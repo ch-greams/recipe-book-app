@@ -1,0 +1,11 @@
+{
+  "name": "recipe-book-app",
+  "version": "0.1.0",
+  "description": "Recipe Book Application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrei Khvalko",
+  "license": "ISC"
+}
