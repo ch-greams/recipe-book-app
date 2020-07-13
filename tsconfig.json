@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "out",
+        "baseUrl": ".",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "sourceMap": true,
+        "esModuleInterop": true,
+        "noImplicitAny": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "plugins": [
+            {
+                "name": "typescript-tslint-plugin",
+                "alwaysShowRuleFailuresAsWarnings": false,
+                "ignoreDefinitionFiles": true,
+                "configFile": "./tslint.json",
+                "suppressWhileTypeErrorsPresent": false
+            }
+        ],
+        "typeRoots": [ "./node_modules/@types", "./typings" ]
+    },
+    "include": [ "./src/**/*", "./typings" ]
+}

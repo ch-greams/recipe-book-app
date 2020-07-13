@@ -1,0 +1,16 @@
+
+# node
+node_modules
+.env
+
+# electron-builder
+dist
+
+# typescript
+out
+
+# ide
+# .vscode
+
+# other
+data
