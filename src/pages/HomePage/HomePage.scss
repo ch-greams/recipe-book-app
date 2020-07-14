@@ -1,13 +1,78 @@
-
 @import "../../variables";
 
 
+html,
 body {
+    height: 100%;
 
     margin: 0;
+    background-color: $color-background-light;
 }
 
 .homePage {
 
-    background-color: $color-background;
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    .searchInput {
+
+        width: 640px;
+        height: 60px;
+
+        padding-left: 16px;
+
+        color: $color-input;
+
+        font-family: "Oswald";
+        font-size: 36px;
+        font-weight: 700;
+    }
+
+    ::placeholder {
+        color: $color-input-placeholder;
+    }
+
+    .homePageButtons {
+
+        display: flex;
+
+        flex-direction: row;
+        // align-items: center;
+        justify-content: space-between;
+
+        width: 640px;
+
+        margin-top: 18px;
+
+        .homePageButton {
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            width: 300px;
+            height: 52px;
+
+            // border: 1px solid;
+            // border-color: red;
+
+            background-color: $color-input-placeholder;
+
+            color: $color-background-light;
+
+            font-family: "Oswald";
+            font-size: 24px;
+            font-weight: 700;
+
+            // text-align: center;
+
+            cursor: pointer;
+        }
+    }
 }

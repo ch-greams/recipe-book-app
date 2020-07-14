@@ -13,7 +13,7 @@ const initialState: FoodItem = {
 };
 
 
-export default function dashboardReducer(state = initialState, action: FoodItemActionTypes): FoodItem {
+export default function foodItemReducer(state = initialState, action: FoodItemActionTypes): FoodItem {
 
     switch (action.type) {
 

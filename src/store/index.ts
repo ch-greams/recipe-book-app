@@ -1,24 +1,25 @@
-import { /* applyMiddleware, */ combineReducers, createStore, Store } from "redux";
-//import { composeWithDevTools } from "redux-devtools-extension";
-//import thunkMiddleware from "redux-thunk";
-import foodReducer from "./food/reducers";
+import { applyMiddleware, combineReducers, createStore, Store } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+import thunkMiddleware from "redux-thunk";
+import userSettingsReducer from "./userSettings/reducers";
+import foodItemReducer from "./food/reducers";
 
 
 const rootReducer = combineReducers({
-    foodItem: foodReducer,
+    userSettings: userSettingsReducer,
+    foodItem: foodItemReducer,
 });
 
 
 export type AppState = ReturnType<typeof rootReducer>;
 
 export default function configureStore(): Store {
-    //const middlewares = [ thunkMiddleware ];
-    //const middleWareEnhancer = applyMiddleware(...middlewares);
 
-    const store = createStore(
+    const middlewares = [ thunkMiddleware ];
+    const middleWareEnhancer = applyMiddleware(...middlewares);
+
+    return createStore(
         rootReducer,
-        //composeWithDevTools(middleWareEnhancer),
+        composeWithDevTools(middleWareEnhancer),
     );
-
-    return store;
 }
