@@ -1,14 +1,13 @@
+import { Nutrient, Unit } from "../../pages/FoodPage/FoodPage";
 
 
 export interface FoodItem {
     name: string;
+    amount: number,
+    unit: Unit,
+    energy: number,
+    nutrients: Dictionary<Nutrient>;
 }
-
-export interface InputNumber {
-    inputValue: string;
-    value: number;
-}
-
 
 
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";

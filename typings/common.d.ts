@@ -4,6 +4,6 @@ declare module "*.scss" {
     export default styles;
 }
 
-// interface Dictionary<T> {
-//     [key: string]: T;
-// }
+interface Dictionary<T> {
+    [key: string]: T;
+}

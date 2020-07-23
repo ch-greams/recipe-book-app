@@ -2,14 +2,14 @@ import {
     USER_SETTINGS_CHANGE_PAGE,
     UserSettingsActionTypes,
     UserSettings,
-    Page,
 } from "./types";
+import { Page } from "../../components/Router";
 
 
 
 const initialState: UserSettings = {
 
-    page: Page.Home,
+    page: Page.Food,
 };
 
 

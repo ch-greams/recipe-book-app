@@ -4,30 +4,34 @@ import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { updateName } from "../../store/food/actions";
 import { FoodItem } from "../../store/food/types";
-import { UserSettings, Page } from "../../store/userSettings/types";
+import { UserSettings } from "../../store/userSettings/types";
 import { changePage } from "../../store/userSettings/actions";
+import { Page } from "../../components/Router";
 
 
 
-interface HomePageProps {
-
+interface HomePageStateToProps {
     userSettings: UserSettings;
-    changePage: typeof changePage;
-
     foodItem: FoodItem;
+}
+
+interface HomePageDispatchToProps {
+    changePage: typeof changePage;
     updateName: typeof updateName;
 }
+
+interface HomePageProps extends HomePageStateToProps, HomePageDispatchToProps { }
 
 
 class HomePage extends Component<HomePageProps> {
 
-    constructor(props: HomePageProps) {
+    public constructor(props: HomePageProps) {
         super(props);
 
         // this.props.updateName("NEW_TEST");
     }
 
-     render(): JSX.Element {
+    public render(): JSX.Element {
 
         const createRecipeButtonLabel = "Create Recipe".toUpperCase();
         const createFoodButtonLabel = "Create Food".toUpperCase();
@@ -67,12 +71,14 @@ class HomePage extends Component<HomePageProps> {
 }
 
 
-const mapStateToProps = (state: AppState) => ({
+const mapStateToProps = (state: AppState): HomePageStateToProps => ({
     userSettings: state.userSettings,
     foodItem: state.foodItem,
 });
 
-export default connect(mapStateToProps, {
+const mapDispatchToProps: HomePageDispatchToProps = {
     updateName,
     changePage,
-})(HomePage);
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -1,3 +1,4 @@
+import { Page } from "../../components/Router";
 
 
 export interface UserSettings {
@@ -18,8 +19,3 @@ export type UserSettingsActionTypes = (
     ChangePageAction
 );
 
-export enum Page {
-    Home = "HomePage",
-    Food = "FoodPage",
-    Recipe = "RecipePage",
-}

@@ -1,15 +1,9 @@
 @import "../../variables";
 
 
-html,
-body {
-    height: 100%;
-
-    margin: 0;
-    background-color: $color-background-light;
-}
-
 .homePage {
+
+    background-color: #fff;
 
     display: flex;
 
@@ -64,7 +58,7 @@ body {
 
             background-color: $color-input-placeholder;
 
-            color: $color-background-light;
+            color: #fff;
 
             font-family: "Oswald";
             font-size: 24px;

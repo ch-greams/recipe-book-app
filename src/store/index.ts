@@ -3,11 +3,13 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import thunkMiddleware from "redux-thunk";
 import userSettingsReducer from "./userSettings/reducers";
 import foodItemReducer from "./food/reducers";
+import recipeItemReducer from "./recipe/reducers";
 
 
 const rootReducer = combineReducers({
     userSettings: userSettingsReducer,
     foodItem: foodItemReducer,
+    recipeItem: recipeItemReducer,
 });
 
 

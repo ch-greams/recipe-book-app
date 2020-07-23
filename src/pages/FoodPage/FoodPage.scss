@@ -1,0 +1,522 @@
+@import "../../variables";
+
+
+
+.foodPage {
+
+    height: 100%;
+
+    background-color: $color-default;
+
+    display: flex;
+
+    justify-content: center;
+
+    input:focus {
+
+        outline: none;
+    }
+
+    .foodPageElements {
+
+        flex-basis: 60%;
+
+        margin-top: 40px;
+
+        .titleBlock {
+
+            border-bottom-style: solid;
+            border-bottom-width: 2px;
+            border-bottom-color: $color-white;
+
+            padding-bottom: 8px;      
+            margin-bottom: 4px;      
+
+            .nameBlock {
+
+                margin-bottom: 8px;
+
+                display: flex;
+
+                flex-direction: row;
+                justify-content: space-between;
+
+                .nameText {
+
+                    color: $color-white;
+    
+                    font-family: "Montserrat";
+                    font-size: 32px;
+                    font-weight: 700;
+                }
+
+                .nameInput {
+
+                    width: calc(50% - 14px);
+
+                    margin-right: 4px;
+                    padding-left: 8px;
+
+                    background-color: $color-default-dark;
+                    color: $color-white;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 32px;
+                    font-weight: 700;
+                }
+    
+                .brandText {
+
+                    text-align: right;
+    
+                    color: $color-white;
+    
+                    font-family: "Montserrat";
+                    font-size: 32px;
+                    font-weight: 700;
+                }
+
+                .brandInput {
+
+                    width: calc(50% - 14px);
+
+                    padding-right: 8px;
+
+                    text-align: right;
+
+                    background-color: $color-default-dark;
+                    color: $color-white;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 32px;
+                    font-weight: 700;
+                }
+            }
+
+            .descriptionBlock {
+
+                display: flex;
+
+                height: 24px;
+                line-height: 24px;
+
+                flex-direction: row;
+                justify-content: space-between;
+
+                .descriptionText {
+
+                    color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 18px;
+                    font-weight: 700;
+                }
+
+                .descriptionInput {
+
+                    width: calc(75% - 8px);
+
+                    padding-left: 8px;
+                    margin-right: 4px;
+
+                    background-color: $color-default-dark;
+                    color: $color-white;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 18px;
+                    font-weight: 700;
+                }
+
+                .confirmButton {
+
+                    width: 25%;
+
+                    text-align: center;
+
+                    color: $color-default;
+                    background-color: $color-white;
+    
+                    line-height: 24px;
+
+                    font-family: "Montserrat";
+                    font-size: 14px;
+                    font-weight: 500;
+
+                    cursor: pointer;
+                    user-select: none;
+                }
+            }
+        }
+
+
+        .mainBlock {
+
+            display: flex;
+            
+            flex-direction: row;
+
+            .parametersBlock {
+
+                width: calc(50% - 20px);
+
+                padding-right: 20px;
+
+                .typeSelect {
+
+                    display: flex;
+
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    padding: 20px 0;
+
+                    line-height: 32px;
+
+                    .typeSelectLabel {
+
+                        margin-right: 30px;
+
+                        color: $color-white;
+
+                        font-family: "Montserrat";
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
+
+                    .typeSelectInput {
+
+                        flex-grow: 2;
+
+                        background-color: $color-default-dark;
+                        margin-right: 10px;
+
+                        color: $color-white;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+
+                        font-family: "Montserrat";
+                        font-size: 20px;
+                        font-weight: 500;
+                    }
+                }
+
+
+                .densityLine {
+
+                    display: flex;
+
+                    flex-direction: row;
+
+                    margin: 12px 0;
+
+                    color: $color-white;
+        
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    line-height: 32px;
+
+                    .densityLineLabel {
+
+                        width: 36%;
+                    }
+
+                    .densityLineInput {
+
+                        width: 30%;
+
+                        margin-right: 4px;
+                        padding-right: 8px;
+
+                        background-color: $color-default-dark;
+
+                        color: $color-white;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+
+                        text-align: right;
+
+                        font-family: "Montserrat";
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+
+                .servingSizeLine {
+
+                    display: flex;
+
+                    flex-direction: row;
+
+                    margin: 12px 0;
+
+                    color: $color-white;
+        
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    line-height: 32px;
+
+                    .servingSizeLineLabel {
+
+                        width: 36%;
+                    }
+
+                    .servingSizeLineInput {
+
+                        width: 30%;
+
+                        margin-right: 4px;
+                        padding-right: 8px;
+
+                        background-color: $color-default-dark;
+
+                        color: $color-white;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+
+                        text-align: right;
+
+                        font-family: "Montserrat";
+                        font-size: 18px;
+                        font-weight: 500;
+                    }
+                }
+
+                .customUnitsBlock {
+
+                    margin: 16px 0;
+
+                    color: $color-white;
+        
+                    font-family: "Montserrat";
+                    font-size: 18px;
+                    font-weight: 700;
+
+
+                    .customUnitLine {
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+                    }
+                }
+            }
+
+            .nutrientsBlock {
+
+                width: 50%;
+
+                .nutrientsBlockTitle {
+
+                    margin-top: 20px;
+                    margin-bottom: 12px;
+
+                    text-align: center;
+
+                    color: $color-white;
+        
+                    font-family: "Montserrat";
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+
+                .nutrientLine {
+
+                    display: flex;
+
+                    background-color: $color-white;
+                    padding: 6px 0;
+                    margin: 4px 0;
+
+                    color: $color-grey-dark;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-grey-light;
+
+                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
+                    font-family: "Montserrat";
+                    font-size: 12px;
+                    font-weight: 500;
+        
+                    line-height: 22px;
+
+                    .nutrientName {
+
+                        width: 36%;
+
+                        margin-left: 28px;
+                    }
+        
+                    .nutrientAmount {
+        
+                        max-width: 20%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                        padding-right: 4px;
+
+                        color: $color-default;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-default;
+
+                        font-family: "Montserrat";
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+        
+                    .nutrientUnit {
+        
+                        width: 14%;
+                    }   
+
+                    .nutrientDailyValue {
+
+                        width: 8%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                    }
+
+                    .nutrientPercent {
+
+                        width: 3%;
+
+                        margin-right: 40px;
+                    }
+
+                }
+
+                .subNutrientLine {
+
+                    display: flex;
+
+                    color: $color-white;
+
+                    background-color: $color-default;
+                    padding: 6px 0;
+                    margin: 4px 8px;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 12px;
+                    font-weight: 500;
+        
+                    line-height: 22px;
+
+                    .nutrientName {
+
+                        width: 37.3%;
+
+                        margin-left: 20px;
+                    }
+        
+                    .nutrientAmount {
+        
+                        max-width: 20.7%;
+
+                        text-align: right;
+
+                        background-color: $color-default-dark;
+                        margin-right: 4px;
+                        padding-right: 4px;
+
+                        color: $color-white;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+
+                        font-family: "Montserrat";
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+        
+                    .nutrientUnit {
+        
+                        width: 14.5%;
+                    }   
+
+                    .nutrientDailyValue {
+
+                        width: 8.2%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                    }
+
+                    .nutrientPercent {
+
+                        width: 3%;
+
+                        margin-right: 32px;
+                    }
+
+                }
+            }
+        }
+
+
+        .separator {
+            background-color: $color-white;
+            height: 1px;
+        }
+
+        .selectInput {
+
+            @include reset_select;
+
+            margin: 0 4px;
+
+            width: 48px;
+
+            color: $color-default;
+
+            line-height: 32px;
+            text-align: center;
+
+            font-family: "Montserrat";
+            font-size: 14px;
+            font-weight: 500;
+
+            option {
+
+                color: $color-black;
+
+                font-family: sans-serif;
+                font-size: 14px;
+                font-weight: 500;
+            }
+        }
+    }
+}

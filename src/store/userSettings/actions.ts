@@ -1,8 +1,8 @@
 import {
     USER_SETTINGS_CHANGE_PAGE,
     UserSettingsActionTypes,
-    Page,
 } from "./types";
+import { Page } from "../../components/Router";
 
 
 
