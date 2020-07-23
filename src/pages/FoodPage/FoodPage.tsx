@@ -216,14 +216,43 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         );
     }
 
-    private getCustomUnitLine(): JSX.Element {
+    private getCustomUnitLine(customUnit: CustomUnit): JSX.Element {
 
         return (
-            <div></div>
+            <div
+                key={customUnit.name}
+                className={styles.customUnitLine}
+            >
+
+                <input
+                    type={"text"}
+                    className={styles.customUnitLineName}
+                    value={customUnit.name}
+                />
+
+                {"="}
+
+                <input
+                    type={"text"}
+                    className={styles.customUnitLineAmount}
+                    value={customUnit.amount}
+                />
+
+                {this.getSelect( Object.keys(UnitWeight) )}
+
+                {/* {customUnit.unit} */}
+
+                <div className={styles.customUnitLineButton}>
+                    {( (customUnit.name !== "") ? "X" : "+" )}
+                </div>
+
+            </div>
         );
     }
 
     private getParametersBlock(): JSX.Element {
+
+        const { customUnits } = this.state;
 
         return (
             
@@ -236,7 +265,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     </div>
 
                     <input
-                        type="text"
+                        type={"text"}
                         className={styles.typeSelectInput}
                     />
 
@@ -251,15 +280,15 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     </div>
                     
                     <input
-                        type="text"
+                        type={"text"}
                         className={styles.densityLineInput}
                     />
 
-                    {this.getSelect(Object.keys(UnitWeight))}
+                    {this.getSelect( Object.keys(UnitWeight) )}
 
                     {"/"}
 
-                    {this.getSelect(Object.keys(UnitVolume))}
+                    {this.getSelect( Object.keys(UnitVolume) )}
 
                 </div>
 
@@ -270,18 +299,26 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     </div>
                     
                     <input
-                        type="text"
+                        type={"text"}
                         className={styles.servingSizeLineInput}
                     />
 
-                    {this.getSelect(Object.keys(UnitWeight))}
+                    {this.getSelect( Object.keys(UnitWeight) )}
 
                 </div>
 
                 <div className={styles.separator} />
 
                 <div className={styles.customUnitsBlock}>
-                    {"CUSTOM UNITS"}
+
+                    <div className={styles.customUnitsBlockLabel}>
+                        {"CUSTOM UNITS"}
+                    </div>
+
+                    {customUnits.map( this.getCustomUnitLine.bind(this) )}
+
+                    {this.getCustomUnitLine({ name: "", amount: 100, unit: UnitWeight.g })}
+
                 </div>
 
             </div>

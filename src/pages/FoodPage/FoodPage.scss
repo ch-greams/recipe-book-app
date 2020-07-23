@@ -12,6 +12,7 @@
 
     justify-content: center;
 
+    select:focus,
     input:focus {
 
         outline: none;
@@ -308,17 +309,97 @@
                     margin: 16px 0;
 
                     color: $color-white;
-        
-                    font-family: "Montserrat";
-                    font-size: 18px;
-                    font-weight: 700;
 
+                    .customUnitsBlockLabel {
+
+                        margin-bottom: 14px;
+
+                        font-family: "Montserrat";
+                        font-size: 18px;
+                        font-weight: 700;
+                    }
 
                     .customUnitLine {
+
+                        display: flex;
+
+                        flex-direction: row;
+
+                        margin: 2px 0;
+
+                        height: 20px;
+
+                        padding: 6px 0;
 
                         border-style: solid;
                         border-width: 1px;
                         border-color: $color-white;
+
+                        line-height: 20px;
+
+
+                        .customUnitLineName {
+
+                            width: 34%;
+
+                            margin-left: 26px;
+                            margin-right: 8px;
+                            padding-right: 4px;
+
+                            color: $color-white;
+                            background-color: $color-default-dark;
+
+                            border-style: solid;
+                            border-width: 1px;
+                            border-color: $color-white;
+
+                            text-align: right;
+
+                            font-family: "Montserrat";
+                            font-size: 12px;
+                            font-weight: 500;
+                        }
+                        
+                        .customUnitLineAmount {
+
+                            width: 17%;
+
+                            margin-left: 8px;
+                            // margin-right: 2px;
+                            padding-right: 4px;
+
+                            color: $color-white;
+                            background-color: $color-default-dark;
+
+                            border-style: solid;
+                            border-width: 1px;
+                            border-color: $color-white;
+
+                            text-align: right;
+
+                            font-family: "Montserrat";
+                            font-size: 12px;
+                            font-weight: 500;
+                        }
+
+                        .selectInput {
+
+                            line-height: 20px;
+
+                            margin-right: 64px;
+                        }
+
+                        .customUnitLineButton {
+
+                            width: 20px;
+
+                            font-family: "Montserrat";
+                            font-size: 18px;
+                            font-weight: 500;
+
+                            cursor: pointer;
+                            user-select: none;
+                        }
                     }
                 }
             }
