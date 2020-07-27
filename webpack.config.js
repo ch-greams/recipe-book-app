@@ -8,7 +8,7 @@ module.exports = {
     },
     devtool: "source-map",
     resolve: {
-        extensions: [ ".ts", ".tsx", ".js" ]
+        extensions: [ ".ts", ".tsx", ".js", ".svg" ]
     },
     module: {
         rules: [
@@ -16,6 +16,11 @@ module.exports = {
                 test: /\.ts(x?)$/,
                 exclude: /node_modules/,
                 loader: "ts-loader",
+            },
+            {
+                test: /\.svg$/,
+                exclude: /node_modules/,
+                loader: "@svgr/webpack",
             },
             {
                 enforce: "pre",

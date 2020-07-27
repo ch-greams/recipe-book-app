@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { FoodItem } from "../../store/food/types";
 import { updateName } from "../../store/food/actions";
 import { AppState } from "../../store";
+import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
 
 
@@ -203,6 +204,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         return ( this.state.isTitleInputsOpen ? titleBlockInput : titleBlockStatic );
     }
 
+    // TODO: Add current value for selected
     private getSelect(options: string[]): JSX.Element {
 
         return (
@@ -224,26 +226,35 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                 className={styles.customUnitLine}
             >
 
-                <input
-                    type={"text"}
-                    className={styles.customUnitLineName}
-                    value={customUnit.name}
-                />
+                <div>
 
-                {"="}
+                    <input
+                        type={"text"}
+                        className={styles.customUnitLineName}
+                        value={customUnit.name}
+                    />
 
-                <input
-                    type={"text"}
-                    className={styles.customUnitLineAmount}
-                    value={customUnit.amount}
-                />
+                    {"="}
 
-                {this.getSelect( Object.keys(UnitWeight) )}
+                    <input
+                        type={"text"}
+                        className={styles.customUnitLineAmount}
+                        value={customUnit.amount}
+                    />
+
+                    {this.getSelect( Object.keys(UnitWeight) )}
+
+                </div>
+
 
                 {/* {customUnit.unit} */}
 
                 <div className={styles.customUnitLineButton}>
-                    {( (customUnit.name !== "") ? "X" : "+" )}
+                    {(
+                        (customUnit.name !== "")
+                            ? <IconAdd width={20} height={20} style={{ transform: "rotate(0.125turn)" }} />
+                            : <IconAdd width={20} height={20} />
+                    )}
                 </div>
 
             </div>

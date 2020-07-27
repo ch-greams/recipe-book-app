@@ -325,7 +325,7 @@
 
                         flex-direction: row;
 
-                        margin: 2px 0;
+                        margin: 2px 10px 2px 0;
 
                         height: 20px;
 
@@ -385,11 +385,13 @@
                         .selectInput {
 
                             line-height: 20px;
-
-                            margin-right: 64px;
                         }
 
                         .customUnitLineButton {
+
+                            margin-right: 16px;
+
+                            color: $color-white;
 
                             width: 20px;
 
