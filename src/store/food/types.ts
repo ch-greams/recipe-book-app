@@ -1,12 +1,19 @@
-import { Nutrient, Unit } from "../../pages/FoodPage/FoodPage";
+import { Nutrient, NutrientType } from "../../common/nutrients";
+import { UnitVolume, UnitWeight } from "../../common/units";
+
 
 
 export interface FoodItem {
+
     name: string;
-    amount: number,
-    unit: Unit,
-    energy: number,
+    energy: number;
     nutrients: Dictionary<Nutrient>;
+
+    // NOTE: STATIC
+
+    amount: number;
+    unit: UnitWeight | UnitVolume;
+    featuredNutrients: NutrientType[];
 }
 
 

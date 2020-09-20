@@ -5,41 +5,10 @@ import { updateName } from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
+import { UnitEnergy, UnitVolume, UnitWeight } from "../../common/units";
+import { Nutrient, NutrientType } from "../../common/nutrients";
 
 
-
-export enum NutrientType {
-    Protein = "Protein",
-    Fat = "Fat",
-    Carbohydrate = "Carbohydrate",
-}
-
-
-export enum UnitWeight {
-    g = "g",
-    //mg = "mg",
-    //IU = "IU",
-    oz = "oz",
-}
-
-export enum UnitVolume {
-    ml = "ml",
-    cup = "cup",
-    tbsp = "tbsp",
-    tsp = "tsp",
-}
-
-export enum Unit {
-    g = "g",
-}
-
-
-export interface Nutrient {
-    type: NutrientType | string;
-    amount: number;
-    unit: Unit | string;
-    dv: number;
-}
 
 export interface CustomUnit {
 
@@ -232,6 +201,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.customUnitLineName}
                         value={customUnit.name}
+                        onChange={console.log}
                     />
 
                     {"="}
@@ -240,6 +210,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.customUnitLineAmount}
                         value={customUnit.amount}
+                        onChange={console.log}
                     />
 
                     {this.getSelect( Object.keys(UnitWeight) )}
@@ -278,6 +249,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     <input
                         type={"text"}
                         className={styles.typeSelectInput}
+                        onChange={console.log}
                     />
 
                 </div>
@@ -286,6 +258,8 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                 <div className={styles.densityLine}>
                     
+                    {/* BULK DENSITY */}
+
                     <div className={styles.densityLineLabel}>
                         {"DENSITY"}
                     </div>
@@ -293,6 +267,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     <input
                         type={"text"}
                         className={styles.densityLineInput}
+                        onChange={console.log}
                     />
 
                     {this.getSelect( Object.keys(UnitWeight) )}
@@ -312,6 +287,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     <input
                         type={"text"}
                         className={styles.servingSizeLineInput}
+                        onChange={console.log}
                     />
 
                     {this.getSelect( Object.keys(UnitWeight) )}
@@ -336,10 +312,20 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         );
     }
 
-    private getNutrientLine(nutrient: Nutrient): JSX.Element {
+    private getNutrientLine(nutrient: {
+        type: string;
+        amount: number;
+        unit: string;
+        dv: number;
+        isFraction: boolean;
+    }): JSX.Element {
 
         return (
-            <div className={styles.nutrientLine}>
+
+            <div
+                className={nutrient.isFraction ? styles.subNutrientLine : styles.nutrientLine}
+                key={nutrient.type}
+            >
 
                 <span className={styles.nutrientName}>
                     {nutrient.type}
@@ -349,6 +335,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     type={"text"}
                     className={styles.nutrientAmount}
                     value={nutrient.amount}
+                    onChange={console.log}
                 />
 
                 <span className={styles.nutrientUnit}>
@@ -367,66 +354,26 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         );
     }
 
-    private getSubNutrientLine(nutrient: Nutrient): JSX.Element {
-
-        return (
-            <div className={styles.subNutrientLine}>
-
-                <span className={styles.nutrientName}>
-                    {nutrient.type}
-                </span>
-
-                <input
-                    type={"text"}
-                    className={styles.nutrientAmount}
-                    value={nutrient.amount}
-                />
-
-                <span className={styles.nutrientUnit}>
-                    {nutrient.unit}
-                </span>
-
-                <span className={styles.nutrientDailyValue}>
-                    {nutrient.dv}
-                </span>
-
-                <span className={styles.nutrientPercent}>
-                    {"%"}
-                </span>
-
-            </div>
-        );
-    }
-
-    private getNutrientsBlock(nutrients: Dictionary<Nutrient>): JSX.Element {
+    private getNutritionInfoBlock(nutrients: Dictionary<Nutrient>, featuredNutrients: NutrientType[]): JSX.Element {
 
         return (
 
-            <div className={styles.nutrientsBlock}>
+            <div className={styles.nutritionInfoBlock}>
 
-                <div className={styles.nutrientsBlockTitle}>
-                    {"NUTRIENTS"}
+                <div className={styles.nutritionInfoBlockTitle}>
+                    {"NUTRITION INFORMATION"}
                 </div>
 
-                { this.getNutrientLine({ type: "Energy", amount: this.props.foodItem.energy, unit: "kcal", dv: 28 }) }
 
-                { this.getNutrientLine(nutrients[NutrientType.Protein]) }
+                { this.getNutrientLine({
+                    type: "Energy",
+                    amount: this.props.foodItem.energy,
+                    unit: UnitEnergy.kcal,
+                    dv: 28,
+                    isFraction: false,
+                }) }
 
-                { this.getNutrientLine(nutrients[NutrientType.Fat]) }
-
-                { this.getSubNutrientLine({ type: "Monounsaturated", amount: 24.4, unit: Unit.g, dv: 5 }) }
-
-                { this.getNutrientLine(nutrients[NutrientType.Carbohydrate]) }
-
-                { this.getSubNutrientLine({ type: "Dietary Fiber", amount: 8.5, unit: Unit.g, dv: 34 }) }
-
-                { this.getSubNutrientLine({ type: "Sugars", amount: 4, unit: Unit.g, dv: 0 }) }
-
-                { this.getNutrientLine({ type: "Sodium", amount: 18, unit: "mg", dv: 1 }) }
-
-                { this.getNutrientLine({ type: "Vitamin A", amount: 0, unit: "IU", dv: 0 }) }
-
-                { this.getNutrientLine({ type: "Vitamin C", amount: 0, unit: "mg", dv: 0 }) }
+                { featuredNutrients.map( (nutrientType) => this.getNutrientLine(nutrients[nutrientType]) ) }
 
             </div>
         );
@@ -435,7 +382,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     public render(): JSX.Element {
         
-        const { nutrients } = this.props.foodItem;
+        const { nutrients, featuredNutrients } = this.props.foodItem;
 
         return (
             <div className={styles.foodPage}>
@@ -452,13 +399,21 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                         {this.getParametersBlock()}
                         
-                        {this.getNutrientsBlock(nutrients)}
+                        {this.getNutritionInfoBlock(nutrients, featuredNutrients)}
 
                     </div>
 
                     {/* Detailed Nutrient Information  */}
 
-                    {/* <div className={styles.separator}></div> */}
+                    <div className={styles.detailedNutritionInfoBlock}>
+
+                        <div className={styles.detailedNutritionInfoTitle}>
+                            {"DETAILED NUTRITION INFORMATION"}
+                        </div>
+                        
+
+
+                    </div>
 
                 </div>
             </div>
