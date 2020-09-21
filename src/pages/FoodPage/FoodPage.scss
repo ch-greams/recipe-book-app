@@ -165,8 +165,8 @@
         .mainBlock {
 
             display: flex;
-            
             flex-direction: row;
+            justify-content: space-between;
 
             .parametersBlock {
 
@@ -406,13 +406,18 @@
                     }
                 }
             }
+
+            .featuredNutritionFacts {
+
+                width: 49%;
+            }
         }
 
-        .detailedNutritionInfoBlock {
+        .detailedNutritionFactsBlock {
 
             margin-bottom: 80px;
 
-            .detailedNutritionInfoTitle {
+            .detailedNutritionFactsTitle {
 
                 margin-top: 30px;
                 padding: 14px 0;
@@ -432,6 +437,21 @@
                 font-family: "Montserrat";
                 font-size: 28px;
                 font-weight: 700;
+            }
+
+            .detailedNutritionFacts {
+
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .detailedNutritionFactsColumn {
+
+                    display: flex;
+                    flex-direction: column;
+                    
+                    width: 49%;
+                }
             }
         }
 

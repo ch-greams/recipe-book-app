@@ -69,27 +69,13 @@ export default class NutritionFactsBlock extends React.Component<NutritionFactsB
 
     public render(): JSX.Element {
 
-        // const itemEnergy = this.props.foodItem.energy;
-
-        // const energy: NutritionFact = {
-        //     type: "Energy",
-        //     amount: itemEnergy,
-        //     unit: UnitEnergy.kcal,
-        //     dailyValue: Utils.getDailyValuePercent(itemEnergy, Utils.ENERGY_DAILY_VALUE_CALORIES),
-        //     isFraction: false,
-        // };
-
-        // const nutrientFacts: NutritionFact[] = [
-        //     energy,
-        // ];
-
         const { title, nutritionFacts } = this.props;
 
         return (
 
-            <div className={styles.nutritionInfoBlock}>
+            <div className={styles.nutritionFactsBlock}>
 
-                <div className={styles.nutritionInfoBlockTitle}>
+                <div className={styles.nutritionFactsBlockTitle}>
                     {title}
                 </div>
 

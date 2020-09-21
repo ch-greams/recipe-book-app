@@ -373,66 +373,71 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                         {this.getParametersBlock()}
 
-                        <NutritionFactsBlock
-                            title={"NUTRITION INFORMATION"}
-                            nutritionFacts={[
-                                {
-                                    type: "Energy",
-                                    amount: this.props.foodItem.energy,
-                                    unit: UnitEnergy.kcal,
-                                    dailyValue: Utils.getDailyValuePercent(this.props.foodItem.energy, Utils.ENERGY_DAILY_VALUE_CALORIES),
-                                    isFraction: false,
-                                },
-                                ...this.getNutritionFacts(featuredNutrients, nutrients),
-                            ]}
-                        />
+                        <div className={styles.featuredNutritionFacts}>
+
+                            <NutritionFactsBlock
+                                title={"NUTRITION INFORMATION"}
+                                nutritionFacts={[
+                                    {
+                                        type: "Energy",
+                                        amount: this.props.foodItem.energy,
+                                        unit: UnitEnergy.kcal,
+                                        dailyValue: Utils.getDailyValuePercent(this.props.foodItem.energy, Utils.ENERGY_DAILY_VALUE_CALORIES),
+                                        isFraction: false,
+                                    },
+                                    ...this.getNutritionFacts(featuredNutrients, nutrients),
+                                ]}
+                            />
+                        </div>
 
                     </div>
 
                     {/* Detailed Nutrient Information  */}
 
-                    <div className={styles.detailedNutritionInfoBlock}>
+                    <div className={styles.detailedNutritionFactsBlock}>
 
-                        <div className={styles.detailedNutritionInfoTitle}>
+                        <div className={styles.detailedNutritionFactsTitle}>
                             {"DETAILED NUTRITION INFORMATION"}
                         </div>
 
-                        <div>
-                            {/* LEFT COLUMN */}
+                        <div className={styles.detailedNutritionFacts}>
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Carbohydrates}
-                                nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutrients)}
-                            />
+                            <div className={styles.detailedNutritionFactsColumn}>
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Lipids}
-                                nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutrients)}
-                            />
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Carbohydrates}
+                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutrients)}
+                                />
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Vitamins}
-                                nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutrients)}
-                            />
-                        </div>
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Lipids}
+                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutrients)}
+                                />
 
-                        <div>
-                            {/* RIGHT COLUMN */}
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Vitamins}
+                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutrients)}
+                                />
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Proteins}
-                                nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutrients)}
-                            />
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Other}
+                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutrients)}
+                                />
+                            </div>
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Minerals}
-                                nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutrients)}
-                            />
+                            <div className={styles.detailedNutritionFactsColumn}>
 
-                            <NutritionFactsBlock
-                                title={NutrientGroupType.Other}
-                                nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutrients)}
-                            />
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Proteins}
+                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutrients)}
+                                />
+
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Minerals}
+                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutrients)}
+                                />
+                            </div>
+
                         </div>
 
                     </div>
