@@ -4,6 +4,8 @@ import { Dictionary } from "./typings";
 
 export default class Utils {
 
+    public static readonly ENERGY_DAILY_VALUE_CALORIES: number = 2000;
+
 
     public static roundToDecimal(value: number, accuracy: number): number {
 

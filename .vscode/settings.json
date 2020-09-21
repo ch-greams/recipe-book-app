@@ -7,6 +7,7 @@
         "Hydroxyproline",
         "Pantothenic",
         "Phytosterol",
+        "Readonly",
         "cond",
         "stylelint"
     ]

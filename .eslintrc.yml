@@ -31,9 +31,6 @@ rules:
         - 2
         - "always"
     no-console: 1
-    no-magic-numbers:
-        - 2
-        - detectObjects: false
     interface-name: 0
     one-line: 0
     member-ordering: 0
@@ -44,3 +41,6 @@ rules:
         - 2
         - allowExpressions: true
     "@typescript-eslint/no-inferrable-types": 0
+    "@typescript-eslint/no-magic-numbers":
+        - 2
+        - ignoreReadonlyClassProperties: true
