@@ -6,9 +6,26 @@ import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
 import { UnitEnergy, UnitVolume, UnitWeight } from "../../common/units";
-import { Nutrient, NutrientType } from "../../common/nutrients";
+import {
+    CARBOHYDRATES_GROUP,
+    LIPIDS_GROUP,
+    MINERALS_GROUP,
+    NutrientGroupType,
+    NutrientType, NUTRIENT_DESCRIPTIONS, OTHER_GROUP, PROTEINS_GROUP, VITAMINS_GROUP,
+} from "../../common/nutrients";
+import Utils from "../../common/utils";
+import { Dictionary } from "../../common/typings";
 
 
+
+export interface NutritionFact {
+
+    amount: number;
+    type: NutrientType | "Energy";
+    unit: UnitWeight | UnitEnergy;
+    dailyValue?: number;
+    isFraction: boolean;
+}
 
 export interface CustomUnit {
 
@@ -312,49 +329,51 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         );
     }
 
-    private getNutrientLine(nutrient: {
-        type: string;
-        amount: number;
-        unit: string;
-        dv: number;
-        isFraction: boolean;
-    }): JSX.Element {
+    private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
+
+        const dailyValueBlock = (
+            <span className={styles.nutrientDailyValue}>
+                {nutritionFact.dailyValue}
+            </span>
+        );
+
+        const dailyValuePercentBlock = (
+            <span className={styles.nutrientPercent}>
+                {"%"}
+            </span>
+        );
 
         return (
 
             <div
-                className={nutrient.isFraction ? styles.subNutrientLine : styles.nutrientLine}
-                key={nutrient.type}
+                className={nutritionFact.isFraction ? styles.subNutrientLine : styles.nutrientLine}
+                key={nutritionFact.type}
             >
 
                 <span className={styles.nutrientName}>
-                    {nutrient.type}
+                    {nutritionFact.type}
                 </span>
 
                 <input
                     type={"text"}
                     className={styles.nutrientAmount}
-                    value={nutrient.amount}
+                    value={nutritionFact.amount}
                     onChange={console.log}
                 />
 
                 <span className={styles.nutrientUnit}>
-                    {nutrient.unit}
+                    {nutritionFact.unit}
                 </span>
 
-                <span className={styles.nutrientDailyValue}>
-                    {nutrient.dv}
-                </span>
+                {typeof nutritionFact.dailyValue === "number" && dailyValueBlock}
 
-                <span className={styles.nutrientPercent}>
-                    {"%"}
-                </span>
+                {typeof nutritionFact.dailyValue === "number" && dailyValuePercentBlock}
 
             </div>
         );
     }
 
-    private getNutritionInfoBlock(nutrients: Dictionary<Nutrient>, featuredNutrients: NutrientType[]): JSX.Element {
+    private getNutritionInfoBlock(nutrients: Dictionary<NutrientType, number>, featuredNutrients: NutrientType[]): JSX.Element {
 
         return (
 
@@ -364,21 +383,62 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     {"NUTRITION INFORMATION"}
                 </div>
 
-
-                { this.getNutrientLine({
+                { this.getNutritionFactLine({
                     type: "Energy",
                     amount: this.props.foodItem.energy,
                     unit: UnitEnergy.kcal,
-                    dv: 28,
+                    // eslint-disable-next-line no-magic-numbers
+                    dailyValue: Utils.getDailyValuePercent(this.props.foodItem.energy, 2000),
                     isFraction: false,
                 }) }
 
-                { featuredNutrients.map( (nutrientType) => this.getNutrientLine(nutrients[nutrientType]) ) }
+                { featuredNutrients.map( (nutrientType) => {
+
+                    const amount = nutrients[nutrientType];
+                    const nutrientDescription = NUTRIENT_DESCRIPTIONS[nutrientType];
+
+                    return this.getNutritionFactLine({
+                        type: nutrientType,
+                        amount: amount,
+                        unit: nutrientDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
+                        isFraction: nutrientDescription.isFraction,
+                    });
+
+                }) }
 
             </div>
         );
     }
 
+    private getDetailedNutrientsBlock(title: string, nutrients: Dictionary<NutrientType, number>, nutrientTypes: NutrientType[]): JSX.Element {
+
+        return (
+
+            <div className={styles.nutritionInfoBlock}>
+
+                <div className={styles.nutritionInfoBlockTitle}>
+                    {title}
+                </div>
+
+                { nutrientTypes.map( (nutrientType) => {
+
+                    const amount = nutrients[nutrientType];
+                    const nutrientDescription = NUTRIENT_DESCRIPTIONS[nutrientType];
+
+                    return this.getNutritionFactLine({
+                        type: nutrientType,
+                        amount: amount,
+                        unit: nutrientDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
+                        isFraction: nutrientDescription.isFraction,
+                    });
+
+                }) }
+
+            </div>
+        );
+    }
 
     public render(): JSX.Element {
         
@@ -410,11 +470,28 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         <div className={styles.detailedNutritionInfoTitle}>
                             {"DETAILED NUTRITION INFORMATION"}
                         </div>
-                        
 
+                        <div>
+                            {/* LEFT COLUMN */}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Carbohydrates, nutrients, CARBOHYDRATES_GROUP)}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Lipids, nutrients, LIPIDS_GROUP)}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Vitamins, nutrients, VITAMINS_GROUP)}
+                        </div>
+
+                        <div>
+                            {/* RIGHT COLUMN */}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Proteins, nutrients, PROTEINS_GROUP)}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Minerals, nutrients, MINERALS_GROUP)}
+
+                            {this.getDetailedNutrientsBlock(NutrientGroupType.Other, nutrients, OTHER_GROUP)}
+                        </div>
 
                     </div>
-
                 </div>
             </div>
         );

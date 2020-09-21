@@ -15,75 +15,24 @@ const initialState: FoodItem = {
     energy: 567,
 
     nutrients: {
-        [NutrientType.Protein]: {
-            type: NutrientType.Protein,
-            amount: 25.8,
-            unit: UnitWeight.g,
-            dv: 52,
-            isFraction: false,
-        },
 
-        [NutrientType.Fat]: {
-            type: NutrientType.Fat,
-            amount: 49.2,
-            unit: UnitWeight.g,
-            dv: 76,
-            isFraction: false,
-        },
+        // [NutrientType.Energy]: {
+        //     type: NutrientType.Energy, 
+        //     amount: 567, 
+        //     unit: UnitEnergy.kcal, 
+        //     dv: 28,
+        //     isFraction: false,
+        // },
 
-        [NutrientType.Monounsaturated]: {
-            type: NutrientType.Monounsaturated, 
-            amount: 24.4, 
-            unit: UnitWeight.g, 
-            dv: 5,
-            isFraction: true,
-        },
-
-        [NutrientType.Carbohydrate]: {
-            type: NutrientType.Carbohydrate,
-            amount: 16.1,
-            unit: UnitWeight.g,
-            dv: 5,
-            isFraction: false,
-        },
-
-        [NutrientType.DietaryFiber]: {
-            type: NutrientType.DietaryFiber, 
-            amount: 8.5, 
-            unit: UnitWeight.g, 
-            dv: 3,
-            isFraction: true,
-         },
-        [NutrientType.Sugars]: {
-            type: NutrientType.Sugars, 
-            amount: 4, 
-            unit: UnitWeight.g, 
-            dv: 0,
-            isFraction: true,
-        },
-
-        [NutrientType.Sodium]: {
-            type: NutrientType.Sodium, 
-            amount: 18, 
-            unit: UnitWeight.mg, 
-            dv: 1,
-            isFraction: false,
-        },
-
-        [NutrientType.VitaminA]: {
-            type: NutrientType.VitaminA, 
-            amount: 0, 
-            unit: UnitWeight.IU, 
-            dv: 0,
-            isFraction: false,
-        },
-        [NutrientType.VitaminC]: {
-            type: NutrientType.VitaminC, 
-            amount: 0, 
-            unit: UnitWeight.mg, 
-            dv: 0,
-            isFraction: false,
-        },
+        [NutrientType.Protein]: 25.8,
+        [NutrientType.Fat]: 49.2,
+        [NutrientType.Monounsaturated]: 24.4,
+        [NutrientType.Carbohydrate]: 16.1,
+        [NutrientType.DietaryFiber]: 8.5,
+        [NutrientType.Sugars]: 4,
+        [NutrientType.Sodium]: 18,
+        [NutrientType.VitaminA]: 0,
+        [NutrientType.VitaminC]: 0,
     },
 
     // NOTE: STATIC

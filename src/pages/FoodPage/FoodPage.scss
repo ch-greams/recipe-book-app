@@ -572,6 +572,8 @@
 
         .detailedNutritionInfoBlock {
 
+            margin-bottom: 80px;
+
             .detailedNutritionInfoTitle {
 
                 margin-top: 30px;
@@ -594,6 +596,168 @@
                 font-weight: 700;
             }
 
+            // TODO: REWORK
+            .nutritionInfoBlock {
+
+                width: 50%;
+
+                .nutritionInfoBlockTitle {
+
+                    margin-top: 20px;
+                    margin-bottom: 12px;
+
+                    text-align: center;
+
+                    color: $color-white;
+        
+                    font-family: "Montserrat";
+                    font-size: 24px;
+                    font-weight: 700;
+                }
+
+                .nutrientLine {
+
+                    display: flex;
+
+                    background-color: $color-white;
+                    padding: 6px 0;
+                    margin: 4px 0;
+
+                    color: $color-grey-dark;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-grey-light;
+
+                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
+                    font-family: "Montserrat";
+                    font-size: 12px;
+                    font-weight: 500;
+        
+                    line-height: 22px;
+
+                    .nutrientName {
+
+                        width: 36%;
+
+                        margin-left: 28px;
+                    }
+        
+                    .nutrientAmount {
+        
+                        max-width: 20%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                        padding-right: 4px;
+
+                        color: $color-default;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-default;
+
+                        font-family: "Montserrat";
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+        
+                    .nutrientUnit {
+        
+                        width: 14%;
+                    }   
+
+                    .nutrientDailyValue {
+
+                        width: 8%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                    }
+
+                    .nutrientPercent {
+
+                        width: 3%;
+
+                        margin-right: 40px;
+                    }
+
+                }
+
+                .subNutrientLine {
+
+                    display: flex;
+
+                    color: $color-white;
+
+                    background-color: $color-default;
+                    padding: 6px 0;
+                    margin: 4px 8px;
+
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-white;
+
+                    font-family: "Montserrat";
+                    font-size: 12px;
+                    font-weight: 500;
+        
+                    line-height: 22px;
+
+                    .nutrientName {
+
+                        width: 37.3%;
+
+                        margin-left: 20px;
+                    }
+        
+                    .nutrientAmount {
+        
+                        max-width: 20.7%;
+
+                        text-align: right;
+
+                        background-color: $color-default-dark;
+                        margin-right: 4px;
+                        padding-right: 4px;
+
+                        color: $color-white;
+
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+
+                        font-family: "Montserrat";
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+        
+                    .nutrientUnit {
+        
+                        width: 14.5%;
+                    }   
+
+                    .nutrientDailyValue {
+
+                        width: 8.2%;
+
+                        text-align: right;
+
+                        margin-right: 4px;
+                    }
+
+                    .nutrientPercent {
+
+                        width: 3%;
+
+                        margin-right: 32px;
+                    }
+
+                }
+            }
         }
 
 

@@ -1,4 +1,5 @@
-import { Nutrient, NutrientType } from "../../common/nutrients";
+import { NutrientType } from "../../common/nutrients";
+import { Dictionary } from "../../common/typings";
 import { UnitVolume, UnitWeight } from "../../common/units";
 
 
@@ -7,7 +8,7 @@ export interface FoodItem {
 
     name: string;
     energy: number;
-    nutrients: Dictionary<Nutrient>;
+    nutrients: Dictionary<NutrientType, number>;
 
     // NOTE: STATIC
 

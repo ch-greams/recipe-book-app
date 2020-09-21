@@ -5,10 +5,6 @@ declare module "*.scss" {
 }
 
 declare module "*.svg" {
-    const content: React.StatelessComponent<React.SVGAttributes<SVGElement>>;
+    const content: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
     export default content;
-}
-
-interface Dictionary<T> {
-    [key: string]: T;
 }

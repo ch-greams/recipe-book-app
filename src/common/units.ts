@@ -3,6 +3,7 @@
 export enum UnitWeight {
     g = "g",
     mg = "mg",
+    mcg = "mcg",
     IU = "IU",
     oz = "oz",
 }
