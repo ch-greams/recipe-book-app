@@ -1,0 +1,21 @@
+[
+    {
+        "name": "Peanuts",
+        "brand": "Test",
+        "description": "That is technically a food",
+
+        "nutritionFactValues": {
+            
+            "Energy": 567,
+            "Protein": 25.8,
+            "Fat": 49.2,
+            "Monounsaturated": 24.4,
+            "Carbohydrate": 16.1,
+            "Dietary Fiber": 8.5,
+            "Sugars": 4,
+            "Sodium": 18,
+            "Vitamin A": 0,
+            "Vitamin C": 0
+        }
+    }
+]

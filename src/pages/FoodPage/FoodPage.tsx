@@ -59,9 +59,9 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         this.state = {
             isTitleInputsOpen: false,
 
-            nameInput: "PEANUTS",
-            brandInput: "",
-            descriptionInput: "REGULAR OR QUICK COOKING, DRY",
+            nameInput: this.props.foodItem.name,
+            brandInput: this.props.foodItem.brand,
+            descriptionInput: this.props.foodItem.description,
 
             customUnits: [
                 { name: "piece", amount: 53, unit: UnitWeight.g },
@@ -116,11 +116,11 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                 <div className={styles.nameBlock}>
 
                     <div className={styles.nameText}>
-                        {nameInput}
+                        {nameInput.toUpperCase()}
                     </div>
 
                     <div className={styles.brandText}>
-                        {brandInput}
+                        {brandInput.toUpperCase()}
                     </div>
                     
                 </div>
@@ -128,7 +128,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                 <div className={styles.descriptionBlock}>
 
                     <div className={styles.descriptionText}>
-                        {descriptionInput}
+                        {descriptionInput.toUpperCase()}
                     </div>
                 </div>
 
@@ -145,7 +145,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.nameInput}
                         placeholder={"NAME"}
-                        value={nameInput}
+                        value={nameInput.toUpperCase()}
                         onChange={this.handleNameEdit.bind(this)}
                     />
 
@@ -153,7 +153,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.brandInput}
                         placeholder={"BRAND"}
-                        value={brandInput}
+                        value={brandInput.toUpperCase()}
                         onChange={this.handleBrandEdit.bind(this)}
                     />
                     
@@ -165,7 +165,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.descriptionInput}
                         placeholder={"DESCRIPTION"}
-                        value={descriptionInput}
+                        value={descriptionInput.toUpperCase()}
                         onChange={this.handleDescriptionEdit.bind(this)}
                     />
 
@@ -367,7 +367,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         <div className={styles.featuredNutritionFacts}>
 
                             <NutritionFactsBlock
-                                title={"NUTRITION INFORMATION"}
+                                title={"NUTRITION FACTS"}
                                 nutritionFacts={this.getNutritionFacts(featuredNutritionFacts, nutritionFactValues)}
                             />
                         </div>

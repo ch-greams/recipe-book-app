@@ -11,8 +11,8 @@ import { UnitWeight } from "../../common/units";
 const initialState: FoodItem = {
 
     name: "Peanuts",
-    brand: "",
-    description: "",
+    brand: "Test",
+    description: "That is technically a food",
 
     nutritionFactValues: {
         [NutritionFactType.Energy]: 567,
