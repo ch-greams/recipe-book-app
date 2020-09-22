@@ -3,8 +3,8 @@ import {
     FoodItemActionTypes,
     FoodItem,
 } from "./types";
-import { NutritionFactType } from "../../common/nutrients";
-import { UnitWeight } from "../../common/units";
+import { NutritionFactType } from "../../../common/nutrients";
+import { UnitWeight } from "../../../common/units";
 
 
 

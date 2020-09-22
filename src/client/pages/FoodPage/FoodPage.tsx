@@ -5,16 +5,16 @@ import { updateName } from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
-import { UnitVolume, UnitWeight } from "../../common/units";
+import { UnitVolume, UnitWeight } from "../../../common/units";
 import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
     MINERALS_GROUP,
     NutrientGroupType,
     NutritionFactType, NUTRITION_FACT_DESCRIPTIONS, OTHER_GROUP, PROTEINS_GROUP, VITAMINS_GROUP,
-} from "../../common/nutrients";
-import Utils from "../../common/utils";
-import { Dictionary } from "../../common/typings";
+} from "../../../common/nutrients";
+import Utils from "../../../common/utils";
+import { Dictionary } from "../../../common/typings";
 import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 
 

@@ -1,6 +1,6 @@
 import React from "react";
-import { NutritionFactType } from "../../common/nutrients";
-import { UnitEnergy, UnitWeight } from "../../common/units";
+import { NutritionFactType } from "../../../common/nutrients";
+import { UnitEnergy, UnitWeight } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
 
 
