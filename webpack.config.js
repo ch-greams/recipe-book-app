@@ -3,6 +3,7 @@ const path = require('path');
 
 module.exports = {
     mode: "production",
+    entry : "./src/client/index.tsx",
     output: {
         path: path.resolve(__dirname, "out"),
     },
