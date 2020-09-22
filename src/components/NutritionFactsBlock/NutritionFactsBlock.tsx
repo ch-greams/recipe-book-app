@@ -1,5 +1,5 @@
 import React from "react";
-import { NutrientType } from "../../common/nutrients";
+import { NutritionFactType } from "../../common/nutrients";
 import { UnitEnergy, UnitWeight } from "../../common/units";
 import styles from "./NutritionFactsBlock.scss";
 
@@ -7,7 +7,7 @@ import styles from "./NutritionFactsBlock.scss";
 export interface NutritionFact {
 
     amount: number;
-    type: NutrientType | "Energy";
+    type: NutritionFactType;
     unit: UnitWeight | UnitEnergy;
     dailyValue?: number;
     isFraction: boolean;
@@ -24,6 +24,8 @@ export interface NutritionFactsBlockProps {
 export default class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
 
     private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
+
+        const isDailyValueNotEmpty = ( typeof nutritionFact.dailyValue === "number" );
 
         const dailyValueBlock = (
             <span className={styles.nutrientDailyValue}>
@@ -59,9 +61,9 @@ export default class NutritionFactsBlock extends React.Component<NutritionFactsB
                     {nutritionFact.unit}
                 </span>
 
-                {typeof nutritionFact.dailyValue === "number" && dailyValueBlock}
+                {isDailyValueNotEmpty && dailyValueBlock}
 
-                {typeof nutritionFact.dailyValue === "number" && dailyValuePercentBlock}
+                {isDailyValueNotEmpty && dailyValuePercentBlock}
 
             </div>
         );

@@ -5,28 +5,19 @@ import { updateName } from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
-import { UnitEnergy, UnitVolume, UnitWeight } from "../../common/units";
+import { UnitVolume, UnitWeight } from "../../common/units";
 import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
     MINERALS_GROUP,
     NutrientGroupType,
-    NutrientType, NUTRIENT_DESCRIPTIONS, OTHER_GROUP, PROTEINS_GROUP, VITAMINS_GROUP,
+    NutritionFactType, NUTRITION_FACT_DESCRIPTIONS, OTHER_GROUP, PROTEINS_GROUP, VITAMINS_GROUP,
 } from "../../common/nutrients";
 import Utils from "../../common/utils";
 import { Dictionary } from "../../common/typings";
-import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
+import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 
 
-
-export interface NutritionFact {
-
-    amount: number;
-    type: NutrientType | "Energy";
-    unit: UnitWeight | UnitEnergy;
-    dailyValue?: number;
-    isFraction: boolean;
-}
 
 export interface CustomUnit {
 
@@ -331,13 +322,13 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
     }
 
 
-    private getNutritionFacts(nutrientTypes: NutrientType[], nutrients: Dictionary<NutrientType, number>): NutritionFact[] {
+    private getNutritionFacts(nutrientTypes: NutritionFactType[], nutrients: Dictionary<NutritionFactType, number>): NutritionFact[] {
 
         return nutrientTypes.reduce<NutritionFact[]>(
             (previousNutritionFacts, currentNutrientType) => {
 
                 const amount = nutrients[currentNutrientType];
-                const nutrientDescription = NUTRIENT_DESCRIPTIONS[currentNutrientType];
+                const nutrientDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
 
                 return [
                     ...previousNutritionFacts,
@@ -356,7 +347,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     public render(): JSX.Element {
         
-        const { nutrients, featuredNutrients } = this.props.foodItem;
+        const { nutritionFactValues, featuredNutritionFacts } = this.props.foodItem;
 
         return (
             <div className={styles.foodPage}>
@@ -377,22 +368,13 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                             <NutritionFactsBlock
                                 title={"NUTRITION INFORMATION"}
-                                nutritionFacts={[
-                                    {
-                                        type: "Energy",
-                                        amount: this.props.foodItem.energy,
-                                        unit: UnitEnergy.kcal,
-                                        dailyValue: Utils.getDailyValuePercent(this.props.foodItem.energy, Utils.ENERGY_DAILY_VALUE_CALORIES),
-                                        isFraction: false,
-                                    },
-                                    ...this.getNutritionFacts(featuredNutrients, nutrients),
-                                ]}
+                                nutritionFacts={this.getNutritionFacts(featuredNutritionFacts, nutritionFactValues)}
                             />
                         </div>
 
                     </div>
 
-                    {/* Detailed Nutrient Information  */}
+                    {/* Detailed Nutrition Information  */}
 
                     <div className={styles.detailedNutritionFactsBlock}>
 
@@ -406,22 +388,22 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Carbohydrates}
-                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFactValues)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Lipids}
-                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutritionFactValues)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Vitamins}
-                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Other}
-                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues)}
                                 />
                             </div>
 
@@ -429,12 +411,12 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Proteins}
-                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Minerals}
-                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutrients)}
+                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutritionFactValues)}
                                 />
                             </div>
 

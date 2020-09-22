@@ -1,9 +1,11 @@
 import { Dictionary } from "./typings";
-import { UnitWeight } from "./units";
+import { UnitEnergy, UnitWeight } from "./units";
 
 
 
-export enum NutrientType {
+export enum NutritionFactType {
+
+    Energy = "Energy",
 
     // Carbohydrates
     Carbohydrate = "Carbohydrate",
@@ -84,92 +86,92 @@ export enum NutrientType {
 }
 
 
-export const CARBOHYDRATES_GROUP: NutrientType[] = [
+export const CARBOHYDRATES_GROUP: NutritionFactType[] = [
 
-    NutrientType.Carbohydrate,
-    NutrientType.DietaryFiber,
-    NutrientType.Starch,
-    NutrientType.Sugars,
+    NutritionFactType.Carbohydrate,
+    NutritionFactType.DietaryFiber,
+    NutritionFactType.Starch,
+    NutritionFactType.Sugars,
 ];
 
-export const LIPIDS_GROUP: NutrientType[] = [
+export const LIPIDS_GROUP: NutritionFactType[] = [
 
-    NutrientType.Fat,
-    NutrientType.Monounsaturated,
-    NutrientType.Polyunsaturated,
-    NutrientType.Omega3,
-    NutrientType.Omega6,
-    NutrientType.Saturated,
-    NutrientType.TransFats,
-    NutrientType.Cholesterol,
+    NutritionFactType.Fat,
+    NutritionFactType.Monounsaturated,
+    NutritionFactType.Polyunsaturated,
+    NutritionFactType.Omega3,
+    NutritionFactType.Omega6,
+    NutritionFactType.Saturated,
+    NutritionFactType.TransFats,
+    NutritionFactType.Cholesterol,
 ];
 
-export const PROTEINS_GROUP: NutrientType[] = [
+export const PROTEINS_GROUP: NutritionFactType[] = [
 
-    NutrientType.Protein,
-    NutrientType.Tryptophan,
-    NutrientType.Threonine,
-    NutrientType.Isoleucine,
-    NutrientType.Leucine,
-    NutrientType.Lysine,
-    NutrientType.Methionine,
-    NutrientType.Cystine,
-    NutrientType.Phenylalanine,
-    NutrientType.Tyrosine,
-    NutrientType.Valine,
-    NutrientType.Arginine,
-    NutrientType.Histidine,
-    NutrientType.Alanine,
-    NutrientType.AsparticAcid,
-    NutrientType.GlutamicAcid,
-    NutrientType.Glycine,
-    NutrientType.Proline,
-    NutrientType.Serine,
-    NutrientType.Hydroxyproline,
+    NutritionFactType.Protein,
+    NutritionFactType.Tryptophan,
+    NutritionFactType.Threonine,
+    NutritionFactType.Isoleucine,
+    NutritionFactType.Leucine,
+    NutritionFactType.Lysine,
+    NutritionFactType.Methionine,
+    NutritionFactType.Cystine,
+    NutritionFactType.Phenylalanine,
+    NutritionFactType.Tyrosine,
+    NutritionFactType.Valine,
+    NutritionFactType.Arginine,
+    NutritionFactType.Histidine,
+    NutritionFactType.Alanine,
+    NutritionFactType.AsparticAcid,
+    NutritionFactType.GlutamicAcid,
+    NutritionFactType.Glycine,
+    NutritionFactType.Proline,
+    NutritionFactType.Serine,
+    NutritionFactType.Hydroxyproline,
 ];
 
-export const VITAMINS_GROUP: NutrientType[] = [
+export const VITAMINS_GROUP: NutritionFactType[] = [
 
-    NutrientType.VitaminA,
-    NutrientType.VitaminC,
-    NutrientType.VitaminD,
-    NutrientType.VitaminE,
-    NutrientType.VitaminK,
-    NutrientType.VitaminB1,
-    NutrientType.VitaminB2,
-    NutrientType.VitaminB3,
-    NutrientType.VitaminB5,
-    NutrientType.VitaminB6,
-    NutrientType.VitaminB9,
-    NutrientType.VitaminB12,
-    NutrientType.Choline,
-    NutrientType.Betaine,
+    NutritionFactType.VitaminA,
+    NutritionFactType.VitaminC,
+    NutritionFactType.VitaminD,
+    NutritionFactType.VitaminE,
+    NutritionFactType.VitaminK,
+    NutritionFactType.VitaminB1,
+    NutritionFactType.VitaminB2,
+    NutritionFactType.VitaminB3,
+    NutritionFactType.VitaminB5,
+    NutritionFactType.VitaminB6,
+    NutritionFactType.VitaminB9,
+    NutritionFactType.VitaminB12,
+    NutritionFactType.Choline,
+    NutritionFactType.Betaine,
 ];
 
-export const MINERALS_GROUP: NutrientType[] = [
+export const MINERALS_GROUP: NutritionFactType[] = [
 
-    NutrientType.Calcium,
-    NutrientType.Iron,
-    NutrientType.Magnesium,
-    NutrientType.Phosphorus,
-    NutrientType.Potassium,
-    NutrientType.Sodium,
-    NutrientType.Zinc,
-    NutrientType.Copper,
-    NutrientType.Manganese,
-    NutrientType.Selenium,
-    NutrientType.Fluoride,
-    NutrientType.Chromium,
-    NutrientType.Iodine,
-    NutrientType.Molybdenum,
+    NutritionFactType.Calcium,
+    NutritionFactType.Iron,
+    NutritionFactType.Magnesium,
+    NutritionFactType.Phosphorus,
+    NutritionFactType.Potassium,
+    NutritionFactType.Sodium,
+    NutritionFactType.Zinc,
+    NutritionFactType.Copper,
+    NutritionFactType.Manganese,
+    NutritionFactType.Selenium,
+    NutritionFactType.Fluoride,
+    NutritionFactType.Chromium,
+    NutritionFactType.Iodine,
+    NutritionFactType.Molybdenum,
 ];
 
-export const OTHER_GROUP: NutrientType[] = [
+export const OTHER_GROUP: NutritionFactType[] = [
 
-    NutrientType.Alcohol,
-    NutrientType.Water,
-    NutrientType.Ash,
-    NutrientType.Caffeine,
+    NutritionFactType.Alcohol,
+    NutritionFactType.Water,
+    NutritionFactType.Ash,
+    NutritionFactType.Caffeine,
 ];
 
 
@@ -183,7 +185,7 @@ export enum NutrientGroupType {
     Other = "Other",
 }
 
-export const NUTRIENTS: NutrientType[] = [
+export const NUTRIENTS: NutritionFactType[] = [
 
     ...CARBOHYDRATES_GROUP,
     ...LIPIDS_GROUP,
@@ -195,37 +197,44 @@ export const NUTRIENTS: NutrientType[] = [
 
 
 
-export interface NutrientDescription {
-    type: NutrientType;
-    unit: UnitWeight;
+export interface NutritionFactDescription {
+    type: NutritionFactType;
+    unit: UnitWeight | UnitEnergy;
     dailyValue?: number;
     isFraction: boolean;
 }
 
-export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription> = {
+export const NUTRITION_FACT_DESCRIPTIONS: Dictionary<NutritionFactType, NutritionFactDescription> = {
+
+    [NutritionFactType.Energy]: {
+        type: NutritionFactType.Energy,
+        unit: UnitEnergy.kcal,
+        dailyValue: 2000,
+        isFraction: false,
+    },
 
     // CARBOHYDRATES
 
-    [NutrientType.Carbohydrate]: {
-        type: NutrientType.Carbohydrate,
+    [NutritionFactType.Carbohydrate]: {
+        type: NutritionFactType.Carbohydrate,
         unit: UnitWeight.g,
         dailyValue: 275,
         isFraction: false,
     },
-    [NutrientType.DietaryFiber]: {
-        type: NutrientType.DietaryFiber,
+    [NutritionFactType.DietaryFiber]: {
+        type: NutritionFactType.DietaryFiber,
         unit: UnitWeight.g,
         dailyValue: 28,
         isFraction: true,
     },
-    [NutrientType.Starch]: {
-        type: NutrientType.Starch,
+    [NutritionFactType.Starch]: {
+        type: NutritionFactType.Starch,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Sugars]: {
-        type: NutrientType.Sugars,
+    [NutritionFactType.Sugars]: {
+        type: NutritionFactType.Sugars,
         unit: UnitWeight.g,
         dailyValue: 50,
         isFraction: true,
@@ -233,50 +242,50 @@ export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription
 
     // LIPIDS
 
-    [NutrientType.Fat]: {
-        type: NutrientType.Fat,
+    [NutritionFactType.Fat]: {
+        type: NutritionFactType.Fat,
         unit: UnitWeight.g,
         dailyValue: 78,
         isFraction: false,
     },
-    [NutrientType.Monounsaturated]: {
-        type: NutrientType.Monounsaturated,
+    [NutritionFactType.Monounsaturated]: {
+        type: NutritionFactType.Monounsaturated,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Polyunsaturated]: {
-        type: NutrientType.Polyunsaturated,
+    [NutritionFactType.Polyunsaturated]: {
+        type: NutritionFactType.Polyunsaturated,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Omega3]: {
-        type: NutrientType.Omega3,
+    [NutritionFactType.Omega3]: {
+        type: NutritionFactType.Omega3,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Omega6]: {
-        type: NutrientType.Omega6,
+    [NutritionFactType.Omega6]: {
+        type: NutritionFactType.Omega6,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Saturated]: {
-        type: NutrientType.Saturated,
+    [NutritionFactType.Saturated]: {
+        type: NutritionFactType.Saturated,
         unit: UnitWeight.g,
         dailyValue: 20,
         isFraction: true,
     },
-    [NutrientType.TransFats]: {
-        type: NutrientType.TransFats,
+    [NutritionFactType.TransFats]: {
+        type: NutritionFactType.TransFats,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Cholesterol]: {
-        type: NutrientType.Cholesterol,
+    [NutritionFactType.Cholesterol]: {
+        type: NutritionFactType.Cholesterol,
         unit: UnitWeight.mg,
         dailyValue: 300,
         isFraction: true,
@@ -284,122 +293,122 @@ export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription
 
     // PROTEINS
 
-    [NutrientType.Protein]: {
-        type: NutrientType.Protein,
+    [NutritionFactType.Protein]: {
+        type: NutritionFactType.Protein,
         unit: UnitWeight.g,
         dailyValue: 50,
         isFraction: false,
     },
-    [NutrientType.Tryptophan]: {
-        type: NutrientType.Tryptophan,
+    [NutritionFactType.Tryptophan]: {
+        type: NutritionFactType.Tryptophan,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Threonine]: {
-        type: NutrientType.Threonine,
+    [NutritionFactType.Threonine]: {
+        type: NutritionFactType.Threonine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Isoleucine]: {
-        type: NutrientType.Isoleucine,
+    [NutritionFactType.Isoleucine]: {
+        type: NutritionFactType.Isoleucine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Leucine]: {
-        type: NutrientType.Leucine,
+    [NutritionFactType.Leucine]: {
+        type: NutritionFactType.Leucine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Lysine]: {
-        type: NutrientType.Lysine,
+    [NutritionFactType.Lysine]: {
+        type: NutritionFactType.Lysine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Methionine]: {
-        type: NutrientType.Methionine,
+    [NutritionFactType.Methionine]: {
+        type: NutritionFactType.Methionine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Cystine]: {
-        type: NutrientType.Cystine,
+    [NutritionFactType.Cystine]: {
+        type: NutritionFactType.Cystine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Phenylalanine]: {
-        type: NutrientType.Phenylalanine,
+    [NutritionFactType.Phenylalanine]: {
+        type: NutritionFactType.Phenylalanine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Tyrosine]: {
-        type: NutrientType.Tyrosine,
+    [NutritionFactType.Tyrosine]: {
+        type: NutritionFactType.Tyrosine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Valine]: {
-        type: NutrientType.Valine,
+    [NutritionFactType.Valine]: {
+        type: NutritionFactType.Valine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Arginine]: {
-        type: NutrientType.Arginine,
+    [NutritionFactType.Arginine]: {
+        type: NutritionFactType.Arginine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Histidine]: {
-        type: NutrientType.Histidine,
+    [NutritionFactType.Histidine]: {
+        type: NutritionFactType.Histidine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Alanine]: {
-        type: NutrientType.Alanine,
+    [NutritionFactType.Alanine]: {
+        type: NutritionFactType.Alanine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.AsparticAcid]: {
-        type: NutrientType.AsparticAcid,
+    [NutritionFactType.AsparticAcid]: {
+        type: NutritionFactType.AsparticAcid,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.GlutamicAcid]: {
-        type: NutrientType.GlutamicAcid,
+    [NutritionFactType.GlutamicAcid]: {
+        type: NutritionFactType.GlutamicAcid,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Glycine]: {
-        type: NutrientType.Glycine,
+    [NutritionFactType.Glycine]: {
+        type: NutritionFactType.Glycine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Proline]: {
-        type: NutrientType.Proline,
+    [NutritionFactType.Proline]: {
+        type: NutritionFactType.Proline,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Serine]: {
-        type: NutrientType.Serine,
+    [NutritionFactType.Serine]: {
+        type: NutritionFactType.Serine,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
     },
-    [NutrientType.Hydroxyproline]: {
-        type: NutrientType.Hydroxyproline,
+    [NutritionFactType.Hydroxyproline]: {
+        type: NutritionFactType.Hydroxyproline,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: true,
@@ -407,86 +416,86 @@ export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription
 
     // VITAMINS
 
-    [NutrientType.VitaminA]: {
-        type: NutrientType.VitaminA,
+    [NutritionFactType.VitaminA]: {
+        type: NutritionFactType.VitaminA,
         unit: UnitWeight.IU,
         dailyValue: 5000,
         isFraction: false,
     },
-    [NutrientType.VitaminC]: {
-        type: NutrientType.VitaminC,
+    [NutritionFactType.VitaminC]: {
+        type: NutritionFactType.VitaminC,
         unit: UnitWeight.mg,
         dailyValue: 90,
         isFraction: false,
     },
-    [NutrientType.VitaminD]: {
-        type: NutrientType.VitaminD,
+    [NutritionFactType.VitaminD]: {
+        type: NutritionFactType.VitaminD,
         unit: UnitWeight.IU,
         dailyValue: 400,
         isFraction: false,
     },
-    [NutrientType.VitaminE]: {
-        type: NutrientType.VitaminE,
+    [NutritionFactType.VitaminE]: {
+        type: NutritionFactType.VitaminE,
         unit: UnitWeight.mg,
         dailyValue: 15,
         isFraction: false,
     },
-    [NutrientType.VitaminK]: {
-        type: NutrientType.VitaminK,
+    [NutritionFactType.VitaminK]: {
+        type: NutritionFactType.VitaminK,
         unit: UnitWeight.mcg,
         dailyValue: 120,
         isFraction: false,
     },
-    [NutrientType.VitaminB1]: {
-        type: NutrientType.VitaminB1,
+    [NutritionFactType.VitaminB1]: {
+        type: NutritionFactType.VitaminB1,
         unit: UnitWeight.mg,
         dailyValue: 1.2,
         isFraction: false,
     },
-    [NutrientType.VitaminB2]: {
-        type: NutrientType.VitaminB2,
+    [NutritionFactType.VitaminB2]: {
+        type: NutritionFactType.VitaminB2,
         unit: UnitWeight.mg,
         dailyValue: 1.3,
         isFraction: false,
     },
-    [NutrientType.VitaminB3]: {
-        type: NutrientType.VitaminB3,
+    [NutritionFactType.VitaminB3]: {
+        type: NutritionFactType.VitaminB3,
         unit: UnitWeight.mg,
         dailyValue: 16,
         isFraction: false,
     },
-    [NutrientType.VitaminB5]: {
-        type: NutrientType.VitaminB5,
+    [NutritionFactType.VitaminB5]: {
+        type: NutritionFactType.VitaminB5,
         unit: UnitWeight.mg,
         dailyValue: 5,
         isFraction: false,
     },
-    [NutrientType.VitaminB6]: {
-        type: NutrientType.VitaminB6,
+    [NutritionFactType.VitaminB6]: {
+        type: NutritionFactType.VitaminB6,
         unit: UnitWeight.mg,
         dailyValue: 1.7,
         isFraction: false,
     },
-    [NutrientType.VitaminB9]: {
-        type: NutrientType.VitaminB9,
+    [NutritionFactType.VitaminB9]: {
+        type: NutritionFactType.VitaminB9,
         unit: UnitWeight.mcg,
         dailyValue: 400,
         isFraction: false,
     },
-    [NutrientType.VitaminB12]: {
-        type: NutrientType.VitaminB12,
+    [NutritionFactType.VitaminB12]: {
+        type: NutritionFactType.VitaminB12,
         unit: UnitWeight.mcg,
         dailyValue: 2.4,
         isFraction: false,
     },
-    [NutrientType.Choline]: {
-        type: NutrientType.Choline,
+    [NutritionFactType.Choline]: {
+        type: NutritionFactType.Choline,
         unit: UnitWeight.mg,
         dailyValue: 550,
         isFraction: false,
     },
-    [NutrientType.Betaine]: {
-        type: NutrientType.Betaine,
+    [NutritionFactType.Betaine]: {
+        type: NutritionFactType.Betaine,
         unit: UnitWeight.mg,
         dailyValue: null,
         isFraction: false,
@@ -494,86 +503,86 @@ export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription
 
     // MINERALS
 
-    [NutrientType.Calcium]: {
-        type: NutrientType.Calcium,
+    [NutritionFactType.Calcium]: {
+        type: NutritionFactType.Calcium,
         unit: UnitWeight.mg,
         dailyValue: 1300,
         isFraction: false,
     },
-    [NutrientType.Iron]: {
-        type: NutrientType.Iron,
+    [NutritionFactType.Iron]: {
+        type: NutritionFactType.Iron,
         unit: UnitWeight.mg,
         dailyValue: 18,
         isFraction: false,
     },
-    [NutrientType.Magnesium]: {
-        type: NutrientType.Magnesium,
+    [NutritionFactType.Magnesium]: {
+        type: NutritionFactType.Magnesium,
         unit: UnitWeight.mg,
         dailyValue: 420,
         isFraction: false,
     },
-    [NutrientType.Phosphorus]: {
-        type: NutrientType.Phosphorus,
+    [NutritionFactType.Phosphorus]: {
+        type: NutritionFactType.Phosphorus,
         unit: UnitWeight.mg,
         dailyValue: 1250,
         isFraction: false,
     },
-    [NutrientType.Potassium]: {
-        type: NutrientType.Potassium,
+    [NutritionFactType.Potassium]: {
+        type: NutritionFactType.Potassium,
         unit: UnitWeight.mg,
         dailyValue: 4700,
         isFraction: false,
     },
-    [NutrientType.Sodium]: {
-        type: NutrientType.Sodium,
+    [NutritionFactType.Sodium]: {
+        type: NutritionFactType.Sodium,
         unit: UnitWeight.mg,
         dailyValue: 2300,
         isFraction: false,
     },
-    [NutrientType.Zinc]: {
-        type: NutrientType.Zinc,
+    [NutritionFactType.Zinc]: {
+        type: NutritionFactType.Zinc,
         unit: UnitWeight.mg,
         dailyValue: 11,
         isFraction: false,
     },
-    [NutrientType.Copper]: {
-        type: NutrientType.Copper,
+    [NutritionFactType.Copper]: {
+        type: NutritionFactType.Copper,
         unit: UnitWeight.mg,
         dailyValue: 0.9,
         isFraction: false,
     },
-    [NutrientType.Manganese]: {
-        type: NutrientType.Manganese,
+    [NutritionFactType.Manganese]: {
+        type: NutritionFactType.Manganese,
         unit: UnitWeight.mg,
         dailyValue: 2.3,
         isFraction: false,
     },
-    [NutrientType.Selenium]: {
-        type: NutrientType.Selenium,
+    [NutritionFactType.Selenium]: {
+        type: NutritionFactType.Selenium,
         unit: UnitWeight.mcg,
         dailyValue: 55,
         isFraction: false,
     },
-    [NutrientType.Fluoride]: {
-        type: NutrientType.Fluoride,
+    [NutritionFactType.Fluoride]: {
+        type: NutritionFactType.Fluoride,
         unit: UnitWeight.mcg,
         dailyValue: null,
         isFraction: false,
     },
-    [NutrientType.Chromium]: {
-        type: NutrientType.Chromium,
+    [NutritionFactType.Chromium]: {
+        type: NutritionFactType.Chromium,
         unit: UnitWeight.mcg,
         dailyValue: 35,
         isFraction: false,
     },
-    [NutrientType.Iodine]: {
-        type: NutrientType.Iodine,
+    [NutritionFactType.Iodine]: {
+        type: NutritionFactType.Iodine,
         unit: UnitWeight.mcg,
         dailyValue: 150,
         isFraction: false,
     },
-    [NutrientType.Molybdenum]: {
-        type: NutrientType.Molybdenum,
+    [NutritionFactType.Molybdenum]: {
+        type: NutritionFactType.Molybdenum,
         unit: UnitWeight.mcg,
         dailyValue: 45,
         isFraction: false,
@@ -581,26 +590,26 @@ export const NUTRIENT_DESCRIPTIONS: Dictionary<NutrientType, NutrientDescription
 
     // OTHER
 
-    [NutrientType.Alcohol]: {
-        type: NutrientType.Alcohol,
+    [NutritionFactType.Alcohol]: {
+        type: NutritionFactType.Alcohol,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: false,
     },
-    [NutrientType.Water]: {
-        type: NutrientType.Water,
+    [NutritionFactType.Water]: {
+        type: NutritionFactType.Water,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: false,
     },
-    [NutrientType.Ash]: {
-        type: NutrientType.Ash,
+    [NutritionFactType.Ash]: {
+        type: NutritionFactType.Ash,
         unit: UnitWeight.g,
         dailyValue: null,
         isFraction: false,
     },
-    [NutrientType.Caffeine]: {
-        type: NutrientType.Caffeine,
+    [NutritionFactType.Caffeine]: {
+        type: NutritionFactType.Caffeine,
         unit: UnitWeight.mg,
         dailyValue: null,
         isFraction: false,

@@ -3,7 +3,7 @@ import {
     FoodItemActionTypes,
     FoodItem,
 } from "./types";
-import { NutrientType } from "../../common/nutrients";
+import { NutritionFactType } from "../../common/nutrients";
 import { UnitWeight } from "../../common/units";
 
 
@@ -11,28 +11,20 @@ import { UnitWeight } from "../../common/units";
 const initialState: FoodItem = {
 
     name: "Peanuts",
+    brand: "",
+    description: "",
 
-    energy: 567,
-
-    nutrients: {
-
-        // [NutrientType.Energy]: {
-        //     type: NutrientType.Energy, 
-        //     amount: 567, 
-        //     unit: UnitEnergy.kcal, 
-        //     dv: 28,
-        //     isFraction: false,
-        // },
-
-        [NutrientType.Protein]: 25.8,
-        [NutrientType.Fat]: 49.2,
-        [NutrientType.Monounsaturated]: 24.4,
-        [NutrientType.Carbohydrate]: 16.1,
-        [NutrientType.DietaryFiber]: 8.5,
-        [NutrientType.Sugars]: 4,
-        [NutrientType.Sodium]: 18,
-        [NutrientType.VitaminA]: 0,
-        [NutrientType.VitaminC]: 0,
+    nutritionFactValues: {
+        [NutritionFactType.Energy]: 567,
+        [NutritionFactType.Protein]: 25.8,
+        [NutritionFactType.Fat]: 49.2,
+        [NutritionFactType.Monounsaturated]: 24.4,
+        [NutritionFactType.Carbohydrate]: 16.1,
+        [NutritionFactType.DietaryFiber]: 8.5,
+        [NutritionFactType.Sugars]: 4,
+        [NutritionFactType.Sodium]: 18,
+        [NutritionFactType.VitaminA]: 0,
+        [NutritionFactType.VitaminC]: 0,
     },
 
     // NOTE: STATIC
@@ -40,16 +32,17 @@ const initialState: FoodItem = {
     amount: 100,
     unit: UnitWeight.g,
 
-    featuredNutrients: [
-        NutrientType.Protein,
-        NutrientType.Fat,
-        NutrientType.Monounsaturated,
-        NutrientType.Carbohydrate,
-        NutrientType.DietaryFiber,
-        NutrientType.Sugars,
-        NutrientType.Sodium,
-        NutrientType.VitaminA,
-        NutrientType.VitaminC,
+    featuredNutritionFacts: [
+        NutritionFactType.Energy,
+        NutritionFactType.Protein,
+        NutritionFactType.Fat,
+        NutritionFactType.Monounsaturated,
+        NutritionFactType.Carbohydrate,
+        NutritionFactType.DietaryFiber,
+        NutritionFactType.Sugars,
+        NutritionFactType.Sodium,
+        NutritionFactType.VitaminA,
+        NutritionFactType.VitaminC,
     ],
 };
 

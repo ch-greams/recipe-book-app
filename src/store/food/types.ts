@@ -1,4 +1,4 @@
-import { NutrientType } from "../../common/nutrients";
+import { NutritionFactType } from "../../common/nutrients";
 import { Dictionary } from "../../common/typings";
 import { UnitVolume, UnitWeight } from "../../common/units";
 
@@ -7,14 +7,16 @@ import { UnitVolume, UnitWeight } from "../../common/units";
 export interface FoodItem {
 
     name: string;
-    energy: number;
-    nutrients: Dictionary<NutrientType, number>;
+    brand: string;
+    description: string;
+
+    nutritionFactValues: Dictionary<NutritionFactType, number>;
 
     // NOTE: STATIC
 
     amount: number;
     unit: UnitWeight | UnitVolume;
-    featuredNutrients: NutrientType[];
+    featuredNutritionFacts: NutritionFactType[];
 }
 
 
