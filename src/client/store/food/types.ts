@@ -27,7 +27,6 @@ export interface FoodPageStore {
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 
 export const FOOD_ITEM_REQUEST = "FOOD_ITEM_REQUEST";
-export const FOOD_ITEM_RECEIVE = "FOOD_ITEM_RECEIVE";
 
 
 export const FOOD_ITEM_FETCH_REQUESTED = "FOOD_ITEM_FETCH_REQUESTED";
@@ -38,11 +37,6 @@ export const FOOD_ITEM_FETCH_ERROR = "FOOD_ITEM_FETCH_ERROR";
 
 interface UpdateNameAction {
     type: typeof FOOD_ITEM_UPDATE_NAME;
-    payload: string;
-}
-
-interface FoodItemRequestAction {
-    type: typeof FOOD_ITEM_REQUEST;
     payload: string;
 }
 
@@ -59,5 +53,5 @@ interface FoodItemFetchSuccessAction {
 
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | FoodItemRequestAction | FoodItemFetchSuccessAction | FoodItemFetchRequestedAction
+    UpdateNameAction | FoodItemFetchSuccessAction | FoodItemFetchRequestedAction
 );

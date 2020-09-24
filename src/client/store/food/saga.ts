@@ -20,7 +20,8 @@ function* fetchFoodItem(action: FoodItemFetchRequestedAction): Generator<StrictE
         yield put({ type: FOOD_ITEM_FETCH_SUCCESS, payload: response.body });
     }
     catch (error) {
-        yield put({ type: FOOD_ITEM_FETCH_ERROR, message: error.message });
+
+        yield put({ type: FOOD_ITEM_FETCH_ERROR, payload: error.message });
     }
 }
 

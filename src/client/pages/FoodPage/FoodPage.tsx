@@ -10,9 +10,13 @@ import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
     MINERALS_GROUP,
+    OTHER_GROUP,
+    PROTEINS_GROUP,
+    VITAMINS_GROUP,
     NutrientGroupType,
-    NutritionFactType, NUTRITION_FACT_DESCRIPTIONS, OTHER_GROUP, PROTEINS_GROUP, VITAMINS_GROUP,
+    NutritionFactType,
 } from "../../../common/nutrients";
+import NUTRITION_FACT_DESCRIPTIONS from "../../../common/mapping/nutritionFactDescriptions";
 import Utils from "../../../common/utils";
 import { Dictionary } from "../../../common/typings";
 import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";

@@ -1,7 +1,8 @@
 import {
     FOOD_ITEM_UPDATE_NAME,
     FoodItemActionTypes,
-    FoodPageStore, FOOD_ITEM_REQUEST, FOOD_ITEM_FETCH_SUCCESS
+    FoodPageStore,
+    FOOD_ITEM_FETCH_SUCCESS,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutrients";
 import { UnitWeight } from "../../../common/units";
@@ -48,13 +49,6 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             return {
                 ...state,
                 name: action.payload,
-            };
-        }
-
-        case FOOD_ITEM_REQUEST: {
-            return {
-                ...state,
-                id: action.payload,
             };
         }
 
