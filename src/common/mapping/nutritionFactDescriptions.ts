@@ -12,6 +12,24 @@ const ENERGY: Dictionary<NutritionFactType, NutritionFactDescription> = {
         dailyValue: 2000,
         isFraction: false,
     },
+    [NutritionFactType.CarbohydrateEnergy]: {
+        type: NutritionFactType.CarbohydrateEnergy,
+        unit: UnitEnergy.kcal,
+        dailyValue: 1098,
+        isFraction: false,
+    },
+    [NutritionFactType.FatEnergy]: {
+        type: NutritionFactType.FatEnergy,
+        unit: UnitEnergy.kcal,
+        dailyValue: 702,
+        isFraction: false,
+    },
+    [NutritionFactType.ProteinEnergy]: {
+        type: NutritionFactType.ProteinEnergy,
+        unit: UnitEnergy.kcal,
+        dailyValue: 200,
+        isFraction: false,
+    },
 };
 
 const CARBOHYDRATES: Dictionary<NutritionFactType, NutritionFactDescription> = {

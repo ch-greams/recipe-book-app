@@ -5,6 +5,9 @@ import { UnitEnergy, UnitWeight } from "./units";
 export enum NutritionFactType {
 
     Energy = "Energy",
+    CarbohydrateEnergy = "Carbohydrate Energy",
+    FatEnergy = "Fat Energy",
+    ProteinEnergy = "Protein Energy",
 
     // Carbohydrates
     Carbohydrate = "Carbohydrate",
