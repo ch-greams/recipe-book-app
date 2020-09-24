@@ -47,9 +47,6 @@ interface FoodPageProps extends FoodPageOwnProps, FoodPageStateToProps, FoodPage
 
 export interface FoodPageState {
     isTitleInputsOpen: boolean;
-
-    // TODO: Remove placeholder later
-    amount: number;
 }
 
 class FoodPage extends Component<FoodPageProps, FoodPageState> {
@@ -59,8 +56,6 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         
         this.state = {
             isTitleInputsOpen: false,
-
-            amount: 0,
         };
     }
 
@@ -323,12 +318,17 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
     }
 
 
-    private getNutritionFacts(nutrientTypes: NutritionFactType[], nutrients: Dictionary<NutritionFactType, number>): NutritionFact[] {
+    private getNutritionFacts(
+        nutrientTypes: NutritionFactType[],
+        nutrients: Dictionary<NutritionFactType, number>,
+        nutrientInputs: Dictionary<NutritionFactType, string>,
+    ): NutritionFact[] {
 
         return nutrientTypes.reduce<NutritionFact[]>(
             (previousNutritionFacts, currentNutrientType) => {
 
                 const amount = nutrients[currentNutrientType];
+                const inputValue = nutrientInputs[currentNutrientType];
                 const nutrientDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
 
                 return [
@@ -336,6 +336,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     {
                         type: currentNutrientType,
                         amount: amount,
+                        inputValue: inputValue,
                         unit: nutrientDescription.unit,
                         dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
                         isFraction: nutrientDescription.isFraction,
@@ -348,7 +349,14 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     public render(): JSX.Element {
         
-        const { name, brand, description, nutritionFactValues, featuredNutritionFacts } = this.props.foodItem;
+        const {
+            name,
+            brand,
+            description,
+            nutritionFactValues,
+            nutritionFactInputs,
+            featuredNutritionFacts,
+        } = this.props.foodItem;
 
         if (!this.props.foodItem.isLoaded) {
             return (<h1>LOADING</h1>);
@@ -373,7 +381,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                             <NutritionFactsBlock
                                 title={"NUTRITION FACTS"}
-                                nutritionFacts={this.getNutritionFacts(featuredNutritionFacts, nutritionFactValues)}
+                                nutritionFacts={this.getNutritionFacts(featuredNutritionFacts, nutritionFactValues, nutritionFactInputs)}
                             />
                         </div>
 
@@ -393,22 +401,22 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Carbohydrates}
-                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Lipids}
-                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Vitamins}
-                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Other}
-                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
                             </div>
 
@@ -416,12 +424,12 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Proteins}
-                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Minerals}
-                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutritionFactValues)}
+                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
                             </div>
 

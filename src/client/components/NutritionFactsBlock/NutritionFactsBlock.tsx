@@ -1,12 +1,16 @@
 import React from "react";
+import { connect } from "react-redux";
 import { NutritionFactType } from "../../../common/nutrients";
+import { updateNutritionFact } from "../../store/food/actions";
 import { UnitEnergy, UnitWeight } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
+import Utils from "../../../common/utils";
 
 
 export interface NutritionFact {
 
     amount: number;
+    inputValue: string;
     type: NutritionFactType;
     unit: UnitWeight | UnitEnergy;
     dailyValue?: number;
@@ -14,14 +18,30 @@ export interface NutritionFact {
 }
 
 
-export interface NutritionFactsBlockProps {
+interface NutritionFactsBlockOwnProps {
 
     title: string;
     nutritionFacts: NutritionFact[];
 }
 
+interface NutritionFactsBlockDispatchToProps {
+    updateNutritionFact: typeof updateNutritionFact;
+}
 
-export default class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
+interface NutritionFactsBlockProps extends NutritionFactsBlockOwnProps, NutritionFactsBlockDispatchToProps { }
+
+
+class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
+
+    private handleOnChange(nutritionFact: NutritionFact): (event: React.ChangeEvent<HTMLInputElement>) => void {
+
+        return (event: React.ChangeEvent<HTMLInputElement>) => {
+
+            const inputValue = Utils.decimalNormalizer((event.target.value || ""), "0");
+        
+            this.props.updateNutritionFact(nutritionFact.type, inputValue);    
+        };
+    }
 
     private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
 
@@ -53,8 +73,8 @@ export default class NutritionFactsBlock extends React.Component<NutritionFactsB
                 <input
                     type={"text"}
                     className={styles.nutrientAmount}
-                    value={nutritionFact.amount}
-                    onChange={console.log}
+                    value={nutritionFact.inputValue}
+                    onChange={this.handleOnChange(nutritionFact)}
                 />
 
                 <span className={styles.nutrientUnit}>
@@ -88,4 +108,8 @@ export default class NutritionFactsBlock extends React.Component<NutritionFactsB
     }
 }
 
+const mapDispatchToProps: NutritionFactsBlockDispatchToProps = {
+    updateNutritionFact,
+};
 
+export default connect(null, mapDispatchToProps)(NutritionFactsBlock);

@@ -16,6 +16,7 @@ export interface FoodPageStore {
     description: string;
 
     nutritionFactValues: Dictionary<NutritionFactType, number>;
+    nutritionFactInputs: Dictionary<NutritionFactType, string>;
 
     // NOTE: STATIC
 
@@ -29,6 +30,7 @@ export interface FoodPageStore {
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_DESCRIPTION = "FOOD_ITEM_UPDATE_DESCRIPTION";
+export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 
 
 export const FOOD_ITEM_FETCH_REQUESTED = "FOOD_ITEM_FETCH_REQUESTED";
@@ -51,6 +53,10 @@ interface UpdateDescriptionAction {
     payload: string;
 }
 
+interface UpdateNutritionFactAction {
+    type: typeof FOOD_ITEM_UPDATE_NUTRITION_FACT;
+    payload: Dictionary<NutritionFactType, string>;
+}
 
 export interface FoodItemFetchRequestedAction {
     type: typeof FOOD_ITEM_FETCH_REQUESTED;
@@ -68,6 +74,6 @@ interface FoodItemFetchErrorAction {
 }
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateDescriptionAction |
+    UpdateNameAction | UpdateBrandAction | UpdateDescriptionAction | UpdateNutritionFactAction |
     FoodItemFetchRequestedAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
 );

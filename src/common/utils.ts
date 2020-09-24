@@ -20,6 +20,18 @@ export default class Utils {
         return Number(getRoundedValue);
     }
 
+    public static decimalNormalizer(value: string, previousValue: string): string {
+
+        if (value) {
+            const isDouble = /^\d*\.?\d+$/.test(value);
+            const isPartialDecimal = /^\d*\.?$/.test(value);
+
+            return ( (isDouble || isPartialDecimal) ? value : (previousValue || "0") );
+        }
+
+        return "0";
+    }
+
     // NOTE: APP-SPECIFIC CALCULATIONS
 
     public static getDailyValuePercent(currentValue?: number, dailyValue?: number): number | null {

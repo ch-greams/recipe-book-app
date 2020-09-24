@@ -7,9 +7,12 @@ import {
     FOOD_ITEM_FETCH_ERROR,
     FOOD_ITEM_UPDATE_BRAND,
     FOOD_ITEM_UPDATE_DESCRIPTION,
+    FOOD_ITEM_UPDATE_NUTRITION_FACT,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutrients";
 import { UnitWeight } from "../../../common/units";
+import { Dictionary } from "../../../common/typings";
+import Utils from "../../../common/utils";
 
 
 
@@ -23,6 +26,8 @@ const initialState: FoodPageStore = {
     brand: "Brand",
     description: "Description",
     nutritionFactValues: {},
+
+    nutritionFactInputs: {},
 
     // NOTE: STATIC
 
@@ -48,6 +53,20 @@ const initialState: FoodPageStore = {
     ],
 };
 
+
+function convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
+
+    return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
+        (acc, nfType) => ({ ...acc, [nfType]: String(values[nfType]) }), {}
+    );
+}
+
+function convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
+
+    return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
+        (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {}
+    );
+}
 
 export default function foodPageReducer(state = initialState, action: FoodItemActionTypes): FoodPageStore {
 
@@ -96,6 +115,8 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 brand: foodItem.brand,
                 description: foodItem.description,
                 nutritionFactValues: foodItem.nutritionFactValues,
+
+                nutritionFactInputs: convertNutritionFactValuesIntoInputs(foodItem.nutritionFactValues),
             };
         }
 
@@ -105,6 +126,22 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 ...state,
                 isLoaded: true,
                 errorMessage: action.payload as string,
+            };
+        }
+
+        case FOOD_ITEM_UPDATE_NUTRITION_FACT: {
+
+            return {
+                ...state,
+
+                nutritionFactValues: {
+                    ...state.nutritionFactValues,
+                    ...convertNutritionFactInputsIntoValues(action.payload),
+                },
+                nutritionFactInputs: {
+                    ...state.nutritionFactInputs,
+                    ...action.payload as Dictionary<NutritionFactType, string>,
+                },
             };
         }
 
