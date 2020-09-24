@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FoodPageStore } from "../../store/food/types";
-import { requestFoodItem, updateName } from "../../store/food/actions";
+import {
+    requestFoodItem,
+    updateName,
+    updateBrand,
+    updateDescription,
+} from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
-import { UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnit, UnitVolume, UnitWeight } from "../../../common/units";
 import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
@@ -23,14 +28,6 @@ import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFa
 
 
 
-export interface CustomUnit {
-
-    name: string;
-    amount: number;
-    unit: UnitWeight;
-}
-
-
 interface FoodPageOwnProps {
     foodId: string;
 }
@@ -41,6 +38,8 @@ interface FoodPageStateToProps {
 
 interface FoodPageDispatchToProps {
     updateName: typeof updateName;
+    updateBrand: typeof updateBrand;
+    updateDescription: typeof updateDescription;
     requestFoodItem: typeof requestFoodItem;
 }
 
@@ -48,12 +47,6 @@ interface FoodPageProps extends FoodPageOwnProps, FoodPageStateToProps, FoodPage
 
 export interface FoodPageState {
     isTitleInputsOpen: boolean;
-
-    nameInput: string;
-    brandInput: string;
-    descriptionInput: string;
-
-    customUnits: CustomUnit[];
 
     // TODO: Remove placeholder later
     amount: number;
@@ -67,15 +60,6 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         this.state = {
             isTitleInputsOpen: false,
 
-            nameInput: this.props.foodItem.name,
-            brandInput: this.props.foodItem.brand,
-            descriptionInput: this.props.foodItem.description,
-
-            customUnits: [
-                { name: "piece", amount: 53, unit: UnitWeight.g },
-                { name: "container", amount: 127, unit: UnitWeight.g }
-            ],
-            
             amount: 0,
         };
     }
@@ -100,17 +84,23 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     private handleNameEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
-        this.setState({ nameInput: (event.target.value || "").toUpperCase() });
+        this.props.updateName(
+            (event.target.value || "").toUpperCase()
+        );
     }
 
     private handleBrandEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
-        this.setState({ brandInput: (event.target.value || "").toUpperCase() });
+        this.props.updateBrand(
+            (event.target.value || "").toUpperCase()
+        );
     }
 
     private handleDescriptionEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
-        this.setState({ descriptionInput: (event.target.value || "").toUpperCase() });
+        this.props.updateDescription(
+            (event.target.value || "").toUpperCase()
+        );
     }
 
     // NOTE: Elements
@@ -254,7 +244,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     private getParametersBlock(): JSX.Element {
 
-        const { customUnits } = this.state;
+        const { customUnits } = this.props.foodItem;
 
         return (
             
@@ -452,6 +442,8 @@ const mapStateToProps = (state: AppState): FoodPageStateToProps => ({
 
 const mapDispatchToProps: FoodPageDispatchToProps = {
     updateName,
+    updateBrand,
+    updateDescription,
     requestFoodItem,
 };
 

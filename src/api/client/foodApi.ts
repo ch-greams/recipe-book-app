@@ -5,7 +5,7 @@ import { Food } from "../../common/typings";
 
 export default class FoodApi {
 
-    public static readonly API_PATH: string = "/api/food";
+    public static readonly API_PATH: string = "/api/food/";
 
 
     public static async getFoodItem(id: string): Promise<Food> {

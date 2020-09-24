@@ -5,6 +5,8 @@ import {
     FOOD_ITEM_FETCH_REQUESTED,
     FOOD_ITEM_FETCH_SUCCESS,
     FOOD_ITEM_FETCH_ERROR,
+    FOOD_ITEM_UPDATE_BRAND,
+    FOOD_ITEM_UPDATE_DESCRIPTION,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutrients";
 import { UnitWeight } from "../../../common/units";
@@ -17,15 +19,20 @@ const initialState: FoodPageStore = {
     errorMessage: null,
 
     id: "",
-    name: "",
-    brand: "",
-    description: "",
+    name: "Name",
+    brand: "Brand",
+    description: "Description",
     nutritionFactValues: {},
 
     // NOTE: STATIC
 
     amount: 100,
     unit: UnitWeight.g,
+
+    customUnits: [
+        { name: "piece", amount: 53, unit: UnitWeight.g },
+        { name: "container", amount: 127, unit: UnitWeight.g }
+    ],
 
     featuredNutritionFacts: [
         NutritionFactType.Energy,
@@ -50,6 +57,20 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             return {
                 ...state,
                 name: action.payload,
+            };
+        }
+
+        case FOOD_ITEM_UPDATE_BRAND: {
+            return {
+                ...state,
+                brand: action.payload,
+            };
+        }
+
+        case FOOD_ITEM_UPDATE_DESCRIPTION: {
+            return {
+                ...state,
+                description: action.payload,
             };
         }
 
@@ -82,7 +103,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
 
             return {
                 ...state,
-                isLoaded: false,
+                isLoaded: true,
                 errorMessage: action.payload as string,
             };
         }

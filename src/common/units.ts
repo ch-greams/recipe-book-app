@@ -19,3 +19,9 @@ export enum UnitEnergy {
     kcal = "kcal",
     kj = "kj",
 }
+
+export interface CustomUnit {
+    name: string;
+    amount: number;
+    unit: UnitWeight;
+}

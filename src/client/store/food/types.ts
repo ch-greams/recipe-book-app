@@ -1,6 +1,6 @@
 import { NutritionFactType } from "../../../common/nutrients";
 import { Dictionary, Food } from "../../../common/typings";
-import { UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnit, UnitVolume, UnitWeight } from "../../../common/units";
 
 
 
@@ -19,6 +19,7 @@ export interface FoodPageStore {
 
     // NOTE: STATIC
 
+    customUnits: CustomUnit[];
     amount: number;
     unit: UnitWeight | UnitVolume;
     featuredNutritionFacts: NutritionFactType[];
@@ -26,6 +27,9 @@ export interface FoodPageStore {
 
 
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
+export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
+export const FOOD_ITEM_UPDATE_DESCRIPTION = "FOOD_ITEM_UPDATE_DESCRIPTION";
+
 
 export const FOOD_ITEM_FETCH_REQUESTED = "FOOD_ITEM_FETCH_REQUESTED";
 export const FOOD_ITEM_FETCH_SUCCESS = "FOOD_ITEM_FETCH_SUCCESS";
@@ -34,6 +38,16 @@ export const FOOD_ITEM_FETCH_ERROR = "FOOD_ITEM_FETCH_ERROR";
 
 interface UpdateNameAction {
     type: typeof FOOD_ITEM_UPDATE_NAME;
+    payload: string;
+}
+
+interface UpdateBrandAction {
+    type: typeof FOOD_ITEM_UPDATE_BRAND;
+    payload: string;
+}
+
+interface UpdateDescriptionAction {
+    type: typeof FOOD_ITEM_UPDATE_DESCRIPTION;
     payload: string;
 }
 
@@ -54,6 +68,6 @@ interface FoodItemFetchErrorAction {
 }
 
 export type FoodItemActionTypes = (
-    UpdateNameAction |
+    UpdateNameAction | UpdateBrandAction | UpdateDescriptionAction |
     FoodItemFetchRequestedAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
 );
