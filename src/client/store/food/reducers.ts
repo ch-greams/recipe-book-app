@@ -2,7 +2,9 @@ import {
     FOOD_ITEM_UPDATE_NAME,
     FoodItemActionTypes,
     FoodPageStore,
+    FOOD_ITEM_FETCH_REQUESTED,
     FOOD_ITEM_FETCH_SUCCESS,
+    FOOD_ITEM_FETCH_ERROR,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutrients";
 import { UnitWeight } from "../../../common/units";
@@ -12,13 +14,12 @@ import { UnitWeight } from "../../../common/units";
 const initialState: FoodPageStore = {
 
     isLoaded: false,
+    errorMessage: null,
 
     id: "",
-
     name: "",
     brand: "",
     description: "",
-
     nutritionFactValues: {},
 
     // NOTE: STATIC
@@ -52,15 +53,37 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
+        case FOOD_ITEM_FETCH_REQUESTED: {
+            return {
+                ...state,
+                isLoaded: false,
+                errorMessage: null,
+
+                id: action.payload as string,
+            };
+        }
+
         case FOOD_ITEM_FETCH_SUCCESS: {
+            const foodItem = action.payload;
             return {
                 ...state,
                 isLoaded: true,
+                errorMessage: null,
 
-                name: action.payload.name,
-                brand: action.payload.brand,
-                description: action.payload.description,
-                nutritionFactValues: action.payload.nutritionFactValues,
+                id: foodItem.id,
+                name: foodItem.name,
+                brand: foodItem.brand,
+                description: foodItem.description,
+                nutritionFactValues: foodItem.nutritionFactValues,
+            };
+        }
+
+        case FOOD_ITEM_FETCH_ERROR: {
+
+            return {
+                ...state,
+                isLoaded: false,
+                errorMessage: action.payload as string,
             };
         }
 

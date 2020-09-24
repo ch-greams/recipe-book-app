@@ -7,6 +7,7 @@ import { UnitVolume, UnitWeight } from "../../../common/units";
 export interface FoodPageStore {
 
     isLoaded: boolean;
+    errorMessage: string;
 
     id: string;
 
@@ -26,11 +27,7 @@ export interface FoodPageStore {
 
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 
-export const FOOD_ITEM_REQUEST = "FOOD_ITEM_REQUEST";
-
-
 export const FOOD_ITEM_FETCH_REQUESTED = "FOOD_ITEM_FETCH_REQUESTED";
-export const FOOD_ITEM_FETCH_STARTED = "FOOD_ITEM_FETCH_STARTED";
 export const FOOD_ITEM_FETCH_SUCCESS = "FOOD_ITEM_FETCH_SUCCESS";
 export const FOOD_ITEM_FETCH_ERROR = "FOOD_ITEM_FETCH_ERROR";
 
@@ -51,7 +48,12 @@ interface FoodItemFetchSuccessAction {
     payload: Food;
 }
 
+interface FoodItemFetchErrorAction {
+    type: typeof FOOD_ITEM_FETCH_ERROR;
+    payload: string;
+}
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | FoodItemFetchSuccessAction | FoodItemFetchRequestedAction
+    UpdateNameAction |
+    FoodItemFetchRequestedAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
 );
