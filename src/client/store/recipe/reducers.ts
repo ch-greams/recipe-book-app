@@ -16,7 +16,7 @@ const initialState: RecipeItem = {
 };
 
 
-export default function recipeItemReducer(state = initialState, action: RecipeItemActionTypes): RecipeItem {
+export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipeItem {
 
     switch (action.type) {
 

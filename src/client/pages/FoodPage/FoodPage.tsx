@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FoodItem } from "../../store/food/types";
-import { updateName } from "../../store/food/actions";
+import { FoodPageStore } from "../../store/food/types";
+import { requestFoodItem, updateName } from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
 import styles from "./FoodPage.scss";
@@ -27,15 +27,20 @@ export interface CustomUnit {
 }
 
 
+interface FoodPageOwnProps {
+    foodId: string;
+}
+
 interface FoodPageStateToProps {
-    foodItem: FoodItem;
+    foodItem: FoodPageStore;
 }
 
 interface FoodPageDispatchToProps {
     updateName: typeof updateName;
+    requestFoodItem: typeof requestFoodItem;
 }
 
-interface FoodPageProps extends FoodPageStateToProps, FoodPageDispatchToProps { }
+interface FoodPageProps extends FoodPageOwnProps, FoodPageStateToProps, FoodPageDispatchToProps { }
 
 export interface FoodPageState {
     isTitleInputsOpen: boolean;
@@ -43,7 +48,6 @@ export interface FoodPageState {
     nameInput: string;
     brandInput: string;
     descriptionInput: string;
-
 
     customUnits: CustomUnit[];
 
@@ -70,6 +74,11 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
             
             amount: 0,
         };
+    }
+
+    public componentDidMount(): void {
+
+        this.props.requestFoodItem(this.props.foodId);
     }
 
     // NOTE: Input handles
@@ -102,9 +111,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     // NOTE: Elements
 
-    private getTitleBlock(): JSX.Element {
-
-        const { nameInput, brandInput, descriptionInput } = this.state;
+    private getTitleBlock(name: string, brand: string, description: string): JSX.Element {
 
         const titleBlockStatic = (
 
@@ -116,11 +123,11 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                 <div className={styles.nameBlock}>
 
                     <div className={styles.nameText}>
-                        {nameInput.toUpperCase()}
+                        {name.toUpperCase()}
                     </div>
 
                     <div className={styles.brandText}>
-                        {brandInput.toUpperCase()}
+                        {brand.toUpperCase()}
                     </div>
                     
                 </div>
@@ -128,7 +135,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                 <div className={styles.descriptionBlock}>
 
                     <div className={styles.descriptionText}>
-                        {descriptionInput.toUpperCase()}
+                        {description.toUpperCase()}
                     </div>
                 </div>
 
@@ -145,7 +152,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.nameInput}
                         placeholder={"NAME"}
-                        value={nameInput.toUpperCase()}
+                        value={name.toUpperCase()}
                         onChange={this.handleNameEdit.bind(this)}
                     />
 
@@ -153,7 +160,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.brandInput}
                         placeholder={"BRAND"}
-                        value={brandInput.toUpperCase()}
+                        value={brand.toUpperCase()}
                         onChange={this.handleBrandEdit.bind(this)}
                     />
                     
@@ -165,7 +172,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                         type={"text"}
                         className={styles.descriptionInput}
                         placeholder={"DESCRIPTION"}
-                        value={descriptionInput.toUpperCase()}
+                        value={description.toUpperCase()}
                         onChange={this.handleDescriptionEdit.bind(this)}
                     />
 
@@ -347,7 +354,11 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
     public render(): JSX.Element {
         
-        const { nutritionFactValues, featuredNutritionFacts } = this.props.foodItem;
+        const { name, brand, description, nutritionFactValues, featuredNutritionFacts } = this.props.foodItem;
+
+        if (!this.props.foodItem.isLoaded) {
+            return (<h1>LOADING</h1>);
+        }
 
         return (
             <div className={styles.foodPage}>
@@ -356,7 +367,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                     {/* Title Block */}
 
-                    {this.getTitleBlock()}
+                    {this.getTitleBlock(name, brand, description)}
 
                     {/* Main Block */}
 
@@ -432,11 +443,12 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
 
 const mapStateToProps = (state: AppState): FoodPageStateToProps => ({
-    foodItem: state.foodItem,
+    foodItem: state.foodPage,
 });
 
 const mapDispatchToProps: FoodPageDispatchToProps = {
     updateName,
+    requestFoodItem,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodPage);

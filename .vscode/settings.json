@@ -9,6 +9,8 @@
         "Phytosterol",
         "Readonly",
         "cond",
-        "stylelint"
+        "crossorigin",
+        "stylelint",
+        "svgr"
     ]
 }

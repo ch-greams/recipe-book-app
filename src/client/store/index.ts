@@ -1,27 +1,36 @@
 import { applyMiddleware, combineReducers, createStore, Store } from "redux";
+import { createLogger } from "redux-logger";
 import { composeWithDevTools } from "redux-devtools-extension";
-import thunkMiddleware from "redux-thunk";
-import userSettingsReducer from "./userSettings/reducers";
-import foodItemReducer from "./food/reducers";
-import recipeItemReducer from "./recipe/reducers";
+import foodPageReducer from "./food/reducers";
+import recipePageReducer from "./recipe/reducers";
+import rootSaga from "./rootSaga";
+import createSagaMiddleware from "redux-saga";
+
 
 
 const rootReducer = combineReducers({
-    userSettings: userSettingsReducer,
-    foodItem: foodItemReducer,
-    recipeItem: recipeItemReducer,
+    foodPage: foodPageReducer,
+    recipePage: recipePageReducer,
 });
-
 
 export type AppState = ReturnType<typeof rootReducer>;
 
 export default function configureStore(): Store {
 
-    const middlewares = [ thunkMiddleware ];
+    const sagaMiddleware = createSagaMiddleware();
+
+    const middlewares = [
+        createLogger(),
+        sagaMiddleware,
+    ];
     const middleWareEnhancer = applyMiddleware(...middlewares);
 
-    return createStore(
+    const store = createStore(
         rootReducer,
         composeWithDevTools(middleWareEnhancer),
     );
+
+    sagaMiddleware.run(rootSaga);
+
+    return store;
 }

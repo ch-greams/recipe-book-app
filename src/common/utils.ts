@@ -1,4 +1,3 @@
-// import fs from "fs";
 import { Dictionary } from "./typings";
 
 
@@ -7,7 +6,6 @@ export default class Utils {
 
     public static readonly ENERGY_DAILY_VALUE_CALORIES: number = 2000;
 
-    // private static readonly DEFAULT_READ_FILE_OPTIONS = "utf8";
 
     // NOTE: CALCULATIONS
 
@@ -38,17 +36,6 @@ export default class Utils {
                 : null
         );
     }
-
-    // NOTE: GENERAL
-
-    // public static fileExists(path: string): boolean {
-    //     return fs.existsSync(path);
-    // }
-
-    // public static async readJsonFileAsync<T>(path: string): Promise<T> {
-    //     const rawJsonString = await fs.promises.readFile(path, Utils.DEFAULT_READ_FILE_OPTIONS) as string;
-    //     return JSON.parse(rawJsonString);
-    // }
 
     public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): Array<keyof T> {
         return Object.keys(obj) as Array<keyof T>;

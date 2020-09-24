@@ -1,11 +1,51 @@
-const path = require('path');
+const path = require("path");
 
+// TODO: Use template for HTML and don't reference anything outside "out" folder?
 
-module.exports = {
+const server = {
+    target: "node",
+    watch: true,
+    //externals: [ "express" ], // NOTE: Consider using webpack-node-externals to reduce bundle size
+    node: {
+        __dirname: false,
+    },
     mode: "production",
-    entry : "./src/client/index.tsx",
+    entry: { "server": path.join(__dirname, "src", "server", "index.ts") },
     output: {
         path: path.resolve(__dirname, "out"),
+        filename: "[name]/[name].bundle.js",
+    },
+    devtool: "source-map",
+    resolve: {
+        extensions: [ ".ts", ".js" ],
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                loader: "ts-loader",
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "source-map-loader"
+            },
+        ]
+    }
+};
+
+const client = {
+    target: "web",
+    watch: true,
+    mode: "production",
+    entry: {
+        "client": path.join(__dirname, "src", "client", "index.tsx")
+    },
+    output: {
+        path: path.resolve(__dirname, "out"),
+        filename: "[name]/[name].bundle.js"
     },
     devtool: "source-map",
     resolve: {
@@ -26,6 +66,7 @@ module.exports = {
             {
                 enforce: "pre",
                 test: /\.js$/,
+                exclude: /node_modules/,
                 loader: "source-map-loader"
             },
             {
@@ -58,3 +99,6 @@ module.exports = {
         "react-dom": "ReactDOM"
     }
 };
+
+
+module.exports = [ server, client ];

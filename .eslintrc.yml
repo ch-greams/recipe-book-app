@@ -44,3 +44,4 @@ rules:
     "@typescript-eslint/no-magic-numbers":
         - 2
         - ignoreReadonlyClassProperties: true
+          ignoreEnums: true

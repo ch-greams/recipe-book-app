@@ -1,47 +1,40 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { AppState } from "../store";
-import { UserSettings } from "../store/userSettings/types";
-import HomePage from "../pages/HomePage/HomePage";
+import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import FoodPage from "../pages/FoodPage/FoodPage";
+import HomePage from "../pages/HomePage/HomePage";
 import RecipePage from "../pages/RecipePage/RecipePage";
 
 
 
-export enum Page {
-    Home = "HomePage",
-    Food = "FoodPage",
-    Recipe = "RecipePage",
+export enum Route {
+    Home = "",
+    Food = "food",
+    Recipe = "recipe",
 }
 
-
-interface RouterProps {
-    userSettings: UserSettings;
+interface RouterParams {
+    route: Route;
+    id: string;
 }
 
+type RouterProps = RouteComponentProps<RouterParams>;
 
-class Router extends Component<RouterProps> {
+   
+const Router: React.FunctionComponent<RouterProps> = (props: RouterProps): React.ReactElement => {
 
-    public render(): JSX.Element {
+    const { match: { params: { route, id } } } = props;
 
-        switch (this.props.userSettings.page) {
+    switch (route) {
+        case Route.Food:
+            return <FoodPage foodId={id} />;
 
-            case Page.Food:
-                return <FoodPage />;
+        case Route.Recipe:
+            return <RecipePage />;
 
-            case Page.Recipe:
-                return <RecipePage />;
-
-            case Page.Home:
-            default:
-                return <HomePage />;
-        }
+        case Route.Home:
+        default:
+            return <HomePage />;
     }
-}
+};
 
-
-const mapStateToProps = (state: AppState): RouterProps => ({
-    userSettings: state.userSettings,
-});
-
-export default connect(mapStateToProps, {})(Router);
+export default Router;

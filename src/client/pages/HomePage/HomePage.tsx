@@ -3,20 +3,17 @@ import styles from "./HomePage.scss";
 import { connect } from "react-redux";
 import { AppState } from "../../store";
 import { updateName } from "../../store/food/actions";
-import { FoodItem } from "../../store/food/types";
-import { UserSettings } from "../../store/userSettings/types";
-import { changePage } from "../../store/userSettings/actions";
-import { Page } from "../../components/Router";
+import { FoodPageStore } from "../../store/food/types";
+import { Link } from "react-router-dom";
+import { Route } from "../../components/Router";
 
 
 
 interface HomePageStateToProps {
-    userSettings: UserSettings;
-    foodItem: FoodItem;
+    foodItem: FoodPageStore;
 }
 
 interface HomePageDispatchToProps {
-    changePage: typeof changePage;
     updateName: typeof updateName;
 }
 
@@ -36,8 +33,6 @@ class HomePage extends Component<HomePageProps> {
         const createRecipeButtonLabel = "Create Recipe".toUpperCase();
         const createFoodButtonLabel = "Create Food".toUpperCase();
 
-        const { changePage } = this.props;
-
         return (
             <div className={styles.homePage}>
 
@@ -49,19 +44,13 @@ class HomePage extends Component<HomePageProps> {
 
                 <div className={styles.homePageButtons}>
 
-                    <div
-                        className={styles.homePageButton}
-                        onClick={() => changePage(Page.Recipe)}
-                    >
-                            {createRecipeButtonLabel}
-                    </div>
+                    <Link to={Route.Recipe} className={styles.homePageButton}>
+                        {createRecipeButtonLabel}
+                    </Link>
 
-                    <div
-                        className={styles.homePageButton}
-                        onClick={() => changePage(Page.Food)}
-                    >
-                            {createFoodButtonLabel}
-                    </div>
+                    <Link to={Route.Food} className={styles.homePageButton}>
+                        {createFoodButtonLabel}
+                    </Link>
 
                 </div>
 
@@ -72,13 +61,11 @@ class HomePage extends Component<HomePageProps> {
 
 
 const mapStateToProps = (state: AppState): HomePageStateToProps => ({
-    userSettings: state.userSettings,
-    foodItem: state.foodItem,
+    foodItem: state.foodPage,
 });
 
 const mapDispatchToProps: HomePageDispatchToProps = {
     updateName,
-    changePage,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

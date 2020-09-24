@@ -1,31 +1,24 @@
 import {
     FOOD_ITEM_UPDATE_NAME,
     FoodItemActionTypes,
-    FoodItem,
+    FoodPageStore, FOOD_ITEM_REQUEST, FOOD_ITEM_FETCH_SUCCESS
 } from "./types";
 import { NutritionFactType } from "../../../common/nutrients";
 import { UnitWeight } from "../../../common/units";
 
 
 
-const initialState: FoodItem = {
+const initialState: FoodPageStore = {
 
-    name: "Peanuts",
-    brand: "Test",
-    description: "That is technically a food",
+    isLoaded: false,
 
-    nutritionFactValues: {
-        [NutritionFactType.Energy]: 567,
-        [NutritionFactType.Protein]: 25.8,
-        [NutritionFactType.Fat]: 49.2,
-        [NutritionFactType.Monounsaturated]: 24.4,
-        [NutritionFactType.Carbohydrate]: 16.1,
-        [NutritionFactType.DietaryFiber]: 8.5,
-        [NutritionFactType.Sugars]: 4,
-        [NutritionFactType.Sodium]: 18,
-        [NutritionFactType.VitaminA]: 0,
-        [NutritionFactType.VitaminC]: 0,
-    },
+    id: "",
+
+    name: "",
+    brand: "",
+    description: "",
+
+    nutritionFactValues: {},
 
     // NOTE: STATIC
 
@@ -47,7 +40,7 @@ const initialState: FoodItem = {
 };
 
 
-export default function foodItemReducer(state = initialState, action: FoodItemActionTypes): FoodItem {
+export default function foodPageReducer(state = initialState, action: FoodItemActionTypes): FoodPageStore {
 
     switch (action.type) {
 
@@ -55,6 +48,25 @@ export default function foodItemReducer(state = initialState, action: FoodItemAc
             return {
                 ...state,
                 name: action.payload,
+            };
+        }
+
+        case FOOD_ITEM_REQUEST: {
+            return {
+                ...state,
+                id: action.payload,
+            };
+        }
+
+        case FOOD_ITEM_FETCH_SUCCESS: {
+            return {
+                ...state,
+                isLoaded: true,
+
+                name: action.payload.name,
+                brand: action.payload.brand,
+                description: action.payload.description,
+                nutritionFactValues: action.payload.nutritionFactValues,
             };
         }
 

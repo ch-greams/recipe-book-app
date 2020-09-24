@@ -36,7 +36,7 @@ export class RecipePage extends Component<RecipePageProps> {
 
 
 const mapStateToProps = (state: AppState): RecipePageStateToProps => ({
-    recipeItem: state.recipeItem,
+    recipeItem: state.recipePage,
 });
 
 const mapDispatchToProps: RecipePageDispatchToProps = {
