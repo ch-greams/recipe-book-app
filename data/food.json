@@ -17,7 +17,12 @@
             "Sodium": 18,
             "Vitamin A": 78,
             "Vitamin C": 0
-        }
+        },
+
+        "customUnits": [
+            { "name": "piece", "amount": 53, "unit": "g" },
+            { "name": "container", "amount": 127, "unit": "g" }
+        ]
     },
     {
         "id": "f000002",
@@ -37,6 +42,10 @@
             "Sodium": 18,
             "Vitamin A": 0,
             "Vitamin C": 0
-        }
+        },
+
+        "customUnits": [
+            { "name": "container", "amount": 127, "unit": "g" }
+        ]
     }
 ]

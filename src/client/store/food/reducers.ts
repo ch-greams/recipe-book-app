@@ -37,10 +37,7 @@ const initialState: FoodPageStore = {
     servingSize: 100,
     unit: UnitWeight.g,
 
-    customUnits: [
-        { name: "piece", amount: 53, unit: UnitWeight.g },
-        { name: "container", amount: 127, unit: UnitWeight.g }
-    ],
+    customUnits: [],
 
     featuredNutritionFacts: [
         NutritionFactType.Energy,
@@ -120,6 +117,8 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 nutritionFactValues: foodItem.nutritionFactValues,
 
                 nutritionFactInputs: convertNutritionFactValuesIntoInputs(foodItem.nutritionFactValues),
+
+                customUnits: foodItem.customUnits,
             };
         }
 

@@ -413,26 +413,26 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                                 />
 
                                 <NutritionFactsBlock
-                                    title={NutrientGroupType.Vitamins}
-                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Other}
-                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues, nutritionFactInputs)}
+                                    title={NutrientGroupType.Proteins}
+                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
                             </div>
 
                             <div className={styles.detailedNutritionFactsColumn}>
 
                                 <NutritionFactsBlock
-                                    title={NutrientGroupType.Proteins}
-                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                                    title={NutrientGroupType.Vitamins}
+                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
 
                                 <NutritionFactsBlock
                                     title={NutrientGroupType.Minerals}
                                     nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                                />
+
+                                <NutritionFactsBlock
+                                    title={NutrientGroupType.Other}
+                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues, nutritionFactInputs)}
                                 />
                             </div>
 
