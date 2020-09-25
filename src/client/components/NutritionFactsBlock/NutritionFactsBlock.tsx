@@ -36,8 +36,8 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
     private handleOnChange(nutritionFact: NutritionFact): (event: React.ChangeEvent<HTMLInputElement>) => void {
 
         return (event: React.ChangeEvent<HTMLInputElement>) => {
-
-            const inputValue = Utils.decimalNormalizer((event.target.value || ""), "0");
+            
+            const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
         
             this.props.updateNutritionFact(nutritionFact.type, inputValue);    
         };
@@ -73,7 +73,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
                 <input
                     type={"text"}
                     className={styles.nutrientAmount}
-                    value={nutritionFact.inputValue}
+                    value={(nutritionFact.inputValue || "")}
                     onChange={this.handleOnChange(nutritionFact)}
                 />
 
