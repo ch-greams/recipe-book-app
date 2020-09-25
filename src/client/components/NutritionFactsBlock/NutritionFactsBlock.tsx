@@ -49,7 +49,11 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
 
         const dailyValueBlock = (
             <span className={styles.nutrientDailyValue}>
-                {nutritionFact.dailyValue}
+                {(
+                    nutritionFact.dailyValue > Utils.MAX_DAILY_VALUE
+                        ? `${Utils.MAX_DAILY_VALUE}+`
+                        : nutritionFact.dailyValue
+                )}
             </span>
         );
 
