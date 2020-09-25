@@ -20,9 +20,11 @@ export interface FoodPageStore {
 
     // NOTE: STATIC
 
-    customUnits: CustomUnit[];
-    amount: number;
+    type: string;
+    density: number;
+    servingSize: number;
     unit: UnitWeight | UnitVolume;
+    customUnits: CustomUnit[];
     featuredNutritionFacts: NutritionFactType[];
 }
 

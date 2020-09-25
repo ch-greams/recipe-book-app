@@ -253,6 +253,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                     <input
                         type={"text"}
+                        value={this.props.foodItem.type}
                         className={styles.typeSelectInput}
                         onChange={console.log}
                     />
@@ -271,6 +272,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     
                     <input
                         type={"text"}
+                        value={this.props.foodItem.density}
                         className={styles.densityLineInput}
                         onChange={console.log}
                     />
@@ -291,6 +293,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
                     
                     <input
                         type={"text"}
+                        value={this.props.foodItem.servingSize}
                         className={styles.servingSizeLineInput}
                         onChange={console.log}
                     />

@@ -31,7 +31,10 @@ const initialState: FoodPageStore = {
 
     // NOTE: STATIC
 
-    amount: 100,
+    type: "Nuts",
+
+    density: 1,
+    servingSize: 100,
     unit: UnitWeight.g,
 
     customUnits: [
