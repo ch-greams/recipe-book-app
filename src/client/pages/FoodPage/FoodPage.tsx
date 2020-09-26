@@ -27,6 +27,7 @@ import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFa
 import styles from "./FoodPage.scss";
 import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
+import SelectInput from "../../components/SelectInput/SelectInput";
 
 
 
@@ -54,20 +55,6 @@ class FoodPage extends Component<Props> {
     public componentDidMount(): void {
 
         this.props.requestFoodItem(this.props.foodId);
-    }
-
-    // TODO: Add current value for selected
-    private getSelect(options: string[]): JSX.Element {
-
-        return (
-            <select className={styles.selectInput}>
-                {options.map((option) => (
-                    <option value={option} key={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
-        );
     }
 
     private getParametersBlock(): JSX.Element {
@@ -113,11 +100,11 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    {this.getSelect( Object.keys(UnitWeight) )}
+                    <SelectInput options={Object.keys(UnitWeight)} />
 
                     {"/"}
 
-                    {this.getSelect( Object.keys(UnitVolume) )}
+                    <SelectInput options={Object.keys(UnitVolume)} />
 
                 </div>
 
@@ -134,7 +121,7 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    {this.getSelect( Object.keys(UnitWeight) )}
+                    <SelectInput options={Object.keys(UnitWeight)} />
 
                 </div>
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { AnyAction } from "redux";
 import { CustomUnitInput, UnitWeight } from "../../../common/units";
 import IconAdd from "../../icons/add-sharp.svg";
+import SelectInput from "../SelectInput/SelectInput";
 import styles from "./ServingSizesBlock.scss";
 
 
@@ -19,19 +20,6 @@ export default class ServingSizesBlock extends Component<Props, State> {
     public state = {
         newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
     };
-
-    private getSelect(options: string[]): JSX.Element {
-
-        return (
-            <select className={styles.selectInput}>
-                {options.map((option) => (
-                    <option value={option} key={option}>
-                        {option}
-                    </option>
-                ))}
-            </select>
-        );
-    }
 
     private createCustomUnits(customUnit: CustomUnitInput): void {
 
@@ -158,7 +146,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
                         onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
                     />
 
-                    {this.getSelect( Object.keys(UnitWeight) )}
+                    <SelectInput options={Object.keys(UnitWeight)} />
 
                 </div>
 
