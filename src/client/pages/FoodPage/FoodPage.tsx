@@ -9,8 +9,7 @@ import {
     updateCustomUnits,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
-import IconAdd from "../../icons/add-sharp.svg";
-import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { UnitVolume, UnitWeight } from "../../../common/units";
 import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
@@ -27,6 +26,7 @@ import { Dictionary } from "../../../common/typings";
 import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import styles from "./FoodPage.scss";
 import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
+import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 
 
 
@@ -48,85 +48,13 @@ interface DispatchToProps {
 
 interface Props extends OwnProps, StateToProps, DispatchToProps { }
 
-export interface State {
-    newCustomUnit: CustomUnitInput;
-}
 
-class FoodPage extends Component<Props, State> {
-
-    public state: State = {
-        newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
-    };
+class FoodPage extends Component<Props> {
 
     public componentDidMount(): void {
 
         this.props.requestFoodItem(this.props.foodId);
     }
-
-    // NOTE: Input handles
-
-    private createCustomUnits(customUnit: CustomUnitInput): void {
-
-        const isUniqueName = !this.props.foodItem.customUnitInputs.some((cu) => cu.name === customUnit.name);
-        const isEmpty = !customUnit.name;
-
-        if (isUniqueName && !isEmpty) {
-
-            this.props.updateCustomUnits([
-                ...this.props.foodItem.customUnitInputs,
-                customUnit,
-            ]);
-    
-            this.setState({ newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g } });
-        }
-        else {
-            console.log("Custom Unit name is empty or already exist");
-        }
-    }
-    private deleteCustomUnits(name: string): void {
-        this.props.updateCustomUnits(this.props.foodItem.customUnitInputs.filter((cu) => cu.name !== name));
-    }
-
-    private handleCustomUnitNameEdit(customUnit: CustomUnitInput, isNew: boolean): (event: React.ChangeEvent<HTMLInputElement>) => void {
-        return (event: React.ChangeEvent<HTMLInputElement>) => {
-            if (isNew) {
-                this.setState({
-                    newCustomUnit: {
-                        ...this.state.newCustomUnit,
-                        name: event.target.value,
-                    }
-                });
-            }
-            else {
-                this.props.updateCustomUnits(
-                    this.props.foodItem.customUnitInputs.map(
-                        (cu) => (cu.name === customUnit.name) ? { ...cu, name: event.target.value } : cu
-                    )
-                );
-            }
-        };
-    }
-    private handleCustomUnitAmountEdit(customUnit: CustomUnitInput, isNew: boolean): (event: React.ChangeEvent<HTMLInputElement>) => void {
-        return (event: React.ChangeEvent<HTMLInputElement>) => {
-            if (isNew) {
-                this.setState({
-                    newCustomUnit: {
-                        ...this.state.newCustomUnit,
-                        amount: event.target.value,
-                    }
-                });
-            }
-            else {
-                this.props.updateCustomUnits(
-                    this.props.foodItem.customUnitInputs.map(
-                        (cu) => (cu.name === customUnit.name) ? { ...cu, amount: event.target.value } : cu
-                    )
-                );
-            }
-        };
-    }
-
-    // NOTE: Elements
 
     // TODO: Add current value for selected
     private getSelect(options: string[]): JSX.Element {
@@ -142,75 +70,12 @@ class FoodPage extends Component<Props, State> {
         );
     }
 
-    private getCustomUnitCreateButton(customUnit: CustomUnitInput): JSX.Element {
-        return (
-            <IconAdd
-                width={20} height={20}
-                onClick={() => this.createCustomUnits(customUnit)}
-            />
-        );
-    }
-
-    private getCustomUnitDeleteButton(name: string): JSX.Element {
-        return (
-            <IconAdd
-                width={20} height={20}
-                style={{ transform: "rotate(0.125turn)" }}
-                onClick={() => this.deleteCustomUnits(name)}
-            />
-        );
-    }
-
-    private getCustomUnitLine(key: string, customUnit: CustomUnitInput, isNew: boolean): JSX.Element {
-
-        const customUnitButton = (
-            isNew
-                ? this.getCustomUnitCreateButton(customUnit)
-                : this.getCustomUnitDeleteButton(customUnit.name)
-        );
-
-        return (
-            <div
-                key={key}
-                className={styles.customUnitLine}
-            >
-
-                <div>
-
-                    <input
-                        type={"text"}
-                        placeholder={"NAME"}
-                        className={styles.customUnitLineName}
-                        value={customUnit.name}
-                        onChange={this.handleCustomUnitNameEdit(customUnit, isNew).bind(this)}
-                    />
-
-                    {"="}
-
-                    <input
-                        type={"text"}
-                        placeholder={"#"}
-                        className={styles.customUnitLineAmount}
-                        value={customUnit.amount}
-                        onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
-                    />
-
-                    {this.getSelect( Object.keys(UnitWeight) )}
-
-                </div>
-
-                <div className={styles.customUnitLineButton}>
-                    {customUnitButton}
-                </div>
-
-            </div>
-        );
-    }
-
     private getParametersBlock(): JSX.Element {
 
-        const { customUnitInputs } = this.props.foodItem;
-        const { newCustomUnit } = this.state;
+        const {
+            foodItem: { customUnitInputs },
+            updateCustomUnits,
+        } = this.props;
 
         return (
             
@@ -275,17 +140,10 @@ class FoodPage extends Component<Props, State> {
 
                 <div className={styles.separator} />
 
-                <div className={styles.customUnitsBlock}>
-
-                    <div className={styles.customUnitsBlockLabel}>
-                        {"CUSTOM UNITS"}
-                    </div>
-
-                    {customUnitInputs.map( (customUnit, index) => this.getCustomUnitLine(`CU_${index}`, customUnit, false) )}
-
-                    {this.getCustomUnitLine("CU", newCustomUnit, true)}
-
-                </div>
+                <ServingSizesBlock
+                    customUnitInputs={customUnitInputs}
+                    updateCustomUnits={updateCustomUnits}
+                />
 
             </div>
         );
