@@ -3,7 +3,7 @@ import { CustomUnitInput } from "../../../common/units";
 import {
     FOOD_ITEM_UPDATE_NAME,
     FOOD_ITEM_UPDATE_BRAND,
-    FOOD_ITEM_UPDATE_DESCRIPTION,
+    FOOD_ITEM_UPDATE_SUBTITLE,
     FOOD_ITEM_FETCH_REQUESTED,
     FOOD_ITEM_UPDATE_NUTRITION_FACT,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
@@ -11,7 +11,7 @@ import {
     FoodItemFetchRequestedAction,
     UpdateNameAction,
     UpdateBrandAction,
-    UpdateDescriptionAction,
+    UpdateSubtitleAction,
     UpdateNutritionFactAction,
 } from "./types";
 
@@ -31,10 +31,10 @@ export function updateBrand(brand: string): UpdateBrandAction {
     };
 }
 
-export function updateDescription(description: string): UpdateDescriptionAction {
+export function updateSubtitle(subtitle: string): UpdateSubtitleAction {
     return {
-        type: FOOD_ITEM_UPDATE_DESCRIPTION,
-        payload: description,
+        type: FOOD_ITEM_UPDATE_SUBTITLE,
+        payload: subtitle,
     };
 }
 

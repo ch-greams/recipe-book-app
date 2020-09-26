@@ -28,3 +28,12 @@ $color-input: #707070;
        -moz-border-radius: none;
             border-radius: none;
 }
+
+html, body {
+
+   select:focus,
+   input:focus {
+
+       outline: none;
+   }
+}

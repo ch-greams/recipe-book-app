@@ -1,5 +1,7 @@
 import {
     RECIPE_ITEM_UPDATE_NAME,
+    RECIPE_ITEM_UPDATE_BRAND,
+    RECIPE_ITEM_UPDATE_SUBTITLE,
     RecipeItemActionTypes,
     RecipeItem,
 } from "./types";
@@ -9,7 +11,8 @@ import {
 const initialState: RecipeItem = {
 
     name: "Cocoa Muffins",
-
+    brand: "Homemade",
+    subtitle: "Those are really good",
     // eslint-disable-next-line max-len
     description: "These cocoa muffins, made with flour, sugar, cocoa, eggs, oil, and vanilla, are moist and have a not-too-sweet and in intense cocoa flavor. For those with more restrained chocolate cravings.",
 
@@ -24,6 +27,20 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 name: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_BRAND: {
+            return {
+                ...state,
+                brand: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SUBTITLE: {
+            return {
+                ...state,
+                subtitle: action.payload,
             };
         }
 

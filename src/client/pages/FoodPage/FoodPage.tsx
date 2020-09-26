@@ -5,7 +5,7 @@ import {
     requestFoodItem,
     updateName,
     updateBrand,
-    updateDescription,
+    updateSubtitle,
     updateCustomUnits,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
@@ -24,10 +24,10 @@ import NUTRITION_FACT_DESCRIPTIONS from "../../../common/mapping/nutritionFactDe
 import Utils from "../../../common/utils";
 import { Dictionary } from "../../../common/typings";
 import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
-import styles from "./FoodPage.scss";
 import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
+import styles from "./FoodPage.scss";
 
 
 
@@ -42,7 +42,7 @@ interface StateToProps {
 interface DispatchToProps {
     updateName: typeof updateName;
     updateBrand: typeof updateBrand;
-    updateDescription: typeof updateDescription;
+    updateSubtitle: typeof updateSubtitle;
     requestFoodItem: typeof requestFoodItem;
     updateCustomUnits: typeof updateCustomUnits;
 }
@@ -172,14 +172,14 @@ class FoodPage extends Component<Props> {
             foodItem: {
                 name,
                 brand,
-                description,
+                subtitle,
                 nutritionFactValues,
                 nutritionFactInputs,
                 featuredNutritionFacts,
             },
             updateName,
             updateBrand,
-            updateDescription,
+            updateSubtitle,
         } = this.props;
 
         if (!this.props.foodItem.isLoaded) {
@@ -196,10 +196,10 @@ class FoodPage extends Component<Props> {
                     <PageItemTitleBlock
                         name={name}
                         brand={brand}
-                        description={description}
+                        subtitle={subtitle}
                         updateName={updateName}
                         updateBrand={updateBrand}
-                        updateDescription={updateDescription}
+                        updateSubtitle={updateSubtitle}
                     />
 
                     {/* Main Block */}
@@ -282,7 +282,7 @@ const mapStateToProps = (state: AppState): StateToProps => ({
 const mapDispatchToProps: DispatchToProps = {
     updateName,
     updateBrand,
-    updateDescription,
+    updateSubtitle,
     requestFoodItem,
     updateCustomUnits,
 };

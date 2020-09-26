@@ -4,14 +4,19 @@
 
 .recipePage {
 
-    .description {
+    min-height: 100%;
 
-        margin: 20px 0;
+    background-color: $color-default;
 
-        color: $color-input;
+    display: flex;
 
-        font-family: "Montserrat";
-        font-size: 22px;
-        font-weight: 400;
+    justify-content: center;
+
+    .recipePageElements {
+
+        flex-basis: 60%;
+
+        margin-top: 40px;
+
     }
 }

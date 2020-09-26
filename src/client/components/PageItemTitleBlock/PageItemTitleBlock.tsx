@@ -8,10 +8,10 @@ import styles from "./PageItemTitleBlock.scss";
 interface Props {
     name: string;
     brand: string;
-    description: string;
+    subtitle: string;
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
-    updateDescription: (value: string) => AnyAction;
+    updateSubtitle: (value: string) => AnyAction;
 }
 interface State {
     isTitleInputsOpen: boolean;
@@ -49,16 +49,16 @@ export default class PageItemTitleBlock extends Component<Props, State> {
         );
     }
 
-    private handleDescriptionEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleSubtitleEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
         Utils.keepCaretInPlace(window, event);
 
-        this.props.updateDescription(
+        this.props.updateSubtitle(
             (event.target.value || "").toUpperCase()
         );
     }
 
-    private getTitleBlockStatic(name: string, brand: string, description: string): JSX.Element {
+    private getTitleBlockStatic(name: string, brand: string, subtitle: string): JSX.Element {
 
         return (
 
@@ -79,17 +79,17 @@ export default class PageItemTitleBlock extends Component<Props, State> {
                     
                 </div>
 
-                <div className={styles.descriptionBlock}>
+                <div className={styles.subtitleBlock}>
 
-                    <div className={styles.descriptionText}>
-                        {description.toUpperCase()}
+                    <div className={styles.subtitleText}>
+                        {subtitle.toUpperCase()}
                     </div>
                 </div>
             </div>
         );
     }
 
-    private getTitleBlockInput(name: string, brand: string, description: string): JSX.Element {
+    private getTitleBlockInput(name: string, brand: string, subtitle: string): JSX.Element {
 
         return (
 
@@ -115,14 +115,14 @@ export default class PageItemTitleBlock extends Component<Props, State> {
                     
                 </div>
 
-                <div className={styles.descriptionBlock}>
+                <div className={styles.subtitleBlock}>
 
                     <input
                         type={"text"}
-                        className={styles.descriptionInput}
-                        placeholder={"DESCRIPTION"}
-                        value={description.toUpperCase()}
-                        onChange={this.handleDescriptionEdit.bind(this)}
+                        className={styles.subtitleInput}
+                        placeholder={"SUBTITLE"}
+                        value={subtitle.toUpperCase()}
+                        onChange={this.handleSubtitleEdit.bind(this)}
                     />
 
                     <div
@@ -139,12 +139,12 @@ export default class PageItemTitleBlock extends Component<Props, State> {
 
     public render(): JSX.Element {
 
-        const { name, brand, description } = this.props;
+        const { name, brand, subtitle } = this.props;
 
         return (
             this.state.isTitleInputsOpen
-                ? this.getTitleBlockInput(name, brand, description)
-                : this.getTitleBlockStatic(name, brand, description)
+                ? this.getTitleBlockInput(name, brand, subtitle)
+                : this.getTitleBlockStatic(name, brand, subtitle)
         );
     }
 }

@@ -80,7 +80,7 @@
         }
     }
 
-    .descriptionBlock {
+    .subtitleBlock {
 
         display: flex;
 
@@ -90,7 +90,7 @@
         flex-direction: row;
         justify-content: space-between;
 
-        .descriptionText {
+        .subtitleText {
 
             color: $color-white;
 
@@ -99,7 +99,7 @@
             font-weight: 700;
         }
 
-        .descriptionInput {
+        .subtitleInput {
 
             width: calc(75% - 8px);
 

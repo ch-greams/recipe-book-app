@@ -10,7 +10,7 @@ interface Food {
     id: string;
     name: string;
     brand: string;
-    description: string;
+    subtitle: string;
     nutritionFactValues: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 }

@@ -6,7 +6,7 @@ import {
     FOOD_ITEM_FETCH_SUCCESS,
     FOOD_ITEM_FETCH_ERROR,
     FOOD_ITEM_UPDATE_BRAND,
-    FOOD_ITEM_UPDATE_DESCRIPTION,
+    FOOD_ITEM_UPDATE_SUBTITLE,
     FOOD_ITEM_UPDATE_NUTRITION_FACT,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
 } from "./types";
@@ -25,7 +25,7 @@ const initialState: FoodPageStore = {
     id: "",
     name: "Name",
     brand: "Brand",
-    description: "Description",
+    subtitle: "Subtitle",
     nutritionFactValues: {},
     customUnits: [],
 
@@ -101,10 +101,10 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_UPDATE_DESCRIPTION: {
+        case FOOD_ITEM_UPDATE_SUBTITLE: {
             return {
                 ...state,
-                description: action.payload,
+                subtitle: action.payload,
             };
         }
 
@@ -128,7 +128,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 id: foodItem.id,
                 name: foodItem.name,
                 brand: foodItem.brand,
-                description: foodItem.description,
+                subtitle: foodItem.subtitle,
                 nutritionFactValues: foodItem.nutritionFactValues,
                 customUnits: foodItem.customUnits,
 

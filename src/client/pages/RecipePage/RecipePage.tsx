@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RecipeItem } from "../../store/recipe/types";
-import { updateRecipeName } from "../../store/recipe/actions";
+import { updateName, updateBrand, updateSubtitle } from "../../store/recipe/actions";
 import { AppState } from "../../store";
+import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
+import styles from "./RecipePage.scss";
 
 
 
@@ -11,22 +13,45 @@ interface RecipePageStateToProps {
 }
 
 interface RecipePageDispatchToProps {
-    updateRecipeName: typeof updateRecipeName;
+    updateName: typeof updateName;
+    updateBrand: typeof updateBrand;
+    updateSubtitle: typeof updateSubtitle;
 }
 
 interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToProps { }
 
 
-export class RecipePage extends Component<RecipePageProps> {
+class RecipePage extends Component<RecipePageProps> {
+
+
     public render(): JSX.Element {
+
+        const {
+            recipeItem: {
+                name,
+                brand,
+                subtitle,
+            },
+            updateName,
+            updateBrand,
+            updateSubtitle,
+        } = this.props;
+
         return (
-            <div>
+            <div className={styles.recipePage}>
 
-                {"RecipePage"}
+                <div className={styles.recipePageElements}>
 
-                {/* <div className={styles.description}>
-                    {this.props.foodItem.description}
-                </div> */}
+                    <PageItemTitleBlock
+                        name={name}
+                        brand={brand}
+                        subtitle={subtitle}
+                        updateName={updateName}
+                        updateBrand={updateBrand}
+                        updateSubtitle={updateSubtitle}
+                    />
+
+                </div>
                 
             </div>
         );
@@ -34,13 +59,14 @@ export class RecipePage extends Component<RecipePageProps> {
 }
 
 
-
 const mapStateToProps = (state: AppState): RecipePageStateToProps => ({
     recipeItem: state.recipePage,
 });
 
 const mapDispatchToProps: RecipePageDispatchToProps = {
-    updateRecipeName,
+    updateName,
+    updateBrand,
+    updateSubtitle,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

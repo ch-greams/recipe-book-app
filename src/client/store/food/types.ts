@@ -12,7 +12,7 @@ export interface FoodPageStore {
     id: string;
     name: string;
     brand: string;
-    description: string;
+    subtitle: string;
     nutritionFactValues: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 
@@ -33,7 +33,7 @@ export interface FoodPageStore {
 
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
-export const FOOD_ITEM_UPDATE_DESCRIPTION = "FOOD_ITEM_UPDATE_DESCRIPTION";
+export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
 
@@ -53,8 +53,8 @@ export interface UpdateBrandAction {
     payload: string;
 }
 
-export interface UpdateDescriptionAction {
-    type: typeof FOOD_ITEM_UPDATE_DESCRIPTION;
+export interface UpdateSubtitleAction {
+    type: typeof FOOD_ITEM_UPDATE_SUBTITLE;
     payload: string;
 }
 
@@ -85,7 +85,7 @@ interface FoodItemFetchErrorAction {
 }
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateDescriptionAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction |
     UpdateNutritionFactAction | UpdateCustomUnitsAction |
     FoodItemFetchRequestedAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
 );
