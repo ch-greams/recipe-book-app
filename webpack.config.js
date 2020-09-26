@@ -1,4 +1,5 @@
 const path = require("path");
+const NodemonPlugin = require("nodemon-webpack-plugin");
 
 // TODO: Use template for HTML and don't reference anything outside "out" folder?
 
@@ -30,10 +31,13 @@ const server = {
                 enforce: "pre",
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "source-map-loader"
+                loader: "source-map-loader",
             },
-        ]
-    }
+        ],
+    },
+    plugins: [
+        new NodemonPlugin(),
+    ],
 };
 
 const client = {
@@ -41,15 +45,15 @@ const client = {
     watch: true,
     mode: "production",
     entry: {
-        "client": path.join(__dirname, "src", "client", "index.tsx")
+        "client": path.join(__dirname, "src", "client", "index.tsx"),
     },
     output: {
         path: path.resolve(__dirname, "out"),
-        filename: "[name]/[name].bundle.js"
+        filename: "[name]/[name].bundle.js",
     },
     devtool: "source-map",
     resolve: {
-        extensions: [ ".ts", ".tsx", ".js", ".svg" ]
+        extensions: [ ".ts", ".tsx", ".js", ".svg" ],
     },
     module: {
         rules: [
@@ -91,13 +95,13 @@ const client = {
                         options: { sourceMap: true },
                     },
                 ],
-            }
-        ]
+            },
+        ],
     },
     externals: {
         "react": "React",
-        "react-dom": "ReactDOM"
-    }
+        "react-dom": "ReactDOM",
+    },
 };
 
 

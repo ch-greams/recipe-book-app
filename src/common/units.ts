@@ -25,3 +25,9 @@ export interface CustomUnit {
     amount: number;
     unit: UnitWeight;
 }
+
+export interface CustomUnitInput {
+    name: string;
+    amount: string;
+    unit: UnitWeight;
+}
