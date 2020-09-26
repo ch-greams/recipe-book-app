@@ -53,4 +53,15 @@ export default class Utils {
     public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): Array<keyof T> {
         return Object.keys(obj) as Array<keyof T>;
     }
+
+    // NOTE: OTHER
+
+    public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement>): void {
+        const caret = event.target.selectionStart;
+        const element = event.target;
+        window.requestAnimationFrame(() => {
+            element.selectionStart = caret;
+            element.selectionEnd = caret;
+        });
+    }
 }

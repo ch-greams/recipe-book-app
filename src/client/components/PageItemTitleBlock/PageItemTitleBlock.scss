@@ -1,0 +1,140 @@
+@import "../../variables";
+
+
+
+.titleBlock {
+
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+    border-bottom-color: $color-white;
+
+    padding-bottom: 8px;      
+    margin-bottom: 4px;      
+
+    .nameBlock {
+
+        margin-bottom: 8px;
+
+        display: flex;
+
+        flex-direction: row;
+        justify-content: space-between;
+
+        .nameText {
+
+            color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .nameInput {
+
+            width: calc(50% - 14px);
+
+            margin-right: 4px;
+            padding-left: 8px;
+
+            background-color: $color-default-dark;
+            color: $color-white;
+
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .brandText {
+
+            text-align: right;
+
+            color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .brandInput {
+
+            width: calc(50% - 14px);
+
+            padding-right: 8px;
+
+            text-align: right;
+
+            background-color: $color-default-dark;
+            color: $color-white;
+
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 32px;
+            font-weight: 700;
+        }
+    }
+
+    .descriptionBlock {
+
+        display: flex;
+
+        height: 24px;
+        line-height: 24px;
+
+        flex-direction: row;
+        justify-content: space-between;
+
+        .descriptionText {
+
+            color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .descriptionInput {
+
+            width: calc(75% - 8px);
+
+            padding-left: 8px;
+            margin-right: 4px;
+
+            background-color: $color-default-dark;
+            color: $color-white;
+
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .confirmButton {
+
+            width: 25%;
+
+            text-align: center;
+
+            color: $color-default;
+            background-color: $color-white;
+
+            line-height: 24px;
+
+            font-family: "Montserrat";
+            font-size: 14px;
+            font-weight: 500;
+
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+}

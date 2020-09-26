@@ -10,7 +10,6 @@ import {
 } from "../../store/food/actions";
 import { AppState } from "../../store";
 import IconAdd from "../../icons/add-sharp.svg";
-import styles from "./FoodPage.scss";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 import {
     CARBOHYDRATES_GROUP,
@@ -26,18 +25,20 @@ import NUTRITION_FACT_DESCRIPTIONS from "../../../common/mapping/nutritionFactDe
 import Utils from "../../../common/utils";
 import { Dictionary } from "../../../common/typings";
 import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
+import styles from "./FoodPage.scss";
+import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
 
 
 
-interface FoodPageOwnProps {
+interface OwnProps {
     foodId: string;
 }
 
-interface FoodPageStateToProps {
+interface StateToProps {
     foodItem: FoodPageStore;
 }
 
-interface FoodPageDispatchToProps {
+interface DispatchToProps {
     updateName: typeof updateName;
     updateBrand: typeof updateBrand;
     updateDescription: typeof updateDescription;
@@ -45,17 +46,15 @@ interface FoodPageDispatchToProps {
     updateCustomUnits: typeof updateCustomUnits;
 }
 
-interface FoodPageProps extends FoodPageOwnProps, FoodPageStateToProps, FoodPageDispatchToProps { }
+interface Props extends OwnProps, StateToProps, DispatchToProps { }
 
-export interface FoodPageState {
-    isTitleInputsOpen: boolean;
+export interface State {
     newCustomUnit: CustomUnitInput;
 }
 
-class FoodPage extends Component<FoodPageProps, FoodPageState> {
+class FoodPage extends Component<Props, State> {
 
-    public state: FoodPageState = {
-        isTitleInputsOpen: false,
+    public state: State = {
         newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
     };
 
@@ -65,17 +64,6 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
     }
 
     // NOTE: Input handles
-
-    private editTitle(): void {
-
-        this.setState({ isTitleInputsOpen: true });
-    }
-
-    private confirmTitle(): void {
-
-        this.setState({ isTitleInputsOpen: false });
-    }
-
 
     private createCustomUnits(customUnit: CustomUnitInput): void {
 
@@ -95,7 +83,6 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
             console.log("Custom Unit name is empty or already exist");
         }
     }
-
     private deleteCustomUnits(name: string): void {
         this.props.updateCustomUnits(this.props.foodItem.customUnitInputs.filter((cu) => cu.name !== name));
     }
@@ -119,7 +106,6 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
             }
         };
     }
-
     private handleCustomUnitAmountEdit(customUnit: CustomUnitInput, isNew: boolean): (event: React.ChangeEvent<HTMLInputElement>) => void {
         return (event: React.ChangeEvent<HTMLInputElement>) => {
             if (isNew) {
@@ -140,107 +126,7 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
         };
     }
 
-
-    private handleNameEdit(event: React.ChangeEvent<HTMLInputElement>): void {
-
-        this.props.updateName(
-            (event.target.value || "").toUpperCase()
-        );
-    }
-
-    private handleBrandEdit(event: React.ChangeEvent<HTMLInputElement>): void {
-
-        this.props.updateBrand(
-            (event.target.value || "").toUpperCase()
-        );
-    }
-
-    private handleDescriptionEdit(event: React.ChangeEvent<HTMLInputElement>): void {
-
-        this.props.updateDescription(
-            (event.target.value || "").toUpperCase()
-        );
-    }
-
     // NOTE: Elements
-
-    private getTitleBlock(name: string, brand: string, description: string): JSX.Element {
-
-        const titleBlockStatic = (
-
-            <div
-                className={styles.titleBlock}
-                onClick={this.editTitle.bind(this)}
-            >
-
-                <div className={styles.nameBlock}>
-
-                    <div className={styles.nameText}>
-                        {name.toUpperCase()}
-                    </div>
-
-                    <div className={styles.brandText}>
-                        {brand.toUpperCase()}
-                    </div>
-                    
-                </div>
-
-                <div className={styles.descriptionBlock}>
-
-                    <div className={styles.descriptionText}>
-                        {description.toUpperCase()}
-                    </div>
-                </div>
-
-            </div>
-        );
-
-        const titleBlockInput = (
-
-            <div className={styles.titleBlock}>
-
-                <div className={styles.nameBlock}>
-
-                    <input
-                        type={"text"}
-                        className={styles.nameInput}
-                        placeholder={"NAME"}
-                        value={name.toUpperCase()}
-                        onChange={this.handleNameEdit.bind(this)}
-                    />
-
-                    <input
-                        type={"text"}
-                        className={styles.brandInput}
-                        placeholder={"BRAND"}
-                        value={brand.toUpperCase()}
-                        onChange={this.handleBrandEdit.bind(this)}
-                    />
-                    
-                </div>
-
-                <div className={styles.descriptionBlock}>
-
-                    <input
-                        type={"text"}
-                        className={styles.descriptionInput}
-                        placeholder={"DESCRIPTION"}
-                        value={description.toUpperCase()}
-                        onChange={this.handleDescriptionEdit.bind(this)}
-                    />
-
-                    <div
-                        className={styles.confirmButton}
-                        onClick={this.confirmTitle.bind(this)}
-                    >
-                        {"CONFIRM"}
-                    </div>
-                </div>
-            </div>
-        );
-        
-        return ( this.state.isTitleInputsOpen ? titleBlockInput : titleBlockStatic );
-    }
 
     // TODO: Add current value for selected
     private getSelect(options: string[]): JSX.Element {
@@ -438,13 +324,18 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
     public render(): JSX.Element {
         
         const {
-            name,
-            brand,
-            description,
-            nutritionFactValues,
-            nutritionFactInputs,
-            featuredNutritionFacts,
-        } = this.props.foodItem;
+            foodItem: {
+                name,
+                brand,
+                description,
+                nutritionFactValues,
+                nutritionFactInputs,
+                featuredNutritionFacts,
+            },
+            updateName,
+            updateBrand,
+            updateDescription,
+        } = this.props;
 
         if (!this.props.foodItem.isLoaded) {
             return (<h1>LOADING</h1>);
@@ -457,7 +348,14 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
                     {/* Title Block */}
 
-                    {this.getTitleBlock(name, brand, description)}
+                    <PageItemTitleBlock
+                        name={name}
+                        brand={brand}
+                        description={description}
+                        updateName={updateName}
+                        updateBrand={updateBrand}
+                        updateDescription={updateDescription}
+                    />
 
                     {/* Main Block */}
 
@@ -532,11 +430,11 @@ class FoodPage extends Component<FoodPageProps, FoodPageState> {
 
 
 
-const mapStateToProps = (state: AppState): FoodPageStateToProps => ({
+const mapStateToProps = (state: AppState): StateToProps => ({
     foodItem: state.foodPage,
 });
 
-const mapDispatchToProps: FoodPageDispatchToProps = {
+const mapDispatchToProps: DispatchToProps = {
     updateName,
     updateBrand,
     updateDescription,
