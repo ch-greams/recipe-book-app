@@ -6,7 +6,6 @@ const NodemonPlugin = require("nodemon-webpack-plugin");
 const server = {
     target: "node",
     watch: true,
-    //externals: [ "express" ], // NOTE: Consider using webpack-node-externals to reduce bundle size
     node: {
         __dirname: false,
     },
@@ -38,6 +37,10 @@ const server = {
     plugins: [
         new NodemonPlugin(),
     ],
+    externals: [
+        // "express",
+        // NOTE: Consider using webpack-node-externals to reduce bundle size
+    ],
 };
 
 const client = {
@@ -50,6 +53,7 @@ const client = {
     output: {
         path: path.resolve(__dirname, "out"),
         filename: "[name]/[name].bundle.js",
+        chunkFilename: "[name]/[name].bundle.js",
     },
     devtool: "source-map",
     resolve: {
@@ -101,6 +105,10 @@ const client = {
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",
+        "redux": "Redux",
+        "react-router-dom": "ReactRouterDOM",
+        "react-redux": "ReactRedux",
+        "redux-saga": "ReduxSaga",
     },
 };
 
