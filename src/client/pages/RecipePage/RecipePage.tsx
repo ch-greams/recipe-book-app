@@ -25,6 +25,16 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 class RecipePage extends Component<RecipePageProps> {
 
 
+    private getIngredientsBlock(): JSX.Element {
+
+
+        return (
+            <div>
+                {"INGREDIENTS"}
+            </div>
+        );
+    }
+
     public render(): JSX.Element {
 
         const {
@@ -55,6 +65,8 @@ class RecipePage extends Component<RecipePageProps> {
                     <div className={styles.recipePageBlockTitle}>
                         {"INGREDIENTS"}
                     </div>
+
+                    {this.getIngredientsBlock()}
 
                     <div className={styles.recipePageBlockTitle}>
                         {"DIRECTIONS"}

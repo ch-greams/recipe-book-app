@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { NutritionFactType } from "../../../common/nutrients";
+import { NutritionFactType } from "../../../common/nutritionFacts";
 import { updateNutritionFact } from "../../store/food/actions";
 import { UnitEnergy, UnitWeight } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
@@ -48,7 +48,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         const isDailyValueNotEmpty = ( typeof nutritionFact.dailyValue === "number" );
 
         const dailyValueBlock = (
-            <span className={styles.nutrientDailyValue}>
+            <span className={styles.nutritionFactDailyValue}>
                 {(
                     nutritionFact.dailyValue > Utils.MAX_DAILY_VALUE
                         ? `${Utils.MAX_DAILY_VALUE}+`
@@ -58,7 +58,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         );
 
         const dailyValuePercentBlock = (
-            <span className={styles.nutrientPercent}>
+            <span className={styles.nutritionFactPercent}>
                 {"%"}
             </span>
         );
@@ -66,22 +66,22 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         return (
 
             <div
-                className={nutritionFact.isFraction ? styles.subNutrientLine : styles.nutrientLine}
+                className={nutritionFact.isFraction ? styles.subNutrientLine : styles.nutritionFactLine}
                 key={nutritionFact.type}
             >
 
-                <span className={styles.nutrientName}>
+                <span className={styles.nutritionFactName}>
                     {nutritionFact.type}
                 </span>
 
                 <input
                     type={"text"}
-                    className={styles.nutrientAmount}
+                    className={styles.nutritionFactAmount}
                     value={(nutritionFact.inputValue || "")}
                     onChange={this.handleOnChange(nutritionFact)}
                 />
 
-                <span className={styles.nutrientUnit}>
+                <span className={styles.nutritionFactUnit}>
                     {nutritionFact.unit}
                 </span>
 

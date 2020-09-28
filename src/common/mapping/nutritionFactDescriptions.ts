@@ -1,4 +1,4 @@
-import { NutritionFactDescription, NutritionFactType } from "../nutrients";
+import { NutritionFactDescription, NutritionFactType } from "../nutritionFacts";
 import { Dictionary } from "../typings";
 import { UnitEnergy, UnitWeight } from "../units";
 

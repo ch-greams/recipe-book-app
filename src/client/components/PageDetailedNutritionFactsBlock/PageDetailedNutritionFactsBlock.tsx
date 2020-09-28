@@ -8,7 +8,7 @@ import {
     VITAMINS_GROUP,
     NutrientGroupType,
     NutritionFactType,
-} from "../../../common/nutrients";
+} from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
 import NutritionFactsBlock from "../NutritionFactsBlock/NutritionFactsBlock";

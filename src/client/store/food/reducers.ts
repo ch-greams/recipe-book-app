@@ -10,7 +10,7 @@ import {
     FOOD_ITEM_UPDATE_NUTRITION_FACT,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
 } from "./types";
-import { NutritionFactType } from "../../../common/nutrients";
+import { NutritionFactType } from "../../../common/nutritionFacts";
 import { CustomUnit, CustomUnitInput, UnitWeight } from "../../../common/units";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";

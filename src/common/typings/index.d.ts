@@ -1,4 +1,4 @@
-import { NutritionFactType } from "../nutrients";
+import { NutritionFactType } from "../nutritionFacts";
 import { CustomUnit } from "../units";
 
 export type Dictionary<TKey extends string | number | symbol, TValue> = {

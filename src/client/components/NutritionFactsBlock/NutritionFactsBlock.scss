@@ -17,7 +17,7 @@
         font-weight: 700;
     }
 
-    .nutrientLine {
+    .nutritionFactLine {
 
         display: flex;
 
@@ -39,14 +39,14 @@
 
         line-height: 22px;
 
-        .nutrientName {
+        .nutritionFactName {
 
             width: 36%;
 
             margin-left: 16px;
         }
 
-        .nutrientAmount {
+        .nutritionFactAmount {
 
             max-width: 20%;
 
@@ -66,12 +66,12 @@
             font-weight: 500;
         }
 
-        .nutrientUnit {
+        .nutritionFactUnit {
 
             width: 14%;
         }   
 
-        .nutrientDailyValue {
+        .nutritionFactDailyValue {
 
             width: 8%;
 
@@ -80,7 +80,7 @@
             margin-right: 4px;
         }
 
-        .nutrientPercent {
+        .nutritionFactPercent {
 
             width: 3%;
         }
@@ -107,14 +107,14 @@
 
         line-height: 22px;
 
-        .nutrientName {
+        .nutritionFactName {
 
             width: 36.72%;
 
             margin-left: 12px;
         }
 
-        .nutrientAmount {
+        .nutritionFactAmount {
 
             max-width: 20.7%;
 
@@ -135,12 +135,12 @@
             font-weight: 500;
         }
 
-        .nutrientUnit {
+        .nutritionFactUnit {
 
             width: 14.5%;
         }   
 
-        .nutrientDailyValue {
+        .nutritionFactDailyValue {
 
             width: 8.2%;
 
@@ -149,7 +149,7 @@
             margin-right: 4px;
         }
 
-        .nutrientPercent {
+        .nutritionFactPercent {
 
             width: 3%;
         }

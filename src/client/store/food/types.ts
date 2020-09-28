@@ -1,4 +1,4 @@
-import { NutritionFactType } from "../../../common/nutrients";
+import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, Food } from "../../../common/typings";
 import { CustomUnit, CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 

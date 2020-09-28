@@ -1,5 +1,5 @@
 import { NutritionFact } from "../client/components/NutritionFactsBlock/NutritionFactsBlock";
-import { NutritionFactType } from "./nutrients";
+import { NutritionFactType } from "./nutritionFacts";
 import { Dictionary } from "./typings";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 
@@ -41,17 +41,17 @@ export default class Utils {
     // NOTE: APP-SPECIFIC CALCULATIONS
 
     public static getNutritionFacts(
-        nutrientTypes: NutritionFactType[],
-        nutrients: Dictionary<NutritionFactType, number>,
-        nutrientInputs: Dictionary<NutritionFactType, string>,
+        nutritionFactTypes: NutritionFactType[],
+        nutritionFacts: Dictionary<NutritionFactType, number>,
+        nutritionFactInputs: Dictionary<NutritionFactType, string>,
     ): NutritionFact[] {
 
-        return nutrientTypes.reduce<NutritionFact[]>(
+        return nutritionFactTypes.reduce<NutritionFact[]>(
             (previousNutritionFacts, currentNutrientType) => {
 
-                const amount = nutrients[currentNutrientType];
-                const inputValue = nutrientInputs[currentNutrientType];
-                const nutrientDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
+                const amount = nutritionFacts[currentNutrientType];
+                const inputValue = nutritionFactInputs[currentNutrientType];
+                const nutritionFactDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
 
                 return [
                     ...previousNutritionFacts,
@@ -59,9 +59,9 @@ export default class Utils {
                         type: currentNutrientType,
                         amount: amount,
                         inputValue: inputValue,
-                        unit: nutrientDescription.unit,
-                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
-                        isFraction: nutrientDescription.isFraction,
+                        unit: nutritionFactDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
+                        isFraction: nutritionFactDescription.isFraction,
                     }
                 ];
             },
