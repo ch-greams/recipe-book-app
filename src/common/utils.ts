@@ -1,4 +1,7 @@
+import { NutritionFact } from "../client/components/NutritionFactsBlock/NutritionFactsBlock";
+import { NutritionFactType } from "./nutrients";
 import { Dictionary } from "./typings";
+import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 
 
 
@@ -23,17 +26,48 @@ export default class Utils {
 
     public static decimalNormalizer(value: string, previousValue: string): string {
 
+        const DEFAULT_VALUE = "";
+
         if (value) {
             const isDouble = /^\d*\.?\d+$/.test(value);
             const isPartialDecimal = /^\d*\.?$/.test(value);
 
-            return ( (isDouble || isPartialDecimal) ? value : (previousValue || "0") );
+            return ( (isDouble || isPartialDecimal) ? value : (previousValue || DEFAULT_VALUE) );
         }
 
-        return "0";
+        return DEFAULT_VALUE;
     }
 
     // NOTE: APP-SPECIFIC CALCULATIONS
+
+    public static getNutritionFacts(
+        nutrientTypes: NutritionFactType[],
+        nutrients: Dictionary<NutritionFactType, number>,
+        nutrientInputs: Dictionary<NutritionFactType, string>,
+    ): NutritionFact[] {
+
+        return nutrientTypes.reduce<NutritionFact[]>(
+            (previousNutritionFacts, currentNutrientType) => {
+
+                const amount = nutrients[currentNutrientType];
+                const inputValue = nutrientInputs[currentNutrientType];
+                const nutrientDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
+
+                return [
+                    ...previousNutritionFacts,
+                    {
+                        type: currentNutrientType,
+                        amount: amount,
+                        inputValue: inputValue,
+                        unit: nutrientDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
+                        isFraction: nutrientDescription.isFraction,
+                    }
+                ];
+            },
+            []
+        );
+    }
 
     public static getDailyValuePercent(currentValue?: number, dailyValue?: number): number | null {
 

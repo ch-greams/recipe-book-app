@@ -10,24 +10,13 @@ import {
 } from "../../store/food/actions";
 import { AppState } from "../../store";
 import { UnitVolume, UnitWeight } from "../../../common/units";
-import {
-    CARBOHYDRATES_GROUP,
-    LIPIDS_GROUP,
-    MINERALS_GROUP,
-    OTHER_GROUP,
-    PROTEINS_GROUP,
-    VITAMINS_GROUP,
-    NutrientGroupType,
-    NutritionFactType,
-} from "../../../common/nutrients";
-import NUTRITION_FACT_DESCRIPTIONS from "../../../common/mapping/nutritionFactDescriptions";
-import Utils from "../../../common/utils";
-import { Dictionary } from "../../../common/typings";
-import NutritionFactsBlock, { NutritionFact } from "../../components/NutritionFactsBlock/NutritionFactsBlock";
-import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
+import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
+import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
 import styles from "./FoodPage.scss";
+import Utils from "../../../common/utils";
+import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 
 
 
@@ -89,7 +78,7 @@ class FoodPage extends Component<Props> {
                     
                     {/* BULK DENSITY */}
 
-                    <div className={styles.densityLineLabel}>
+                    <div className={styles.densityLineLabel} title={"Use Bulk Density for foods like rice or beans"}>
                         {"DENSITY"}
                     </div>
                     
@@ -137,35 +126,6 @@ class FoodPage extends Component<Props> {
     }
 
 
-    private getNutritionFacts(
-        nutrientTypes: NutritionFactType[],
-        nutrients: Dictionary<NutritionFactType, number>,
-        nutrientInputs: Dictionary<NutritionFactType, string>,
-    ): NutritionFact[] {
-
-        return nutrientTypes.reduce<NutritionFact[]>(
-            (previousNutritionFacts, currentNutrientType) => {
-
-                const amount = nutrients[currentNutrientType];
-                const inputValue = nutrientInputs[currentNutrientType];
-                const nutrientDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
-
-                return [
-                    ...previousNutritionFacts,
-                    {
-                        type: currentNutrientType,
-                        amount: amount,
-                        inputValue: inputValue,
-                        unit: nutrientDescription.unit,
-                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
-                        isFraction: nutrientDescription.isFraction,
-                    }
-                ];
-            },
-            []
-        );
-    }
-
     public render(): JSX.Element {
         
         const {
@@ -193,7 +153,7 @@ class FoodPage extends Component<Props> {
 
                     {/* Title Block */}
 
-                    <PageItemTitleBlock
+                    <PageTitleBlock
                         name={name}
                         brand={brand}
                         subtitle={subtitle}
@@ -212,7 +172,7 @@ class FoodPage extends Component<Props> {
 
                             <NutritionFactsBlock
                                 title={"NUTRITION FACTS"}
-                                nutritionFacts={this.getNutritionFacts(featuredNutritionFacts, nutritionFactValues, nutritionFactInputs)}
+                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFactValues, nutritionFactInputs)}
                             />
                         </div>
 
@@ -220,53 +180,15 @@ class FoodPage extends Component<Props> {
 
                     {/* Detailed Nutrition Information  */}
 
-                    <div className={styles.detailedNutritionFactsBlock}>
-
-                        <div className={styles.detailedNutritionFactsTitle}>
-                            {"DETAILED NUTRITION INFORMATION"}
-                        </div>
-
-                        <div className={styles.detailedNutritionFacts}>
-
-                            <div className={styles.detailedNutritionFactsColumn}>
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Carbohydrates}
-                                    nutritionFacts={this.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Lipids}
-                                    nutritionFacts={this.getNutritionFacts(LIPIDS_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Proteins}
-                                    nutritionFacts={this.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-                            </div>
-
-                            <div className={styles.detailedNutritionFactsColumn}>
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Vitamins}
-                                    nutritionFacts={this.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Minerals}
-                                    nutritionFacts={this.getNutritionFacts(MINERALS_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-
-                                <NutritionFactsBlock
-                                    title={NutrientGroupType.Other}
-                                    nutritionFacts={this.getNutritionFacts(OTHER_GROUP, nutritionFactValues, nutritionFactInputs)}
-                                />
-                            </div>
-
-                        </div>
-
+                    <div className={styles.pageBlockTitle}>
+                        {"DETAILED NUTRITION INFORMATION"}
                     </div>
+
+                    <PageDetailedNutritionFactsBlock
+                        nutritionFactValues={nutritionFactValues}
+                        nutritionFactInputs={nutritionFactInputs}
+                    />
+
                 </div>
             </div>
         );

@@ -45,12 +45,12 @@ const initialState: FoodPageStore = {
 
     featuredNutritionFacts: [
         NutritionFactType.Energy,
-        NutritionFactType.Protein,
-        NutritionFactType.Fat,
-        NutritionFactType.Monounsaturated,
         NutritionFactType.Carbohydrate,
         NutritionFactType.DietaryFiber,
         NutritionFactType.Sugars,
+        NutritionFactType.Fat,
+        NutritionFactType.Monounsaturated,
+        NutritionFactType.Protein,
         NutritionFactType.Sodium,
         NutritionFactType.VitaminA,
         NutritionFactType.VitaminC,

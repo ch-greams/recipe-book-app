@@ -169,44 +169,26 @@
             }
         }
 
-        .detailedNutritionFactsBlock {
+        .pageBlockTitle {
 
-            .detailedNutritionFactsTitle {
-
-                margin-top: 30px;
-                padding: 14px 0;
-
-                border-top-style: solid;
-                border-top-width: 2px;
-                border-top-color: $color-white;
-
-                border-bottom-style: solid;
-                border-bottom-width: 2px;
-                border-bottom-color: $color-white;
-
-                color: $color-white;
-
-                text-align: center;
-
-                font-family: "Montserrat";
-                font-size: 28px;
-                font-weight: 700;
-            }
-
-            .detailedNutritionFacts {
-
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-
-                .detailedNutritionFactsColumn {
-
-                    display: flex;
-                    flex-direction: column;
-                    
-                    width: 49%;
-                }
-            }
+            margin-top: 30px;
+            padding: 14px 0;
+    
+            border-top-style: solid;
+            border-top-width: 2px;
+            border-top-color: $color-white;
+    
+            border-bottom-style: solid;
+            border-bottom-width: 2px;
+            border-bottom-color: $color-white;
+    
+            color: $color-white;
+    
+            text-align: center;
+    
+            font-family: "Montserrat";
+            font-size: 28px;
+            font-weight: 700;
         }
 
         .separator {

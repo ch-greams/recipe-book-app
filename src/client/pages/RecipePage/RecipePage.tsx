@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { RecipeItem } from "../../store/recipe/types";
 import { updateName, updateBrand, updateSubtitle } from "../../store/recipe/actions";
 import { AppState } from "../../store";
-import PageItemTitleBlock from "../../components/PageItemTitleBlock/PageItemTitleBlock";
+import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import styles from "./RecipePage.scss";
+import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 
 
 
@@ -42,13 +43,30 @@ class RecipePage extends Component<RecipePageProps> {
 
                 <div className={styles.recipePageElements}>
 
-                    <PageItemTitleBlock
+                    <PageTitleBlock
                         name={name}
                         brand={brand}
                         subtitle={subtitle}
                         updateName={updateName}
                         updateBrand={updateBrand}
                         updateSubtitle={updateSubtitle}
+                    />
+
+                    <div className={styles.recipePageBlockTitle}>
+                        {"INGREDIENTS"}
+                    </div>
+
+                    <div className={styles.recipePageBlockTitle}>
+                        {"DIRECTIONS"}
+                    </div>
+
+                    <div className={styles.recipePageBlockTitle}>
+                        {"DETAILED NUTRITION INFORMATION"}
+                    </div>
+
+                    <PageDetailedNutritionFactsBlock
+                        nutritionFactValues={{}}
+                        nutritionFactInputs={{}}
                     />
 
                 </div>

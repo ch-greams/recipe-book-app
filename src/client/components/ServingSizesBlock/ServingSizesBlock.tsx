@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
 import { CustomUnitInput, UnitWeight } from "../../../common/units";
+import Utils from "../../../common/utils";
 import IconAdd from "../../icons/add-sharp.svg";
 import SelectInput from "../SelectInput/SelectInput";
 import styles from "./ServingSizesBlock.scss";
@@ -62,7 +63,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
             else {
                 updateCustomUnits(
                     customUnitInputs.map(
-                        (cu) => (cu.name === customUnit.name) ? { ...cu, name: event.target.value } : cu
+                        (cui) => (cui.name === customUnit.name) ? { ...cui, name: event.target.value } : cui
                     )
                 );
             }
@@ -77,15 +78,18 @@ export default class ServingSizesBlock extends Component<Props, State> {
         const { newCustomUnit } = this.state;
 
         return (event: React.ChangeEvent<HTMLInputElement>) => {
+
+            const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
+
             if (isNew) {
                 this.setState({
-                    newCustomUnit: { ...newCustomUnit, amount: event.target.value }
+                    newCustomUnit: { ...newCustomUnit, amount: amount }
                 });
             }
             else {
                 updateCustomUnits(
                     customUnitInputs.map(
-                        (cu) => (cu.name === customUnit.name) ? { ...cu, amount: event.target.value } : cu
+                        (cui) => (cui.name === customUnit.name) ? { ...cui, amount: amount } : cui
                     )
                 );
             }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
 import Utils from "../../../common/utils";
-import styles from "./PageItemTitleBlock.scss";
+import styles from "./PageTitleBlock.scss";
 
 
 
@@ -17,7 +17,7 @@ interface State {
     isTitleInputsOpen: boolean;
 }
 
-export default class PageItemTitleBlock extends Component<Props, State> {
+export default class PageTitleBlock extends Component<Props, State> {
     public state: State = {
         isTitleInputsOpen: false,
     };
