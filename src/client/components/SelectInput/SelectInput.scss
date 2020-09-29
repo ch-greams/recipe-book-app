@@ -28,6 +28,12 @@
         border-color: $color-default;
     }
 
+    &.altIngredientUnit {
+
+        width: 58px;
+        line-height: 20px;
+    }
+
     option {
 
         color: $color-black;

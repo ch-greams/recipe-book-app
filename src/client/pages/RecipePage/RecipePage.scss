@@ -66,50 +66,163 @@
                     cursor: pointer;
                 }
 
-                .ingredientLineInfo {
+                .ingredientInfoLines {
 
                     display: flex;
-                    justify-content: space-between;
-
+                    flex-direction: column;
+    
                     flex-grow: 2;
-    
-                    background-color: $color-white;
-                    padding: 10px 12px 10px 20px;
+
+                    .ingredientInfoLine {
+
+                        display: flex;
+                        justify-content: space-between;
             
-                    color: $color-default;
+                        background-color: $color-white;
+                        padding: 10px 12px 10px 20px;
+                
+                        color: $color-default;
+                
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-grey-light;
+                
+                        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+                
+                        font-family: "Montserrat";
+                        font-size: 16px;
+                        font-weight: 500;
+                
+                        .ingredientInfoLineName {
+        
+                            line-height: 24px;
+                        }
+        
+                        .ingredientInfoLineMeasure {
+        
+                            display: flex;
+                            flex-direction: row;
+        
+                            .ingredientInfoLineAmount {
+        
+                                width: 80px;
+        
+                                padding-right: 4px;
+        
+                                line-height: 22px;
+                                text-align: right;
             
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: $color-grey-light;
-            
-                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
-            
-                    font-family: "Montserrat";
-                    font-size: 16px;
-                    font-weight: 500;
-            
-                    .ingredientLineInfoName {
-    
-                        line-height: 24px;
+                                border-style: solid;
+                                border-width: 1px;
+                                border-color: $color-grey-light;         
+                            }
+                        }
                     }
-    
-                    .ingredientLineInfoMeasure {
+
+                    .altIngredientInfoLine {
     
                         display: flex;
-                        flex-direction: row;
+                        justify-content: space-between;
     
-                        .ingredientLineInfoAmount {
-    
-                            width: 80px;
-    
-                            padding-right: 4px;
-    
-                            line-height: 22px;
-                            text-align: right;
+                        margin-top: 8px;
         
+                        background-color: $color-default;
+                        padding: 6px 12px 6px 20px;
+                
+                        color: $color-white;
+                
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-white;
+                
+                        font-family: "Montserrat";
+                        font-size: 16px;
+                        font-weight: 500;
+                
+                        .ingredientInfoLineName {
+        
+                            line-height: 22px;
+                        }
+        
+                        .ingredientInfoLineMeasure {
+        
+                            display: flex;
+                            flex-direction: row;
+        
+                            .ingredientInfoLineAmount {
+        
+                                width: 80px;
+        
+                                padding-right: 4px;
+        
+                                line-height: 20px;
+                                text-align: right;
+            
+                                border-style: solid;
+                                border-width: 1px;
+                                border-color: rgba($color: $color-white, $alpha: 0.5);        
+                            }
+                        }
+                    }
+
+                    .ingredientInfoLineNutritionFacts {
+
+                        display: flex;
+                        flex-direction: row;
+
+                        justify-content: space-evenly;
+
+                        margin-top: 8px;
+
+                        .ingredientInfoLineNutritionFact:first-child {
+                            margin-left: 0;
+                        }
+
+                        .ingredientInfoLineNutritionFact:last-child {
+                            margin-right: 0;
+                        }
+
+                        .ingredientInfoLineNutritionFact {
+
+                            display: flex;
+                            flex-direction: column;
+
+                            flex: 1;
+
+                            margin: 0 2px;
+
+                            text-align: center;
+
                             border-style: solid;
                             border-width: 1px;
-                            border-color: $color-grey-light;         
+                            border-color: $color-white;
+
+                            .ingredientInfoLineNutritionFactAmount {
+
+                                margin: 0 16px;
+                                margin-top: 4px;
+
+                                font-family: "Montserrat";
+                                font-size: 32px;
+                                font-weight: 700;
+
+                                color: $color-white;
+
+                                border-bottom-style: solid;
+                                border-bottom-width: 2px;
+                                border-bottom-color: $color-white;
+                            }
+
+                            .ingredientInfoLineNutritionFactType {
+
+                                margin: 4px 0;
+
+                                font-family: "Montserrat";
+                                font-size: 14px;
+                                font-weight: 700;
+
+                                color: $color-white;
+                            }
                         }
                     }
                 }
@@ -117,6 +230,7 @@
                 .ingredientLineButton {
 
                     width: 44px;
+                    height: 24px;
                     line-height: 24px;
 
                     margin-left: 8px;
@@ -141,7 +255,6 @@
                     cursor: pointer;
                 }
             }
-
         }
     }
 }

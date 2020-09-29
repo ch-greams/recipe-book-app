@@ -5,6 +5,7 @@ import styles from "./SelectInput.scss";
 
 export enum SelectInputType {
     IngredientUnit,
+    AltIngredientUnit,
 }
 
 
@@ -23,7 +24,12 @@ class SelectInput extends Component<Props> {
                 return Utils.classNames({
                     [styles.selectInput]: true,
                     [styles.ingredientUnit]: true,
-                });        
+                });
+            case SelectInputType.AltIngredientUnit:
+                return Utils.classNames({
+                    [styles.selectInput]: true,
+                    [styles.altIngredientUnit]: true,
+                });
             default:
                 return styles.selectInput;
         }

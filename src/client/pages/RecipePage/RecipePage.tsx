@@ -9,7 +9,7 @@ import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutrit
 import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
 import { UnitVolume } from "../../../common/units";
 import InfoIcon from "../../icons/information-sharp.svg";
-import ReplaceIcon from "../../icons/repeat-sharp.svg";
+import AltIcon from "../../icons/repeat-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 
 
@@ -29,8 +29,79 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 
 class RecipePage extends Component<RecipePageProps> {
 
+    private getIngredientInfoLineNutritionFacts(): JSX.Element {
 
-    private getIngredientLine(name: string, amount: string): JSX.Element {
+        return (
+            <div className={styles.ingredientInfoLineNutritionFacts}>
+                <div className={styles.ingredientInfoLineNutritionFact}>
+
+                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
+                        {"158.2"}
+                    </div>
+                    <div className={styles.ingredientInfoLineNutritionFactType}>
+                        {"CARBOHYDRATE"}
+                    </div>
+
+                </div>
+                <div className={styles.ingredientInfoLineNutritionFact}>
+
+                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
+                        {"8.1"}
+                    </div>
+                    <div className={styles.ingredientInfoLineNutritionFactType}>
+                        {"FAT"}
+                    </div>
+
+                </div>
+                <div className={styles.ingredientInfoLineNutritionFact}>
+
+                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
+                        {"47.3"}
+                    </div>
+                    <div className={styles.ingredientInfoLineNutritionFactType}>
+                        {"PROTEIN"}
+                    </div>
+
+                </div>
+                <div className={styles.ingredientInfoLineNutritionFact}>
+
+                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
+                        {"573"}
+                    </div>
+                    <div className={styles.ingredientInfoLineNutritionFactType}>
+                        {"ENERGY / KCAL"}
+                    </div>
+
+                </div>
+            </div>
+        );
+    }
+
+    private getIngredientInfoLine(name: string, amount: string, isAlt: boolean = false): JSX.Element {
+
+        return (
+            <div className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
+
+                <div className={styles.ingredientInfoLineName}>
+                    {name.toUpperCase()}
+                </div>
+
+                <div className={styles.ingredientInfoLineMeasure}>
+                    
+                    <div className={styles.ingredientInfoLineAmount}>
+                        {amount}
+                    </div>
+                    
+                    <SelectInput
+                        type={(isAlt ? SelectInputType.AltIngredientUnit : SelectInputType.IngredientUnit)}
+                        options={Object.keys(UnitVolume)}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    private getIngredientLine(name: string, amount: string, isOpen: boolean, alternatives: { name: string; amount: string; }[] = []): JSX.Element {
 
         return (
 
@@ -38,23 +109,14 @@ class RecipePage extends Component<RecipePageProps> {
 
                 <div className={styles.ingredientLineCheckbox}></div>
 
-                <div className={styles.ingredientLineInfo}>
+                <div className={styles.ingredientInfoLines}>
 
-                    <div className={styles.ingredientLineInfoName}>
-                        {name.toUpperCase()}
-                    </div>
+                    {this.getIngredientInfoLine(name, amount)}
 
-                    <div className={styles.ingredientLineInfoMeasure}>
-                        
-                        <div className={styles.ingredientLineInfoAmount}>
-                            {amount}
-                        </div>
-                        
-                        <SelectInput
-                            type={SelectInputType.IngredientUnit}
-                            options={Object.keys(UnitVolume)}
-                        />
-                    </div>
+                    {isOpen && this.getIngredientInfoLineNutritionFacts()}
+
+                    {alternatives.map((alt) => this.getIngredientInfoLine(alt.name, alt.amount, true))}
+
                 </div>
 
                 <div className={styles.ingredientLineButton}>
@@ -65,7 +127,7 @@ class RecipePage extends Component<RecipePageProps> {
 
                 <div className={styles.ingredientLineButton}>
                     <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <ReplaceIcon />
+                        <AltIcon />
                     </IconWrapper>
                 </div>
 
@@ -75,12 +137,20 @@ class RecipePage extends Component<RecipePageProps> {
 
     private getIngredientsBlock(): JSX.Element {
 
-
         return (
             <div className={styles.ingredientsBlock}>
-                {this.getIngredientLine("Milk", "120")}
-                {this.getIngredientLine("Flour", "250")}
-                {this.getIngredientLine("Eggs", "2")}
+
+                {this.getIngredientLine("Milk", "120", false, [
+                    { name: "Oat Milk", amount: "120" },
+                    { name: "Almond Milk", amount: "120" },
+                ])}
+
+                {this.getIngredientLine("Flour", "250", true, [
+                    { name: "Rye Flour", amount: "220" },
+                ])}
+
+                {this.getIngredientLine("Eggs", "2", true)}
+
             </div>
         );
     }
