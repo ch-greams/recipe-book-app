@@ -90,6 +90,10 @@ export default class Utils {
 
     // NOTE: OTHER
 
+    public static classNames(values: Dictionary<string, boolean>): string {
+        return Object.keys(values).filter((key) => values[key]).join(" ");
+    }
+
     public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement>): void {
         const caret = event.target.selectionStart;
         const element = event.target;

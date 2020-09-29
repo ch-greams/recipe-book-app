@@ -21,7 +21,7 @@
 
         .recipePageBlockTitle {
 
-            margin-top: 30px;
+            margin: 30px 0;
             padding: 14px 0;
 
             border-top-style: solid;
@@ -39,6 +39,109 @@
             font-family: "Montserrat";
             font-size: 28px;
             font-weight: 700;
+        }
+
+        .ingredientsBlock {
+
+            .ingredientLine {
+
+                display: flex;
+                flex-direction: row;
+
+                margin: 8px 0;
+
+                .ingredientLineCheckbox {
+
+                    width: 22px;
+                    height: 22px;
+
+                    margin: 10px;
+
+                    background-color: $color-default-dark;
+
+                    border-style: solid;
+                    border-width: 2px;
+                    border-color: $color-white;
+
+                    cursor: pointer;
+                }
+
+                .ingredientLineInfo {
+
+                    display: flex;
+                    justify-content: space-between;
+
+                    flex-grow: 2;
+    
+                    background-color: $color-white;
+                    padding: 10px 12px 10px 20px;
+            
+                    color: $color-default;
+            
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-grey-light;
+            
+                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 500;
+            
+                    .ingredientLineInfoName {
+    
+                        line-height: 24px;
+                    }
+    
+                    .ingredientLineInfoMeasure {
+    
+                        display: flex;
+                        flex-direction: row;
+    
+                        .ingredientLineInfoAmount {
+    
+                            width: 80px;
+    
+                            padding-right: 4px;
+    
+                            line-height: 22px;
+                            text-align: right;
+        
+                            border-style: solid;
+                            border-width: 1px;
+                            border-color: $color-grey-light;         
+                        }
+                    }
+                }
+
+                .ingredientLineButton {
+
+                    width: 44px;
+                    line-height: 24px;
+
+                    margin-left: 8px;
+
+                    background-color: $color-white;
+                    padding: 10px 0;
+            
+                    color: $color-default;
+            
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-grey-light;
+            
+                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    text-align: center;
+
+                    cursor: pointer;
+                }
+            }
+
         }
     }
 }

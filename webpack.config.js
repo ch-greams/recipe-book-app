@@ -109,6 +109,7 @@ const client = {
         "react-router-dom": "ReactRouterDOM",
         "react-redux": "ReactRedux",
         "redux-saga": "ReduxSaga",
+        "styled-components": "styled",
     },
 };
 

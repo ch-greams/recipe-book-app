@@ -1,22 +1,40 @@
 import React, { Component } from "react";
+import Utils from "../../../common/utils";
 import styles from "./SelectInput.scss";
 
 
+export enum SelectInputType {
+    IngredientUnit,
+}
+
 
 interface Props {
+    type?: SelectInputType;
     options: string[];
 }
 
 // TODO: Add current value for selected
 class SelectInput extends Component<Props> {
-    public state = {}
+
+    private getClassName(type?: SelectInputType): string {
+
+        switch (type) {
+            case SelectInputType.IngredientUnit:
+                return Utils.classNames({
+                    [styles.selectInput]: true,
+                    [styles.ingredientUnit]: true,
+                });        
+            default:
+                return styles.selectInput;
+        }
+    }
 
     public render(): JSX.Element {
 
-        const { options } = this.props;
+        const { type, options } = this.props;
 
         return (
-            <select className={styles.selectInput}>
+            <select className={this.getClassName(type)}>
                 {options.map((option) => (
                     <option value={option} key={option}>
                         {option}

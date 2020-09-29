@@ -6,6 +6,11 @@ import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import styles from "./RecipePage.scss";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
+import { UnitVolume } from "../../../common/units";
+import InfoIcon from "../../icons/information-sharp.svg";
+import ReplaceIcon from "../../icons/repeat-sharp.svg";
+import IconWrapper from "../../icons/IconWrapper";
 
 
 
@@ -25,12 +30,57 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 class RecipePage extends Component<RecipePageProps> {
 
 
+    private getIngredientLine(name: string, amount: string): JSX.Element {
+
+        return (
+
+            <div className={styles.ingredientLine}>
+
+                <div className={styles.ingredientLineCheckbox}></div>
+
+                <div className={styles.ingredientLineInfo}>
+
+                    <div className={styles.ingredientLineInfoName}>
+                        {name.toUpperCase()}
+                    </div>
+
+                    <div className={styles.ingredientLineInfoMeasure}>
+                        
+                        <div className={styles.ingredientLineInfoAmount}>
+                            {amount}
+                        </div>
+                        
+                        <SelectInput
+                            type={SelectInputType.IngredientUnit}
+                            options={Object.keys(UnitVolume)}
+                        />
+                    </div>
+                </div>
+
+                <div className={styles.ingredientLineButton}>
+                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                        <InfoIcon />
+                    </IconWrapper>
+                </div>
+
+                <div className={styles.ingredientLineButton}>
+                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                        <ReplaceIcon />
+                    </IconWrapper>
+                </div>
+
+            </div>
+        );
+    }
+
     private getIngredientsBlock(): JSX.Element {
 
 
         return (
-            <div>
-                {"INGREDIENTS"}
+            <div className={styles.ingredientsBlock}>
+                {this.getIngredientLine("Milk", "120")}
+                {this.getIngredientLine("Flour", "250")}
+                {this.getIngredientLine("Eggs", "2")}
             </div>
         );
     }
