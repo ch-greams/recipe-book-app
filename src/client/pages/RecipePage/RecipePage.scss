@@ -50,20 +50,9 @@
 
                 margin: 8px 0;
 
-                .ingredientLineCheckbox {
-
-                    width: 22px;
-                    height: 22px;
+                .lineCheckbox {
 
                     margin: 10px;
-
-                    background-color: $color-default-dark;
-
-                    border-style: solid;
-                    border-width: 2px;
-                    border-color: $color-white;
-
-                    cursor: pointer;
                 }
 
                 .ingredientInfoLines {
@@ -255,6 +244,195 @@
                     cursor: pointer;
                 }
             }
+        }
+
+        .directionsBlock {
+
+            .directionLine {
+
+                display: flex;
+                flex-direction: row;
+
+                margin: 8px 0;
+
+                .lineCheckbox {
+
+                    margin: 10px;
+                }
+
+                .directionInfoLines {
+
+                    display: flex;
+                    flex-direction: column;
+    
+                    flex-grow: 2;
+
+                    .directionInfoLine {
+
+                        display: flex;
+                        justify-content: space-between;
+            
+                        background-color: $color-white;
+                        padding: 10px 12px 10px 20px;
+                
+                        color: $color-default;
+                
+                        border-style: solid;
+                        border-width: 1px;
+                        border-color: $color-grey-light;
+                
+                        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+                
+                        font-family: "Montserrat";
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        .directionInfoLineTitle {
+
+                            display: flex;
+                            flex-direction: row;
+
+                            .directionInfoLineIndex {
+
+                                width: 28px;
+                                line-height: 24px;
+
+                                font-weight: 700;
+                            }
+    
+                            .directionInfoLineName {
+            
+                                line-height: 24px;
+                            }    
+                        }
+                
+        
+                        .directionInfoLineMeasure {
+        
+                            display: flex;
+                            flex-direction: row;
+        
+                            .directionInfoLineAmount {
+        
+                                width: 80px;
+        
+                                padding-right: 4px;
+        
+                                line-height: 22px;
+                                text-align: right;
+            
+                                border-style: solid;
+                                border-width: 1px;
+                                border-color: $color-grey-light;         
+                            }
+                        }
+                    }
+
+                    .subDirectionLine {
+
+                        display: flex;
+                        flex-direction: row;
+
+                        margin-top: 8px;
+
+                        .lineCheckbox {
+
+                            width: 20px;
+                            height: 20px;                
+
+                            margin: 6px;
+                        }        
+        
+                        .subDirectionInfoLine {
+    
+                            display: flex;
+                            justify-content: space-between;
+        
+                            flex-grow: 2;
+            
+                            background-color: $color-default;
+                            padding: 6px 12px 6px 20px;
+                    
+                            color: $color-white;
+                    
+                            border-style: solid;
+                            border-width: 1px;
+                            border-color: $color-white;
+                    
+                            font-family: "Montserrat";
+                            font-size: 16px;
+                            font-weight: 500;
+                    
+                            .directionInfoLineName {
+            
+                                line-height: 22px;
+                            }
+            
+                            .directionInfoLineMeasure {
+            
+                                display: flex;
+                                flex-direction: row;
+            
+                                .directionInfoLineAmount {
+            
+                                    width: 80px;
+            
+                                    padding-right: 4px;
+            
+                                    line-height: 20px;
+                                    text-align: right;
+                
+                                    border-style: solid;
+                                    border-width: 1px;
+                                    border-color: rgba($color: $color-white, $alpha: 0.5);        
+                                }
+                            }
+                        }    
+                    }
+                }
+
+                .directionLineButton {
+
+                    width: 44px;
+                    height: 24px;
+                    line-height: 24px;
+
+                    margin-left: 8px;
+
+                    background-color: $color-white;
+                    padding: 10px 0;
+            
+                    color: $color-default;
+            
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-grey-light;
+            
+                    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            
+                    font-family: "Montserrat";
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    text-align: center;
+
+                    cursor: pointer;
+                }
+            }
+        }
+
+        .lineCheckbox {
+
+            width: 22px;
+            height: 22px;
+
+            background-color: $color-default-dark;
+
+            border-style: solid;
+            border-width: 2px;
+            border-color: $color-white;
+
+            cursor: pointer;
         }
     }
 }

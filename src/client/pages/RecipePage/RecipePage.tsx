@@ -7,7 +7,7 @@ import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import styles from "./RecipePage.scss";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
-import { UnitVolume } from "../../../common/units";
+import { UnitTemperature, UnitVolume, UnitWeight } from "../../../common/units";
 import InfoIcon from "../../icons/information-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
@@ -28,6 +28,8 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 
 
 class RecipePage extends Component<RecipePageProps> {
+
+    // NOTE: Ingredients
 
     private getIngredientInfoLineNutritionFacts(): JSX.Element {
 
@@ -80,7 +82,7 @@ class RecipePage extends Component<RecipePageProps> {
     private getIngredientInfoLine(name: string, amount: string, isAlt: boolean = false): JSX.Element {
 
         return (
-            <div className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
+            <div key={name} className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
 
                 <div className={styles.ingredientInfoLineName}>
                     {name.toUpperCase()}
@@ -107,7 +109,7 @@ class RecipePage extends Component<RecipePageProps> {
 
             <div className={styles.ingredientLine}>
 
-                <div className={styles.ingredientLineCheckbox}></div>
+                <div className={styles.lineCheckbox}></div>
 
                 <div className={styles.ingredientInfoLines}>
 
@@ -155,6 +157,123 @@ class RecipePage extends Component<RecipePageProps> {
         );
     }
 
+    // NOTE: Directions
+
+    private getSubDirectionLine(name: string, amount: string): JSX.Element {
+        return (
+
+            <div key={name} className={styles.subDirectionLine}>
+
+                <div className={styles.lineCheckbox}></div>
+
+                <div className={styles.subDirectionInfoLine}>
+
+                    <div className={styles.directionInfoLineTitle}>
+
+                        <div className={styles.directionInfoLineName}>
+                            {name.toUpperCase()}
+                        </div>
+
+                    </div>
+
+                    <div className={styles.directionInfoLineMeasure}>
+
+                        <div className={styles.directionInfoLineAmount}>
+                            {amount}
+                        </div>
+                        
+                        <SelectInput
+                            type={SelectInputType.AltIngredientUnit}
+                            options={Object.keys(UnitWeight)}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    private getDirectionInfoLine(step: number, name: string, amount: string): JSX.Element {
+
+        return (
+            <div key={name} className={styles.directionInfoLine}>
+
+                <div className={styles.directionInfoLineTitle}>
+
+                    <div className={styles.directionInfoLineIndex}>
+                        {`${step}.`}
+                    </div>
+
+                    <div className={styles.directionInfoLineName}>
+                        {name.toUpperCase()}
+                    </div>
+
+                </div>
+
+                <div className={styles.directionInfoLineMeasure}>
+
+                    <div className={styles.directionInfoLineAmount}>
+                        {amount}
+                    </div>
+                    
+                    <SelectInput
+                        type={SelectInputType.IngredientUnit}
+                        options={Object.keys(UnitTemperature)}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    private getDirectionLine(step: number, name: string, subSteps: { name: string; amount: string; }[] = []): JSX.Element {
+
+        return (
+            <div key={name} className={styles.directionLine}>
+
+                <div className={styles.lineCheckbox}></div>
+
+                <div className={styles.directionInfoLines}>
+
+                    {this.getDirectionInfoLine(step, name, "180")}
+
+                    {subSteps.map((subStep) => this.getSubDirectionLine(subStep.name, subStep.amount))}
+
+                </div>
+
+                <div className={styles.directionLineButton}>
+                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                        <InfoIcon />
+                    </IconWrapper>
+                </div>
+
+            </div>
+        );
+    }
+
+    private getDirectionsBlock(): JSX.Element {
+
+        const FIRST_STEP_NUMBER = 1;
+
+        const directions = [
+            { name: "Preheat Oven" },
+            { name: "Stir", subSteps: [
+                { name: "Milk", amount: "100" },
+                { name: "Flour", amount: "240" },
+                { name: "Egg", amount: "120" },                
+            ] },
+            { name: "Bake" },
+        ];
+
+        return (
+            <div className={styles.directionsBlock}>
+                {directions.map((direction, index) => this.getDirectionLine(
+                    index + FIRST_STEP_NUMBER,
+                    direction.name,
+                    direction.subSteps,
+                ))}
+            </div>
+        );
+    }
+
     public render(): JSX.Element {
 
         const {
@@ -191,6 +310,8 @@ class RecipePage extends Component<RecipePageProps> {
                     <div className={styles.recipePageBlockTitle}>
                         {"DIRECTIONS"}
                     </div>
+
+                    {this.getDirectionsBlock()}
 
                     <div className={styles.recipePageBlockTitle}>
                         {"DETAILED NUTRITION INFORMATION"}

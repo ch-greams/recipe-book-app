@@ -20,6 +20,12 @@ export enum UnitEnergy {
     kj = "kj",
 }
 
+export enum UnitTemperature {
+    C = "C",
+    F = "F",
+}
+
+
 export interface CustomUnit {
     name: string;
     amount: number;
