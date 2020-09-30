@@ -9,6 +9,7 @@ import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutrit
 import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
 import { UnitTemperature, UnitVolume, UnitWeight } from "../../../common/units";
 import InfoIcon from "../../icons/information-sharp.svg";
+import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 
@@ -122,13 +123,13 @@ class RecipePage extends Component<RecipePageProps> {
                 </div>
 
                 <div className={styles.ingredientLineButton}>
-                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                         <InfoIcon />
                     </IconWrapper>
                 </div>
 
                 <div className={styles.ingredientLineButton}>
-                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                         <AltIcon />
                     </IconWrapper>
                 </div>
@@ -158,6 +159,29 @@ class RecipePage extends Component<RecipePageProps> {
     }
 
     // NOTE: Directions
+
+    private getSubDirectionNoteLine(description: string): JSX.Element {
+        return (
+
+            <div key={name} className={styles.subDirectionLine}>
+
+                <div className={styles.subDirectionNoteInfoLine}>
+
+                    <IconWrapper width={"22px"} height={"22px"} color={"#fff"}>
+                        <InfoBlockIcon />
+                    </IconWrapper>
+
+                    <div className={styles.directionInfoLineTitle}>
+
+                        <div className={styles.directionInfoLineDescription}>
+                            {description}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     private getSubDirectionLine(name: string, amount: string): JSX.Element {
         return (
@@ -224,7 +248,9 @@ class RecipePage extends Component<RecipePageProps> {
         );
     }
 
-    private getDirectionLine(step: number, name: string, subSteps: { name: string; amount: string; }[] = []): JSX.Element {
+    private getDirectionLine(
+        step: number, name: string, notes: { description: string; }[] = [], subSteps: { name: string; amount: string; }[] = []
+    ): JSX.Element {
 
         return (
             <div key={name} className={styles.directionLine}>
@@ -235,12 +261,14 @@ class RecipePage extends Component<RecipePageProps> {
 
                     {this.getDirectionInfoLine(step, name, "180")}
 
+                    {notes.map((note) => this.getSubDirectionNoteLine(note.description))}
+
                     {subSteps.map((subStep) => this.getSubDirectionLine(subStep.name, subStep.amount))}
 
                 </div>
 
                 <div className={styles.directionLineButton}>
-                    <IconWrapper width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                         <InfoIcon />
                     </IconWrapper>
                 </div>
@@ -255,12 +283,23 @@ class RecipePage extends Component<RecipePageProps> {
 
         const directions = [
             { name: "Preheat Oven" },
-            { name: "Stir", subSteps: [
-                { name: "Milk", amount: "100" },
-                { name: "Flour", amount: "240" },
-                { name: "Egg", amount: "120" },                
-            ] },
-            { name: "Bake" },
+            {
+                name: "Stir",
+                notes: [
+                    { description: "Mix quickly and lightly with a fork until moistened, but do not beat." },
+                ],
+                subSteps: [
+                    { name: "Milk", amount: "100" },
+                    { name: "Flour", amount: "240" },
+                    { name: "Egg", amount: "120" },                
+                ]
+            },
+            {
+                name: "Bake",
+                notes: [
+                    { description: "If you don't burn your house down, then everything will be ok." },
+                ],
+            },
         ];
 
         return (
@@ -268,6 +307,7 @@ class RecipePage extends Component<RecipePageProps> {
                 {directions.map((direction, index) => this.getDirectionLine(
                     index + FIRST_STEP_NUMBER,
                     direction.name,
+                    direction.notes,
                     direction.subSteps,
                 ))}
             </div>

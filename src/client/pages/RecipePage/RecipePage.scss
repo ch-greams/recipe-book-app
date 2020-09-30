@@ -387,7 +387,37 @@
                                     border-color: rgba($color: $color-white, $alpha: 0.5);        
                                 }
                             }
-                        }    
+                        }
+
+                        .subDirectionNoteInfoLine {
+    
+                            display: flex;
+                            justify-content: flex-start;
+        
+                            flex-grow: 2;
+            
+                            background-color: $color-default;
+                            padding: 6px 12px;
+                    
+                            color: $color-white;
+                    
+                            border-style: solid;
+                            border-width: 1px;
+                            border-color: $color-white;
+                    
+                            font-family: "Montserrat";
+                            font-size: 16px;
+                            font-weight: 500;
+                    
+                            .directionInfoLineDescription {
+
+                                margin-left: 12px;
+
+                                font-size: 14px;
+
+                                line-height: 22px;
+                            }
+                        }
                     }
                 }
 
