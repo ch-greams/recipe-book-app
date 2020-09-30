@@ -25,6 +25,10 @@ export enum UnitTemperature {
     F = "F",
 }
 
+export enum UnitTime {
+    min = "min",
+    h = "h",
+}
 
 export interface CustomUnit {
     name: string;

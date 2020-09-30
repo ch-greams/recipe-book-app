@@ -7,7 +7,7 @@ import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import styles from "./RecipePage.scss";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
-import { UnitTemperature, UnitVolume, UnitWeight } from "../../../common/units";
+import { UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 import InfoIcon from "../../icons/information-sharp.svg";
 import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
@@ -242,6 +242,15 @@ class RecipePage extends Component<RecipePageProps> {
                     <SelectInput
                         type={SelectInputType.IngredientUnit}
                         options={Object.keys(UnitTemperature)}
+                    />
+
+                    <div className={styles.directionInfoLineAmount}>
+                        {amount}
+                    </div>
+
+                    <SelectInput
+                        type={SelectInputType.IngredientUnit}
+                        options={Object.keys(UnitTime)}
                     />
                 </div>
             </div>
