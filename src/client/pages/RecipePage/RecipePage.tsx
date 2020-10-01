@@ -345,6 +345,9 @@ class RecipePage extends Component<RecipePageProps> {
                         name={name}
                         brand={brand}
                         subtitle={subtitle}
+                        // eslint-disable-next-line max-len
+                        description={"Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eaque ex tempore nobis natus verita, aut harum minima at, porro omnis blanditiis fugiat. Voluptatem minima enim incidunt dignis, dolor et itaque."}
+                        withDescription={true}
                         updateName={updateName}
                         updateBrand={updateBrand}
                         updateSubtitle={updateSubtitle}

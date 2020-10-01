@@ -32,7 +32,8 @@ $color-input: #707070;
 html, body {
 
    select:focus,
-   input:focus {
+   input:focus,
+   textarea:focus {
 
        outline: none;
    }

@@ -9,6 +9,8 @@ interface Props {
     name: string;
     brand: string;
     subtitle: string;
+    description?: string;
+    withDescription?: boolean;
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
@@ -58,7 +60,15 @@ export default class PageTitleBlock extends Component<Props, State> {
         );
     }
 
-    private getTitleBlockStatic(name: string, brand: string, subtitle: string): JSX.Element {
+    private getTitleBlockStatic(name: string, brand: string, subtitle: string, description?: string): JSX.Element {
+
+        const descriptionBlock = (
+            <div className={styles.descriptionBlock}>
+                <div className={styles.descriptionBlockText}>
+                    {description}
+                </div>
+            </div>
+        );
 
         return (
 
@@ -85,11 +95,25 @@ export default class PageTitleBlock extends Component<Props, State> {
                         {subtitle.toUpperCase()}
                     </div>
                 </div>
+
+                {description && descriptionBlock}
+
             </div>
         );
     }
 
-    private getTitleBlockInput(name: string, brand: string, subtitle: string): JSX.Element {
+    private getTitleBlockInput(name: string, brand: string, subtitle: string, description?: string, withDescription: boolean = false): JSX.Element {
+
+        const descriptionBlock = (
+            <div className={styles.descriptionBlock}>
+                <textarea
+                    className={styles.descriptionBlockInput}
+                    name={"description"} id={"description"} rows={6}
+                    placeholder={"Description"} value={(description || "")}
+                    onChange={console.log}
+                />
+            </div>
+        );
 
         return (
 
@@ -132,6 +156,8 @@ export default class PageTitleBlock extends Component<Props, State> {
                         {"CONFIRM"}
                     </div>
                 </div>
+
+                {withDescription && descriptionBlock}
             </div>
         );
     }
@@ -139,12 +165,12 @@ export default class PageTitleBlock extends Component<Props, State> {
 
     public render(): JSX.Element {
 
-        const { name, brand, subtitle } = this.props;
+        const { name, brand, subtitle, description, withDescription } = this.props;
 
         return (
             this.state.isTitleInputsOpen
-                ? this.getTitleBlockInput(name, brand, subtitle)
-                : this.getTitleBlockStatic(name, brand, subtitle)
+                ? this.getTitleBlockInput(name, brand, subtitle, description, withDescription)
+                : this.getTitleBlockStatic(name, brand, subtitle, description)
         );
     }
 }

@@ -4,12 +4,7 @@
 
 .titleBlock {
 
-    border-bottom-style: solid;
-    border-bottom-width: 2px;
-    border-bottom-color: $color-white;
-
-    padding-bottom: 8px;      
-    margin-bottom: 4px;      
+    margin-bottom: 8px;
 
     .nameBlock {
 
@@ -87,6 +82,13 @@
         height: 24px;
         line-height: 24px;
 
+        padding-bottom: 8px;
+        margin-bottom: 8px;
+
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+        border-bottom-color: #fff;
+
         flex-direction: row;
         justify-content: space-between;
 
@@ -135,6 +137,38 @@
 
             cursor: pointer;
             user-select: none;
+        }
+    }
+
+    .descriptionBlock {
+
+        .descriptionBlockInput {
+
+            resize: none;
+
+            width: calc(100% - 18px);
+    
+            padding: 8px;
+            
+            background-color: $color-default-dark;
+            color: $color-white;
+    
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-white;
+    
+            font-family: "Montserrat";
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .descriptionBlockText {
+
+            color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 16px;
+            font-weight: 500;
         }
     }
 }
