@@ -1,10 +1,19 @@
+import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 
 
-export interface RecipeItem {
+export interface RecipePageStore {
     name: string;
     brand: string;
     subtitle: string;
     description: string;
+
+    customUnitInputs: CustomUnitInput[];
+
+    type: string;
+
+    servingSize: number;
+
+    unit: UnitWeight | UnitVolume;
 }
 
 

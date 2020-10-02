@@ -82,8 +82,8 @@
         height: 24px;
         line-height: 24px;
 
-        padding-bottom: 8px;
-        margin-bottom: 8px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
 
         border-bottom-style: solid;
         border-bottom-width: 2px;
@@ -141,6 +141,13 @@
     }
 
     .descriptionBlock {
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+        border-bottom-color: #fff;
 
         .descriptionBlockInput {
 

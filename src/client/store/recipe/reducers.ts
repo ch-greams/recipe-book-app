@@ -1,14 +1,15 @@
+import { UnitWeight } from "../../../common/units";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_SUBTITLE,
     RecipeItemActionTypes,
-    RecipeItem,
+    RecipePageStore,
 } from "./types";
 
 
 
-const initialState: RecipeItem = {
+const initialState: RecipePageStore = {
 
     name: "Cocoa Muffins",
     brand: "Homemade",
@@ -16,10 +17,14 @@ const initialState: RecipeItem = {
     // eslint-disable-next-line max-len
     description: "These cocoa muffins, made with flour, sugar, cocoa, eggs, oil, and vanilla, are moist and have a not-too-sweet and in intense cocoa flavor. For those with more restrained chocolate cravings.",
 
+    customUnitInputs: [],
+    type: "Muffins",
+    servingSize: 100,
+    unit: UnitWeight.g,
 };
 
 
-export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipeItem {
+export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
 
     switch (action.type) {
 

@@ -1,22 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RecipeItem } from "../../store/recipe/types";
+import { RecipePageStore } from "../../store/recipe/types";
 import { updateName, updateBrand, updateSubtitle } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import styles from "./RecipePage.scss";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
-import { UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 import InfoIcon from "../../icons/information-sharp.svg";
 import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
+import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
+import Utils from "../../../common/utils";
+import { NutritionFactType } from "../../../common/nutritionFacts";
+import { UpdateCustomUnitsAction } from "../../store/food/types";
+import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 
 
 
 interface RecipePageStateToProps {
-    recipeItem: RecipeItem;
+    recipeItem: RecipePageStore;
 }
 
 interface RecipePageDispatchToProps {
@@ -29,6 +34,102 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 
 
 class RecipePage extends Component<RecipePageProps> {
+
+    // NOTE: General Information
+
+    private getParametersBlock(
+        recipeItem: RecipePageStore,
+        updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
+    ): JSX.Element {
+
+        return (
+            
+            <div className={styles.parametersBlock}>
+
+                <div className={styles.typeSelect}>
+
+                    <div className={styles.typeSelectLabel}>
+                        {"TYPE"}
+                    </div>
+
+                    <input
+                        type={"text"}
+                        value={recipeItem.type}
+                        className={styles.typeSelectInput}
+                        onChange={console.log}
+                    />
+
+                </div>
+
+                <div className={styles.separator} />
+
+                <div className={styles.servingSizeLine}>
+                    
+                    <div className={styles.servingSizeLineLabel}>
+                        {"SERVING SIZE"}
+                    </div>
+                    
+                    <input
+                        type={"text"}
+                        value={recipeItem.servingSize}
+                        className={styles.servingSizeLineInput}
+                        onChange={console.log}
+                    />
+
+                    <SelectInput options={Object.keys(UnitWeight)} />
+
+                </div>
+
+                <div className={styles.separator} />
+
+                <ServingSizesBlock
+                    customUnitInputs={recipeItem.customUnitInputs}
+                    updateCustomUnits={updateCustomUnits}
+                />
+
+            </div>
+        );
+    }
+
+    private getGeneralInfoBlock(): JSX.Element {
+
+        const {
+            recipeItem,
+        } = this.props;
+
+        const featuredNutritionFacts = [
+            NutritionFactType.Energy,
+            NutritionFactType.Carbohydrate,
+            NutritionFactType.DietaryFiber,
+            NutritionFactType.Sugars,
+            NutritionFactType.Fat,
+            NutritionFactType.Monounsaturated,
+            NutritionFactType.Protein,
+            NutritionFactType.Sodium,
+            NutritionFactType.VitaminA,
+            NutritionFactType.VitaminC,
+        ];
+
+        const phFunc = (customUnits: CustomUnitInput[]): UpdateCustomUnitsAction => {
+            console.log(customUnits);
+            return null;
+        };
+
+        return (
+            <div className={styles.mainBlock}>
+
+                {this.getParametersBlock(recipeItem, phFunc)}
+
+                <div className={styles.featuredNutritionFacts}>
+
+                    <NutritionFactsBlock
+                        title={"NUTRITION FACTS"}
+                        nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, {}, {})}
+                    />
+                </div>
+            </div>
+        );
+    }
 
     // NOTE: Ingredients
 
@@ -352,6 +453,8 @@ class RecipePage extends Component<RecipePageProps> {
                         updateBrand={updateBrand}
                         updateSubtitle={updateSubtitle}
                     />
+
+                    {this.getGeneralInfoBlock()}
 
                     <div className={styles.recipePageBlockTitle}>
                         {"INGREDIENTS"}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FoodPageStore } from "../../store/food/types";
+import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
 import {
     requestFoodItem,
     updateName,
@@ -9,7 +9,7 @@ import {
     updateCustomUnits,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
-import { UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
@@ -46,12 +46,10 @@ class FoodPage extends Component<Props> {
         this.props.requestFoodItem(this.props.foodId);
     }
 
-    private getParametersBlock(): JSX.Element {
-
-        const {
-            foodItem: { customUnitInputs },
-            updateCustomUnits,
-        } = this.props;
+    private getParametersBlock(
+        foodItem: FoodPageStore,
+        updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
+    ): JSX.Element {
 
         return (
             
@@ -65,7 +63,7 @@ class FoodPage extends Component<Props> {
 
                     <input
                         type={"text"}
-                        value={this.props.foodItem.type}
+                        value={foodItem.type}
                         className={styles.typeSelectInput}
                         onChange={console.log}
                     />
@@ -84,7 +82,7 @@ class FoodPage extends Component<Props> {
                     
                     <input
                         type={"text"}
-                        value={this.props.foodItem.density}
+                        value={foodItem.density}
                         className={styles.densityLineInput}
                         onChange={console.log}
                     />
@@ -105,7 +103,7 @@ class FoodPage extends Component<Props> {
                     
                     <input
                         type={"text"}
-                        value={this.props.foodItem.servingSize}
+                        value={foodItem.servingSize}
                         className={styles.servingSizeLineInput}
                         onChange={console.log}
                     />
@@ -117,7 +115,7 @@ class FoodPage extends Component<Props> {
                 <div className={styles.separator} />
 
                 <ServingSizesBlock
-                    customUnitInputs={customUnitInputs}
+                    customUnitInputs={foodItem.customUnitInputs}
                     updateCustomUnits={updateCustomUnits}
                 />
 
@@ -129,7 +127,9 @@ class FoodPage extends Component<Props> {
     public render(): JSX.Element {
         
         const {
+            foodItem,
             foodItem: {
+                isLoaded,
                 name,
                 brand,
                 subtitle,
@@ -140,9 +140,10 @@ class FoodPage extends Component<Props> {
             updateName,
             updateBrand,
             updateSubtitle,
+            updateCustomUnits,
         } = this.props;
 
-        if (!this.props.foodItem.isLoaded) {
+        if (!isLoaded) {
             return (<h1>LOADING</h1>);
         }
 
@@ -166,7 +167,7 @@ class FoodPage extends Component<Props> {
 
                     <div className={styles.mainBlock}>
 
-                        {this.getParametersBlock()}
+                        {this.getParametersBlock(foodItem, updateCustomUnits)}
 
                         <div className={styles.featuredNutritionFacts}>
 
