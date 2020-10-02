@@ -3,7 +3,8 @@ import { AnyAction } from "redux";
 import { CustomUnitInput, UnitWeight } from "../../../common/units";
 import Utils from "../../../common/utils";
 import IconAdd from "../../icons/add-sharp.svg";
-import SelectInput from "../SelectInput/SelectInput";
+import IconWrapper from "../../icons/IconWrapper";
+import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./ServingSizesBlock.scss";
 
 
@@ -98,20 +99,24 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
     private getCustomUnitCreateButton(customUnit: CustomUnitInput): JSX.Element {
         return (
-            <IconAdd
-                width={20} height={20}
+            <IconWrapper
+                isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
                 onClick={() => this.createCustomUnits(customUnit)}
-            />
+            >
+                <IconAdd />
+            </IconWrapper>
         );
     }
 
     private getCustomUnitDeleteButton(name: string): JSX.Element {
         return (
-            <IconAdd
-                width={20} height={20}
+            <IconWrapper
+                isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
                 style={{ transform: "rotate(0.125turn)" }}
                 onClick={() => this.deleteCustomUnits(name)}
-            />
+            >
+                <IconAdd />
+            </IconWrapper>
         );
     }
 
@@ -150,7 +155,10 @@ export default class ServingSizesBlock extends Component<Props, State> {
                         onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} />
+                    <SelectInput
+                        type={SelectInputType.CustomUnit}
+                        options={Object.keys(UnitWeight)}
+                    />
 
                 </div>
 

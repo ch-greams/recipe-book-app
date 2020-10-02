@@ -23,18 +23,22 @@
         flex-direction: row;
         justify-content: space-between;
 
-        margin: 2px 10px 2px 0;
+        margin: 4px 10px 4px 0;
 
-        height: 20px;
+        height: 22px;
 
         padding: 6px 0;
 
+        color: $color-grey-dark;
+        background-color: $color-white;
+
         border-style: solid;
         border-width: 1px;
-        border-color: $color-white;
+        border-color: $color-grey-light;
 
-        line-height: 20px;
+        line-height: 22px;
 
+        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
         .customUnitLineName {
 
@@ -44,14 +48,16 @@
             margin-right: 8px;
             padding-right: 4px;
 
-            color: $color-white;
-            background-color: $color-default-dark;
+            color: $color-default;
+            background-color: $color-white;
 
             border-style: solid;
             border-width: 1px;
-            border-color: $color-white;
+            border-color: $color-default;
 
             text-align: right;
+
+            line-height: 18px;
 
             font-family: "Montserrat";
             font-size: 12px;
@@ -63,25 +69,22 @@
             width: 17%;
 
             margin-left: 8px;
-            // margin-right: 2px;
             padding-right: 4px;
 
-            color: $color-white;
-            background-color: $color-default-dark;
+            color: $color-default;
+            background-color: $color-white;
 
             border-style: solid;
             border-width: 1px;
-            border-color: $color-white;
+            border-color: $color-default;
 
             text-align: right;
+
+            line-height: 18px;
 
             font-family: "Montserrat";
             font-size: 12px;
             font-weight: 500;
-        }
-
-        select {
-            line-height: 20px;
         }
 
         .customUnitLineButton {
