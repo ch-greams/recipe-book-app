@@ -4,19 +4,17 @@ import { RecipePageStore } from "../../store/recipe/types";
 import { updateName, updateBrand, updateSubtitle } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
-import styles from "./RecipePage.scss";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
-import SelectInput, { SelectInputType } from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
-import InfoIcon from "../../icons/information-sharp.svg";
-import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
-import AltIcon from "../../icons/repeat-sharp.svg";
-import IconWrapper from "../../icons/IconWrapper";
+import SelectInput from "../../components/SelectInput/SelectInput";
+import { CustomUnitInput, UnitWeight } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import Utils from "../../../common/utils";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { UpdateCustomUnitsAction } from "../../store/food/types";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
+import IngredientsBlock from "../../components/IngredientsBlock/IngredientsBlock";
+import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
+import styles from "./RecipePage.scss";
 
 
 
@@ -132,299 +130,6 @@ class RecipePage extends Component<RecipePageProps> {
         );
     }
 
-    // NOTE: Ingredients
-
-    private getIngredientInfoLineNutritionFacts(): JSX.Element {
-
-        return (
-            <div className={styles.ingredientInfoLineNutritionFacts}>
-                <div className={styles.ingredientInfoLineNutritionFact}>
-
-                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
-                        {"158.2"}
-                    </div>
-                    <div className={styles.ingredientInfoLineNutritionFactType}>
-                        {"CARBOHYDRATE"}
-                    </div>
-
-                </div>
-                <div className={styles.ingredientInfoLineNutritionFact}>
-
-                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
-                        {"8.1"}
-                    </div>
-                    <div className={styles.ingredientInfoLineNutritionFactType}>
-                        {"FAT"}
-                    </div>
-
-                </div>
-                <div className={styles.ingredientInfoLineNutritionFact}>
-
-                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
-                        {"47.3"}
-                    </div>
-                    <div className={styles.ingredientInfoLineNutritionFactType}>
-                        {"PROTEIN"}
-                    </div>
-
-                </div>
-                <div className={styles.ingredientInfoLineNutritionFact}>
-
-                    <div className={styles.ingredientInfoLineNutritionFactAmount}>
-                        {"573"}
-                    </div>
-                    <div className={styles.ingredientInfoLineNutritionFactType}>
-                        {"ENERGY / KCAL"}
-                    </div>
-
-                </div>
-            </div>
-        );
-    }
-
-    private getIngredientInfoLine(name: string, amount: string, isAlt: boolean = false): JSX.Element {
-
-        return (
-            <div key={name} className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
-
-                <div className={styles.ingredientInfoLineName}>
-                    {name.toUpperCase()}
-                </div>
-
-                <div className={styles.ingredientInfoLineMeasure}>
-                    
-                    <div className={styles.ingredientInfoLineAmount}>
-                        {amount}
-                    </div>
-                    
-                    <SelectInput
-                        type={(isAlt ? SelectInputType.AltIngredientUnit : SelectInputType.IngredientUnit)}
-                        options={Object.keys(UnitVolume)}
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    private getIngredientLine(name: string, amount: string, isOpen: boolean, alternatives: { name: string; amount: string; }[] = []): JSX.Element {
-
-        return (
-
-            <div className={styles.ingredientLine}>
-
-                <div className={styles.lineCheckbox}></div>
-
-                <div className={styles.ingredientInfoLines}>
-
-                    {this.getIngredientInfoLine(name, amount)}
-
-                    {isOpen && this.getIngredientInfoLineNutritionFacts()}
-
-                    {alternatives.map((alt) => this.getIngredientInfoLine(alt.name, alt.amount, true))}
-
-                </div>
-
-                <div className={styles.ingredientLineButton}>
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <InfoIcon />
-                    </IconWrapper>
-                </div>
-
-                <div className={styles.ingredientLineButton}>
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <AltIcon />
-                    </IconWrapper>
-                </div>
-
-            </div>
-        );
-    }
-
-    private getIngredientsBlock(): JSX.Element {
-
-        return (
-            <div className={styles.ingredientsBlock}>
-
-                {this.getIngredientLine("Milk", "120", false, [
-                    { name: "Oat Milk", amount: "120" },
-                    { name: "Almond Milk", amount: "120" },
-                ])}
-
-                {this.getIngredientLine("Flour", "250", true, [
-                    { name: "Rye Flour", amount: "220" },
-                ])}
-
-                {this.getIngredientLine("Eggs", "2", true)}
-
-            </div>
-        );
-    }
-
-    // NOTE: Directions
-
-    private getSubDirectionNoteLine(description: string): JSX.Element {
-        return (
-
-            <div key={name} className={styles.subDirectionLine}>
-
-                <div className={styles.subDirectionNoteInfoLine}>
-
-                    <IconWrapper width={"22px"} height={"22px"} color={"#fff"}>
-                        <InfoBlockIcon />
-                    </IconWrapper>
-
-                    <div className={styles.directionInfoLineTitle}>
-
-                        <div className={styles.directionInfoLineDescription}>
-                            {description}
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    private getSubDirectionLine(name: string, amount: string): JSX.Element {
-        return (
-
-            <div key={name} className={styles.subDirectionLine}>
-
-                <div className={styles.lineCheckbox}></div>
-
-                <div className={styles.subDirectionInfoLine}>
-
-                    <div className={styles.directionInfoLineTitle}>
-
-                        <div className={styles.directionInfoLineName}>
-                            {name.toUpperCase()}
-                        </div>
-
-                    </div>
-
-                    <div className={styles.directionInfoLineMeasure}>
-
-                        <div className={styles.directionInfoLineAmount}>
-                            {amount}
-                        </div>
-                        
-                        <SelectInput
-                            type={SelectInputType.AltIngredientUnit}
-                            options={Object.keys(UnitWeight)}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
-    private getDirectionInfoLine(step: number, name: string, amount: string): JSX.Element {
-
-        return (
-            <div key={name} className={styles.directionInfoLine}>
-
-                <div className={styles.directionInfoLineTitle}>
-
-                    <div className={styles.directionInfoLineIndex}>
-                        {`${step}.`}
-                    </div>
-
-                    <div className={styles.directionInfoLineName}>
-                        {name.toUpperCase()}
-                    </div>
-
-                </div>
-
-                <div className={styles.directionInfoLineMeasure}>
-
-                    <div className={styles.directionInfoLineAmount}>
-                        {amount}
-                    </div>
-                    
-                    <SelectInput
-                        type={SelectInputType.IngredientUnit}
-                        options={Object.keys(UnitTemperature)}
-                    />
-
-                    <div className={styles.directionInfoLineAmount}>
-                        {amount}
-                    </div>
-
-                    <SelectInput
-                        type={SelectInputType.IngredientUnit}
-                        options={Object.keys(UnitTime)}
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    private getDirectionLine(
-        step: number, name: string, notes: { description: string; }[] = [], subSteps: { name: string; amount: string; }[] = []
-    ): JSX.Element {
-
-        return (
-            <div key={name} className={styles.directionLine}>
-
-                <div className={styles.lineCheckbox}></div>
-
-                <div className={styles.directionInfoLines}>
-
-                    {this.getDirectionInfoLine(step, name, "180")}
-
-                    {notes.map((note) => this.getSubDirectionNoteLine(note.description))}
-
-                    {subSteps.map((subStep) => this.getSubDirectionLine(subStep.name, subStep.amount))}
-
-                </div>
-
-                <div className={styles.directionLineButton}>
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <InfoIcon />
-                    </IconWrapper>
-                </div>
-
-            </div>
-        );
-    }
-
-    private getDirectionsBlock(): JSX.Element {
-
-        const FIRST_STEP_NUMBER = 1;
-
-        const directions = [
-            { name: "Preheat Oven" },
-            {
-                name: "Stir",
-                notes: [
-                    { description: "Mix quickly and lightly with a fork until moistened, but do not beat." },
-                ],
-                subSteps: [
-                    { name: "Milk", amount: "100" },
-                    { name: "Flour", amount: "240" },
-                    { name: "Egg", amount: "120" },                
-                ]
-            },
-            {
-                name: "Bake",
-                notes: [
-                    { description: "If you don't burn your house down, then everything will be ok." },
-                ],
-            },
-        ];
-
-        return (
-            <div className={styles.directionsBlock}>
-                {directions.map((direction, index) => this.getDirectionLine(
-                    index + FIRST_STEP_NUMBER,
-                    direction.name,
-                    direction.notes,
-                    direction.subSteps,
-                ))}
-            </div>
-        );
-    }
-
     public render(): JSX.Element {
 
         const {
@@ -462,13 +167,13 @@ class RecipePage extends Component<RecipePageProps> {
                         {"INGREDIENTS"}
                     </div>
 
-                    {this.getIngredientsBlock()}
+                    <IngredientsBlock />
 
                     <div className={styles.recipePageBlockTitle}>
                         {"DIRECTIONS"}
                     </div>
 
-                    {this.getDirectionsBlock()}
+                    <DirectionsBlock />
 
                     <div className={styles.recipePageBlockTitle}>
                         {"DETAILED NUTRITION INFORMATION"}
