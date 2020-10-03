@@ -1,3 +1,4 @@
+import { NutritionFactType } from "../../../common/nutritionFacts";
 import { UnitWeight } from "../../../common/units";
 import {
     RECIPE_ITEM_UPDATE_NAME,
@@ -23,6 +24,87 @@ const initialState: RecipePageStore = {
     type: "Muffins",
     servingSize: 100,
     unit: UnitWeight.g,
+
+    ingredients: [
+        {
+            isOpen: false,
+
+            foodItem: {
+                id: "Milk",
+                name: "Milk",
+                nutritionFacts: {
+                    [NutritionFactType.Carbohydrate]: 158.2,
+                    [NutritionFactType.Fat]: 8.1,
+                    [NutritionFactType.Protein]: 47.3,
+                    [NutritionFactType.Energy]: 573,
+                },
+            },
+
+            amount: 120,
+
+            alternatives: [
+                { id: "Oat Milk", amount: 120 },
+                { id: "Almond Milk", amount: 120 },
+            ],
+        },
+        {
+            isOpen: true,
+
+
+            foodItem: {
+                id: "Flour",
+                name: "Flour",
+
+                nutritionFacts: {
+                    [NutritionFactType.Carbohydrate]: 158.2,
+                    [NutritionFactType.Fat]: 8.1,
+                    [NutritionFactType.Protein]: 47.3,
+                    [NutritionFactType.Energy]: 573,
+                },
+            },
+
+            amount: 250,
+            alternatives: [
+                { id: "Rye Flour", amount: 220 },
+            ],
+        },
+        {
+            isOpen: true,
+
+            foodItem: {
+                id: "Eggs",
+                name: "Eggs",
+
+                nutritionFacts: {
+                    [NutritionFactType.Carbohydrate]: 158.2,
+                    [NutritionFactType.Fat]: 8.1,
+                    [NutritionFactType.Protein]: 47.3,
+                    [NutritionFactType.Energy]: 573,
+                },
+            },
+
+            amount: 2,
+            alternatives: [],
+        },
+        {
+            isOpen: false,
+
+            foodItem: {
+                id: "Cocoa",
+                name: "Cocoa",
+
+                nutritionFacts: {
+                    [NutritionFactType.Carbohydrate]: 158.2,
+                    [NutritionFactType.Fat]: 8.1,
+                    [NutritionFactType.Protein]: 47.3,
+                    [NutritionFactType.Energy]: 573,
+                },
+            },
+
+            amount: 45,
+            alternatives: [],
+        },
+    ],
 };
 
 

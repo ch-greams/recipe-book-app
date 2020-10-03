@@ -1,4 +1,26 @@
+import { NutritionFactType } from "../../../common/nutritionFacts";
+import { Dictionary } from "../../../common/typings";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+
+
+interface IngredientFood {
+    id: string;
+    name: string;
+
+    nutritionFacts: Dictionary<NutritionFactType, number>;
+}
+
+export interface IngredientReference {
+    id: string;
+    amount: number;
+}
+
+export interface Ingredient {
+    isOpen?: boolean;
+    foodItem: IngredientFood;
+    amount: number;
+    alternatives: IngredientReference[];
+}
 
 
 export interface RecipePageStore {
@@ -17,6 +39,8 @@ export interface RecipePageStore {
     servingSize: number;
 
     unit: UnitWeight | UnitVolume;
+
+    ingredients: Ingredient[];
 }
 
 
