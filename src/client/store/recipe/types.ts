@@ -2,6 +2,9 @@ import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 
 
 export interface RecipePageStore {
+
+    isReadOnly: boolean;
+
     name: string;
     brand: string;
     subtitle: string;

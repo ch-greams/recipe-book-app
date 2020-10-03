@@ -19,7 +19,7 @@ export interface NutritionFact {
 
 
 interface NutritionFactsBlockOwnProps {
-
+    isReadOnly: boolean;
     title: string;
     nutritionFacts: NutritionFact[];
 }
@@ -32,6 +32,9 @@ interface NutritionFactsBlockProps extends NutritionFactsBlockOwnProps, Nutritio
 
 
 class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
+    public static defaultProps = {
+        isReadOnly: false,
+    };
 
     private handleOnChange(nutritionFact: NutritionFact): (event: React.ChangeEvent<HTMLInputElement>) => void {
 
@@ -45,22 +48,39 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
 
     private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
 
+        const { isReadOnly } = this.props;
+
         const isDailyValueNotEmpty = ( typeof nutritionFact.dailyValue === "number" );
 
         const dailyValueBlock = (
-            <span className={styles.nutritionFactDailyValue}>
+            <div className={styles.nutritionFactDailyValue}>
                 {(
                     nutritionFact.dailyValue > Utils.MAX_DAILY_VALUE
                         ? `${Utils.MAX_DAILY_VALUE}+`
                         : nutritionFact.dailyValue
                 )}
-            </span>
+            </div>
         );
 
         const dailyValuePercentBlock = (
-            <span className={styles.nutritionFactPercent}>
+            <div className={styles.nutritionFactPercent}>
                 {"%"}
-            </span>
+            </div>
+        );
+
+        const nutritionFactAmountInput = (
+            <input
+                type={"text"}
+                className={styles.nutritionFactAmountInput}
+                value={(nutritionFact.inputValue || "")}
+                onChange={this.handleOnChange(nutritionFact)}
+            />
+        );
+
+        const nutritionFactAmountText = (
+            <div className={styles.nutritionFactAmountText}>
+                {nutritionFact.inputValue}
+            </div>
         );
 
         return (
@@ -70,24 +90,19 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
                 key={nutritionFact.type}
             >
 
-                <span className={styles.nutritionFactName}>
+                <div className={styles.nutritionFactName}>
                     {nutritionFact.type}
-                </span>
+                </div>
 
-                <input
-                    type={"text"}
-                    className={styles.nutritionFactAmount}
-                    value={(nutritionFact.inputValue || "")}
-                    onChange={this.handleOnChange(nutritionFact)}
-                />
+                {( isReadOnly ? nutritionFactAmountText : nutritionFactAmountInput )}
 
-                <span className={styles.nutritionFactUnit}>
+                <div className={styles.nutritionFactUnit}>
                     {nutritionFact.unit}
-                </span>
+                </div>
 
-                {isDailyValueNotEmpty && dailyValueBlock}
+                {( isDailyValueNotEmpty && dailyValueBlock )}
 
-                {isDailyValueNotEmpty && dailyValuePercentBlock}
+                {( isDailyValueNotEmpty && dailyValuePercentBlock )}
 
             </div>
         );

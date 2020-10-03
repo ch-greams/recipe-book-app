@@ -46,7 +46,7 @@
             margin-left: 16px;
         }
 
-        .nutritionFactAmount {
+        .nutritionFactAmountInput {
 
             max-width: 20%;
 
@@ -60,6 +60,26 @@
             border-style: solid;
             border-width: 1px;
             border-color: $color-default;
+
+            font-family: "Montserrat";
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .nutritionFactAmountText {
+
+            width: 20%;
+
+            text-align: right;
+
+            margin-right: 4px;
+            padding-right: 4px;
+
+            color: $color-grey-dark;
+
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-grey-light;
 
             font-family: "Montserrat";
             font-size: 12px;
@@ -114,7 +134,7 @@
             margin-left: 12px;
         }
 
-        .nutritionFactAmount {
+        .nutritionFactAmountInput {
 
             max-width: 20.7%;
 
@@ -129,6 +149,27 @@
             border-style: solid;
             border-width: 1px;
             border-color: $color-white;
+
+            font-family: "Montserrat";
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .nutritionFactAmountText {
+
+            width: 20.7%;
+
+            text-align: right;
+
+            background-color: $color-default;
+            margin-right: 4px;
+            padding-right: 4px;
+
+            color: $color-white;
+
+            border-style: solid;
+            border-width: 1px;
+            border-color: rgba($color: $color-white, $alpha: 0.5);
 
             font-family: "Montserrat";
             font-size: 12px;

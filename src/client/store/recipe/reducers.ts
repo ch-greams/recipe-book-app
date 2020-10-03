@@ -11,6 +11,8 @@ import {
 
 const initialState: RecipePageStore = {
 
+    isReadOnly: true,
+
     name: "Cocoa Muffins",
     brand: "Homemade",
     subtitle: "Those are really good",
