@@ -13,12 +13,14 @@ interface IngredientFood {
 export interface IngredientReference {
     id: string;
     amount: number;
+    unit: UnitWeight | UnitVolume;
 }
 
 export interface Ingredient {
     isOpen?: boolean;
     foodItem: IngredientFood;
     amount: number;
+    unit: UnitWeight | UnitVolume;
     alternatives: IngredientReference[];
 }
 

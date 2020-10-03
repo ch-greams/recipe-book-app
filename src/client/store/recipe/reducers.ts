@@ -1,5 +1,5 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { UnitWeight } from "../../../common/units";
+import { UnitVolume, UnitWeight } from "../../../common/units";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
@@ -41,10 +41,11 @@ const initialState: RecipePageStore = {
             },
 
             amount: 120,
+            unit: UnitVolume.ml,
 
             alternatives: [
-                { id: "Oat Milk", amount: 120 },
-                { id: "Almond Milk", amount: 120 },
+                { id: "Oat Milk", amount: 120, unit: UnitVolume.ml },
+                { id: "Almond Milk", amount: 120, unit: UnitVolume.ml },
             ],
         },
         {
@@ -64,8 +65,10 @@ const initialState: RecipePageStore = {
             },
 
             amount: 250,
+            unit: UnitWeight.g,
+
             alternatives: [
-                { id: "Rye Flour", amount: 220 },
+                { id: "Rye Flour", amount: 220, unit: UnitWeight.g },
             ],
         },
         {
@@ -83,7 +86,9 @@ const initialState: RecipePageStore = {
                 },
             },
 
-            amount: 2,
+            amount: 1,
+            unit: UnitVolume.cup,
+
             alternatives: [],
         },
         {
@@ -102,6 +107,8 @@ const initialState: RecipePageStore = {
             },
 
             amount: 45,
+            unit: UnitWeight.g,
+
             alternatives: [],
         },
     ],

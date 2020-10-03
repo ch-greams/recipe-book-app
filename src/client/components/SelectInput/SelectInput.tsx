@@ -13,6 +13,7 @@ export enum SelectInputType {
 interface Props {
     type?: SelectInputType;
     options: string[];
+    value?: string;
 }
 
 // TODO: Add current value for selected
@@ -43,10 +44,10 @@ class SelectInput extends Component<Props> {
 
     public render(): JSX.Element {
 
-        const { type, options } = this.props;
+        const { type, options, value } = this.props;
 
         return (
-            <select className={this.getClassName(type)}>
+            <select className={this.getClassName(type)} value={value}>
                 {options.map((option) => (
                     <option value={option} key={option}>
                         {option}

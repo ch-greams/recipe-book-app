@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { UnitVolume } from "../../../common/units";
+import { Units, UnitVolume, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import InfoIcon from "../../icons/information-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
@@ -52,7 +52,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientInfoLine(name: string, amount: number, isAlt: boolean = false): JSX.Element {
+    private getIngredientInfoLine(name: string, amount: number, unit: UnitWeight | UnitVolume, isAlt: boolean = false): JSX.Element {
 
         return (
             <div key={name} className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
@@ -69,7 +69,8 @@ export default class IngredientsBlock extends Component<Props> {
                     
                     <SelectInput
                         type={(isAlt ? SelectInputType.AltIngredientUnit : SelectInputType.IngredientUnit)}
-                        options={Object.keys(UnitVolume)}
+                        options={Object.keys(Units)}
+                        value={unit}
                     />
                 </div>
             </div>
@@ -86,12 +87,12 @@ export default class IngredientsBlock extends Component<Props> {
 
                 <div className={styles.ingredientInfoLines}>
 
-                    {this.getIngredientInfoLine(ingredient.foodItem.name, ingredient.amount)}
+                    {this.getIngredientInfoLine(ingredient.foodItem.name, ingredient.amount, ingredient.unit)}
 
                     {ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts)}
 
                     {ingredient.alternatives && ingredient.alternatives.map(
-                        (alt) => this.getIngredientInfoLine(alt.id, alt.amount, true)
+                        (alt) => this.getIngredientInfoLine(alt.id, alt.amount, alt.unit, true)
                     )}
 
                 </div>

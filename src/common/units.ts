@@ -15,6 +15,9 @@ export enum UnitVolume {
     tsp = "tsp",
 }
 
+export const Units = { ...UnitWeight, ...UnitVolume };
+export type Units = typeof Units;
+
 export enum UnitEnergy {
     kcal = "kcal",
     kj = "kj",
