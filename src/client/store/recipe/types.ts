@@ -22,6 +22,17 @@ export interface Ingredient {
     alternatives: IngredientReference[];
 }
 
+export interface DirectionStep {
+    foodId: string;
+    amount: number;
+}
+
+export interface Direction {
+    name: string;
+    notes: string[];
+    subSteps: DirectionStep[];
+}
+
 
 export interface RecipePageStore {
 
@@ -41,6 +52,7 @@ export interface RecipePageStore {
     unit: UnitWeight | UnitVolume;
 
     ingredients: Ingredient[];
+    directions: Direction[];
 }
 
 

@@ -140,6 +140,7 @@ class RecipePage extends Component<RecipePageProps> {
                 subtitle,
                 description,
                 ingredients,
+                directions,
             },
             updateName,
             updateBrand,
@@ -177,7 +178,10 @@ class RecipePage extends Component<RecipePageProps> {
                         {"DIRECTIONS"}
                     </div>
 
-                    <DirectionsBlock isReadOnly={isReadOnly} />
+                    <DirectionsBlock
+                        isReadOnly={isReadOnly}
+                        directions={directions}
+                    />
 
                     <div className={styles.recipePageBlockTitle}>
                         {"DETAILED NUTRITION INFORMATION"}

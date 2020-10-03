@@ -105,6 +105,32 @@ const initialState: RecipePageStore = {
             alternatives: [],
         },
     ],
+
+    directions: [
+        {
+            name: "Preheat Oven",
+            notes: [],
+            subSteps: [],
+        },
+        {
+            name: "Stir",
+            notes: [
+                "Mix quickly and lightly with a fork until moistened, but do not beat.",
+            ],
+            subSteps: [
+                { foodId: "Milk", amount: 100 },
+                { foodId: "Flour", amount: 240 },
+                { foodId: "Egg", amount: 120 },                
+            ]
+        },
+        {
+            name: "Bake",
+            notes: [
+                "If you don't burn your house down, then everything will be ok.",
+            ],
+            subSteps: [],
+        },
+    ],
 };
 
 

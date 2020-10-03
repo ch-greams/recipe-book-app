@@ -5,18 +5,21 @@ import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
+import { Direction, DirectionStep } from "../../store/recipe/types";
 
 
 
 interface Props {
     isReadOnly: boolean;
+    directions: Direction[];
 }
 
 
 export default class DirectionsBlock extends Component<Props> {
 
-    public static defaultProps = {
+    public static defaultProps: Props = {
         isReadOnly: false,
+        directions: [],
     };
 
 
@@ -43,7 +46,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getSubDirectionLine(name: string, amount: string): JSX.Element {
+    private getSubDirectionLine(step: DirectionStep): JSX.Element {
         return (
 
             <div key={name} className={styles.subDirectionLine}>
@@ -55,7 +58,7 @@ export default class DirectionsBlock extends Component<Props> {
                     <div className={styles.directionInfoLineTitle}>
 
                         <div className={styles.directionInfoLineName}>
-                            {name.toUpperCase()}
+                            {step.foodId.toUpperCase()}
                         </div>
 
                     </div>
@@ -63,7 +66,7 @@ export default class DirectionsBlock extends Component<Props> {
                     <div className={styles.directionInfoLineMeasure}>
 
                         <div className={styles.directionInfoLineAmount}>
-                            {amount}
+                            {step.amount}
                         </div>
                         
                         <SelectInput
@@ -117,22 +120,20 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getDirectionLine(
-        step: number, name: string, notes: { description: string; }[] = [], subSteps: { name: string; amount: string; }[] = []
-    ): JSX.Element {
+    private getDirectionLine(direction: Direction, step: number): JSX.Element {
 
         return (
-            <div key={name} className={styles.directionLine}>
+            <div key={direction.name} className={styles.directionLine}>
 
                 <div className={styles.lineCheckbox}></div>
 
                 <div className={styles.directionInfoLines}>
 
-                    {this.getDirectionInfoLine(step, name, "180")}
+                    {this.getDirectionInfoLine(step, direction.name, "180")}
 
-                    {notes.map((note) => this.getSubDirectionNoteLine(note.description))}
+                    {direction.notes.map((note) => this.getSubDirectionNoteLine(note))}
 
-                    {subSteps.map((subStep) => this.getSubDirectionLine(subStep.name, subStep.amount))}
+                    {direction.subSteps.map((subStep) => this.getSubDirectionLine(subStep))}
 
                 </div>
 
@@ -149,37 +150,15 @@ export default class DirectionsBlock extends Component<Props> {
 
     public render(): JSX.Element {
 
-        const FIRST_STEP_NUMBER = 1;
+        const { directions } = this.props;
 
-        const directions = [
-            { name: "Preheat Oven" },
-            {
-                name: "Stir",
-                notes: [
-                    { description: "Mix quickly and lightly with a fork until moistened, but do not beat." },
-                ],
-                subSteps: [
-                    { name: "Milk", amount: "100" },
-                    { name: "Flour", amount: "240" },
-                    { name: "Egg", amount: "120" },                
-                ]
-            },
-            {
-                name: "Bake",
-                notes: [
-                    { description: "If you don't burn your house down, then everything will be ok." },
-                ],
-            },
-        ];
+        const FIRST_STEP_NUMBER = 1;
 
         return (
             <div className={styles.directionsBlock}>
-                {directions.map((direction, index) => this.getDirectionLine(
-                    index + FIRST_STEP_NUMBER,
-                    direction.name,
-                    direction.notes,
-                    direction.subSteps,
-                ))}
+                {directions.map(
+                    (direction, index) => this.getDirectionLine(direction, index + FIRST_STEP_NUMBER)
+                )}
             </div>
         );
     }
