@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import { Units, UnitVolume, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import LinkIcon from "../../icons/link-sharp.svg";
+import SearchIcon from "../../icons/search-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
-import AddIcon from "../../icons/add-sharp.svg";
 import RemoveIcon from "../../icons/remove-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
-import { Ingredient } from "../../store/recipe/types";
+import { Ingredient, IngredientReference } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
+import Utils from "../../../common/utils";
 
 
 
@@ -54,7 +55,9 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientInfoLine(name: string, amount: number, unit: UnitWeight | UnitVolume, isAlt: boolean = false): JSX.Element {
+    private getIngredientInfoLine(
+        name: string, amount: number, unit: UnitWeight | UnitVolume, isNew: boolean = false, isAlt: boolean = false,
+    ): JSX.Element {
 
         const amountText = (
             <div className={styles.ingredientInfoLineAmountText}>
@@ -72,7 +75,11 @@ export default class IngredientsBlock extends Component<Props> {
         );
 
         return (
-            <div key={name} className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
+            <div key={name} className={Utils.classNames({
+                [styles.ingredientInfoLine]: !isAlt,
+                [styles.altIngredientInfoLine]: isAlt,
+                [styles.newIngredient]: isNew,
+            })}>
 
                 <div className={styles.ingredientInfoLineName}>
                     {name.toUpperCase()}
@@ -92,19 +99,15 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientLine(ingredient: Ingredient, index: number): JSX.Element {
+    private getIngredientLine(ingredient: Ingredient, index: number, isNew: boolean = false): JSX.Element {
+
+        const newAlt: IngredientReference = {
+            id: "ALTERNATIVE",
+            amount: 100,
+            unit: UnitWeight.g,
+        };
 
         const checkbox = (<div className={styles.lineCheckbox}></div>);
-
-        const isNew = false;
-
-        const addButton = (
-            <div className={styles.ingredientLineButton}>
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                    <AddIcon />
-                </IconWrapper>
-            </div>
-        );
 
         const removeButton = (
             <div className={styles.ingredientLineButton}>
@@ -114,8 +117,16 @@ export default class IngredientsBlock extends Component<Props> {
             </div>
         );
 
-        const infoButton = (
+        const searchButton = (
             <div className={styles.ingredientLineButton}>
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <SearchIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const linkButton = (
+            <div className={styles.ingredientLineButton} style={( isNew ? { opacity: "0.5" } : null )}>
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <LinkIcon />
                 </IconWrapper>
@@ -123,7 +134,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
 
         const alternativeButton = (
-            <div className={styles.ingredientLineButton}>
+            <div className={styles.ingredientLineButton} style={( isNew ? { opacity: "0.5" } : null )}>
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <AltIcon />
                 </IconWrapper>
@@ -134,21 +145,23 @@ export default class IngredientsBlock extends Component<Props> {
 
             <div key={`ingredient_${index}`} className={styles.ingredientLine}>
 
-                {( this.props.isReadOnly ? checkbox : ( isNew ? addButton : removeButton ) )}
+                {( this.props.isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
 
                 <div className={styles.ingredientInfoLines}>
 
-                    {this.getIngredientInfoLine(ingredient.foodItem.name, ingredient.amount, ingredient.unit)}
+                    {this.getIngredientInfoLine(ingredient.foodItem.name, ingredient.amount, ingredient.unit, isNew)}
 
                     {ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts)}
 
                     {ingredient.alternatives && ingredient.alternatives.map(
-                        (alt) => this.getIngredientInfoLine(alt.id, alt.amount, alt.unit, true)
+                        (alt) => this.getIngredientInfoLine(alt.id, alt.amount, alt.unit, false, true)
                     )}
+
+                    {( isNew && this.getIngredientInfoLine(newAlt.id, newAlt.amount, newAlt.unit, true, true) )}
 
                 </div>
 
-                {infoButton}
+                {linkButton}
 
                 {alternativeButton}
 
@@ -161,10 +174,26 @@ export default class IngredientsBlock extends Component<Props> {
 
         const { ingredients } = this.props;
 
+        const newIngredient: Ingredient = {
+
+            foodItem: {
+                id: "",
+                name: "NEW INGREDIENT",
+                nutritionFacts: {},
+            },
+
+            amount: 100,
+            unit: UnitWeight.g,
+
+            alternatives: [],
+        };
+
         return (
             <div className={styles.ingredientsBlock}>
 
                 {ingredients.map( (ingredient, index) => this.getIngredientLine(ingredient, index) )}
+
+                {this.getIngredientLine(newIngredient, ++ingredients.length, true)}
 
             </div>
         );

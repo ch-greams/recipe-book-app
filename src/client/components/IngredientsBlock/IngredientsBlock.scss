@@ -43,7 +43,13 @@
                 font-family: "Montserrat";
                 font-size: 16px;
                 font-weight: 500;
-        
+
+                &.newIngredient {
+
+                    color: rgba($color: $color-default, $alpha: 0.25);
+                    font-weight: 700;
+                }
+
                 .ingredientInfoLineName {
 
                     line-height: 24px;
@@ -111,10 +117,16 @@
                 font-family: "Montserrat";
                 font-size: 16px;
                 font-weight: 500;
-        
+
+                &.newIngredient {
+
+                    color: rgba($color: $color-white, $alpha: 0.25);
+                    font-weight: 700;
+                }
+
                 .ingredientInfoLineName {
 
-                    line-height: 22px;
+                    line-height: 24px;
                 }
 
                 .ingredientInfoLineMeasure {
