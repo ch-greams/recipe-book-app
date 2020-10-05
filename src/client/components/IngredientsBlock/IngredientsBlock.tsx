@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Units, UnitVolume, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
-import InfoIcon from "../../icons/information-sharp.svg";
+import LinkIcon from "../../icons/link-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
+import AddIcon from "../../icons/add-sharp.svg";
+import RemoveIcon from "../../icons/remove-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
 import { Ingredient } from "../../store/recipe/types";
@@ -54,6 +56,21 @@ export default class IngredientsBlock extends Component<Props> {
 
     private getIngredientInfoLine(name: string, amount: number, unit: UnitWeight | UnitVolume, isAlt: boolean = false): JSX.Element {
 
+        const amountText = (
+            <div className={styles.ingredientInfoLineAmountText}>
+                {amount}
+            </div>
+        );
+
+        const amountInput = (
+            <input
+                type={"text"}
+                className={styles.ingredientInfoLineAmountInput}
+                value={(amount || "")}
+                onChange={console.log}
+            />
+        );
+
         return (
             <div key={name} className={(isAlt ? styles.altIngredientInfoLine : styles.ingredientInfoLine)}>
 
@@ -63,9 +80,7 @@ export default class IngredientsBlock extends Component<Props> {
 
                 <div className={styles.ingredientInfoLineMeasure}>
                     
-                    <div className={styles.ingredientInfoLineAmount}>
-                        {amount}
-                    </div>
+                    {( this.props.isReadOnly ? amountText : amountInput )}
                     
                     <SelectInput
                         type={(isAlt ? SelectInputType.AltIngredientUnit : SelectInputType.IngredientUnit)}
@@ -79,11 +94,47 @@ export default class IngredientsBlock extends Component<Props> {
 
     private getIngredientLine(ingredient: Ingredient, index: number): JSX.Element {
 
+        const checkbox = (<div className={styles.lineCheckbox}></div>);
+
+        const isNew = false;
+
+        const addButton = (
+            <div className={styles.ingredientLineButton}>
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <AddIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const removeButton = (
+            <div className={styles.ingredientLineButton}>
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <RemoveIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const infoButton = (
+            <div className={styles.ingredientLineButton}>
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <LinkIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const alternativeButton = (
+            <div className={styles.ingredientLineButton}>
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                    <AltIcon />
+                </IconWrapper>
+            </div>
+        );
+
         return (
 
             <div key={`ingredient_${index}`} className={styles.ingredientLine}>
 
-                <div className={styles.lineCheckbox}></div>
+                {( this.props.isReadOnly ? checkbox : ( isNew ? addButton : removeButton ) )}
 
                 <div className={styles.ingredientInfoLines}>
 
@@ -97,17 +148,9 @@ export default class IngredientsBlock extends Component<Props> {
 
                 </div>
 
-                <div className={styles.ingredientLineButton}>
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <InfoIcon />
-                    </IconWrapper>
-                </div>
+                {infoButton}
 
-                <div className={styles.ingredientLineButton}>
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <AltIcon />
-                    </IconWrapper>
-                </div>
+                {alternativeButton}
 
             </div>
         );

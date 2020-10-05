@@ -12,7 +12,7 @@ import {
 
 const initialState: RecipePageStore = {
 
-    isReadOnly: true,
+    isReadOnly: false,
 
     name: "Cocoa Muffins",
     brand: "Homemade",
