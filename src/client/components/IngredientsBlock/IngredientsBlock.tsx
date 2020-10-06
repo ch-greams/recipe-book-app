@@ -1,22 +1,26 @@
 import React, { Component } from "react";
-import { Units, UnitVolume, UnitWeight } from "../../../common/units";
+import { Units, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import LinkIcon from "../../icons/link-sharp.svg";
 import SearchIcon from "../../icons/search-sharp.svg";
 import AltIcon from "../../icons/repeat-sharp.svg";
-import RemoveIcon from "../../icons/remove-sharp.svg";
+import RemoveIcon from "../../icons/close-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
 import { Ingredient, IngredientReference } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
+import { AnyAction } from "redux";
+import { Route } from "../Router";
+import { Link } from "react-router-dom";
 
 
 
 interface Props {
     isReadOnly: boolean;
     ingredients: Ingredient[];
+    updateIngredients: (value: Ingredient[]) => AnyAction;
 }
 
 
@@ -26,6 +30,98 @@ export default class IngredientsBlock extends Component<Props> {
         isReadOnly: false,
     };
 
+
+    private removeIngredient(id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.filter((ingredient) => ingredient.foodItem.id !== id)
+        );
+    }
+
+    private removeAltIngredient(parentId: string, id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.reduce<Ingredient[]>((acc, cur) => [
+                ...acc,
+                cur.foodItem.id === parentId
+                    ? {
+                        ...cur,
+                        alternatives: cur.alternatives.filter((alt) => alt.id !== id)
+                    }
+                    : cur
+            ], [])
+        );
+    }
+
+    private switchAltIngredientWithParent(parentId: string, id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.reduce<Ingredient[]>((acc, cur) => {
+
+                if (cur.foodItem.id === parentId) {
+
+                    const alt = cur.alternatives.find((alt) => alt.id === id);
+                    const newAlt: IngredientReference = {
+                        id: cur.foodItem.name,
+                        amount: cur.amount,
+                        unit: cur.unit,
+                    };
+
+                    return [
+                        ...acc,
+                        {
+                            ...cur,
+                            alternatives: [
+                                ...cur.alternatives.filter((alt) => alt.id !== id),
+                                newAlt,
+                            ],
+                            amount: alt.amount,
+                            unit: alt.unit,
+                            foodItem: {
+                                ...cur.foodItem,
+                                id: alt.id,
+                                name: alt.id,
+                            },
+                        },
+                    ];
+                }
+                else {
+                    return [ ...acc, cur];
+                }
+
+            }, [])
+        );
+    }
+
+    private toggleIngredientAltOpen(id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.map((ingredient) => ({
+                ...ingredient,
+                isAltOpen: (ingredient.foodItem.id === id) ? !ingredient.isAltOpen : ingredient.isAltOpen
+            }))
+        );
+    }
+
+    private toggleIngredientOpen(id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.map((ingredient) => ({
+                ...ingredient,
+                isOpen: (ingredient.foodItem.id === id) ? !ingredient.isOpen : ingredient.isOpen
+            }))
+        );
+    }
 
     private getIngredientInfoLineNutritionFacts(nutritionFacts: Dictionary<NutritionFactType, number>): JSX.Element {
 
@@ -55,13 +151,11 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientInfoLine(
-        name: string, amount: number, unit: UnitWeight | UnitVolume, isNew: boolean = false, isAlt: boolean = false,
-    ): JSX.Element {
+    private getIngredientInfoLine(ingredient: Ingredient, isNew: boolean = false): JSX.Element {
 
         const amountText = (
             <div className={styles.ingredientInfoLineAmountText}>
-                {amount}
+                {ingredient.amount}
             </div>
         );
 
@@ -69,20 +163,22 @@ export default class IngredientsBlock extends Component<Props> {
             <input
                 type={"text"}
                 className={styles.ingredientInfoLineAmountInput}
-                value={(amount || "")}
+                value={(ingredient.amount || "")}
                 onChange={console.log}
             />
         );
 
         return (
-            <div key={name} className={Utils.classNames({
-                [styles.ingredientInfoLine]: !isAlt,
-                [styles.altIngredientInfoLine]: isAlt,
-                [styles.newIngredient]: isNew,
-            })}>
+            <div
+                key={ingredient.foodItem.name}
+                className={Utils.classNames({ [styles.ingredientInfoLine]: true, [styles.newIngredient]: isNew })}
+            >
 
-                <div className={styles.ingredientInfoLineName}>
-                    {name.toUpperCase()}
+                <div
+                    className={styles.ingredientInfoLineName}
+                    onClick={() => this.toggleIngredientOpen(ingredient.foodItem.id)}
+                >
+                    {ingredient.foodItem.name.toUpperCase()}
                 </div>
 
                 <div className={styles.ingredientInfoLineMeasure}>
@@ -90,16 +186,88 @@ export default class IngredientsBlock extends Component<Props> {
                     {( this.props.isReadOnly ? amountText : amountInput )}
                     
                     <SelectInput
-                        type={(isAlt ? SelectInputType.AltIngredientUnit : SelectInputType.IngredientUnit)}
+                        type={SelectInputType.IngredientUnit}
                         options={Object.keys(Units)}
-                        value={unit}
+                        value={ingredient.unit}
                     />
                 </div>
             </div>
         );
     }
 
-    private getIngredientLine(ingredient: Ingredient, index: number, isNew: boolean = false): JSX.Element {
+    private getAltIngredientLine(parentId: string, altIngredient: IngredientReference, isNew: boolean = false): JSX.Element {
+
+        const removeButton = (
+            <div
+                className={styles.altIngredientLineButton}
+                onClick={() => this.removeAltIngredient(parentId, altIngredient.id)}
+            >
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                    <RemoveIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const searchButton = (
+            <div
+                className={styles.altIngredientLineButton}
+                onClick={() => console.log("TODO: Open search modal")}
+            >
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                    <SearchIcon />
+                </IconWrapper>
+            </div>
+        );
+
+        const amountText = (
+            <div className={styles.ingredientInfoLineAmountText}>
+                {altIngredient.amount}
+            </div>
+        );
+
+        const amountInput = (
+            <input
+                type={"text"}
+                className={styles.ingredientInfoLineAmountInput}
+                value={(altIngredient.amount || "")}
+                onChange={console.log}
+            />
+        );
+
+        return (
+
+            <div key={altIngredient.id} className={styles.altIngredientLine}>
+
+                {( isNew ? searchButton : removeButton )}
+
+                <div className={Utils.classNames({
+                    [styles.altIngredientInfoLine]: true,
+                    [styles.newIngredient]: isNew,
+                })}>
+
+                    <div
+                        className={styles.ingredientInfoLineName}
+                        onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.id)}
+                    >
+                        {altIngredient.id.toUpperCase()}
+                    </div>
+
+                    <div className={styles.ingredientInfoLineMeasure}>
+                        
+                        {( this.props.isReadOnly ? amountText : amountInput )}
+                        
+                        <SelectInput
+                            type={SelectInputType.AltIngredientUnit}
+                            options={Object.keys(Units)}
+                            value={altIngredient.unit}
+                        />
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    private getIngredientLine(ingredient: Ingredient, isNew: boolean = false): JSX.Element {
 
         const newAlt: IngredientReference = {
             id: "ALTERNATIVE",
@@ -110,7 +278,10 @@ export default class IngredientsBlock extends Component<Props> {
         const checkbox = (<div className={styles.lineCheckbox}></div>);
 
         const removeButton = (
-            <div className={styles.ingredientLineButton}>
+            <div
+                className={styles.ingredientLineButton}
+                onClick={() => this.removeIngredient(ingredient.foodItem.id)}
+            >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <RemoveIcon />
                 </IconWrapper>
@@ -118,7 +289,10 @@ export default class IngredientsBlock extends Component<Props> {
         );
 
         const searchButton = (
-            <div className={styles.ingredientLineButton}>
+            <div
+                className={styles.ingredientLineButton}
+                onClick={() => console.log("TODO: Open modal for new ingredient search")}
+            >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <SearchIcon />
                 </IconWrapper>
@@ -126,38 +300,50 @@ export default class IngredientsBlock extends Component<Props> {
         );
 
         const linkButton = (
-            <div className={styles.ingredientLineButton} style={( isNew ? { opacity: "0.5" } : null )}>
+            <Link
+                to={Utils.getItemPath(Route.Food, ingredient.foodItem.id)}
+                className={styles.ingredientLineButton}
+                style={( isNew ? { opacity: "0.5" } : null )}
+            >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <LinkIcon />
                 </IconWrapper>
-            </div>
+            </Link>
         );
 
         const alternativeButton = (
-            <div className={styles.ingredientLineButton} style={( isNew ? { opacity: "0.5" } : null )}>
+            <div
+                className={styles.ingredientLineButton}
+                style={( isNew ? { opacity: "0.5" } : null )}
+                onClick={() => isNew || this.toggleIngredientAltOpen(ingredient.foodItem.id)}
+            >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <AltIcon />
                 </IconWrapper>
             </div>
         );
 
+        const showAlternativeIngredients: boolean = !!(ingredient.isAltOpen && ingredient.alternatives);
+        const showNewAlternativeIngredient: boolean = ingredient.isAltOpen && !isNew;
+
         return (
 
-            <div key={`ingredient_${index}`} className={styles.ingredientLine}>
+            <div key={`ingredient_${ingredient.foodItem.id}`} className={styles.ingredientLine}>
 
                 {( this.props.isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
 
                 <div className={styles.ingredientInfoLines}>
 
-                    {this.getIngredientInfoLine(ingredient.foodItem.name, ingredient.amount, ingredient.unit, isNew)}
+                    {this.getIngredientInfoLine(ingredient, isNew)}
 
-                    {ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts)}
+                    {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts) )}
 
-                    {ingredient.alternatives && ingredient.alternatives.map(
-                        (alt) => this.getIngredientInfoLine(alt.id, alt.amount, alt.unit, false, true)
+                    {(
+                        showAlternativeIngredients &&
+                        ingredient.alternatives.map((alt) => this.getAltIngredientLine(ingredient.foodItem.id, alt, false))
                     )}
 
-                    {( isNew && this.getIngredientInfoLine(newAlt.id, newAlt.amount, newAlt.unit, true, true) )}
+                    {( showNewAlternativeIngredient && this.getAltIngredientLine(ingredient.foodItem.id, newAlt, true) )}
 
                 </div>
 
@@ -176,8 +362,11 @@ export default class IngredientsBlock extends Component<Props> {
 
         const newIngredient: Ingredient = {
 
+            isOpen: false,
+            isAltOpen: false,
+
             foodItem: {
-                id: "",
+                id: "new",
                 name: "NEW INGREDIENT",
                 nutritionFacts: {},
             },
@@ -191,9 +380,9 @@ export default class IngredientsBlock extends Component<Props> {
         return (
             <div className={styles.ingredientsBlock}>
 
-                {ingredients.map( (ingredient, index) => this.getIngredientLine(ingredient, index) )}
+                {ingredients.map( (ingredient) => this.getIngredientLine(ingredient) )}
 
-                {this.getIngredientLine(newIngredient, ++ingredients.length, true)}
+                {this.getIngredientLine(newIngredient, true)}
 
             </div>
         );

@@ -47,7 +47,11 @@ class SelectInput extends Component<Props> {
         const { type, options, value } = this.props;
 
         return (
-            <select className={this.getClassName(type)} value={value}>
+            <select
+                className={this.getClassName(type)}
+                value={value}
+                onChange={console.log}
+            >
                 {options.map((option) => (
                     <option value={option} key={option}>
                         {option}

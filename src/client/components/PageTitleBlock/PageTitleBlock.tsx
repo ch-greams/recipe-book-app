@@ -14,6 +14,7 @@ interface Props {
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
+    updateDescription?: (value: string) => AnyAction;
 }
 interface State {
     isTitleInputsOpen: boolean;
@@ -58,6 +59,13 @@ export default class PageTitleBlock extends Component<Props, State> {
         this.props.updateSubtitle(
             (event.target.value || "").toUpperCase()
         );
+    }
+
+    private handleDescriptionEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+
+        Utils.keepCaretInPlace(window, event);
+
+        this.props.updateDescription(event.target.value || "");
     }
 
     private getTitleBlockStatic(name: string, brand: string, subtitle: string, description?: string): JSX.Element {
@@ -110,7 +118,7 @@ export default class PageTitleBlock extends Component<Props, State> {
                     className={styles.descriptionBlockInput}
                     name={"description"} id={"description"} rows={6}
                     placeholder={"Description"} value={(description || "")}
-                    onChange={console.log}
+                    onChange={this.handleDescriptionEdit.bind(this)}
                 />
             </div>
         );

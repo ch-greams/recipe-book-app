@@ -17,7 +17,9 @@ export interface IngredientReference {
 }
 
 export interface Ingredient {
-    isOpen?: boolean;
+    isOpen: boolean;
+    isAltOpen: boolean;
+
     foodItem: IngredientFood;
     amount: number;
     unit: UnitWeight | UnitVolume;
@@ -62,6 +64,9 @@ export interface RecipePageStore {
 export const RECIPE_ITEM_UPDATE_NAME = "RECIPE_ITEM_UPDATE_NAME";
 export const RECIPE_ITEM_UPDATE_BRAND = "RECIPE_ITEM_UPDATE_BRAND";
 export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
+export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
+
+export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
 
 
 export interface UpdateNameAction {
@@ -79,7 +84,17 @@ export interface UpdateSubtitleAction {
     payload: string;
 }
 
+export interface UpdateDescriptionAction {
+    type: typeof RECIPE_ITEM_UPDATE_DESCRIPTION;
+    payload: string;
+}
+
+export interface UpdateIngredientsAction {
+    type: typeof RECIPE_ITEM_UPDATE_INGREDIENTS;
+    payload: Ingredient[];
+}
 
 export type RecipeItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
+    UpdateIngredientsAction
 );

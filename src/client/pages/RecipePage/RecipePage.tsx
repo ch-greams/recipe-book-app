@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
-import { updateName, updateBrand, updateSubtitle } from "../../store/recipe/actions";
+import {
+    updateName, updateBrand, updateSubtitle, updateDescription,
+    updateIngredients,
+} from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
@@ -26,6 +29,8 @@ interface RecipePageDispatchToProps {
     updateName: typeof updateName;
     updateBrand: typeof updateBrand;
     updateSubtitle: typeof updateSubtitle;
+    updateDescription: typeof updateDescription;
+    updateIngredients: typeof updateIngredients;
 }
 
 interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToProps { }
@@ -145,6 +150,8 @@ class RecipePage extends Component<RecipePageProps> {
             updateName,
             updateBrand,
             updateSubtitle,
+            updateDescription,
+            updateIngredients,
         } = this.props;
 
         return (
@@ -161,6 +168,7 @@ class RecipePage extends Component<RecipePageProps> {
                         updateName={updateName}
                         updateBrand={updateBrand}
                         updateSubtitle={updateSubtitle}
+                        updateDescription={updateDescription}
                     />
 
                     {this.getGeneralInfoBlock()}
@@ -172,6 +180,7 @@ class RecipePage extends Component<RecipePageProps> {
                     <IngredientsBlock
                         isReadOnly={isReadOnly}
                         ingredients={ingredients}
+                        updateIngredients={updateIngredients}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -209,6 +218,8 @@ const mapDispatchToProps: RecipePageDispatchToProps = {
     updateName,
     updateBrand,
     updateSubtitle,
+    updateDescription,
+    updateIngredients,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

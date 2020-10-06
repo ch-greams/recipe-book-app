@@ -22,12 +22,6 @@ interface HomePageProps extends HomePageStateToProps, HomePageDispatchToProps { 
 
 class HomePage extends Component<HomePageProps> {
 
-    public constructor(props: HomePageProps) {
-        super(props);
-
-        // this.props.updateName("NEW_TEST");
-    }
-
     public render(): JSX.Element {
 
         const createRecipeButtonLabel = "Create Recipe".toUpperCase();

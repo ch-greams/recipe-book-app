@@ -23,10 +23,10 @@ export default class DirectionsBlock extends Component<Props> {
     };
 
 
-    private getSubDirectionNoteLine(description: string): JSX.Element {
+    private getSubDirectionNoteLine(description: string, index: number): JSX.Element {
         return (
 
-            <div key={name} className={styles.subDirectionLine}>
+            <div key={`subDirectionNoteLine_${index}`} className={styles.subDirectionLine}>
 
                 <div className={styles.subDirectionNoteInfoLine}>
 
@@ -46,10 +46,10 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getSubDirectionLine(step: DirectionStep): JSX.Element {
+    private getSubDirectionLine(step: DirectionStep, index: number): JSX.Element {
         return (
 
-            <div key={name} className={styles.subDirectionLine}>
+            <div key={`subDirectionLine_${index}`} className={styles.subDirectionLine}>
 
                 <div className={styles.lineCheckbox}></div>
 
@@ -131,9 +131,9 @@ export default class DirectionsBlock extends Component<Props> {
 
                     {this.getDirectionInfoLine(step, direction.name, "180")}
 
-                    {direction.notes.map((note) => this.getSubDirectionNoteLine(note))}
+                    {direction.notes.map((note, index) => this.getSubDirectionNoteLine(note, index))}
 
-                    {direction.subSteps.map((subStep) => this.getSubDirectionLine(subStep))}
+                    {direction.subSteps.map((subStep, index) => this.getSubDirectionLine(subStep, index))}
 
                 </div>
 

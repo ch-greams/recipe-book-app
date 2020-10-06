@@ -1,7 +1,7 @@
 [
     {
         "id": "f000001",
-        "name": "Peanuts",
+        "name": "Milk",
         "brand": "Test",
         "subtitle": "That is technically a food",
 
@@ -26,7 +26,7 @@
     },
     {
         "id": "f000002",
-        "name": "Salt",
+        "name": "Flour",
         "brand": "Test",
         "subtitle": "That is technically a food",
 

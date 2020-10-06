@@ -4,8 +4,11 @@ import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_SUBTITLE,
+    RECIPE_ITEM_UPDATE_DESCRIPTION,
+    RECIPE_ITEM_UPDATE_INGREDIENTS,
     RecipeItemActionTypes,
     RecipePageStore,
+    Ingredient,
 } from "./types";
 
 
@@ -28,9 +31,10 @@ const initialState: RecipePageStore = {
     ingredients: [
         {
             isOpen: false,
+            isAltOpen: true,
 
             foodItem: {
-                id: "Milk",
+                id: "f000001",
                 name: "Milk",
                 nutritionFacts: {
                     [NutritionFactType.Carbohydrate]: 158.2,
@@ -45,15 +49,15 @@ const initialState: RecipePageStore = {
 
             alternatives: [
                 { id: "Oat Milk", amount: 120, unit: UnitVolume.ml },
-                { id: "Almond Milk", amount: 120, unit: UnitVolume.ml },
+                { id: "Almond Milk", amount: 100, unit: UnitWeight.g },
             ],
         },
         {
-            isOpen: true,
-
+            isOpen: false,
+            isAltOpen: true,
 
             foodItem: {
-                id: "Flour",
+                id: "f000002",
                 name: "Flour",
 
                 nutritionFacts: {
@@ -68,11 +72,12 @@ const initialState: RecipePageStore = {
             unit: UnitWeight.g,
 
             alternatives: [
-                { id: "Rye Flour", amount: 220, unit: UnitWeight.g },
+                { id: "Rye Flour", amount: 2, unit: UnitVolume.cup },
             ],
         },
         {
-            isOpen: true,
+            isOpen: false,
+            isAltOpen: true,
 
             foodItem: {
                 id: "Eggs",
@@ -93,6 +98,7 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
+            isAltOpen: true,
 
             foodItem: {
                 id: "Cocoa",
@@ -163,6 +169,20 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 subtitle: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DESCRIPTION: {
+            return {
+                ...state,
+                description: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_INGREDIENTS: {
+            return {
+                ...state,
+                ingredients: action.payload as Ingredient[],
             };
         }
 

@@ -2,6 +2,7 @@ import { NutritionFact } from "../client/components/NutritionFactsBlock/Nutritio
 import { NutritionFactType } from "./nutritionFacts";
 import { Dictionary } from "./typings";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
+import { Route } from "../client/components/Router";
 
 
 
@@ -89,6 +90,10 @@ export default class Utils {
     }
 
     // NOTE: OTHER
+
+    public static getItemPath(route: Route, id: string): string {
+        return `/${route}/${id}`;
+    }
 
     public static classNames(values: Dictionary<string, boolean>): string {
         return Object.keys(values).filter((key) => values[key]).join(" ");
