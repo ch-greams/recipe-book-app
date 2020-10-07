@@ -6,9 +6,9 @@
 
         display: flex;
         flex-direction: row;
+        gap: 8px;
 
         margin: 8px 0;
-        gap: 8px;
 
         .lineCheckbox {
 
@@ -20,7 +20,6 @@
 
             display: flex;
             flex-direction: column;
-
             flex-grow: 2;
 
             .ingredientInfoLine {
@@ -28,25 +27,27 @@
                 display: flex;
                 justify-content: space-between;
 
-                background-color: $color-white;
                 padding: 10px 12px 10px 20px;
-
-                color: $color-default;
-
-                border-style: solid;
-                border-width: 1px;
-                border-color: $color-grey-light;
-
-                box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
                 font-family: $font-default;
                 font-size: 16px;
                 font-weight: 500;
 
+                color: $color-default;
+
+                background-color: $color-white;
+
+                border-color: $color-grey-light;
+                border-style: solid;
+                border-width: 1px;
+
+                box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
                 &.newIngredient {
 
-                    color: rgba($color: $color-default, $alpha: 0.25);
                     font-weight: 700;
+
+                    color: rgba($color: $color-default, $alpha: 0.25);
                 }
 
                 .ingredientInfoLineName {
@@ -70,14 +71,15 @@
                         padding-right: 4px;
                         margin-right: 4px;
 
+                        line-height: 22px;
+
                         color: $color-grey-dark;
 
-                        line-height: 22px;
                         text-align: right;
 
+                        border-color: $color-grey-light;
                         border-style: solid;
                         border-width: 1px;
-                        border-color: $color-grey-light;
                     }
 
                     .ingredientInfoLineAmountInput {
@@ -87,18 +89,19 @@
                         padding-right: 4px;
                         margin-right: 4px;
 
-                        color: $color-default;
-
-                        line-height: 20px;
-                        text-align: right;
-
-                        border-style: solid;
-                        border-width: 1px;
-                        border-color: $color-default;
-
                         font-family: $font-default;
                         font-size: 16px;
                         font-weight: 500;
+
+                        line-height: 20px;
+
+                        color: $color-default;
+
+                        text-align: right;
+
+                        border-color: $color-default;
+                        border-style: solid;
+                        border-width: 1px;
                     }
                 }
             }
@@ -107,7 +110,6 @@
 
                 display: flex;
                 flex-direction: row;
-
                 justify-content: space-evenly;
 
                 margin-top: 8px;
@@ -115,17 +117,16 @@
                 .ingredientInfoLineNutritionFact {
 
                     display: flex;
-                    flex-direction: column;
-
                     flex: 1;
+                    flex-direction: column;
 
                     margin: 0 2px;
 
                     text-align: center;
 
+                    border-color: $color-white;
                     border-style: solid;
                     border-width: 1px;
-                    border-color: $color-white;
 
                     .ingredientInfoLineNutritionFactAmount {
 
@@ -138,9 +139,9 @@
 
                         color: $color-white;
 
+                        border-bottom-color: $color-white;
                         border-bottom-style: solid;
                         border-bottom-width: 2px;
-                        border-bottom-color: $color-white;
                     }
 
                     .ingredientInfoLineNutritionFactType {
@@ -161,22 +162,24 @@
 
             width: 44px;
             height: 24px;
-            line-height: 24px;
 
-            background-color: $color-white;
             padding: 10px 0;
 
+            line-height: 24px;
+
             color: $color-default;
-
-            border-style: solid;
-            border-width: 1px;
-            border-color: $color-grey-light;
-
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
             text-align: center;
 
             cursor: pointer;
+
+            background-color: $color-white;
+
+            border-color: $color-grey-light;
+            border-style: solid;
+            border-width: 1px;
+
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
         }
     }
 
@@ -184,54 +187,57 @@
 
         display: flex;
         flex-direction: row;
+        gap: 4px;
 
         margin: 8px 2px 0 2px;
-        gap: 4px;
 
         .altIngredientLineButton {
 
             width: 36px;
             height: 24px;
-            line-height: 24px;
 
-            background-color: $color-default;
             padding: 6px 0;
 
-            color: $color-white;
+            line-height: 24px;
 
-            border-style: solid;
-            border-width: 1px;
-            border-color: $color-white;
+            color: $color-white;
 
             text-align: center;
 
             cursor: pointer;
+
+            background-color: $color-default;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
         }
 
         .altIngredientInfoLine {
 
             display: flex;
+            flex-grow: 2;
             justify-content: space-between;
 
-            flex-grow: 2;
-
-            background-color: $color-default;
             padding: 6px 12px 6px 20px;
-
-            color: $color-white;
-
-            border-style: solid;
-            border-width: 1px;
-            border-color: $color-white;
 
             font-family: $font-default;
             font-size: 16px;
             font-weight: 500;
 
+            color: $color-white;
+
+            background-color: $color-default;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+
             &.newIngredient {
 
-                color: rgba($color: $color-white, $alpha: 0.25);
                 font-weight: 700;
+
+                color: rgba($color: $color-white, $alpha: 0.25);
             }
 
             .ingredientInfoLineName {
@@ -256,11 +262,12 @@
                     margin-right: 4px;
 
                     line-height: 20px;
+
                     text-align: right;
 
+                    border-color: rgba($color: $color-white, $alpha: 0.5);
                     border-style: solid;
                     border-width: 1px;
-                    border-color: rgba($color: $color-white, $alpha: 0.5);
                 }
 
                 .ingredientInfoLineAmountInput {
@@ -270,27 +277,32 @@
                     padding-right: 4px;
                     margin-right: 4px;
 
-                    background-color: $color-default-dark;
-                    color: $color-white;
-
-                    line-height: 18px;
-                    text-align: right;
-
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: $color-white;
-
                     font-family: $font-default;
                     font-size: 16px;
                     font-weight: 500;
+
+                    line-height: 18px;
+
+                    color: $color-white;
+
+                    text-align: right;
+
+                    background-color: $color-default-dark;
+
+                    border-color: $color-white;
+                    border-style: solid;
+                    border-width: 1px;
                 }
             }
         }
     }
 
     .separator {
+
         height: 2px;
+
         margin: 12px 100px 4px 100px;
+
         background-color: $color-white;
     }
 
@@ -300,13 +312,13 @@
         width: 22px;
         height: 22px;
 
+        cursor: pointer;
+
         background-color: $color-default-dark;
 
+        border-color: $color-white;
         border-style: solid;
         border-width: 2px;
-        border-color: $color-white;
-
-        cursor: pointer;
     }
 }
 

@@ -19,7 +19,6 @@
     .customUnitLine {
 
         display: flex;
-
         flex-direction: row;
 
         margin: 4px 0;
@@ -27,7 +26,6 @@
         .customUnitLineInfo {
 
             display: flex;
-
             flex-direction: row;
             justify-content: space-around;
 
@@ -36,14 +34,15 @@
 
             padding: 6px;
 
+            line-height: 22px;
+
             color: $color-grey-dark;
+
             background-color: $color-white;
 
+            border-color: $color-grey-light;
             border-style: solid;
             border-width: 1px;
-            border-color: $color-grey-light;
-
-            line-height: 22px;
 
             box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
@@ -53,20 +52,21 @@
 
                 padding-right: 4px;
 
-                color: $color-default;
-                background-color: $color-white;
-
-                border-style: solid;
-                border-width: 1px;
-                border-color: $color-default;
-
-                text-align: right;
-
-                line-height: 18px;
-
                 font-family: $font-default;
                 font-size: 12px;
                 font-weight: 500;
+
+                line-height: 18px;
+
+                color: $color-default;
+
+                text-align: right;
+
+                background-color: $color-white;
+
+                border-color: $color-default;
+                border-style: solid;
+                border-width: 1px;
             }
 
             .customUnitLineEqualSign {
@@ -77,10 +77,9 @@
             .customUnitLineMeasure {
 
                 display: flex;
+                flex-grow: 1;
 
                 max-width: 30%;
-
-                flex-grow: 1;
 
                 .customUnitLineAmount {
 
@@ -89,42 +88,43 @@
                     padding-right: 4px;
                     margin-right: 2px;
 
-                    color: $color-default;
-                    background-color: $color-white;
-
-                    border-style: solid;
-                    border-width: 1px;
-                    border-color: $color-default;
-
-                    text-align: right;
-
-                    line-height: 18px;
-
                     font-family: $font-default;
                     font-size: 12px;
                     font-weight: 500;
+
+                    line-height: 18px;
+
+                    color: $color-default;
+
+                    text-align: right;
+
+                    background-color: $color-white;
+
+                    border-color: $color-default;
+                    border-style: solid;
+                    border-width: 1px;
                 }
             }
         }
 
         .customUnitLineButton {
 
+            padding: 7px;
             margin-right: 4px;
 
-            padding: 7px;
-
-            background-color: $color-white;
             color: $color-default;
-
-            border-style: solid;
-            border-width: 1px;
-            border-color: $color-grey-light;
-
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
             text-align: center;
 
             cursor: pointer;
+
+            background-color: $color-white;
+
+            border-color: $color-grey-light;
+            border-style: solid;
+            border-width: 1px;
+
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
         }
     }
 }
