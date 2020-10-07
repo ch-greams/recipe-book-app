@@ -21,86 +21,110 @@
         display: flex;
 
         flex-direction: row;
-        justify-content: space-between;
 
-        margin: 4px 10px 4px 0;
+        margin: 4px 0;
 
-        height: 22px;
+        .customUnitLineInfo {
 
-        padding: 6px 0;
+            display: flex;
 
-        color: $color-grey-dark;
-        background-color: $color-white;
+            flex-direction: row;
+            justify-content: space-around;
 
-        border-style: solid;
-        border-width: 1px;
-        border-color: $color-grey-light;
+            max-width: calc(100% - 40px);
+            height: 22px;
 
-        line-height: 22px;
+            padding: 6px;
 
-        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
-
-        .customUnitLineName {
-
-            width: 34%;
-
-            margin-left: 26px;
-            margin-right: 8px;
-            padding-right: 4px;
-
-            color: $color-default;
+            color: $color-grey-dark;
             background-color: $color-white;
 
             border-style: solid;
             border-width: 1px;
-            border-color: $color-default;
+            border-color: $color-grey-light;
 
-            text-align: right;
+            line-height: 22px;
 
-            line-height: 18px;
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
-            font-family: "Montserrat";
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .customUnitLineAmount {
+            .customUnitLineName {
 
-            width: 17%;
+                max-width: 40%;
 
-            margin-left: 8px;
-            padding-right: 4px;
+                padding-right: 4px;
 
-            color: $color-default;
-            background-color: $color-white;
+                color: $color-default;
+                background-color: $color-white;
 
-            border-style: solid;
-            border-width: 1px;
-            border-color: $color-default;
+                border-style: solid;
+                border-width: 1px;
+                border-color: $color-default;
 
-            text-align: right;
+                text-align: right;
 
-            line-height: 18px;
+                line-height: 18px;
 
-            font-family: "Montserrat";
-            font-size: 12px;
-            font-weight: 500;
+                font-family: "Montserrat";
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .customUnitLineEqualSign {
+
+                margin: 0 4px;
+            }
+
+            .customUnitLineMeasure {
+
+                display: flex;
+
+                max-width: 30%;
+
+                flex-grow: 1;
+
+                .customUnitLineAmount {
+
+                    width: 60px;
+
+                    padding-right: 4px;
+                    margin-right: 2px;
+
+                    color: $color-default;
+                    background-color: $color-white;
+    
+                    border-style: solid;
+                    border-width: 1px;
+                    border-color: $color-default;
+    
+                    text-align: right;
+    
+                    line-height: 18px;
+    
+                    font-family: "Montserrat";
+                    font-size: 12px;
+                    font-weight: 500;
+                }
+            }
         }
 
         .customUnitLineButton {
 
-            margin-right: 16px;
+            margin-right: 4px;
 
-            color: $color-white;
+            padding: 7px;
 
-            width: 20px;
+            background-color: $color-white;
+            color: $color-default;
+    
+            border-style: solid;
+            border-width: 1px;
+            border-color: $color-grey-light;
 
-            font-family: "Montserrat";
-            font-size: 18px;
-            font-weight: 500;
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
+            text-align: center;
 
             cursor: pointer;
-            user-select: none;
         }
     }
 }

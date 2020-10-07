@@ -135,7 +135,11 @@ export default class ServingSizesBlock extends Component<Props, State> {
                 className={styles.customUnitLine}
             >
 
-                <div>
+                <div className={styles.customUnitLineButton}>
+                    {customUnitButton}
+                </div>
+
+                <div className={styles.customUnitLineInfo}>
 
                     <input
                         type={"text"}
@@ -145,25 +149,23 @@ export default class ServingSizesBlock extends Component<Props, State> {
                         onChange={this.handleCustomUnitNameEdit(customUnit, isNew).bind(this)}
                     />
 
-                    {"="}
+                    <div className={styles.customUnitLineEqualSign}>{"="}</div>
 
-                    <input
-                        type={"text"}
-                        placeholder={"#"}
-                        className={styles.customUnitLineAmount}
-                        value={customUnit.amount}
-                        onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
-                    />
+                    <div className={styles.customUnitLineMeasure}>
 
-                    <SelectInput
-                        type={SelectInputType.CustomUnit}
-                        options={Object.keys(UnitWeight)}
-                    />
+                        <input
+                            type={"text"}
+                            placeholder={"#"}
+                            className={styles.customUnitLineAmount}
+                            value={customUnit.amount}
+                            onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
+                        />
 
-                </div>
-
-                <div className={styles.customUnitLineButton}>
-                    {customUnitButton}
+                        <SelectInput
+                            type={SelectInputType.CustomUnit}
+                            options={Object.keys(UnitWeight)}
+                        />
+                    </div>
                 </div>
 
             </div>
