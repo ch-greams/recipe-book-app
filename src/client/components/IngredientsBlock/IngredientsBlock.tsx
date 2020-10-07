@@ -3,7 +3,6 @@ import { Units, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import LinkIcon from "../../icons/link-sharp.svg";
 import SearchIcon from "../../icons/search-sharp.svg";
-import AltIcon from "../../icons/repeat-sharp.svg";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
@@ -99,18 +98,6 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private toggleIngredientAltOpen(id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.map((ingredient) => ({
-                ...ingredient,
-                isAltOpen: (ingredient.foodItem.id === id) ? !ingredient.isAltOpen : ingredient.isAltOpen
-            }))
-        );
-    }
-
     private toggleIngredientOpen(id: string): void {
 
         const { ingredients, updateIngredients } = this.props;
@@ -135,8 +122,11 @@ export default class IngredientsBlock extends Component<Props> {
         return (
             <div className={styles.ingredientInfoLineNutritionFacts}>
 
-                {nutritionFactTypes.map( (type, index) => (
-                    <div key={`nutritionFact_${index}`} className={styles.ingredientInfoLineNutritionFact}>
+                {nutritionFactTypes.map( (type) => (
+                    <div
+                        key={`nutritionFact_${type}`}
+                        className={styles.ingredientInfoLineNutritionFact}
+                    >
 
                         <div className={styles.ingredientInfoLineNutritionFactAmount}>
                             {nutritionFacts[type]}
@@ -311,20 +301,8 @@ export default class IngredientsBlock extends Component<Props> {
             </Link>
         );
 
-        const alternativeButton = (
-            <div
-                className={styles.ingredientLineButton}
-                style={( isNew ? { opacity: "0.5" } : null )}
-                onClick={() => isNew || this.toggleIngredientAltOpen(ingredient.foodItem.id)}
-            >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                    <AltIcon />
-                </IconWrapper>
-            </div>
-        );
-
-        const showAlternativeIngredients: boolean = !!(ingredient.isAltOpen && ingredient.alternatives);
-        const showNewAlternativeIngredient: boolean = ingredient.isAltOpen && !isNew;
+        const showAlternativeIngredients: boolean = !!(ingredient.isOpen && ingredient.alternatives);
+        const showNewAlternativeIngredient: boolean = ingredient.isOpen && !isNew;
 
         return (
 
@@ -338,6 +316,8 @@ export default class IngredientsBlock extends Component<Props> {
 
                     {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts) )}
 
+                    {( showAlternativeIngredients && showNewAlternativeIngredient && (<div className={styles.separator}></div>) )}
+
                     {(
                         showAlternativeIngredients &&
                         ingredient.alternatives.map((alt) => this.getAltIngredientLine(ingredient.foodItem.id, alt, false))
@@ -348,8 +328,6 @@ export default class IngredientsBlock extends Component<Props> {
                 </div>
 
                 {linkButton}
-
-                {alternativeButton}
 
             </div>
         );
@@ -363,7 +341,6 @@ export default class IngredientsBlock extends Component<Props> {
         const newIngredient: Ingredient = {
 
             isOpen: false,
-            isAltOpen: false,
 
             foodItem: {
                 id: "new",

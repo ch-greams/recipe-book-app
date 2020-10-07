@@ -2,7 +2,6 @@
 
 
 .nutritionFactsBlock {
-
     .nutritionFactsBlockTitle {
 
         margin-top: 20px;
@@ -12,7 +11,7 @@
 
         color: $color-white;
 
-        font-family: "Montserrat";
+        font-family: $font-default;
         font-size: 24px;
         font-weight: 700;
     }
@@ -33,7 +32,7 @@
 
         box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
-        font-family: "Montserrat";
+        font-family: $font-default;
         font-size: 12px;
         font-weight: 500;
 
@@ -61,7 +60,7 @@
             border-width: 1px;
             border-color: $color-default;
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 12px;
             font-weight: 500;
         }
@@ -81,7 +80,7 @@
             border-width: 1px;
             border-color: $color-grey-light;
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 12px;
             font-weight: 500;
         }
@@ -89,7 +88,7 @@
         .nutritionFactUnit {
 
             width: 14%;
-        }   
+        }
 
         .nutritionFactDailyValue {
 
@@ -104,7 +103,6 @@
 
             width: 3%;
         }
-
     }
 
     .subNutrientLine {
@@ -121,7 +119,7 @@
         border-width: 1px;
         border-color: $color-white;
 
-        font-family: "Montserrat";
+        font-family: $font-default;
         font-size: 12px;
         font-weight: 500;
 
@@ -150,7 +148,7 @@
             border-width: 1px;
             border-color: $color-white;
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 12px;
             font-weight: 500;
         }
@@ -171,7 +169,7 @@
             border-width: 1px;
             border-color: rgba($color: $color-white, $alpha: 0.5);
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 12px;
             font-weight: 500;
         }
@@ -179,7 +177,7 @@
         .nutritionFactUnit {
 
             width: 14.5%;
-        }   
+        }
 
         .nutritionFactDailyValue {
 
@@ -194,6 +192,5 @@
 
             width: 3%;
         }
-
     }
 }

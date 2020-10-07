@@ -1,6 +1,5 @@
 @import "../../variables";
 
-
 .homePage {
 
     background-color: #fff;
@@ -22,7 +21,7 @@
 
         color: $color-input;
 
-        font-family: "Montserrat";
+        font-family: $font-default;
         font-size: 36px;
         font-weight: 700;
     }
@@ -60,7 +59,7 @@
 
             color: #fff;
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 24px;
             font-weight: 700;
 

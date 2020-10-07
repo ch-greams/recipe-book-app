@@ -2,7 +2,6 @@
 
 
 .ingredientsBlock {
-
     .ingredientLine {
 
         display: flex;
@@ -28,19 +27,19 @@
 
                 display: flex;
                 justify-content: space-between;
-    
+
                 background-color: $color-white;
                 padding: 10px 12px 10px 20px;
-        
+
                 color: $color-default;
-        
+
                 border-style: solid;
                 border-width: 1px;
                 border-color: $color-grey-light;
-        
+
                 box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
-        
-                font-family: "Montserrat";
+
+                font-family: $font-default;
                 font-size: 16px;
                 font-weight: 500;
 
@@ -53,7 +52,7 @@
                 .ingredientInfoLineName {
 
                     flex-grow: 2;
-                    
+
                     line-height: 24px;
 
                     cursor: pointer;
@@ -75,7 +74,7 @@
 
                         line-height: 22px;
                         text-align: right;
-    
+
                         border-style: solid;
                         border-width: 1px;
                         border-color: $color-grey-light;
@@ -92,14 +91,14 @@
 
                         line-height: 20px;
                         text-align: right;
-    
+
                         border-style: solid;
                         border-width: 1px;
                         border-color: $color-default;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 16px;
-                        font-weight: 500;        
+                        font-weight: 500;
                     }
                 }
             }
@@ -133,7 +132,7 @@
                         margin: 0 16px;
                         margin-top: 4px;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 32px;
                         font-weight: 700;
 
@@ -148,7 +147,7 @@
 
                         margin: 4px 0;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 14px;
                         font-weight: 700;
 
@@ -166,15 +165,15 @@
 
             background-color: $color-white;
             padding: 10px 0;
-    
+
             color: $color-default;
-    
+
             border-style: solid;
             border-width: 1px;
             border-color: $color-grey-light;
-    
+
             box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
-    
+
             text-align: center;
 
             cursor: pointer;
@@ -197,13 +196,13 @@
 
             background-color: $color-default;
             padding: 6px 0;
-    
+
             color: $color-white;
-    
+
             border-style: solid;
             border-width: 1px;
             border-color: $color-white;
-        
+
             text-align: center;
 
             cursor: pointer;
@@ -218,14 +217,14 @@
 
             background-color: $color-default;
             padding: 6px 12px 6px 20px;
-    
+
             color: $color-white;
-    
+
             border-style: solid;
             border-width: 1px;
             border-color: $color-white;
-    
-            font-family: "Montserrat";
+
+            font-family: $font-default;
             font-size: 16px;
             font-weight: 500;
 
@@ -261,7 +260,7 @@
 
                     border-style: solid;
                     border-width: 1px;
-                    border-color: rgba($color: $color-white, $alpha: 0.5);        
+                    border-color: rgba($color: $color-white, $alpha: 0.5);
                 }
 
                 .ingredientInfoLineAmountInput {
@@ -281,25 +280,33 @@
                     border-width: 1px;
                     border-color: $color-white;
 
-                    font-family: "Montserrat";
+                    font-family: $font-default;
                     font-size: 16px;
-                    font-weight: 500;        
+                    font-weight: 500;
                 }
             }
         }
     }
+
+    .separator {
+        height: 2px;
+        margin: 12px 100px 4px 100px;
+        background-color: $color-white;
+    }
+
+
+    .lineCheckbox {
+
+        width: 22px;
+        height: 22px;
+
+        background-color: $color-default-dark;
+
+        border-style: solid;
+        border-width: 2px;
+        border-color: $color-white;
+
+        cursor: pointer;
+    }
 }
 
-.lineCheckbox {
-
-    width: 22px;
-    height: 22px;
-
-    background-color: $color-default-dark;
-
-    border-style: solid;
-    border-width: 2px;
-    border-color: $color-white;
-
-    cursor: pointer;
-}

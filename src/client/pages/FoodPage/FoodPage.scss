@@ -1,7 +1,6 @@
 @import "../../variables";
 
 
-
 .foodPage {
 
     min-height: 100%;
@@ -48,7 +47,7 @@
 
                         color: $color-white;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 16px;
                         font-weight: 500;
                     }
@@ -67,7 +66,7 @@
                         border-width: 1px;
                         border-color: $color-white;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 20px;
                         font-weight: 500;
                     }
@@ -83,8 +82,8 @@
                     margin: 12px 0;
 
                     color: $color-white;
-        
-                    font-family: "Montserrat";
+
+                    font-family: $font-default;
                     font-size: 16px;
                     font-weight: 500;
 
@@ -112,7 +111,7 @@
 
                         text-align: right;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 18px;
                         font-weight: 500;
                     }
@@ -127,8 +126,8 @@
                     margin: 12px 0;
 
                     color: $color-white;
-        
-                    font-family: "Montserrat";
+
+                    font-family: $font-default;
                     font-size: 16px;
                     font-weight: 500;
 
@@ -156,7 +155,7 @@
 
                         text-align: right;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 18px;
                         font-weight: 500;
                     }
@@ -173,20 +172,20 @@
 
             margin-top: 30px;
             padding: 14px 0;
-    
+
             border-top-style: solid;
             border-top-width: 2px;
             border-top-color: $color-white;
-    
+
             border-bottom-style: solid;
             border-bottom-width: 2px;
             border-bottom-color: $color-white;
-    
+
             color: $color-white;
-    
+
             text-align: center;
-    
-            font-family: "Montserrat";
+
+            font-family: $font-default;
             font-size: 28px;
             font-weight: 700;
         }

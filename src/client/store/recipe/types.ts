@@ -18,7 +18,6 @@ export interface IngredientReference {
 
 export interface Ingredient {
     isOpen: boolean;
-    isAltOpen: boolean;
 
     foodItem: IngredientFood;
     amount: number;

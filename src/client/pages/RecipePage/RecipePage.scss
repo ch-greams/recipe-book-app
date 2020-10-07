@@ -1,7 +1,6 @@
 @import "../../variables";
 
 
-
 .recipePage {
 
     min-height: 100%;
@@ -36,7 +35,7 @@
 
             text-align: center;
 
-            font-family: "Montserrat";
+            font-family: $font-default;
             font-size: 28px;
             font-weight: 700;
         }
@@ -70,7 +69,7 @@
 
                         color: $color-white;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 16px;
                         font-weight: 500;
                     }
@@ -89,7 +88,7 @@
                         border-width: 1px;
                         border-color: $color-white;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 20px;
                         font-weight: 500;
                     }
@@ -104,8 +103,8 @@
                     margin: 12px 0;
 
                     color: $color-white;
-        
-                    font-family: "Montserrat";
+
+                    font-family: $font-default;
                     font-size: 16px;
                     font-weight: 500;
 
@@ -133,7 +132,7 @@
 
                         text-align: right;
 
-                        font-family: "Montserrat";
+                        font-family: $font-default;
                         font-size: 18px;
                         font-weight: 500;
                     }
@@ -148,7 +147,7 @@
             .separator {
                 background-color: $color-white;
                 height: 1px;
-            }    
+            }
         }
     }
 }

@@ -31,7 +31,6 @@ const initialState: RecipePageStore = {
     ingredients: [
         {
             isOpen: false,
-            isAltOpen: true,
 
             foodItem: {
                 id: "f000001",
@@ -54,7 +53,6 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
-            isAltOpen: true,
 
             foodItem: {
                 id: "f000002",
@@ -77,7 +75,6 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
-            isAltOpen: true,
 
             foodItem: {
                 id: "Eggs",
@@ -98,7 +95,6 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
-            isAltOpen: true,
 
             foodItem: {
                 id: "Cocoa",
