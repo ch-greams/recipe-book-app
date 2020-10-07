@@ -96,9 +96,7 @@ class RecipePage extends Component<RecipePageProps> {
 
     private getGeneralInfoBlock(): JSX.Element {
 
-        const {
-            recipeItem, recipeItem: { isReadOnly },
-        } = this.props;
+        const { recipeItem } = this.props;
 
         const featuredNutritionFacts = [
             NutritionFactType.Energy,
@@ -126,7 +124,7 @@ class RecipePage extends Component<RecipePageProps> {
                 <div className={styles.featuredNutritionFacts}>
 
                     <NutritionFactsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={true}
                         title={"NUTRITION FACTS"}
                         nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, {}, {})}
                     />
@@ -197,7 +195,7 @@ class RecipePage extends Component<RecipePageProps> {
                     </div>
 
                     <PageDetailedNutritionFactsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={true}
                         nutritionFactValues={{}}
                         nutritionFactInputs={{}}
                     />

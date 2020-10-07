@@ -11,6 +11,8 @@ export default class Utils {
     public static readonly ENERGY_DAILY_VALUE_CALORIES: number = 2000;
     public static readonly MAX_DAILY_VALUE: number = 999;
 
+    public static readonly ZERO: number = 0;
+
 
     // NOTE: CALCULATIONS
 
@@ -90,6 +92,10 @@ export default class Utils {
     }
 
     // NOTE: OTHER
+
+    public static arrayIsNotEmpty(array: unknown[]): boolean {
+        return (Array.isArray(array) && array.length > Utils.ZERO);
+    }
 
     public static getItemPath(route: Route, id: string): string {
         return `/${route}/${id}`;

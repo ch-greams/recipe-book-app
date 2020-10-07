@@ -187,6 +187,8 @@ export default class IngredientsBlock extends Component<Props> {
 
     private getAltIngredientLine(parentId: string, altIngredient: IngredientReference, isNew: boolean = false): JSX.Element {
 
+        const { isReadOnly } = this.props;
+
         const removeButton = (
             <div
                 className={styles.altIngredientLineButton}
@@ -228,7 +230,7 @@ export default class IngredientsBlock extends Component<Props> {
 
             <div key={altIngredient.id} className={styles.altIngredientLine}>
 
-                {( isNew ? searchButton : removeButton )}
+                {( isReadOnly ? null : ( isNew ? searchButton : removeButton ) )}
 
                 <div className={Utils.classNames({
                     [styles.altIngredientInfoLine]: true,
@@ -238,6 +240,8 @@ export default class IngredientsBlock extends Component<Props> {
                     <div
                         className={styles.ingredientInfoLineName}
                         onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.id)}
+                        onMouseEnter={() => console.log(`Entering ${parentId}/${altIngredient.id}`)}
+                        onMouseLeave={() => console.log(`Leaving ${parentId}/${altIngredient.id}`)}
                     >
                         {altIngredient.id.toUpperCase()}
                     </div>
@@ -258,6 +262,8 @@ export default class IngredientsBlock extends Component<Props> {
     }
 
     private getIngredientLine(ingredient: Ingredient, isNew: boolean = false): JSX.Element {
+
+        const { isReadOnly } = this.props;
 
         const newAlt: IngredientReference = {
             id: "ALTERNATIVE",
@@ -301,14 +307,15 @@ export default class IngredientsBlock extends Component<Props> {
             </Link>
         );
 
-        const showAlternativeIngredients: boolean = !!(ingredient.isOpen && ingredient.alternatives);
-        const showNewAlternativeIngredient: boolean = ingredient.isOpen && !isNew;
+        const showAlternativeIngredients: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(ingredient.alternatives);
+        const showNewAlternativeIngredient: boolean = ingredient.isOpen && !isNew && !isReadOnly;
+        const showSeparator: boolean = showAlternativeIngredients || showNewAlternativeIngredient;
 
         return (
 
             <div key={`ingredient_${ingredient.foodItem.id}`} className={styles.ingredientLine}>
 
-                {( this.props.isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
+                {( isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
 
                 <div className={styles.ingredientInfoLines}>
 
@@ -316,7 +323,7 @@ export default class IngredientsBlock extends Component<Props> {
 
                     {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts) )}
 
-                    {( showAlternativeIngredients && showNewAlternativeIngredient && (<div className={styles.separator}></div>) )}
+                    {( showSeparator && (<div className={styles.separator}></div>) )}
 
                     {(
                         showAlternativeIngredients &&
@@ -336,7 +343,7 @@ export default class IngredientsBlock extends Component<Props> {
 
     public render(): JSX.Element {
 
-        const { ingredients } = this.props;
+        const { ingredients, isReadOnly } = this.props;
 
         const newIngredient: Ingredient = {
 
@@ -359,7 +366,7 @@ export default class IngredientsBlock extends Component<Props> {
 
                 {ingredients.map( (ingredient) => this.getIngredientLine(ingredient) )}
 
-                {this.getIngredientLine(newIngredient, true)}
+                {( isReadOnly ? null : this.getIngredientLine(newIngredient, true) )}
 
             </div>
         );
