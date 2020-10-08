@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Units, UnitWeight } from "../../../common/units";
+import { Units, UnitVolume, UnitWeight } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import LinkIcon from "../../icons/link-sharp.svg";
 import SearchIcon from "../../icons/search-sharp.svg";
@@ -8,7 +8,7 @@ import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
 import { IngredientDefault, IngredientAlternative } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary } from "../../../common/typings";
+import { Dictionary, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 import Utils from "../../../common/utils";
 import { AnyAction } from "redux";
 import { Route } from "../Router";
@@ -69,6 +69,7 @@ export default class IngredientsBlock extends Component<Props> {
                     const alt = cur.alternatives.find((alt) => alt.item.id === id);
                     const newAlt: IngredientAlternative = {
                         amount: cur.amount,
+                        amountInput: cur.amountInput,
                         unit: cur.unit,
                         item: cur.item,
                     };
@@ -82,6 +83,7 @@ export default class IngredientsBlock extends Component<Props> {
                                 newAlt,
                             ],
                             amount: alt.amount,
+                            amountInput: alt.amountInput,
                             unit: alt.unit,
                             item: alt.item,
                         },
@@ -105,6 +107,118 @@ export default class IngredientsBlock extends Component<Props> {
                 isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen
             }))
         );
+    }
+
+    private handleIngredientAmountEdit(id: string): InputChangeCallback {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        return (event) => {
+
+            updateIngredients(
+                ingredients.map((ingredient) => {
+
+                    if (ingredient.item.id === id) {
+
+                        const amount = Utils.decimalNormalizer(event.target.value, ingredient.amountInput);
+
+                        return {
+                            ...ingredient,
+                            amountInput: amount,
+                            amount: Number(amount),
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                })
+            );
+        };
+    }
+
+    private handleIngredientUnitEdit(id: string): SelectChangeCallback {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        return (event) => {
+
+            updateIngredients(
+                ingredients.map((ingredient) => (
+                    (ingredient.item.id === id)
+                        ? { ...ingredient, unit: event.target.value as UnitWeight | UnitVolume }
+                        : ingredient
+                ))
+            );
+        };
+    }
+
+    private handleAltIngredientAmountEdit(parentId: string, id: string): InputChangeCallback {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        return (event) => {
+
+            updateIngredients(
+                ingredients.map((ingredient) => {
+
+                    if (ingredient.item.id === parentId) {
+
+                        return {
+                            ...ingredient,
+                            alternatives: ingredient.alternatives.map((alt) => {
+
+                                const amount = Utils.decimalNormalizer(event.target.value, alt.amountInput);
+
+                                if (alt.item.id === id) {
+                                    return {
+                                        ...alt,
+                                        amountInput: amount,
+                                        amount: Number(amount),
+                                    };
+                                }
+                                else {
+                                    return alt;
+                                }
+                            }),
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                })
+            );
+        };
+    }
+
+    private handleAltIngredientUnitEdit(parentId: string, id: string): InputChangeCallback {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        return (event) => {
+
+            updateIngredients(
+                ingredients.map((ingredient) => {
+
+                    if (ingredient.item.id === parentId) {
+
+                        return {
+                            ...ingredient,
+                            alternatives: ingredient.alternatives.map((alt) => (
+                                (alt.item.id === id)
+                                    ? {
+                                        ...alt,
+                                        unit: event.target.value as UnitWeight | UnitVolume,
+                                    }
+                                    : alt
+                            )),
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                })
+            );
+        };
     }
 
     // NOTE: Component parts
@@ -152,8 +266,8 @@ export default class IngredientsBlock extends Component<Props> {
             <input
                 type={"text"}
                 className={styles.ingredientInfoLineAmountInput}
-                value={(ingredient.amount || "")}
-                onChange={console.log}
+                value={(ingredient.amountInput || "")}
+                onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
             />
         );
 
@@ -166,7 +280,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(Units)}
                     value={ingredient.unit}
-                    onChange={console.log}
+                    onChange={this.handleIngredientUnitEdit(ingredient.item.id).bind(this)}
                 />
             </div>
         );
@@ -225,8 +339,8 @@ export default class IngredientsBlock extends Component<Props> {
             <input
                 type={"text"}
                 className={styles.ingredientInfoLineAmountInput}
-                value={(altIngredient.amount || "")}
-                onChange={console.log}
+                value={(altIngredient.amountInput|| "")}
+                onChange={this.handleAltIngredientAmountEdit(parentId, altIngredient.item.id).bind(this)}
             />
         );
 
@@ -240,7 +354,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.AltIngredientUnit}
                     options={Object.keys(Units)}
                     value={altIngredient.unit}
-                    onChange={console.log}
+                    onChange={this.handleAltIngredientUnitEdit(parentId, altIngredient.item.id).bind(this)}
                 />
             </div>
         );
@@ -277,6 +391,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const newAlt: IngredientAlternative = {
             amount: 100,
+            amountInput: "100",
             unit: UnitWeight.g,
             item: {
                 id: "NEW ALTERNATIVE",
@@ -370,6 +485,7 @@ export default class IngredientsBlock extends Component<Props> {
             },
 
             amount: 100,
+            amountInput: "100",
             unit: UnitWeight.g,
 
             alternatives: [],

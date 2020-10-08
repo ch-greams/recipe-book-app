@@ -36,44 +36,47 @@ const initialState: RecipePageStore = {
                 id: "f000001",
                 name: "Milk",
                 nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 158.2,
-                    [NutritionFactType.Fat]: 8.1,
-                    [NutritionFactType.Protein]: 47.3,
-                    [NutritionFactType.Energy]: 53,
+                    [NutritionFactType.Carbohydrate]: 4.7,
+                    [NutritionFactType.Fat]: 3.7,
+                    [NutritionFactType.Protein]: 3.3,
+                    [NutritionFactType.Energy]: 64,
                 },
             },
 
             amount: 120,
+            amountInput: "120",
             unit: UnitVolume.ml,
 
             alternatives: [
                 {
-                    amount: 120,
+                    amount: 240,
+                    amountInput: "240",
                     unit: UnitVolume.ml,
                     item: {
                         id: "f000002",
                         name: "Oat Milk",
 
                         nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 158.2,
-                            [NutritionFactType.Fat]: 8.1,
-                            [NutritionFactType.Protein]: 47.3,
-                            [NutritionFactType.Energy]: 73,
+                            [NutritionFactType.Carbohydrate]: 16,
+                            [NutritionFactType.Fat]: 5,
+                            [NutritionFactType.Protein]: 3,
+                            [NutritionFactType.Energy]: 120,
                         },
                     },
                 },
                 {
-                    amount: 100,
-                    unit: UnitWeight.g,
+                    amount: 1,
+                    amountInput: "1",
+                    unit: UnitVolume.cup,
                     item: {
-                        id: "f000002",
+                        id: "f000003",
                         name: "Almond Milk",
 
                         nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 158.2,
-                            [NutritionFactType.Fat]: 8.1,
-                            [NutritionFactType.Protein]: 47.3,
-                            [NutritionFactType.Energy]: 63,
+                            [NutritionFactType.Carbohydrate]: 4,
+                            [NutritionFactType.Fat]: 3,
+                            [NutritionFactType.Protein]: 1,
+                            [NutritionFactType.Energy]: 50,
                         },
                     },
                 },
@@ -83,33 +86,35 @@ const initialState: RecipePageStore = {
             isOpen: false,
 
             item: {
-                id: "f000002",
-                name: "Flour",
+                id: "f000004",
+                name: "Wheat Flour",
 
                 nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 158.2,
-                    [NutritionFactType.Fat]: 8.1,
-                    [NutritionFactType.Protein]: 47.3,
-                    [NutritionFactType.Energy]: 573,
+                    [NutritionFactType.Carbohydrate]: 79,
+                    [NutritionFactType.Fat]: 1.8,
+                    [NutritionFactType.Protein]: 7,
+                    [NutritionFactType.Energy]: 364,
                 },
             },
 
-            amount: 250,
+            amount: 100,
+            amountInput: "100",
             unit: UnitWeight.g,
 
             alternatives: [
                 {
-                    amount: 2,
+                    amount: 1,
+                    amountInput: "1",
                     unit: UnitVolume.cup,
                     item: {
-                        id: "f000002",
+                        id: "f000005",
                         name: "Rye Flour",
 
                         nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 158.2,
-                            [NutritionFactType.Fat]: 8.1,
-                            [NutritionFactType.Protein]: 47.3,
-                            [NutritionFactType.Energy]: 573,
+                            [NutritionFactType.Carbohydrate]: 75,
+                            [NutritionFactType.Fat]: 1.5,
+                            [NutritionFactType.Protein]: 11,
+                            [NutritionFactType.Energy]: 349,
                         },
                     },
                 },
@@ -119,18 +124,19 @@ const initialState: RecipePageStore = {
             isOpen: false,
 
             item: {
-                id: "f000001",
+                id: "f000006",
                 name: "Eggs",
 
                 nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 158.2,
-                    [NutritionFactType.Fat]: 8.1,
-                    [NutritionFactType.Protein]: 47.3,
-                    [NutritionFactType.Energy]: 573,
+                    [NutritionFactType.Carbohydrate]: 1.7,
+                    [NutritionFactType.Fat]: 23,
+                    [NutritionFactType.Protein]: 31,
+                    [NutritionFactType.Energy]: 348,
                 },
             },
 
             amount: 1,
+            amountInput: "1",
             unit: UnitVolume.cup,
 
             alternatives: [],
@@ -139,18 +145,19 @@ const initialState: RecipePageStore = {
             isOpen: false,
 
             item: {
-                id: "f000001",
+                id: "f000007",
                 name: "Cocoa",
 
                 nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 158.2,
-                    [NutritionFactType.Fat]: 8.1,
-                    [NutritionFactType.Protein]: 47.3,
-                    [NutritionFactType.Energy]: 573,
+                    [NutritionFactType.Carbohydrate]: 26.1,
+                    [NutritionFactType.Fat]: 6,
+                    [NutritionFactType.Protein]: 9.3,
+                    [NutritionFactType.Energy]: 103,
                 },
             },
 
             amount: 45,
+            amountInput: "45",
             unit: UnitWeight.g,
 
             alternatives: [],

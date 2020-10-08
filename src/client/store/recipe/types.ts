@@ -15,12 +15,15 @@ type Ingredient = {
     item: IngredientItem;
 };
 
-export type IngredientAlternative = Ingredient;
+export interface IngredientAlternative extends Ingredient {
+    amountInput: string;
+}
 
-export type IngredientDefault = Ingredient & {
+export interface IngredientDefault extends Ingredient {
     isOpen: boolean;
+    amountInput: string;
     alternatives: IngredientAlternative[];
-};
+}
 
 
 export interface DirectionStep {
