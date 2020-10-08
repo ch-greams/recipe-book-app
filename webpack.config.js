@@ -1,14 +1,63 @@
-const path = require('path');
+const path = require("path");
+const NodemonPlugin = require("nodemon-webpack-plugin");
 
+// TODO: Use template for HTML and don't reference anything outside "out" folder?
 
-module.exports = {
+const server = {
+    target: "node",
+    watch: true,
+    node: {
+        __dirname: false,
+    },
     mode: "production",
+    entry: { "server": path.join(__dirname, "src", "server", "index.ts") },
     output: {
         path: path.resolve(__dirname, "out"),
+        filename: "[name]/[name].bundle.js",
     },
     devtool: "source-map",
     resolve: {
-        extensions: [ ".ts", ".tsx", ".js", ".svg" ]
+        extensions: [ ".ts", ".js" ],
+    },
+    module: {
+        rules: [
+            {
+                test: /\.ts(x?)$/,
+                exclude: /node_modules/,
+                loader: "ts-loader",
+            },
+            {
+                enforce: "pre",
+                test: /\.js$/,
+                exclude: /node_modules/,
+                loader: "source-map-loader",
+            },
+        ],
+    },
+    plugins: [
+        new NodemonPlugin(),
+    ],
+    externals: [
+        // "express",
+        // NOTE: Consider using webpack-node-externals to reduce bundle size
+    ],
+};
+
+const client = {
+    target: "web",
+    watch: true,
+    mode: "production",
+    entry: {
+        "client": path.join(__dirname, "src", "client", "index.tsx"),
+    },
+    output: {
+        path: path.resolve(__dirname, "out"),
+        filename: "[name]/[name].bundle.js",
+        chunkFilename: "[name]/[name].bundle.js",
+    },
+    devtool: "source-map",
+    resolve: {
+        extensions: [ ".ts", ".tsx", ".js", ".svg" ],
     },
     module: {
         rules: [
@@ -25,6 +74,7 @@ module.exports = {
             {
                 enforce: "pre",
                 test: /\.js$/,
+                exclude: /node_modules/,
                 loader: "source-map-loader"
             },
             {
@@ -49,11 +99,19 @@ module.exports = {
                         options: { sourceMap: true },
                     },
                 ],
-            }
-        ]
+            },
+        ],
     },
     externals: {
         "react": "React",
-        "react-dom": "ReactDOM"
-    }
+        "react-dom": "ReactDOM",
+        "redux": "Redux",
+        "react-router-dom": "ReactRouterDOM",
+        "react-redux": "ReactRedux",
+        "redux-saga": "ReduxSaga",
+        "styled-components": "styled",
+    },
 };
+
+
+module.exports = [ server, client ];

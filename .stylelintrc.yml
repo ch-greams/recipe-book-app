@@ -1,0 +1,14 @@
+extends:
+    - stylelint-config-standard
+    - stylelint-config-recess-order
+rules:
+    indentation: 4
+    max-empty-lines: 2
+    declaration-empty-line-before: null
+    no-descending-specificity: null
+    at-rule-empty-line-before: null
+    at-rule-no-unknown:
+        - true
+        - ignoreAtRules:
+            - mixin
+            - include

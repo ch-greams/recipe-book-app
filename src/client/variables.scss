@@ -1,0 +1,37 @@
+
+$color-default: #00bfa5;
+$color-default-dark: #008e76;
+$color-default-light: #5df2d6;
+
+$color-black: #000;
+$color-white: #fff;
+
+$color-grey-dark: #707070;
+$color-grey-light: #e8e8e8;
+
+$color-input-placeholder: #bbb;
+$color-input: #707070;
+
+$font-default: "Montserrat", sans-serif;
+
+
+@mixin reset_select {
+    appearance: none;
+    padding: 0;
+    border: none;
+    border-radius: none;
+}
+
+html,
+body {
+    select:focus,
+    input:focus,
+    textarea:focus {
+
+        outline: none;
+    }
+}
+
+input {
+    min-width: 0;
+}

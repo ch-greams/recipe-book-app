@@ -1,0 +1,51 @@
+[
+    {
+        "id": "f000001",
+        "name": "Milk",
+        "brand": "Test",
+        "subtitle": "That is technically a food",
+
+        "nutritionFactValues": {
+            
+            "Energy": 567,
+            "Protein": 25.8,
+            "Fat": 49.2,
+            "Monounsaturated": 24.4,
+            "Carbohydrate": 16.1,
+            "Dietary Fiber": 8.5,
+            "Sugars": 4,
+            "Sodium": 18,
+            "Vitamin A": 78,
+            "Vitamin C": 0
+        },
+
+        "customUnits": [
+            { "name": "piece", "amount": 53, "unit": "g" },
+            { "name": "container", "amount": 127, "unit": "g" }
+        ]
+    },
+    {
+        "id": "f000002",
+        "name": "Flour",
+        "brand": "Test",
+        "subtitle": "That is technically a food",
+
+        "nutritionFactValues": {
+            
+            "Energy": 567,
+            "Protein": 25.8,
+            "Fat": 49.2,
+            "Monounsaturated": 24.4,
+            "Carbohydrate": 16.1,
+            "Dietary Fiber": 8.5,
+            "Sugars": 4,
+            "Sodium": 18,
+            "Vitamin A": 0,
+            "Vitamin C": 0
+        },
+
+        "customUnits": [
+            { "name": "container", "amount": 127, "unit": "g" }
+        ]
+    }
+]
