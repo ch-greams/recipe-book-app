@@ -35,7 +35,7 @@ export default class IngredientsBlock extends Component<Props> {
         const { ingredients, updateIngredients } = this.props;
 
         updateIngredients(
-            ingredients.filter((ingredient) => ingredient.foodItem.id !== id)
+            ingredients.filter((ingredient) => ingredient.item.id !== id)
         );
     }
 
@@ -46,10 +46,10 @@ export default class IngredientsBlock extends Component<Props> {
         updateIngredients(
             ingredients.reduce<Ingredient[]>((acc, cur) => [
                 ...acc,
-                cur.foodItem.id === parentId
+                cur.item.id === parentId
                     ? {
                         ...cur,
-                        alternatives: cur.alternatives.filter((alt) => alt.id !== id)
+                        alternatives: cur.alternatives.filter((alt) => alt.item.id !== id)
                     }
                     : cur
             ], [])
@@ -63,13 +63,13 @@ export default class IngredientsBlock extends Component<Props> {
         updateIngredients(
             ingredients.reduce<Ingredient[]>((acc, cur) => {
 
-                if (cur.foodItem.id === parentId) {
+                if (cur.item.id === parentId) {
 
-                    const alt = cur.alternatives.find((alt) => alt.id === id);
+                    const alt = cur.alternatives.find((alt) => alt.item.id === id);
                     const newAlt: IngredientReference = {
-                        id: cur.foodItem.name,
                         amount: cur.amount,
                         unit: cur.unit,
+                        item: cur.item,
                     };
 
                     return [
@@ -77,16 +77,12 @@ export default class IngredientsBlock extends Component<Props> {
                         {
                             ...cur,
                             alternatives: [
-                                ...cur.alternatives.filter((alt) => alt.id !== id),
+                                ...cur.alternatives.filter((alt) => alt.item.id !== id),
                                 newAlt,
                             ],
                             amount: alt.amount,
                             unit: alt.unit,
-                            foodItem: {
-                                ...cur.foodItem,
-                                id: alt.id,
-                                name: alt.id,
-                            },
+                            item: alt.item,
                         },
                     ];
                 }
@@ -105,7 +101,7 @@ export default class IngredientsBlock extends Component<Props> {
         updateIngredients(
             ingredients.map((ingredient) => ({
                 ...ingredient,
-                isOpen: (ingredient.foodItem.id === id) ? !ingredient.isOpen : ingredient.isOpen
+                isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen
             }))
         );
     }
@@ -158,29 +154,33 @@ export default class IngredientsBlock extends Component<Props> {
             />
         );
 
+        const measureInput = (
+            <div className={styles.ingredientInfoLineMeasure}>
+                    
+                {( this.props.isReadOnly ? amountText : amountInput )}
+                
+                <SelectInput
+                    type={SelectInputType.IngredientUnit}
+                    options={Object.keys(Units)}
+                    value={ingredient.unit}
+                />
+            </div>
+        );
+
         return (
             <div
-                key={ingredient.foodItem.name}
+                key={ingredient.item.name}
                 className={Utils.classNames({ [styles.ingredientInfoLine]: true, [styles.newIngredient]: isNew })}
             >
 
                 <div
                     className={styles.ingredientInfoLineName}
-                    onClick={() => this.toggleIngredientOpen(ingredient.foodItem.id)}
+                    onClick={() => this.toggleIngredientOpen(ingredient.item.id)}
                 >
-                    {ingredient.foodItem.name.toUpperCase()}
+                    {ingredient.item.name.toUpperCase()}
                 </div>
 
-                <div className={styles.ingredientInfoLineMeasure}>
-                    
-                    {( this.props.isReadOnly ? amountText : amountInput )}
-                    
-                    <SelectInput
-                        type={SelectInputType.IngredientUnit}
-                        options={Object.keys(Units)}
-                        value={ingredient.unit}
-                    />
-                </div>
+                {( isNew ? null : measureInput )}
             </div>
         );
     }
@@ -192,7 +192,7 @@ export default class IngredientsBlock extends Component<Props> {
         const removeButton = (
             <div
                 className={styles.altIngredientLineButton}
-                onClick={() => this.removeAltIngredient(parentId, altIngredient.id)}
+                onClick={() => this.removeAltIngredient(parentId, altIngredient.item.id)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
                     <RemoveIcon />
@@ -226,9 +226,23 @@ export default class IngredientsBlock extends Component<Props> {
             />
         );
 
+        const measureInput = (
+
+            <div className={styles.ingredientInfoLineMeasure}>
+                            
+                {( isReadOnly ? amountText : amountInput )}
+                
+                <SelectInput
+                    type={SelectInputType.AltIngredientUnit}
+                    options={Object.keys(Units)}
+                    value={altIngredient.unit}
+                />
+            </div>
+        );
+
         return (
 
-            <div key={altIngredient.id} className={styles.altIngredientLine}>
+            <div key={altIngredient.item.id} className={styles.altIngredientLine}>
 
                 {( isReadOnly ? null : ( isNew ? searchButton : removeButton ) )}
 
@@ -239,23 +253,14 @@ export default class IngredientsBlock extends Component<Props> {
 
                     <div
                         className={styles.ingredientInfoLineName}
-                        onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.id)}
-                        onMouseEnter={() => console.log(`Entering ${parentId}/${altIngredient.id}`)}
-                        onMouseLeave={() => console.log(`Leaving ${parentId}/${altIngredient.id}`)}
+                        onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.item.id)}
+                        onMouseEnter={() => console.log(`Entering ${parentId}/${altIngredient.item.id}`)}
+                        onMouseLeave={() => console.log(`Leaving ${parentId}/${altIngredient.item.id}`)}
                     >
-                        {altIngredient.id.toUpperCase()}
+                        {altIngredient.item.name.toUpperCase()}
                     </div>
 
-                    <div className={styles.ingredientInfoLineMeasure}>
-                        
-                        {( this.props.isReadOnly ? amountText : amountInput )}
-                        
-                        <SelectInput
-                            type={SelectInputType.AltIngredientUnit}
-                            options={Object.keys(Units)}
-                            value={altIngredient.unit}
-                        />
-                    </div>
+                    {( isNew ? null : measureInput )}
                 </div>
             </div>
         );
@@ -266,9 +271,13 @@ export default class IngredientsBlock extends Component<Props> {
         const { isReadOnly } = this.props;
 
         const newAlt: IngredientReference = {
-            id: "ALTERNATIVE",
             amount: 100,
             unit: UnitWeight.g,
+            item: {
+                id: "NEW ALTERNATIVE",
+                name: "NEW ALTERNATIVE",
+                nutritionFacts: {},
+            }
         };
 
         const checkbox = (<div className={styles.lineCheckbox}></div>);
@@ -276,7 +285,7 @@ export default class IngredientsBlock extends Component<Props> {
         const removeButton = (
             <div
                 className={styles.ingredientLineButton}
-                onClick={() => this.removeIngredient(ingredient.foodItem.id)}
+                onClick={() => this.removeIngredient(ingredient.item.id)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <RemoveIcon />
@@ -297,7 +306,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const linkButton = (
             <Link
-                to={Utils.getItemPath(Route.Food, ingredient.foodItem.id)}
+                to={Utils.getItemPath(Route.Food, ingredient.item.id)}
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : null )}
             >
@@ -313,7 +322,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         return (
 
-            <div key={`ingredient_${ingredient.foodItem.id}`} className={styles.ingredientLine}>
+            <div key={`ingredient_${ingredient.item.id}`} className={styles.ingredientLine}>
 
                 {( isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
 
@@ -321,16 +330,16 @@ export default class IngredientsBlock extends Component<Props> {
 
                     {this.getIngredientInfoLine(ingredient, isNew)}
 
-                    {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.foodItem.nutritionFacts) )}
+                    {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.item.nutritionFacts) )}
 
                     {( showSeparator && (<div className={styles.separator}></div>) )}
 
                     {(
                         showAlternativeIngredients &&
-                        ingredient.alternatives.map((alt) => this.getAltIngredientLine(ingredient.foodItem.id, alt, false))
+                        ingredient.alternatives.map((alt) => this.getAltIngredientLine(ingredient.item.id, alt, false))
                     )}
 
-                    {( showNewAlternativeIngredient && this.getAltIngredientLine(ingredient.foodItem.id, newAlt, true) )}
+                    {( showNewAlternativeIngredient && this.getAltIngredientLine(ingredient.item.id, newAlt, true) )}
 
                 </div>
 
@@ -349,7 +358,7 @@ export default class IngredientsBlock extends Component<Props> {
 
             isOpen: false,
 
-            foodItem: {
+            item: {
                 id: "new",
                 name: "NEW INGREDIENT",
                 nutritionFacts: {},

@@ -10,19 +10,20 @@ interface IngredientFood {
     nutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
-export interface IngredientReference {
-    id: string;
+export interface IngredientAlternative {
     amount: number;
     unit: UnitWeight | UnitVolume;
+
+    item: IngredientFood;
 }
 
 export interface Ingredient {
     isOpen: boolean;
 
-    foodItem: IngredientFood;
+    item: IngredientFood;
     amount: number;
     unit: UnitWeight | UnitVolume;
-    alternatives: IngredientReference[];
+    alternatives: IngredientAlternative[];
 }
 
 export interface DirectionStep {

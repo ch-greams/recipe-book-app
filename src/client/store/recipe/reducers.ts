@@ -32,7 +32,7 @@ const initialState: RecipePageStore = {
         {
             isOpen: false,
 
-            foodItem: {
+            item: {
                 id: "f000001",
                 name: "Milk",
                 nutritionFacts: {
@@ -47,14 +47,42 @@ const initialState: RecipePageStore = {
             unit: UnitVolume.ml,
 
             alternatives: [
-                { id: "Oat Milk", amount: 120, unit: UnitVolume.ml },
-                { id: "Almond Milk", amount: 100, unit: UnitWeight.g },
+                {
+                    amount: 120,
+                    unit: UnitVolume.ml,
+                    item: {
+                        id: "Oat Milk",
+                        name: "Oat Milk",
+
+                        nutritionFacts: {
+                            [NutritionFactType.Carbohydrate]: 158.2,
+                            [NutritionFactType.Fat]: 8.1,
+                            [NutritionFactType.Protein]: 47.3,
+                            [NutritionFactType.Energy]: 573,
+                        },
+                    },
+                },
+                {
+                    amount: 100,
+                    unit: UnitWeight.g,
+                    item: {
+                        id: "Almond Milk",
+                        name: "Almond Milk",
+
+                        nutritionFacts: {
+                            [NutritionFactType.Carbohydrate]: 158.2,
+                            [NutritionFactType.Fat]: 8.1,
+                            [NutritionFactType.Protein]: 47.3,
+                            [NutritionFactType.Energy]: 573,
+                        },
+                    },
+                },
             ],
         },
         {
             isOpen: false,
 
-            foodItem: {
+            item: {
                 id: "f000002",
                 name: "Flour",
 
@@ -70,13 +98,27 @@ const initialState: RecipePageStore = {
             unit: UnitWeight.g,
 
             alternatives: [
-                { id: "Rye Flour", amount: 2, unit: UnitVolume.cup },
+                {
+                    amount: 2,
+                    unit: UnitVolume.cup,
+                    item: {
+                        id: "f000002",
+                        name: "Rye Flour",
+
+                        nutritionFacts: {
+                            [NutritionFactType.Carbohydrate]: 158.2,
+                            [NutritionFactType.Fat]: 8.1,
+                            [NutritionFactType.Protein]: 47.3,
+                            [NutritionFactType.Energy]: 573,
+                        },
+                    },
+                },
             ],
         },
         {
             isOpen: false,
 
-            foodItem: {
+            item: {
                 id: "Eggs",
                 name: "Eggs",
 
@@ -96,7 +138,7 @@ const initialState: RecipePageStore = {
         {
             isOpen: false,
 
-            foodItem: {
+            item: {
                 id: "Cocoa",
                 name: "Cocoa",
 
