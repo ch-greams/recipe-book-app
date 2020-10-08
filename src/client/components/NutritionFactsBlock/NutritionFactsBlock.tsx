@@ -5,6 +5,7 @@ import { updateNutritionFact } from "../../store/food/actions";
 import { UnitEnergy, UnitWeight } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
 import Utils from "../../../common/utils";
+import { InputChangeCallback } from "../../../common/typings";
 
 
 export interface NutritionFact {
@@ -36,9 +37,8 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         isReadOnly: false,
     };
 
-    private handleOnChange(nutritionFact: NutritionFact): (event: React.ChangeEvent<HTMLInputElement>) => void {
-
-        return (event: React.ChangeEvent<HTMLInputElement>) => {
+    private handleOnChange(nutritionFact: NutritionFact): InputChangeCallback {
+        return (event) => {
             
             const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
         

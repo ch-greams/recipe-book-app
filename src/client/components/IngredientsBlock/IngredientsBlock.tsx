@@ -29,6 +29,7 @@ export default class IngredientsBlock extends Component<Props> {
         isReadOnly: false,
     };
 
+    // NOTE: Handlers
 
     private removeIngredient(id: string): void {
 
@@ -106,6 +107,8 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
+    // NOTE: Component parts
+
     private getIngredientInfoLineNutritionFacts(nutritionFacts: Dictionary<NutritionFactType, number>): JSX.Element {
 
         const nutritionFactTypes = [
@@ -163,6 +166,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(Units)}
                     value={ingredient.unit}
+                    onChange={console.log}
                 />
             </div>
         );
@@ -236,6 +240,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.AltIngredientUnit}
                     options={Object.keys(Units)}
                     value={altIngredient.unit}
+                    onChange={console.log}
                 />
             </div>
         );

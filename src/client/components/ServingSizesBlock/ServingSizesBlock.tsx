@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
+import { InputChangeCallback } from "../../../common/typings";
 import { CustomUnitInput, UnitWeight } from "../../../common/units";
 import Utils from "../../../common/utils";
 import IconAdd from "../../icons/add-sharp.svg";
@@ -47,15 +48,13 @@ export default class ServingSizesBlock extends Component<Props, State> {
         updateCustomUnits(customUnitInputs.filter((cu) => cu.name !== name));
     }
 
-    private handleCustomUnitNameEdit(
-        customUnit: CustomUnitInput,
-        isNew: boolean,
-    ): (event: React.ChangeEvent<HTMLInputElement>) => void {
+    private handleCustomUnitNameEdit(customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
         const { newCustomUnit } = this.state;
 
-        return (event: React.ChangeEvent<HTMLInputElement>) => {
+        return (event) => {
+
             if (isNew) {
                 this.setState({
                     newCustomUnit: { ...newCustomUnit, name: event.target.value }
@@ -70,15 +69,12 @@ export default class ServingSizesBlock extends Component<Props, State> {
             }
         };
     }
-    private handleCustomUnitAmountEdit(
-        customUnit: CustomUnitInput,
-        isNew: boolean,
-    ): (event: React.ChangeEvent<HTMLInputElement>) => void {
+    private handleCustomUnitAmountEdit(customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
         const { newCustomUnit } = this.state;
 
-        return (event: React.ChangeEvent<HTMLInputElement>) => {
+        return (event) => {
 
             const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
 
@@ -164,6 +160,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
                         <SelectInput
                             type={SelectInputType.CustomUnit}
                             options={Object.keys(UnitWeight)}
+                            onChange={console.log}
                         />
                     </div>
                 </div>

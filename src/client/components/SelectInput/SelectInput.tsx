@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { SelectChangeCallback } from "../../../common/typings";
 import Utils from "../../../common/utils";
 import styles from "./SelectInput.scss";
 
@@ -14,10 +15,11 @@ interface Props {
     type?: SelectInputType;
     options: string[];
     value?: string;
+    onChange: SelectChangeCallback;
 }
 
 // TODO: Add current value for selected
-class SelectInput extends Component<Props> {
+export default class SelectInput extends Component<Props> {
 
     private getClassName(type?: SelectInputType): string {
 
@@ -44,13 +46,13 @@ class SelectInput extends Component<Props> {
 
     public render(): JSX.Element {
 
-        const { type, options, value } = this.props;
+        const { type, options, value, onChange } = this.props;
 
         return (
             <select
                 className={this.getClassName(type)}
                 value={value}
-                onChange={console.log}
+                onChange={onChange}
             >
                 {options.map((option) => (
                     <option value={option} key={option}>
@@ -61,5 +63,3 @@ class SelectInput extends Component<Props> {
         );
     }
 }
-
-export default SelectInput;

@@ -87,11 +87,11 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} />
+                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
 
                     {"/"}
 
-                    <SelectInput options={Object.keys(UnitVolume)} />
+                    <SelectInput options={Object.keys(UnitVolume)} onChange={console.log} />
 
                 </div>
 
@@ -108,7 +108,7 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} />
+                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
 
                 </div>
 

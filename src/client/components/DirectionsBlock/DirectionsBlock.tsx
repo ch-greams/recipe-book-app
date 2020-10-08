@@ -72,6 +72,7 @@ export default class DirectionsBlock extends Component<Props> {
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}
                             options={Object.keys(UnitWeight)}
+                            onChange={console.log}
                         />
                     </div>
                 </div>
@@ -105,6 +106,7 @@ export default class DirectionsBlock extends Component<Props> {
                     <SelectInput
                         type={SelectInputType.IngredientUnit}
                         options={Object.keys(UnitTemperature)}
+                        onChange={console.log}
                     />
 
                     <div className={styles.directionInfoLineAmount}>
@@ -114,6 +116,7 @@ export default class DirectionsBlock extends Component<Props> {
                     <SelectInput
                         type={SelectInputType.IngredientUnit}
                         options={Object.keys(UnitTime)}
+                        onChange={console.log}
                     />
                 </div>
             </div>

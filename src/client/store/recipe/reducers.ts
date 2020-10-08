@@ -39,7 +39,7 @@ const initialState: RecipePageStore = {
                     [NutritionFactType.Carbohydrate]: 158.2,
                     [NutritionFactType.Fat]: 8.1,
                     [NutritionFactType.Protein]: 47.3,
-                    [NutritionFactType.Energy]: 573,
+                    [NutritionFactType.Energy]: 53,
                 },
             },
 
@@ -51,14 +51,14 @@ const initialState: RecipePageStore = {
                     amount: 120,
                     unit: UnitVolume.ml,
                     item: {
-                        id: "Oat Milk",
+                        id: "f000002",
                         name: "Oat Milk",
 
                         nutritionFacts: {
                             [NutritionFactType.Carbohydrate]: 158.2,
                             [NutritionFactType.Fat]: 8.1,
                             [NutritionFactType.Protein]: 47.3,
-                            [NutritionFactType.Energy]: 573,
+                            [NutritionFactType.Energy]: 73,
                         },
                     },
                 },
@@ -66,14 +66,14 @@ const initialState: RecipePageStore = {
                     amount: 100,
                     unit: UnitWeight.g,
                     item: {
-                        id: "Almond Milk",
+                        id: "f000002",
                         name: "Almond Milk",
 
                         nutritionFacts: {
                             [NutritionFactType.Carbohydrate]: 158.2,
                             [NutritionFactType.Fat]: 8.1,
                             [NutritionFactType.Protein]: 47.3,
-                            [NutritionFactType.Energy]: 573,
+                            [NutritionFactType.Energy]: 63,
                         },
                     },
                 },
@@ -119,7 +119,7 @@ const initialState: RecipePageStore = {
             isOpen: false,
 
             item: {
-                id: "Eggs",
+                id: "f000001",
                 name: "Eggs",
 
                 nutritionFacts: {
@@ -139,7 +139,7 @@ const initialState: RecipePageStore = {
             isOpen: false,
 
             item: {
-                id: "Cocoa",
+                id: "f000001",
                 name: "Cocoa",
 
                 nutritionFacts: {

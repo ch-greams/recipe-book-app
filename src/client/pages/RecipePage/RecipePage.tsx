@@ -79,7 +79,7 @@ class RecipePage extends Component<RecipePageProps> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} />
+                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
 
                 </div>
 
