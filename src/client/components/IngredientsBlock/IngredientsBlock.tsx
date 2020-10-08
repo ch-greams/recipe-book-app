@@ -6,7 +6,7 @@ import SearchIcon from "../../icons/search-sharp.svg";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
-import { Ingredient, IngredientReference } from "../../store/recipe/types";
+import { Ingredient, IngredientAlternative } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
@@ -66,7 +66,7 @@ export default class IngredientsBlock extends Component<Props> {
                 if (cur.item.id === parentId) {
 
                     const alt = cur.alternatives.find((alt) => alt.item.id === id);
-                    const newAlt: IngredientReference = {
+                    const newAlt: IngredientAlternative = {
                         amount: cur.amount,
                         unit: cur.unit,
                         item: cur.item,
@@ -185,7 +185,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getAltIngredientLine(parentId: string, altIngredient: IngredientReference, isNew: boolean = false): JSX.Element {
+    private getAltIngredientLine(parentId: string, altIngredient: IngredientAlternative, isNew: boolean = false): JSX.Element {
 
         const { isReadOnly } = this.props;
 
@@ -270,7 +270,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const { isReadOnly } = this.props;
 
-        const newAlt: IngredientReference = {
+        const newAlt: IngredientAlternative = {
             amount: 100,
             unit: UnitWeight.g,
             item: {
