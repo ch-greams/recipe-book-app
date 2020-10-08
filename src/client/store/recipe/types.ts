@@ -3,28 +3,25 @@ import { Dictionary } from "../../../common/typings";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 
 
-interface IngredientFood {
+interface IngredientItem {
     id: string;
     name: string;
-
     nutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
-export interface IngredientAlternative {
+type Ingredient = {
     amount: number;
     unit: UnitWeight | UnitVolume;
+    item: IngredientItem;
+};
 
-    item: IngredientFood;
-}
+export type IngredientAlternative = Ingredient;
 
-export interface Ingredient {
+export type IngredientDefault = Ingredient & {
     isOpen: boolean;
-
-    item: IngredientFood;
-    amount: number;
-    unit: UnitWeight | UnitVolume;
     alternatives: IngredientAlternative[];
-}
+};
+
 
 export interface DirectionStep {
     foodId: string;
@@ -55,7 +52,7 @@ export interface RecipePageStore {
 
     unit: UnitWeight | UnitVolume;
 
-    ingredients: Ingredient[];
+    ingredients: IngredientDefault[];
     directions: Direction[];
 }
 
@@ -91,7 +88,7 @@ export interface UpdateDescriptionAction {
 
 export interface UpdateIngredientsAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENTS;
-    payload: Ingredient[];
+    payload: IngredientDefault[];
 }
 
 export type RecipeItemActionTypes = (

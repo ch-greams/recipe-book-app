@@ -8,7 +8,7 @@ import {
     RECIPE_ITEM_UPDATE_INGREDIENTS,
     RecipeItemActionTypes,
     RecipePageStore,
-    Ingredient,
+    IngredientDefault,
 } from "./types";
 
 
@@ -220,7 +220,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
         case RECIPE_ITEM_UPDATE_INGREDIENTS: {
             return {
                 ...state,
-                ingredients: action.payload as Ingredient[],
+                ingredients: action.payload as IngredientDefault[],
             };
         }
 

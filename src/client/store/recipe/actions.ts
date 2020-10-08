@@ -9,7 +9,7 @@ import {
     UpdateSubtitleAction,
     UpdateDescriptionAction,
     UpdateIngredientsAction,
-    Ingredient,
+    IngredientDefault,
 } from "./types";
 
 
@@ -42,7 +42,7 @@ export function updateDescription(description: string): UpdateDescriptionAction 
     };
 }
 
-export function updateIngredients(ingredients: Ingredient[]): UpdateIngredientsAction {
+export function updateIngredients(ingredients: IngredientDefault[]): UpdateIngredientsAction {
     return {
         type: RECIPE_ITEM_UPDATE_INGREDIENTS,
         payload: ingredients,

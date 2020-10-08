@@ -6,7 +6,7 @@ import SearchIcon from "../../icons/search-sharp.svg";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
-import { Ingredient, IngredientAlternative } from "../../store/recipe/types";
+import { IngredientDefault, IngredientAlternative } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
@@ -18,8 +18,8 @@ import { Link } from "react-router-dom";
 
 interface Props {
     isReadOnly: boolean;
-    ingredients: Ingredient[];
-    updateIngredients: (value: Ingredient[]) => AnyAction;
+    ingredients: IngredientDefault[];
+    updateIngredients: (value: IngredientDefault[]) => AnyAction;
 }
 
 
@@ -44,7 +44,7 @@ export default class IngredientsBlock extends Component<Props> {
         const { ingredients, updateIngredients } = this.props;
 
         updateIngredients(
-            ingredients.reduce<Ingredient[]>((acc, cur) => [
+            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
                 ...acc,
                 cur.item.id === parentId
                     ? {
@@ -61,7 +61,7 @@ export default class IngredientsBlock extends Component<Props> {
         const { ingredients, updateIngredients } = this.props;
 
         updateIngredients(
-            ingredients.reduce<Ingredient[]>((acc, cur) => {
+            ingredients.reduce<IngredientDefault[]>((acc, cur) => {
 
                 if (cur.item.id === parentId) {
 
@@ -137,7 +137,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientInfoLine(ingredient: Ingredient, isNew: boolean = false): JSX.Element {
+    private getIngredientInfoLine(ingredient: IngredientDefault, isNew: boolean = false): JSX.Element {
 
         const amountText = (
             <div className={styles.ingredientInfoLineAmountText}>
@@ -266,7 +266,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientLine(ingredient: Ingredient, isNew: boolean = false): JSX.Element {
+    private getIngredientLine(ingredient: IngredientDefault, isNew: boolean = false): JSX.Element {
 
         const { isReadOnly } = this.props;
 
@@ -354,7 +354,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const { ingredients, isReadOnly } = this.props;
 
-        const newIngredient: Ingredient = {
+        const newIngredient: IngredientDefault = {
 
             isOpen: false,
 
