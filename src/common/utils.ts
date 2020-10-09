@@ -97,6 +97,10 @@ export default class Utils {
         return (Array.isArray(array) && array.length > Utils.ZERO);
     }
 
+    public static objectIsNotEmpty<T>(obj: T | Dictionary<string | number | symbol, T>): boolean {
+        return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
+    }
+
     public static getItemPath(route: Route, id: string): string {
         return `/${route}/${id}`;
     }

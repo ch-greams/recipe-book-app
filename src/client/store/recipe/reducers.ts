@@ -47,6 +47,8 @@ const initialState: RecipePageStore = {
             amountInput: "120",
             unit: UnitVolume.ml,
 
+            altNutritionFacts: {},
+
             alternatives: [
                 {
                     amount: 240,
@@ -101,6 +103,8 @@ const initialState: RecipePageStore = {
             amountInput: "100",
             unit: UnitWeight.g,
 
+            altNutritionFacts: {},
+
             alternatives: [
                 {
                     amount: 1,
@@ -139,6 +143,8 @@ const initialState: RecipePageStore = {
             amountInput: "1",
             unit: UnitVolume.cup,
 
+            altNutritionFacts: {},
+
             alternatives: [],
         },
         {
@@ -159,6 +165,8 @@ const initialState: RecipePageStore = {
             amount: 45,
             amountInput: "45",
             unit: UnitWeight.g,
+
+            altNutritionFacts: {},
 
             alternatives: [],
         },

@@ -221,9 +221,34 @@ export default class IngredientsBlock extends Component<Props> {
         };
     }
 
+    private handleAltIngredientHover(parentId: string, id: string, inside: boolean = false): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.map((ingredient) => (
+                (ingredient.item.id === parentId)
+                    ? {
+                        ...ingredient,
+                        altNutritionFacts: (
+                            inside
+                                ? ingredient.alternatives.find((alt) => (alt.item.id === id)).item.nutritionFacts
+                                : {}
+                        ),
+                    }
+                    : ingredient
+            ))
+        );
+    }
+
+
+
     // NOTE: Component parts
 
-    private getIngredientInfoLineNutritionFacts(nutritionFacts: Dictionary<NutritionFactType, number>): JSX.Element {
+    private getIngredientInfoLineNutritionFacts(
+        nutritionFacts: Dictionary<NutritionFactType, number>,
+        altNutritionFacts: Dictionary<NutritionFactType, number> = {},
+    ): JSX.Element {
 
         const nutritionFactTypes = [
             NutritionFactType.Carbohydrate,
@@ -240,14 +265,19 @@ export default class IngredientsBlock extends Component<Props> {
                         key={`nutritionFact_${type}`}
                         className={styles.ingredientInfoLineNutritionFact}
                     >
-
-                        <div className={styles.ingredientInfoLineNutritionFactAmount}>
-                            {nutritionFacts[type]}
+                        <div
+                            className={styles.ingredientInfoLineNutritionFactAmount}
+                            style={(
+                                Utils.objectIsNotEmpty(altNutritionFacts)
+                                    ? { color: (nutritionFacts[type] > altNutritionFacts[type]) ? "#ff6e40" : "#008e76" }
+                                    : null
+                            )}
+                        >
+                            {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
                         </div>
                         <div className={styles.ingredientInfoLineNutritionFactType}>
                             {type.toUpperCase()}
                         </div>
-
                     </div>
                 ) )}
             </div>
@@ -373,8 +403,8 @@ export default class IngredientsBlock extends Component<Props> {
                     <div
                         className={styles.ingredientInfoLineName}
                         onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.item.id)}
-                        onMouseEnter={() => console.log(`Entering ${parentId}/${altIngredient.item.id}`)}
-                        onMouseLeave={() => console.log(`Leaving ${parentId}/${altIngredient.item.id}`)}
+                        onMouseEnter={() => this.handleAltIngredientHover(parentId, altIngredient.item.id, true)}
+                        onMouseLeave={() => this.handleAltIngredientHover(parentId, altIngredient.item.id, false)}
                     >
                         {altIngredient.item.name.toUpperCase()}
                     </div>
@@ -450,7 +480,10 @@ export default class IngredientsBlock extends Component<Props> {
 
                     {this.getIngredientInfoLine(ingredient, isNew)}
 
-                    {( ingredient.isOpen && this.getIngredientInfoLineNutritionFacts(ingredient.item.nutritionFacts) )}
+                    {(
+                        ingredient.isOpen &&
+                        this.getIngredientInfoLineNutritionFacts(ingredient.item.nutritionFacts, ingredient.altNutritionFacts)
+                    )}
 
                     {( showSeparator && (<div className={styles.separator}></div>) )}
 
@@ -487,6 +520,8 @@ export default class IngredientsBlock extends Component<Props> {
             amount: 100,
             amountInput: "100",
             unit: UnitWeight.g,
+
+            altNutritionFacts: {},
 
             alternatives: [],
         };

@@ -23,6 +23,7 @@ export interface IngredientDefault extends Ingredient {
     isOpen: boolean;
     amountInput: string;
     alternatives: IngredientAlternative[];
+    altNutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 
