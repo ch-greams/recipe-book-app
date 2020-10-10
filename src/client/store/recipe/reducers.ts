@@ -9,13 +9,15 @@ import {
     RecipeItemActionTypes,
     RecipePageStore,
     IngredientDefault,
+    Direction,
+    RECIPE_ITEM_UPDATE_DIRECTIONS,
 } from "./types";
 
 
 
 const initialState: RecipePageStore = {
 
-    isReadOnly: true,
+    isReadOnly: false,
 
     name: "Cocoa Muffins",
     brand: "Homemade",
@@ -178,22 +180,40 @@ const initialState: RecipePageStore = {
 
     directions: [
         {
+            isMarked: false,
+
             name: "Preheat Oven",
             notes: [],
             subSteps: [],
         },
         {
+            isMarked: false,
+
             name: "Stir",
             notes: [
                 "Mix quickly and lightly with a fork until moistened, but do not beat.",
             ],
             subSteps: [
-                { foodId: "Milk", amount: 100 },
-                { foodId: "Flour", amount: 240 },
-                { foodId: "Egg", amount: 120 },                
+                {
+                    isMarked: false,
+                    foodId: "Milk",
+                    amount: 100,
+                },
+                {
+                    isMarked: false,
+                    foodId: "Flour",
+                    amount: 240,
+                },
+                {
+                    isMarked: false,
+                    foodId: "Egg",
+                    amount: 120,
+                },            
             ]
         },
         {
+            isMarked: false,
+
             name: "Bake",
             notes: [
                 "If you don't burn your house down, then everything will be ok.",
@@ -240,6 +260,13 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: action.payload as IngredientDefault[],
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTIONS: {
+            return {
+                ...state,
+                directions: action.payload as Direction[],
             };
         }
 

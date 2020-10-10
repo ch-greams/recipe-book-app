@@ -308,7 +308,6 @@ export default class IngredientsBlock extends Component<Props> {
                     : cur
             ], [])
         );
-
     }
 
 

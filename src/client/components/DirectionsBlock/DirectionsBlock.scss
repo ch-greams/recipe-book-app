@@ -99,6 +99,12 @@
                     height: 20px;
 
                     margin: 6px;
+
+                    .lineCheckboxMark {
+
+                        width: 14px;
+                        height: 14px;
+                    }
                 }
 
                 .subDirectionInfoLine {
@@ -223,4 +229,14 @@
     border-color: $color-white;
     border-style: solid;
     border-width: 2px;
+
+    .lineCheckboxMark {
+
+        width: 16px;
+        height: 16px;
+
+        margin: 3px;
+
+        background-color: $color-white;
+    }
 }

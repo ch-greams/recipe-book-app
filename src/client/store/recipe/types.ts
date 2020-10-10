@@ -29,11 +29,13 @@ export interface IngredientDefault extends Ingredient {
 
 
 export interface DirectionStep {
+    isMarked: boolean;
     foodId: string;
     amount: number;
 }
 
 export interface Direction {
+    isMarked: boolean;
     name: string;
     notes: string[];
     subSteps: DirectionStep[];
@@ -69,6 +71,7 @@ export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
 export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 
 export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
+export const RECIPE_ITEM_UPDATE_DIRECTIONS = "RECIPE_ITEM_UPDATE_DIRECTIONS";
 
 
 export interface UpdateNameAction {
@@ -96,7 +99,13 @@ export interface UpdateIngredientsAction {
     payload: IngredientDefault[];
 }
 
+export interface UpdateDirectionsAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTIONS;
+    payload: Direction[];
+}
+
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateIngredientsAction
+    UpdateIngredientsAction | UpdateDirectionsAction
 );

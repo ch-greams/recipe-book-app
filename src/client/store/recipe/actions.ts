@@ -1,12 +1,15 @@
 import {
+    Direction,
     IngredientDefault,
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_DESCRIPTION,
+    RECIPE_ITEM_UPDATE_DIRECTIONS,
     RECIPE_ITEM_UPDATE_INGREDIENTS,
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_SUBTITLE,
     UpdateBrandAction,
     UpdateDescriptionAction,
+    UpdateDirectionsAction,
     UpdateIngredientsAction,
     UpdateNameAction,
     UpdateSubtitleAction,
@@ -46,5 +49,12 @@ export function updateIngredients(ingredients: IngredientDefault[]): UpdateIngre
     return {
         type: RECIPE_ITEM_UPDATE_INGREDIENTS,
         payload: ingredients,
+    };
+}
+
+export function updateDirections(directions: Direction[]): UpdateDirectionsAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_DIRECTIONS,
+        payload: directions,
     };
 }
