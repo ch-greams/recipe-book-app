@@ -36,6 +36,15 @@ export default class DirectionsBlock extends Component<Props> {
         updateDirections(directions);
     }
 
+    private removeSubDirection(index: number, stepIndex: number): void {
+
+        const { directions, updateDirections } = this.props;
+
+        delete directions[index].subSteps[stepIndex];
+
+        updateDirections(directions);
+    }
+
     private toggleDirectionOpen(index: number): void {
 
         const { directions, updateDirections } = this.props;
@@ -93,6 +102,8 @@ export default class DirectionsBlock extends Component<Props> {
 
     private getSubDirectionLine(step: DirectionStep, index: number, stepIndex: number): JSX.Element {
 
+        const { isReadOnly } = this.props;
+
         const checkbox = (
             <div
                 className={styles.lineCheckbox}
@@ -102,11 +113,22 @@ export default class DirectionsBlock extends Component<Props> {
             </div>
         );
 
+        const removeButton = (
+            <div
+                className={styles.subDirectionLineButton}
+                onClick={() => this.removeSubDirection(index, stepIndex)}
+            >
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                    <RemoveIcon />
+                </IconWrapper>
+            </div>
+        );
+
         return (
 
             <div key={`subDirectionLine_${stepIndex}`} className={styles.subDirectionLine}>
 
-                {checkbox}
+                {( isReadOnly ? checkbox : removeButton )}
 
                 <div className={styles.subDirectionInfoLine}>
 
