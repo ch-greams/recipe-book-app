@@ -1,5 +1,5 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { UnitVolume, UnitWeight } from "../../../common/units";
+import { UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
@@ -180,16 +180,44 @@ const initialState: RecipePageStore = {
 
     directions: [
         {
+            isOpen: false,
             isMarked: false,
 
             name: "Preheat Oven",
+
+            time: {
+                count: 5,
+                unit: UnitTime.min,
+            },
+            temperature: {
+                count: 180,
+                unit: UnitTemperature.C,
+            },
+
+            timeInput: "5",
+            temperatureInput: "180",
+
             notes: [],
             subSteps: [],
         },
         {
+            isOpen: false,
             isMarked: false,
 
             name: "Stir",
+
+            time: {
+                count: 20,
+                unit: UnitTime.min,
+            },
+            temperature: {
+                count: 20,
+                unit: UnitTemperature.C,
+            },
+
+            timeInput: "20",
+            temperatureInput: "20",
+
             notes: [
                 "Mix quickly and lightly with a fork until moistened, but do not beat.",
             ],
@@ -212,9 +240,23 @@ const initialState: RecipePageStore = {
             ]
         },
         {
+            isOpen: false,
             isMarked: false,
 
             name: "Bake",
+
+            time: {
+                count: 40,
+                unit: UnitTime.min,
+            },
+            temperature: {
+                count: 180,
+                unit: UnitTemperature.C,
+            },
+
+            timeInput: "15",
+            temperatureInput: "180",
+
             notes: [
                 "If you don't burn your house down, then everything will be ok.",
             ],

@@ -7,6 +7,7 @@
         display: flex;
         flex-direction: row;
 
+        gap: 8px;
         margin: 8px 0;
 
         .lineCheckbox {
@@ -45,6 +46,9 @@
 
                     display: flex;
                     flex-direction: row;
+                    flex-grow: 2;
+
+                    cursor: pointer;
 
                     .directionInfoLineIndex {
 
@@ -66,6 +70,7 @@
 
                     display: flex;
                     flex-direction: row;
+                    gap: 4px;
 
                     .directionInfoLineAmount {
 
@@ -136,6 +141,7 @@
 
                         display: flex;
                         flex-direction: row;
+                        gap: 4px;
 
                         .directionInfoLineAmount {
 
@@ -192,7 +198,6 @@
             height: 24px;
 
             padding: 10px 0;
-            margin-left: 8px;
 
             font-family: $font-default;
             font-size: 16px;

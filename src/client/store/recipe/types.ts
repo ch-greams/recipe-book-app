@@ -1,6 +1,6 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
-import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 
 
 export interface IngredientItem {
@@ -28,6 +28,16 @@ export interface IngredientDefault extends Ingredient {
 }
 
 
+interface Time {
+    count: number;
+    unit: UnitTime;
+}
+
+interface Temperature {
+    count: number;
+    unit: UnitTemperature;
+}
+
 export interface DirectionStep {
     isMarked: boolean;
     foodId: string;
@@ -35,8 +45,13 @@ export interface DirectionStep {
 }
 
 export interface Direction {
+    isOpen: boolean;
     isMarked: boolean;
     name: string;
+    time: Time;
+    timeInput: string;
+    temperature: Temperature;
+    temperatureInput: string;
     notes: string[];
     subSteps: DirectionStep[];
 }
