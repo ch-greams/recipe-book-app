@@ -45,6 +45,15 @@ export default class DirectionsBlock extends Component<Props> {
         updateDirections(directions);
     }
 
+    private removeSubDirectionNote(index: number, noteIndex: number): void {
+
+        const { directions, updateDirections } = this.props;
+
+        delete directions[index].notes[noteIndex];
+
+        updateDirections(directions);
+    }
+
     private toggleDirectionOpen(index: number): void {
 
         const { directions, updateDirections } = this.props;
@@ -77,10 +86,26 @@ export default class DirectionsBlock extends Component<Props> {
 
     // NOTE: Component parts
 
-    private getSubDirectionNoteLine(description: string, index: number): JSX.Element {
+    private getSubDirectionNoteLine(description: string, index: number, noteIndex: number): JSX.Element {
+
+        const { isReadOnly } = this.props;
+
+        const removeButton = (
+            <div
+                className={styles.subDirectionLineButton}
+                onClick={() => this.removeSubDirectionNote(index, noteIndex)}
+            >
+                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                    <RemoveIcon />
+                </IconWrapper>
+            </div>
+        );
+
         return (
 
             <div key={`subDirectionNoteLine_${index}`} className={styles.subDirectionLine}>
+
+                {( isReadOnly ? null : removeButton )}
 
                 <div className={styles.subDirectionNoteInfoLine}>
 
@@ -251,7 +276,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                     {this.getDirectionInfoLine(index, direction)}
 
-                    {direction.isOpen && direction.notes.map((note, index) => this.getSubDirectionNoteLine(note, index))}
+                    {direction.isOpen && direction.notes.map((note, noteIndex) => this.getSubDirectionNoteLine(note, index, noteIndex))}
 
                     {direction.isOpen && direction.subSteps.map((subStep, stepIndex) => this.getSubDirectionLine(subStep, index, stepIndex))}
 
