@@ -87,8 +87,8 @@ export default class Utils {
         );
     }
 
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): Array<keyof T> {
-        return Object.keys(obj) as Array<keyof T>;
+    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): (keyof T)[] {
+        return Object.keys(obj) as (keyof T)[];
     }
 
     // NOTE: OTHER

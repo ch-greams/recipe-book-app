@@ -21,6 +21,7 @@ export interface IngredientAlternative extends Ingredient {
 
 export interface IngredientDefault extends Ingredient {
     isOpen: boolean;
+    isMarked: boolean;
     amountInput: string;
     alternatives: IngredientAlternative[];
     altNutritionFacts: Dictionary<NutritionFactType, number>;

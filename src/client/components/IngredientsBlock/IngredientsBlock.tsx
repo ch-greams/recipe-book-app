@@ -253,6 +253,7 @@ export default class IngredientsBlock extends Component<Props> {
             ...ingredients,
             {
                 isOpen: true,
+                isMarked: false,
 
                 item: item,
 
@@ -295,6 +296,20 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
+    private markIngredient(id: string): void {
+
+        const { ingredients, updateIngredients } = this.props;
+
+        updateIngredients(
+            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
+                ...acc,
+                cur.item.id === id
+                    ? { ...cur, isMarked: !cur.isMarked }
+                    : cur
+            ], [])
+        );
+
+    }
 
 
     // NOTE: Component parts
@@ -377,6 +392,7 @@ export default class IngredientsBlock extends Component<Props> {
 
                 <div
                     className={styles.ingredientInfoLineName}
+                    style={( ingredient.isMarked ? { opacity: 0.25 } : null )}
                     onClick={() => this.toggleIngredientOpen(ingredient.item.id)}
                 >
                     {ingredient.item.name.toUpperCase()}
@@ -488,7 +504,14 @@ export default class IngredientsBlock extends Component<Props> {
             }
         };
 
-        const checkbox = (<div className={styles.lineCheckbox}></div>);
+        const checkbox = (
+            <div
+                className={styles.lineCheckbox}
+                onClick={() => this.markIngredient(ingredient.item.id)}
+            >
+                {( ingredient.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
+            </div>
+        );
 
         const removeButton = (
             <div
@@ -568,6 +591,7 @@ export default class IngredientsBlock extends Component<Props> {
         const newIngredient: IngredientDefault = {
 
             isOpen: false,
+            isMarked: false,
 
             item: {
                 id: "new",

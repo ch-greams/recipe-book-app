@@ -10,10 +10,9 @@
   "scripts": {
     "postinstall": "webpack",
     "build": "npm run purge && npm i",
-    "watch": "webpack --watch",
-    "start": "open view/index.html",
+    "start": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npx eslint .",
+    "lint": "npx eslint . && npx stylelint src/",
     "purge": "rm -rf out node_modules package-lock.json"
   },
   "author": "Andrei Khvalko",

@@ -15,7 +15,7 @@ import {
 
 const initialState: RecipePageStore = {
 
-    isReadOnly: false,
+    isReadOnly: true,
 
     name: "Cocoa Muffins",
     brand: "Homemade",
@@ -31,6 +31,7 @@ const initialState: RecipePageStore = {
     ingredients: [
         {
             isOpen: false,
+            isMarked: false,
 
             item: {
                 id: "f000001",
@@ -86,6 +87,7 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
+            isMarked: false,
 
             item: {
                 id: "f000004",
@@ -126,6 +128,7 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
+            isMarked: false,
 
             item: {
                 id: "f000006",
@@ -149,6 +152,7 @@ const initialState: RecipePageStore = {
         },
         {
             isOpen: false,
+            isMarked: false,
 
             item: {
                 id: "f000007",
