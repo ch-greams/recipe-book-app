@@ -13,12 +13,14 @@ import Utils from "../../../common/utils";
 import { AnyAction } from "redux";
 import { Route } from "../Router";
 import { Link } from "react-router-dom";
+import { SearchPageStore } from "../../store/search/types";
 
 
 
 interface Props {
     isReadOnly: boolean;
     ingredients: IngredientDefault[];
+    search: SearchPageStore;
     updateIngredients: (value: IngredientDefault[]) => AnyAction;
 }
 
@@ -36,7 +38,7 @@ export default class IngredientsBlock extends Component<Props> {
         const { ingredients, updateIngredients } = this.props;
 
         updateIngredients(
-            ingredients.filter((ingredient) => ingredient.item.id !== id)
+            ingredients.filter((ingredient) => ingredient.item.id !== id),
         );
     }
 
@@ -50,7 +52,7 @@ export default class IngredientsBlock extends Component<Props> {
                 cur.item.id === parentId
                     ? {
                         ...cur,
-                        alternatives: cur.alternatives.filter((alt) => alt.item.id !== id)
+                        alternatives: cur.alternatives.filter((alt) => alt.item.id !== id),
                     }
                     : cur
             ], [])
@@ -241,6 +243,58 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
+    private addIngredient(): void {
+
+        const { ingredients, search, updateIngredients } = this.props;
+
+        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
+
+        updateIngredients([
+            ...ingredients,
+            {
+                isOpen: true,
+
+                item: item,
+
+                amount: 100,
+                amountInput: "100",
+                unit: UnitWeight.g,
+    
+                altNutritionFacts: {},
+    
+                alternatives: [],    
+            },
+        ]);
+    }
+
+    private addAltIngredient(id: string): void {
+
+        const { ingredients, search, updateIngredients } = this.props;
+
+        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
+
+        updateIngredients(
+            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
+                ...acc,
+                cur.item.id === id
+                    ? {
+                        ...cur,
+                        alternatives: [
+                            ...cur.alternatives,
+                            {
+                                amount: 100,
+                                amountInput: "100",
+                                unit: UnitWeight.g,
+            
+                                item: item,
+                            }
+                        ]
+                    }
+                    : cur
+            ], [])
+        );
+    }
+
 
 
     // NOTE: Component parts
@@ -351,7 +405,7 @@ export default class IngredientsBlock extends Component<Props> {
         const searchButton = (
             <div
                 className={styles.altIngredientLineButton}
-                onClick={() => console.log("TODO: Open search modal")}
+                onClick={() => this.addAltIngredient(parentId)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
                     <SearchIcon />
@@ -389,6 +443,10 @@ export default class IngredientsBlock extends Component<Props> {
             </div>
         );
 
+        const onClick = (): void => this.switchAltIngredientWithParent(parentId, altIngredient.item.id);
+        const onMouseEnter = (): void => this.handleAltIngredientHover(parentId, altIngredient.item.id, true);
+        const onMouseLeave = (): void => this.handleAltIngredientHover(parentId, altIngredient.item.id, false);
+
         return (
 
             <div key={altIngredient.item.id} className={styles.altIngredientLine}>
@@ -402,9 +460,9 @@ export default class IngredientsBlock extends Component<Props> {
 
                     <div
                         className={styles.ingredientInfoLineName}
-                        onClick={() => this.switchAltIngredientWithParent(parentId, altIngredient.item.id)}
-                        onMouseEnter={() => this.handleAltIngredientHover(parentId, altIngredient.item.id, true)}
-                        onMouseLeave={() => this.handleAltIngredientHover(parentId, altIngredient.item.id, false)}
+                        onClick={isNew ? null : onClick}
+                        onMouseEnter={isNew ? null : onMouseEnter}
+                        onMouseLeave={isNew ? null : onMouseLeave}
                     >
                         {altIngredient.item.name.toUpperCase()}
                     </div>
@@ -446,7 +504,7 @@ export default class IngredientsBlock extends Component<Props> {
         const searchButton = (
             <div
                 className={styles.ingredientLineButton}
-                onClick={() => console.log("TODO: Open modal for new ingredient search")}
+                onClick={this.addIngredient.bind(this)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <SearchIcon />

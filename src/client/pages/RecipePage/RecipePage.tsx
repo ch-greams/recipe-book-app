@@ -18,11 +18,14 @@ import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBl
 import IngredientsBlock from "../../components/IngredientsBlock/IngredientsBlock";
 import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
 import styles from "./RecipePage.scss";
+import { requestIngredients } from "../../store/search/actions";
+import { SearchPageStore } from "../../store/search/types";
 
 
 
 interface RecipePageStateToProps {
     recipeItem: RecipePageStore;
+    search: SearchPageStore;
 }
 
 interface RecipePageDispatchToProps {
@@ -31,12 +34,18 @@ interface RecipePageDispatchToProps {
     updateSubtitle: typeof updateSubtitle;
     updateDescription: typeof updateDescription;
     updateIngredients: typeof updateIngredients;
+    requestIngredients: typeof requestIngredients;
 }
 
 interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToProps { }
 
 
 class RecipePage extends Component<RecipePageProps> {
+
+    public componentDidMount(): void {
+
+        this.props.requestIngredients();
+    }
 
     // NOTE: General Information
 
@@ -79,7 +88,11 @@ class RecipePage extends Component<RecipePageProps> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(UnitWeight)}
+                        value={recipeItem.unit}
+                        onChange={console.log}
+                    />
 
                 </div>
 
@@ -145,6 +158,7 @@ class RecipePage extends Component<RecipePageProps> {
                 ingredients,
                 directions,
             },
+            search,
             updateName,
             updateBrand,
             updateSubtitle,
@@ -179,6 +193,7 @@ class RecipePage extends Component<RecipePageProps> {
                         isReadOnly={isReadOnly}
                         ingredients={ingredients}
                         updateIngredients={updateIngredients}
+                        search={search}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -210,6 +225,7 @@ class RecipePage extends Component<RecipePageProps> {
 
 const mapStateToProps = (state: AppState): RecipePageStateToProps => ({
     recipeItem: state.recipePage,
+    search: state.searchPage,
 });
 
 const mapDispatchToProps: RecipePageDispatchToProps = {
@@ -218,6 +234,7 @@ const mapDispatchToProps: RecipePageDispatchToProps = {
     updateSubtitle,
     updateDescription,
     updateIngredients,
+    requestIngredients,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

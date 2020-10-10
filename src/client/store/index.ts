@@ -5,12 +5,14 @@ import foodPageReducer from "./food/reducers";
 import recipePageReducer from "./recipe/reducers";
 import rootSaga from "./rootSaga";
 import createSagaMiddleware from "redux-saga";
+import searchPageReducer from "./search/reducers";
 
 
 
 const rootReducer = combineReducers({
     foodPage: foodPageReducer,
     recipePage: recipePageReducer,
+    searchPage: searchPageReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

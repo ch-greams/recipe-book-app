@@ -3,7 +3,7 @@ import { Dictionary } from "../../../common/typings";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 
 
-interface IngredientItem {
+export interface IngredientItem {
     id: string;
     name: string;
     nutritionFacts: Dictionary<NutritionFactType, number>;
