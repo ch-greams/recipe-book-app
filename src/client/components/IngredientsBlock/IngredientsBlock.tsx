@@ -26,6 +26,7 @@ interface Props {
 
 
 export default class IngredientsBlock extends Component<Props> {
+    public static readonly displayName = "IngredientsBlock";
 
     public static defaultProps = {
         isReadOnly: false,

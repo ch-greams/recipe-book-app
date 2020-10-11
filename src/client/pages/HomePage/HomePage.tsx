@@ -21,6 +21,7 @@ interface HomePageProps extends HomePageStateToProps, HomePageDispatchToProps { 
 
 
 class HomePage extends Component<HomePageProps> {
+    public static readonly displayName = "HomePage";
 
     public render(): JSX.Element {
 

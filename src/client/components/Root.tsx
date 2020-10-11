@@ -11,6 +11,7 @@ export interface RootProps {
 
 
 export default class Root extends React.Component<RootProps> {
+    public static readonly displayName = "Root";
 
     public render(): JSX.Element {
 

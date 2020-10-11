@@ -20,6 +20,7 @@ interface Props {
 
 // TODO: Add current value for selected
 export default class SelectInput extends Component<Props> {
+    public static readonly displayName = "SelectInput";
 
     private getClassName(type?: SelectInputType): string {
 

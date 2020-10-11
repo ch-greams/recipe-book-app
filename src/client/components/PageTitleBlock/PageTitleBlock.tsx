@@ -21,6 +21,8 @@ interface State {
 }
 
 export default class PageTitleBlock extends Component<Props, State> {
+    public static readonly displayName = "PageTitleBlock";
+
     public state: State = {
         isTitleInputsOpen: false,
     };

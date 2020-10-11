@@ -42,6 +42,7 @@ interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToPr
 
 
 class RecipePage extends Component<RecipePageProps> {
+    public static readonly displayName = "RecipePage";
 
     public componentDidMount(): void {
 

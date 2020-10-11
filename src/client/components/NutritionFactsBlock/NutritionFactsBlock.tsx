@@ -33,7 +33,9 @@ interface NutritionFactsBlockProps extends NutritionFactsBlockOwnProps, Nutritio
 
 
 class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
-    public static defaultProps = {
+    public static readonly displayName = "NutritionFactsBlock";
+
+    public static readonly defaultProps = {
         isReadOnly: false,
     };
 

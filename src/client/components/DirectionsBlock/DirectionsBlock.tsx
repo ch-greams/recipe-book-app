@@ -19,6 +19,7 @@ interface Props {
 
 
 export default class DirectionsBlock extends Component<Props> {
+    public static readonly displayName = "DirectionsBlock";
 
     public static defaultProps: Partial<Props> = {
         isReadOnly: false,

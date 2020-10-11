@@ -19,6 +19,7 @@ interface State {
 }
 
 export default class ServingSizesBlock extends Component<Props, State> {
+    public static readonly displayName = "ServingSizesBlock";
 
     public state = {
         newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },

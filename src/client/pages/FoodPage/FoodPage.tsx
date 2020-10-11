@@ -40,6 +40,7 @@ interface Props extends OwnProps, StateToProps, DispatchToProps { }
 
 
 class FoodPage extends Component<Props> {
+    public static readonly displayName = "FoodPage";
 
     public componentDidMount(): void {
 
