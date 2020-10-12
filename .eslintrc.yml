@@ -36,6 +36,12 @@ rules:
     member-ordering: 0
     object-literal-sort-keys: 0
 
+    react/jsx-curly-brace-presence:
+        - 2
+        - props: always
+          children: always
+    react/jsx-key: 1
+
     "@typescript-eslint/explicit-member-accessibility": 2
     "@typescript-eslint/explicit-function-return-type":
         - 2

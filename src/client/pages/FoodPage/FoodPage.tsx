@@ -145,7 +145,7 @@ class FoodPage extends Component<Props> {
         } = this.props;
 
         if (!isLoaded) {
-            return (<h1>LOADING</h1>);
+            return (<h1>{"LOADING"}</h1>);
         }
 
         return (

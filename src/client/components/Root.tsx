@@ -18,7 +18,7 @@ export default class Root extends React.Component<RootProps> {
         return (
             <Provider store={this.props.store}>
                 <BrowserRouter>
-                    <Route path="/:route?/:id?" component={Router} />
+                    <Route path={"/:route?/:id?"} component={Router} />
                 </BrowserRouter>
             </Provider>
         );
