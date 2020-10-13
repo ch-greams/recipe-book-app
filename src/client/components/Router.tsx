@@ -22,14 +22,19 @@ type RouterProps = RouteComponentProps<RouterParams>;
    
 const Router: React.FunctionComponent<RouterProps> = (props: RouterProps): React.ReactElement => {
 
-    const { match: { params: { route, id } } } = props;
+    const {
+        match: { params: { route, id } },
+        location: { search },
+    } = props;
+
+    const searchParams = new URLSearchParams(search);
 
     switch (route) {
         case Route.Food:
             return <FoodPage foodId={id} />;
 
         case Route.Recipe:
-            return <RecipePage />;
+            return <RecipePage isEdit={(searchParams.get("edit") === "true")} />;
 
         case Route.Home:
         default:

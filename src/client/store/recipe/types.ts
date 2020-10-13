@@ -48,10 +48,13 @@ export interface Direction {
     isOpen: boolean;
     isMarked: boolean;
     name: string;
-    time: Time;
+
+    time?: Time;
     timeInput: string;
-    temperature: Temperature;
+
+    temperature?: Temperature;
     temperatureInput: string;
+
     notes: string[];
     subSteps: DirectionStep[];
 }

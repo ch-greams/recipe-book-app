@@ -185,16 +185,12 @@ const initialState: RecipePageStore = {
 
             name: "Preheat Oven",
 
-            time: {
-                count: 5,
-                unit: UnitTime.min,
-            },
             temperature: {
                 count: 180,
                 unit: UnitTemperature.C,
             },
 
-            timeInput: "5",
+            timeInput: "",
             temperatureInput: "180",
 
             notes: [],
@@ -210,13 +206,9 @@ const initialState: RecipePageStore = {
                 count: 20,
                 unit: UnitTime.min,
             },
-            temperature: {
-                count: 20,
-                unit: UnitTemperature.C,
-            },
 
             timeInput: "20",
-            temperatureInput: "20",
+            temperatureInput: "",
 
             notes: [
                 "Mix quickly and lightly with a fork until moistened, but do not beat.",

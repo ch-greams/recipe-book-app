@@ -23,12 +23,16 @@ import { SearchPageStore } from "../../store/search/types";
 
 
 
-interface RecipePageStateToProps {
+interface OwnProps {
+    isEdit: boolean;
+}
+
+interface StateToProps {
     recipeItem: RecipePageStore;
     search: SearchPageStore;
 }
 
-interface RecipePageDispatchToProps {
+interface DispatchToProps {
     updateName: typeof updateName;
     updateBrand: typeof updateBrand;
     updateSubtitle: typeof updateSubtitle;
@@ -38,7 +42,7 @@ interface RecipePageDispatchToProps {
     requestIngredients: typeof requestIngredients;
 }
 
-interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToProps { }
+interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
 
 
 class RecipePage extends Component<RecipePageProps> {
@@ -151,8 +155,8 @@ class RecipePage extends Component<RecipePageProps> {
     public render(): JSX.Element {
 
         const {
+            isEdit,
             recipeItem: {
-                isReadOnly,
                 name,
                 brand,
                 subtitle,
@@ -193,7 +197,7 @@ class RecipePage extends Component<RecipePageProps> {
                     </div>
 
                     <IngredientsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={!isEdit}
                         ingredients={ingredients}
                         updateIngredients={updateIngredients}
                         search={search}
@@ -204,7 +208,7 @@ class RecipePage extends Component<RecipePageProps> {
                     </div>
 
                     <DirectionsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={!isEdit}
                         directions={directions}
                         updateDirections={updateDirections}
                     />
@@ -227,12 +231,12 @@ class RecipePage extends Component<RecipePageProps> {
 }
 
 
-const mapStateToProps = (state: AppState): RecipePageStateToProps => ({
+const mapStateToProps = (state: AppState): StateToProps => ({
     recipeItem: state.recipePage,
     search: state.searchPage,
 });
 
-const mapDispatchToProps: RecipePageDispatchToProps = {
+const mapDispatchToProps: DispatchToProps = {
     updateName,
     updateBrand,
     updateSubtitle,

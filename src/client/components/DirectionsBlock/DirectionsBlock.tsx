@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-// import InfoIcon from "../../icons/information-sharp.svg";
 import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
@@ -8,6 +7,8 @@ import styles from "./DirectionsBlock.scss";
 import { Direction, DirectionStep } from "../../store/recipe/types";
 import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
+import CheckmarkIcon from "../../icons/checkmark-sharp.svg";
+import Utils from "../../../common/utils";
 
 
 
@@ -64,13 +65,16 @@ export default class DirectionsBlock extends Component<Props> {
         updateDirections(directions);
     }
 
-
     private markDirection(index: number): void {
 
         const { directions, updateDirections } = this.props;
 
         directions[index].isMarked = !directions[index].isMarked;
         directions[index].subSteps.forEach((step) => step.isMarked = directions[index].isMarked);
+
+        if (directions[index].isMarked) {
+            directions[index].isOpen = false;
+        }
 
         updateDirections(directions);
     }
@@ -188,49 +192,122 @@ export default class DirectionsBlock extends Component<Props> {
 
     private getDirectionInfoLine(index: number, direction: Direction): JSX.Element {
 
+        const { isReadOnly } = this.props;
+
         const FIRST_STEP_NUMBER = 1;
         const step = index + FIRST_STEP_NUMBER;
 
+        const tempAmountText = (
+            <div className={styles.directionInfoLineAmount}>
+                {direction.temperature?.count}
+            </div>
+        );
+
+        const tempAmountInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                value={direction.temperatureInput}
+                onChange={console.log}
+            />
+        );
+
+        const tempSelectInput = (
+            <SelectInput
+                type={SelectInputType.IngredientUnit}
+                options={Object.keys(UnitTemperature)}
+                value={direction.temperature?.unit}
+                onChange={console.log}
+            />
+        );
+
+        const timeAmountText = (
+            <div className={styles.directionInfoLineAmount}>
+                {direction.time?.count}
+            </div>
+        );
+
+        const timeAmountInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                value={direction.timeInput}
+                onChange={console.log}
+            />
+        );
+
+        const timeSelectInput = (
+            <SelectInput
+                type={SelectInputType.IngredientUnit}
+                options={Object.keys(UnitTime)}
+                value={direction.time?.unit}
+                onChange={console.log}
+            />
+        );
+
+        const indexText = (
+            <div className={styles.directionInfoLineIndex}>
+                {`${step}.`}
+            </div>
+        );
+
+        const indexInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineIndexInput}
+                value={step}
+                placeholder={"#"}
+                maxLength={2}
+                onChange={console.log}
+            />
+        );
+
+        const titleText = (
+            <div className={styles.directionInfoLineName}>
+                {direction.name.toUpperCase()}
+            </div>
+        );
+
+        const titleInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineNameInput}
+                value={direction.name.toUpperCase()}
+                placeholder={"TITLE"}
+                onChange={console.log}
+            />
+        );
+
         return (
-            <div key={`${step}_${direction.name}`} className={styles.directionInfoLine}>
+            <div
+                key={`${step}_${direction.name}`}
+                className={styles.directionInfoLine}
+                style={( isReadOnly ? null : { paddingLeft: "12px" } )}
+            >
 
                 <div
                     className={styles.directionInfoLineTitle}
                     style={( direction.isMarked ? { opacity: 0.25 } : null )}
-                    onClick={() => this.toggleDirectionOpen(index)}
+                    onClick={( isReadOnly ? () => this.toggleDirectionOpen(index) : null )}
                 >
-                    <div className={styles.directionInfoLineIndex}>
-                        {`${step}.`}
-                    </div>
+                    {( isReadOnly ? indexText : indexInput )}
 
-                    <div className={styles.directionInfoLineName}>
-                        {direction.name.toUpperCase()}
-                    </div>
+                    {( isReadOnly ? titleText : titleInput )}
+
                 </div>
 
                 <div className={styles.directionInfoLineMeasure}>
 
-                    <div className={styles.directionInfoLineAmount}>
-                        {direction.temperature.count}
-                    </div>
-                    
-                    <SelectInput
-                        type={SelectInputType.IngredientUnit}
-                        options={Object.keys(UnitTemperature)}
-                        value={direction.temperature.unit}
-                        onChange={console.log}
-                    />
+                    {( isReadOnly ? ( direction.temperature && tempAmountText ) : tempAmountInput )}
 
-                    <div className={styles.directionInfoLineAmount}>
-                        {direction.time.count}
-                    </div>
+                    {( isReadOnly ? ( direction.temperature && tempSelectInput ) : tempSelectInput )}
 
-                    <SelectInput
-                        type={SelectInputType.IngredientUnit}
-                        options={Object.keys(UnitTime)}
-                        value={direction.time.unit}
-                        onChange={console.log}
-                    />
+                    {( isReadOnly ? ( direction.time && timeAmountText ) : timeAmountInput )}
+
+                    {( isReadOnly ? ( direction.time && timeSelectInput ) : timeSelectInput )}
+
                 </div>
             </div>
         );
@@ -260,16 +337,8 @@ export default class DirectionsBlock extends Component<Props> {
             </div>
         );
 
-        // const infoButton = (
-        //     <div className={styles.directionLineButton}>
-        //         <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-        //             <InfoIcon />
-        //         </IconWrapper>
-        //     </div>
-        // );
-
         return (
-            <div key={direction.name} className={styles.directionLine}>
+            <div key={`${index}_${direction.name}`} className={styles.directionLine}>
 
                 {( isReadOnly ? checkbox : removeButton )}
 
@@ -277,28 +346,137 @@ export default class DirectionsBlock extends Component<Props> {
 
                     {this.getDirectionInfoLine(index, direction)}
 
-                    {direction.isOpen && direction.notes.map((note, noteIndex) => this.getSubDirectionNoteLine(note, index, noteIndex))}
+                    {(
+                        ( direction.isOpen || !isReadOnly ) &&
+                        direction.notes.map((note, noteIndex) => this.getSubDirectionNoteLine(note, index, noteIndex))
+                    )}
 
-                    {direction.isOpen && direction.subSteps.map((subStep, stepIndex) => this.getSubDirectionLine(subStep, index, stepIndex))}
+                    {(
+                        ( direction.isOpen || !isReadOnly ) &&
+                        direction.subSteps.map((subStep, stepIndex) => this.getSubDirectionLine(subStep, index, stepIndex))
+                    )}
 
                 </div>
-
-                {/* {infoButton} */}
-
             </div>
         );
     }
 
+    private getNewDirectionLine(): JSX.Element {
+
+        const amountText = (
+            <div className={styles.directionInfoLineAmount}>
+                {""}
+            </div>
+        );
+
+        const tempAmountInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                // value={(ingredient.amountInput || "")}
+                // onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
+            />
+        );
+
+        const tempMeasureInput = (
+            <div className={styles.directionInfoLineMeasure}>
+                    
+                {( this.props.isReadOnly ? amountText : tempAmountInput )}
+                
+                <SelectInput
+                    type={SelectInputType.IngredientUnit}
+                    options={Object.keys(UnitTemperature)}
+                    // value={direction.temperature.unit}
+                    onChange={console.log}
+                />
+            </div>
+        );
+
+        const timeAmountInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                // value={(ingredient.amountInput || "")}
+                // onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
+            />
+        );
+
+        const timeMeasureInput = (
+            <div className={styles.directionInfoLineMeasure}>
+                    
+                {( this.props.isReadOnly ? amountText : timeAmountInput )}
+                
+                <SelectInput
+                    type={SelectInputType.IngredientUnit}
+                    options={Object.keys(UnitTime)}
+                    // value={direction.temperature.unit}
+                    onChange={console.log}
+                />
+            </div>
+        );
+
+        return (
+            <div className={styles.directionLine}>
+
+                <div
+                    className={styles.directionLineButton}
+                    onClick={console.log}
+                >
+                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                        <CheckmarkIcon />
+                    </IconWrapper>
+                </div>
+
+                <div className={styles.directionInfoLines}>
+
+                    <div
+                        className={Utils.classNames({ [styles.directionInfoLine]: true, [styles.newDirection]: true })}
+                    >
+
+                        <div className={styles.directionInfoLineTitle}>
+
+                            <input
+                                type={"text"}
+                                className={styles.directionInfoLineIndexInput}
+                                // value={"9"}
+                                placeholder={"#"}
+                                maxLength={2}
+                            />
+
+                            <input
+                                type={"text"}
+                                className={styles.directionInfoLineNameInput}
+                                // value={"NEW DIRECTION"}
+                                placeholder={"TITLE"}
+                            />
+                        </div>
+
+                        <div className={styles.directionInfoLineMeasure}>
+
+                            {tempMeasureInput}
+
+                            {timeMeasureInput}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     public render(): JSX.Element {
 
-        const { directions } = this.props;
+        const { isReadOnly, directions } = this.props;
 
         return (
             <div className={styles.directionsBlock}>
-                {directions.map(
-                    (direction, index) => this.getDirectionLine(direction, index)
-                )}
+
+                {directions.map( (direction, index) => this.getDirectionLine(direction, index) )}
+
+                {( isReadOnly ? null : this.getNewDirectionLine() )}
+
             </div>
         );
     }
