@@ -25,6 +25,8 @@ export interface FoodPageStore {
 
     type: string;
     density: number;
+    densityVolume: UnitVolume;
+    densityWeight: UnitWeight;
     servingSize: number;
     unit: UnitWeight | UnitVolume;
     featuredNutritionFacts: NutritionFactType[];

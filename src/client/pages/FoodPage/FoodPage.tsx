@@ -77,7 +77,10 @@ class FoodPage extends Component<Props> {
                     
                     {/* BULK DENSITY */}
 
-                    <div className={styles.densityLineLabel} title={"Use Bulk Density for foods like rice or beans"}>
+                    <div
+                        className={styles.densityLineLabel}
+                        title={"Use Bulk Density for foods like rice or beans"}
+                    >
                         {"DENSITY"}
                     </div>
                     
@@ -88,11 +91,19 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(UnitWeight)}
+                        onChange={console.log}
+                        value={foodItem.densityWeight}
+                    />
 
                     {"/"}
 
-                    <SelectInput options={Object.keys(UnitVolume)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(UnitVolume)}
+                        onChange={console.log}
+                        value={foodItem.densityVolume}
+                    />
 
                 </div>
 
