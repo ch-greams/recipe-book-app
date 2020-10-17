@@ -52,6 +52,7 @@ export interface SubDirectionIngredient extends SubDirection {
     isMarked: boolean;
     id: string;
     amount: number;
+    amountInput: string;
     unit: UnitWeight | UnitVolume;
 }
 

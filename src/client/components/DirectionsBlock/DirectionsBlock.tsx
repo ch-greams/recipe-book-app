@@ -4,11 +4,17 @@ import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
-import { Direction, IngredientDefault, SubDirection, SubDirectionIngredient, SubDirectionType } from "../../store/recipe/types";
+import {
+    Direction,
+    IngredientDefault,
+    SubDirection,
+    SubDirectionIngredient,
+    SubDirectionType
+} from "../../store/recipe/types";
 import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
-import CheckmarkIcon from "../../icons/checkmark-sharp.svg";
 import Utils from "../../../common/utils";
+import { InputChangeCallback } from "../../../common/typings";
 
 
 
@@ -91,6 +97,44 @@ export default class DirectionsBlock extends Component<Props> {
 
         updateDirections(directions);
     }
+    private handleSubDirectionIngredientAmountEdit(parentIndex: number, id: string): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => {
+
+                    if (index === parentIndex) {
+
+                        return {
+                            ...direction,
+                            steps: direction.steps.map((step: SubDirectionIngredient) => {
+
+                                const amount = Utils.decimalNormalizer(event.target.value, step.amountInput);
+
+                                if (step.id === id) {
+                                    return {
+                                        ...step,
+                                        amountInput: amount,
+                                        amount: Number(amount),
+                                    };
+                                }
+                                else {
+                                    return step;
+                                }
+                            }),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
 
     // NOTE: Component parts
 
@@ -168,8 +212,8 @@ export default class DirectionsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                value={step.amount}
-                onChange={console.log}
+                value={step.amountInput}
+                onChange={this.handleSubDirectionIngredientAmountEdit(index, step.id).bind(this)}
             />
         );
 
@@ -217,8 +261,12 @@ export default class DirectionsBlock extends Component<Props> {
                     className={styles.subDirectionLineButton}
                     onClick={console.log}
                 >
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
-                        <CheckmarkIcon />
+                    <IconWrapper
+                        isFullWidth={true}
+                        width={"24px"} height={"24px"} color={"#fff"}
+                        style={{ transform: "rotate(0.125turn)" }}
+                    >
+                        <RemoveIcon />
                     </IconWrapper>
                 </div>
 
@@ -479,8 +527,12 @@ export default class DirectionsBlock extends Component<Props> {
                     className={styles.directionLineButton}
                     onClick={console.log}
                 >
-                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
-                        <CheckmarkIcon />
+                    <IconWrapper
+                        isFullWidth={true}
+                        width={"24px"} height={"24px"} color={"#00bfa5"}
+                        style={{ transform: "rotate(0.125turn)" }}
+                    >
+                        <RemoveIcon />
                     </IconWrapper>
                 </div>
 

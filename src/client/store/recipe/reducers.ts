@@ -222,6 +222,7 @@ const initialState: RecipePageStore = {
                     id: "f000001",
                     isMarked: false,
                     amount: 100,
+                    amountInput: "100",
                 },
                 {
                     type: SubDirectionType.Ingredient,
@@ -230,6 +231,7 @@ const initialState: RecipePageStore = {
                     id: "f000004",
                     isMarked: false,
                     amount: 240,
+                    amountInput: "240",
                 },
                 {
                     type: SubDirectionType.Ingredient,
@@ -238,6 +240,7 @@ const initialState: RecipePageStore = {
                     id: "f000006",
                     isMarked: false,
                     amount: 120,
+                    amountInput: "120",
                 },            
             ]
         },
