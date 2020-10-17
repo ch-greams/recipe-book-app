@@ -135,7 +135,7 @@ const initialState: RecipePageStore = {
 
             item: {
                 id: "f000006",
-                name: "Eggs",
+                name: "Egg",
 
                 nutritionFacts: {
                     [NutritionFactType.Carbohydrate]: 1.7,
@@ -219,6 +219,7 @@ const initialState: RecipePageStore = {
                     type: SubDirectionType.Ingredient,
                     label: "Milk",
 
+                    id: "f000001",
                     isMarked: false,
                     amount: 100,
                 },
@@ -226,6 +227,7 @@ const initialState: RecipePageStore = {
                     type: SubDirectionType.Ingredient,
                     label: "Flour",
 
+                    id: "f000004",
                     isMarked: false,
                     amount: 240,
                 },
@@ -233,6 +235,7 @@ const initialState: RecipePageStore = {
                     type: SubDirectionType.Ingredient,
                     label: "Egg",
 
+                    id: "f000006",
                     isMarked: false,
                     amount: 120,
                 },            

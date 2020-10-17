@@ -50,6 +50,7 @@ export interface SubDirection {
 
 export interface SubDirectionIngredient extends SubDirection {
     isMarked: boolean;
+    id: string;
     amount: number;
     unit: UnitWeight | UnitVolume;
 }

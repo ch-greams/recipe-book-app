@@ -8,17 +8,22 @@ export enum SelectInputType {
     IngredientUnit,
     AltIngredientUnit,
     CustomUnit,
+    SubDirectionType,
 }
 
+interface SelectOption {
+    label: string;
+    value: string;
+}
 
 interface Props {
     type?: SelectInputType;
-    options: string[];
+    options: (string | SelectOption)[];
     value?: string;
     onChange: SelectChangeCallback;
 }
 
-// TODO: Add current value for selected
+
 export default class SelectInput extends Component<Props> {
     public static readonly displayName = "SelectInput";
 
@@ -40,6 +45,11 @@ export default class SelectInput extends Component<Props> {
                     [styles.selectInput]: true,
                     [styles.customUnit]: true,
                 });
+            case SelectInputType.SubDirectionType:
+                return Utils.classNames({
+                    [styles.selectInput]: true,
+                    [styles.subDirectionType]: true,
+                });
             default:
                 return styles.selectInput;
         }
@@ -56,9 +66,13 @@ export default class SelectInput extends Component<Props> {
                 onChange={onChange}
             >
                 {options.map((option) => (
-                    <option value={option} key={option}>
-                        {option}
-                    </option>
+                    (typeof option === "string")
+                        ? (
+                            (option === "----")
+                                ? <option key={option} disabled={true}>{option}</option>
+                                : <option key={option} value={option}>{option}</option>
+                        )
+                        : <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
             </select>
         );

@@ -210,6 +210,7 @@ class RecipePage extends Component<RecipePageProps> {
                     <DirectionsBlock
                         isReadOnly={!isEdit}
                         directions={directions}
+                        ingredients={ingredients}
                         updateDirections={updateDirections}
                     />
 

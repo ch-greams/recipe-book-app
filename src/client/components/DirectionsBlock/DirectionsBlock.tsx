@@ -4,7 +4,7 @@ import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
-import { Direction, SubDirection, SubDirectionIngredient, SubDirectionType } from "../../store/recipe/types";
+import { Direction, IngredientDefault, SubDirection, SubDirectionIngredient, SubDirectionType } from "../../store/recipe/types";
 import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import CheckmarkIcon from "../../icons/checkmark-sharp.svg";
@@ -15,6 +15,7 @@ import Utils from "../../../common/utils";
 interface Props {
     isReadOnly: boolean;
     directions: Direction[];
+    ingredients: IngredientDefault[];
     updateDirections: (value: Direction[]) => AnyAction;
 }
 
@@ -192,6 +193,43 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
+    private getNewSubDirectionLine(ingredients: IngredientDefault[]): JSX.Element {
+
+        return (
+
+            <div key={`newSubDirectionLine`} className={styles.subDirectionLine}>
+
+                <div
+                    className={styles.subDirectionLineButton}
+                    onClick={console.log}
+                >
+                    <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                        <CheckmarkIcon />
+                    </IconWrapper>
+                </div>
+
+                <div className={styles.subDirectionInfoLine}>
+
+                    <SelectInput
+                        type={SelectInputType.SubDirectionType}
+                        options={[
+                            "Tip",
+                            "Note",
+                            "Warning",
+                            "----",
+                            ...ingredients.map((ingredient) => ({
+                                label: ingredient.item.name.toUpperCase(),
+                                value: ingredient.item.id,
+                            })),
+                        ]}
+                        onChange={console.log}
+                    />
+
+                </div>
+            </div>
+        );
+    }
+
     private getDirectionInfoLine(index: number, direction: Direction): JSX.Element {
 
         const { isReadOnly } = this.props;
@@ -317,7 +355,7 @@ export default class DirectionsBlock extends Component<Props> {
 
     private getDirectionLine(direction: Direction, index: number): JSX.Element {
 
-        const { isReadOnly } = this.props;
+        const { isReadOnly, ingredients } = this.props;
 
         const checkbox = (
             <div
@@ -356,6 +394,8 @@ export default class DirectionsBlock extends Component<Props> {
                                 : this.getSubDirectionNoteLine(step, index, stepIndex)
                         ))
                     )}
+
+                    {( isReadOnly ? null : this.getNewSubDirectionLine(ingredients) )}
 
                 </div>
             </div>

@@ -45,6 +45,25 @@
         border-width: 1px;
     }
 
+    &.subDirectionType {
+
+        width: 100%;
+
+        padding-left: 4px;
+
+        line-height: 22px;
+
+        color: $color-white;
+
+        text-align: left;
+
+        background-color: $color-default-dark;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
     option {
 
         font-family: sans-serif;
