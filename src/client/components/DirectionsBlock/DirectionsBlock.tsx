@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
-import { UnitWeight, UnitTemperature, UnitTime, UnitVolume } from "../../../common/units";
+import { UnitWeight, UnitTemperature, UnitTime, UnitVolume, Units } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
 import {
@@ -167,17 +167,102 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
+    private addSubDirection(parentIndex: number, value: string): void {
+
+        const type = (
+            Object.keys(SubDirectionType).includes(value)
+                ? value as SubDirectionType
+                : value.split("_")[Utils.ZERO] as SubDirectionType
+        );
+
+        const { directions, ingredients, updateDirections } = this.props;
+
+        if (type === SubDirectionType.Ingredient) {
+
+            const LAST_INDEX = 1;
+            const id = value.split("_")[LAST_INDEX];
+
+            const ingredient = ingredients.find((ingredient) => ingredient.item.id === id);
+
+            updateDirections(
+                directions.reduce<Direction[]>((acc, cur, index) => [
+                    ...acc,
+                    parentIndex === index
+                        ? {
+                            ...cur,
+                            steps: [
+                                ...cur.steps,
+                                {
+                                    type: type,
+                                    label: ingredient.item.name,
+                
+                                    id: ingredient.item.id,
+                                    isMarked: false,
+                                    amount: ingredient.amount,
+                                    amountInput: ingredient.amountInput,
+                                    unit: ingredient.unit,
+                                },
+                            ]
+                        }
+                        : cur
+                ], [])
+            );
+        }
+        else {
+
+            updateDirections(
+                directions.reduce<Direction[]>((acc, cur, index) => [
+                    ...acc,
+                    parentIndex === index
+                        ? {
+                            ...cur,
+                            steps: [
+                                ...cur.steps,
+                                { type: type, label: type },
+                            ]
+                        }
+                        : cur
+                ], [])
+            );
+        }
+
+    }
+
+    private handleSubDirectionTypeSelect(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => {
+
+                    if (index === parentIndex) {
+
+                        return {
+                            ...direction,
+                            newStep: event.target.value,
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
 
     // NOTE: Component parts
 
-    private getSubDirectionNoteLine(step: SubDirection, index: number, stepIndex: number): JSX.Element {
+    private getSubDirectionNoteLine(step: SubDirection, directionIndex: number, stepIndex: number): JSX.Element {
 
         const { isReadOnly } = this.props;
 
         const removeButton = (
             <div
                 className={styles.subDirectionLineButton}
-                onClick={() => this.removeSubDirection(index, stepIndex)}
+                onClick={() => this.removeSubDirection(directionIndex, stepIndex)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
                     <RemoveIcon />
@@ -187,7 +272,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         return (
 
-            <div key={`subDirectionNoteLine_${index}`} className={styles.subDirectionLine}>
+            <div key={`subDirectionNoteLine_${stepIndex}`} className={styles.subDirectionLine}>
 
                 {( isReadOnly ? null : removeButton )}
 
@@ -274,7 +359,8 @@ export default class DirectionsBlock extends Component<Props> {
                         
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}
-                            options={Object.keys(UnitWeight)}
+                            options={Object.keys(Units)}
+                            value={step.unit}
                             onChange={this.handleSubDirectionIngredientUnitEdit(index, step.id).bind(this)}
                         />
                     </div>
@@ -283,7 +369,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getNewSubDirectionLine(ingredients: IngredientDefault[]): JSX.Element {
+    private getNewSubDirectionLine(directionIndex: number, direction: Direction, ingredients: IngredientDefault[]): JSX.Element {
 
         return (
 
@@ -291,7 +377,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                 <div
                     className={styles.subDirectionLineButton}
-                    onClick={console.log}
+                    onClick={() => this.addSubDirection(directionIndex, direction.newStep)}
                 >
                     <IconWrapper
                         isFullWidth={true}
@@ -307,16 +393,17 @@ export default class DirectionsBlock extends Component<Props> {
                     <SelectInput
                         type={SelectInputType.SubDirectionType}
                         options={[
-                            "Tip",
-                            "Note",
-                            "Warning",
+                            SubDirectionType.Tip,
+                            SubDirectionType.Note,
+                            SubDirectionType.Warning,
                             "----",
                             ...ingredients.map((ingredient) => ({
                                 label: ingredient.item.name.toUpperCase(),
-                                value: ingredient.item.id,
+                                value: `${SubDirectionType.Ingredient}_${ingredient.item.id}`,
                             })),
                         ]}
-                        onChange={console.log}
+                        value={direction.newStep}
+                        onChange={this.handleSubDirectionTypeSelect(directionIndex).bind(this)}
                     />
 
                 </div>
@@ -489,7 +576,7 @@ export default class DirectionsBlock extends Component<Props> {
                         ))
                     )}
 
-                    {( isReadOnly ? null : this.getNewSubDirectionLine(ingredients) )}
+                    {( isReadOnly ? null : this.getNewSubDirectionLine(index, direction, ingredients) )}
 
                 </div>
             </div>

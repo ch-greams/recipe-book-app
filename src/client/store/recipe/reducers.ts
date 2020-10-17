@@ -194,6 +194,7 @@ const initialState: RecipePageStore = {
             timeInput: "",
             temperatureInput: "180",
 
+            newStep: SubDirectionType.Note,
             steps: [],
         },
         {
@@ -210,9 +211,10 @@ const initialState: RecipePageStore = {
             timeInput: "20",
             temperatureInput: "",
 
+            newStep: SubDirectionType.Note,
             steps: [
                 {
-                    type: SubDirectionType.Default,
+                    type: SubDirectionType.Note,
                     label: "Mix quickly and lightly with a fork until moistened, but do not beat.",
                 },
                 {
@@ -262,9 +264,10 @@ const initialState: RecipePageStore = {
             timeInput: "15",
             temperatureInput: "180",
 
+            newStep: SubDirectionType.Note,
             steps: [
                 {
-                    type: SubDirectionType.Default,
+                    type: SubDirectionType.Note,
                     label: "If you don't burn your house down, then everything will be ok.",
                 },
             ],

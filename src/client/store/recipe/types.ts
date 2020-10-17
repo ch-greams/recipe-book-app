@@ -39,8 +39,10 @@ interface Temperature {
 }
 
 export enum SubDirectionType {
-    Default,
-    Ingredient,
+    Tip = "Tip",
+    Note = "Note",
+    Warning = "Warning",
+    Ingredient = "Ingredient",
 }
 
 export interface SubDirection {
@@ -67,6 +69,7 @@ export interface Direction {
     temperature?: Temperature;
     temperatureInput: string;
 
+    newStep: string;
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 
