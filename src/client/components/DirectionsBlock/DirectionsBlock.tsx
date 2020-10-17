@@ -157,6 +157,22 @@ export default class DirectionsBlock extends Component<Props> {
             </div>
         );
 
+        const ingredientAmountText = (
+            <div className={styles.directionInfoLineAmount}>
+                {step.amount}
+            </div>
+        );
+
+        const ingredientAmountInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                value={step.amount}
+                onChange={console.log}
+            />
+        );
+
         return (
 
             <div key={`subDirectionLine_${stepIndex}`} className={styles.subDirectionLine}>
@@ -178,9 +194,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                     <div className={styles.directionInfoLineMeasure}>
 
-                        <div className={styles.directionInfoLineAmount}>
-                            {step.amount}
-                        </div>
+                        {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
                         
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}

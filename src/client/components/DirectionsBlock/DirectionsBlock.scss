@@ -253,6 +253,29 @@
                             border-style: solid;
                             border-width: 1px;
                         }
+
+                        .directionInfoLineAmountInput {
+
+                            width: 80px;
+
+                            padding-right: 4px;
+
+                            font-family: $font-default;
+                            font-size: 16px;
+                            font-weight: 500;
+
+                            line-height: 18px;
+
+                            color: $color-white;
+
+                            text-align: right;
+
+                            background-color: $color-default-dark;
+
+                            border-color: $color-white;
+                            border-style: solid;
+                            border-width: 1px;
+                        }
                     }
                 }
 
