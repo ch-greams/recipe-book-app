@@ -4,7 +4,7 @@ import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
-import { Direction, DirectionStep } from "../../store/recipe/types";
+import { Direction, SubDirection, SubDirectionIngredient, SubDirectionType } from "../../store/recipe/types";
 import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import CheckmarkIcon from "../../icons/checkmark-sharp.svg";
@@ -42,16 +42,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         const { directions, updateDirections } = this.props;
 
-        delete directions[index].subSteps[stepIndex];
-
-        updateDirections(directions);
-    }
-
-    private removeSubDirectionNote(index: number, noteIndex: number): void {
-
-        const { directions, updateDirections } = this.props;
-
-        delete directions[index].notes[noteIndex];
+        delete directions[index].steps[stepIndex];
 
         updateDirections(directions);
     }
@@ -70,7 +61,11 @@ export default class DirectionsBlock extends Component<Props> {
         const { directions, updateDirections } = this.props;
 
         directions[index].isMarked = !directions[index].isMarked;
-        directions[index].subSteps.forEach((step) => step.isMarked = directions[index].isMarked);
+        directions[index].steps.forEach((step) => {
+            if (step.type === SubDirectionType.Ingredient) {
+                (step as SubDirectionIngredient).isMarked = directions[index].isMarked;
+            }
+        });
 
         if (directions[index].isMarked) {
             directions[index].isOpen = false;
@@ -83,22 +78,29 @@ export default class DirectionsBlock extends Component<Props> {
 
         const { directions, updateDirections } = this.props;
 
-        directions[index].subSteps[stepIndex].isMarked = !directions[index].subSteps[stepIndex].isMarked;
-        directions[index].isMarked = directions[index].subSteps.every((step) => step.isMarked);
+        if (directions[index].steps[stepIndex].type === SubDirectionType.Ingredient) {
+
+            const step = directions[index].steps[stepIndex] as SubDirectionIngredient;
+            (directions[index].steps[stepIndex] as SubDirectionIngredient).isMarked = !step.isMarked;
+        }
+
+        directions[index].isMarked = directions[index].steps.every((step) => (
+            (step.type !== SubDirectionType.Ingredient) || (step as SubDirectionIngredient).isMarked
+        ));
 
         updateDirections(directions);
     }
 
     // NOTE: Component parts
 
-    private getSubDirectionNoteLine(description: string, index: number, noteIndex: number): JSX.Element {
+    private getSubDirectionNoteLine(step: SubDirection, index: number, stepIndex: number): JSX.Element {
 
         const { isReadOnly } = this.props;
 
         const removeButton = (
             <div
                 className={styles.subDirectionLineButton}
-                onClick={() => this.removeSubDirectionNote(index, noteIndex)}
+                onClick={() => this.removeSubDirection(index, stepIndex)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
                     <RemoveIcon />
@@ -121,7 +123,7 @@ export default class DirectionsBlock extends Component<Props> {
                     <div className={styles.directionInfoLineTitle}>
 
                         <div className={styles.directionInfoLineDescription}>
-                            {description}
+                            {step.label}
                         </div>
 
                     </div>
@@ -130,7 +132,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getSubDirectionLine(step: DirectionStep, index: number, stepIndex: number): JSX.Element {
+    private getSubDirectionLine(step: SubDirectionIngredient, index: number, stepIndex: number): JSX.Element {
 
         const { isReadOnly } = this.props;
 
@@ -168,7 +170,7 @@ export default class DirectionsBlock extends Component<Props> {
                     >
 
                         <div className={styles.directionInfoLineName}>
-                            {step.foodId.toUpperCase()}
+                            {step.label.toUpperCase()}
                         </div>
 
                     </div>
@@ -348,12 +350,11 @@ export default class DirectionsBlock extends Component<Props> {
 
                     {(
                         ( direction.isOpen || !isReadOnly ) &&
-                        direction.notes.map((note, noteIndex) => this.getSubDirectionNoteLine(note, index, noteIndex))
-                    )}
-
-                    {(
-                        ( direction.isOpen || !isReadOnly ) &&
-                        direction.subSteps.map((subStep, stepIndex) => this.getSubDirectionLine(subStep, index, stepIndex))
+                        direction.steps.map((step, stepIndex) => (
+                            step.type === SubDirectionType.Ingredient
+                                ? this.getSubDirectionLine(step as SubDirectionIngredient, index, stepIndex)
+                                : this.getSubDirectionNoteLine(step, index, stepIndex)
+                        ))
                     )}
 
                 </div>

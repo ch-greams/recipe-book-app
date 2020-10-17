@@ -38,10 +38,20 @@ interface Temperature {
     unit: UnitTemperature;
 }
 
-export interface DirectionStep {
+export enum SubDirectionType {
+    Default,
+    Ingredient,
+}
+
+export interface SubDirection {
+    type: SubDirectionType;
+    label: string;
+}
+
+export interface SubDirectionIngredient extends SubDirection {
     isMarked: boolean;
-    foodId: string;
     amount: number;
+    unit: UnitWeight | UnitVolume;
 }
 
 export interface Direction {
@@ -55,8 +65,7 @@ export interface Direction {
     temperature?: Temperature;
     temperatureInput: string;
 
-    notes: string[];
-    subSteps: DirectionStep[];
+    steps: (SubDirection | SubDirectionIngredient)[];
 }
 
 

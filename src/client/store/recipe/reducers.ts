@@ -11,6 +11,7 @@ import {
     IngredientDefault,
     Direction,
     RECIPE_ITEM_UPDATE_DIRECTIONS,
+    SubDirectionType,
 } from "./types";
 
 
@@ -193,8 +194,7 @@ const initialState: RecipePageStore = {
             timeInput: "",
             temperatureInput: "180",
 
-            notes: [],
-            subSteps: [],
+            steps: [],
         },
         {
             isOpen: false,
@@ -210,23 +210,30 @@ const initialState: RecipePageStore = {
             timeInput: "20",
             temperatureInput: "",
 
-            notes: [
-                "Mix quickly and lightly with a fork until moistened, but do not beat.",
-            ],
-            subSteps: [
+            steps: [
                 {
+                    type: SubDirectionType.Default,
+                    label: "Mix quickly and lightly with a fork until moistened, but do not beat.",
+                },
+                {
+                    type: SubDirectionType.Ingredient,
+                    label: "Milk",
+
                     isMarked: false,
-                    foodId: "Milk",
                     amount: 100,
                 },
                 {
+                    type: SubDirectionType.Ingredient,
+                    label: "Flour",
+
                     isMarked: false,
-                    foodId: "Flour",
                     amount: 240,
                 },
                 {
+                    type: SubDirectionType.Ingredient,
+                    label: "Egg",
+
                     isMarked: false,
-                    foodId: "Egg",
                     amount: 120,
                 },            
             ]
@@ -249,10 +256,12 @@ const initialState: RecipePageStore = {
             timeInput: "15",
             temperatureInput: "180",
 
-            notes: [
-                "If you don't burn your house down, then everything will be ok.",
+            steps: [
+                {
+                    type: SubDirectionType.Default,
+                    label: "If you don't burn your house down, then everything will be ok.",
+                },
             ],
-            subSteps: [],
         },
     ],
 };
