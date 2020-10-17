@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
-import { UnitWeight, UnitTemperature, UnitTime } from "../../../common/units";
+import { UnitWeight, UnitTemperature, UnitTime, UnitVolume } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
 import {
@@ -97,6 +97,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         updateDirections(directions);
     }
+
     private handleSubDirectionIngredientAmountEdit(parentIndex: number, id: string): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
@@ -125,6 +126,37 @@ export default class DirectionsBlock extends Component<Props> {
                                     return step;
                                 }
                             }),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
+    private handleSubDirectionIngredientUnitEdit(parentIndex: number, id: string): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => {
+
+                    if (index === parentIndex) {
+
+                        return {
+                            ...direction,
+                            steps: direction.steps.map((step: SubDirectionIngredient) => (
+                                (step.id === id)
+                                    ? {
+                                        ...step,
+                                        unit: event.target.value as UnitWeight | UnitVolume,
+                                    }
+                                    : step
+                            )),
                         };
                     }
                     else {
@@ -243,7 +275,7 @@ export default class DirectionsBlock extends Component<Props> {
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}
                             options={Object.keys(UnitWeight)}
-                            onChange={console.log}
+                            onChange={this.handleSubDirectionIngredientUnitEdit(index, step.id).bind(this)}
                         />
                     </div>
                 </div>
