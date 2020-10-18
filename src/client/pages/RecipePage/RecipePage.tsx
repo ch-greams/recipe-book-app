@@ -6,7 +6,11 @@ import {
     updateIngredients, updateDirections, updateNewDirection, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
     updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
-    createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType, updateDirectionStepNumber,
+    createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType,
+    updateDirectionStepNumber, updateDirectionName, updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
+    updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -57,6 +61,17 @@ interface DispatchToProps {
     createSubDirection: typeof createSubDirection;
     updateNewSubDirectionType: typeof updateNewSubDirectionType;
     updateDirectionStepNumber: typeof updateDirectionStepNumber;
+    updateDirectionName: typeof updateDirectionName;
+    updateDirectionTemperatureCount: typeof updateDirectionTemperatureCount;
+    updateDirectionTemperatureUnit: typeof updateDirectionTemperatureUnit;
+    updateDirectionTimeCount: typeof updateDirectionTimeCount;
+    updateDirectionTimeUnit: typeof updateDirectionTimeUnit;
+    updateNewDirectionStepNumber: typeof updateNewDirectionStepNumber;
+    updateNewDirectionName: typeof updateNewDirectionName;
+    updateNewDirectionTemperatureCount: typeof updateNewDirectionTemperatureCount;
+    updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
+    updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
+    updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
 }
 
 interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
@@ -203,6 +218,17 @@ class RecipePage extends Component<RecipePageProps> {
             createSubDirection,
             updateNewSubDirectionType,
             updateDirectionStepNumber,
+            updateDirectionName,
+            updateDirectionTemperatureCount,
+            updateDirectionTemperatureUnit,
+            updateDirectionTimeCount,
+            updateDirectionTimeUnit,
+            updateNewDirectionStepNumber,
+            updateNewDirectionName,
+            updateNewDirectionTemperatureCount,
+            updateNewDirectionTemperatureUnit,
+            updateNewDirectionTimeCount,
+            updateNewDirectionTimeUnit,
         } = this.props;
 
         return (
@@ -259,6 +285,17 @@ class RecipePage extends Component<RecipePageProps> {
                         createSubDirection={createSubDirection}
                         updateNewSubDirectionType={updateNewSubDirectionType}
                         updateDirectionStepNumber={updateDirectionStepNumber}
+                        updateDirectionName={updateDirectionName}
+                        updateDirectionTemperatureCount={updateDirectionTemperatureCount}
+                        updateDirectionTemperatureUnit={updateDirectionTemperatureUnit}
+                        updateDirectionTimeCount={updateDirectionTimeCount}
+                        updateDirectionTimeUnit={updateDirectionTimeUnit}
+                        updateNewDirectionStepNumber={updateNewDirectionStepNumber}
+                        updateNewDirectionName={updateNewDirectionName}
+                        updateNewDirectionTemperatureCount={updateNewDirectionTemperatureCount}
+                        updateNewDirectionTemperatureUnit={updateNewDirectionTemperatureUnit}
+                        updateNewDirectionTimeCount={updateNewDirectionTimeCount}
+                        updateNewDirectionTimeUnit={updateNewDirectionTimeUnit}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -306,6 +343,17 @@ const mapDispatchToProps: DispatchToProps = {
     createSubDirection,
     updateNewSubDirectionType,
     updateDirectionStepNumber,
+    updateDirectionName,
+    updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit,
+    updateDirectionTimeCount,
+    updateDirectionTimeUnit,
+    updateNewDirectionStepNumber,
+    updateNewDirectionName,
+    updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit,
+    updateNewDirectionTimeCount,
+    updateNewDirectionTimeUnit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

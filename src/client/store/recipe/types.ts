@@ -121,6 +121,18 @@ export const RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT = "RECIPE_ITEM_CREATE_SU
 export const RECIPE_ITEM_CREATE_SUBDIRECTION = "RECIPE_ITEM_CREATE_SUBDIRECTION";
 export const RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE = "RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE";
 export const RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER";
+export const RECIPE_ITEM_UPDATE_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_DIRECTION_NAME";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT";
+
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT";
 
 
 export interface UpdateNameAction {
@@ -217,6 +229,60 @@ export interface UpdateDirectionStepNumberAction {
     payload: { directionIndex: number, stepNumber: number };
 }
 
+export interface UpdateDirectionNameAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_NAME;
+    payload: { directionIndex: number, name: string };
+}
+
+export interface UpdateDirectionTemperatureCountAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT;
+    payload: { directionIndex: number, inputValue: string };
+}
+
+export interface UpdateDirectionTemperatureUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT;
+    payload: { directionIndex: number, unit: UnitTemperature };
+}
+
+export interface UpdateDirectionTimeCountAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT;
+    payload: { directionIndex: number, inputValue: string };
+}
+
+export interface UpdateDirectionTimeUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT;
+    payload: { directionIndex: number, unit: UnitTime };
+}
+
+export interface UpdateNewDirectionStepNumberAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER;
+    payload: number;
+}
+
+export interface UpdateNewDirectionNameAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME;
+    payload: string;
+}
+
+export interface UpdateNewDirectionTemperatureCountAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT;
+    payload: string;
+}
+
+export interface UpdateNewDirectionTemperatureUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT;
+    payload: UnitTemperature;
+}
+
+export interface UpdateNewDirectionTimeCountAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT;
+    payload: string;
+}
+
+export interface UpdateNewDirectionTimeUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT;
+    payload: UnitTime;
+}
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
@@ -227,5 +293,10 @@ export type RecipeItemActionTypes = (
     
     UpdateSubDirectionIngredientAmountAction | UpdateSubDirectionIngredientUnitAction |
     CreateSubDirectionIngredientAction | CreateSubDirectionAction | UpdateNewSubDirectionTypeAction |
-    UpdateDirectionStepNumberAction
+    UpdateDirectionStepNumberAction | UpdateDirectionNameAction |
+    UpdateDirectionTemperatureCountAction | UpdateDirectionTemperatureUnitAction |
+    UpdateDirectionTimeCountAction | UpdateDirectionTimeUnitAction |
+
+    UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
+    UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction
 );

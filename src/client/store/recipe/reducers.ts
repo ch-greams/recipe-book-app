@@ -27,6 +27,18 @@ import {
     RECIPE_ITEM_CREATE_SUBDIRECTION,
     RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
     RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
+    RECIPE_ITEM_UPDATE_DIRECTION_NAME,
+    RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT,
+    RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT,
+    RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT,
+    RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
+
 } from "./types";
 
 
@@ -615,6 +627,203 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 )),  
             };
         }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_NAME: {
+
+            const { directionIndex, name } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? { ...direction, name: name }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT: {
+
+            const { directionIndex, inputValue } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => {
+
+                    const count = Utils.decimalNormalizer(inputValue, direction.temperatureInput);
+
+                    return (
+                        (directionIndex === iDirection)
+                            ? {
+                                ...direction,
+                                temperature: {
+                                    ...direction.temperature,
+                                    count: Number(count),
+                                },
+                                temperatureInput: count,
+                            }
+                            : direction
+                    );
+                }),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT: {
+
+            const { directionIndex, unit } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            temperature: {
+                                ...direction.temperature,
+                                unit: unit,
+                            },
+                        }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT: {
+
+            const { directionIndex, inputValue } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => {
+
+                    const count = Utils.decimalNormalizer(inputValue, direction.timeInput);
+
+                    return (
+                        (directionIndex === iDirection)
+                            ? {
+                                ...direction,
+                                time: {
+                                    ...direction.time,
+                                    count: Number(count),
+                                },
+                                timeInput: count,
+                            }
+                            : direction
+                    );
+                }),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT: {
+
+            const { directionIndex, unit } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            time: {
+                                ...direction.time,
+                                unit: unit,
+                            },
+                        }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER: {
+
+            const stepNumber = action.payload;
+
+            return {
+                ...state,
+                newDirection: { ...state.newDirection, stepNumber: stepNumber },  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME: {
+
+            const name = action.payload;
+
+            return {
+                ...state,
+                newDirection: { ...state.newDirection, name: name },  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT: {
+
+            const inputValue = action.payload;
+
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureInput);
+
+            return {
+                ...state,
+                newDirection: {
+                    ...state.newDirection,
+                    temperature: {
+                        ...state.newDirection.temperature,
+                        count: Number(count),
+                    },
+                    temperatureInput: count,
+                },
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT: {
+
+            const unit = action.payload;
+
+            return {
+                ...state,
+                newDirection: {
+                    ...state.newDirection,
+                    temperature: {
+                        ...state.newDirection.temperature,
+                        unit: unit,
+                    },
+                },  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT: {
+
+            const inputValue = action.payload;
+
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.timeInput);
+
+            return {
+                ...state,
+                newDirection: {
+                    ...state.newDirection,
+                    time: {
+                        ...state.newDirection.time,
+                        count: Number(count),
+                    },
+                    timeInput: count,
+                },  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT: {
+
+            const unit = action.payload;
+
+            return {
+                ...state,
+                newDirection: {
+                    ...state.newDirection,
+                    time: {
+                        ...state.newDirection.time,
+                        unit: unit,
+                    },
+                },  
+            };
+        }
+
 
         default:
             return state;
