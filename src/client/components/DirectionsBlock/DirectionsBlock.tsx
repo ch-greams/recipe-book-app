@@ -9,12 +9,20 @@ import {
     IngredientDefault,
     SubDirection,
     SubDirectionIngredient,
-    SubDirectionType
+    SubDirectionType,
 } from "../../store/recipe/types";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import Utils from "../../../common/utils";
 import { InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
-import { removeDirection, removeSubDirection, toggleDirectionOpen, updateDirections, updateNewDirection } from "../../store/recipe/actions";
+import {
+    removeDirection,
+    removeSubDirection,
+    toggleDirectionMark,
+    toggleDirectionOpen,
+    toggleSubDirectionMark,
+    updateDirections,
+    updateNewDirection,
+} from "../../store/recipe/actions";
 
 
 
@@ -29,6 +37,8 @@ interface Props {
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
+    toggleDirectionMark: typeof toggleDirectionMark;
+    toggleSubDirectionMark: typeof toggleSubDirectionMark;
 }
 
 
@@ -40,16 +50,11 @@ export default class DirectionsBlock extends Component<Props> {
         directions: [],
     };
 
-    // NOTE: Handlers
+    // NOTE: Handlers - Directions
 
     private removeDirection(directionIndex: number): void {
 
         this.props.removeDirection(directionIndex);
-    }
-
-    private removeSubDirection(directionIndex: number, subDirectionIndex: number): void {
-
-        this.props.removeSubDirection(directionIndex, subDirectionIndex);
     }
 
     private toggleDirectionOpen(directionIndex: number): void {
@@ -57,56 +62,40 @@ export default class DirectionsBlock extends Component<Props> {
         this.props.toggleDirectionOpen(directionIndex);
     }
 
-    private markDirection(index: number): void {
+    private toggleDirectionMark(directionIndex: number): void {
 
-        const { directions, updateDirections } = this.props;
-
-        directions[index].isMarked = !directions[index].isMarked;
-        directions[index].steps.forEach((step) => {
-            if (step.type === SubDirectionType.Ingredient) {
-                (step as SubDirectionIngredient).isMarked = directions[index].isMarked;
-            }
-        });
-
-        if (directions[index].isMarked) {
-            directions[index].isOpen = false;
-        }
-
-        updateDirections(directions);
+        this.props.toggleDirectionMark(directionIndex);
     }
 
-    private markDirectionStep(index: number, stepIndex: number): void {
+    // NOTE: Handlers - SubDirections
 
-        const { directions, updateDirections } = this.props;
+    private removeSubDirection(directionIndex: number, subDirectionIndex: number): void {
 
-        if (directions[index].steps[stepIndex].type === SubDirectionType.Ingredient) {
-
-            const step = directions[index].steps[stepIndex] as SubDirectionIngredient;
-            (directions[index].steps[stepIndex] as SubDirectionIngredient).isMarked = !step.isMarked;
-        }
-
-        directions[index].isMarked = directions[index].steps.every((step) => (
-            (step.type !== SubDirectionType.Ingredient) || (step as SubDirectionIngredient).isMarked
-        ));
-
-        updateDirections(directions);
+        this.props.removeSubDirection(directionIndex, subDirectionIndex);
     }
 
-    private handleSubDirectionNoteEdit(parentIndex: number, index: number): InputChangeCallback {
+    private toggleSubDirectionMark(directionIndex: number, subDirectionIndex: number): void {
+
+        this.props.toggleSubDirectionMark(directionIndex, subDirectionIndex);
+    }
+
+    // NOTE: Handlers - Other
+
+    private handleSubDirectionNoteEdit(directionIndex: number, subDirectionIndex: number): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
         return (event) => {
 
             updateDirections(
-                directions.map((direction, directionIndex) => {
+                directions.map((direction, iDirection) => {
 
-                    if (directionIndex === parentIndex) {
+                    if (directionIndex === iDirection) {
 
                         return {
                             ...direction,
-                            steps: direction.steps.map((step: SubDirectionIngredient, stepIndex) => (
-                                (stepIndex === index)
+                            steps: direction.steps.map((step: SubDirectionIngredient, iSubDirection) => (
+                                (subDirectionIndex === iSubDirection)
                                     ? {
                                         ...step,
                                         label: event.target.value
@@ -123,7 +112,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleSubDirectionIngredientAmountEdit(parentIndex: number, id: string): InputChangeCallback {
+    private handleSubDirectionIngredientAmountEdit(directionIndex: number, id: string): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -132,7 +121,7 @@ export default class DirectionsBlock extends Component<Props> {
             updateDirections(
                 directions.map((direction, index) => {
 
-                    if (index === parentIndex) {
+                    if (index === directionIndex) {
 
                         return {
                             ...direction,
@@ -161,7 +150,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleSubDirectionIngredientUnitEdit(parentIndex: number, id: string): SelectChangeCallback {
+    private handleSubDirectionIngredientUnitEdit(directionIndex: number, id: string): SelectChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -170,7 +159,7 @@ export default class DirectionsBlock extends Component<Props> {
             updateDirections(
                 directions.map((direction, index) => {
 
-                    if (index === parentIndex) {
+                    if (index === directionIndex) {
 
                         return {
                             ...direction,
@@ -192,7 +181,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private addSubDirection(parentIndex: number, value: string): void {
+    private addSubDirection(directionIndex: number, value: string): void {
 
         const type = (
             Object.keys(SubDirectionType).includes(value)
@@ -212,7 +201,7 @@ export default class DirectionsBlock extends Component<Props> {
             updateDirections(
                 directions.reduce<Direction[]>((acc, cur, index) => [
                     ...acc,
-                    parentIndex === index
+                    directionIndex === index
                         ? {
                             ...cur,
                             steps: [
@@ -238,7 +227,7 @@ export default class DirectionsBlock extends Component<Props> {
             updateDirections(
                 directions.reduce<Direction[]>((acc, cur, index) => [
                     ...acc,
-                    parentIndex === index
+                    directionIndex === index
                         ? {
                             ...cur,
                             steps: [
@@ -577,23 +566,27 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getSubDirectionLine(step: SubDirectionIngredient, index: number, stepIndex: number): JSX.Element {
+    private getSubDirectionLine(
+        subDirection: SubDirectionIngredient,
+        directionIndex: number,
+        subDirectionIndex: number,
+    ): JSX.Element {
 
         const { isReadOnly } = this.props;
 
         const checkbox = (
             <div
                 className={styles.lineCheckbox}
-                onClick={() => this.markDirectionStep(index, stepIndex)}
+                onClick={() => this.toggleSubDirectionMark(directionIndex, subDirectionIndex)}
             >
-                {( step.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
+                {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
             </div>
         );
 
         const removeButton = (
             <div
                 className={styles.subDirectionLineButton}
-                onClick={() => this.removeSubDirection(index, stepIndex)}
+                onClick={() => this.removeSubDirection(directionIndex, subDirectionIndex)}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
                     <RemoveIcon />
@@ -603,7 +596,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         const ingredientAmountText = (
             <div className={styles.directionInfoLineAmount}>
-                {step.amount}
+                {subDirection.amount}
             </div>
         );
 
@@ -612,14 +605,14 @@ export default class DirectionsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                value={step.amountInput}
-                onChange={this.handleSubDirectionIngredientAmountEdit(index, step.id).bind(this)}
+                value={subDirection.amountInput}
+                onChange={this.handleSubDirectionIngredientAmountEdit(directionIndex, subDirection.id).bind(this)}
             />
         );
 
         return (
 
-            <div key={`subDirectionLine_${stepIndex}`} className={styles.subDirectionLine}>
+            <div key={`subDirectionLine_${subDirectionIndex}`} className={styles.subDirectionLine}>
 
                 {( isReadOnly ? checkbox : removeButton )}
 
@@ -627,11 +620,11 @@ export default class DirectionsBlock extends Component<Props> {
 
                     <div
                         className={styles.directionInfoLineTitle}
-                        style={( step.isMarked ? { opacity: 0.25 } : null )}
+                        style={( subDirection.isMarked ? { opacity: 0.25 } : null )}
                     >
 
                         <div className={styles.directionInfoLineName}>
-                            {step.label.toUpperCase()}
+                            {subDirection.label.toUpperCase()}
                         </div>
 
                     </div>
@@ -643,8 +636,8 @@ export default class DirectionsBlock extends Component<Props> {
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}
                             options={Object.keys(Units)}
-                            value={step.unit}
-                            onChange={this.handleSubDirectionIngredientUnitEdit(index, step.id).bind(this)}
+                            value={subDirection.unit}
+                            onChange={this.handleSubDirectionIngredientUnitEdit(directionIndex, subDirection.id).bind(this)}
                         />
                     </div>
                 </div>
@@ -821,7 +814,7 @@ export default class DirectionsBlock extends Component<Props> {
         const checkbox = (
             <div
                 className={styles.lineCheckbox}
-                onClick={() => this.markDirection(index)}
+                onClick={() => this.toggleDirectionMark(index)}
             >
                 {( direction.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
             </div>

@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
 import {
     updateName, updateBrand, updateSubtitle, updateDescription,
-    updateIngredients, updateDirections, updateNewDirection, removeDirection, removeSubDirection, toggleDirectionOpen,
+    updateIngredients, updateDirections, updateNewDirection, removeDirection,
+    removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -45,6 +46,8 @@ interface DispatchToProps {
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
+    toggleDirectionMark: typeof toggleDirectionMark;
+    toggleSubDirectionMark: typeof toggleSubDirectionMark;
 }
 
 interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
@@ -182,6 +185,8 @@ class RecipePage extends Component<RecipePageProps> {
             removeDirection,
             removeSubDirection,
             toggleDirectionOpen,
+            toggleDirectionMark,
+            toggleSubDirectionMark,
         } = this.props;
 
         return (
@@ -229,6 +234,8 @@ class RecipePage extends Component<RecipePageProps> {
                         removeDirection={removeDirection}
                         removeSubDirection={removeSubDirection}
                         toggleDirectionOpen={toggleDirectionOpen}
+                        toggleDirectionMark={toggleDirectionMark}
+                        toggleSubDirectionMark={toggleSubDirectionMark}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -267,6 +274,8 @@ const mapDispatchToProps: DispatchToProps = {
     removeDirection,
     removeSubDirection,
     toggleDirectionOpen,
+    toggleDirectionMark,
+    toggleSubDirectionMark,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

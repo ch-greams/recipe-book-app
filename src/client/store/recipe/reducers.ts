@@ -16,6 +16,9 @@ import {
     RECIPE_ITEM_REMOVE_DIRECTION,
     RECIPE_ITEM_REMOVE_SUBDIRECTION,
     RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
+    RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
+    RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
+    SubDirectionIngredient,
 } from "./types";
 
 
@@ -392,6 +395,63 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         ? { ...direction, isOpen: !direction.isOpen }
                         : direction
                 ),
+            };
+        }
+
+        case RECIPE_ITEM_TOGGLE_DIRECTION_MARK: {
+            const directionIndex = action.payload;
+            return {
+                ...state,
+                directions: state.directions.map((direction, index) =>
+                    (index === directionIndex)
+                        ? {
+                            ...direction,
+                            isMarked: !direction.isMarked,
+                            isOpen: ( direction.isMarked ? direction.isOpen : false ),
+                            steps: (
+                                direction.isMarked
+                                    ? direction.steps
+                                    : direction.steps.map((subDirection) => (
+                                        (subDirection.type === SubDirectionType.Ingredient)
+                                            ? { ...subDirection, isMarked: true }
+                                            : subDirection
+                                    ))
+                            )
+                        }
+                        : direction
+                ),
+            };
+        }
+
+        case RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK: {
+            const { directionIndex, subDirectionIndex } = action.payload;
+            return {
+                ...state,
+                directions: state.directions.map((direction, index) => {
+
+                    if (index === directionIndex) {
+
+                        const steps = direction.steps.map((sd: SubDirectionIngredient, index) =>
+                            (sd.type === SubDirectionType.Ingredient) && (subDirectionIndex === index)
+                                ? { ...sd, isMarked: !sd.isMarked }
+                                : sd
+                        );
+
+                        const areAllStepsMarked = steps.every((step) => (
+                            (step.type !== SubDirectionType.Ingredient) || step.isMarked
+                        ));
+
+                        return {
+                            ...direction,
+                            steps: steps,
+                            isMarked: areAllStepsMarked,
+                            isOpen: ( areAllStepsMarked ? false : direction.isOpen ),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                }),
             };
         }
 

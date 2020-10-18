@@ -3,7 +3,9 @@ import {
     IngredientDefault,
     RECIPE_ITEM_REMOVE_DIRECTION,
     RECIPE_ITEM_REMOVE_SUBDIRECTION,
+    RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
     RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
+    RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_DESCRIPTION,
     RECIPE_ITEM_UPDATE_DIRECTIONS,
@@ -13,7 +15,9 @@ import {
     RECIPE_ITEM_UPDATE_SUBTITLE,
     RemoveDirectionAction,
     RemoveSubDirectionAction,
+    ToggleDirectionMarkAction,
     ToggleDirectionOpenAction,
+    ToggleSubDirectionMarkAction,
     UpdateBrandAction,
     UpdateDescriptionAction,
     UpdateDirectionsAction,
@@ -89,9 +93,23 @@ export function toggleDirectionOpen(directionIndex: number): ToggleDirectionOpen
     };
 }
 
+export function toggleDirectionMark(directionIndex: number): ToggleDirectionMarkAction {
+    return {
+        type: RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
+        payload: directionIndex,
+    };
+}
+
 export function removeSubDirection(directionIndex: number, subDirectionIndex: number): RemoveSubDirectionAction {
     return {
         type: RECIPE_ITEM_REMOVE_SUBDIRECTION,
+        payload: { directionIndex, subDirectionIndex },
+    };
+}
+
+export function toggleSubDirectionMark(directionIndex: number, subDirectionIndex: number): ToggleSubDirectionMarkAction {
+    return {
+        type: RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
         payload: { directionIndex, subDirectionIndex },
     };
 }
