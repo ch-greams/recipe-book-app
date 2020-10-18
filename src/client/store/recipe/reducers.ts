@@ -184,6 +184,7 @@ const initialState: RecipePageStore = {
         isOpen: false,
         isMarked: false,
 
+        stepNumber: 4,
         name: "",
 
         time: {
@@ -206,6 +207,7 @@ const initialState: RecipePageStore = {
             isOpen: false,
             isMarked: false,
 
+            stepNumber: 1,
             name: "Preheat Oven",
 
             temperature: {
@@ -223,6 +225,7 @@ const initialState: RecipePageStore = {
             isOpen: false,
             isMarked: false,
 
+            stepNumber: 2,
             name: "Stir",
 
             time: {
@@ -272,6 +275,7 @@ const initialState: RecipePageStore = {
             isOpen: false,
             isMarked: false,
 
+            stepNumber: 3,
             name: "Bake",
 
             time: {

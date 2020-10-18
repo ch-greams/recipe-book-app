@@ -285,6 +285,26 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
+    private handleDirectionStepNumberEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.reduce<Direction[]>((acc, cur, index) => [
+                    ...acc,
+                    (parentIndex === index)
+                        ? {
+                            ...cur,
+                            stepNumber: Number(event.target.value),
+                        }
+                        : cur
+                ], [])
+            );
+        };
+    }
+
     private handleDirectionNameEdit(parentIndex: number): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
@@ -492,6 +512,43 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
+    private handleNewDirectionStepNumberEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            updateNewDirection({
+                ...newDirection,
+                stepNumber: Number(event.target.value),
+            });
+        };
+    }
+
+    private addNewDirection(direction: Direction): void {
+
+        const { directions, updateDirections } = this.props;
+
+        updateDirections([
+            ...directions,
+            {
+                isOpen: false,
+                isMarked: false,
+        
+                stepNumber: direction.stepNumber,
+                name: direction.name,
+        
+                time: ( !direction.timeInput ? null : direction.time  ),
+                temperature: ( !direction.temperatureInput ? null : direction.temperature ),
+        
+                timeInput: direction.timeInput,
+                temperatureInput: direction.temperatureInput,
+        
+                newStep: SubDirectionType.Note,
+                steps: [],
+            },
+        ]);
+    }
 
 
     // NOTE: Component parts
@@ -667,9 +724,6 @@ export default class DirectionsBlock extends Component<Props> {
 
         const { isReadOnly } = this.props;
 
-        const FIRST_STEP_NUMBER = 1;
-        const step = index + FIRST_STEP_NUMBER;
-
         const tempAmountText = (
             <div className={styles.directionInfoLineAmount}>
                 {direction.temperature?.count}
@@ -722,7 +776,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         const indexText = (
             <div className={styles.directionInfoLineIndex}>
-                {`${step}.`}
+                {`${direction.stepNumber}.`}
             </div>
         );
 
@@ -730,10 +784,10 @@ export default class DirectionsBlock extends Component<Props> {
             <input
                 type={"text"}
                 className={styles.directionInfoLineIndexInput}
-                value={step}
+                value={direction.stepNumber}
                 placeholder={"#"}
                 maxLength={2}
-                onChange={console.log}
+                onChange={this.handleDirectionStepNumberEdit(index).bind(this)}
             />
         );
 
@@ -755,7 +809,7 @@ export default class DirectionsBlock extends Component<Props> {
 
         return (
             <div
-                key={`directionInfo_${step}`}
+                key={`directionInfo_${index}`}
                 className={styles.directionInfoLine}
                 style={( isReadOnly ? null : { paddingLeft: "12px" } )}
             >
@@ -896,7 +950,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                 <div
                     className={styles.directionLineButton}
-                    onClick={console.log}
+                    onClick={() => this.addNewDirection(direction)}
                 >
                     <IconWrapper
                         isFullWidth={true}
@@ -918,10 +972,10 @@ export default class DirectionsBlock extends Component<Props> {
                             <input
                                 type={"text"}
                                 className={styles.directionInfoLineIndexInput}
-                                // value={"9"}
+                                value={direction.stepNumber}
                                 placeholder={"#"}
                                 maxLength={2}
-                                onChange={console.log}
+                                onChange={this.handleNewDirectionStepNumberEdit().bind(this)}
                             />
 
                             <input

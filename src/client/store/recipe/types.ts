@@ -61,6 +61,7 @@ export interface SubDirectionIngredient extends SubDirection {
 export interface Direction {
     isOpen: boolean;
     isMarked: boolean;
+    stepNumber: number;
     name: string;
 
     time?: Time;
