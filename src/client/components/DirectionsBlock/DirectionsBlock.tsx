@@ -100,6 +100,37 @@ export default class DirectionsBlock extends Component<Props> {
         updateDirections(directions);
     }
 
+    private handleSubDirectionNoteEdit(parentIndex: number, index: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, directionIndex) => {
+
+                    if (directionIndex === parentIndex) {
+
+                        return {
+                            ...direction,
+                            steps: direction.steps.map((step: SubDirectionIngredient, stepIndex) => (
+                                (stepIndex === index)
+                                    ? {
+                                        ...step,
+                                        label: event.target.value
+                                    }
+                                    : step
+                            )),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
     private handleSubDirectionIngredientAmountEdit(parentIndex: number, id: string): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
@@ -480,6 +511,22 @@ export default class DirectionsBlock extends Component<Props> {
             </div>
         );
 
+        const noteText = (
+            <div className={styles.directionInfoLineDescription}>
+                {step.label}
+            </div>
+        );
+
+        const noteInput = (
+            <input
+                type={"text"}
+                className={styles.directionInfoLineDescriptionInput}
+                placeholder={step.type.toUpperCase()}
+                value={step.label}
+                onChange={this.handleSubDirectionNoteEdit(directionIndex, stepIndex).bind(this)}
+            />
+        );
+
         return (
 
             <div key={`subDirectionNoteLine_${stepIndex}`} className={styles.subDirectionLine}>
@@ -492,13 +539,8 @@ export default class DirectionsBlock extends Component<Props> {
                         <InfoBlockIcon />
                     </IconWrapper>
 
-                    <div className={styles.directionInfoLineTitle}>
+                    {( isReadOnly ? noteText : noteInput )}
 
-                        <div className={styles.directionInfoLineDescription}>
-                            {step.label}
-                        </div>
-
-                    </div>
                 </div>
             </div>
         );
