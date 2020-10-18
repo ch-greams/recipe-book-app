@@ -20,9 +20,11 @@ import { InputChangeCallback } from "../../../common/typings";
 
 interface Props {
     isReadOnly: boolean;
+    newDirection: Direction;
     directions: Direction[];
     ingredients: IngredientDefault[];
     updateDirections: (value: Direction[]) => AnyAction;
+    updateNewDirection: (value: Direction) => AnyAction;
 }
 
 
@@ -252,6 +254,26 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
+    private handleDirectionNameEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.reduce<Direction[]>((acc, cur, index) => [
+                    ...acc,
+                    (parentIndex === index)
+                        ? {
+                            ...cur,
+                            name: event.target.value,
+                        }
+                        : cur
+                ], [])
+            );
+        };
+    }
+
     private handleDirectionTemperatureCountEdit(parentIndex: number): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
@@ -355,6 +377,90 @@ export default class DirectionsBlock extends Component<Props> {
             );
         };
     }
+
+    private handleNewDirectionTemperatureCountEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            const amount = Utils.decimalNormalizer(event.target.value, newDirection.temperatureInput);
+
+            updateNewDirection({
+                ...newDirection,
+                temperatureInput: amount,
+                temperature: {
+                    unit: newDirection.temperature?.unit,
+                    count: Number(amount),
+                },
+            });
+        };
+    }
+
+    private handleNewDirectionTemperatureUnitEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            updateNewDirection({
+                ...newDirection,
+                temperature: {
+                    count: newDirection.temperature?.count,
+                    unit: event.target.value as UnitTemperature,
+                },
+            });
+        };
+    }
+
+    private handleNewDirectionTimeCountEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            const amount = Utils.decimalNormalizer(event.target.value, newDirection.timeInput);
+
+            updateNewDirection({
+                ...newDirection,
+                timeInput: amount,
+                time: {
+                    unit: newDirection.time?.unit,
+                    count: Number(amount),
+                },
+            });
+        };
+    }
+
+    private handleNewDirectionTimeUnitEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            updateNewDirection({
+                ...newDirection,
+                time: {
+                    count: newDirection.time?.count,
+                    unit: event.target.value as UnitTime,
+                },
+            });
+        };
+    }
+
+    private handleNewDirectionNameEdit(): InputChangeCallback {
+
+        const { newDirection, updateNewDirection } = this.props;
+
+        return (event) => {
+
+            updateNewDirection({
+                ...newDirection,
+                name: event.target.value,
+            });
+        };
+    }
+
 
 
     // NOTE: Component parts
@@ -601,13 +707,13 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionInfoLineNameInput}
                 value={direction.name.toUpperCase()}
                 placeholder={"TITLE"}
-                onChange={console.log}
+                onChange={this.handleDirectionNameEdit(index).bind(this)}
             />
         );
 
         return (
             <div
-                key={`${step}_${direction.name}`}
+                key={`directionInfo_${step}`}
                 className={styles.directionInfoLine}
                 style={( isReadOnly ? null : { paddingLeft: "12px" } )}
             >
@@ -663,7 +769,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
 
         return (
-            <div key={`${index}_${direction.name}`} className={styles.directionLine}>
+            <div key={`direction_${index}`} className={styles.directionLine}>
 
                 {( isReadOnly ? checkbox : removeButton )}
 
@@ -687,7 +793,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getNewDirectionLine(): JSX.Element {
+    private getNewDirectionLine(direction: Direction): JSX.Element {
 
         const amountText = (
             <div className={styles.directionInfoLineAmount}>
@@ -700,8 +806,8 @@ export default class DirectionsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                // value={(ingredient.amountInput || "")}
-                // onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
+                value={direction.temperatureInput}
+                onChange={this.handleNewDirectionTemperatureCountEdit().bind(this)}
             />
         );
 
@@ -713,8 +819,8 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(UnitTemperature)}
-                    // value={direction.temperature.unit}
-                    onChange={console.log}
+                    value={direction.temperature.unit}
+                    onChange={this.handleNewDirectionTemperatureUnitEdit().bind(this)}
                 />
             </div>
         );
@@ -724,8 +830,8 @@ export default class DirectionsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                // value={(ingredient.amountInput || "")}
-                // onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
+                value={direction.timeInput}
+                onChange={this.handleNewDirectionTimeCountEdit().bind(this)}
             />
         );
 
@@ -737,8 +843,8 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(UnitTime)}
-                    // value={direction.temperature.unit}
-                    onChange={console.log}
+                    value={direction.temperature.unit}
+                    onChange={this.handleNewDirectionTimeUnitEdit().bind(this)}
                 />
             </div>
         );
@@ -773,13 +879,15 @@ export default class DirectionsBlock extends Component<Props> {
                                 // value={"9"}
                                 placeholder={"#"}
                                 maxLength={2}
+                                onChange={console.log}
                             />
 
                             <input
                                 type={"text"}
                                 className={styles.directionInfoLineNameInput}
-                                // value={"NEW DIRECTION"}
+                                value={direction.name}
                                 placeholder={"TITLE"}
+                                onChange={this.handleNewDirectionNameEdit().bind(this)}
                             />
                         </div>
 
@@ -798,14 +906,14 @@ export default class DirectionsBlock extends Component<Props> {
 
     public render(): JSX.Element {
 
-        const { isReadOnly, directions } = this.props;
+        const { isReadOnly, directions, newDirection } = this.props;
 
         return (
             <div className={styles.directionsBlock}>
 
                 {directions.map( (direction, index) => this.getDirectionLine(direction, index) )}
 
-                {( isReadOnly ? null : this.getNewDirectionLine() )}
+                {( isReadOnly ? null : this.getNewDirectionLine(newDirection) )}
 
             </div>
         );

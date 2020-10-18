@@ -12,6 +12,7 @@ import {
     Direction,
     RECIPE_ITEM_UPDATE_DIRECTIONS,
     SubDirectionType,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION,
 } from "./types";
 
 
@@ -179,6 +180,27 @@ const initialState: RecipePageStore = {
         },
     ],
 
+    newDirection: {
+        isOpen: false,
+        isMarked: false,
+
+        name: "",
+
+        time: {
+            count: 0,
+            unit: UnitTime.min,
+        },
+        temperature: {
+            count: 0,
+            unit: UnitTemperature.C,
+        },
+
+        timeInput: "",
+        temperatureInput: "",
+
+        newStep: SubDirectionType.Note,
+        steps: [],
+    },
     directions: [
         {
             isOpen: false,
@@ -319,6 +341,13 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 directions: action.payload as Direction[],
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_DIRECTION: {
+            return {
+                ...state,
+                newDirection: action.payload as Direction,
             };
         }
 

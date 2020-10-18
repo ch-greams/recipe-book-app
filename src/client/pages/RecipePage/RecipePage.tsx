@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
 import {
     updateName, updateBrand, updateSubtitle, updateDescription,
-    updateIngredients, updateDirections,
+    updateIngredients, updateDirections, updateNewDirection,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -39,6 +39,7 @@ interface DispatchToProps {
     updateDescription: typeof updateDescription;
     updateIngredients: typeof updateIngredients;
     updateDirections: typeof updateDirections;
+    updateNewDirection: typeof updateNewDirection;
     requestIngredients: typeof requestIngredients;
 }
 
@@ -162,6 +163,7 @@ class RecipePage extends Component<RecipePageProps> {
                 subtitle,
                 description,
                 ingredients,
+                newDirection,
                 directions,
             },
             search,
@@ -171,6 +173,7 @@ class RecipePage extends Component<RecipePageProps> {
             updateDescription,
             updateIngredients,
             updateDirections,
+            updateNewDirection,
         } = this.props;
 
         return (
@@ -209,9 +212,11 @@ class RecipePage extends Component<RecipePageProps> {
 
                     <DirectionsBlock
                         isReadOnly={!isEdit}
+                        newDirection={newDirection}
                         directions={directions}
                         ingredients={ingredients}
                         updateDirections={updateDirections}
+                        updateNewDirection={updateNewDirection}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -244,6 +249,7 @@ const mapDispatchToProps: DispatchToProps = {
     updateDescription,
     updateIngredients,
     updateDirections,
+    updateNewDirection,
     requestIngredients,
 };
 

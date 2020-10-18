@@ -6,12 +6,14 @@ import {
     RECIPE_ITEM_UPDATE_DIRECTIONS,
     RECIPE_ITEM_UPDATE_INGREDIENTS,
     RECIPE_ITEM_UPDATE_NAME,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION,
     RECIPE_ITEM_UPDATE_SUBTITLE,
     UpdateBrandAction,
     UpdateDescriptionAction,
     UpdateDirectionsAction,
     UpdateIngredientsAction,
     UpdateNameAction,
+    UpdateNewDirectionAction,
     UpdateSubtitleAction,
 } from "./types";
 
@@ -56,5 +58,12 @@ export function updateDirections(directions: Direction[]): UpdateDirectionsActio
     return {
         type: RECIPE_ITEM_UPDATE_DIRECTIONS,
         payload: directions,
+    };
+}
+
+export function updateNewDirection(direction: Direction): UpdateNewDirectionAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_NEW_DIRECTION,
+        payload: direction,
     };
 }

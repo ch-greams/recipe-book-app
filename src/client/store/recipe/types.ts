@@ -92,6 +92,8 @@ export interface RecipePageStore {
     unit: UnitWeight | UnitVolume;
 
     ingredients: IngredientDefault[];
+
+    newDirection: Direction;
     directions: Direction[];
 }
 
@@ -104,6 +106,7 @@ export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 
 export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
 export const RECIPE_ITEM_UPDATE_DIRECTIONS = "RECIPE_ITEM_UPDATE_DIRECTIONS";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION = "RECIPE_ITEM_UPDATE_NEW_DIRECTION";
 
 
 export interface UpdateNameAction {
@@ -136,8 +139,13 @@ export interface UpdateDirectionsAction {
     payload: Direction[];
 }
 
+export interface UpdateNewDirectionAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION;
+    payload: Direction;
+}
+
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateIngredientsAction | UpdateDirectionsAction
+    UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction
 );
