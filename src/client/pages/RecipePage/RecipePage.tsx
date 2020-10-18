@@ -10,7 +10,7 @@ import {
     updateDirectionStepNumber, updateDirectionName, updateDirectionTemperatureCount,
     updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
     updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -72,6 +72,7 @@ interface DispatchToProps {
     updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
     updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
     updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
+    createDirection: typeof createDirection;
 }
 
 interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
@@ -229,6 +230,7 @@ class RecipePage extends Component<RecipePageProps> {
             updateNewDirectionTemperatureUnit,
             updateNewDirectionTimeCount,
             updateNewDirectionTimeUnit,
+            createDirection,
         } = this.props;
 
         return (
@@ -296,6 +298,7 @@ class RecipePage extends Component<RecipePageProps> {
                         updateNewDirectionTemperatureUnit={updateNewDirectionTemperatureUnit}
                         updateNewDirectionTimeCount={updateNewDirectionTimeCount}
                         updateNewDirectionTimeUnit={updateNewDirectionTimeUnit}
+                        createDirection={createDirection}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -354,6 +357,7 @@ const mapDispatchToProps: DispatchToProps = {
     updateNewDirectionTemperatureUnit,
     updateNewDirectionTimeCount,
     updateNewDirectionTimeUnit,
+    createDirection,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

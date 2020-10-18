@@ -133,7 +133,7 @@ export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_U
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT";
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT";
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT";
-
+export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
 
 export interface UpdateNameAction {
     type: typeof RECIPE_ITEM_UPDATE_NAME;
@@ -284,6 +284,11 @@ export interface UpdateNewDirectionTimeUnitAction {
     payload: UnitTime;
 }
 
+export interface CreateDirectionAction {
+    type: typeof RECIPE_ITEM_CREATE_DIRECTION;
+    payload: Direction;
+}
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
     UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction |
@@ -295,7 +300,7 @@ export type RecipeItemActionTypes = (
     CreateSubDirectionIngredientAction | CreateSubDirectionAction | UpdateNewSubDirectionTypeAction |
     UpdateDirectionStepNumberAction | UpdateDirectionNameAction |
     UpdateDirectionTemperatureCountAction | UpdateDirectionTemperatureUnitAction |
-    UpdateDirectionTimeCountAction | UpdateDirectionTimeUnitAction |
+    UpdateDirectionTimeCountAction | UpdateDirectionTimeUnitAction | CreateDirectionAction |
 
     UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
     UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction

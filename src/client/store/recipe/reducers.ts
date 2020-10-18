@@ -38,6 +38,7 @@ import {
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
+    RECIPE_ITEM_CREATE_DIRECTION,
 
 } from "./types";
 
@@ -824,6 +825,55 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
+        case RECIPE_ITEM_CREATE_DIRECTION: {
+
+            const direction = action.payload;
+
+            return {
+                ...state,
+                directions: [
+                    ...state.directions,
+                    {
+                        isOpen: false,
+                        isMarked: false,
+                
+                        stepNumber: direction.stepNumber,
+                        name: direction.name,
+                
+                        time: ( !direction.timeInput ? null : direction.time  ),
+                        temperature: ( !direction.temperatureInput ? null : direction.temperature ),
+                
+                        timeInput: direction.timeInput,
+                        temperatureInput: direction.temperatureInput,
+                
+                        newStep: SubDirectionType.Note,
+                        steps: [],
+                    },
+                ],
+                newDirection: {
+                    isOpen: false,
+                    isMarked: false,
+
+                    stepNumber: 0,
+                    name: "",
+
+                    time: {
+                        count: 0,
+                        unit: UnitTime.min,
+                    },
+                    temperature: {
+                        count: 0,
+                        unit: UnitTemperature.C,
+                    },
+            
+                    timeInput: "",
+                    temperatureInput: "",
+            
+                    newStep: SubDirectionType.Note,
+                    steps: [],
+                }
+            };
+        }
 
         default:
             return state;

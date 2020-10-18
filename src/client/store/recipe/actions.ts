@@ -63,6 +63,8 @@ import {
     UpdateSubDirectionIngredientUnitAction,
     UpdateSubDirectionNoteAction,
     UpdateSubtitleAction,
+    CreateDirectionAction,
+    RECIPE_ITEM_CREATE_DIRECTION,
 } from "./types";
 
 
@@ -279,5 +281,12 @@ export function updateNewDirectionTimeUnit(unit: UnitTime): UpdateNewDirectionTi
     return {
         type: RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
         payload: unit,
+    };
+}
+
+export function createDirection(direction: Direction): CreateDirectionAction {
+    return {
+        type: RECIPE_ITEM_CREATE_DIRECTION,
+        payload: direction,
     };
 }

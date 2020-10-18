@@ -35,7 +35,7 @@ import {
     updateSubDirectionIngredientUnit,
     updateSubDirectionNote,
     updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
 } from "../../store/recipe/actions";
 
 
@@ -71,6 +71,7 @@ interface Props {
     updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
     updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
     updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
+    createDirection: typeof createDirection;
 }
 
 
@@ -219,29 +220,8 @@ export default class DirectionsBlock extends Component<Props> {
         this.props.updateNewDirectionStepNumber(Number(event.target.value));
     }
 
-    private addNewDirection(direction: Direction): void {
-
-        const { directions, updateDirections } = this.props;
-
-        updateDirections([
-            ...directions,
-            {
-                isOpen: false,
-                isMarked: false,
-        
-                stepNumber: direction.stepNumber,
-                name: direction.name,
-        
-                time: ( !direction.timeInput ? null : direction.time  ),
-                temperature: ( !direction.temperatureInput ? null : direction.temperature ),
-        
-                timeInput: direction.timeInput,
-                temperatureInput: direction.temperatureInput,
-        
-                newStep: SubDirectionType.Note,
-                steps: [],
-            },
-        ]);
+    private createDirection(direction: Direction): void {
+        this.props.createDirection(direction);
     }
 
 
@@ -648,7 +628,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                 <div
                     className={styles.directionLineButton}
-                    onClick={() => this.addNewDirection(direction)}
+                    onClick={() => this.createDirection(direction)}
                 >
                     <IconWrapper
                         isFullWidth={true}
