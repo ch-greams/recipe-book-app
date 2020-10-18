@@ -14,7 +14,7 @@ import {
 import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import Utils from "../../../common/utils";
-import { InputChangeCallback } from "../../../common/typings";
+import { InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 
 
 
@@ -169,7 +169,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleSubDirectionIngredientUnitEdit(parentIndex: number, id: string): InputChangeCallback {
+    private handleSubDirectionIngredientUnitEdit(parentIndex: number, id: string): SelectChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -261,7 +261,7 @@ export default class DirectionsBlock extends Component<Props> {
 
     }
 
-    private handleSubDirectionTypeSelect(directionIndex: number): InputChangeCallback {
+    private handleSubDirectionTypeSelect(directionIndex: number): SelectChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -355,7 +355,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleDirectionTemperatureUnitEdit(parentIndex: number): InputChangeCallback {
+    private handleDirectionTemperatureUnitEdit(parentIndex: number): SelectChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -407,7 +407,7 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleDirectionTimeUnitEdit(parentIndex: number): InputChangeCallback {
+    private handleDirectionTimeUnitEdit(parentIndex: number): SelectChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -429,100 +429,82 @@ export default class DirectionsBlock extends Component<Props> {
         };
     }
 
-    private handleNewDirectionTemperatureCountEdit(): InputChangeCallback {
+    private handleNewDirectionTemperatureCountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
+        const amount = Utils.decimalNormalizer(event.target.value, newDirection.temperatureInput);
 
-            const amount = Utils.decimalNormalizer(event.target.value, newDirection.temperatureInput);
-
-            updateNewDirection({
-                ...newDirection,
-                temperatureInput: amount,
-                temperature: {
-                    unit: newDirection.temperature?.unit,
-                    count: Number(amount),
-                },
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            temperatureInput: amount,
+            temperature: {
+                unit: newDirection.temperature?.unit,
+                count: Number(amount),
+            },
+        });
     }
 
-    private handleNewDirectionTemperatureUnitEdit(): InputChangeCallback {
+    private handleNewDirectionTemperatureUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
-
-            updateNewDirection({
-                ...newDirection,
-                temperature: {
-                    count: newDirection.temperature?.count,
-                    unit: event.target.value as UnitTemperature,
-                },
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            temperature: {
+                count: newDirection.temperature?.count,
+                unit: event.target.value as UnitTemperature,
+            },
+        });
     }
 
-    private handleNewDirectionTimeCountEdit(): InputChangeCallback {
+    private handleNewDirectionTimeCountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
+        const amount = Utils.decimalNormalizer(event.target.value, newDirection.timeInput);
 
-            const amount = Utils.decimalNormalizer(event.target.value, newDirection.timeInput);
-
-            updateNewDirection({
-                ...newDirection,
-                timeInput: amount,
-                time: {
-                    unit: newDirection.time?.unit,
-                    count: Number(amount),
-                },
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            timeInput: amount,
+            time: {
+                unit: newDirection.time?.unit,
+                count: Number(amount),
+            },
+        });
     }
 
-    private handleNewDirectionTimeUnitEdit(): InputChangeCallback {
+    private handleNewDirectionTimeUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
-
-            updateNewDirection({
-                ...newDirection,
-                time: {
-                    count: newDirection.time?.count,
-                    unit: event.target.value as UnitTime,
-                },
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            time: {
+                count: newDirection.time?.count,
+                unit: event.target.value as UnitTime,
+            },
+        });
     }
 
-    private handleNewDirectionNameEdit(): InputChangeCallback {
+    private handleNewDirectionNameEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
-
-            updateNewDirection({
-                ...newDirection,
-                name: event.target.value,
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            name: event.target.value,
+        });
     }
 
-    private handleNewDirectionStepNumberEdit(): InputChangeCallback {
+    private handleNewDirectionStepNumberEdit(event: React.ChangeEvent<HTMLInputElement>): void {
 
         const { newDirection, updateNewDirection } = this.props;
 
-        return (event) => {
-
-            updateNewDirection({
-                ...newDirection,
-                stepNumber: Number(event.target.value),
-            });
-        };
+        updateNewDirection({
+            ...newDirection,
+            stepNumber: Number(event.target.value),
+        });
     }
 
     private addNewDirection(direction: Direction): void {
@@ -903,7 +885,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
                 value={direction.temperatureInput}
-                onChange={this.handleNewDirectionTemperatureCountEdit().bind(this)}
+                onChange={this.handleNewDirectionTemperatureCountEdit.bind(this)}
             />
         );
 
@@ -916,7 +898,7 @@ export default class DirectionsBlock extends Component<Props> {
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(UnitTemperature)}
                     value={direction.temperature.unit}
-                    onChange={this.handleNewDirectionTemperatureUnitEdit().bind(this)}
+                    onChange={this.handleNewDirectionTemperatureUnitEdit.bind(this)}
                 />
             </div>
         );
@@ -927,7 +909,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
                 value={direction.timeInput}
-                onChange={this.handleNewDirectionTimeCountEdit().bind(this)}
+                onChange={this.handleNewDirectionTimeCountEdit.bind(this)}
             />
         );
 
@@ -940,7 +922,7 @@ export default class DirectionsBlock extends Component<Props> {
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(UnitTime)}
                     value={direction.temperature.unit}
-                    onChange={this.handleNewDirectionTimeUnitEdit().bind(this)}
+                    onChange={this.handleNewDirectionTimeUnitEdit.bind(this)}
                 />
             </div>
         );
@@ -975,7 +957,7 @@ export default class DirectionsBlock extends Component<Props> {
                                 value={direction.stepNumber}
                                 placeholder={"#"}
                                 maxLength={2}
-                                onChange={this.handleNewDirectionStepNumberEdit().bind(this)}
+                                onChange={this.handleNewDirectionStepNumberEdit.bind(this)}
                             />
 
                             <input
@@ -983,7 +965,7 @@ export default class DirectionsBlock extends Component<Props> {
                                 className={styles.directionInfoLineNameInput}
                                 value={direction.name}
                                 placeholder={"TITLE"}
-                                onChange={this.handleNewDirectionNameEdit().bind(this)}
+                                onChange={this.handleNewDirectionNameEdit.bind(this)}
                             />
                         </div>
 
