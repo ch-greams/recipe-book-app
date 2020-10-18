@@ -2,7 +2,7 @@ import { NutritionFact } from "../client/components/NutritionFactsBlock/Nutritio
 import { NutritionFactType } from "./nutritionFacts";
 import { Dictionary } from "./typings";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import { Route } from "../client/components/Router";
+import { RoutePath } from "../client/components/Root";
 
 
 
@@ -101,7 +101,7 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: Route, id: string): string {
+    public static getItemPath(route: RoutePath, id: string): string {
         return `/${route}/${id}`;
     }
 

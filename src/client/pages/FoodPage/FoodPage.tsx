@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
 import {
-    requestFoodItem,
-    updateName,
-    updateBrand,
-    updateSubtitle,
-    updateCustomUnits,
+    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
@@ -17,12 +13,9 @@ import SelectInput from "../../components/SelectInput/SelectInput";
 import styles from "./FoodPage.scss";
 import Utils from "../../../common/utils";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import { RouteComponentProps } from "react-router-dom";
 
 
-
-interface OwnProps {
-    foodId: string;
-}
 
 interface StateToProps {
     foodItem: FoodPageStore;
@@ -36,15 +29,14 @@ interface DispatchToProps {
     updateCustomUnits: typeof updateCustomUnits;
 }
 
-interface Props extends OwnProps, StateToProps, DispatchToProps { }
+interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
 
 
 class FoodPage extends Component<Props> {
     public static readonly displayName = "FoodPage";
 
     public componentDidMount(): void {
-
-        this.props.requestFoodItem(this.props.foodId);
+        this.props.requestFoodItem(this.props.match.params.foodId);
     }
 
     private getParametersBlock(

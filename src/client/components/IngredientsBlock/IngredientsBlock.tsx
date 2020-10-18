@@ -11,9 +11,9 @@ import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 import Utils from "../../../common/utils";
 import { AnyAction } from "redux";
-import { Route } from "../Router";
 import { Link } from "react-router-dom";
 import { SearchPageStore } from "../../store/search/types";
+import { RoutePath } from "../Root";
 
 
 
@@ -537,7 +537,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const linkButton = (
             <Link
-                to={Utils.getItemPath(Route.Food, ingredient.item.id)}
+                to={Utils.getItemPath(RoutePath.Food, ingredient.item.id)}
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : null )}
             >

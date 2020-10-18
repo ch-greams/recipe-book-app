@@ -27,12 +27,9 @@ import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
 import styles from "./RecipePage.scss";
 import { requestIngredients } from "../../store/search/actions";
 import { SearchPageStore } from "../../store/search/types";
+import { RouteComponentProps } from "react-router-dom";
 
 
-
-interface OwnProps {
-    isEdit: boolean;
-}
 
 interface StateToProps {
     recipeItem: RecipePageStore;
@@ -75,7 +72,7 @@ interface DispatchToProps {
     createDirection: typeof createDirection;
 }
 
-interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
+interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
 
 
 class RecipePage extends Component<RecipePageProps> {
@@ -188,7 +185,7 @@ class RecipePage extends Component<RecipePageProps> {
     public render(): JSX.Element {
 
         const {
-            isEdit,
+            location,
             recipeItem: {
                 name,
                 brand,
@@ -232,6 +229,9 @@ class RecipePage extends Component<RecipePageProps> {
             updateNewDirectionTimeUnit,
             createDirection,
         } = this.props;
+
+        const searchParams = new URLSearchParams(location.search);
+        const isEdit = ( searchParams.get("edit") === "true" );
 
         return (
             <div className={styles.recipePage}>
