@@ -11,10 +11,10 @@ import {
     SubDirectionIngredient,
     SubDirectionType
 } from "../../store/recipe/types";
-import { AnyAction } from "redux";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import Utils from "../../../common/utils";
 import { InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
+import { removeDirection, removeSubDirection, toggleDirectionOpen, updateDirections, updateNewDirection } from "../../store/recipe/actions";
 
 
 
@@ -23,8 +23,12 @@ interface Props {
     newDirection: Direction;
     directions: Direction[];
     ingredients: IngredientDefault[];
-    updateDirections: (value: Direction[]) => AnyAction;
-    updateNewDirection: (value: Direction) => AnyAction;
+    updateDirections: typeof updateDirections;
+    updateNewDirection: typeof updateNewDirection;
+
+    removeDirection: typeof removeDirection;
+    removeSubDirection: typeof removeSubDirection;
+    toggleDirectionOpen: typeof toggleDirectionOpen;
 }
 
 
@@ -38,31 +42,19 @@ export default class DirectionsBlock extends Component<Props> {
 
     // NOTE: Handlers
 
-    private removeDirection(index: number): void {
+    private removeDirection(directionIndex: number): void {
 
-        const { directions, updateDirections } = this.props;
-
-        delete directions[index];
-
-        updateDirections(directions);
+        this.props.removeDirection(directionIndex);
     }
 
-    private removeSubDirection(index: number, stepIndex: number): void {
+    private removeSubDirection(directionIndex: number, subDirectionIndex: number): void {
 
-        const { directions, updateDirections } = this.props;
-
-        delete directions[index].steps[stepIndex];
-
-        updateDirections(directions);
+        this.props.removeSubDirection(directionIndex, subDirectionIndex);
     }
 
-    private toggleDirectionOpen(index: number): void {
+    private toggleDirectionOpen(directionIndex: number): void {
 
-        const { directions, updateDirections } = this.props;
-
-        directions[index].isOpen = !directions[index].isOpen;
-
-        updateDirections(directions);
+        this.props.toggleDirectionOpen(directionIndex);
     }
 
     private markDirection(index: number): void {

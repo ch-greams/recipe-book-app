@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
 import {
     updateName, updateBrand, updateSubtitle, updateDescription,
-    updateIngredients, updateDirections, updateNewDirection,
+    updateIngredients, updateDirections, updateNewDirection, removeDirection, removeSubDirection, toggleDirectionOpen,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -41,6 +41,10 @@ interface DispatchToProps {
     updateDirections: typeof updateDirections;
     updateNewDirection: typeof updateNewDirection;
     requestIngredients: typeof requestIngredients;
+
+    removeDirection: typeof removeDirection;
+    removeSubDirection: typeof removeSubDirection;
+    toggleDirectionOpen: typeof toggleDirectionOpen;
 }
 
 interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
@@ -174,6 +178,10 @@ class RecipePage extends Component<RecipePageProps> {
             updateIngredients,
             updateDirections,
             updateNewDirection,
+
+            removeDirection,
+            removeSubDirection,
+            toggleDirectionOpen,
         } = this.props;
 
         return (
@@ -217,6 +225,10 @@ class RecipePage extends Component<RecipePageProps> {
                         ingredients={ingredients}
                         updateDirections={updateDirections}
                         updateNewDirection={updateNewDirection}
+
+                        removeDirection={removeDirection}
+                        removeSubDirection={removeSubDirection}
+                        toggleDirectionOpen={toggleDirectionOpen}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -251,6 +263,10 @@ const mapDispatchToProps: DispatchToProps = {
     updateDirections,
     updateNewDirection,
     requestIngredients,
+
+    removeDirection,
+    removeSubDirection,
+    toggleDirectionOpen,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

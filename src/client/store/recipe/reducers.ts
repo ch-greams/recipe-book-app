@@ -13,6 +13,9 @@ import {
     RECIPE_ITEM_UPDATE_DIRECTIONS,
     SubDirectionType,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION,
+    RECIPE_ITEM_REMOVE_DIRECTION,
+    RECIPE_ITEM_REMOVE_SUBDIRECTION,
+    RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
 } from "./types";
 
 
@@ -352,6 +355,43 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 newDirection: action.payload as Direction,
+            };
+        }
+
+        case RECIPE_ITEM_REMOVE_DIRECTION: {
+            const directionIndex = action.payload;
+            return {
+                ...state,
+                directions: state.directions.filter((_direction, index) => (index !== directionIndex)),
+            };
+        }
+
+        case RECIPE_ITEM_REMOVE_SUBDIRECTION: {
+            const { directionIndex, subDirectionIndex } = action.payload;
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (iDirection === directionIndex)
+                        ? {
+                            ...direction,
+                            steps: direction.steps.filter(
+                                (_sd, iSubDirection) => (iSubDirection !== subDirectionIndex)
+                            ),
+                        }
+                        : direction
+                )),
+            };
+        }
+
+        case RECIPE_ITEM_TOGGLE_DIRECTION_OPEN: {
+            const directionIndex = action.payload;
+            return {
+                ...state,
+                directions: state.directions.map((direction, index) =>
+                    (index === directionIndex)
+                        ? { ...direction, isOpen: !direction.isOpen }
+                        : direction
+                ),
             };
         }
 

@@ -107,6 +107,9 @@ export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 
 export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
 export const RECIPE_ITEM_UPDATE_DIRECTIONS = "RECIPE_ITEM_UPDATE_DIRECTIONS";
+export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
+export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
+export const RECIPE_ITEM_REMOVE_SUBDIRECTION = "RECIPE_ITEM_REMOVE_SUBDIRECTION";
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION = "RECIPE_ITEM_UPDATE_NEW_DIRECTION";
 
 
@@ -140,13 +143,29 @@ export interface UpdateDirectionsAction {
     payload: Direction[];
 }
 
+export interface RemoveDirectionAction {
+    type: typeof RECIPE_ITEM_REMOVE_DIRECTION;
+    payload: number;
+}
+
+export interface ToggleDirectionOpenAction {
+    type: typeof RECIPE_ITEM_TOGGLE_DIRECTION_OPEN;
+    payload: number;
+}
+
 export interface UpdateNewDirectionAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION;
     payload: Direction;
 }
 
+export interface RemoveSubDirectionAction {
+    type: typeof RECIPE_ITEM_REMOVE_SUBDIRECTION;
+    payload: { directionIndex: number, subDirectionIndex: number };
+}
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction
+    UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction |
+
+    RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction
 );
