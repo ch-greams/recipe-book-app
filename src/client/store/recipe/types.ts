@@ -114,6 +114,13 @@ export const RECIPE_ITEM_UPDATE_NEW_DIRECTION = "RECIPE_ITEM_UPDATE_NEW_DIRECTIO
 
 export const RECIPE_ITEM_REMOVE_SUBDIRECTION = "RECIPE_ITEM_REMOVE_SUBDIRECTION";
 export const RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK = "RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE = "RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT";
+export const RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT = "RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT";
+export const RECIPE_ITEM_CREATE_SUBDIRECTION = "RECIPE_ITEM_CREATE_SUBDIRECTION";
+export const RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE = "RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE";
+export const RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER";
 
 
 export interface UpdateNameAction {
@@ -176,10 +183,49 @@ export interface ToggleSubDirectionMarkAction {
     payload: { directionIndex: number, subDirectionIndex: number };
 }
 
+export interface UpdateSubDirectionNoteAction {
+    type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE;
+    payload: { directionIndex: number, subDirectionIndex: number, note: string };
+}
+
+export interface UpdateSubDirectionIngredientAmountAction {
+    type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT;
+    payload: { directionIndex: number, subDirectionIndex: number, inputValue: string };
+}
+
+export interface UpdateSubDirectionIngredientUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT;
+    payload: { directionIndex: number, subDirectionIndex: number, unit: UnitWeight | UnitVolume };
+}
+
+export interface CreateSubDirectionIngredientAction {
+    type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT;
+    payload: { directionIndex: number, ingredientId: string };
+}
+export interface CreateSubDirectionAction {
+    type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION;
+    payload: { directionIndex: number, type: SubDirectionType };
+}
+
+export interface UpdateNewSubDirectionTypeAction {
+    type: typeof RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE;
+    payload: { directionIndex: number, type: SubDirectionType };
+}
+
+export interface UpdateDirectionStepNumberAction {
+    type: typeof RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER;
+    payload: { directionIndex: number, stepNumber: number };
+}
+
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
     UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
-    ToggleSubDirectionMarkAction
+    ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |
+    
+    UpdateSubDirectionIngredientAmountAction | UpdateSubDirectionIngredientUnitAction |
+    CreateSubDirectionIngredientAction | CreateSubDirectionAction | UpdateNewSubDirectionTypeAction |
+    UpdateDirectionStepNumberAction
 );

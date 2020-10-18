@@ -1,5 +1,6 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import Utils from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
@@ -19,6 +20,13 @@ import {
     RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
     RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
     SubDirectionIngredient,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
+    RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
+    RECIPE_ITEM_CREATE_SUBDIRECTION,
+    RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
+    RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
 } from "./types";
 
 
@@ -427,14 +435,14 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             const { directionIndex, subDirectionIndex } = action.payload;
             return {
                 ...state,
-                directions: state.directions.map((direction, index) => {
+                directions: state.directions.map((direction, iDirection) => {
 
-                    if (index === directionIndex) {
+                    if (directionIndex === iDirection) {
 
-                        const steps = direction.steps.map((sd: SubDirectionIngredient, index) =>
-                            (sd.type === SubDirectionType.Ingredient) && (subDirectionIndex === index)
-                                ? { ...sd, isMarked: !sd.isMarked }
-                                : sd
+                        const steps = direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) =>
+                            (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                ? { ...subDirection, isMarked: !subDirection.isMarked }
+                                : subDirection
                         );
 
                         const areAllStepsMarked = steps.every((step) => (
@@ -452,6 +460,159 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         return direction;
                     }
                 }),
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE: {
+            const { directionIndex, subDirectionIndex, note } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: direction.steps.map((subDirection, iSubDirection) =>
+                                (subDirection.type !== SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                    ? { ...subDirection, label: note }
+                                    : subDirection
+                            ),
+                        }
+                        : direction
+                )),
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT: {
+
+            const { directionIndex, subDirectionIndex, inputValue } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) => {
+
+                                if (
+                                    (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                ) {
+                                    const amount = Utils.decimalNormalizer(inputValue, subDirection.amountInput);
+
+                                    return {
+                                        ...subDirection,
+                                        amountInput: amount,
+                                        amount: Number(amount),
+                                    };
+                                }
+                                else {
+                                    return subDirection;
+                                }
+                            }),
+                        }
+                        : direction
+                )),
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT: {
+
+            const { directionIndex, subDirectionIndex, unit } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) => (
+                                (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                    ? { ...subDirection, unit: unit }
+                                    : subDirection
+                            )),
+                        }
+                        : direction
+                )),
+            };
+        }
+
+        case RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT: {
+
+            const { directionIndex, ingredientId } = action.payload;
+
+            const ingredient = state.ingredients.find((ingredient) => ingredient.item.id === ingredientId);
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: [
+                                ...direction.steps,
+                                {
+                                    type: SubDirectionType.Ingredient,
+                                    label: ingredient.item.name,
+                
+                                    id: ingredient.item.id,
+                                    isMarked: false,
+                                    amount: ingredient.amount,
+                                    amountInput: ingredient.amountInput,
+                                    unit: ingredient.unit,
+                                },
+                            ]
+                        }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_CREATE_SUBDIRECTION: {
+
+            const { directionIndex, type } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: [
+                                ...direction.steps,
+                                { type: type, label: type },
+                            ]
+                        }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE: {
+
+            const { directionIndex, type } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? { ...direction, newStep: type }
+                        : direction
+                )),  
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER: {
+
+            const { directionIndex, stepNumber } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? { ...direction, stepNumber: stepNumber }
+                        : direction
+                )),  
             };
         }
 

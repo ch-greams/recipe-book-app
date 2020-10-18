@@ -5,6 +5,8 @@ import {
     updateName, updateBrand, updateSubtitle, updateDescription,
     updateIngredients, updateDirections, updateNewDirection, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
+    updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
+    createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType, updateDirectionStepNumber,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -48,6 +50,13 @@ interface DispatchToProps {
     toggleDirectionOpen: typeof toggleDirectionOpen;
     toggleDirectionMark: typeof toggleDirectionMark;
     toggleSubDirectionMark: typeof toggleSubDirectionMark;
+    updateSubDirectionNote: typeof updateSubDirectionNote;
+    updateSubDirectionIngredientAmount: typeof updateSubDirectionIngredientAmount;
+    updateSubDirectionIngredientUnit: typeof updateSubDirectionIngredientUnit;
+    createSubDirectionIngredient: typeof createSubDirectionIngredient;
+    createSubDirection: typeof createSubDirection;
+    updateNewSubDirectionType: typeof updateNewSubDirectionType;
+    updateDirectionStepNumber: typeof updateDirectionStepNumber;
 }
 
 interface RecipePageProps extends OwnProps, StateToProps, DispatchToProps { }
@@ -187,6 +196,13 @@ class RecipePage extends Component<RecipePageProps> {
             toggleDirectionOpen,
             toggleDirectionMark,
             toggleSubDirectionMark,
+            updateSubDirectionNote,
+            updateSubDirectionIngredientAmount,
+            updateSubDirectionIngredientUnit,
+            createSubDirectionIngredient,
+            createSubDirection,
+            updateNewSubDirectionType,
+            updateDirectionStepNumber,
         } = this.props;
 
         return (
@@ -236,6 +252,13 @@ class RecipePage extends Component<RecipePageProps> {
                         toggleDirectionOpen={toggleDirectionOpen}
                         toggleDirectionMark={toggleDirectionMark}
                         toggleSubDirectionMark={toggleSubDirectionMark}
+                        updateSubDirectionNote={updateSubDirectionNote}
+                        updateSubDirectionIngredientAmount={updateSubDirectionIngredientAmount}
+                        updateSubDirectionIngredientUnit={updateSubDirectionIngredientUnit}
+                        createSubDirectionIngredient={createSubDirectionIngredient}
+                        createSubDirection={createSubDirection}
+                        updateNewSubDirectionType={updateNewSubDirectionType}
+                        updateDirectionStepNumber={updateDirectionStepNumber}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -276,6 +299,13 @@ const mapDispatchToProps: DispatchToProps = {
     toggleDirectionOpen,
     toggleDirectionMark,
     toggleSubDirectionMark,
+    updateSubDirectionNote,
+    updateSubDirectionIngredientAmount,
+    updateSubDirectionIngredientUnit,
+    createSubDirectionIngredient,
+    createSubDirection,
+    updateNewSubDirectionType,
+    updateDirectionStepNumber,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

@@ -1,6 +1,11 @@
+import { UnitWeight, UnitVolume } from "../../../common/units";
 import {
+    CreateSubDirectionAction,
+    CreateSubDirectionIngredientAction,
     Direction,
     IngredientDefault,
+    RECIPE_ITEM_CREATE_SUBDIRECTION,
+    RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
     RECIPE_ITEM_REMOVE_DIRECTION,
     RECIPE_ITEM_REMOVE_SUBDIRECTION,
     RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
@@ -9,21 +14,32 @@ import {
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_DESCRIPTION,
     RECIPE_ITEM_UPDATE_DIRECTIONS,
+    RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
     RECIPE_ITEM_UPDATE_INGREDIENTS,
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION,
+    RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
     RECIPE_ITEM_UPDATE_SUBTITLE,
     RemoveDirectionAction,
     RemoveSubDirectionAction,
+    SubDirectionType,
     ToggleDirectionMarkAction,
     ToggleDirectionOpenAction,
     ToggleSubDirectionMarkAction,
     UpdateBrandAction,
     UpdateDescriptionAction,
     UpdateDirectionsAction,
+    UpdateDirectionStepNumberAction,
     UpdateIngredientsAction,
     UpdateNameAction,
     UpdateNewDirectionAction,
+    UpdateNewSubDirectionTypeAction,
+    UpdateSubDirectionIngredientAmountAction,
+    UpdateSubDirectionIngredientUnitAction,
+    UpdateSubDirectionNoteAction,
     UpdateSubtitleAction,
 } from "./types";
 
@@ -111,5 +127,58 @@ export function toggleSubDirectionMark(directionIndex: number, subDirectionIndex
     return {
         type: RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
         payload: { directionIndex, subDirectionIndex },
+    };
+}
+
+export function updateSubDirectionNote(directionIndex: number, subDirectionIndex: number, note: string): UpdateSubDirectionNoteAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
+        payload: { directionIndex, subDirectionIndex, note },
+    };
+}
+
+export function updateSubDirectionIngredientAmount(
+    directionIndex: number, subDirectionIndex: number, inputValue: string,
+): UpdateSubDirectionIngredientAmountAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
+        payload: { directionIndex, subDirectionIndex, inputValue },
+    };
+}
+
+export function updateSubDirectionIngredientUnit(
+    directionIndex: number, subDirectionIndex: number, unit: (UnitWeight | UnitVolume),
+): UpdateSubDirectionIngredientUnitAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
+        payload: { directionIndex, subDirectionIndex, unit },
+    };
+}
+
+export function createSubDirectionIngredient(directionIndex: number, ingredientId: string): CreateSubDirectionIngredientAction {
+    return {
+        type: RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
+        payload: { directionIndex, ingredientId },
+    };
+}
+
+export function createSubDirection(directionIndex: number, type: SubDirectionType): CreateSubDirectionAction {
+    return {
+        type: RECIPE_ITEM_CREATE_SUBDIRECTION,
+        payload: { directionIndex, type },
+    };
+}
+
+export function updateNewSubDirectionType(directionIndex: number, type: SubDirectionType): UpdateNewSubDirectionTypeAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
+        payload: { directionIndex, type },
+    };
+}
+
+export function updateDirectionStepNumber(directionIndex: number, stepNumber: number): UpdateDirectionStepNumberAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
+        payload: { directionIndex, stepNumber },
     };
 }
