@@ -153,7 +153,7 @@ export default class DirectionsBlock extends Component<Props> {
                                 (step.id === id)
                                     ? {
                                         ...step,
-                                        unit: event.target.value as UnitWeight | UnitVolume,
+                                        unit: event.target.value as (UnitWeight | UnitVolume),
                                     }
                                     : step
                             )),
@@ -228,7 +228,7 @@ export default class DirectionsBlock extends Component<Props> {
 
     }
 
-    private handleSubDirectionTypeSelect(parentIndex: number): InputChangeCallback {
+    private handleSubDirectionTypeSelect(directionIndex: number): InputChangeCallback {
 
         const { directions, updateDirections } = this.props;
 
@@ -237,7 +237,7 @@ export default class DirectionsBlock extends Component<Props> {
             updateDirections(
                 directions.map((direction, index) => {
 
-                    if (index === parentIndex) {
+                    if (index === directionIndex) {
 
                         return {
                             ...direction,
@@ -248,6 +248,110 @@ export default class DirectionsBlock extends Component<Props> {
                         return direction;
                     }
                 })
+            );
+        };
+    }
+
+    private handleDirectionTemperatureCountEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => {
+
+                    if (index === parentIndex) {
+
+                        const amount = Utils.decimalNormalizer(event.target.value, direction.temperatureInput);
+
+                        return {
+                            ...direction,
+                            temperatureInput: amount,
+                            temperature: {
+                                unit: direction.temperature?.unit,
+                                count: Number(amount),
+                            },
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
+    private handleDirectionTemperatureUnitEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => (
+                    (index === parentIndex)
+                        ? {
+                            ...direction,
+                            temperature: {
+                                count: direction.temperature?.count,
+                                unit: event.target.value as UnitTemperature,
+                            },
+                        }
+                        : direction
+                ))
+            );
+        };
+    }
+
+    private handleDirectionTimeCountEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => {
+
+                    if (index === parentIndex) {
+
+                        const amount = Utils.decimalNormalizer(event.target.value, direction.timeInput);
+
+                        return {
+                            ...direction,
+                            timeInput: amount,
+                            time: {
+                                unit: direction.time?.unit,
+                                count: Number(amount),
+                            },
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                })
+            );
+        };
+    }
+
+    private handleDirectionTimeUnitEdit(parentIndex: number): InputChangeCallback {
+
+        const { directions, updateDirections } = this.props;
+
+        return (event) => {
+
+            updateDirections(
+                directions.map((direction, index) => (
+                    (index === parentIndex)
+                        ? {
+                            ...direction,
+                            time: {
+                                count: direction.time?.count,
+                                unit: event.target.value as UnitTime,
+                            },
+                        }
+                        : direction
+                ))
             );
         };
     }
@@ -430,7 +534,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
                 value={direction.temperatureInput}
-                onChange={console.log}
+                onChange={this.handleDirectionTemperatureCountEdit(index).bind(this)}
             />
         );
 
@@ -439,7 +543,7 @@ export default class DirectionsBlock extends Component<Props> {
                 type={SelectInputType.IngredientUnit}
                 options={Object.keys(UnitTemperature)}
                 value={direction.temperature?.unit}
-                onChange={console.log}
+                onChange={this.handleDirectionTemperatureUnitEdit(index).bind(this)}
             />
         );
 
@@ -455,7 +559,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
                 value={direction.timeInput}
-                onChange={console.log}
+                onChange={this.handleDirectionTimeCountEdit(index).bind(this)}
             />
         );
 
@@ -464,7 +568,7 @@ export default class DirectionsBlock extends Component<Props> {
                 type={SelectInputType.IngredientUnit}
                 options={Object.keys(UnitTime)}
                 value={direction.time?.unit}
-                onChange={console.log}
+                onChange={this.handleDirectionTimeUnitEdit(index).bind(this)}
             />
         );
 
