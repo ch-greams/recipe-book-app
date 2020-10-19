@@ -279,6 +279,41 @@ export interface CreateDirectionAction {
     payload: Direction;
 }
 
+// NOTE: Ingredients
+
+export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
+export const RECIPE_ITEM_REMOVE_ALT_INGREDIENT = "RECIPE_ITEM_REMOVE_ALT_INGREDIENT";
+export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
+export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
+export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
+
+
+export interface RemoveIngredientAction {
+    type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
+    payload: string;
+}
+
+export interface RemoveAltIngredientAction {
+    type: typeof RECIPE_ITEM_REMOVE_ALT_INGREDIENT;
+    payload: { parentId: string, id: string };
+}
+
+export interface ReplaceIngredientWithAlternativeAction {
+    type: typeof RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE;
+    payload: { parentId: string, id: string };
+}
+
+export interface ToggleIngredientOpenAction {
+    type: typeof RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN;
+    payload: string;
+}
+
+export interface ToggleIngredientMarkAction {
+    type: typeof RECIPE_ITEM_TOGGLE_INGREDIENT_MARK;
+    payload: string;
+}
+
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateIngredientsAction |
 
@@ -292,5 +327,8 @@ export type RecipeItemActionTypes = (
     UpdateDirectionTimeCountAction | UpdateDirectionTimeUnitAction | CreateDirectionAction |
 
     UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
-    UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction
+    UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction |
+
+    RemoveIngredientAction | RemoveAltIngredientAction | ReplaceIngredientWithAlternativeAction |
+    ToggleIngredientOpenAction | ToggleIngredientMarkAction
 );

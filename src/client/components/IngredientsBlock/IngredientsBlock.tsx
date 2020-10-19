@@ -14,6 +14,10 @@ import { AnyAction } from "redux";
 import { Link } from "react-router-dom";
 import { SearchPageStore } from "../../store/search/types";
 import { RoutePath } from "../Root";
+import {
+    removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
+    toggleIngredientMark, toggleIngredientOpen,
+} from "../../store/recipe/actions";
 
 
 
@@ -22,6 +26,12 @@ interface Props {
     ingredients: IngredientDefault[];
     search: SearchPageStore;
     updateIngredients: (value: IngredientDefault[]) => AnyAction;
+
+    removeIngredient: typeof removeIngredient;
+    removeAltIngredient: typeof removeAltIngredient;
+    replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
+    toggleIngredientOpen: typeof toggleIngredientOpen;
+    toggleIngredientMark: typeof toggleIngredientMark;
 }
 
 
@@ -32,85 +42,31 @@ export default class IngredientsBlock extends Component<Props> {
         isReadOnly: false,
     };
 
-    // NOTE: Handlers
+    // NOTE: Handlers - Ingredient
 
     private removeIngredient(id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.filter((ingredient) => ingredient.item.id !== id),
-        );
+        this.props.removeIngredient(id);
     }
 
-    private removeAltIngredient(parentId: string, id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
-                ...acc,
-                cur.item.id === parentId
-                    ? {
-                        ...cur,
-                        alternatives: cur.alternatives.filter((alt) => alt.item.id !== id),
-                    }
-                    : cur
-            ], [])
-        );
-    }
-
-    private switchAltIngredientWithParent(parentId: string, id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.reduce<IngredientDefault[]>((acc, cur) => {
-
-                if (cur.item.id === parentId) {
-
-                    const alt = cur.alternatives.find((alt) => alt.item.id === id);
-                    const newAlt: IngredientAlternative = {
-                        amount: cur.amount,
-                        amountInput: cur.amountInput,
-                        unit: cur.unit,
-                        item: cur.item,
-                    };
-
-                    return [
-                        ...acc,
-                        {
-                            ...cur,
-                            alternatives: [
-                                ...cur.alternatives.filter((alt) => alt.item.id !== id),
-                                newAlt,
-                            ],
-                            amount: alt.amount,
-                            amountInput: alt.amountInput,
-                            unit: alt.unit,
-                            item: alt.item,
-                        },
-                    ];
-                }
-                else {
-                    return [ ...acc, cur];
-                }
-
-            }, [])
-        );
+    private replaceIngredientWithAlternative(parentId: string, id: string): void {
+        this.props.replaceIngredientWithAlternative(parentId, id);
     }
 
     private toggleIngredientOpen(id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.map((ingredient) => ({
-                ...ingredient,
-                isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen
-            }))
-        );
+        this.props.toggleIngredientOpen(id);
     }
+
+    private toggleIngredientMark(id: string): void {
+        this.props.toggleIngredientMark(id);
+    }
+
+    // NOTE: Handlers - AltIngredient
+
+    private removeAltIngredient(parentId: string, id: string): void {
+        this.props.removeAltIngredient(parentId, id);
+    }
+
+    // NOTE: Handlers - Other
 
     private handleIngredientAmountEdit(id: string): InputChangeCallback {
 
@@ -224,6 +180,7 @@ export default class IngredientsBlock extends Component<Props> {
         };
     }
 
+
     private handleAltIngredientHover(parentId: string, id: string, inside: boolean = false): void {
 
         const { ingredients, updateIngredients } = this.props;
@@ -297,21 +254,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private markIngredient(id: string): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
-                ...acc,
-                cur.item.id === id
-                    ? { ...cur, isMarked: !cur.isMarked }
-                    : cur
-            ], [])
-        );
-    }
-
-
+    
     // NOTE: Component parts
 
     private getIngredientInfoLineNutritionFacts(
@@ -459,7 +402,7 @@ export default class IngredientsBlock extends Component<Props> {
             </div>
         );
 
-        const onClick = (): void => this.switchAltIngredientWithParent(parentId, altIngredient.item.id);
+        const onClick = (): void => this.replaceIngredientWithAlternative(parentId, altIngredient.item.id);
         const onMouseEnter = (): void => this.handleAltIngredientHover(parentId, altIngredient.item.id, true);
         const onMouseLeave = (): void => this.handleAltIngredientHover(parentId, altIngredient.item.id, false);
 
@@ -507,7 +450,7 @@ export default class IngredientsBlock extends Component<Props> {
         const checkbox = (
             <div
                 className={styles.lineCheckbox}
-                onClick={() => this.markIngredient(ingredient.item.id)}
+                onClick={() => this.toggleIngredientMark(ingredient.item.id)}
             >
                 {( ingredient.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
             </div>

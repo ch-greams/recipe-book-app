@@ -36,6 +36,12 @@ import {
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
     RECIPE_ITEM_CREATE_DIRECTION,
+    RECIPE_ITEM_REMOVE_INGREDIENT,
+    RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+    RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
+    IngredientAlternative,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
 } from "./types";
 
 
@@ -854,6 +860,101 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     newStep: SubDirectionType.Note,
                     steps: [],
                 }
+            };
+        }
+
+        case RECIPE_ITEM_REMOVE_INGREDIENT: {
+
+            const id = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.filter((ingredient) => ingredient.item.id !== id)
+            };
+        }
+
+        case RECIPE_ITEM_REMOVE_ALT_INGREDIENT: {
+
+            const { parentId, id } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    ( ingredient.item.id === parentId )
+                        ? {
+                            ...ingredient,
+                            alternatives: ingredient.alternatives.filter((alt) => alt.item.id !== id)
+                        }
+                        : ingredient
+                ))
+            };
+        }
+
+        case RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
+
+            const { parentId, id } = action.payload;
+
+            const ingredients = state.ingredients.reduce<IngredientDefault[]>((accIngredients, curIngredient) => {
+
+                if (curIngredient.item.id === parentId) {
+
+                    const alternative = curIngredient.alternatives.find((alt) => alt.item.id === id);
+                    const newAlternative: IngredientAlternative = {
+                        amount: curIngredient.amount,
+                        amountInput: curIngredient.amountInput,
+                        unit: curIngredient.unit,
+                        item: curIngredient.item,
+                    };
+
+                    return [
+                        ...accIngredients,
+                        {
+                            ...curIngredient,
+                            alternatives: [
+                                ...curIngredient.alternatives.filter((alt) => alt.item.id !== id),
+                                newAlternative,
+                            ],
+                            amount: alternative.amount,
+                            amountInput: alternative.amountInput,
+                            unit: alternative.unit,
+                            item: alternative.item,
+                        },
+                    ];
+                }
+                else {
+                    return [ ...accIngredients, curIngredient];
+                }
+            }, []);
+
+            return {
+                ...state,
+                ingredients: ingredients,
+            };
+        }
+
+        case RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN: {
+
+            const id = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => ({
+                    ...ingredient,
+                    isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen
+                }))
+            };
+        }
+
+        case RECIPE_ITEM_TOGGLE_INGREDIENT_MARK: {
+
+            const id = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => ({
+                    ...ingredient,
+                    isMarked: (ingredient.item.id === id) ? !ingredient.isMarked : ingredient.isMarked
+                }))
             };
         }
 

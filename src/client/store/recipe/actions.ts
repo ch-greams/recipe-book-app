@@ -61,6 +61,16 @@ import {
     UpdateSubtitleAction,
     CreateDirectionAction,
     RECIPE_ITEM_CREATE_DIRECTION,
+    RemoveIngredientAction,
+    RECIPE_ITEM_REMOVE_INGREDIENT,
+    RemoveAltIngredientAction,
+    RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+    RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
+    ReplaceIngredientWithAlternativeAction,
+    ToggleIngredientOpenAction,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
+    ToggleIngredientMarkAction,
 } from "./types";
 
 
@@ -269,5 +279,40 @@ export function createDirection(direction: Direction): CreateDirectionAction {
     return {
         type: RECIPE_ITEM_CREATE_DIRECTION,
         payload: direction,
+    };
+}
+
+export function removeIngredient(id: string): RemoveIngredientAction {
+    return {
+        type: RECIPE_ITEM_REMOVE_INGREDIENT,
+        payload: id,
+    };
+}
+
+export function removeAltIngredient(parentId: string, id: string): RemoveAltIngredientAction {
+    return {
+        type: RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+        payload: { parentId, id },
+    };
+}
+
+export function replaceIngredientWithAlternative(parentId: string, id: string): ReplaceIngredientWithAlternativeAction {
+    return {
+        type: RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
+        payload: { parentId, id },
+    };
+}
+
+export function toggleIngredientOpen(id: string): ToggleIngredientOpenAction {
+    return {
+        type: RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
+        payload: id,
+    };
+}
+
+export function toggleIngredientMark(id: string): ToggleIngredientMarkAction {
+    return {
+        type: RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
+        payload: id,
     };
 }
