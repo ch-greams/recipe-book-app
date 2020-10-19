@@ -10,7 +10,9 @@ import {
     updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
     updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
     updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
-    createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative, toggleIngredientOpen, toggleIngredientMark,
+    createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
+    toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
+    updateIngredientAmount, updateIngredientUnit,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -73,6 +75,10 @@ interface DispatchToProps {
     replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
     toggleIngredientOpen: typeof toggleIngredientOpen;
     toggleIngredientMark: typeof toggleIngredientMark;
+    updateIngredientAmount: typeof updateIngredientAmount;
+    updateIngredientUnit: typeof updateIngredientUnit;
+    updateAltIngredientAmount: typeof updateAltIngredientAmount;
+    updateAltIngredientUnit: typeof updateAltIngredientUnit;
 }
 
 interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
@@ -234,6 +240,10 @@ class RecipePage extends Component<RecipePageProps> {
             replaceIngredientWithAlternative,
             toggleIngredientOpen,
             toggleIngredientMark,
+            updateIngredientAmount,
+            updateIngredientUnit,
+            updateAltIngredientAmount,
+            updateAltIngredientUnit,
         } = this.props;
 
         const searchParams = new URLSearchParams(location.search);
@@ -273,6 +283,10 @@ class RecipePage extends Component<RecipePageProps> {
                         replaceIngredientWithAlternative={replaceIngredientWithAlternative}
                         toggleIngredientOpen={toggleIngredientOpen}
                         toggleIngredientMark={toggleIngredientMark}
+                        updateIngredientAmount={updateIngredientAmount}
+                        updateIngredientUnit={updateIngredientUnit}
+                        updateAltIngredientAmount={updateAltIngredientAmount}
+                        updateAltIngredientUnit={updateAltIngredientUnit}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -370,6 +384,10 @@ const mapDispatchToProps: DispatchToProps = {
     replaceIngredientWithAlternative,
     toggleIngredientOpen,
     toggleIngredientMark,
+    updateIngredientAmount,
+    updateIngredientUnit,
+    updateAltIngredientAmount,
+    updateAltIngredientUnit,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

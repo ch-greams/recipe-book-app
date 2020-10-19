@@ -42,6 +42,10 @@ import {
     IngredientAlternative,
     RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
     RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
+    RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
 } from "./types";
 
 
@@ -955,6 +959,95 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     ...ingredient,
                     isMarked: (ingredient.item.id === id) ? !ingredient.isMarked : ingredient.isMarked
                 }))
+            };
+        }
+
+
+        case RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT: {
+
+            const { id, inputValue } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => {
+
+                    if (ingredient.item.id === id) {
+
+                        const amount = Utils.decimalNormalizer(inputValue, ingredient.amountInput);
+
+                        return {
+                            ...ingredient,
+                            amountInput: amount,
+                            amount: Number(amount),
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                })
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_INGREDIENT_UNIT: {
+
+            const { id, unit } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    (ingredient.item.id === id) ? { ...ingredient, unit: unit } : ingredient
+                ))
+            };
+        }
+
+
+        case RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT: {
+
+            const { parentId, id, inputValue } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    (ingredient.item.id === parentId)
+                        ? {
+                            ...ingredient,
+                            alternatives: ingredient.alternatives.map((alt) => {
+
+                                const amount = Utils.decimalNormalizer(inputValue, alt.amountInput);
+
+                                if (alt.item.id === id) {
+                                    return {
+                                        ...alt,
+                                        amountInput: amount,
+                                        amount: Number(amount),
+                                    };
+                                }
+                                else {
+                                    return alt;
+                                }
+                            }),
+                        }
+                        : ingredient
+                )),
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT: {
+
+            const { parentId, id, unit } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    (ingredient.item.id === parentId)
+                        ? {
+                            ...ingredient,
+                            alternatives: ingredient.alternatives.map((alt) => (
+                                (alt.item.id === id) ? { ...alt, unit: unit } : alt
+                            )),
+                        }
+                        : ingredient
+                ))
             };
         }
 

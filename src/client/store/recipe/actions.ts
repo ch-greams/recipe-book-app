@@ -71,6 +71,14 @@ import {
     RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
     RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
     ToggleIngredientMarkAction,
+    UpdateAltIngredientAmountAction,
+    UpdateAltIngredientUnitAction,
+    UpdateIngredientAmountAction,
+    UpdateIngredientUnitAction,
+    RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
 } from "./types";
 
 
@@ -314,5 +322,37 @@ export function toggleIngredientMark(id: string): ToggleIngredientMarkAction {
     return {
         type: RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
         payload: id,
+    };
+}
+
+export function updateIngredientAmount(id: string, inputValue: string): UpdateIngredientAmountAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
+        payload: { id, inputValue },
+    };
+}
+
+export function updateIngredientUnit(id: string, unit: (UnitWeight | UnitVolume)): UpdateIngredientUnitAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
+        payload: { id, unit },
+    };
+}
+
+export function updateAltIngredientAmount(
+    parentId: string, id: string, inputValue: string,
+): UpdateAltIngredientAmountAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+        payload: { parentId, id, inputValue },
+    };
+}
+
+export function updateAltIngredientUnit(
+    parentId: string, id: string, unit: (UnitWeight | UnitVolume),
+): UpdateAltIngredientUnitAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+        payload: { parentId, id, unit },
     };
 }

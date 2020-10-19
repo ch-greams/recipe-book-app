@@ -16,7 +16,7 @@ import { SearchPageStore } from "../../store/search/types";
 import { RoutePath } from "../Root";
 import {
     removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
-    toggleIngredientMark, toggleIngredientOpen,
+    toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount, updateAltIngredientUnit, updateIngredientAmount, updateIngredientUnit,
 } from "../../store/recipe/actions";
 
 
@@ -32,6 +32,10 @@ interface Props {
     replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
     toggleIngredientOpen: typeof toggleIngredientOpen;
     toggleIngredientMark: typeof toggleIngredientMark;
+    updateIngredientAmount: typeof updateIngredientAmount;
+    updateIngredientUnit: typeof updateIngredientUnit;
+    updateAltIngredientAmount: typeof updateAltIngredientAmount;
+    updateAltIngredientUnit: typeof updateAltIngredientUnit;
 }
 
 
@@ -60,126 +64,37 @@ export default class IngredientsBlock extends Component<Props> {
         this.props.toggleIngredientMark(id);
     }
 
+    private handleIngredientAmountEdit(id: string): InputChangeCallback {
+        return (event) => {
+            this.props.updateIngredientAmount(id, event.target.value);
+        };
+    }
+
+    private handleIngredientUnitEdit(id: string): SelectChangeCallback {
+        return (event) => {
+            this.props.updateIngredientUnit(id, event.target.value as UnitWeight | UnitVolume);
+        };
+    }
+
     // NOTE: Handlers - AltIngredient
 
     private removeAltIngredient(parentId: string, id: string): void {
         this.props.removeAltIngredient(parentId, id);
     }
 
-    // NOTE: Handlers - Other
-
-    private handleIngredientAmountEdit(id: string): InputChangeCallback {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        return (event) => {
-
-            updateIngredients(
-                ingredients.map((ingredient) => {
-
-                    if (ingredient.item.id === id) {
-
-                        const amount = Utils.decimalNormalizer(event.target.value, ingredient.amountInput);
-
-                        return {
-                            ...ingredient,
-                            amountInput: amount,
-                            amount: Number(amount),
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                })
-            );
-        };
-    }
-
-    private handleIngredientUnitEdit(id: string): SelectChangeCallback {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        return (event) => {
-
-            updateIngredients(
-                ingredients.map((ingredient) => (
-                    (ingredient.item.id === id)
-                        ? { ...ingredient, unit: event.target.value as UnitWeight | UnitVolume }
-                        : ingredient
-                ))
-            );
-        };
-    }
-
     private handleAltIngredientAmountEdit(parentId: string, id: string): InputChangeCallback {
-
-        const { ingredients, updateIngredients } = this.props;
-
         return (event) => {
-
-            updateIngredients(
-                ingredients.map((ingredient) => {
-
-                    if (ingredient.item.id === parentId) {
-
-                        return {
-                            ...ingredient,
-                            alternatives: ingredient.alternatives.map((alt) => {
-
-                                const amount = Utils.decimalNormalizer(event.target.value, alt.amountInput);
-
-                                if (alt.item.id === id) {
-                                    return {
-                                        ...alt,
-                                        amountInput: amount,
-                                        amount: Number(amount),
-                                    };
-                                }
-                                else {
-                                    return alt;
-                                }
-                            }),
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                })
-            );
+            this.props.updateAltIngredientAmount(parentId, id, event.target.value);
         };
     }
 
     private handleAltIngredientUnitEdit(parentId: string, id: string): InputChangeCallback {
-
-        const { ingredients, updateIngredients } = this.props;
-
         return (event) => {
-
-            updateIngredients(
-                ingredients.map((ingredient) => {
-
-                    if (ingredient.item.id === parentId) {
-
-                        return {
-                            ...ingredient,
-                            alternatives: ingredient.alternatives.map((alt) => (
-                                (alt.item.id === id)
-                                    ? {
-                                        ...alt,
-                                        unit: event.target.value as UnitWeight | UnitVolume,
-                                    }
-                                    : alt
-                            )),
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                })
-            );
+            this.props.updateAltIngredientUnit(parentId, id, event.target.value as UnitWeight | UnitVolume);
         };
     }
 
+    // NOTE: Handlers - Other
 
     private handleAltIngredientHover(parentId: string, id: string, inside: boolean = false): void {
 

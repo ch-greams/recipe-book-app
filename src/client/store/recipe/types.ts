@@ -287,6 +287,11 @@ export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPL
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
 
+export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
+export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT";
+
 
 export interface RemoveIngredientAction {
     type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
@@ -314,6 +319,27 @@ export interface ToggleIngredientMarkAction {
 }
 
 
+export interface UpdateIngredientAmountAction {
+    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT;
+    payload: { id: string, inputValue: string };
+}
+
+export interface UpdateIngredientUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_UNIT;
+    payload: { id: string, unit: UnitWeight | UnitVolume };
+}
+
+export interface UpdateAltIngredientAmountAction {
+    type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT;
+    payload: { parentId: string, id: string, inputValue: string };
+}
+
+export interface UpdateAltIngredientUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT;
+    payload: { parentId: string, id: string, unit: UnitWeight | UnitVolume };
+}
+
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateIngredientsAction |
 
@@ -330,5 +356,7 @@ export type RecipeItemActionTypes = (
     UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction |
 
     RemoveIngredientAction | RemoveAltIngredientAction | ReplaceIngredientWithAlternativeAction |
-    ToggleIngredientOpenAction | ToggleIngredientMarkAction
+    ToggleIngredientOpenAction | ToggleIngredientMarkAction |
+
+    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction
 );
