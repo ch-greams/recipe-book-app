@@ -3,7 +3,6 @@ import {
     CreateSubDirectionAction,
     CreateSubDirectionIngredientAction,
     Direction,
-    IngredientDefault,
     RECIPE_ITEM_CREATE_SUBDIRECTION,
     RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
     RECIPE_ITEM_REMOVE_DIRECTION,
@@ -25,7 +24,6 @@ import {
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
-    RECIPE_ITEM_UPDATE_INGREDIENTS,
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
@@ -52,7 +50,6 @@ import {
     UpdateNewDirectionTemperatureUnitAction,
     UpdateNewDirectionTimeCountAction,
     UpdateNewDirectionTimeUnitAction,
-    UpdateIngredientsAction,
     UpdateNameAction,
     UpdateNewSubDirectionTypeAction,
     UpdateSubDirectionIngredientAmountAction,
@@ -115,13 +112,6 @@ export function updateDescription(description: string): UpdateDescriptionAction 
     return {
         type: RECIPE_ITEM_UPDATE_DESCRIPTION,
         payload: description,
-    };
-}
-
-export function updateIngredients(ingredients: IngredientDefault[]): UpdateIngredientsAction {
-    return {
-        type: RECIPE_ITEM_UPDATE_INGREDIENTS,
-        payload: ingredients,
     };
 }
 

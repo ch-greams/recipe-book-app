@@ -6,7 +6,6 @@ import {
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_SUBTITLE,
     RECIPE_ITEM_UPDATE_DESCRIPTION,
-    RECIPE_ITEM_UPDATE_INGREDIENTS,
     RecipeItemActionTypes,
     RecipePageStore,
     IngredientDefault,
@@ -367,13 +366,6 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 description: action.payload,
-            };
-        }
-
-        case RECIPE_ITEM_UPDATE_INGREDIENTS: {
-            return {
-                ...state,
-                ingredients: action.payload as IngredientDefault[],
             };
         }
 

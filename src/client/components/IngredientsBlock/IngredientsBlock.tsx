@@ -10,7 +10,6 @@ import { IngredientDefault, IngredientAlternative } from "../../store/recipe/typ
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 import Utils from "../../../common/utils";
-import { AnyAction } from "redux";
 import { Link } from "react-router-dom";
 import { SearchPageStore } from "../../store/search/types";
 import { RoutePath } from "../Root";
@@ -28,7 +27,6 @@ interface Props {
     isReadOnly: boolean;
     ingredients: IngredientDefault[];
     search: SearchPageStore;
-    updateIngredients: (value: IngredientDefault[]) => AnyAction;
 
     removeIngredient: typeof removeIngredient;
     removeAltIngredient: typeof removeAltIngredient;

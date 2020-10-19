@@ -105,7 +105,6 @@ export const RECIPE_ITEM_UPDATE_BRAND = "RECIPE_ITEM_UPDATE_BRAND";
 export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
 export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 
-export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
 export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
 export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
 export const RECIPE_ITEM_TOGGLE_DIRECTION_MARK = "RECIPE_ITEM_TOGGLE_DIRECTION_MARK";
@@ -151,11 +150,6 @@ export interface UpdateSubtitleAction {
 export interface UpdateDescriptionAction {
     type: typeof RECIPE_ITEM_UPDATE_DESCRIPTION;
     payload: string;
-}
-
-export interface UpdateIngredientsAction {
-    type: typeof RECIPE_ITEM_UPDATE_INGREDIENTS;
-    payload: IngredientDefault[];
 }
 
 // NOTE: Directions
@@ -359,7 +353,7 @@ export interface AddAltIngredientAction {
 }
 
 export type RecipeItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateIngredientsAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |

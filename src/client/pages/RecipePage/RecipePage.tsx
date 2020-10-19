@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
 import {
-    updateName, updateBrand, updateSubtitle, updateDescription, updateIngredients, removeDirection,
+    updateName, updateBrand, updateSubtitle, updateDescription, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
     updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
     createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType,
@@ -43,7 +43,6 @@ interface DispatchToProps {
     updateBrand: typeof updateBrand;
     updateSubtitle: typeof updateSubtitle;
     updateDescription: typeof updateDescription;
-    updateIngredients: typeof updateIngredients;
     requestIngredients: typeof requestIngredients;
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
@@ -212,7 +211,6 @@ class RecipePage extends Component<RecipePageProps> {
             updateBrand,
             updateSubtitle,
             updateDescription,
-            updateIngredients,
             removeDirection,
             removeSubDirection,
             toggleDirectionOpen,
@@ -281,7 +279,6 @@ class RecipePage extends Component<RecipePageProps> {
                     <IngredientsBlock
                         isReadOnly={!isEdit}
                         ingredients={ingredients}
-                        updateIngredients={updateIngredients}
                         search={search}
 
                         removeIngredient={removeIngredient}
@@ -361,7 +358,6 @@ const mapDispatchToProps: DispatchToProps = {
     updateBrand,
     updateSubtitle,
     updateDescription,
-    updateIngredients,
     requestIngredients,
     removeDirection,
     removeSubDirection,
