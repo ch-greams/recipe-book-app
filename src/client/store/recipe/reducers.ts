@@ -46,6 +46,9 @@ import {
     RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
     RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
     RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
+    RECIPE_ITEM_ADD_INGREDIENT,
+    RECIPE_ITEM_ADD_ALT_INGREDIENT,
 } from "./types";
 
 
@@ -1048,6 +1051,78 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         }
                         : ingredient
                 ))
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS: {
+
+            const { parentId, id, isSelected } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    (ingredient.item.id === parentId)
+                        ? {
+                            ...ingredient,
+                            altNutritionFacts: (
+                                isSelected
+                                    ? ingredient.alternatives.find((alt) => (alt.item.id === id))?.item.nutritionFacts
+                                    : {}
+                            ),
+                        }
+                        : ingredient
+                ))
+            };
+        }
+
+        case RECIPE_ITEM_ADD_INGREDIENT: {
+
+            const ingredient = action.payload;
+
+            return {
+                ...state,
+                ingredients: [
+                    ...state.ingredients,
+                    {
+                        isOpen: true,
+                        isMarked: false,
+        
+                        item: ingredient,
+        
+                        amount: 100,
+                        amountInput: "100",
+                        unit: UnitWeight.g,
+            
+                        altNutritionFacts: {},
+            
+                        alternatives: [],    
+                    },
+                ],
+            };
+        }
+
+        case RECIPE_ITEM_ADD_ALT_INGREDIENT: {
+
+            const { id, altIngredient } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    (ingredient.item.id === id)
+                        ? {
+                            ...ingredient,
+                            alternatives: [
+                                ...ingredient.alternatives,
+                                {
+                                    amount: 100,
+                                    amountInput: "100",
+                                    unit: UnitWeight.g,
+                                    item: altIngredient,
+                                }
+                            ],
+                        }
+                        : ingredient
+                )),
             };
         }
 

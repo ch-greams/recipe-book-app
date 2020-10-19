@@ -15,8 +15,11 @@ import { Link } from "react-router-dom";
 import { SearchPageStore } from "../../store/search/types";
 import { RoutePath } from "../Root";
 import {
+    addAltIngredient,
+    addIngredient,
     removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
-    toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount, updateAltIngredientUnit, updateIngredientAmount, updateIngredientUnit,
+    toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount,
+    updateAltIngredientUnit, updateAltNutritionFacts, updateIngredientAmount, updateIngredientUnit,
 } from "../../store/recipe/actions";
 
 
@@ -36,6 +39,9 @@ interface Props {
     updateIngredientUnit: typeof updateIngredientUnit;
     updateAltIngredientAmount: typeof updateAltIngredientAmount;
     updateAltIngredientUnit: typeof updateAltIngredientUnit;
+    updateAltNutritionFacts: typeof updateAltNutritionFacts;
+    addIngredient: typeof addIngredient;
+    addAltIngredient: typeof addAltIngredient;
 }
 
 
@@ -76,6 +82,15 @@ export default class IngredientsBlock extends Component<Props> {
         };
     }
 
+    private addIngredient(): void {
+
+        const { search, addIngredient } = this.props;
+
+        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
+        
+        addIngredient(item);
+    }
+
     // NOTE: Handlers - AltIngredient
 
     private removeAltIngredient(parentId: string, id: string): void {
@@ -94,81 +109,18 @@ export default class IngredientsBlock extends Component<Props> {
         };
     }
 
-    // NOTE: Handlers - Other
-
-    private handleAltIngredientHover(parentId: string, id: string, inside: boolean = false): void {
-
-        const { ingredients, updateIngredients } = this.props;
-
-        updateIngredients(
-            ingredients.map((ingredient) => (
-                (ingredient.item.id === parentId)
-                    ? {
-                        ...ingredient,
-                        altNutritionFacts: (
-                            inside
-                                ? ingredient.alternatives.find((alt) => (alt.item.id === id)).item.nutritionFacts
-                                : {}
-                        ),
-                    }
-                    : ingredient
-            ))
-        );
-    }
-
-    private addIngredient(): void {
-
-        const { ingredients, search, updateIngredients } = this.props;
-
-        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
-
-        updateIngredients([
-            ...ingredients,
-            {
-                isOpen: true,
-                isMarked: false,
-
-                item: item,
-
-                amount: 100,
-                amountInput: "100",
-                unit: UnitWeight.g,
-    
-                altNutritionFacts: {},
-    
-                alternatives: [],    
-            },
-        ]);
+    private handleAltIngredientHover(parentId: string, id: string, inside: boolean): void {
+        this.props.updateAltNutritionFacts(parentId, id, inside);
     }
 
     private addAltIngredient(id: string): void {
 
-        const { ingredients, search, updateIngredients } = this.props;
+        const { search, addAltIngredient } = this.props;
 
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
-
-        updateIngredients(
-            ingredients.reduce<IngredientDefault[]>((acc, cur) => [
-                ...acc,
-                cur.item.id === id
-                    ? {
-                        ...cur,
-                        alternatives: [
-                            ...cur.alternatives,
-                            {
-                                amount: 100,
-                                amountInput: "100",
-                                unit: UnitWeight.g,
-            
-                                item: item,
-                            }
-                        ]
-                    }
-                    : cur
-            ], [])
-        );
+        
+        addAltIngredient(id, item);
     }
-
     
     // NOTE: Component parts
 

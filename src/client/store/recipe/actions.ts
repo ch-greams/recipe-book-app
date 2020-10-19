@@ -79,6 +79,13 @@ import {
     RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
     RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
     RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
+    UpdateAltNutritionFactsAction,
+    AddAltIngredientAction,
+    AddIngredientAction,
+    RECIPE_ITEM_ADD_ALT_INGREDIENT,
+    RECIPE_ITEM_ADD_INGREDIENT,
+    IngredientItem,
 } from "./types";
 
 
@@ -339,20 +346,37 @@ export function updateIngredientUnit(id: string, unit: (UnitWeight | UnitVolume)
     };
 }
 
-export function updateAltIngredientAmount(
-    parentId: string, id: string, inputValue: string,
-): UpdateAltIngredientAmountAction {
+export function updateAltIngredientAmount(parentId: string, id: string, inputValue: string): UpdateAltIngredientAmountAction {
     return {
         type: RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
         payload: { parentId, id, inputValue },
     };
 }
 
-export function updateAltIngredientUnit(
-    parentId: string, id: string, unit: (UnitWeight | UnitVolume),
-): UpdateAltIngredientUnitAction {
+export function updateAltIngredientUnit(parentId: string, id: string, unit: (UnitWeight | UnitVolume)): UpdateAltIngredientUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
         payload: { parentId, id, unit },
+    };
+}
+
+export function updateAltNutritionFacts(parentId: string, id: string, isSelected: boolean): UpdateAltNutritionFactsAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
+        payload: { parentId, id, isSelected },
+    };
+}
+
+export function addIngredient(ingredient: IngredientItem): AddIngredientAction {
+    return {
+        type: RECIPE_ITEM_ADD_INGREDIENT,
+        payload: ingredient,
+    };
+}
+
+export function addAltIngredient(id: string, altIngredient: IngredientItem): AddAltIngredientAction {
+    return {
+        type: RECIPE_ITEM_ADD_ALT_INGREDIENT,
+        payload: { id, altIngredient },
     };
 }

@@ -291,6 +291,10 @@ export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIE
 export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
 export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT";
 export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT";
+export const RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS = "RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS";
+
+export const RECIPE_ITEM_ADD_INGREDIENT = "RECIPE_ITEM_ADD_INGREDIENT";
+export const RECIPE_ITEM_ADD_ALT_INGREDIENT = "RECIPE_ITEM_ADD_ALT_INGREDIENT";
 
 
 export interface RemoveIngredientAction {
@@ -339,6 +343,20 @@ export interface UpdateAltIngredientUnitAction {
     payload: { parentId: string, id: string, unit: UnitWeight | UnitVolume };
 }
 
+export interface UpdateAltNutritionFactsAction {
+    type: typeof RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS;
+    payload: { parentId: string, id: string, isSelected: boolean };
+}
+
+export interface AddIngredientAction {
+    type: typeof RECIPE_ITEM_ADD_INGREDIENT;
+    payload: IngredientItem;
+}
+
+export interface AddAltIngredientAction {
+    type: typeof RECIPE_ITEM_ADD_ALT_INGREDIENT;
+    payload: { id: string, altIngredient: IngredientItem };
+}
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateIngredientsAction |
@@ -358,5 +376,6 @@ export type RecipeItemActionTypes = (
     RemoveIngredientAction | RemoveAltIngredientAction | ReplaceIngredientWithAlternativeAction |
     ToggleIngredientOpenAction | ToggleIngredientMarkAction |
 
-    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction
+    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction |
+    UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction
 );

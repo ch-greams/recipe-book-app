@@ -12,7 +12,7 @@ import {
     updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
     createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
     toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
-    updateIngredientAmount, updateIngredientUnit,
+    updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -79,6 +79,9 @@ interface DispatchToProps {
     updateIngredientUnit: typeof updateIngredientUnit;
     updateAltIngredientAmount: typeof updateAltIngredientAmount;
     updateAltIngredientUnit: typeof updateAltIngredientUnit;
+    updateAltNutritionFacts: typeof updateAltNutritionFacts;
+    addIngredient: typeof addIngredient;
+    addAltIngredient: typeof addAltIngredient;
 }
 
 interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
@@ -244,6 +247,9 @@ class RecipePage extends Component<RecipePageProps> {
             updateIngredientUnit,
             updateAltIngredientAmount,
             updateAltIngredientUnit,
+            updateAltNutritionFacts,
+            addIngredient,
+            addAltIngredient,
         } = this.props;
 
         const searchParams = new URLSearchParams(location.search);
@@ -287,6 +293,9 @@ class RecipePage extends Component<RecipePageProps> {
                         updateIngredientUnit={updateIngredientUnit}
                         updateAltIngredientAmount={updateAltIngredientAmount}
                         updateAltIngredientUnit={updateAltIngredientUnit}
+                        updateAltNutritionFacts={updateAltNutritionFacts}
+                        addIngredient={addIngredient}
+                        addAltIngredient={addAltIngredient}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -388,6 +397,9 @@ const mapDispatchToProps: DispatchToProps = {
     updateIngredientUnit,
     updateAltIngredientAmount,
     updateAltIngredientUnit,
+    updateAltNutritionFacts,
+    addIngredient,
+    addAltIngredient,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);
