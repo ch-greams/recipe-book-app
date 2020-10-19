@@ -10,10 +10,7 @@ import {
     RecipeItemActionTypes,
     RecipePageStore,
     IngredientDefault,
-    Direction,
-    RECIPE_ITEM_UPDATE_DIRECTIONS,
     SubDirectionType,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION,
     RECIPE_ITEM_REMOVE_DIRECTION,
     RECIPE_ITEM_REMOVE_SUBDIRECTION,
     RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
@@ -39,7 +36,6 @@ import {
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
     RECIPE_ITEM_CREATE_DIRECTION,
-
 } from "./types";
 
 
@@ -365,20 +361,6 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: action.payload as IngredientDefault[],
-            };
-        }
-
-        case RECIPE_ITEM_UPDATE_DIRECTIONS: {
-            return {
-                ...state,
-                directions: action.payload as Direction[],
-            };
-        }
-
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION: {
-            return {
-                ...state,
-                newDirection: action.payload as Direction,
             };
         }
 

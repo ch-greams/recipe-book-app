@@ -13,7 +13,6 @@ import {
     RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
     RECIPE_ITEM_UPDATE_BRAND,
     RECIPE_ITEM_UPDATE_DESCRIPTION,
-    RECIPE_ITEM_UPDATE_DIRECTIONS,
     RECIPE_ITEM_UPDATE_DIRECTION_NAME,
     RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
     RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT,
@@ -28,7 +27,6 @@ import {
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
     RECIPE_ITEM_UPDATE_INGREDIENTS,
     RECIPE_ITEM_UPDATE_NAME,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION,
     RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
@@ -42,7 +40,6 @@ import {
     ToggleSubDirectionMarkAction,
     UpdateBrandAction,
     UpdateDescriptionAction,
-    UpdateDirectionsAction,
     UpdateDirectionNameAction,
     UpdateDirectionStepNumberAction,
     UpdateDirectionTemperatureCountAction,
@@ -57,7 +54,6 @@ import {
     UpdateNewDirectionTimeUnitAction,
     UpdateIngredientsAction,
     UpdateNameAction,
-    UpdateNewDirectionAction,
     UpdateNewSubDirectionTypeAction,
     UpdateSubDirectionIngredientAmountAction,
     UpdateSubDirectionIngredientUnitAction,
@@ -103,21 +99,6 @@ export function updateIngredients(ingredients: IngredientDefault[]): UpdateIngre
         payload: ingredients,
     };
 }
-
-export function updateDirections(directions: Direction[]): UpdateDirectionsAction {
-    return {
-        type: RECIPE_ITEM_UPDATE_DIRECTIONS,
-        payload: directions,
-    };
-}
-
-export function updateNewDirection(direction: Direction): UpdateNewDirectionAction {
-    return {
-        type: RECIPE_ITEM_UPDATE_NEW_DIRECTION,
-        payload: direction,
-    };
-}
-
 
 export function removeDirection(directionIndex: number): RemoveDirectionAction {
     return {

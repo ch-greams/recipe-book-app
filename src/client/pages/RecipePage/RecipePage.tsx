@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RecipePageStore } from "../../store/recipe/types";
 import {
-    updateName, updateBrand, updateSubtitle, updateDescription,
-    updateIngredients, updateDirections, updateNewDirection, removeDirection,
+    updateName, updateBrand, updateSubtitle, updateDescription, updateIngredients, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
     updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
     createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType,
@@ -42,10 +41,7 @@ interface DispatchToProps {
     updateSubtitle: typeof updateSubtitle;
     updateDescription: typeof updateDescription;
     updateIngredients: typeof updateIngredients;
-    updateDirections: typeof updateDirections;
-    updateNewDirection: typeof updateNewDirection;
     requestIngredients: typeof requestIngredients;
-
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
@@ -201,9 +197,6 @@ class RecipePage extends Component<RecipePageProps> {
             updateSubtitle,
             updateDescription,
             updateIngredients,
-            updateDirections,
-            updateNewDirection,
-
             removeDirection,
             removeSubDirection,
             toggleDirectionOpen,
@@ -272,9 +265,6 @@ class RecipePage extends Component<RecipePageProps> {
                         newDirection={newDirection}
                         directions={directions}
                         ingredients={ingredients}
-                        updateDirections={updateDirections}
-                        updateNewDirection={updateNewDirection}
-
                         removeDirection={removeDirection}
                         removeSubDirection={removeSubDirection}
                         toggleDirectionOpen={toggleDirectionOpen}
@@ -330,10 +320,7 @@ const mapDispatchToProps: DispatchToProps = {
     updateSubtitle,
     updateDescription,
     updateIngredients,
-    updateDirections,
-    updateNewDirection,
     requestIngredients,
-
     removeDirection,
     removeSubDirection,
     toggleDirectionOpen,

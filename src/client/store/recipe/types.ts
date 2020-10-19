@@ -106,11 +106,9 @@ export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
 export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 
 export const RECIPE_ITEM_UPDATE_INGREDIENTS = "RECIPE_ITEM_UPDATE_INGREDIENTS";
-export const RECIPE_ITEM_UPDATE_DIRECTIONS = "RECIPE_ITEM_UPDATE_DIRECTIONS";
 export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
 export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
 export const RECIPE_ITEM_TOGGLE_DIRECTION_MARK = "RECIPE_ITEM_TOGGLE_DIRECTION_MARK";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION = "RECIPE_ITEM_UPDATE_NEW_DIRECTION";
 
 export const RECIPE_ITEM_REMOVE_SUBDIRECTION = "RECIPE_ITEM_REMOVE_SUBDIRECTION";
 export const RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK = "RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK";
@@ -160,10 +158,7 @@ export interface UpdateIngredientsAction {
     payload: IngredientDefault[];
 }
 
-export interface UpdateDirectionsAction {
-    type: typeof RECIPE_ITEM_UPDATE_DIRECTIONS;
-    payload: Direction[];
-}
+// NOTE: Directions
 
 export interface RemoveDirectionAction {
     type: typeof RECIPE_ITEM_REMOVE_DIRECTION;
@@ -178,11 +173,6 @@ export interface ToggleDirectionOpenAction {
 export interface ToggleDirectionMarkAction {
     type: typeof RECIPE_ITEM_TOGGLE_DIRECTION_MARK;
     payload: number;
-}
-
-export interface UpdateNewDirectionAction {
-    type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION;
-    payload: Direction;
 }
 
 export interface RemoveSubDirectionAction {
@@ -290,8 +280,7 @@ export interface CreateDirectionAction {
 }
 
 export type RecipeItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateIngredientsAction | UpdateDirectionsAction | UpdateNewDirectionAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateIngredientsAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |

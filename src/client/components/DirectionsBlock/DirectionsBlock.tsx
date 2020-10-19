@@ -15,25 +15,11 @@ import RemoveIcon from "../../icons/close-sharp.svg";
 import Utils from "../../../common/utils";
 import { InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 import {
-    createSubDirection,
-    createSubDirectionIngredient,
-    removeDirection,
-    removeSubDirection,
-    toggleDirectionMark,
-    toggleDirectionOpen,
-    toggleSubDirectionMark,
-    updateDirectionName,
-    updateDirections,
-    updateDirectionStepNumber,
-    updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit,
-    updateDirectionTimeCount,
-    updateDirectionTimeUnit,
-    updateNewDirection,
-    updateNewSubDirectionType,
-    updateSubDirectionIngredientAmount,
-    updateSubDirectionIngredientUnit,
-    updateSubDirectionNote,
+    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
+    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
+    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
+    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewSubDirectionType,
+    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
     updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
     updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
 } from "../../store/recipe/actions";
@@ -45,9 +31,6 @@ interface Props {
     newDirection: Direction;
     directions: Direction[];
     ingredients: IngredientDefault[];
-    updateDirections: typeof updateDirections;
-    updateNewDirection: typeof updateNewDirection;
-
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
