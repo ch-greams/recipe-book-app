@@ -1,4 +1,4 @@
-import { UnitWeight, UnitVolume, UnitTemperature, UnitTime } from "../../../common/units";
+import { UnitWeight, UnitVolume, UnitTemperature, UnitTime, CustomUnitInput } from "../../../common/units";
 import {
     CreateSubDirectionAction,
     CreateSubDirectionIngredientAction,
@@ -83,6 +83,14 @@ import {
     RECIPE_ITEM_ADD_ALT_INGREDIENT,
     RECIPE_ITEM_ADD_INGREDIENT,
     IngredientItem,
+    RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
+    RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
+    UpdateServingSizeAmountAction,
+    UpdateServingSizeUnitAction,
+    RECIPE_ITEM_UPDATE_TYPE,
+    UpdateTypeAction,
+    RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
+    UpdateCustomUnitsAction,
 } from "./types";
 
 
@@ -368,5 +376,33 @@ export function addAltIngredient(id: string, altIngredient: IngredientItem): Add
     return {
         type: RECIPE_ITEM_ADD_ALT_INGREDIENT,
         payload: { id, altIngredient },
+    };
+}
+
+export function updateServingSizeAmount(inputValue: string): UpdateServingSizeAmountAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
+        payload: inputValue,
+    };
+}
+
+export function updateServingSizeUnit(unit: UnitWeight | UnitVolume): UpdateServingSizeUnitAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
+        payload: unit,
+    };
+}
+
+export function updateType(type: string): UpdateTypeAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_TYPE,
+        payload: type,
+    };
+}
+
+export function updateCustomUnits(customUnits: CustomUnitInput[]): UpdateCustomUnitsAction {
+    return {
+        type: RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
+        payload: customUnits,
     };
 }

@@ -1,6 +1,6 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary } from "../../../common/typings";
-import { CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 
 
 export interface IngredientItem {
@@ -84,13 +84,14 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
 
+    customUnits: CustomUnit[];
     customUnitInputs: CustomUnitInput[];
 
     type: string;
 
     servingSize: number;
-
-    unit: UnitWeight | UnitVolume;
+    servingSizeInput: string;
+    servingSizeUnit: UnitWeight | UnitVolume;
 
     ingredients: IngredientDefault[];
 
@@ -104,6 +105,51 @@ export const RECIPE_ITEM_UPDATE_NAME = "RECIPE_ITEM_UPDATE_NAME";
 export const RECIPE_ITEM_UPDATE_BRAND = "RECIPE_ITEM_UPDATE_BRAND";
 export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
 export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
+export const RECIPE_ITEM_UPDATE_TYPE = "RECIPE_ITEM_UPDATE_TYPE";
+export const RECIPE_ITEM_UPDATE_CUSTOM_UNITS = "RECIPE_ITEM_UPDATE_CUSTOM_UNITS";
+export const RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
+export const RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT";
+
+
+export interface UpdateNameAction {
+    type: typeof RECIPE_ITEM_UPDATE_NAME;
+    payload: string;
+}
+
+export interface UpdateBrandAction {
+    type: typeof RECIPE_ITEM_UPDATE_BRAND;
+    payload: string;
+}
+
+export interface UpdateSubtitleAction {
+    type: typeof RECIPE_ITEM_UPDATE_SUBTITLE;
+    payload: string;
+}
+
+export interface UpdateDescriptionAction {
+    type: typeof RECIPE_ITEM_UPDATE_DESCRIPTION;
+    payload: string;
+}
+
+export interface UpdateServingSizeAmountAction {
+    type: typeof RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT;
+    payload: string;
+}
+
+export interface UpdateServingSizeUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT;
+    payload: UnitWeight | UnitVolume;
+}
+
+export interface UpdateTypeAction {
+    type: typeof RECIPE_ITEM_UPDATE_TYPE;
+    payload: string;
+}
+
+export interface UpdateCustomUnitsAction {
+    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNITS;
+    payload: CustomUnitInput[];
+}
 
 export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
 export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
@@ -131,26 +177,6 @@ export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UP
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT";
 export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT";
 export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
-
-export interface UpdateNameAction {
-    type: typeof RECIPE_ITEM_UPDATE_NAME;
-    payload: string;
-}
-
-export interface UpdateBrandAction {
-    type: typeof RECIPE_ITEM_UPDATE_BRAND;
-    payload: string;
-}
-
-export interface UpdateSubtitleAction {
-    type: typeof RECIPE_ITEM_UPDATE_SUBTITLE;
-    payload: string;
-}
-
-export interface UpdateDescriptionAction {
-    type: typeof RECIPE_ITEM_UPDATE_DESCRIPTION;
-    payload: string;
-}
 
 // NOTE: Directions
 
@@ -353,7 +379,8 @@ export interface AddAltIngredientAction {
 }
 
 export type RecipeItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
+    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | UpdateCustomUnitsAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |

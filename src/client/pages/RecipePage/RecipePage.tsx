@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RecipePageStore } from "../../store/recipe/types";
+import { RecipePageStore, UpdateCustomUnitsAction } from "../../store/recipe/types";
 import {
     updateName, updateBrand, updateSubtitle, updateDescription, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
@@ -13,16 +13,16 @@ import {
     createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
     toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
     updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
+    updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, UnitVolume, UnitWeight } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import Utils from "../../../common/utils";
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { UpdateCustomUnitsAction } from "../../store/food/types";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 import IngredientsBlock from "../../components/IngredientsBlock/IngredientsBlock";
 import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
@@ -43,6 +43,11 @@ interface DispatchToProps {
     updateBrand: typeof updateBrand;
     updateSubtitle: typeof updateSubtitle;
     updateDescription: typeof updateDescription;
+    updateType: typeof updateType;
+    updateServingSizeAmount: typeof updateServingSizeAmount;
+    updateServingSizeUnit: typeof updateServingSizeUnit;
+    updateCustomUnits: typeof updateCustomUnits;
+
     requestIngredients: typeof requestIngredients;
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
@@ -94,6 +99,20 @@ class RecipePage extends Component<RecipePageProps> {
         this.props.requestIngredients();
     }
 
+    // NOTE: Handlers
+
+    private handleTypeEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.props.updateType(event.target.value);
+    }
+
+    private handleServingSizeAmountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.props.updateServingSizeAmount(event.target.value);
+    }
+
+    private handleServingSizeUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
+        this.props.updateServingSizeUnit(event.target.value as UnitWeight | UnitVolume);
+    }
+
     // NOTE: General Information
 
     private getParametersBlock(
@@ -115,7 +134,7 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.type}
                         className={styles.typeSelectInput}
-                        onChange={console.log}
+                        onChange={this.handleTypeEdit.bind(this)}
                     />
 
                 </div>
@@ -130,15 +149,15 @@ class RecipePage extends Component<RecipePageProps> {
                     
                     <input
                         type={"text"}
-                        value={recipeItem.servingSize}
+                        value={recipeItem.servingSizeInput}
                         className={styles.servingSizeLineInput}
-                        onChange={console.log}
+                        onChange={this.handleServingSizeAmountEdit.bind(this)}
                     />
 
                     <SelectInput
-                        options={Object.keys(UnitWeight)}
-                        value={recipeItem.unit}
-                        onChange={console.log}
+                        options={Object.keys(Units)}
+                        value={recipeItem.servingSizeUnit}
+                        onChange={this.handleServingSizeUnitEdit.bind(this)}
                     />
 
                 </div>
@@ -156,7 +175,7 @@ class RecipePage extends Component<RecipePageProps> {
 
     private getGeneralInfoBlock(): JSX.Element {
 
-        const { recipeItem } = this.props;
+        const { recipeItem, updateCustomUnits } = this.props;
 
         const featuredNutritionFacts = [
             NutritionFactType.Energy,
@@ -171,15 +190,10 @@ class RecipePage extends Component<RecipePageProps> {
             NutritionFactType.VitaminC,
         ];
 
-        const phFunc = (customUnits: CustomUnitInput[]): UpdateCustomUnitsAction => {
-            console.log(customUnits);
-            return null;
-        };
-
         return (
             <div className={styles.mainBlock}>
 
-                {this.getParametersBlock(recipeItem, phFunc)}
+                {this.getParametersBlock(recipeItem, updateCustomUnits)}
 
                 <div className={styles.featuredNutritionFacts}>
 
@@ -358,6 +372,11 @@ const mapDispatchToProps: DispatchToProps = {
     updateBrand,
     updateSubtitle,
     updateDescription,
+    updateType,
+    updateCustomUnits,
+    updateServingSizeAmount,
+    updateServingSizeUnit,
+
     requestIngredients,
     removeDirection,
     removeSubDirection,

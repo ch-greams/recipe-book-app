@@ -1,5 +1,5 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 import Utils from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
@@ -48,6 +48,10 @@ import {
     RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
     RECIPE_ITEM_ADD_INGREDIENT,
     RECIPE_ITEM_ADD_ALT_INGREDIENT,
+    RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
+    RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
+    RECIPE_ITEM_UPDATE_TYPE,
+    RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
 } from "./types";
 
 
@@ -62,10 +66,13 @@ const initialState: RecipePageStore = {
     // eslint-disable-next-line max-len
     description: "These cocoa muffins, made with flour, sugar, cocoa, eggs, oil, and vanilla, are moist and have a not-too-sweet and in intense cocoa flavor. For those with more restrained chocolate cravings.",
 
+    customUnits: [],
     customUnitInputs: [],
-    type: "Muffins",
+    type: "Bread / Sweet / Muffins",
+
     servingSize: 100,
-    unit: UnitWeight.g,
+    servingSizeInput: "100",
+    servingSizeUnit: UnitWeight.g,
 
     ingredients: [
         {
@@ -337,6 +344,11 @@ const initialState: RecipePageStore = {
 };
 
 
+function convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
+
+    return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
+}
+
 export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
 
     switch (action.type) {
@@ -366,6 +378,22 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 description: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_TYPE: {
+            return {
+                ...state,
+                type: action.payload,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_CUSTOM_UNITS: {
+            return {
+                ...state,
+
+                customUnits: convertCustomUnitsIntoValues(action.payload),
+                customUnitInputs: action.payload as CustomUnitInput[],
             };
         }
 
@@ -1115,6 +1143,29 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         }
                         : ingredient
                 )),
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
+
+            const inputValue = action.payload;
+
+            const amount = Utils.decimalNormalizer(inputValue, state.servingSizeInput);
+
+            return {
+                ...state,
+                servingSize: Number(amount),
+                servingSizeInput: amount,
+            };
+        }
+
+        case RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT: {
+
+            const unit = action.payload;
+
+            return {
+                ...state,
+                servingSizeUnit: unit,
             };
         }
 
