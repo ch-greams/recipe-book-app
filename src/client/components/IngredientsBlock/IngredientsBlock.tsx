@@ -6,7 +6,7 @@ import SearchIcon from "../../icons/search-sharp.svg";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
-import { IngredientDefault, IngredientAlternative } from "../../store/recipe/types";
+import { RecipeIngredientDefault, RecipeIngredient } from "../../store/recipe/types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
 import Utils from "../../../common/utils";
@@ -25,7 +25,7 @@ import {
 
 interface Props {
     isReadOnly: boolean;
-    ingredients: IngredientDefault[];
+    ingredients: RecipeIngredientDefault[];
     search: SearchPageStore;
 
     removeIngredient: typeof removeIngredient;
@@ -161,7 +161,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientInfoLine(ingredient: IngredientDefault, isNew: boolean = false): JSX.Element {
+    private getIngredientInfoLine(ingredient: RecipeIngredientDefault, isNew: boolean = false): JSX.Element {
 
         const amountText = (
             <div className={styles.ingredientInfoLineAmountText}>
@@ -211,7 +211,7 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getAltIngredientLine(parentId: string, altIngredient: IngredientAlternative, isNew: boolean = false): JSX.Element {
+    private getAltIngredientLine(parentId: string, altIngredient: RecipeIngredient, isNew: boolean = false): JSX.Element {
 
         const { isReadOnly } = this.props;
 
@@ -297,11 +297,11 @@ export default class IngredientsBlock extends Component<Props> {
         );
     }
 
-    private getIngredientLine(ingredient: IngredientDefault, isNew: boolean = false): JSX.Element {
+    private getIngredientLine(ingredient: RecipeIngredientDefault, isNew: boolean = false): JSX.Element {
 
         const { isReadOnly } = this.props;
 
-        const newAlt: IngredientAlternative = {
+        const newAlt: RecipeIngredient = {
             amount: 100,
             amountInput: "100",
             unit: UnitWeight.g,
@@ -396,7 +396,7 @@ export default class IngredientsBlock extends Component<Props> {
 
         const { ingredients, isReadOnly } = this.props;
 
-        const newIngredient: IngredientDefault = {
+        const newIngredient: RecipeIngredientDefault = {
 
             isOpen: false,
             isMarked: false,

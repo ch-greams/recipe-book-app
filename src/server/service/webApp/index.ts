@@ -47,7 +47,7 @@ export default class WebApp {
 
     private static async getFoodRecordsEndpoint(_request: express.Request, response: express.Response): Promise<void> {
 
-        const records = await Database.getRecords();
+        const records = await Database.getFoodRecords();
 
         response.send(records);
     }
@@ -56,7 +56,23 @@ export default class WebApp {
 
         const { params: { id } } = request;
 
-        const record = await Database.getRecord(id);
+        const record = await Database.getFoodRecord(id);
+
+        response.send(record);
+    }
+
+    private static async getRecipeRecordsEndpoint(_request: express.Request, response: express.Response): Promise<void> {
+
+        const records = await Database.getRecipeRecords();
+
+        response.send(records);
+    }
+
+    private static async getRecipeRecordEndpoint(request: express.Request, response: express.Response): Promise<void> {
+
+        const { params: { id } } = request;
+
+        const record = await Database.getRecipeRecord(id);
 
         response.send(record);
     }
@@ -79,6 +95,10 @@ export default class WebApp {
         this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint);
 
         this.app.get("/api/food/:id", WebApp.log, WebApp.getFoodRecordEndpoint);
+
+        this.app.get("/api/recipe", WebApp.log, WebApp.getRecipeRecordsEndpoint);
+
+        this.app.get("/api/recipe/:id", WebApp.log, WebApp.getRecipeRecordEndpoint);
 
         this.app.get("*", WebApp.log, (_req, res) => {
             res.sendFile( path.join(__dirname, "..", "..", "view", "index.html") );

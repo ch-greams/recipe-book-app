@@ -6,8 +6,7 @@ import {
     INGREDIENTS_FETCH_SUCCESS,
 } from "./types";
 import FoodApi from "../../../api/client/foodApi";
-import { Food } from "../../../common/typings";
-import { IngredientItem } from "../recipe/types";
+import { Food, IngredientItem } from "../../../common/typings";
 
 
 

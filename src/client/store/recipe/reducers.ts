@@ -8,14 +8,14 @@ import {
     RECIPE_ITEM_UPDATE_DESCRIPTION,
     RecipeItemActionTypes,
     RecipePageStore,
-    IngredientDefault,
+    RecipeIngredientDefault,
     SubDirectionType,
     RECIPE_ITEM_REMOVE_DIRECTION,
     RECIPE_ITEM_REMOVE_SUBDIRECTION,
     RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
     RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
     RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
-    SubDirectionIngredient,
+    RecipeSubDirectionIngredient,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
     RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
@@ -38,7 +38,7 @@ import {
     RECIPE_ITEM_REMOVE_INGREDIENT,
     RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
     RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
-    IngredientAlternative,
+    RecipeIngredient,
     RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
     RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
     RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
@@ -60,15 +60,16 @@ const initialState: RecipePageStore = {
 
     isReadOnly: false,
 
+    id: "",
     name: "Cocoa Muffins",
     brand: "Homemade",
     subtitle: "Those are really good",
     // eslint-disable-next-line max-len
     description: "These cocoa muffins, made with flour, sugar, cocoa, eggs, oil, and vanilla, are moist and have a not-too-sweet and in intense cocoa flavor. For those with more restrained chocolate cravings.",
+    type: "Bread / Sweet / Muffins",
 
     customUnits: [],
     customUnitInputs: [],
-    type: "Bread / Sweet / Muffins",
 
     servingSize: 100,
     servingSizeInput: "100",
@@ -467,7 +468,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
                     if (directionIndex === iDirection) {
 
-                        const steps = direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) =>
+                        const steps = direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) =>
                             (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                 ? { ...subDirection, isMarked: !subDirection.isMarked }
                                 : subDirection
@@ -521,7 +522,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) => {
+                            steps: direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) => {
 
                                 if (
                                     (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
@@ -554,7 +555,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection: SubDirectionIngredient, iSubDirection) => (
+                            steps: direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) => (
                                 (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                     ? { ...subDirection, unit: unit }
                                     : subDirection
@@ -921,12 +922,12 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const { parentId, id } = action.payload;
 
-            const ingredients = state.ingredients.reduce<IngredientDefault[]>((accIngredients, curIngredient) => {
+            const ingredients = state.ingredients.reduce<RecipeIngredientDefault[]>((accIngredients, curIngredient) => {
 
                 if (curIngredient.item.id === parentId) {
 
                     const alternative = curIngredient.alternatives.find((alt) => alt.item.id === id);
-                    const newAlternative: IngredientAlternative = {
+                    const newAlternative: RecipeIngredient = {
                         amount: curIngredient.amount,
                         amountInput: curIngredient.amountInput,
                         unit: curIngredient.unit,

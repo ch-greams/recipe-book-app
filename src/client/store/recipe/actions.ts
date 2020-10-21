@@ -1,8 +1,9 @@
+import { IngredientItem } from "../../../common/typings";
 import { UnitWeight, UnitVolume, UnitTemperature, UnitTime, CustomUnitInput } from "../../../common/units";
 import {
     CreateSubDirectionAction,
     CreateSubDirectionIngredientAction,
-    Direction,
+    RecipeDirection,
     RECIPE_ITEM_CREATE_SUBDIRECTION,
     RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
     RECIPE_ITEM_REMOVE_DIRECTION,
@@ -82,7 +83,6 @@ import {
     AddIngredientAction,
     RECIPE_ITEM_ADD_ALT_INGREDIENT,
     RECIPE_ITEM_ADD_INGREDIENT,
-    IngredientItem,
     RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
     RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
     UpdateServingSizeAmountAction,
@@ -288,7 +288,7 @@ export function updateNewDirectionTimeUnit(unit: UnitTime): UpdateNewDirectionTi
     };
 }
 
-export function createDirection(direction: Direction): CreateDirectionAction {
+export function createDirection(direction: RecipeDirection): CreateDirectionAction {
     return {
         type: RECIPE_ITEM_CREATE_DIRECTION,
         payload: direction,

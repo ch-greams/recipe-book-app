@@ -5,15 +5,14 @@ import { UnitWeight, UnitTemperature, UnitTime, UnitVolume, Units } from "../../
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
 import {
-    Direction,
-    IngredientDefault,
-    SubDirection,
-    SubDirectionIngredient,
+    RecipeDirection,
+    RecipeIngredientDefault,
+    RecipeSubDirectionIngredient,
     SubDirectionType,
 } from "../../store/recipe/types";
 import RemoveIcon from "../../icons/close-sharp.svg";
 import Utils from "../../../common/utils";
-import { InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
+import { InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
 import {
     createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
     toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
@@ -28,9 +27,9 @@ import {
 
 interface Props {
     isReadOnly: boolean;
-    newDirection: Direction;
-    directions: Direction[];
-    ingredients: IngredientDefault[];
+    newDirection: RecipeDirection;
+    directions: RecipeDirection[];
+    ingredients: RecipeIngredientDefault[];
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
@@ -203,7 +202,7 @@ export default class DirectionsBlock extends Component<Props> {
         this.props.updateNewDirectionStepNumber(Number(event.target.value));
     }
 
-    private createDirection(direction: Direction): void {
+    private createDirection(direction: RecipeDirection): void {
         this.props.createDirection(direction);
     }
 
@@ -261,7 +260,7 @@ export default class DirectionsBlock extends Component<Props> {
     }
 
     private getSubDirectionLine(
-        subDirection: SubDirectionIngredient,
+        subDirection: RecipeSubDirectionIngredient,
         directionIndex: number,
         subDirectionIndex: number,
     ): JSX.Element {
@@ -339,7 +338,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getNewSubDirectionLine(directionIndex: number, direction: Direction, ingredients: IngredientDefault[]): JSX.Element {
+    private getNewSubDirectionLine(directionIndex: number, direction: RecipeDirection, ingredients: RecipeIngredientDefault[]): JSX.Element {
 
         return (
 
@@ -381,7 +380,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getDirectionInfoLine(index: number, direction: Direction): JSX.Element {
+    private getDirectionInfoLine(index: number, direction: RecipeDirection): JSX.Element {
 
         const { isReadOnly } = this.props;
 
@@ -501,7 +500,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getDirectionLine(direction: Direction, index: number): JSX.Element {
+    private getDirectionLine(direction: RecipeDirection, index: number): JSX.Element {
 
         const { isReadOnly, ingredients } = this.props;
 
@@ -538,7 +537,7 @@ export default class DirectionsBlock extends Component<Props> {
                         ( direction.isOpen || !isReadOnly ) &&
                         direction.steps.map((step, stepIndex) => (
                             step.type === SubDirectionType.Ingredient
-                                ? this.getSubDirectionLine(step as SubDirectionIngredient, index, stepIndex)
+                                ? this.getSubDirectionLine(step as RecipeSubDirectionIngredient, index, stepIndex)
                                 : this.getSubDirectionNoteLine(step, index, stepIndex)
                         ))
                     )}
@@ -550,7 +549,7 @@ export default class DirectionsBlock extends Component<Props> {
         );
     }
 
-    private getNewDirectionLine(direction: Direction): JSX.Element {
+    private getNewDirectionLine(direction: RecipeDirection): JSX.Element {
 
         const amountText = (
             <div className={styles.directionInfoLineAmount}>

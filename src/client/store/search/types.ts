@@ -1,4 +1,4 @@
-import { IngredientItem } from "../recipe/types";
+import { IngredientItem } from "../../../common/typings";
 
 
 

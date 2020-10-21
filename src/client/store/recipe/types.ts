@@ -1,42 +1,21 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary } from "../../../common/typings";
+import { Dictionary, Direction, Ingredient, IngredientItem, SubDirection, SubDirectionIngredient } from "../../../common/typings";
 import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 
 
-export interface IngredientItem {
-    id: string;
-    name: string;
-    nutritionFacts: Dictionary<NutritionFactType, number>;
-}
 
-type Ingredient = {
-    amount: number;
-    unit: UnitWeight | UnitVolume;
-    item: IngredientItem;
-};
-
-export interface IngredientAlternative extends Ingredient {
+export interface RecipeIngredient extends Ingredient {
     amountInput: string;
 }
 
-export interface IngredientDefault extends Ingredient {
+export interface RecipeIngredientDefault extends Ingredient {
     isOpen: boolean;
     isMarked: boolean;
     amountInput: string;
-    alternatives: IngredientAlternative[];
+    alternatives: RecipeIngredient[];
     altNutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
-
-interface Time {
-    count: number;
-    unit: UnitTime;
-}
-
-interface Temperature {
-    count: number;
-    unit: UnitTemperature;
-}
 
 export enum SubDirectionType {
     Tip = "Tip",
@@ -45,33 +24,18 @@ export enum SubDirectionType {
     Ingredient = "Ingredient",
 }
 
-export interface SubDirection {
-    type: SubDirectionType;
-    label: string;
-}
-
-export interface SubDirectionIngredient extends SubDirection {
+export interface RecipeSubDirectionIngredient extends SubDirectionIngredient {
     isMarked: boolean;
-    id: string;
-    amount: number;
     amountInput: string;
-    unit: UnitWeight | UnitVolume;
 }
 
-export interface Direction {
+export interface RecipeDirection extends Direction {
     isOpen: boolean;
     isMarked: boolean;
-    stepNumber: number;
-    name: string;
-
-    time?: Time;
     timeInput: string;
-
-    temperature?: Temperature;
     temperatureInput: string;
-
     newStep: string;
-    steps: (SubDirection | SubDirectionIngredient)[];
+    steps: (SubDirection | RecipeSubDirectionIngredient)[];
 }
 
 
@@ -79,24 +43,24 @@ export interface RecipePageStore {
 
     isReadOnly: boolean;
 
+    id: string;
     name: string;
     brand: string;
     subtitle: string;
     description: string;
+    type: string;
 
     customUnits: CustomUnit[];
     customUnitInputs: CustomUnitInput[];
-
-    type: string;
 
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: UnitWeight | UnitVolume;
 
-    ingredients: IngredientDefault[];
+    ingredients: RecipeIngredientDefault[];
 
-    newDirection: Direction;
-    directions: Direction[];
+    newDirection: RecipeDirection;
+    directions: RecipeDirection[];
 }
 
 
@@ -296,7 +260,7 @@ export interface UpdateNewDirectionTimeUnitAction {
 
 export interface CreateDirectionAction {
     type: typeof RECIPE_ITEM_CREATE_DIRECTION;
-    payload: Direction;
+    payload: RecipeDirection;
 }
 
 // NOTE: Ingredients
