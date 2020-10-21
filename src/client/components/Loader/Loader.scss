@@ -1,0 +1,22 @@
+@import "../../variables";
+
+
+.loaderBlock {
+
+
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    font-family: $font-default;
+    font-size: 36px;
+    font-weight: 500;
+
+    color: $color-white;
+
+    background-color: $color-default;
+}

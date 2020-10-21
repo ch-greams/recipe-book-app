@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Store } from "redux";
+import Loader from "./Loader/Loader";
 
 
 export enum RoutePath {
@@ -27,7 +28,7 @@ export default class Root extends React.Component<RootProps> {
         return (
             <Provider store={this.props.store}>
                 <BrowserRouter>
-                    <Suspense fallback={<div>{"Loading..."}</div>}>
+                    <Suspense fallback={<Loader />}>
                         <Switch>
                             <Route path={"/food/:foodId?"} component={FoodPage} />
                             <Route path={"/recipe/:recipeId?"} component={RecipePage} />

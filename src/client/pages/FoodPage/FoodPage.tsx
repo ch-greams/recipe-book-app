@@ -14,6 +14,7 @@ import styles from "./FoodPage.scss";
 import Utils from "../../../common/utils";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import { RouteComponentProps } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 
 
@@ -148,7 +149,7 @@ class FoodPage extends Component<Props> {
         } = this.props;
 
         if (!isLoaded) {
-            return (<h1>{"LOADING"}</h1>);
+            return <Loader />;
         }
 
         return (

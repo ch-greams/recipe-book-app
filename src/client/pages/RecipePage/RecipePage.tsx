@@ -30,6 +30,7 @@ import styles from "./RecipePage.scss";
 import { requestIngredients } from "../../store/search/actions";
 import { SearchPageStore } from "../../store/search/types";
 import { RouteComponentProps } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 
 
@@ -215,6 +216,7 @@ class RecipePage extends Component<RecipePageProps> {
         const {
             location,
             recipeItem: {
+                isLoaded,
                 name,
                 brand,
                 subtitle,
@@ -269,6 +271,10 @@ class RecipePage extends Component<RecipePageProps> {
 
         const searchParams = new URLSearchParams(location.search);
         const isEdit = ( searchParams.get("edit") === "true" );
+
+        if (!isLoaded) {
+            return <Loader />;
+        }
 
         return (
             <div className={styles.recipePage}>
