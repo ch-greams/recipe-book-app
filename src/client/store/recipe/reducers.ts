@@ -1,5 +1,5 @@
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import { Direction, IngredientDefault, SubDirectionIngredient } from "../../../common/typings";
+import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitWeight } from "../../../common/units";
 import Utils from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
@@ -52,21 +52,26 @@ import {
     RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
     RECIPE_ITEM_UPDATE_TYPE,
     RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
+    RECIPE_ITEM_FETCH_REQUESTED,
+    RECIPE_ITEM_FETCH_SUCCESS,
+    RECIPE_ITEM_FETCH_ERROR,
+    RecipeDirection,
 } from "./types";
 
 
 
 const initialState: RecipePageStore = {
 
+    isLoaded: false,
+    errorMessage: null,
     isReadOnly: false,
 
     id: "",
-    name: "Cocoa Muffins",
-    brand: "Homemade",
-    subtitle: "Those are really good",
-    // eslint-disable-next-line max-len
-    description: "These cocoa muffins, made with flour, sugar, cocoa, eggs, oil, and vanilla, are moist and have a not-too-sweet and in intense cocoa flavor. For those with more restrained chocolate cravings.",
-    type: "Bread / Sweet / Muffins",
+    name: "Name",
+    brand: "Brand",
+    subtitle: "Subtitle",
+    description: "Description",
+    type: "",
 
     customUnits: [],
     customUnitInputs: [],
@@ -75,153 +80,7 @@ const initialState: RecipePageStore = {
     servingSizeInput: "100",
     servingSizeUnit: UnitWeight.g,
 
-    ingredients: [
-        {
-            isOpen: false,
-            isMarked: false,
-
-            item: {
-                id: "f000001",
-                name: "Milk",
-                nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 4.7,
-                    [NutritionFactType.Fat]: 3.7,
-                    [NutritionFactType.Protein]: 3.3,
-                    [NutritionFactType.Energy]: 64,
-                },
-            },
-
-            amount: 120,
-            amountInput: "120",
-            unit: UnitVolume.ml,
-
-            altNutritionFacts: {},
-
-            alternatives: [
-                {
-                    amount: 240,
-                    amountInput: "240",
-                    unit: UnitVolume.ml,
-                    item: {
-                        id: "f000002",
-                        name: "Oat Milk",
-
-                        nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 16,
-                            [NutritionFactType.Fat]: 5,
-                            [NutritionFactType.Protein]: 3,
-                            [NutritionFactType.Energy]: 120,
-                        },
-                    },
-                },
-                {
-                    amount: 1,
-                    amountInput: "1",
-                    unit: UnitVolume.cup,
-                    item: {
-                        id: "f000003",
-                        name: "Almond Milk",
-
-                        nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 4,
-                            [NutritionFactType.Fat]: 3,
-                            [NutritionFactType.Protein]: 1,
-                            [NutritionFactType.Energy]: 50,
-                        },
-                    },
-                },
-            ],
-        },
-        {
-            isOpen: false,
-            isMarked: false,
-
-            item: {
-                id: "f000004",
-                name: "Wheat Flour",
-
-                nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 79,
-                    [NutritionFactType.Fat]: 1.8,
-                    [NutritionFactType.Protein]: 7,
-                    [NutritionFactType.Energy]: 364,
-                },
-            },
-
-            amount: 100,
-            amountInput: "100",
-            unit: UnitWeight.g,
-
-            altNutritionFacts: {},
-
-            alternatives: [
-                {
-                    amount: 1,
-                    amountInput: "1",
-                    unit: UnitVolume.cup,
-                    item: {
-                        id: "f000005",
-                        name: "Rye Flour",
-
-                        nutritionFacts: {
-                            [NutritionFactType.Carbohydrate]: 75,
-                            [NutritionFactType.Fat]: 1.5,
-                            [NutritionFactType.Protein]: 11,
-                            [NutritionFactType.Energy]: 349,
-                        },
-                    },
-                },
-            ],
-        },
-        {
-            isOpen: false,
-            isMarked: false,
-
-            item: {
-                id: "f000006",
-                name: "Egg",
-
-                nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 1.7,
-                    [NutritionFactType.Fat]: 23,
-                    [NutritionFactType.Protein]: 31,
-                    [NutritionFactType.Energy]: 348,
-                },
-            },
-
-            amount: 1,
-            amountInput: "1",
-            unit: UnitVolume.cup,
-
-            altNutritionFacts: {},
-
-            alternatives: [],
-        },
-        {
-            isOpen: false,
-            isMarked: false,
-
-            item: {
-                id: "f000007",
-                name: "Cocoa",
-
-                nutritionFacts: {
-                    [NutritionFactType.Carbohydrate]: 26.1,
-                    [NutritionFactType.Fat]: 6,
-                    [NutritionFactType.Protein]: 9.3,
-                    [NutritionFactType.Energy]: 103,
-                },
-            },
-
-            amount: 45,
-            amountInput: "45",
-            unit: UnitWeight.g,
-
-            altNutritionFacts: {},
-
-            alternatives: [],
-        },
-    ],
+    ingredients: [],
 
     newDirection: {
         isOpen: false,
@@ -245,109 +104,57 @@ const initialState: RecipePageStore = {
         newStep: SubDirectionType.Note,
         steps: [],
     },
-    directions: [
-        {
-            isOpen: false,
-            isMarked: false,
-
-            stepNumber: 1,
-            name: "Preheat Oven",
-
-            temperature: {
-                count: 180,
-                unit: UnitTemperature.C,
-            },
-
-            timeInput: "",
-            temperatureInput: "180",
-
-            newStep: SubDirectionType.Note,
-            steps: [],
-        },
-        {
-            isOpen: false,
-            isMarked: false,
-
-            stepNumber: 2,
-            name: "Stir",
-
-            time: {
-                count: 20,
-                unit: UnitTime.min,
-            },
-
-            timeInput: "20",
-            temperatureInput: "",
-
-            newStep: SubDirectionType.Note,
-            steps: [
-                {
-                    type: SubDirectionType.Note,
-                    label: "Mix quickly and lightly with a fork until moistened, but do not beat.",
-                },
-                {
-                    type: SubDirectionType.Ingredient,
-                    label: "Milk",
-
-                    id: "f000001",
-                    isMarked: false,
-                    amount: 100,
-                    amountInput: "100",
-                },
-                {
-                    type: SubDirectionType.Ingredient,
-                    label: "Flour",
-
-                    id: "f000004",
-                    isMarked: false,
-                    amount: 240,
-                    amountInput: "240",
-                },
-                {
-                    type: SubDirectionType.Ingredient,
-                    label: "Egg",
-
-                    id: "f000006",
-                    isMarked: false,
-                    amount: 120,
-                    amountInput: "120",
-                },            
-            ]
-        },
-        {
-            isOpen: false,
-            isMarked: false,
-
-            stepNumber: 3,
-            name: "Bake",
-
-            time: {
-                count: 40,
-                unit: UnitTime.min,
-            },
-            temperature: {
-                count: 180,
-                unit: UnitTemperature.C,
-            },
-
-            timeInput: "15",
-            temperatureInput: "180",
-
-            newStep: SubDirectionType.Note,
-            steps: [
-                {
-                    type: SubDirectionType.Note,
-                    label: "If you don't burn your house down, then everything will be ok.",
-                },
-            ],
-        },
-    ],
+    directions: [],
 };
 
+
+function convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
+
+    return customUnits.map((customUnit: CustomUnit) => ({ ...customUnit, amount: String(customUnit.amount) }));
+}
 
 function convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
 
     return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
+}
+
+function convertIngredients(ingredients: IngredientDefault[]): RecipeIngredientDefault[] {
+
+    return ingredients.map((ingredient) => ({
+        ...ingredient,
+
+        isOpen: true,
+        isMarked: false,
+        amountInput: String(ingredient.amount),
+        alternatives: ingredient.alternatives.map((alt) => ({
+            ...alt,
+            amountInput: String(alt.amount),
+        })),
+        altNutritionFacts: {},
+    }));
+}
+
+function convertDirections(directions: Direction[]): RecipeDirection[] {
+
+    return directions.map((direction) => ({
+        ...direction,
+
+        isOpen: true,
+        isMarked: false,
+        timeInput: direction.time?.count ? String(direction.time?.count) : "",
+        temperatureInput: direction.temperature?.count ? String(direction.temperature?.count) : "",
+        newStep: SubDirectionType.Note,
+
+        steps: direction.steps.map((step) => 
+            step.type !== SubDirectionType.Ingredient
+                ? step
+                : ({
+                    ...step,
+                    isMarked: false,
+                    amountInput: String((step as SubDirectionIngredient).amount),
+                })
+        ),
+    }));
 }
 
 export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
@@ -1167,6 +974,46 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 servingSizeUnit: unit,
+            };
+        }
+
+        case RECIPE_ITEM_FETCH_REQUESTED: {
+            return {
+                ...state,
+                isLoaded: false,
+                errorMessage: null,
+
+                id: action.payload as string,
+            };
+        }
+
+        case RECIPE_ITEM_FETCH_SUCCESS: {
+            const recipeItem = action.payload;
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: null,
+
+                id: recipeItem.id,
+                name: recipeItem.name,
+                brand: recipeItem.brand,
+                subtitle: recipeItem.subtitle,
+                description: recipeItem.description,
+                type: recipeItem.type,
+
+                customUnits: recipeItem.customUnits,
+                customUnitInputs: convertCustomUnitsIntoInputs(recipeItem.customUnits),
+
+                ingredients: convertIngredients(recipeItem.ingredients),
+                directions: convertDirections(recipeItem.directions),
+            };
+        }
+
+        case RECIPE_ITEM_FETCH_ERROR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: action.payload as string,
             };
         }
 

@@ -13,7 +13,7 @@ import {
     createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
     toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
     updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
-    updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits,
+    updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits, requestRecipeItem,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
@@ -86,6 +86,7 @@ interface DispatchToProps {
     updateAltNutritionFacts: typeof updateAltNutritionFacts;
     addIngredient: typeof addIngredient;
     addAltIngredient: typeof addAltIngredient;
+    requestRecipeItem: typeof requestRecipeItem;
 }
 
 interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
@@ -95,6 +96,8 @@ class RecipePage extends Component<RecipePageProps> {
     public static readonly displayName = "RecipePage";
 
     public componentDidMount(): void {
+
+        this.props.requestRecipeItem(this.props.match.params.recipeId);
 
         this.props.requestIngredients();
     }
@@ -415,6 +418,8 @@ const mapDispatchToProps: DispatchToProps = {
     updateAltNutritionFacts,
     addIngredient,
     addAltIngredient,
+
+    requestRecipeItem,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

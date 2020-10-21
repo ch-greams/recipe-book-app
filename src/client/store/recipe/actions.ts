@@ -91,6 +91,8 @@ import {
     UpdateTypeAction,
     RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
     UpdateCustomUnitsAction,
+    RECIPE_ITEM_FETCH_REQUESTED,
+    RecipeItemFetchRequestedAction,
 } from "./types";
 
 
@@ -404,5 +406,12 @@ export function updateCustomUnits(customUnits: CustomUnitInput[]): UpdateCustomU
     return {
         type: RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
         payload: customUnits,
+    };
+}
+
+export function requestRecipeItem(recipeId: string): RecipeItemFetchRequestedAction {
+    return {
+        type: RECIPE_ITEM_FETCH_REQUESTED,
+        payload: recipeId,
     };
 }

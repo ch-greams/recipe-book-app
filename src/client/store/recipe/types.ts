@@ -1,5 +1,5 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, Direction, Ingredient, IngredientItem, SubDirection, SubDirectionIngredient } from "../../../common/typings";
+import { Dictionary, Direction, Ingredient, IngredientItem, Recipe, SubDirection, SubDirectionIngredient } from "../../../common/typings";
 import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
 
 
@@ -40,7 +40,8 @@ export interface RecipeDirection extends Direction {
 
 
 export interface RecipePageStore {
-
+    isLoaded: boolean;
+    errorMessage: string;
     isReadOnly: boolean;
 
     id: string;
@@ -342,6 +343,26 @@ export interface AddAltIngredientAction {
     payload: { id: string, altIngredient: IngredientItem };
 }
 
+export const RECIPE_ITEM_FETCH_REQUESTED = "RECIPE_ITEM_FETCH_REQUESTED";
+export const RECIPE_ITEM_FETCH_SUCCESS = "RECIPE_ITEM_FETCH_SUCCESS";
+export const RECIPE_ITEM_FETCH_ERROR = "RECIPE_ITEM_FETCH_ERROR";
+
+export interface RecipeItemFetchRequestedAction {
+    type: typeof RECIPE_ITEM_FETCH_REQUESTED;
+    payload: string;
+}
+
+interface RecipeItemFetchSuccessAction {
+    type: typeof RECIPE_ITEM_FETCH_SUCCESS;
+    payload: Recipe;
+}
+
+interface RecipeItemFetchErrorAction {
+    type: typeof RECIPE_ITEM_FETCH_ERROR;
+    payload: string;
+}
+
+
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | UpdateCustomUnitsAction |
@@ -362,5 +383,7 @@ export type RecipeItemActionTypes = (
     ToggleIngredientOpenAction | ToggleIngredientMarkAction |
 
     UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction |
-    UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction
+    UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction |
+
+    RecipeItemFetchRequestedAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction
 );
