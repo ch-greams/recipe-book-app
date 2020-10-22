@@ -3,6 +3,7 @@ import styles from "./Loader.scss";
 
 
 export default class Loader extends Component {
+    public static readonly displayName = "Loader";
 
     public render(): JSX.Element {
         return (
