@@ -45,6 +45,7 @@
     "@typescript-eslint/eslint-plugin": "^3.6.0",
     "@typescript-eslint/parser": "^3.6.0",
     "css-loader": "^3.6.0",
+    "dotenv-webpack": "^4.0.0",
     "eslint": "^7.4.0",
     "eslint-plugin-react": "^7.20.3",
     "node-sass": "^4.14.1",

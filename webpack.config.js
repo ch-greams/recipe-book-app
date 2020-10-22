@@ -1,5 +1,6 @@
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
+const Dotenv = require("dotenv-webpack");
 
 
 const server = {
@@ -8,7 +9,7 @@ const server = {
     node: {
         __dirname: false,
     },
-    mode: "production",
+    mode: "development",
     entry: { "server": path.join(__dirname, "src", "server", "index.ts") },
     output: {
         path: path.resolve(__dirname, "out/server"),
@@ -35,6 +36,7 @@ const server = {
     },
     plugins: [
         new NodemonPlugin(),
+        new Dotenv(),
     ],
     externals: [
         // "express",
@@ -45,7 +47,7 @@ const server = {
 const client = {
     target: "web",
     watch: true,
-    mode: "production",
+    mode: "development",
     entry: {
         "client": path.join(__dirname, "src", "client", "index.tsx"),
     },
@@ -102,6 +104,9 @@ const client = {
             },
         ],
     },
+    plugins: [
+        new Dotenv(),
+    ],
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",
