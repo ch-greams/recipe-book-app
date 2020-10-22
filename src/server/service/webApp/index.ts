@@ -1,8 +1,8 @@
 import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
-import Database from "../../../common/server/database";
 import Logger, { LogLevel } from "../../../common/server/logger";
+import Database from "../database";
 import { HttpStatusSuccess } from "../webApp";
 
 
