@@ -10,6 +10,8 @@ export * from "./enums";
 
 export default class WebApp {
 
+    private static readonly DEFAULT_PORT: number = 8080;
+
     private app: express.Application;
 
     private port: number;
@@ -17,11 +19,9 @@ export default class WebApp {
 
     public constructor(database: Database) {
 
-        const DEFAULT_PORT = 8080;
-
         this.app = express();
 
-        this.port = (parseInt(process.env.PORT, 10) || DEFAULT_PORT);
+        this.port = (parseInt(process.env.PORT, 10) || WebApp.DEFAULT_PORT);
 
         this.config();
         this.routes(database);
