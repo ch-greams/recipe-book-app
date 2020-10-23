@@ -1,6 +1,7 @@
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
-const Dotenv = require("dotenv-webpack");
+const DotEnv = require("dotenv-webpack");
+const nodeExternals = require("webpack-node-externals");
 
 
 const server = {
@@ -36,12 +37,9 @@ const server = {
     },
     plugins: [
         new NodemonPlugin(),
-        new Dotenv(),
+        new DotEnv(),
     ],
-    externals: [
-        // "express",
-        // NOTE: Consider using webpack-node-externals to reduce bundle size
-    ],
+    externals: [ nodeExternals() ],
 };
 
 const client = {
@@ -105,7 +103,7 @@ const client = {
         ],
     },
     plugins: [
-        new Dotenv(),
+        new DotEnv(),
     ],
     externals: {
         "react": "React",
