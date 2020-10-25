@@ -19,6 +19,7 @@ interface State {
 }
 
 export default class ServingSizesBlock extends Component<Props, State> {
+    public static readonly displayName = "ServingSizesBlock";
 
     public state = {
         newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
@@ -57,7 +58,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             if (isNew) {
                 this.setState({
-                    newCustomUnit: { ...newCustomUnit, name: event.target.value }
+                    newCustomUnit: { ...newCustomUnit, name: event.target.value },
                 });
             }
             else {
@@ -80,7 +81,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             if (isNew) {
                 this.setState({
-                    newCustomUnit: { ...newCustomUnit, amount: amount }
+                    newCustomUnit: { ...newCustomUnit, amount: amount },
                 });
             }
             else {

@@ -2,11 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
 import {
-    requestFoodItem,
-    updateName,
-    updateBrand,
-    updateSubtitle,
-    updateCustomUnits,
+    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
@@ -17,12 +13,10 @@ import SelectInput from "../../components/SelectInput/SelectInput";
 import styles from "./FoodPage.scss";
 import Utils from "../../../common/utils";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import { RouteComponentProps } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 
-
-interface OwnProps {
-    foodId: string;
-}
 
 interface StateToProps {
     foodItem: FoodPageStore;
@@ -36,14 +30,14 @@ interface DispatchToProps {
     updateCustomUnits: typeof updateCustomUnits;
 }
 
-interface Props extends OwnProps, StateToProps, DispatchToProps { }
+interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
 
 
 class FoodPage extends Component<Props> {
+    public static readonly displayName = "FoodPage";
 
     public componentDidMount(): void {
-
-        this.props.requestFoodItem(this.props.foodId);
+        this.props.requestFoodItem(this.props.match.params.foodId);
     }
 
     private getParametersBlock(
@@ -76,7 +70,10 @@ class FoodPage extends Component<Props> {
                     
                     {/* BULK DENSITY */}
 
-                    <div className={styles.densityLineLabel} title={"Use Bulk Density for foods like rice or beans"}>
+                    <div
+                        className={styles.densityLineLabel}
+                        title={"Use Bulk Density for foods like rice or beans"}
+                    >
                         {"DENSITY"}
                     </div>
                     
@@ -87,11 +84,19 @@ class FoodPage extends Component<Props> {
                         onChange={console.log}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(UnitWeight)}
+                        onChange={console.log}
+                        value={foodItem.densityWeight}
+                    />
 
                     {"/"}
 
-                    <SelectInput options={Object.keys(UnitVolume)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(UnitVolume)}
+                        onChange={console.log}
+                        value={foodItem.densityVolume}
+                    />
 
                 </div>
 
@@ -144,7 +149,7 @@ class FoodPage extends Component<Props> {
         } = this.props;
 
         if (!isLoaded) {
-            return (<h1>LOADING</h1>);
+            return <Loader />;
         }
 
         return (

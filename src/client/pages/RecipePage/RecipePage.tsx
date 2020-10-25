@@ -1,42 +1,121 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RecipePageStore } from "../../store/recipe/types";
+import { RecipePageStore, UpdateCustomUnitsAction } from "../../store/recipe/types";
 import {
-    updateName, updateBrand, updateSubtitle, updateDescription,
-    updateIngredients,
+    updateName, updateBrand, updateSubtitle, updateDescription, removeDirection,
+    removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
+    updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
+    createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType,
+    updateDirectionStepNumber, updateDirectionName, updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
+    updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
+    createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
+    toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
+    updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
+    updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits, requestRecipeItem,
 } from "../../store/recipe/actions";
 import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, UnitVolume, UnitWeight } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import Utils from "../../../common/utils";
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { UpdateCustomUnitsAction } from "../../store/food/types";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
 import IngredientsBlock from "../../components/IngredientsBlock/IngredientsBlock";
 import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
 import styles from "./RecipePage.scss";
+import { requestIngredients } from "../../store/search/actions";
+import { SearchPageStore } from "../../store/search/types";
+import { RouteComponentProps } from "react-router-dom";
+import Loader from "../../components/Loader/Loader";
 
 
 
-interface RecipePageStateToProps {
+interface StateToProps {
     recipeItem: RecipePageStore;
+    search: SearchPageStore;
 }
 
-interface RecipePageDispatchToProps {
+interface DispatchToProps {
     updateName: typeof updateName;
     updateBrand: typeof updateBrand;
     updateSubtitle: typeof updateSubtitle;
     updateDescription: typeof updateDescription;
-    updateIngredients: typeof updateIngredients;
+    updateType: typeof updateType;
+    updateServingSizeAmount: typeof updateServingSizeAmount;
+    updateServingSizeUnit: typeof updateServingSizeUnit;
+    updateCustomUnits: typeof updateCustomUnits;
+
+    requestIngredients: typeof requestIngredients;
+    removeDirection: typeof removeDirection;
+    removeSubDirection: typeof removeSubDirection;
+    toggleDirectionOpen: typeof toggleDirectionOpen;
+    toggleDirectionMark: typeof toggleDirectionMark;
+    toggleSubDirectionMark: typeof toggleSubDirectionMark;
+    updateSubDirectionNote: typeof updateSubDirectionNote;
+    updateSubDirectionIngredientAmount: typeof updateSubDirectionIngredientAmount;
+    updateSubDirectionIngredientUnit: typeof updateSubDirectionIngredientUnit;
+    createSubDirectionIngredient: typeof createSubDirectionIngredient;
+    createSubDirection: typeof createSubDirection;
+    updateNewSubDirectionType: typeof updateNewSubDirectionType;
+    updateDirectionStepNumber: typeof updateDirectionStepNumber;
+    updateDirectionName: typeof updateDirectionName;
+    updateDirectionTemperatureCount: typeof updateDirectionTemperatureCount;
+    updateDirectionTemperatureUnit: typeof updateDirectionTemperatureUnit;
+    updateDirectionTimeCount: typeof updateDirectionTimeCount;
+    updateDirectionTimeUnit: typeof updateDirectionTimeUnit;
+    updateNewDirectionStepNumber: typeof updateNewDirectionStepNumber;
+    updateNewDirectionName: typeof updateNewDirectionName;
+    updateNewDirectionTemperatureCount: typeof updateNewDirectionTemperatureCount;
+    updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
+    updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
+    updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
+    createDirection: typeof createDirection;
+
+    removeIngredient: typeof removeIngredient;
+    removeAltIngredient: typeof removeAltIngredient;
+    replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
+    toggleIngredientOpen: typeof toggleIngredientOpen;
+    toggleIngredientMark: typeof toggleIngredientMark;
+    updateIngredientAmount: typeof updateIngredientAmount;
+    updateIngredientUnit: typeof updateIngredientUnit;
+    updateAltIngredientAmount: typeof updateAltIngredientAmount;
+    updateAltIngredientUnit: typeof updateAltIngredientUnit;
+    updateAltNutritionFacts: typeof updateAltNutritionFacts;
+    addIngredient: typeof addIngredient;
+    addAltIngredient: typeof addAltIngredient;
+    requestRecipeItem: typeof requestRecipeItem;
 }
 
-interface RecipePageProps extends RecipePageStateToProps, RecipePageDispatchToProps { }
+interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
 
 
 class RecipePage extends Component<RecipePageProps> {
+    public static readonly displayName = "RecipePage";
+
+    public componentDidMount(): void {
+
+        this.props.requestRecipeItem(this.props.match.params.recipeId);
+
+        this.props.requestIngredients();
+    }
+
+    // NOTE: Handlers
+
+    private handleTypeEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.props.updateType(event.target.value);
+    }
+
+    private handleServingSizeAmountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+        this.props.updateServingSizeAmount(event.target.value);
+    }
+
+    private handleServingSizeUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
+        this.props.updateServingSizeUnit(event.target.value as UnitWeight | UnitVolume);
+    }
 
     // NOTE: General Information
 
@@ -59,7 +138,7 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.type}
                         className={styles.typeSelectInput}
-                        onChange={console.log}
+                        onChange={this.handleTypeEdit.bind(this)}
                     />
 
                 </div>
@@ -74,12 +153,16 @@ class RecipePage extends Component<RecipePageProps> {
                     
                     <input
                         type={"text"}
-                        value={recipeItem.servingSize}
+                        value={recipeItem.servingSizeInput}
                         className={styles.servingSizeLineInput}
-                        onChange={console.log}
+                        onChange={this.handleServingSizeAmountEdit.bind(this)}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={Object.keys(Units)}
+                        value={recipeItem.servingSizeUnit}
+                        onChange={this.handleServingSizeUnitEdit.bind(this)}
+                    />
 
                 </div>
 
@@ -96,7 +179,7 @@ class RecipePage extends Component<RecipePageProps> {
 
     private getGeneralInfoBlock(): JSX.Element {
 
-        const { recipeItem } = this.props;
+        const { recipeItem, updateCustomUnits } = this.props;
 
         const featuredNutritionFacts = [
             NutritionFactType.Energy,
@@ -111,15 +194,10 @@ class RecipePage extends Component<RecipePageProps> {
             NutritionFactType.VitaminC,
         ];
 
-        const phFunc = (customUnits: CustomUnitInput[]): UpdateCustomUnitsAction => {
-            console.log(customUnits);
-            return null;
-        };
-
         return (
             <div className={styles.mainBlock}>
 
-                {this.getParametersBlock(recipeItem, phFunc)}
+                {this.getParametersBlock(recipeItem, updateCustomUnits)}
 
                 <div className={styles.featuredNutritionFacts}>
 
@@ -136,21 +214,67 @@ class RecipePage extends Component<RecipePageProps> {
     public render(): JSX.Element {
 
         const {
+            location,
             recipeItem: {
-                isReadOnly,
+                isLoaded,
                 name,
                 brand,
                 subtitle,
                 description,
                 ingredients,
+                newDirection,
                 directions,
             },
+            search,
             updateName,
             updateBrand,
             updateSubtitle,
             updateDescription,
-            updateIngredients,
+            removeDirection,
+            removeSubDirection,
+            toggleDirectionOpen,
+            toggleDirectionMark,
+            toggleSubDirectionMark,
+            updateSubDirectionNote,
+            updateSubDirectionIngredientAmount,
+            updateSubDirectionIngredientUnit,
+            createSubDirectionIngredient,
+            createSubDirection,
+            updateNewSubDirectionType,
+            updateDirectionStepNumber,
+            updateDirectionName,
+            updateDirectionTemperatureCount,
+            updateDirectionTemperatureUnit,
+            updateDirectionTimeCount,
+            updateDirectionTimeUnit,
+            updateNewDirectionStepNumber,
+            updateNewDirectionName,
+            updateNewDirectionTemperatureCount,
+            updateNewDirectionTemperatureUnit,
+            updateNewDirectionTimeCount,
+            updateNewDirectionTimeUnit,
+            createDirection,
+
+            removeIngredient,
+            removeAltIngredient,
+            replaceIngredientWithAlternative,
+            toggleIngredientOpen,
+            toggleIngredientMark,
+            updateIngredientAmount,
+            updateIngredientUnit,
+            updateAltIngredientAmount,
+            updateAltIngredientUnit,
+            updateAltNutritionFacts,
+            addIngredient,
+            addAltIngredient,
         } = this.props;
+
+        const searchParams = new URLSearchParams(location.search);
+        const isEdit = ( searchParams.get("edit") === "true" );
+
+        if (!isLoaded) {
+            return <Loader />;
+        }
 
         return (
             <div className={styles.recipePage}>
@@ -176,9 +300,22 @@ class RecipePage extends Component<RecipePageProps> {
                     </div>
 
                     <IngredientsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={!isEdit}
                         ingredients={ingredients}
-                        updateIngredients={updateIngredients}
+                        search={search}
+
+                        removeIngredient={removeIngredient}
+                        removeAltIngredient={removeAltIngredient}
+                        replaceIngredientWithAlternative={replaceIngredientWithAlternative}
+                        toggleIngredientOpen={toggleIngredientOpen}
+                        toggleIngredientMark={toggleIngredientMark}
+                        updateIngredientAmount={updateIngredientAmount}
+                        updateIngredientUnit={updateIngredientUnit}
+                        updateAltIngredientAmount={updateAltIngredientAmount}
+                        updateAltIngredientUnit={updateAltIngredientUnit}
+                        updateAltNutritionFacts={updateAltNutritionFacts}
+                        addIngredient={addIngredient}
+                        addAltIngredient={addAltIngredient}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -186,8 +323,34 @@ class RecipePage extends Component<RecipePageProps> {
                     </div>
 
                     <DirectionsBlock
-                        isReadOnly={isReadOnly}
+                        isReadOnly={!isEdit}
+                        newDirection={newDirection}
                         directions={directions}
+                        ingredients={ingredients}
+                        removeDirection={removeDirection}
+                        removeSubDirection={removeSubDirection}
+                        toggleDirectionOpen={toggleDirectionOpen}
+                        toggleDirectionMark={toggleDirectionMark}
+                        toggleSubDirectionMark={toggleSubDirectionMark}
+                        updateSubDirectionNote={updateSubDirectionNote}
+                        updateSubDirectionIngredientAmount={updateSubDirectionIngredientAmount}
+                        updateSubDirectionIngredientUnit={updateSubDirectionIngredientUnit}
+                        createSubDirectionIngredient={createSubDirectionIngredient}
+                        createSubDirection={createSubDirection}
+                        updateNewSubDirectionType={updateNewSubDirectionType}
+                        updateDirectionStepNumber={updateDirectionStepNumber}
+                        updateDirectionName={updateDirectionName}
+                        updateDirectionTemperatureCount={updateDirectionTemperatureCount}
+                        updateDirectionTemperatureUnit={updateDirectionTemperatureUnit}
+                        updateDirectionTimeCount={updateDirectionTimeCount}
+                        updateDirectionTimeUnit={updateDirectionTimeUnit}
+                        updateNewDirectionStepNumber={updateNewDirectionStepNumber}
+                        updateNewDirectionName={updateNewDirectionName}
+                        updateNewDirectionTemperatureCount={updateNewDirectionTemperatureCount}
+                        updateNewDirectionTemperatureUnit={updateNewDirectionTemperatureUnit}
+                        updateNewDirectionTimeCount={updateNewDirectionTimeCount}
+                        updateNewDirectionTimeUnit={updateNewDirectionTimeUnit}
+                        createDirection={createDirection}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -208,16 +371,61 @@ class RecipePage extends Component<RecipePageProps> {
 }
 
 
-const mapStateToProps = (state: AppState): RecipePageStateToProps => ({
+const mapStateToProps = (state: AppState): StateToProps => ({
     recipeItem: state.recipePage,
+    search: state.searchPage,
 });
 
-const mapDispatchToProps: RecipePageDispatchToProps = {
+const mapDispatchToProps: DispatchToProps = {
     updateName,
     updateBrand,
     updateSubtitle,
     updateDescription,
-    updateIngredients,
+    updateType,
+    updateCustomUnits,
+    updateServingSizeAmount,
+    updateServingSizeUnit,
+
+    requestIngredients,
+    removeDirection,
+    removeSubDirection,
+    toggleDirectionOpen,
+    toggleDirectionMark,
+    toggleSubDirectionMark,
+    updateSubDirectionNote,
+    updateSubDirectionIngredientAmount,
+    updateSubDirectionIngredientUnit,
+    createSubDirectionIngredient,
+    createSubDirection,
+    updateNewSubDirectionType,
+    updateDirectionStepNumber,
+    updateDirectionName,
+    updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit,
+    updateDirectionTimeCount,
+    updateDirectionTimeUnit,
+    updateNewDirectionStepNumber,
+    updateNewDirectionName,
+    updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit,
+    updateNewDirectionTimeCount,
+    updateNewDirectionTimeUnit,
+    createDirection,
+
+    removeIngredient,
+    removeAltIngredient,
+    replaceIngredientWithAlternative,
+    toggleIngredientOpen,
+    toggleIngredientMark,
+    updateIngredientAmount,
+    updateIngredientUnit,
+    updateAltIngredientAmount,
+    updateAltIngredientUnit,
+    updateAltNutritionFacts,
+    addIngredient,
+    addAltIngredient,
+
+    requestRecipeItem,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

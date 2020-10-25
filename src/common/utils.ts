@@ -2,7 +2,7 @@ import { NutritionFact } from "../client/components/NutritionFactsBlock/Nutritio
 import { NutritionFactType } from "./nutritionFacts";
 import { Dictionary } from "./typings";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import { Route } from "../client/components/Router";
+import { RoutePath } from "../client/components/Root";
 
 
 
@@ -65,7 +65,7 @@ export default class Utils {
                         unit: nutritionFactDescription.unit,
                         dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
                         isFraction: nutritionFactDescription.isFraction,
-                    }
+                    },
                 ];
             },
             []
@@ -87,8 +87,8 @@ export default class Utils {
         );
     }
 
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): Array<keyof T> {
-        return Object.keys(obj) as Array<keyof T>;
+    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): (keyof T)[] {
+        return Object.keys(obj) as (keyof T)[];
     }
 
     // NOTE: OTHER
@@ -97,7 +97,11 @@ export default class Utils {
         return (Array.isArray(array) && array.length > Utils.ZERO);
     }
 
-    public static getItemPath(route: Route, id: string): string {
+    public static objectIsNotEmpty<T>(obj: T | Dictionary<string | number | symbol, T>): boolean {
+        return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
+    }
+
+    public static getItemPath(route: RoutePath, id: string): string {
         return `/${route}/${id}`;
     }
 

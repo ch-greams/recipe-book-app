@@ -5,7 +5,7 @@ import { AppState } from "../../store";
 import { updateName } from "../../store/food/actions";
 import { FoodPageStore } from "../../store/food/types";
 import { Link } from "react-router-dom";
-import { Route } from "../../components/Router";
+import { RoutePath } from "../../components/Root";
 
 
 
@@ -21,6 +21,7 @@ interface HomePageProps extends HomePageStateToProps, HomePageDispatchToProps { 
 
 
 class HomePage extends Component<HomePageProps> {
+    public static readonly displayName = "HomePage";
 
     public render(): JSX.Element {
 
@@ -38,11 +39,11 @@ class HomePage extends Component<HomePageProps> {
 
                 <div className={styles.homePageButtons}>
 
-                    <Link to={Route.Recipe} className={styles.homePageButton}>
+                    <Link to={RoutePath.Recipe} className={styles.homePageButton}>
                         {createRecipeButtonLabel}
                     </Link>
 
-                    <Link to={Route.Food} className={styles.homePageButton}>
+                    <Link to={RoutePath.Food} className={styles.homePageButton}>
                         {createFoodButtonLabel}
                     </Link>
 

@@ -1,8 +1,8 @@
 import bodyParser from "body-parser";
-import express from "express";
+import express, { RequestHandler } from "express";
 import path from "path";
-import Database from "../../../common/server/database";
 import Logger, { LogLevel } from "../../../common/server/logger";
+import Database from "../database";
 import { HttpStatusSuccess } from "../webApp";
 
 
@@ -10,21 +10,21 @@ export * from "./enums";
 
 export default class WebApp {
 
+    private static readonly DEFAULT_PORT: number = 8080;
+
     private app: express.Application;
 
     private port: number;
 
 
-    public constructor() {
-
-        const DEFAULT_PORT = 8080;
+    public constructor(database: Database) {
 
         this.app = express();
 
-        this.port = (parseInt(process.env.PORT, 10) || DEFAULT_PORT);
+        this.port = (parseInt(process.env.PORT, 10) || WebApp.DEFAULT_PORT);
 
         this.config();
-        this.routes();
+        this.routes(database);
     }
 
     public run(): void {
@@ -45,20 +45,49 @@ export default class WebApp {
         response.sendStatus(HttpStatusSuccess.Ok);
     }
 
-    private static async getFoodRecordsEndpoint(_request: express.Request, response: express.Response): Promise<void> {
 
-        const records = await Database.getRecords();
+    private static getFoodRecordsEndpoint(database: Database): RequestHandler {
 
-        response.send(records);
+        return async (_request, response) => {
+
+            const records = await database.getFoodRecords();
+
+            response.send(records);
+        };
     }
 
-    private static async getFoodRecordEndpoint(request: express.Request, response: express.Response): Promise<void> {
+    private static getFoodRecordEndpoint(database: Database): RequestHandler {
 
-        const { params: { id } } = request;
+        return async (request, response) => {
 
-        const record = await Database.getRecord(id);
+            const { params: { id } } = request;
 
-        response.send(record);
+            const record = await database.getFoodRecord(id);
+    
+            response.send(record);
+        };
+    }
+
+    private static getRecipeRecordsEndpoint(database: Database): RequestHandler {
+
+        return async (_request, response) => {
+
+            const records = await database.getRecipeRecords();
+
+            response.send(records);
+        };
+    }
+
+    private static getRecipeRecordEndpoint(database: Database): RequestHandler {
+
+        return async (request, response) => {
+
+            const { params: { id } } = request;
+
+            const record = await database.getRecipeRecord(id);
+    
+            response.send(record);
+        };
     }
 
     private static log(request: express.Request, _response: express.Response, next: express.NextFunction): void {
@@ -70,15 +99,19 @@ export default class WebApp {
 
 
 
-    private routes(): void {
+    private routes(database: Database): void {
 
         // WebApp Endpoints
 
         this.app.get("/status", WebApp.log, WebApp.getStatusEndpoint);
 
-        this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint);
+        this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint(database));
 
-        this.app.get("/api/food/:id", WebApp.log, WebApp.getFoodRecordEndpoint);
+        this.app.get("/api/food/:id", WebApp.log, WebApp.getFoodRecordEndpoint(database));
+
+        this.app.get("/api/recipe", WebApp.log, WebApp.getRecipeRecordsEndpoint(database));
+
+        this.app.get("/api/recipe/:id", WebApp.log, WebApp.getRecipeRecordEndpoint(database));
 
         this.app.get("*", WebApp.log, (_req, res) => {
             res.sendFile( path.join(__dirname, "..", "..", "view", "index.html") );

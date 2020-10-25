@@ -1,11 +1,11 @@
 {
     "compilerOptions": {
         "target": "es6",
-        "module": "commonjs",
+        "module": "esnext",
         "outDir": "out",
         "baseUrl": ".",
         "moduleResolution": "node",
-        "lib": [ "es2017", "DOM" ],
+        "lib": [ "es2020", "DOM" ],
         "jsx": "react",
         "sourceMap": true,
         "esModuleInterop": true,

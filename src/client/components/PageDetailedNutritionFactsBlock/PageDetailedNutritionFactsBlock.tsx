@@ -24,7 +24,9 @@ interface Props {
 
 
 export default class PageDetailedNutritionFactsBlock extends Component<Props> {
-    public static defaultProps = {
+    public static readonly displayName = "PageDetailedNutritionFactsBlock";
+
+    public static readonly defaultProps = {
         isReadOnly: false,
     };
 

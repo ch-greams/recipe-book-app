@@ -1,7 +1,8 @@
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
+const DotEnv = require("dotenv-webpack");
+const nodeExternals = require("webpack-node-externals");
 
-// TODO: Use template for HTML and don't reference anything outside "out" folder?
 
 const server = {
     target: "node",
@@ -9,11 +10,11 @@ const server = {
     node: {
         __dirname: false,
     },
-    mode: "production",
+    mode: "development",
     entry: { "server": path.join(__dirname, "src", "server", "index.ts") },
     output: {
-        path: path.resolve(__dirname, "out"),
-        filename: "[name]/[name].bundle.js",
+        path: path.resolve(__dirname, "out/server"),
+        filename: "[name].bundle.js",
     },
     devtool: "source-map",
     resolve: {
@@ -36,24 +37,23 @@ const server = {
     },
     plugins: [
         new NodemonPlugin(),
+        new DotEnv(),
     ],
-    externals: [
-        // "express",
-        // NOTE: Consider using webpack-node-externals to reduce bundle size
-    ],
+    externals: [ nodeExternals() ],
 };
 
 const client = {
     target: "web",
     watch: true,
-    mode: "production",
+    mode: "development",
     entry: {
         "client": path.join(__dirname, "src", "client", "index.tsx"),
     },
     output: {
-        path: path.resolve(__dirname, "out"),
-        filename: "[name]/[name].bundle.js",
-        chunkFilename: "[name]/[name].bundle.js",
+        path: path.resolve(__dirname, "out/client"),
+        filename: "[name].bundle.js",
+        chunkFilename: "chunk-[name].bundle.js",
+        publicPath: "/",
     },
     devtool: "source-map",
     resolve: {
@@ -102,6 +102,9 @@ const client = {
             },
         ],
     },
+    plugins: [
+        new DotEnv(),
+    ],
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",

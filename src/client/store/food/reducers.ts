@@ -11,7 +11,7 @@ import {
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { CustomUnit, CustomUnitInput, UnitWeight } from "../../../common/units";
+import { CustomUnit, CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
 
@@ -39,6 +39,9 @@ const initialState: FoodPageStore = {
     type: "Nuts",
 
     density: 1,
+    densityVolume: UnitVolume.ml,
+    densityWeight: UnitWeight.g,
+
     servingSize: 100,
     unit: UnitWeight.g,
 
