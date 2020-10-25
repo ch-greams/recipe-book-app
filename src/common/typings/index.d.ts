@@ -4,7 +4,7 @@ import { CustomUnit, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from ".
 
 export type Dictionary<TKey extends string | number | symbol, TValue> = {
     [key in TKey]?: TValue;
-}
+};
 
 export type InputChangeCallback = (event: React.ChangeEvent<HTMLInputElement>) => void;
 export type SelectChangeCallback = (event: React.ChangeEvent<HTMLSelectElement>) => void;

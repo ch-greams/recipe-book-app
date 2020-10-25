@@ -65,7 +65,7 @@ export default class Utils {
                         unit: nutritionFactDescription.unit,
                         dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
                         isFraction: nutritionFactDescription.isFraction,
-                    }
+                    },
                 ];
             },
             []

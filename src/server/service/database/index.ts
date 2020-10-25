@@ -1,6 +1,9 @@
 import Logger, { LogLevel } from "../../../common/server/logger";
 import { Food, Recipe } from "../../../common/typings";
 import { MongoClient, Db, MongoError } from "mongodb";
+import foodSchema from "./schemas/food";
+import recipeSchema from "./schemas/recipe";
+import { SchemaValidator } from "./schemas/types";
 
 
 
@@ -27,6 +30,8 @@ export default class Database {
     
             this.db = client.db(Database.DB_NAME);
     
+            this.config(foodSchema, recipeSchema);
+
             // client.close();
         }
         catch (err) {
@@ -35,16 +40,24 @@ export default class Database {
         }
     }
 
+    private async config(foodSchema: SchemaValidator, recipeSchema: SchemaValidator): Promise<void> {
+
+        Logger.log(LogLevel.INFO, "Database.config", "Updating schema validators for collections...");
+
+        await this.db.command({ collMod: "food", validator: foodSchema });
+        await this.db.command({ collMod: "recipe", validator: recipeSchema });
+
+        Logger.log(LogLevel.INFO, "Database.config", "Done");
+    }
+
 
     public async getFoodRecords(): Promise<Food[]> {
 
         try {
             const collection = this.db.collection("food");
 
-            const records = await collection.find<Food>()
-                .sort({ id: 1 })
-                .limit(Database.DEFAULT_LIMIT)
-                .toArray();
+            const options = { sort: { id: 1 }, limit: Database.DEFAULT_LIMIT };
+            const records = await collection.find<Food>({}, options).toArray();
     
             Logger.log(LogLevel.DEBUG, "Database.getFoodRecords", records);
 
@@ -82,10 +95,8 @@ export default class Database {
         try {
             const collection = this.db.collection("recipe");
 
-            const records = await collection.find<Recipe>()
-                .sort({ id: 1 })
-                .limit(Database.DEFAULT_LIMIT)
-                .toArray();
+            const options = { sort: { id: 1 }, limit: Database.DEFAULT_LIMIT };
+            const records = await collection.find<Recipe>({}, options).toArray();
     
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecords", records);
 

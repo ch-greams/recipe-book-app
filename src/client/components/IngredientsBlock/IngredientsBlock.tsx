@@ -309,7 +309,7 @@ export default class IngredientsBlock extends Component<Props> {
                 id: "NEW ALTERNATIVE",
                 name: "NEW ALTERNATIVE",
                 nutritionFacts: {},
-            }
+            },
         };
 
         const checkbox = (

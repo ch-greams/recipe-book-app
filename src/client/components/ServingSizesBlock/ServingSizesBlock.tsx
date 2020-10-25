@@ -58,7 +58,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             if (isNew) {
                 this.setState({
-                    newCustomUnit: { ...newCustomUnit, name: event.target.value }
+                    newCustomUnit: { ...newCustomUnit, name: event.target.value },
                 });
             }
             else {
@@ -81,7 +81,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             if (isNew) {
                 this.setState({
-                    newCustomUnit: { ...newCustomUnit, amount: amount }
+                    newCustomUnit: { ...newCustomUnit, amount: amount },
                 });
             }
             else {

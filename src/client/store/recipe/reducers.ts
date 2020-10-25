@@ -260,7 +260,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                             ? { ...subDirection, isMarked: true }
                                             : subDirection
                                     ))
-                            )
+                            ),
                         }
                         : direction
                 ),
@@ -397,7 +397,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                     amountInput: ingredient.amountInput,
                                     unit: ingredient.unit,
                                 },
-                            ]
+                            ],
                         }
                         : direction
                 )),  
@@ -417,7 +417,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                             steps: [
                                 ...direction.steps,
                                 { type: type, label: type },
-                            ]
+                            ],
                         }
                         : direction
                 )),  
@@ -694,7 +694,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             
                     newStep: SubDirectionType.Note,
                     steps: [],
-                }
+                },
             };
         }
 
@@ -704,7 +704,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             return {
                 ...state,
-                ingredients: state.ingredients.filter((ingredient) => ingredient.item.id !== id)
+                ingredients: state.ingredients.filter((ingredient) => ingredient.item.id !== id),
             };
         }
 
@@ -718,10 +718,10 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     ( ingredient.item.id === parentId )
                         ? {
                             ...ingredient,
-                            alternatives: ingredient.alternatives.filter((alt) => alt.item.id !== id)
+                            alternatives: ingredient.alternatives.filter((alt) => alt.item.id !== id),
                         }
                         : ingredient
-                ))
+                )),
             };
         }
 
@@ -775,8 +775,8 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => ({
                     ...ingredient,
-                    isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen
-                }))
+                    isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen,
+                })),
             };
         }
 
@@ -788,8 +788,8 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => ({
                     ...ingredient,
-                    isMarked: (ingredient.item.id === id) ? !ingredient.isMarked : ingredient.isMarked
-                }))
+                    isMarked: (ingredient.item.id === id) ? !ingredient.isMarked : ingredient.isMarked,
+                })),
             };
         }
 
@@ -815,7 +815,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     else {
                         return ingredient;
                     }
-                })
+                }),
             };
         }
 
@@ -827,7 +827,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
                     (ingredient.item.id === id) ? { ...ingredient, unit: unit } : ingredient
-                ))
+                )),
             };
         }
 
@@ -878,7 +878,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                             )),
                         }
                         : ingredient
-                ))
+                )),
             };
         }
 
@@ -899,7 +899,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                             ),
                         }
                         : ingredient
-                ))
+                )),
             };
         }
 
@@ -946,7 +946,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                     amountInput: "100",
                                     unit: UnitWeight.g,
                                     item: altIngredient,
-                                }
+                                },
                             ],
                         }
                         : ingredient
