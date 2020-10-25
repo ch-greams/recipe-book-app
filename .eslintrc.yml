@@ -31,6 +31,9 @@ rules:
     comma-dangle:
         - 2
         - "always-multiline"
+    quotes:
+        - 2
+        - "double"
     no-console: 1
     interface-name: 0
     one-line: 0

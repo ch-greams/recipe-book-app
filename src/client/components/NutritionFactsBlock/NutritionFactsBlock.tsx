@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { NutritionFactType } from "../../../common/nutritionFacts";
+import { NutritionFactType, nutritionFactTypeLabelMapping } from "../../../common/nutritionFacts";
 import { updateNutritionFact } from "../../store/food/actions";
 import { UnitEnergy, UnitWeight } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
@@ -93,7 +93,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
             >
 
                 <div className={styles.nutritionFactName}>
-                    {nutritionFact.type}
+                    {nutritionFactTypeLabelMapping[nutritionFact.type]}
                 </div>
 
                 {( isReadOnly ? nutritionFactAmountText : nutritionFactAmountInput )}
