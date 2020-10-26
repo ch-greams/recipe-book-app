@@ -4,6 +4,7 @@ import path from "path";
 import Logger, { LogLevel } from "../../../common/server/logger";
 import Database from "../database";
 import { HttpStatusSuccess } from "../webApp";
+import GraphQL from "../graphql";
 
 
 export * from "./enums";
@@ -17,14 +18,14 @@ export default class WebApp {
     private port: number;
 
 
-    public constructor(database: Database) {
+    public constructor(database: Database, isProduction: boolean = false) {
 
         this.app = express();
 
         this.port = (parseInt(process.env.PORT, 10) || WebApp.DEFAULT_PORT);
 
         this.config();
-        this.routes(database);
+        this.routes(database, isProduction);
     }
 
     public run(): void {
@@ -99,11 +100,13 @@ export default class WebApp {
 
 
 
-    private routes(database: Database): void {
+    private routes(database: Database, isProduction: boolean): void {
 
         // WebApp Endpoints
 
         this.app.get("/status", WebApp.log, WebApp.getStatusEndpoint);
+
+        this.app.use("/graphql", GraphQL.getMiddleware(database, isProduction));
 
         this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint(database));
 
