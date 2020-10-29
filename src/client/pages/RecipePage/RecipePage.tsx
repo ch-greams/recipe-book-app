@@ -105,24 +105,24 @@ class RecipePage extends Component<RecipePageProps> {
 
     // NOTE: Handlers
 
-    private handleTypeEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleTypeEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
         this.props.updateType(event.target.value);
-    }
+    };
 
-    private handleServingSizeAmountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
         this.props.updateServingSizeAmount(event.target.value);
-    }
+    };
 
-    private handleServingSizeUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
+    private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
         this.props.updateServingSizeUnit(event.target.value as UnitWeight | UnitVolume);
-    }
+    };
 
     // NOTE: General Information
 
-    private getParametersBlock(
+    private getParametersBlock = (
         recipeItem: RecipePageStore,
         updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
-    ): JSX.Element {
+    ): JSX.Element => {
 
         return (
             
@@ -138,7 +138,7 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.type}
                         className={styles.typeSelectInput}
-                        onChange={this.handleTypeEdit.bind(this)}
+                        onChange={this.handleTypeEdit}
                     />
 
                 </div>
@@ -155,13 +155,13 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.servingSizeInput}
                         className={styles.servingSizeLineInput}
-                        onChange={this.handleServingSizeAmountEdit.bind(this)}
+                        onChange={this.handleServingSizeAmountEdit}
                     />
 
                     <SelectInput
                         options={Object.keys(Units)}
                         value={recipeItem.servingSizeUnit}
-                        onChange={this.handleServingSizeUnitEdit.bind(this)}
+                        onChange={this.handleServingSizeUnitEdit}
                     />
 
                 </div>
@@ -175,9 +175,9 @@ class RecipePage extends Component<RecipePageProps> {
 
             </div>
         );
-    }
+    };
 
-    private getGeneralInfoBlock(): JSX.Element {
+    private getGeneralInfoBlock = (): JSX.Element => {
 
         const { recipeItem, updateCustomUnits } = this.props;
 
@@ -209,7 +209,7 @@ class RecipePage extends Component<RecipePageProps> {
                 </div>
             </div>
         );
-    }
+    };
 
     public render(): JSX.Element {
 

@@ -28,49 +28,49 @@ export default class PageTitleBlock extends Component<Props, State> {
     };
 
 
-    private editTitle(): void {
+    private editTitle = (): void => {
         this.setState({ isTitleInputsOpen: true });
-    }
+    };
 
-    private confirmTitle(): void {
+    private confirmTitle = (): void => {
         this.setState({ isTitleInputsOpen: false });
-    }
+    };
 
-    private handleNameEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleNameEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
 
         Utils.keepCaretInPlace(window, event);
 
         this.props.updateName(
             (event.target.value || "").toUpperCase()
         );
-    }
+    };
 
-    private handleBrandEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleBrandEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
 
         Utils.keepCaretInPlace(window, event);
 
         this.props.updateBrand(
             (event.target.value || "").toUpperCase()
         );
-    }
+    };
 
-    private handleSubtitleEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleSubtitleEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
 
         Utils.keepCaretInPlace(window, event);
 
         this.props.updateSubtitle(
             (event.target.value || "").toUpperCase()
         );
-    }
+    };
 
-    private handleDescriptionEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleDescriptionEdit = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
 
         Utils.keepCaretInPlace(window, event);
 
         this.props.updateDescription(event.target.value || "");
-    }
+    };
 
-    private getTitleBlockStatic(name: string, brand: string, subtitle: string, description?: string): JSX.Element {
+    private getTitleBlockStatic = (name: string, brand: string, subtitle: string, description?: string): JSX.Element => {
 
         const descriptionBlock = (
             <div className={styles.descriptionBlock}>
@@ -84,7 +84,7 @@ export default class PageTitleBlock extends Component<Props, State> {
 
             <div
                 className={styles.titleBlock}
-                onClick={this.editTitle.bind(this)}
+                onClick={this.editTitle}
             >
 
                 <div className={styles.nameBlock}>
@@ -110,9 +110,11 @@ export default class PageTitleBlock extends Component<Props, State> {
 
             </div>
         );
-    }
+    };
 
-    private getTitleBlockInput(name: string, brand: string, subtitle: string, description?: string, withDescription: boolean = false): JSX.Element {
+    private getTitleBlockInput = (
+        name: string, brand: string, subtitle: string, description?: string, withDescription: boolean = false,
+    ): JSX.Element => {
 
         const descriptionBlock = (
             <div className={styles.descriptionBlock}>
@@ -120,7 +122,7 @@ export default class PageTitleBlock extends Component<Props, State> {
                     className={styles.descriptionBlockInput}
                     name={"description"} id={"description"} rows={6}
                     placeholder={"Description"} value={(description || "")}
-                    onChange={this.handleDescriptionEdit.bind(this)}
+                    onChange={this.handleDescriptionEdit}
                 />
             </div>
         );
@@ -136,7 +138,7 @@ export default class PageTitleBlock extends Component<Props, State> {
                         className={styles.nameInput}
                         placeholder={"NAME"}
                         value={name.toUpperCase()}
-                        onChange={this.handleNameEdit.bind(this)}
+                        onChange={this.handleNameEdit}
                     />
 
                     <input
@@ -144,7 +146,7 @@ export default class PageTitleBlock extends Component<Props, State> {
                         className={styles.brandInput}
                         placeholder={"BRAND"}
                         value={brand.toUpperCase()}
-                        onChange={this.handleBrandEdit.bind(this)}
+                        onChange={this.handleBrandEdit}
                     />
                     
                 </div>
@@ -156,12 +158,12 @@ export default class PageTitleBlock extends Component<Props, State> {
                         className={styles.subtitleInput}
                         placeholder={"SUBTITLE"}
                         value={subtitle.toUpperCase()}
-                        onChange={this.handleSubtitleEdit.bind(this)}
+                        onChange={this.handleSubtitleEdit}
                     />
 
                     <div
                         className={styles.confirmButton}
-                        onClick={this.confirmTitle.bind(this)}
+                        onClick={this.confirmTitle}
                     >
                         {"CONFIRM"}
                     </div>
@@ -170,7 +172,7 @@ export default class PageTitleBlock extends Component<Props, State> {
                 {withDescription && descriptionBlock}
             </div>
         );
-    }
+    };
 
 
     public render(): JSX.Element {

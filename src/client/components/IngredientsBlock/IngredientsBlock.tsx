@@ -52,73 +52,73 @@ export default class IngredientsBlock extends Component<Props> {
 
     // NOTE: Handlers - Ingredient
 
-    private removeIngredient(id: string): void {
+    private removeIngredient = (id: string): void => {
         this.props.removeIngredient(id);
-    }
+    };
 
-    private replaceIngredientWithAlternative(parentId: string, id: string): void {
+    private replaceIngredientWithAlternative = (parentId: string, id: string): void => {
         this.props.replaceIngredientWithAlternative(parentId, id);
-    }
+    };
 
-    private toggleIngredientOpen(id: string): void {
+    private toggleIngredientOpen = (id: string): void => {
         this.props.toggleIngredientOpen(id);
-    }
+    };
 
-    private toggleIngredientMark(id: string): void {
+    private toggleIngredientMark = (id: string): void => {
         this.props.toggleIngredientMark(id);
-    }
+    };
 
-    private handleIngredientAmountEdit(id: string): InputChangeCallback {
+    private handleIngredientAmountEdit = (id: string): InputChangeCallback => {
         return (event) => {
             this.props.updateIngredientAmount(id, event.target.value);
         };
-    }
+    };
 
-    private handleIngredientUnitEdit(id: string): SelectChangeCallback {
+    private handleIngredientUnitEdit = (id: string): SelectChangeCallback => {
         return (event) => {
             this.props.updateIngredientUnit(id, event.target.value as UnitWeight | UnitVolume);
         };
-    }
+    };
 
-    private addIngredient(): void {
+    private addIngredient = (): void => {
 
         const { search, addIngredient } = this.props;
 
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
         
         addIngredient(item);
-    }
+    };
 
     // NOTE: Handlers - AltIngredient
 
-    private removeAltIngredient(parentId: string, id: string): void {
+    private removeAltIngredient = (parentId: string, id: string): void => {
         this.props.removeAltIngredient(parentId, id);
-    }
+    };
 
-    private handleAltIngredientAmountEdit(parentId: string, id: string): InputChangeCallback {
+    private handleAltIngredientAmountEdit = (parentId: string, id: string): InputChangeCallback => {
         return (event) => {
             this.props.updateAltIngredientAmount(parentId, id, event.target.value);
         };
-    }
+    };
 
-    private handleAltIngredientUnitEdit(parentId: string, id: string): InputChangeCallback {
+    private handleAltIngredientUnitEdit = (parentId: string, id: string): SelectChangeCallback => {
         return (event) => {
             this.props.updateAltIngredientUnit(parentId, id, event.target.value as UnitWeight | UnitVolume);
         };
-    }
+    };
 
-    private handleAltIngredientHover(parentId: string, id: string, inside: boolean): void {
+    private handleAltIngredientHover = (parentId: string, id: string, inside: boolean): void => {
         this.props.updateAltNutritionFacts(parentId, id, inside);
-    }
+    };
 
-    private addAltIngredient(id: string): void {
+    private addAltIngredient = (id: string): void => {
 
         const { search, addAltIngredient } = this.props;
 
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
         
         addAltIngredient(id, item);
-    }
+    };
     
     // NOTE: Component parts
 
@@ -174,7 +174,7 @@ export default class IngredientsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.ingredientInfoLineAmountInput}
                 value={(ingredient.amountInput || "")}
-                onChange={this.handleIngredientAmountEdit(ingredient.item.id).bind(this)}
+                onChange={this.handleIngredientAmountEdit(ingredient.item.id)}
             />
         );
 
@@ -187,7 +187,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(Units)}
                     value={ingredient.unit}
-                    onChange={this.handleIngredientUnitEdit(ingredient.item.id).bind(this)}
+                    onChange={this.handleIngredientUnitEdit(ingredient.item.id)}
                 />
             </div>
         );
@@ -248,7 +248,7 @@ export default class IngredientsBlock extends Component<Props> {
                 type={"text"}
                 className={styles.ingredientInfoLineAmountInput}
                 value={(altIngredient.amountInput|| "")}
-                onChange={this.handleAltIngredientAmountEdit(parentId, altIngredient.item.id).bind(this)}
+                onChange={this.handleAltIngredientAmountEdit(parentId, altIngredient.item.id)}
             />
         );
 
@@ -262,7 +262,7 @@ export default class IngredientsBlock extends Component<Props> {
                     type={SelectInputType.AltIngredientUnit}
                     options={Object.keys(Units)}
                     value={altIngredient.unit}
-                    onChange={this.handleAltIngredientUnitEdit(parentId, altIngredient.item.id).bind(this)}
+                    onChange={this.handleAltIngredientUnitEdit(parentId, altIngredient.item.id)}
                 />
             </div>
         );
@@ -335,7 +335,7 @@ export default class IngredientsBlock extends Component<Props> {
         const searchButton = (
             <div
                 className={styles.ingredientLineButton}
-                onClick={this.addIngredient.bind(this)}
+                onClick={this.addIngredient}
             >
                 <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
                     <SearchIcon />

@@ -39,16 +39,16 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         isReadOnly: false,
     };
 
-    private handleOnChange(nutritionFact: NutritionFact): InputChangeCallback {
+    private handleOnChange = (nutritionFact: NutritionFact): InputChangeCallback => {
         return (event) => {
             
             const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
         
             this.props.updateNutritionFact(nutritionFact.type, inputValue);    
         };
-    }
+    };
 
-    private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
+    private getNutritionFactLine = (nutritionFact: NutritionFact): JSX.Element => {
 
         const { isReadOnly } = this.props;
 
@@ -108,7 +108,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
 
             </div>
         );
-    }
+    };
 
     public render(): JSX.Element {
 
@@ -122,7 +122,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
                     {title}
                 </div>
 
-                { nutritionFacts.map( this.getNutritionFactLine.bind(this) ) }
+                { nutritionFacts.map(this.getNutritionFactLine) }
 
             </div>
         );

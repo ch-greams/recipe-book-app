@@ -47,6 +47,9 @@ export default class WebApp {
     }
 
 
+    /**
+     * @deprecated
+     */
     private static getFoodRecordsEndpoint(database: Database): RequestHandler {
 
         return async (_request, response) => {
@@ -57,6 +60,9 @@ export default class WebApp {
         };
     }
 
+    /**
+     * @deprecated
+     */
     private static getFoodRecordEndpoint(database: Database): RequestHandler {
 
         return async (request, response) => {
@@ -69,6 +75,9 @@ export default class WebApp {
         };
     }
 
+    /**
+     * @deprecated
+     */
     private static getRecipeRecordsEndpoint(database: Database): RequestHandler {
 
         return async (_request, response) => {
@@ -79,6 +88,9 @@ export default class WebApp {
         };
     }
 
+    /**
+     * @deprecated
+     */
     private static getRecipeRecordEndpoint(database: Database): RequestHandler {
 
         return async (request, response) => {

@@ -109,7 +109,7 @@ export default class Utils {
         return Object.keys(values).filter((key) => values[key]).join(" ");
     }
 
-    public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement>): void {
+    public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         const caret = event.target.selectionStart;
         const element = event.target;
         window.requestAnimationFrame(() => {
