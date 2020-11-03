@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
 import { UnitWeight, UnitTemperature, UnitTime, UnitVolume, Units } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
@@ -11,6 +10,9 @@ import {
     SubDirectionType,
 } from "../../store/recipe/types";
 import RemoveIcon from "../../icons/close-sharp.svg";
+import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
+import BulbIcon from "../../icons/bulb-sharp.svg";
+import WarningIcon from "../../icons/warning-sharp.svg";
 import Utils from "../../../common/utils";
 import { InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
 import {
@@ -209,6 +211,21 @@ export default class DirectionsBlock extends Component<Props> {
 
     // NOTE: Component parts
 
+    private getSubDirectionNoteLineIcon = (type: SubDirectionType): JSX.Element => {
+
+        switch (type) {
+            case SubDirectionType.Tip:
+                return (<BulbIcon />);
+
+            case SubDirectionType.Warning:
+                return (<WarningIcon />);
+
+            case SubDirectionType.Note:
+            default:
+                return (<InfoBlockIcon />);
+        }
+    };
+
     private getSubDirectionNoteLine(step: SubDirection, directionIndex: number, stepIndex: number): JSX.Element {
 
         const { isReadOnly } = this.props;
@@ -249,7 +266,7 @@ export default class DirectionsBlock extends Component<Props> {
                 <div className={styles.subDirectionNoteInfoLine}>
 
                     <IconWrapper width={"22px"} height={"22px"} color={"#fff"}>
-                        <InfoBlockIcon />
+                        {this.getSubDirectionNoteLineIcon(step.type)}
                     </IconWrapper>
 
                     {( isReadOnly ? noteText : noteInput )}
