@@ -224,6 +224,7 @@ class RecipePage extends Component<RecipePageProps> {
                 ingredients,
                 newDirection,
                 directions,
+                references,
             },
             search,
             updateName,
@@ -302,6 +303,7 @@ class RecipePage extends Component<RecipePageProps> {
                     <IngredientsBlock
                         isReadOnly={!isEdit}
                         ingredients={ingredients}
+                        references={references}
                         search={search}
 
                         removeIngredient={removeIngredient}
@@ -327,6 +329,8 @@ class RecipePage extends Component<RecipePageProps> {
                         newDirection={newDirection}
                         directions={directions}
                         ingredients={ingredients}
+                        references={references}
+
                         removeDirection={removeDirection}
                         removeSubDirection={removeSubDirection}
                         toggleDirectionOpen={toggleDirectionOpen}
@@ -359,7 +363,7 @@ class RecipePage extends Component<RecipePageProps> {
 
                     <PageDetailedNutritionFactsBlock
                         isReadOnly={true}
-                        nutritionFactValues={{}}
+                        nutritionFacts={{}}
                         nutritionFactInputs={{}}
                     />
 

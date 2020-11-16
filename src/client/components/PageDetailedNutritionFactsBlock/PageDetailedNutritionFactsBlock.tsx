@@ -18,7 +18,7 @@ import styles from "./PageDetailedNutritionFactsBlock.scss";
 
 interface Props {
     isReadOnly: boolean;
-    nutritionFactValues: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     nutritionFactInputs: Dictionary<NutritionFactType, string>;
 }
 
@@ -34,7 +34,7 @@ export default class PageDetailedNutritionFactsBlock extends Component<Props> {
 
         const {
             isReadOnly,
-            nutritionFactValues,
+            nutritionFacts,
             nutritionFactInputs,
         } = this.props;
 
@@ -46,19 +46,19 @@ export default class PageDetailedNutritionFactsBlock extends Component<Props> {
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Carbohydrates}
-                        nutritionFacts={Utils.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(CARBOHYDRATES_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
 
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Lipids}
-                        nutritionFacts={Utils.getNutritionFacts(LIPIDS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(LIPIDS_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
 
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Proteins}
-                        nutritionFacts={Utils.getNutritionFacts(PROTEINS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(PROTEINS_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
                 </div>
 
@@ -67,19 +67,19 @@ export default class PageDetailedNutritionFactsBlock extends Component<Props> {
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Vitamins}
-                        nutritionFacts={Utils.getNutritionFacts(VITAMINS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(VITAMINS_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
 
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Minerals}
-                        nutritionFacts={Utils.getNutritionFacts(MINERALS_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(MINERALS_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
 
                     <NutritionFactsBlock
                         isReadOnly={isReadOnly}
                         title={NutrientGroupType.Other}
-                        nutritionFacts={Utils.getNutritionFacts(OTHER_GROUP, nutritionFactValues, nutritionFactInputs)}
+                        nutritionFacts={Utils.getNutritionFacts(OTHER_GROUP, nutritionFacts, nutritionFactInputs)}
                     />
                 </div>
 

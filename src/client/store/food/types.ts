@@ -13,7 +13,7 @@ export interface FoodPageStore {
     name: string;
     brand: string;
     subtitle: string;
-    nutritionFactValues: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 
     // NOTE: INPUTS

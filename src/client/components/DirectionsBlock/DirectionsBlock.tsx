@@ -14,7 +14,7 @@ import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
 import BulbIcon from "../../icons/bulb-sharp.svg";
 import WarningIcon from "../../icons/warning-sharp.svg";
 import Utils from "../../../common/utils";
-import { InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
+import { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
 import {
     createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
     toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
@@ -32,6 +32,8 @@ interface Props {
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
     ingredients: RecipeIngredientDefault[];
+    references: Dictionary<string, IngredientItem>;
+
     removeDirection: typeof removeDirection;
     removeSubDirection: typeof removeSubDirection;
     toggleDirectionOpen: typeof toggleDirectionOpen;
@@ -357,6 +359,8 @@ export default class DirectionsBlock extends Component<Props> {
 
     private getNewSubDirectionLine(directionIndex: number, direction: RecipeDirection, ingredients: RecipeIngredientDefault[]): JSX.Element {
 
+        const { references } = this.props;
+
         return (
 
             <div key={"newSubDirectionLine"} className={styles.subDirectionLine}>
@@ -384,8 +388,8 @@ export default class DirectionsBlock extends Component<Props> {
                             SubDirectionType.Warning,
                             "----",
                             ...ingredients.map((ingredient) => ({
-                                label: ingredient.item.name.toUpperCase(),
-                                value: `${SubDirectionType.Ingredient}_${ingredient.item.id}`,
+                                label: references[ingredient.id].name.toUpperCase(),
+                                value: `${SubDirectionType.Ingredient}_${ingredient.id}`,
                             })),
                         ]}
                         value={direction.newStep}

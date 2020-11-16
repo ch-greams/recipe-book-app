@@ -3,19 +3,9 @@ import { UnitTime, UnitTemperature } from "../../../../common/units";
 
 // NOTE: Ingredients
 
-const IngredientItemType = `
-    type IngredientItem {
-        id: ID!
-        name: String!
-        nutritionFacts: NutritionFactValues!
-    }
-`;
-
 const IngredientAlternativeType = `
     type IngredientAlternative {
-
-        item: IngredientItem!
-
+        id: String!
         amount: Float!
         unit: Unit!
     }
@@ -23,17 +13,25 @@ const IngredientAlternativeType = `
 
 const IngredientType = `
 
-    ${IngredientItemType}
-
     ${IngredientAlternativeType}
 
     type Ingredient {
-
-        item: IngredientItem!
-
+        id: String!
         amount: Float!
         unit: Unit!
         alternatives: [IngredientAlternative!]!
+    }
+`;
+
+const IngredientDataType = `
+    type IngredientData {
+        id: ID!
+        name: String!
+        brand: String!
+        subtitle: String!
+
+        nutritionFacts: NutritionFactValues!
+        customUnits: [CustomUnit!]!
     }
 `;
 
@@ -100,11 +98,24 @@ const DirectionType = `
     }
 `;
 
+const ReferencesType = `
+
+    ${IngredientDataType}
+
+    type References {
+
+        food: [IngredientData!]!
+        recipe: [IngredientData!]!
+    }
+`;
+
 const RecipeType = `
 
     ${IngredientType}
 
     ${DirectionType}
+
+    ${ReferencesType}
 
     type Recipe {
         id: ID!
@@ -118,6 +129,8 @@ const RecipeType = `
 
         ingredients: [Ingredient!]!
         directions: [Direction!]!
+
+        references: References!
     }
 `;
 

@@ -14,7 +14,7 @@ interface Food {
     name: string;
     brand: string;
     subtitle: string;
-    nutritionFactValues: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 }
 
@@ -27,7 +27,7 @@ interface IngredientItem {
 interface Ingredient {
     amount: number;
     unit: UnitWeight | UnitVolume;
-    item: IngredientItem;
+    id: string;
 }
 
 interface IngredientDefault extends Ingredient {
@@ -63,6 +63,11 @@ interface Direction {
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 
+interface References {
+    food: IngredientItem[];
+    recipe: IngredientItem[];
+}
+
 interface Recipe {
     id: string;
     name: string;
@@ -75,4 +80,5 @@ interface Recipe {
 
     ingredients: IngredientDefault[];
     directions: Direction[];
+    references: References;
 }

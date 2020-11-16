@@ -38,7 +38,7 @@ const foodSchema: SchemaValidator = {
             "name",
             "brand",
             "subtitle",
-            "nutritionFactValues",
+            "nutritionFacts",
             "customUnits",
         ],
         properties: {
@@ -46,7 +46,7 @@ const foodSchema: SchemaValidator = {
             name: { bsonType: "string" },
             brand: { bsonType: "string" },
             subtitle: { bsonType: "string" },
-            nutritionFactValues: nutritionFactValuesValidator,
+            nutritionFacts: nutritionFactValuesValidator,
             customUnits: customUnitsValidator,
         },
     },

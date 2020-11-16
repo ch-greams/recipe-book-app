@@ -10,27 +10,20 @@ export default class RecipeApi {
     public static readonly INGREDIENT_TYPE_FIELDS: string = `
         amount
         unit
-
-        item {
-            id
-            name
-            nutritionFacts {
-                ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
-            }
-        }
+        id
 
         alternatives {
 
             amount
             unit
-
-            item {
-                id
-                name
-                nutritionFacts {
-                    ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
-                }
-            }
+            id
+        }
+    `;
+    public static readonly INGREDIENT_DATA_TYPE_FIELDS: string = `
+        id
+        name
+        nutritionFacts {
+            ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
         }
     `;
     public static readonly DIRECTION_TYPE_FIELDS: string = `
@@ -67,6 +60,15 @@ export default class RecipeApi {
 
         directions {
             ${RecipeApi.DIRECTION_TYPE_FIELDS}
+        }
+
+        references {
+            food {
+                ${RecipeApi.INGREDIENT_DATA_TYPE_FIELDS}
+            }
+            recipe {
+                ${RecipeApi.INGREDIENT_DATA_TYPE_FIELDS}
+            }
         }
     `;
 

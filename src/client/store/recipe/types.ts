@@ -1,6 +1,21 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, Direction, Ingredient, IngredientItem, Recipe, SubDirection, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import {
+    Dictionary,
+    Direction,
+    Ingredient,
+    IngredientItem,
+    Recipe,
+    SubDirection,
+    SubDirectionIngredient,
+} from "../../../common/typings";
+import {
+    CustomUnit,
+    CustomUnitInput,
+    UnitTemperature,
+    UnitTime,
+    UnitVolume,
+    UnitWeight,
+} from "../../../common/units";
 
 
 
@@ -62,6 +77,8 @@ export interface RecipePageStore {
 
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
+
+    references: Dictionary<string, IngredientItem>;
 }
 
 

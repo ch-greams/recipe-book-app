@@ -115,8 +115,27 @@ export default class Database {
         try {
             const collection = this.db.collection("recipe");
 
-            const record = await collection.findOne<Recipe>({ id });
+            // const record = await collection.findOne<Recipe>({ id });
     
+            const records = await collection.aggregate([
+                {
+                    $match: { id },
+                },
+                {
+                    $lookup: {
+                        from: "food",
+                        let: { "fid": "$references.food" },
+                        pipeline: [
+                            { $match: { $expr: { $in: [ "$id", "$$fid" ] } } },
+                            { $project: { "_id": 0, "customUnits": 0 } },
+                        ],
+                        as: "references.food",
+                    },
+                },
+            ]).toArray();
+
+            const [ record ] = records;
+
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecord", record);
 
             return record;

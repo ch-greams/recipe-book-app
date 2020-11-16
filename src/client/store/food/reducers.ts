@@ -26,7 +26,7 @@ const initialState: FoodPageStore = {
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
-    nutritionFactValues: {},
+    nutritionFacts: {},
     customUnits: [],
 
     // NOTE: INPUTS
@@ -132,10 +132,10 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 name: foodItem.name,
                 brand: foodItem.brand,
                 subtitle: foodItem.subtitle,
-                nutritionFactValues: foodItem.nutritionFactValues,
+                nutritionFacts: foodItem.nutritionFacts,
                 customUnits: foodItem.customUnits,
 
-                nutritionFactInputs: convertNutritionFactValuesIntoInputs(foodItem.nutritionFactValues),
+                nutritionFactInputs: convertNutritionFactValuesIntoInputs(foodItem.nutritionFacts),
                 customUnitInputs: convertCustomUnitsIntoInputs(foodItem.customUnits),
             };
         }
@@ -152,8 +152,8 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             return {
                 ...state,
 
-                nutritionFactValues: {
-                    ...state.nutritionFactValues,
+                nutritionFacts: {
+                    ...state.nutritionFacts,
                     ...convertNutritionFactInputsIntoValues(action.payload),
                 },
                 nutritionFactInputs: {

@@ -11,7 +11,7 @@ export default class FoodApi {
         name
         brand
         subtitle
-        nutritionFactValues {
+        nutritionFacts {
             ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
         }
         customUnits {

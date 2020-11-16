@@ -19,7 +19,7 @@ function* fetchIngredients(): Generator<StrictEffect, void, Food[]> {
         const ingredients = foodItems.map<IngredientItem>((foodItem) => ({
             id: foodItem.id,
             name: foodItem.name,
-            nutritionFacts: foodItem.nutritionFactValues,
+            nutritionFacts: foodItem.nutritionFacts,
         }));
 
         yield put({ type: INGREDIENTS_FETCH_SUCCESS, payload: ingredients });
