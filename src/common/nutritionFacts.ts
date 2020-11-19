@@ -4,6 +4,7 @@ import { UnitEnergy, UnitWeight } from "./units";
 
 export enum NutritionFactType {
 
+    // Energy
     Energy = "Energy",
     CarbohydrateEnergy = "CarbohydrateEnergy",
     FatEnergy = "FatEnergy",
@@ -259,6 +260,13 @@ export const nutritionFactTypeLabelMapping: Dictionary<NutritionFactType, Nutrit
     [NutritionFactType.Caffeine]: NutritionFactTypeLabel.Caffeine,
 };
 
+export const ENERGY_GROUP: NutritionFactType[] = [
+
+    NutritionFactType.Energy,
+    NutritionFactType.CarbohydrateEnergy,
+    NutritionFactType.FatEnergy,
+    NutritionFactType.ProteinEnergy,
+];
 
 export const CARBOHYDRATES_GROUP: NutritionFactType[] = [
 
@@ -361,6 +369,7 @@ export enum NutrientGroupType {
 
 export const NUTRIENTS: NutritionFactType[] = [
 
+    ...ENERGY_GROUP,
     ...CARBOHYDRATES_GROUP,
     ...LIPIDS_GROUP,
     ...PROTEINS_GROUP,

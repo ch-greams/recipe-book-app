@@ -31,6 +31,7 @@ import { requestIngredients } from "../../store/search/actions";
 import { SearchPageStore } from "../../store/search/types";
 import { RouteComponentProps } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import { Dictionary } from "../../../common/typings";
 
 
 
@@ -177,7 +178,10 @@ class RecipePage extends Component<RecipePageProps> {
         );
     };
 
-    private getGeneralInfoBlock = (): JSX.Element => {
+    private getGeneralInfoBlock = (
+        nutritionFacts: Dictionary<NutritionFactType, number>,
+        nutritionFactInputs: Dictionary<NutritionFactType, string>,
+    ): JSX.Element => {
 
         const { recipeItem, updateCustomUnits } = this.props;
 
@@ -204,7 +208,7 @@ class RecipePage extends Component<RecipePageProps> {
                     <NutritionFactsBlock
                         isReadOnly={true}
                         title={"NUTRITION FACTS"}
-                        nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, {}, {})}
+                        nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}
                     />
                 </div>
             </div>
@@ -225,6 +229,7 @@ class RecipePage extends Component<RecipePageProps> {
                 newDirection,
                 directions,
                 references,
+                nutritionFacts,
             },
             search,
             updateName,
@@ -277,6 +282,8 @@ class RecipePage extends Component<RecipePageProps> {
             return <Loader />;
         }
 
+        const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
+
         return (
             <div className={styles.recipePage}>
 
@@ -294,7 +301,7 @@ class RecipePage extends Component<RecipePageProps> {
                         updateDescription={updateDescription}
                     />
 
-                    {this.getGeneralInfoBlock()}
+                    {this.getGeneralInfoBlock(nutritionFacts, nutritionFactInputs)}
 
                     <div className={styles.recipePageBlockTitle}>
                         {"INGREDIENTS"}
@@ -363,8 +370,8 @@ class RecipePage extends Component<RecipePageProps> {
 
                     <PageDetailedNutritionFactsBlock
                         isReadOnly={true}
-                        nutritionFacts={{}}
-                        nutritionFactInputs={{}}
+                        nutritionFacts={nutritionFacts}
+                        nutritionFactInputs={nutritionFactInputs}
                     />
 
                 </div>

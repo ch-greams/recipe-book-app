@@ -65,8 +65,10 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
-
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
+
+    // NOTE: INPUTS
     customUnitInputs: CustomUnitInput[];
 
     servingSize: number;

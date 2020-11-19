@@ -1,6 +1,7 @@
-import { Direction, IngredientDefault, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitWeight } from "../../../common/units";
-import Utils from "../../../common/utils";
+import { NutritionFactType } from "../../../common/nutritionFacts";
+import { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "../../../common/typings";
+import { CustomUnitInput, UnitTemperature, UnitTime, UnitWeight } from "../../../common/units";
+import Utils, { DecimalPlaces } from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
@@ -73,6 +74,8 @@ const initialState: RecipePageStore = {
     description: "Description",
     type: "",
 
+    nutritionFacts: {},
+
     customUnits: [],
     customUnitInputs: [],
 
@@ -110,15 +113,6 @@ const initialState: RecipePageStore = {
 };
 
 
-function convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-
-    return customUnits.map((customUnit: CustomUnit) => ({ ...customUnit, amount: String(customUnit.amount) }));
-}
-
-function convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-
-    return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
-}
 
 function convertIngredients(ingredients: IngredientDefault[]): RecipeIngredientDefault[] {
 
@@ -158,6 +152,32 @@ function convertDirections(directions: Direction[]): RecipeDirection[] {
         ),
     }));
 }
+
+function getRecipeNutritionFacts(
+    ingredients: IngredientDefault[],
+    references: Dictionary<string, IngredientItem>,
+): Dictionary<NutritionFactType, number> {
+
+    const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
+        .map((ingredient) => {
+            
+            const nf = references[ingredient.id].nutritionFacts;
+            const multiplier = Utils.getPercentMultiplier(ingredient.amount);
+
+            return Utils.getObjectKeys(nf)
+                .reduce((acc, nfType) => ({
+                    ...acc,
+                    [nfType]: (
+                        typeof nf[nfType] === "number"
+                            ? Utils.roundToDecimal(nf[nfType] * multiplier, DecimalPlaces.Two)
+                            : null
+                    ),
+                }), {});
+        });
+
+    return Utils.dictionarySum(nutritionFactsById);
+}
+
 
 export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
 
@@ -202,7 +222,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
 
-                customUnits: convertCustomUnitsIntoValues(action.payload),
+                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
                 customUnitInputs: action.payload as CustomUnitInput[],
             };
         }
@@ -705,12 +725,16 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const id = action.payload;
 
+            const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
+            const references = Utils.getObjectKeys(state.references).reduce((refs, rid) => (
+                (rid !== id) ? { ...refs, [rid]: state.references[rid] } : refs
+            ), {});
+
             return {
                 ...state,
-                ingredients: state.ingredients.filter((ingredient) => ingredient.id !== id),
-                references: Utils.getObjectKeys(state.references).reduce((refs, rid) => (
-                    (rid !== id) ? { ...refs, [rid]: state.references[rid] } : refs
-                ), {}),
+                ingredients: ingredients,
+                references: references,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, references),
             };
         }
 
@@ -773,6 +797,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: ingredients,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, state.references),
             };
         }
 
@@ -807,24 +832,27 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const { id, inputValue } = action.payload;
 
+            const ingredients = state.ingredients.map((ingredient) => {
+
+                if (ingredient.id === id) {
+
+                    const amount = Utils.decimalNormalizer(inputValue, ingredient.amountInput);
+
+                    return {
+                        ...ingredient,
+                        amountInput: amount,
+                        amount: Number(amount),
+                    };
+                }
+                else {
+                    return ingredient;
+                }
+            });
+
             return {
                 ...state,
-                ingredients: state.ingredients.map((ingredient) => {
-
-                    if (ingredient.id === id) {
-
-                        const amount = Utils.decimalNormalizer(inputValue, ingredient.amountInput);
-
-                        return {
-                            ...ingredient,
-                            amountInput: amount,
-                            amount: Number(amount),
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                }),
+                ingredients: ingredients,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, state.references),
             };
         }
 
@@ -913,29 +941,34 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 return state;
             }
 
+            const ingredients = [
+                ...state.ingredients,
+                {
+                    isOpen: true,
+                    isMarked: false,
+    
+                    id: ingredient.id,
+    
+                    amount: 100,
+                    amountInput: "100",
+                    unit: UnitWeight.g,
+        
+                    altNutritionFacts: {},
+        
+                    alternatives: [],    
+                },
+            ];
+
+            const references = {
+                ...state.references,
+                [ingredient.id]: ingredient,
+            };
+
             return {
                 ...state,
-                ingredients: [
-                    ...state.ingredients,
-                    {
-                        isOpen: true,
-                        isMarked: false,
-        
-                        id: ingredient.id,
-        
-                        amount: 100,
-                        amountInput: "100",
-                        unit: UnitWeight.g,
-            
-                        altNutritionFacts: {},
-            
-                        alternatives: [],    
-                    },
-                ],
-                references: {
-                    ...state.references,
-                    [ingredient.id]: ingredient,
-                },
+                ingredients: ingredients,
+                references: references,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, references),
             };
         }
 
@@ -1008,10 +1041,13 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
         case RECIPE_ITEM_FETCH_SUCCESS: {
             const recipeItem = action.payload;
 
-            const references = [
+            const referenceItems: IngredientItem[] = [
                 ...(recipeItem.references?.food || []),
                 ...(recipeItem.references?.recipe || []),
             ];
+
+            const references: Dictionary<string, IngredientItem> = referenceItems
+                .reduce((refs, item) => ({ ...refs, [item.id]: item }), {});
 
             return {
                 ...state,
@@ -1025,13 +1061,15 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 description: recipeItem.description,
                 type: recipeItem.type,
 
+                nutritionFacts: getRecipeNutritionFacts(recipeItem.ingredients, references),
+
                 customUnits: recipeItem.customUnits,
-                customUnitInputs: convertCustomUnitsIntoInputs(recipeItem.customUnits),
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(recipeItem.customUnits),
 
                 ingredients: convertIngredients(recipeItem.ingredients),
                 directions: convertDirections(recipeItem.directions),
 
-                references: references.reduce((refs, item) => ({ ...refs, [item.id]: item }), {}),
+                references: references,
             };
         }
 
