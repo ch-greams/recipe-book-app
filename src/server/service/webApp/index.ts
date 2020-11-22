@@ -1,5 +1,5 @@
 import bodyParser from "body-parser";
-import express, { RequestHandler } from "express";
+import express from "express";
 import path from "path";
 import Logger, { LogLevel } from "../../../common/server/logger";
 import Database from "../database";
@@ -46,70 +46,12 @@ export default class WebApp {
         response.sendStatus(HttpStatusSuccess.Ok);
     }
 
-
-    /**
-     * @deprecated
-     */
-    private static getFoodRecordsEndpoint(database: Database): RequestHandler {
-
-        return async (_request, response) => {
-
-            const records = await database.getFoodRecords();
-
-            response.send(records);
-        };
-    }
-
-    /**
-     * @deprecated
-     */
-    private static getFoodRecordEndpoint(database: Database): RequestHandler {
-
-        return async (request, response) => {
-
-            const { params: { id } } = request;
-
-            const record = await database.getFoodRecord(id);
-    
-            response.send(record);
-        };
-    }
-
-    /**
-     * @deprecated
-     */
-    private static getRecipeRecordsEndpoint(database: Database): RequestHandler {
-
-        return async (_request, response) => {
-
-            const records = await database.getRecipeRecords();
-
-            response.send(records);
-        };
-    }
-
-    /**
-     * @deprecated
-     */
-    private static getRecipeRecordEndpoint(database: Database): RequestHandler {
-
-        return async (request, response) => {
-
-            const { params: { id } } = request;
-
-            const record = await database.getRecipeRecord(id);
-    
-            response.send(record);
-        };
-    }
-
     private static log(request: express.Request, _response: express.Response, next: express.NextFunction): void {
 
         Logger.log(LogLevel.INFO, "WebApp.log", `${request.method} ${request.url}`);
 
         next();
     }
-
 
 
     private routes(database: Database, isProduction: boolean): void {
@@ -119,14 +61,6 @@ export default class WebApp {
         this.app.get("/status", WebApp.log, WebApp.getStatusEndpoint);
 
         this.app.use("/graphql", GraphQL.getMiddleware(database, isProduction));
-
-        this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint(database));
-
-        this.app.get("/api/food/:id", WebApp.log, WebApp.getFoodRecordEndpoint(database));
-
-        this.app.get("/api/recipe", WebApp.log, WebApp.getRecipeRecordsEndpoint(database));
-
-        this.app.get("/api/recipe/:id", WebApp.log, WebApp.getRecipeRecordEndpoint(database));
 
         this.app.get("*", WebApp.log, (_req, res) => {
             res.sendFile( path.join(__dirname, "..", "..", "view", "index.html") );
