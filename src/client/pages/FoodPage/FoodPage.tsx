@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
 import {
-    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits,
+    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits, updateServingSize,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
@@ -28,6 +28,7 @@ interface DispatchToProps {
     updateSubtitle: typeof updateSubtitle;
     requestFoodItem: typeof requestFoodItem;
     updateCustomUnits: typeof updateCustomUnits;
+    updateServingSize: typeof updateServingSize;
 }
 
 interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
@@ -39,6 +40,15 @@ class FoodPage extends Component<Props> {
     public componentDidMount(): void {
         this.props.requestFoodItem(this.props.match.params.foodId);
     }
+
+    private handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+        const { foodItem, updateServingSize } = this.props;
+
+        const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
+
+        updateServingSize(amount);
+    };
 
     private getParametersBlock(
         foodItem: FoodPageStore,
@@ -110,7 +120,7 @@ class FoodPage extends Component<Props> {
                         type={"text"}
                         value={foodItem.servingSize}
                         className={styles.servingSizeLineInput}
-                        onChange={console.log}
+                        onChange={this.handleServingSizeAmountEdit}
                     />
 
                     <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
@@ -213,6 +223,7 @@ const mapDispatchToProps: DispatchToProps = {
     updateSubtitle,
     requestFoodItem,
     updateCustomUnits,
+    updateServingSize,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodPage);

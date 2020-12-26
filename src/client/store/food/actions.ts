@@ -13,6 +13,8 @@ import {
     UpdateBrandAction,
     UpdateSubtitleAction,
     UpdateNutritionFactAction,
+    FOOD_ITEM_UPDATE_SERVING_SIZE,
+    UpdateServingSizeAction,
 } from "./types";
 
 
@@ -56,5 +58,12 @@ export function requestFoodItem(foodId: string): FoodItemFetchRequestedAction {
     return {
         type: FOOD_ITEM_FETCH_REQUESTED,
         payload: foodId,
+    };
+}
+
+export function updateServingSize(servingSizeInput: string): UpdateServingSizeAction {
+    return {
+        type: FOOD_ITEM_UPDATE_SERVING_SIZE,
+        payload: servingSizeInput,
     };
 }

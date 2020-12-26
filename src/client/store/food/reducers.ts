@@ -9,6 +9,7 @@ import {
     FOOD_ITEM_UPDATE_SUBTITLE,
     FOOD_ITEM_UPDATE_NUTRITION_FACT,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
+    FOOD_ITEM_UPDATE_SERVING_SIZE,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
@@ -43,6 +44,7 @@ const initialState: FoodPageStore = {
     densityWeight: UnitWeight.g,
 
     servingSize: 100,
+    servingSizeInput: "100",
     unit: UnitWeight.g,
 
 
@@ -145,6 +147,21 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
 
                 customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
                 customUnitInputs: action.payload as CustomUnitInput[],
+            };
+        }
+
+        case FOOD_ITEM_UPDATE_SERVING_SIZE: {
+            const servingSize = Number(action.payload);
+            const nutritionFacts = Utils.convertNutritionFacts(servingSize, state.servingSize, state.nutritionFacts);
+
+            return {
+                ...state,
+
+                servingSize: servingSize,
+                servingSizeInput: action.payload,
+
+                nutritionFacts: nutritionFacts,
+                nutritionFactInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
             };
         }
 

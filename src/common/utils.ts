@@ -126,6 +126,23 @@ export default class Utils {
         }, {});
     }
 
+   public static convertNutritionFacts(
+       nextAmount: number,
+       prevAmount: number,
+       nutritionFacts: Dictionary<NutritionFactType, number>,
+    ): Dictionary<NutritionFactType, number> {
+
+        const multiplier = nextAmount / prevAmount;
+
+        const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
+            .reduce((acc, cur) => ({
+                ...acc,
+                [cur]: Utils.roundToDecimal(nutritionFacts[cur] * multiplier, DecimalPlaces.Two),
+            }), {});
+
+        return updatedNutritionFacts;
+    }
+
     // NOTE: OTHER
 
     public static arrayIsNotEmpty(array: unknown[]): boolean {
