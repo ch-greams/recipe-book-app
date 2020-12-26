@@ -18,7 +18,8 @@ export interface FoodPageStore {
 
     // NOTE: INPUTS
 
-    nutritionFactInputs: Dictionary<NutritionFactType, string>;
+    nutritionFactsByServing: Dictionary<NutritionFactType, number>;
+    nutritionFactsByServingInputs: Dictionary<NutritionFactType, string>;
     customUnitInputs: CustomUnitInput[];
 
     // NOTE: STATIC

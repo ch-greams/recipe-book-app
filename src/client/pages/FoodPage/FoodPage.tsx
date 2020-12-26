@@ -148,8 +148,8 @@ class FoodPage extends Component<Props> {
                 name,
                 brand,
                 subtitle,
-                nutritionFacts,
-                nutritionFactInputs,
+                nutritionFactsByServing,
+                nutritionFactsByServingInputs,
                 featuredNutritionFacts,
             },
             updateName,
@@ -188,7 +188,7 @@ class FoodPage extends Component<Props> {
 
                             <NutritionFactsBlock
                                 title={"NUTRITION FACTS"}
-                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}
+                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFactsByServing, nutritionFactsByServingInputs)}
                             />
                         </div>
 
@@ -201,8 +201,8 @@ class FoodPage extends Component<Props> {
                     </div>
 
                     <PageDetailedNutritionFactsBlock
-                        nutritionFacts={nutritionFacts}
-                        nutritionFactInputs={nutritionFactInputs}
+                        nutritionFacts={nutritionFactsByServing}
+                        nutritionFactInputs={nutritionFactsByServingInputs}
                     />
 
                 </div>

@@ -127,12 +127,12 @@ export default class Utils {
     }
 
    public static convertNutritionFacts(
-       nextAmount: number,
-       prevAmount: number,
+       amount: number,
+       isFrom: boolean,
        nutritionFacts: Dictionary<NutritionFactType, number>,
     ): Dictionary<NutritionFactType, number> {
 
-        const multiplier = nextAmount / prevAmount;
+        const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );
 
         const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
             .reduce((acc, cur) => ({
