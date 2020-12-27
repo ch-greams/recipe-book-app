@@ -1,4 +1,4 @@
-import { UnitTime, UnitTemperature } from "../../../../common/units";
+import { TimeUnit, TemperatureUnit } from "../../../../common/units";
 
 
 // NOTE: Ingredients
@@ -37,35 +37,35 @@ const IngredientDataType = `
 
 // NOTE: Directions
 
-const UnitTimeEnum = `
-    enum UnitTime {
-        ${Object.values(UnitTime).join("\n\t")}
+const TimeUnitEnum = `
+    enum TimeUnit {
+        ${Object.values(TimeUnit).join("\n\t")}
     }
 `;
 
 const TimeType = `
 
-    ${UnitTimeEnum}
+    ${TimeUnitEnum}
 
     type Time {
         count: Float!
-        unit: UnitTime!
+        unit: TimeUnit!
     }
 `;
 
-const UnitTemperatureEnum = `
-    enum UnitTemperature {
-        ${Object.values(UnitTemperature).join("\n\t")}
+const TemperatureUnitEnum = `
+    enum TemperatureUnit {
+        ${Object.values(TemperatureUnit).join("\n\t")}
     }
 `;
 
 const TemperatureType = `
 
-    ${UnitTemperatureEnum}
+    ${TemperatureUnitEnum}
 
     type Temperature {
         count: Float!
-        unit: UnitTemperature!
+        unit: TemperatureUnit!
     }
 `;
 

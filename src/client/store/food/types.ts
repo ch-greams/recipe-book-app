@@ -1,6 +1,6 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, Food } from "../../../common/typings";
-import { CustomUnit, CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "../../../common/units";
 
 
 
@@ -26,11 +26,11 @@ export interface FoodPageStore {
 
     type: string;
     density: number;
-    densityVolume: UnitVolume;
-    densityWeight: UnitWeight;
+    densityVolume: VolumeUnit;
+    densityWeight: WeightUnit;
     servingSize: number;
     servingSizeInput: string;
-    unit: UnitWeight | UnitVolume;
+    unit: WeightUnit | VolumeUnit;
     featuredNutritionFacts: NutritionFactType[];
 }
 

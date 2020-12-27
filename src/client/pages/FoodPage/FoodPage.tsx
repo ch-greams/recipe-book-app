@@ -5,7 +5,7 @@ import {
     requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits, updateServingSize,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
-import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
@@ -48,6 +48,12 @@ class FoodPage extends Component<Props> {
         const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
 
         updateServingSize(amount);
+    };
+
+    private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+
+        // NOTE: Unit or CustomUnit
+        console.log(event.target.value);
     };
 
     private getParametersBlock(
@@ -95,7 +101,7 @@ class FoodPage extends Component<Props> {
                     />
 
                     <SelectInput
-                        options={Object.keys(UnitWeight)}
+                        options={Object.keys(WeightUnit)}
                         onChange={console.log}
                         value={foodItem.densityWeight}
                     />
@@ -103,7 +109,7 @@ class FoodPage extends Component<Props> {
                     {"/"}
 
                     <SelectInput
-                        options={Object.keys(UnitVolume)}
+                        options={Object.keys(VolumeUnit)}
                         onChange={console.log}
                         value={foodItem.densityVolume}
                     />
@@ -123,7 +129,10 @@ class FoodPage extends Component<Props> {
                         onChange={this.handleServingSizeAmountEdit}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={[ ...Object.values(Units), ...foodItem.customUnits.map((cu) => cu.name) ]}
+                        onChange={this.handleServingSizeUnitEdit}
+                    />
 
                 </div>
 

@@ -19,7 +19,7 @@ import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, Units, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import Utils from "../../../common/utils";
 import { NutritionFactType } from "../../../common/nutritionFacts";
@@ -115,7 +115,7 @@ class RecipePage extends Component<RecipePageProps> {
     };
 
     private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        this.props.updateServingSizeUnit(event.target.value as UnitWeight | UnitVolume);
+        this.props.updateServingSizeUnit(event.target.value as WeightUnit | VolumeUnit);
     };
 
     // NOTE: General Information
@@ -160,7 +160,7 @@ class RecipePage extends Component<RecipePageProps> {
                     />
 
                     <SelectInput
-                        options={Object.keys(Units)}
+                        options={Object.values(Units)}
                         value={recipeItem.servingSizeUnit}
                         onChange={this.handleServingSizeUnitEdit}
                     />

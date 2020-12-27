@@ -1,5 +1,5 @@
 import { Dictionary } from "./typings";
-import { UnitEnergy, UnitWeight } from "./units";
+import { NutritionFactUnit } from "./units";
 
 
 export enum NutritionFactType {
@@ -381,7 +381,7 @@ export const NUTRIENTS: NutritionFactType[] = [
 
 export interface NutritionFactDescription {
     type: NutritionFactType;
-    unit: UnitWeight | UnitEnergy;
+    unit: NutritionFactUnit;
     dailyValue?: number;
     isFraction: boolean;
 }

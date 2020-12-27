@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Units, UnitVolume, UnitWeight } from "../../../common/units";
+import { Units, VolumeUnit, WeightUnit } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import LinkIcon from "../../icons/link-sharp.svg";
 import SearchIcon from "../../icons/search-sharp.svg";
@@ -77,7 +77,7 @@ export default class IngredientsBlock extends Component<Props> {
 
     private handleIngredientUnitEdit = (id: string): SelectChangeCallback => {
         return (event) => {
-            this.props.updateIngredientUnit(id, event.target.value as UnitWeight | UnitVolume);
+            this.props.updateIngredientUnit(id, event.target.value as WeightUnit | VolumeUnit);
         };
     };
 
@@ -104,7 +104,7 @@ export default class IngredientsBlock extends Component<Props> {
 
     private handleAltIngredientUnitEdit = (parentId: string, id: string): SelectChangeCallback => {
         return (event) => {
-            this.props.updateAltIngredientUnit(parentId, id, event.target.value as UnitWeight | UnitVolume);
+            this.props.updateAltIngredientUnit(parentId, id, event.target.value as WeightUnit | VolumeUnit);
         };
     };
 
@@ -188,7 +188,7 @@ export default class IngredientsBlock extends Component<Props> {
                 
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
-                    options={Object.keys(Units)}
+                    options={Object.values(Units)}
                     value={ingredient.unit}
                     onChange={this.handleIngredientUnitEdit(ingredient.id)}
                 />
@@ -265,7 +265,7 @@ export default class IngredientsBlock extends Component<Props> {
                 
                 <SelectInput
                     type={SelectInputType.AltIngredientUnit}
-                    options={Object.keys(Units)}
+                    options={Object.values(Units)}
                     value={altIngredient.unit}
                     onChange={this.handleAltIngredientUnitEdit(parentId, altIngredient.id)}
                 />
@@ -311,7 +311,7 @@ export default class IngredientsBlock extends Component<Props> {
         const newAlt: RecipeIngredient = {
             amount: 100,
             amountInput: "100",
-            unit: UnitWeight.g,
+            unit: WeightUnit.g,
             id: "NEW ALTERNATIVE",
         };
 
@@ -408,7 +408,7 @@ export default class IngredientsBlock extends Component<Props> {
 
             amount: 100,
             amountInput: "100",
-            unit: UnitWeight.g,
+            unit: WeightUnit.g,
 
             altNutritionFacts: {},
 

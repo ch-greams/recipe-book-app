@@ -1,6 +1,6 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
 import { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnitInput, UnitTemperature, UnitTime, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "../../../common/units";
 import Utils, { DecimalPlaces } from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
@@ -81,7 +81,7 @@ const initialState: RecipePageStore = {
 
     servingSize: 100,
     servingSizeInput: "100",
-    servingSizeUnit: UnitWeight.g,
+    servingSizeUnit: WeightUnit.g,
 
     ingredients: [],
 
@@ -94,11 +94,11 @@ const initialState: RecipePageStore = {
 
         time: {
             count: 0,
-            unit: UnitTime.min,
+            unit: TimeUnit.min,
         },
         temperature: {
             count: 0,
-            unit: UnitTemperature.C,
+            unit: TemperatureUnit.C,
         },
 
         timeInput: "",
@@ -705,11 +705,11 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
                     time: {
                         count: 0,
-                        unit: UnitTime.min,
+                        unit: TimeUnit.min,
                     },
                     temperature: {
                         count: 0,
-                        unit: UnitTemperature.C,
+                        unit: TemperatureUnit.C,
                     },
             
                     timeInput: "",
@@ -951,7 +951,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
     
                     amount: 100,
                     amountInput: "100",
-                    unit: UnitWeight.g,
+                    unit: WeightUnit.g,
         
                     altNutritionFacts: {},
         
@@ -991,7 +991,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                 {
                                     amount: 100,
                                     amountInput: "100",
-                                    unit: UnitWeight.g,
+                                    unit: WeightUnit.g,
                                     id: altIngredient.id,
                                 },
                             ],

@@ -1,6 +1,6 @@
 import { SubDirectionType } from "../../../../client/store/recipe/types";
 import { Dictionary } from "../../../../common/typings";
-import { Units, UnitTemperature, UnitTime } from "../../../../common/units";
+import { Units, TemperatureUnit, TimeUnit } from "../../../../common/units";
 import { SchemaValidator, Validator } from "./types";
 
 
@@ -71,7 +71,7 @@ const directionProperties: Dictionary<string, Validator> = {
         required: [ "count", "unit" ],
         properties: {
             count: { bsonType: "number" },
-            unit: { enum: Object.values(UnitTime) },
+            unit: { enum: Object.values(TimeUnit) },
         },
     },
     temperature: {
@@ -79,7 +79,7 @@ const directionProperties: Dictionary<string, Validator> = {
         required: [ "count", "unit" ],
         properties: {
             count: { bsonType: "number" },
-            unit: { enum: Object.values(UnitTemperature) },
+            unit: { enum: Object.values(TemperatureUnit) },
         },
     },
     steps: directionStepsValidator,

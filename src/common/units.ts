@@ -1,34 +1,37 @@
 
 
-export enum UnitWeight {
+export enum NutritionFactUnit {
     g = "g",
     mg = "mg",
     mcg = "mcg",
     IU = "IU",
+
+    kcal = "kcal",
+    kj = "kj",
+}
+
+export enum WeightUnit {
+    g = "g",
     oz = "oz",
 }
 
-export enum UnitVolume {
+export enum VolumeUnit {
     ml = "ml",
     cup = "cup",
     tbsp = "tbsp",
     tsp = "tsp",
 }
 
-export const Units = { ...UnitWeight, ...UnitVolume };
+export const Units = { ...WeightUnit, ...VolumeUnit };
 export type Units = typeof Units;
 
-export enum UnitEnergy {
-    kcal = "kcal",
-    kj = "kj",
-}
 
-export enum UnitTemperature {
+export enum TemperatureUnit {
     C = "C",
     F = "F",
 }
 
-export enum UnitTime {
+export enum TimeUnit {
     min = "min",
     h = "h",
 }
@@ -36,11 +39,11 @@ export enum UnitTime {
 export interface CustomUnit {
     name: string;
     amount: number;
-    unit: UnitWeight;
+    unit: WeightUnit;
 }
 
 export interface CustomUnitInput {
     name: string;
     amount: string;
-    unit: UnitWeight;
+    unit: WeightUnit;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import IconWrapper from "../../icons/IconWrapper";
-import { UnitWeight, UnitTemperature, UnitTime, UnitVolume, Units } from "../../../common/units";
+import { WeightUnit, TemperatureUnit, TimeUnit, VolumeUnit, Units } from "../../../common/units";
 import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
 import styles from "./DirectionsBlock.scss";
 import {
@@ -106,7 +106,7 @@ export default class DirectionsBlock extends Component<Props> {
 
     private handleDirectionTemperatureUnitEdit = (parentIndex: number): SelectChangeCallback => {
         return (event) => {
-            this.props.updateDirectionTemperatureUnit(parentIndex, event.target.value as UnitTemperature);
+            this.props.updateDirectionTemperatureUnit(parentIndex, event.target.value as TemperatureUnit);
         };
     };
 
@@ -118,7 +118,7 @@ export default class DirectionsBlock extends Component<Props> {
 
     private handleDirectionTimeUnitEdit = (parentIndex: number): SelectChangeCallback => {
         return (event) => {
-            this.props.updateDirectionTimeUnit(parentIndex, event.target.value as UnitTime);
+            this.props.updateDirectionTimeUnit(parentIndex, event.target.value as TimeUnit);
         };
     };
 
@@ -149,7 +149,7 @@ export default class DirectionsBlock extends Component<Props> {
     private handleSubDirectionIngredientUnitEdit = (directionIndex: number, subDirectionIndex: number): SelectChangeCallback => {
         return (event) => {
             this.props.updateSubDirectionIngredientUnit(
-                directionIndex, subDirectionIndex, event.target.value as (UnitWeight | UnitVolume),
+                directionIndex, subDirectionIndex, event.target.value as (WeightUnit | VolumeUnit),
             );
         };
     };
@@ -187,7 +187,7 @@ export default class DirectionsBlock extends Component<Props> {
     };
 
     private handleNewDirectionTemperatureUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        this.props.updateNewDirectionTemperatureUnit(event.target.value as UnitTemperature);
+        this.props.updateNewDirectionTemperatureUnit(event.target.value as TemperatureUnit);
     };
 
     private handleNewDirectionTimeCountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -195,7 +195,7 @@ export default class DirectionsBlock extends Component<Props> {
     };
 
     private handleNewDirectionTimeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        this.props.updateNewDirectionTimeUnit(event.target.value as UnitTime);
+        this.props.updateNewDirectionTimeUnit(event.target.value as TimeUnit);
     };
 
     private handleNewDirectionNameEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -347,7 +347,7 @@ export default class DirectionsBlock extends Component<Props> {
                         
                         <SelectInput
                             type={SelectInputType.AltIngredientUnit}
-                            options={Object.keys(Units)}
+                            options={Object.values(Units)}
                             value={subDirection.unit}
                             onChange={this.handleSubDirectionIngredientUnitEdit(directionIndex, subDirectionIndex)}
                         />
@@ -424,7 +424,7 @@ export default class DirectionsBlock extends Component<Props> {
         const tempSelectInput = (
             <SelectInput
                 type={SelectInputType.IngredientUnit}
-                options={Object.keys(UnitTemperature)}
+                options={Object.keys(TemperatureUnit)}
                 value={direction.temperature?.unit}
                 onChange={this.handleDirectionTemperatureUnitEdit(index)}
             />
@@ -449,7 +449,7 @@ export default class DirectionsBlock extends Component<Props> {
         const timeSelectInput = (
             <SelectInput
                 type={SelectInputType.IngredientUnit}
-                options={Object.keys(UnitTime)}
+                options={Object.keys(TimeUnit)}
                 value={direction.time?.unit}
                 onChange={this.handleDirectionTimeUnitEdit(index)}
             />
@@ -595,7 +595,7 @@ export default class DirectionsBlock extends Component<Props> {
                 
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
-                    options={Object.keys(UnitTemperature)}
+                    options={Object.keys(TemperatureUnit)}
                     value={direction.temperature.unit}
                     onChange={this.handleNewDirectionTemperatureUnitEdit}
                 />
@@ -619,7 +619,7 @@ export default class DirectionsBlock extends Component<Props> {
                 
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
-                    options={Object.keys(UnitTime)}
+                    options={Object.keys(TimeUnit)}
                     value={direction.temperature.unit}
                     onChange={this.handleNewDirectionTimeUnitEdit}
                 />

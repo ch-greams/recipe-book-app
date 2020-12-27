@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { NutritionFactType, nutritionFactTypeLabelMapping } from "../../../common/nutritionFacts";
 import { updateNutritionFact } from "../../store/food/actions";
-import { UnitEnergy, UnitWeight } from "../../../common/units";
+import { NutritionFactUnit } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
 import Utils from "../../../common/utils";
 import { InputChangeCallback } from "../../../common/typings";
@@ -13,7 +13,7 @@ export interface NutritionFact {
     amount: number;
     inputValue: string;
     type: NutritionFactType;
-    unit: UnitWeight | UnitEnergy;
+    unit: NutritionFactUnit;
     dailyValue?: number;
     isFraction: boolean;
 }

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
 import { InputChangeCallback } from "../../../common/typings";
-import { CustomUnitInput, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, WeightUnit } from "../../../common/units";
 import Utils from "../../../common/utils";
 import IconAdd from "../../icons/add-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
@@ -22,7 +22,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
     public static readonly displayName = "ServingSizesBlock";
 
     public state = {
-        newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
+        newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g },
     };
 
     private createCustomUnits = (customUnit: CustomUnitInput): void => {
@@ -36,7 +36,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             updateCustomUnits([ ...customUnitInputs, customUnit ]);
     
-            this.setState({ newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g } });
+            this.setState({ newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g } });
         }
         else {
             console.log("Custom Unit name is empty or already exist");
@@ -160,7 +160,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
                         <SelectInput
                             type={SelectInputType.CustomUnit}
-                            options={Object.keys(UnitWeight)}
+                            options={Object.keys(WeightUnit)}
                             onChange={console.log}
                         />
                     </div>
