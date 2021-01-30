@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+  app:
+    image: recipe-book-app
+    command: sh -c "npm install && npm start"
+    ports:
+      - 8080:8080
+    working_dir: /app
+    # volumes:
+    #   - ./:/app
+    environment:
+      NODE_ENV: development
+      PORT: 8080
+      LOG_LEVEL: DEBUG
+      MONGODB_URL: mongodb
+
+  mongodb:
+    image: mongo:4.4
+    volumes:
+      - rba-mongodb-data:/data/db
+    # environment: 
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+
+volumes:
+  rba-mongodb-data:
+

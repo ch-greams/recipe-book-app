@@ -2,7 +2,6 @@
 # node
 node_modules
 .env
-package-lock.json
 
 # electron-builder
 dist
