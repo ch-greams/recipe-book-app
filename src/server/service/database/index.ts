@@ -18,7 +18,7 @@ export default class Database {
 
     public constructor() {
 
-        this.path = process.env.MONGODB_URL;
+        this.path = `mongodb://${process.env.MONGODB_URL}`;
     }
 
     public async connect(): Promise<void> {
