@@ -1,6 +1,6 @@
 import { SubDirectionType } from "../../client/store/recipe/types";
 import { NutritionFactType } from "../nutritionFacts";
-import { CustomUnit, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../units";
+import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "../units";
 
 export type Dictionary<TKey extends string | number | symbol, TValue> = {
     [key in TKey]?: TValue;
@@ -14,7 +14,7 @@ interface Food {
     name: string;
     brand: string;
     subtitle: string;
-    nutritionFactValues: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 }
 
@@ -26,8 +26,8 @@ interface IngredientItem {
 
 interface Ingredient {
     amount: number;
-    unit: UnitWeight | UnitVolume;
-    item: IngredientItem;
+    unit: WeightUnit | VolumeUnit;
+    id: string;
 }
 
 interface IngredientDefault extends Ingredient {
@@ -36,12 +36,12 @@ interface IngredientDefault extends Ingredient {
 
 interface Time {
     count: number;
-    unit: UnitTime;
+    unit: TimeUnit;
 }
 
 interface Temperature {
     count: number;
-    unit: UnitTemperature;
+    unit: TemperatureUnit;
 }
 
 interface SubDirection {
@@ -52,7 +52,7 @@ interface SubDirection {
 interface SubDirectionIngredient extends SubDirection {
     id: string;
     amount: number;
-    unit: UnitWeight | UnitVolume;
+    unit: WeightUnit | VolumeUnit;
 }
 
 interface Direction {
@@ -61,6 +61,11 @@ interface Direction {
     time?: Time;
     temperature?: Temperature;
     steps: (SubDirection | SubDirectionIngredient)[];
+}
+
+interface References {
+    food: IngredientItem[];
+    recipe: IngredientItem[];
 }
 
 interface Recipe {
@@ -75,4 +80,5 @@ interface Recipe {
 
     ingredients: IngredientDefault[];
     directions: Direction[];
+    references: References;
 }

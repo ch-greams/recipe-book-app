@@ -18,7 +18,7 @@ export default class Database {
 
     public constructor() {
 
-        this.path = process.env.MONGODB_URL;
+        this.path = `mongodb://${process.env.MONGODB_URL}`;
     }
 
     public async connect(): Promise<void> {
@@ -51,12 +51,12 @@ export default class Database {
     }
 
 
-    public async getFoodRecords(): Promise<Food[]> {
+    public async getFoodRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Food[]> {
 
         try {
             const collection = this.db.collection("food");
 
-            const options = { sort: { id: 1 }, limit: Database.DEFAULT_LIMIT };
+            const options = { sort: { id: 1 }, limit: limit };
             const records = await collection.find<Food>({}, options).toArray();
     
             Logger.log(LogLevel.DEBUG, "Database.getFoodRecords", records);
@@ -90,12 +90,12 @@ export default class Database {
         }
     }
 
-    public async getRecipeRecords(): Promise<Recipe[]> {
+    public async getRecipeRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Recipe[]> {
 
         try {
             const collection = this.db.collection("recipe");
 
-            const options = { sort: { id: 1 }, limit: Database.DEFAULT_LIMIT };
+            const options = { sort: { id: 1 }, limit: limit };
             const records = await collection.find<Recipe>({}, options).toArray();
     
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecords", records);
@@ -115,8 +115,27 @@ export default class Database {
         try {
             const collection = this.db.collection("recipe");
 
-            const record = await collection.findOne<Recipe>({ id });
+            // const record = await collection.findOne<Recipe>({ id });
     
+            const records = await collection.aggregate([
+                {
+                    $match: { id },
+                },
+                {
+                    $lookup: {
+                        from: "food",
+                        let: { "fid": "$references.food" },
+                        pipeline: [
+                            { $match: { $expr: { $in: [ "$id", "$$fid" ] } } },
+                            { $project: { "_id": 0, "customUnits": 0 } },
+                        ],
+                        as: "references.food",
+                    },
+                },
+            ]).toArray();
+
+            const [ record ] = records;
+
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecord", record);
 
             return record;

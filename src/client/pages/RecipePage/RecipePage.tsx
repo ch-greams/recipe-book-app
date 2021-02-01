@@ -19,7 +19,7 @@ import { AppState } from "../../store";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import SelectInput from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, Units, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import Utils from "../../../common/utils";
 import { NutritionFactType } from "../../../common/nutritionFacts";
@@ -31,6 +31,7 @@ import { requestIngredients } from "../../store/search/actions";
 import { SearchPageStore } from "../../store/search/types";
 import { RouteComponentProps } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import { Dictionary } from "../../../common/typings";
 
 
 
@@ -105,24 +106,24 @@ class RecipePage extends Component<RecipePageProps> {
 
     // NOTE: Handlers
 
-    private handleTypeEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleTypeEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
         this.props.updateType(event.target.value);
-    }
+    };
 
-    private handleServingSizeAmountEdit(event: React.ChangeEvent<HTMLInputElement>): void {
+    private handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
         this.props.updateServingSizeAmount(event.target.value);
-    }
+    };
 
-    private handleServingSizeUnitEdit(event: React.ChangeEvent<HTMLSelectElement>): void {
-        this.props.updateServingSizeUnit(event.target.value as UnitWeight | UnitVolume);
-    }
+    private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+        this.props.updateServingSizeUnit(event.target.value as WeightUnit | VolumeUnit);
+    };
 
     // NOTE: General Information
 
-    private getParametersBlock(
+    private getParametersBlock = (
         recipeItem: RecipePageStore,
         updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
-    ): JSX.Element {
+    ): JSX.Element => {
 
         return (
             
@@ -138,7 +139,7 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.type}
                         className={styles.typeSelectInput}
-                        onChange={this.handleTypeEdit.bind(this)}
+                        onChange={this.handleTypeEdit}
                     />
 
                 </div>
@@ -155,13 +156,13 @@ class RecipePage extends Component<RecipePageProps> {
                         type={"text"}
                         value={recipeItem.servingSizeInput}
                         className={styles.servingSizeLineInput}
-                        onChange={this.handleServingSizeAmountEdit.bind(this)}
+                        onChange={this.handleServingSizeAmountEdit}
                     />
 
                     <SelectInput
-                        options={Object.keys(Units)}
+                        options={Object.values(Units)}
                         value={recipeItem.servingSizeUnit}
-                        onChange={this.handleServingSizeUnitEdit.bind(this)}
+                        onChange={this.handleServingSizeUnitEdit}
                     />
 
                 </div>
@@ -175,9 +176,12 @@ class RecipePage extends Component<RecipePageProps> {
 
             </div>
         );
-    }
+    };
 
-    private getGeneralInfoBlock(): JSX.Element {
+    private getGeneralInfoBlock = (
+        nutritionFacts: Dictionary<NutritionFactType, number>,
+        nutritionFactInputs: Dictionary<NutritionFactType, string>,
+    ): JSX.Element => {
 
         const { recipeItem, updateCustomUnits } = this.props;
 
@@ -204,12 +208,12 @@ class RecipePage extends Component<RecipePageProps> {
                     <NutritionFactsBlock
                         isReadOnly={true}
                         title={"NUTRITION FACTS"}
-                        nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, {}, {})}
+                        nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}
                     />
                 </div>
             </div>
         );
-    }
+    };
 
     public render(): JSX.Element {
 
@@ -224,6 +228,8 @@ class RecipePage extends Component<RecipePageProps> {
                 ingredients,
                 newDirection,
                 directions,
+                references,
+                nutritionFacts,
             },
             search,
             updateName,
@@ -276,6 +282,8 @@ class RecipePage extends Component<RecipePageProps> {
             return <Loader />;
         }
 
+        const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
+
         return (
             <div className={styles.recipePage}>
 
@@ -293,7 +301,7 @@ class RecipePage extends Component<RecipePageProps> {
                         updateDescription={updateDescription}
                     />
 
-                    {this.getGeneralInfoBlock()}
+                    {this.getGeneralInfoBlock(nutritionFacts, nutritionFactInputs)}
 
                     <div className={styles.recipePageBlockTitle}>
                         {"INGREDIENTS"}
@@ -302,6 +310,7 @@ class RecipePage extends Component<RecipePageProps> {
                     <IngredientsBlock
                         isReadOnly={!isEdit}
                         ingredients={ingredients}
+                        references={references}
                         search={search}
 
                         removeIngredient={removeIngredient}
@@ -327,6 +336,8 @@ class RecipePage extends Component<RecipePageProps> {
                         newDirection={newDirection}
                         directions={directions}
                         ingredients={ingredients}
+                        references={references}
+
                         removeDirection={removeDirection}
                         removeSubDirection={removeSubDirection}
                         toggleDirectionOpen={toggleDirectionOpen}
@@ -359,8 +370,8 @@ class RecipePage extends Component<RecipePageProps> {
 
                     <PageDetailedNutritionFactsBlock
                         isReadOnly={true}
-                        nutritionFactValues={{}}
-                        nutritionFactInputs={{}}
+                        nutritionFacts={nutritionFacts}
+                        nutritionFactInputs={nutritionFactInputs}
                     />
 
                 </div>

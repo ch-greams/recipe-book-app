@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { NutritionFactType } from "../../../common/nutritionFacts";
+import { NutritionFactType, nutritionFactTypeLabelMapping } from "../../../common/nutritionFacts";
 import { updateNutritionFact } from "../../store/food/actions";
-import { UnitEnergy, UnitWeight } from "../../../common/units";
+import { NutritionFactUnit } from "../../../common/units";
 import styles from "./NutritionFactsBlock.scss";
 import Utils from "../../../common/utils";
 import { InputChangeCallback } from "../../../common/typings";
@@ -13,7 +13,7 @@ export interface NutritionFact {
     amount: number;
     inputValue: string;
     type: NutritionFactType;
-    unit: UnitWeight | UnitEnergy;
+    unit: NutritionFactUnit;
     dailyValue?: number;
     isFraction: boolean;
 }
@@ -39,16 +39,16 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         isReadOnly: false,
     };
 
-    private handleOnChange(nutritionFact: NutritionFact): InputChangeCallback {
+    private handleOnChange = (nutritionFact: NutritionFact): InputChangeCallback => {
         return (event) => {
             
             const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
         
             this.props.updateNutritionFact(nutritionFact.type, inputValue);    
         };
-    }
+    };
 
-    private getNutritionFactLine(nutritionFact: NutritionFact): JSX.Element {
+    private getNutritionFactLine = (nutritionFact: NutritionFact): JSX.Element => {
 
         const { isReadOnly } = this.props;
 
@@ -93,7 +93,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
             >
 
                 <div className={styles.nutritionFactName}>
-                    {nutritionFact.type}
+                    {nutritionFactTypeLabelMapping[nutritionFact.type]}
                 </div>
 
                 {( isReadOnly ? nutritionFactAmountText : nutritionFactAmountInput )}
@@ -108,7 +108,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
 
             </div>
         );
-    }
+    };
 
     public render(): JSX.Element {
 
@@ -122,7 +122,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
                     {title}
                 </div>
 
-                { nutritionFacts.map( this.getNutritionFactLine.bind(this) ) }
+                { nutritionFacts.map(this.getNutritionFactLine) }
 
             </div>
         );

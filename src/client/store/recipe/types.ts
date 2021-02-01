@@ -1,6 +1,21 @@
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, Direction, Ingredient, IngredientItem, Recipe, SubDirection, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitVolume, UnitWeight } from "../../../common/units";
+import {
+    Dictionary,
+    Direction,
+    Ingredient,
+    IngredientItem,
+    Recipe,
+    SubDirection,
+    SubDirectionIngredient,
+} from "../../../common/typings";
+import {
+    CustomUnit,
+    CustomUnitInput,
+    TemperatureUnit,
+    TimeUnit,
+    VolumeUnit,
+    WeightUnit,
+} from "../../../common/units";
 
 
 
@@ -50,18 +65,22 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
-
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
+
+    // NOTE: INPUTS
     customUnitInputs: CustomUnitInput[];
 
     servingSize: number;
     servingSizeInput: string;
-    servingSizeUnit: UnitWeight | UnitVolume;
+    servingSizeUnit: WeightUnit | VolumeUnit;
 
     ingredients: RecipeIngredientDefault[];
 
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
+
+    references: Dictionary<string, IngredientItem>;
 }
 
 
@@ -103,7 +122,7 @@ export interface UpdateServingSizeAmountAction {
 
 export interface UpdateServingSizeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT;
-    payload: UnitWeight | UnitVolume;
+    payload: WeightUnit | VolumeUnit;
 }
 
 export interface UpdateTypeAction {
@@ -182,7 +201,7 @@ export interface UpdateSubDirectionIngredientAmountAction {
 
 export interface UpdateSubDirectionIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT;
-    payload: { directionIndex: number, subDirectionIndex: number, unit: UnitWeight | UnitVolume };
+    payload: { directionIndex: number, subDirectionIndex: number, unit: WeightUnit | VolumeUnit };
 }
 
 export interface CreateSubDirectionIngredientAction {
@@ -216,7 +235,7 @@ export interface UpdateDirectionTemperatureCountAction {
 
 export interface UpdateDirectionTemperatureUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT;
-    payload: { directionIndex: number, unit: UnitTemperature };
+    payload: { directionIndex: number, unit: TemperatureUnit };
 }
 
 export interface UpdateDirectionTimeCountAction {
@@ -226,7 +245,7 @@ export interface UpdateDirectionTimeCountAction {
 
 export interface UpdateDirectionTimeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT;
-    payload: { directionIndex: number, unit: UnitTime };
+    payload: { directionIndex: number, unit: TimeUnit };
 }
 
 export interface UpdateNewDirectionStepNumberAction {
@@ -246,7 +265,7 @@ export interface UpdateNewDirectionTemperatureCountAction {
 
 export interface UpdateNewDirectionTemperatureUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT;
-    payload: UnitTemperature;
+    payload: TemperatureUnit;
 }
 
 export interface UpdateNewDirectionTimeCountAction {
@@ -256,7 +275,7 @@ export interface UpdateNewDirectionTimeCountAction {
 
 export interface UpdateNewDirectionTimeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT;
-    payload: UnitTime;
+    payload: TimeUnit;
 }
 
 export interface CreateDirectionAction {
@@ -315,7 +334,7 @@ export interface UpdateIngredientAmountAction {
 
 export interface UpdateIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_UNIT;
-    payload: { id: string, unit: UnitWeight | UnitVolume };
+    payload: { id: string, unit: WeightUnit | VolumeUnit };
 }
 
 export interface UpdateAltIngredientAmountAction {
@@ -325,7 +344,7 @@ export interface UpdateAltIngredientAmountAction {
 
 export interface UpdateAltIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT;
-    payload: { parentId: string, id: string, unit: UnitWeight | UnitVolume };
+    payload: { parentId: string, id: string, unit: WeightUnit | VolumeUnit };
 }
 
 export interface UpdateAltNutritionFactsAction {

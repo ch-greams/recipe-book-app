@@ -1,14 +1,8 @@
 import { SubDirectionType } from "../../../../client/store/recipe/types";
-import { NUTRIENTS, NutritionFactType } from "../../../../common/nutritionFacts";
 import { Dictionary } from "../../../../common/typings";
-import { Units, UnitTemperature, UnitTime } from "../../../../common/units";
+import { Units, TemperatureUnit, TimeUnit } from "../../../../common/units";
 import { SchemaValidator, Validator } from "./types";
 
-
-const nutritionFactProperties = NUTRIENTS.reduce<Dictionary<NutritionFactType, Validator>>(
-    (acc, cur) => ({ ...acc, [cur]: { bsonType: "number" } }),
-    {},
-);
 
 const customUnitProperties: Dictionary<string, Validator> = {
     name: { bsonType: "string" },
@@ -25,26 +19,13 @@ const customUnitsValidator: Validator = {
     },
 };
 
-const ingredientItemValidator: Validator = {
-    bsonType: "object",
-    required: [ "id", "name", "nutritionFacts" ],
-    properties: {
-        id: { bsonType: "string" },
-        name: { bsonType: "string" },
-        nutritionFacts: {
-            bsonType: "object",
-            properties: nutritionFactProperties,
-        },
-    },
-};
-
 const ingredientAlternativesValidator: Validator = {
     bsonType: "array",
     items: {
         bsonType: "object",
-        required: [ "item", "amount", "unit" ],
+        required: [ "id", "amount", "unit" ],
         properties: {
-            item: ingredientItemValidator,
+            id: { bsonType: "string" },
             amount: { bsonType: "number" },
             unit: { enum: Object.values(Units) },
         },
@@ -52,7 +33,7 @@ const ingredientAlternativesValidator: Validator = {
 };
 
 const ingredientProperties: Dictionary<string, Validator> = {
-    item: ingredientItemValidator,
+    id: { bsonType: "string" },
     amount: { bsonType: "number" },
     unit: { enum: Object.values(Units) },
     alternatives: ingredientAlternativesValidator,
@@ -62,7 +43,7 @@ const ingredientsValidator: Validator = {
     bsonType: "array",
     items: {
         bsonType: "object",
-        required: [ "item", "amount", "unit", "alternatives" ],
+        required: [ "id", "amount", "unit", "alternatives" ],
         properties: ingredientProperties,
     },
 };
@@ -90,7 +71,7 @@ const directionProperties: Dictionary<string, Validator> = {
         required: [ "count", "unit" ],
         properties: {
             count: { bsonType: "number" },
-            unit: { enum: Object.values(UnitTime) },
+            unit: { enum: Object.values(TimeUnit) },
         },
     },
     temperature: {
@@ -98,7 +79,7 @@ const directionProperties: Dictionary<string, Validator> = {
         required: [ "count", "unit" ],
         properties: {
             count: { bsonType: "number" },
-            unit: { enum: Object.values(UnitTemperature) },
+            unit: { enum: Object.values(TemperatureUnit) },
         },
     },
     steps: directionStepsValidator,
@@ -113,7 +94,22 @@ const directionsValidator: Validator = {
     },
 };
 
-const recipeSchema: SchemaValidator= {
+const referencesValidator: Validator = {
+    bsonType: "object",
+    required: [ "food", "recipe" ],
+    properties: {
+        food: {
+            bsonType: "array",
+            items: { bsonType: "string" },
+        },
+        recipe: {
+            bsonType: "array",
+            items: { bsonType: "string" },
+        },
+    },
+};
+
+const recipeSchema: SchemaValidator = {
     $jsonSchema: {
         bsonType: "object",
         required: [
@@ -128,6 +124,8 @@ const recipeSchema: SchemaValidator= {
 
             "ingredients",
             "directions",
+
+            "references",
         ],
         properties: {
             id: { bsonType: "string" },
@@ -141,6 +139,8 @@ const recipeSchema: SchemaValidator= {
 
             ingredients: ingredientsValidator,
             directions: directionsValidator,
+
+            references: referencesValidator,
         },
     },
 };

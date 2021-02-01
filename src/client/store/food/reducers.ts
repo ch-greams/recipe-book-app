@@ -9,9 +9,10 @@ import {
     FOOD_ITEM_UPDATE_SUBTITLE,
     FOOD_ITEM_UPDATE_NUTRITION_FACT,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
+    FOOD_ITEM_UPDATE_SERVING_SIZE,
 } from "./types";
 import { NutritionFactType } from "../../../common/nutritionFacts";
-import { CustomUnit, CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, VolumeUnit, WeightUnit } from "../../../common/units";
 import { Dictionary } from "../../../common/typings";
 import Utils from "../../../common/utils";
 
@@ -26,12 +27,13 @@ const initialState: FoodPageStore = {
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
-    nutritionFactValues: {},
+    nutritionFacts: {},
     customUnits: [],
 
     // NOTE: INPUTS
 
-    nutritionFactInputs: {},
+    nutritionFactsByServing: {},
+    nutritionFactsByServingInputs: {},
     customUnitInputs: [],
 
     // NOTE: STATIC
@@ -39,11 +41,12 @@ const initialState: FoodPageStore = {
     type: "Nuts",
 
     density: 1,
-    densityVolume: UnitVolume.ml,
-    densityWeight: UnitWeight.g,
+    densityVolume: VolumeUnit.ml,
+    densityWeight: WeightUnit.g,
 
     servingSize: 100,
-    unit: UnitWeight.g,
+    servingSizeInput: "100",
+    unit: WeightUnit.g,
 
 
     featuredNutritionFacts: [
@@ -60,30 +63,6 @@ const initialState: FoodPageStore = {
     ],
 };
 
-
-function convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
-
-    return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-        (acc, nfType) => ({ ...acc, [nfType]: String(values[nfType]) }), {}
-    );
-}
-
-function convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
-
-    return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
-        (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {}
-    );
-}
-
-function convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-
-    return customUnits.map((customUnit: CustomUnit) => ({ ...customUnit, amount: String(customUnit.amount) }));
-}
-
-function convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-
-    return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
-}
 
 
 export default function foodPageReducer(state = initialState, action: FoodItemActionTypes): FoodPageStore {
@@ -123,6 +102,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
 
         case FOOD_ITEM_FETCH_SUCCESS: {
             const foodItem = action.payload;
+
             return {
                 ...state,
                 isLoaded: true,
@@ -132,11 +112,12 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
                 name: foodItem.name,
                 brand: foodItem.brand,
                 subtitle: foodItem.subtitle,
-                nutritionFactValues: foodItem.nutritionFactValues,
+                nutritionFacts: foodItem.nutritionFacts,
                 customUnits: foodItem.customUnits,
 
-                nutritionFactInputs: convertNutritionFactValuesIntoInputs(foodItem.nutritionFactValues),
-                customUnitInputs: convertCustomUnitsIntoInputs(foodItem.customUnits),
+                nutritionFactsByServing: foodItem.nutritionFacts,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(foodItem.nutritionFacts),
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(foodItem.customUnits),
             };
         }
 
@@ -149,15 +130,18 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
         }
 
         case FOOD_ITEM_UPDATE_NUTRITION_FACT: {
+            const nutritionFactsByServing = {
+                ...state.nutritionFactsByServing,
+                ...Utils.convertNutritionFactInputsIntoValues(action.payload),
+            };
+
             return {
                 ...state,
 
-                nutritionFactValues: {
-                    ...state.nutritionFactValues,
-                    ...convertNutritionFactInputsIntoValues(action.payload),
-                },
-                nutritionFactInputs: {
-                    ...state.nutritionFactInputs,
+                nutritionFacts: Utils.convertNutritionFacts(state.servingSize, false, nutritionFactsByServing),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: {
+                    ...state.nutritionFactsByServingInputs,
                     ...action.payload as Dictionary<NutritionFactType, string>,
                 },
             };
@@ -167,8 +151,23 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             return {
                 ...state,
 
-                customUnits: convertCustomUnitsIntoValues(action.payload),
+                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
                 customUnitInputs: action.payload as CustomUnitInput[],
+            };
+        }
+
+        case FOOD_ITEM_UPDATE_SERVING_SIZE: {
+            const servingSize = Number(action.payload);
+            const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
+
+            return {
+                ...state,
+
+                servingSize: servingSize,
+                servingSizeInput: action.payload,
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 

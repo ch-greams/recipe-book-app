@@ -1,9 +1,10 @@
 import bodyParser from "body-parser";
-import express, { RequestHandler } from "express";
+import express from "express";
 import path from "path";
 import Logger, { LogLevel } from "../../../common/server/logger";
 import Database from "../database";
 import { HttpStatusSuccess } from "../webApp";
+import GraphQL from "../graphql";
 
 
 export * from "./enums";
@@ -17,14 +18,14 @@ export default class WebApp {
     private port: number;
 
 
-    public constructor(database: Database) {
+    public constructor(database: Database, isProduction: boolean = false) {
 
         this.app = express();
 
         this.port = (parseInt(process.env.PORT, 10) || WebApp.DEFAULT_PORT);
 
         this.config();
-        this.routes(database);
+        this.routes(database, isProduction);
     }
 
     public run(): void {
@@ -45,51 +46,6 @@ export default class WebApp {
         response.sendStatus(HttpStatusSuccess.Ok);
     }
 
-
-    private static getFoodRecordsEndpoint(database: Database): RequestHandler {
-
-        return async (_request, response) => {
-
-            const records = await database.getFoodRecords();
-
-            response.send(records);
-        };
-    }
-
-    private static getFoodRecordEndpoint(database: Database): RequestHandler {
-
-        return async (request, response) => {
-
-            const { params: { id } } = request;
-
-            const record = await database.getFoodRecord(id);
-    
-            response.send(record);
-        };
-    }
-
-    private static getRecipeRecordsEndpoint(database: Database): RequestHandler {
-
-        return async (_request, response) => {
-
-            const records = await database.getRecipeRecords();
-
-            response.send(records);
-        };
-    }
-
-    private static getRecipeRecordEndpoint(database: Database): RequestHandler {
-
-        return async (request, response) => {
-
-            const { params: { id } } = request;
-
-            const record = await database.getRecipeRecord(id);
-    
-            response.send(record);
-        };
-    }
-
     private static log(request: express.Request, _response: express.Response, next: express.NextFunction): void {
 
         Logger.log(LogLevel.INFO, "WebApp.log", `${request.method} ${request.url}`);
@@ -98,20 +54,13 @@ export default class WebApp {
     }
 
 
-
-    private routes(database: Database): void {
+    private routes(database: Database, isProduction: boolean): void {
 
         // WebApp Endpoints
 
         this.app.get("/status", WebApp.log, WebApp.getStatusEndpoint);
 
-        this.app.get("/api/food", WebApp.log, WebApp.getFoodRecordsEndpoint(database));
-
-        this.app.get("/api/food/:id", WebApp.log, WebApp.getFoodRecordEndpoint(database));
-
-        this.app.get("/api/recipe", WebApp.log, WebApp.getRecipeRecordsEndpoint(database));
-
-        this.app.get("/api/recipe/:id", WebApp.log, WebApp.getRecipeRecordEndpoint(database));
+        this.app.use("/graphql", GraphQL.getMiddleware(database, isProduction));
 
         this.app.get("*", WebApp.log, (_req, res) => {
             res.sendFile( path.join(__dirname, "..", "..", "view", "index.html") );

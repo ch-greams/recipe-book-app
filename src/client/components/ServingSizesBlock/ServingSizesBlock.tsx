@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
 import { InputChangeCallback } from "../../../common/typings";
-import { CustomUnitInput, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, WeightUnit } from "../../../common/units";
 import Utils from "../../../common/utils";
 import IconAdd from "../../icons/add-sharp.svg";
 import IconWrapper from "../../icons/IconWrapper";
@@ -22,10 +22,10 @@ export default class ServingSizesBlock extends Component<Props, State> {
     public static readonly displayName = "ServingSizesBlock";
 
     public state = {
-        newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g },
+        newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g },
     };
 
-    private createCustomUnits(customUnit: CustomUnitInput): void {
+    private createCustomUnits = (customUnit: CustomUnitInput): void => {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
 
@@ -36,20 +36,20 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             updateCustomUnits([ ...customUnitInputs, customUnit ]);
     
-            this.setState({ newCustomUnit: { name: "", amount: "100", unit: UnitWeight.g } });
+            this.setState({ newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g } });
         }
         else {
             console.log("Custom Unit name is empty or already exist");
         }
-    }
-    private deleteCustomUnits(name: string): void {
+    };
+    private deleteCustomUnits = (name: string): void => {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
 
         updateCustomUnits(customUnitInputs.filter((cu) => cu.name !== name));
-    }
+    };
 
-    private handleCustomUnitNameEdit(customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback {
+    private handleCustomUnitNameEdit = (customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback => {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
         const { newCustomUnit } = this.state;
@@ -69,8 +69,8 @@ export default class ServingSizesBlock extends Component<Props, State> {
                 );
             }
         };
-    }
-    private handleCustomUnitAmountEdit(customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback {
+    };
+    private handleCustomUnitAmountEdit = (customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback => {
 
         const { customUnitInputs, updateCustomUnits } = this.props;
         const { newCustomUnit } = this.state;
@@ -92,9 +92,9 @@ export default class ServingSizesBlock extends Component<Props, State> {
                 );
             }
         };
-    }
+    };
 
-    private getCustomUnitCreateButton(customUnit: CustomUnitInput): JSX.Element {
+    private getCustomUnitCreateButton = (customUnit: CustomUnitInput): JSX.Element => {
         return (
             <IconWrapper
                 isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
@@ -103,9 +103,9 @@ export default class ServingSizesBlock extends Component<Props, State> {
                 <IconAdd />
             </IconWrapper>
         );
-    }
+    };
 
-    private getCustomUnitDeleteButton(name: string): JSX.Element {
+    private getCustomUnitDeleteButton = (name: string): JSX.Element => {
         return (
             <IconWrapper
                 isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
@@ -115,10 +115,10 @@ export default class ServingSizesBlock extends Component<Props, State> {
                 <IconAdd />
             </IconWrapper>
         );
-    }
+    };
 
 
-    private getCustomUnitLine(key: string, customUnit: CustomUnitInput, isNew: boolean): JSX.Element {
+    private getCustomUnitLine = (key: string, customUnit: CustomUnitInput, isNew: boolean): JSX.Element => {
 
         const customUnitButton = (
             isNew
@@ -143,7 +143,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
                         placeholder={"NAME"}
                         className={styles.customUnitLineName}
                         value={customUnit.name}
-                        onChange={this.handleCustomUnitNameEdit(customUnit, isNew).bind(this)}
+                        onChange={this.handleCustomUnitNameEdit(customUnit, isNew)}
                     />
 
                     <div className={styles.customUnitLineEqualSign}>{"="}</div>
@@ -155,12 +155,12 @@ export default class ServingSizesBlock extends Component<Props, State> {
                             placeholder={"#"}
                             className={styles.customUnitLineAmount}
                             value={customUnit.amount}
-                            onChange={this.handleCustomUnitAmountEdit(customUnit, isNew).bind(this)}
+                            onChange={this.handleCustomUnitAmountEdit(customUnit, isNew)}
                         />
 
                         <SelectInput
                             type={SelectInputType.CustomUnit}
-                            options={Object.keys(UnitWeight)}
+                            options={Object.keys(WeightUnit)}
                             onChange={console.log}
                         />
                     </div>
@@ -168,7 +168,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
 
             </div>
         );
-    }
+    };
 
 
     public render(): JSX.Element {

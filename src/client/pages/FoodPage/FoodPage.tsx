@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
 import {
-    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits,
+    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits, updateServingSize,
 } from "../../store/food/actions";
 import { AppState } from "../../store";
-import { CustomUnitInput, UnitVolume, UnitWeight } from "../../../common/units";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
 import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
 import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
 import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
@@ -28,6 +28,7 @@ interface DispatchToProps {
     updateSubtitle: typeof updateSubtitle;
     requestFoodItem: typeof requestFoodItem;
     updateCustomUnits: typeof updateCustomUnits;
+    updateServingSize: typeof updateServingSize;
 }
 
 interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
@@ -39,6 +40,21 @@ class FoodPage extends Component<Props> {
     public componentDidMount(): void {
         this.props.requestFoodItem(this.props.match.params.foodId);
     }
+
+    private handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
+
+        const { foodItem, updateServingSize } = this.props;
+
+        const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
+
+        updateServingSize(amount);
+    };
+
+    private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+
+        // NOTE: Unit or CustomUnit
+        console.log(event.target.value);
+    };
 
     private getParametersBlock(
         foodItem: FoodPageStore,
@@ -85,7 +101,7 @@ class FoodPage extends Component<Props> {
                     />
 
                     <SelectInput
-                        options={Object.keys(UnitWeight)}
+                        options={Object.keys(WeightUnit)}
                         onChange={console.log}
                         value={foodItem.densityWeight}
                     />
@@ -93,7 +109,7 @@ class FoodPage extends Component<Props> {
                     {"/"}
 
                     <SelectInput
-                        options={Object.keys(UnitVolume)}
+                        options={Object.keys(VolumeUnit)}
                         onChange={console.log}
                         value={foodItem.densityVolume}
                     />
@@ -110,10 +126,13 @@ class FoodPage extends Component<Props> {
                         type={"text"}
                         value={foodItem.servingSize}
                         className={styles.servingSizeLineInput}
-                        onChange={console.log}
+                        onChange={this.handleServingSizeAmountEdit}
                     />
 
-                    <SelectInput options={Object.keys(UnitWeight)} onChange={console.log} />
+                    <SelectInput
+                        options={[ ...Object.values(Units), ...foodItem.customUnits.map((cu) => cu.name) ]}
+                        onChange={this.handleServingSizeUnitEdit}
+                    />
 
                 </div>
 
@@ -138,8 +157,8 @@ class FoodPage extends Component<Props> {
                 name,
                 brand,
                 subtitle,
-                nutritionFactValues,
-                nutritionFactInputs,
+                nutritionFactsByServing,
+                nutritionFactsByServingInputs,
                 featuredNutritionFacts,
             },
             updateName,
@@ -178,7 +197,7 @@ class FoodPage extends Component<Props> {
 
                             <NutritionFactsBlock
                                 title={"NUTRITION FACTS"}
-                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFactValues, nutritionFactInputs)}
+                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFactsByServing, nutritionFactsByServingInputs)}
                             />
                         </div>
 
@@ -191,8 +210,8 @@ class FoodPage extends Component<Props> {
                     </div>
 
                     <PageDetailedNutritionFactsBlock
-                        nutritionFactValues={nutritionFactValues}
-                        nutritionFactInputs={nutritionFactInputs}
+                        nutritionFacts={nutritionFactsByServing}
+                        nutritionFactInputs={nutritionFactsByServingInputs}
                     />
 
                 </div>
@@ -213,6 +232,7 @@ const mapDispatchToProps: DispatchToProps = {
     updateSubtitle,
     requestFoodItem,
     updateCustomUnits,
+    updateServingSize,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodPage);

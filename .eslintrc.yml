@@ -31,11 +31,17 @@ rules:
     comma-dangle:
         - 2
         - "always-multiline"
+    quotes:
+        - 2
+        - "double"
     no-console: 1
     interface-name: 0
     one-line: 0
     member-ordering: 0
     object-literal-sort-keys: 0
+    eol-last:
+        - 2
+        - "always"
 
     react/jsx-curly-brace-presence:
         - 2

@@ -1,23 +1,56 @@
 import superagent from "superagent";
+import { NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA } from "../../common/nutritionFacts";
 import { Food } from "../../common/typings";
 
 
 export default class FoodApi {
 
-    public static readonly API_PATH: string = "/api/food/";
+    public static readonly API_PATH: string = "/graphql";
+    public static readonly FOOD_TYPE_FIELDS: string = `
+        id
+        name
+        brand
+        subtitle
+        nutritionFacts {
+            ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
+        }
+        customUnits {
+            name, amount, unit
+        }
+    `;
 
 
     public static async getFoodItem(id: string): Promise<Food> {
 
-        const response = await superagent.get(`${FoodApi.API_PATH}${id}`);
+        const query = `
+            {
+                food(id: "${id}") {
+                    ${FoodApi.FOOD_TYPE_FIELDS}
+                }
+            }
+        `;
 
-        return response.body;
+        const response = await superagent.get(FoodApi.API_PATH).query({ query });
+
+        const { data: { food: record } } = response.body;
+
+        return record;
     }
 
     public static async getFoodItems(): Promise<Food[]> {
 
-        const response = await superagent.get(FoodApi.API_PATH);
+        const query = `
+            {
+                foods {
+                    ${FoodApi.FOOD_TYPE_FIELDS}
+                }
+            }
+        `;
 
-        return response.body;
+        const response = await superagent.get(FoodApi.API_PATH).query({ query });
+
+        const { data: { foods: records } } = response.body;
+
+        return records;
     }
 }

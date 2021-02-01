@@ -1,5 +1,5 @@
 import { IngredientItem } from "../../../common/typings";
-import { UnitWeight, UnitVolume, UnitTemperature, UnitTime, CustomUnitInput } from "../../../common/units";
+import { WeightUnit, VolumeUnit, TemperatureUnit, TimeUnit, CustomUnitInput } from "../../../common/units";
 import {
     CreateSubDirectionAction,
     CreateSubDirectionIngredientAction,
@@ -177,7 +177,7 @@ export function updateSubDirectionIngredientAmount(
 }
 
 export function updateSubDirectionIngredientUnit(
-    directionIndex: number, subDirectionIndex: number, unit: (UnitWeight | UnitVolume),
+    directionIndex: number, subDirectionIndex: number, unit: (WeightUnit | VolumeUnit),
 ): UpdateSubDirectionIngredientUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
@@ -227,7 +227,7 @@ export function updateDirectionTemperatureCount(directionIndex: number, inputVal
     };
 }
 
-export function updateDirectionTemperatureUnit(directionIndex: number, unit: UnitTemperature): UpdateDirectionTemperatureUnitAction {
+export function updateDirectionTemperatureUnit(directionIndex: number, unit: TemperatureUnit): UpdateDirectionTemperatureUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT,
         payload: { directionIndex, unit },
@@ -241,7 +241,7 @@ export function updateDirectionTimeCount(directionIndex: number, inputValue: str
     };
 }
 
-export function updateDirectionTimeUnit(directionIndex: number, unit: UnitTime): UpdateDirectionTimeUnitAction {
+export function updateDirectionTimeUnit(directionIndex: number, unit: TimeUnit): UpdateDirectionTimeUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT,
         payload: { directionIndex, unit },
@@ -269,7 +269,7 @@ export function updateNewDirectionTemperatureCount(inputValue: string): UpdateNe
     };
 }
 
-export function updateNewDirectionTemperatureUnit(unit: UnitTemperature): UpdateNewDirectionTemperatureUnitAction {
+export function updateNewDirectionTemperatureUnit(unit: TemperatureUnit): UpdateNewDirectionTemperatureUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
         payload: unit,
@@ -283,7 +283,7 @@ export function updateNewDirectionTimeCount(inputValue: string): UpdateNewDirect
     };
 }
 
-export function updateNewDirectionTimeUnit(unit: UnitTime): UpdateNewDirectionTimeUnitAction {
+export function updateNewDirectionTimeUnit(unit: TimeUnit): UpdateNewDirectionTimeUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
         payload: unit,
@@ -339,7 +339,7 @@ export function updateIngredientAmount(id: string, inputValue: string): UpdateIn
     };
 }
 
-export function updateIngredientUnit(id: string, unit: (UnitWeight | UnitVolume)): UpdateIngredientUnitAction {
+export function updateIngredientUnit(id: string, unit: (WeightUnit | VolumeUnit)): UpdateIngredientUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
         payload: { id, unit },
@@ -353,7 +353,7 @@ export function updateAltIngredientAmount(parentId: string, id: string, inputVal
     };
 }
 
-export function updateAltIngredientUnit(parentId: string, id: string, unit: (UnitWeight | UnitVolume)): UpdateAltIngredientUnitAction {
+export function updateAltIngredientUnit(parentId: string, id: string, unit: (WeightUnit | VolumeUnit)): UpdateAltIngredientUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
         payload: { parentId, id, unit },
@@ -388,7 +388,7 @@ export function updateServingSizeAmount(inputValue: string): UpdateServingSizeAm
     };
 }
 
-export function updateServingSizeUnit(unit: UnitWeight | UnitVolume): UpdateServingSizeUnitAction {
+export function updateServingSizeUnit(unit: WeightUnit | VolumeUnit): UpdateServingSizeUnitAction {
     return {
         type: RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
         payload: unit,

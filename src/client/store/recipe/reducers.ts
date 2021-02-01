@@ -1,6 +1,7 @@
-import { Direction, IngredientDefault, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnit, CustomUnitInput, UnitTemperature, UnitTime, UnitWeight } from "../../../common/units";
-import Utils from "../../../common/utils";
+import { NutritionFactType } from "../../../common/nutritionFacts";
+import { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "../../../common/typings";
+import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "../../../common/units";
+import Utils, { DecimalPlaces } from "../../../common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,
@@ -73,12 +74,14 @@ const initialState: RecipePageStore = {
     description: "Description",
     type: "",
 
+    nutritionFacts: {},
+
     customUnits: [],
     customUnitInputs: [],
 
     servingSize: 100,
     servingSizeInput: "100",
-    servingSizeUnit: UnitWeight.g,
+    servingSizeUnit: WeightUnit.g,
 
     ingredients: [],
 
@@ -91,11 +94,11 @@ const initialState: RecipePageStore = {
 
         time: {
             count: 0,
-            unit: UnitTime.min,
+            unit: TimeUnit.min,
         },
         temperature: {
             count: 0,
-            unit: UnitTemperature.C,
+            unit: TemperatureUnit.C,
         },
 
         timeInput: "",
@@ -105,18 +108,11 @@ const initialState: RecipePageStore = {
         steps: [],
     },
     directions: [],
+
+    references: {},
 };
 
 
-function convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-
-    return customUnits.map((customUnit: CustomUnit) => ({ ...customUnit, amount: String(customUnit.amount) }));
-}
-
-function convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-
-    return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
-}
 
 function convertIngredients(ingredients: IngredientDefault[]): RecipeIngredientDefault[] {
 
@@ -156,6 +152,32 @@ function convertDirections(directions: Direction[]): RecipeDirection[] {
         ),
     }));
 }
+
+function getRecipeNutritionFacts(
+    ingredients: IngredientDefault[],
+    references: Dictionary<string, IngredientItem>,
+): Dictionary<NutritionFactType, number> {
+
+    const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
+        .map((ingredient) => {
+            
+            const nf = references[ingredient.id].nutritionFacts;
+            const multiplier = Utils.getPercentMultiplier(ingredient.amount);
+
+            return Utils.getObjectKeys(nf)
+                .reduce((acc, nfType) => ({
+                    ...acc,
+                    [nfType]: (
+                        typeof nf[nfType] === "number"
+                            ? Utils.roundToDecimal(nf[nfType] * multiplier, DecimalPlaces.Two)
+                            : null
+                    ),
+                }), {});
+        });
+
+    return Utils.dictionarySum(nutritionFactsById);
+}
+
 
 export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
 
@@ -200,7 +222,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
 
-                customUnits: convertCustomUnitsIntoValues(action.payload),
+                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
                 customUnitInputs: action.payload as CustomUnitInput[],
             };
         }
@@ -377,7 +399,8 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const { directionIndex, ingredientId } = action.payload;
 
-            const ingredient = state.ingredients.find((ingredient) => ingredient.item.id === ingredientId);
+            const ingredientItem = state.references[ingredientId];
+            const ingredient = state.ingredients.find((ingredient) => ingredient.id === ingredientId);
 
             return {
                 ...state,
@@ -389,9 +412,9 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                 ...direction.steps,
                                 {
                                     type: SubDirectionType.Ingredient,
-                                    label: ingredient.item.name,
+                                    label: ingredientItem.name,
                 
-                                    id: ingredient.item.id,
+                                    id: ingredientItem.id,
                                     isMarked: false,
                                     amount: ingredient.amount,
                                     amountInput: ingredient.amountInput,
@@ -682,11 +705,11 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
                     time: {
                         count: 0,
-                        unit: UnitTime.min,
+                        unit: TimeUnit.min,
                     },
                     temperature: {
                         count: 0,
-                        unit: UnitTemperature.C,
+                        unit: TemperatureUnit.C,
                     },
             
                     timeInput: "",
@@ -702,9 +725,16 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const id = action.payload;
 
+            const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
+            const references = Utils.getObjectKeys(state.references).reduce((refs, rid) => (
+                (rid !== id) ? { ...refs, [rid]: state.references[rid] } : refs
+            ), {});
+
             return {
                 ...state,
-                ingredients: state.ingredients.filter((ingredient) => ingredient.item.id !== id),
+                ingredients: ingredients,
+                references: references,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, references),
             };
         }
 
@@ -715,13 +745,16 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    ( ingredient.item.id === parentId )
+                    ( ingredient.id === parentId )
                         ? {
                             ...ingredient,
-                            alternatives: ingredient.alternatives.filter((alt) => alt.item.id !== id),
+                            alternatives: ingredient.alternatives.filter((alt) => alt.id !== id),
                         }
                         : ingredient
                 )),
+                references: Utils.getObjectKeys(state.references).reduce((refs, rid) => (
+                    (rid !== id) ? { ...refs, [rid]: state.references[rid] } : refs
+                ), {}),
             };
         }
 
@@ -731,14 +764,14 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const ingredients = state.ingredients.reduce<RecipeIngredientDefault[]>((accIngredients, curIngredient) => {
 
-                if (curIngredient.item.id === parentId) {
+                if (curIngredient.id === parentId) {
 
-                    const alternative = curIngredient.alternatives.find((alt) => alt.item.id === id);
+                    const alternative = curIngredient.alternatives.find((alt) => alt.id === id);
                     const newAlternative: RecipeIngredient = {
                         amount: curIngredient.amount,
                         amountInput: curIngredient.amountInput,
                         unit: curIngredient.unit,
-                        item: curIngredient.item,
+                        id: curIngredient.id,
                     };
 
                     return [
@@ -746,13 +779,13 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         {
                             ...curIngredient,
                             alternatives: [
-                                ...curIngredient.alternatives.filter((alt) => alt.item.id !== id),
+                                ...curIngredient.alternatives.filter((alt) => alt.id !== id),
                                 newAlternative,
                             ],
                             amount: alternative.amount,
                             amountInput: alternative.amountInput,
                             unit: alternative.unit,
-                            item: alternative.item,
+                            id: alternative.id,
                         },
                     ];
                 }
@@ -764,6 +797,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: ingredients,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, state.references),
             };
         }
 
@@ -775,7 +809,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => ({
                     ...ingredient,
-                    isOpen: (ingredient.item.id === id) ? !ingredient.isOpen : ingredient.isOpen,
+                    isOpen: (ingredient.id === id) ? !ingredient.isOpen : ingredient.isOpen,
                 })),
             };
         }
@@ -788,7 +822,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => ({
                     ...ingredient,
-                    isMarked: (ingredient.item.id === id) ? !ingredient.isMarked : ingredient.isMarked,
+                    isMarked: (ingredient.id === id) ? !ingredient.isMarked : ingredient.isMarked,
                 })),
             };
         }
@@ -798,24 +832,27 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const { id, inputValue } = action.payload;
 
+            const ingredients = state.ingredients.map((ingredient) => {
+
+                if (ingredient.id === id) {
+
+                    const amount = Utils.decimalNormalizer(inputValue, ingredient.amountInput);
+
+                    return {
+                        ...ingredient,
+                        amountInput: amount,
+                        amount: Number(amount),
+                    };
+                }
+                else {
+                    return ingredient;
+                }
+            });
+
             return {
                 ...state,
-                ingredients: state.ingredients.map((ingredient) => {
-
-                    if (ingredient.item.id === id) {
-
-                        const amount = Utils.decimalNormalizer(inputValue, ingredient.amountInput);
-
-                        return {
-                            ...ingredient,
-                            amountInput: amount,
-                            amount: Number(amount),
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                }),
+                ingredients: ingredients,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, state.references),
             };
         }
 
@@ -826,7 +863,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.item.id === id) ? { ...ingredient, unit: unit } : ingredient
+                    (ingredient.id === id) ? { ...ingredient, unit: unit } : ingredient
                 )),
             };
         }
@@ -839,23 +876,18 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.item.id === parentId)
+                    (ingredient.id === parentId)
                         ? {
                             ...ingredient,
                             alternatives: ingredient.alternatives.map((alt) => {
 
                                 const amount = Utils.decimalNormalizer(inputValue, alt.amountInput);
 
-                                if (alt.item.id === id) {
-                                    return {
-                                        ...alt,
-                                        amountInput: amount,
-                                        amount: Number(amount),
-                                    };
-                                }
-                                else {
-                                    return alt;
-                                }
+                                return (
+                                    (alt.id === id)
+                                        ? { ...alt, amountInput: amount, amount: Number(amount) }
+                                        : alt
+                                );
                             }),
                         }
                         : ingredient
@@ -870,11 +902,11 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.item.id === parentId)
+                    (ingredient.id === parentId)
                         ? {
                             ...ingredient,
                             alternatives: ingredient.alternatives.map((alt) => (
-                                (alt.item.id === id) ? { ...alt, unit: unit } : alt
+                                (alt.id === id) ? { ...alt, unit: unit } : alt
                             )),
                         }
                         : ingredient
@@ -889,13 +921,11 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.item.id === parentId)
+                    (ingredient.id === parentId)
                         ? {
                             ...ingredient,
                             altNutritionFacts: (
-                                isSelected
-                                    ? ingredient.alternatives.find((alt) => (alt.item.id === id))?.item.nutritionFacts
-                                    : {}
+                                isSelected ? state.references[id]?.nutritionFacts : {}
                             ),
                         }
                         : ingredient
@@ -907,25 +937,38 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const ingredient = action.payload;
 
+            if (ingredient.id in state.references) {
+                return state;
+            }
+
+            const ingredients = [
+                ...state.ingredients,
+                {
+                    isOpen: true,
+                    isMarked: false,
+    
+                    id: ingredient.id,
+    
+                    amount: 100,
+                    amountInput: "100",
+                    unit: WeightUnit.g,
+        
+                    altNutritionFacts: {},
+        
+                    alternatives: [],    
+                },
+            ];
+
+            const references = {
+                ...state.references,
+                [ingredient.id]: ingredient,
+            };
+
             return {
                 ...state,
-                ingredients: [
-                    ...state.ingredients,
-                    {
-                        isOpen: true,
-                        isMarked: false,
-        
-                        item: ingredient,
-        
-                        amount: 100,
-                        amountInput: "100",
-                        unit: UnitWeight.g,
-            
-                        altNutritionFacts: {},
-            
-                        alternatives: [],    
-                    },
-                ],
+                ingredients: ingredients,
+                references: references,
+                nutritionFacts: getRecipeNutritionFacts(ingredients, references),
             };
         }
 
@@ -933,10 +976,14 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
             const { id, altIngredient } = action.payload;
 
+            if (altIngredient.id in state.references) {
+                return state;
+            }
+
             return {
                 ...state,
                 ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.item.id === id)
+                    (ingredient.id === id)
                         ? {
                             ...ingredient,
                             alternatives: [
@@ -944,13 +991,17 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                 {
                                     amount: 100,
                                     amountInput: "100",
-                                    unit: UnitWeight.g,
-                                    item: altIngredient,
+                                    unit: WeightUnit.g,
+                                    id: altIngredient.id,
                                 },
                             ],
                         }
                         : ingredient
                 )),
+                references: {
+                    ...state.references,
+                    [altIngredient.id]: altIngredient,
+                },
             };
         }
 
@@ -989,6 +1040,15 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
         case RECIPE_ITEM_FETCH_SUCCESS: {
             const recipeItem = action.payload;
+
+            const referenceItems: IngredientItem[] = [
+                ...(recipeItem.references?.food || []),
+                ...(recipeItem.references?.recipe || []),
+            ];
+
+            const references: Dictionary<string, IngredientItem> = referenceItems
+                .reduce((refs, item) => ({ ...refs, [item.id]: item }), {});
+
             return {
                 ...state,
                 isLoaded: true,
@@ -1001,11 +1061,15 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                 description: recipeItem.description,
                 type: recipeItem.type,
 
+                nutritionFacts: getRecipeNutritionFacts(recipeItem.ingredients, references),
+
                 customUnits: recipeItem.customUnits,
-                customUnitInputs: convertCustomUnitsIntoInputs(recipeItem.customUnits),
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(recipeItem.customUnits),
 
                 ingredients: convertIngredients(recipeItem.ingredients),
                 directions: convertDirections(recipeItem.directions),
+
+                references: references,
             };
         }
 
