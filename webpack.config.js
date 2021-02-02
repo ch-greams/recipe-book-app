@@ -6,7 +6,6 @@ const nodeExternals = require("webpack-node-externals");
 
 const server = {
     target: "node",
-    watch: true,
     node: {
         __dirname: false,
     },
@@ -44,7 +43,6 @@ const server = {
 
 const client = {
     target: "web",
-    watch: true,
     mode: "development",
     entry: {
         "client": path.join(__dirname, "src", "client", "index.tsx"),

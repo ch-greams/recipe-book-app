@@ -97,7 +97,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
     private getCustomUnitCreateButton = (customUnit: CustomUnitInput): JSX.Element => {
         return (
             <IconWrapper
-                isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
+                isFullWidth={true} width={20} height={20} color={"#00bfa5"}
                 onClick={() => this.createCustomUnits(customUnit)}
             >
                 <IconAdd />
@@ -108,7 +108,7 @@ export default class ServingSizesBlock extends Component<Props, State> {
     private getCustomUnitDeleteButton = (name: string): JSX.Element => {
         return (
             <IconWrapper
-                isFullWidth={true} width={"20px"} height={"20px"} color={"#00bfa5"}
+                isFullWidth={true} width={20} height={20} color={"#00bfa5"}
                 style={{ transform: "rotate(0.125turn)" }}
                 onClick={() => this.deleteCustomUnits(name)}
             >

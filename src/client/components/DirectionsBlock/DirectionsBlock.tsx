@@ -237,7 +237,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.subDirectionLineButton}
                 onClick={() => this.removeSubDirection(directionIndex, stepIndex)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -267,7 +267,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                 <div className={styles.subDirectionNoteInfoLine}>
 
-                    <IconWrapper width={"22px"} height={"22px"} color={"#fff"}>
+                    <IconWrapper width={22} height={22} color={"#fff"}>
                         {this.getSubDirectionNoteLineIcon(step.type)}
                     </IconWrapper>
 
@@ -300,7 +300,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.subDirectionLineButton}
                 onClick={() => this.removeSubDirection(directionIndex, subDirectionIndex)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -371,7 +371,7 @@ export default class DirectionsBlock extends Component<Props> {
                 >
                     <IconWrapper
                         isFullWidth={true}
-                        width={"24px"} height={"24px"} color={"#fff"}
+                        width={24} height={24} color={"#fff"}
                         style={{ transform: "rotate(0.125turn)" }}
                     >
                         <RemoveIcon />
@@ -539,7 +539,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionLineButton}
                 onClick={() => this.removeDirection(index)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -635,7 +635,7 @@ export default class DirectionsBlock extends Component<Props> {
                 >
                     <IconWrapper
                         isFullWidth={true}
-                        width={"24px"} height={"24px"} color={"#00bfa5"}
+                        width={24} height={24} color={"#00bfa5"}
                         style={{ transform: "rotate(0.125turn)" }}
                     >
                         <RemoveIcon />

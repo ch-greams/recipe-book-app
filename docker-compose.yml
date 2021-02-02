@@ -3,13 +3,13 @@ version: "3.8"
 services:
 
   app:
-    image: recipe-book-app
-    command: sh -c "npm install && npm start"
+    build: .
+    command: npm run dev:watch
     ports:
       - 8080:8080
     working_dir: /app
-    # volumes:
-    #   - ./:/app
+    volumes:
+      - ./src:/app/src
     environment:
       NODE_ENV: development
       PORT: 8080

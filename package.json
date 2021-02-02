@@ -8,8 +8,10 @@
   },
   "main": "./out/index.js",
   "scripts": {
-    "build": "npm run purge && npm i",
-    "start": "webpack",
+    "build": "webpack",
+    "start": "node ./out/server/server.bundle.js",
+    "dev": "npm run build && npm start",
+    "dev:watch": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "npx eslint . && npx stylelint src/",
     "purge": "rm -rf out node_modules package-lock.json"

@@ -225,7 +225,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.altIngredientLineButton}
                 onClick={() => this.removeAltIngredient(parentId, altIngredient.id)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -236,7 +236,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.altIngredientLineButton}
                 onClick={() => this.addAltIngredient(parentId)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <SearchIcon />
                 </IconWrapper>
             </div>
@@ -329,7 +329,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.ingredientLineButton}
                 onClick={() => this.removeIngredient(ingredient.id)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -340,7 +340,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.ingredientLineButton}
                 onClick={this.addIngredient}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <SearchIcon />
                 </IconWrapper>
             </div>
@@ -352,7 +352,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : null )}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <LinkIcon />
                 </IconWrapper>
             </Link>
