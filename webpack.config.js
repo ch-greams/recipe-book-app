@@ -1,6 +1,5 @@
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
-const DotEnv = require("dotenv-webpack");
 const nodeExternals = require("webpack-node-externals");
 
 
@@ -34,10 +33,7 @@ const server = {
             },
         ],
     },
-    plugins: [
-        new NodemonPlugin(),
-        new DotEnv(),
-    ],
+    plugins: [ new NodemonPlugin() ],
     externals: [ nodeExternals() ],
 };
 
@@ -100,9 +96,6 @@ const client = {
             },
         ],
     },
-    plugins: [
-        new DotEnv(),
-    ],
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",
