@@ -1,13 +1,15 @@
 import { SagaIterator } from "redux-saga";
 import { all, AllEffect, call, put, StrictEffect, takeLatest } from "redux-saga/effects";
+
+import { Food } from "@common/typings";
+import FoodApi from "@api/client/foodApi";
+
 import {
-    FoodItemFetchRequestedAction,
     FOOD_ITEM_FETCH_ERROR,
     FOOD_ITEM_FETCH_REQUESTED,
     FOOD_ITEM_FETCH_SUCCESS,
+    FoodItemFetchRequestedAction,
 } from "./types";
-import FoodApi from "@api/client/foodApi";
-import { Food } from "@common/typings";
 
 
 

@@ -3,6 +3,7 @@ root: true
 parser: "@typescript-eslint/parser"
 plugins:
     - "@typescript-eslint"
+    - "simple-import-sort"
 
 extends:
     - "eslint:recommended"
@@ -43,6 +44,27 @@ rules:
         - 2
         - "always"
 
+    simple-import-sort/imports:
+        - 2
+        - groups:
+            -
+                - "^react"
+                - "^@?\\w"
+            -
+                - "^@common"
+                - "^@api"
+                - "^@server"
+                - "^@client"
+            -
+                - "^\\.\\.(?!/?$)"
+                - "^\\.\\./?$"
+            -
+                - "^\\./(?=.*/)(?!/?$)"
+                - "^\\.(?!/?$)"
+                - "^\\./?$"
+            -
+                - "^.+\\.s?css$"
+
     react/jsx-curly-brace-presence:
         - 2
         - props: always
@@ -71,4 +93,3 @@ rules:
         - singleline:
             delimiter: "comma"
             requireLast: false
-

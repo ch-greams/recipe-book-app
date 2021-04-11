@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
+
 import { InputChangeCallback } from "@common/typings";
 import { CustomUnitInput, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import IconAdd from "@client/icons/add-sharp.svg";
 import IconWrapper from "@client/icons/IconWrapper";
-import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+
 import styles from "./ServingSizesBlock.scss";
 
 

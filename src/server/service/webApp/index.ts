@@ -1,10 +1,11 @@
 import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
+
 import Logger, { LogLevel } from "@common/server/logger";
 import Database from "@server/service/database";
-import { HttpStatusSuccess } from "@server/service/webApp";
 import GraphQL from "@server/service/graphql";
+import { HttpStatusSuccess } from "@server/service/webApp";
 
 
 export * from "./enums";

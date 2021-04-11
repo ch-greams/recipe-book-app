@@ -1,4 +1,4 @@
-import { IngredientsFetchRequestedAction, INGREDIENTS_FETCH_REQUESTED } from "./types";
+import { INGREDIENTS_FETCH_REQUESTED,IngredientsFetchRequestedAction } from "./types";
 
 
 

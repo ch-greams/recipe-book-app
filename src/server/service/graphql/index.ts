@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
+
 import { Food, Recipe } from "@common/typings";
 import Database from "@server/service/database";
 import QuerySchema from "@server/service/graphql/schemas/query";

@@ -1,18 +1,16 @@
 import React, { Component } from "react";
-import { Units, VolumeUnit, WeightUnit } from "@common/units";
-import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
-import LinkIcon from "@client/icons/link-sharp.svg";
-import SearchIcon from "@client/icons/search-sharp.svg";
-import RemoveIcon from "@client/icons/close-sharp.svg";
-import IconWrapper from "@client/icons/IconWrapper";
-import styles from "./IngredientsBlock.scss";
-import { RecipeIngredientDefault, RecipeIngredient } from "@client/store/recipe/types";
+import { Link } from "react-router-dom";
+
 import { NutritionFactType } from "@common/nutritionFacts";
 import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback } from "@common/typings";
+import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import { Link } from "react-router-dom";
-import { SearchPageStore } from "@client/store/search/types";
 import { RoutePath } from "@client/components/Root";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import IconWrapper from "@client/icons/IconWrapper";
+import LinkIcon from "@client/icons/link-sharp.svg";
+import SearchIcon from "@client/icons/search-sharp.svg";
 import {
     addAltIngredient,
     addIngredient,
@@ -20,6 +18,10 @@ import {
     toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount,
     updateAltIngredientUnit, updateAltNutritionFacts, updateIngredientAmount, updateIngredientUnit,
 } from "@client/store/recipe/actions";
+import { RecipeIngredient,RecipeIngredientDefault } from "@client/store/recipe/types";
+import { SearchPageStore } from "@client/store/search/types";
+
+import styles from "./IngredientsBlock.scss";
 
 
 

@@ -1,20 +1,22 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
-import {
-    requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits, updateServingSize,
-} from "@client/store/food/actions";
-import { AppState } from "@client/store";
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
-import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
-import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
-import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
-import SelectInput from "@client/components/SelectInput/SelectInput";
-import styles from "./FoodPage.scss";
-import Utils from "@common/utils";
-import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import { RouteComponentProps } from "react-router-dom";
+
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
 import Loader from "@client/components/Loader/Loader";
+import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import SelectInput from "@client/components/SelectInput/SelectInput";
+import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
+import { AppState } from "@client/store";
+import {
+    requestFoodItem, updateBrand, updateCustomUnits, updateName, updateServingSize,
+updateSubtitle } from "@client/store/food/actions";
+import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
+
+import styles from "./FoodPage.scss";
 
 
 

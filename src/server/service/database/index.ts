@@ -1,6 +1,8 @@
+import { Db, MongoClient, MongoError } from "mongodb";
+
 import Logger, { LogLevel } from "@common/server/logger";
 import { Food, Recipe } from "@common/typings";
-import { MongoClient, Db, MongoError } from "mongodb";
+
 import foodSchema from "./schemas/food";
 import recipeSchema from "./schemas/recipe";
 import { SchemaValidator } from "./schemas/types";

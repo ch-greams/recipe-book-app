@@ -1,28 +1,29 @@
 import React, { Component } from "react";
-import IconWrapper from "@client/icons/IconWrapper";
-import { WeightUnit, TemperatureUnit, TimeUnit, VolumeUnit, Units } from "@common/units";
+
+import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "@common/typings";
+import { TemperatureUnit, TimeUnit, Units,VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+import InfoBlockIcon from "@client/icons/alert-circle-sharp.svg";
+import BulbIcon from "@client/icons/bulb-sharp.svg";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import IconWrapper from "@client/icons/IconWrapper";
+import WarningIcon from "@client/icons/warning-sharp.svg";
+import {
+createDirection,
+    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
+    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
+    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
+    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewDirectionName,     updateNewDirectionStepNumber, updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, updateNewSubDirectionType,
+    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
+} from "@client/store/recipe/actions";
 import {
     RecipeDirection,
     RecipeIngredientDefault,
     RecipeSubDirectionIngredient,
     SubDirectionType,
 } from "@client/store/recipe/types";
-import RemoveIcon from "@client/icons/close-sharp.svg";
-import InfoBlockIcon from "@client/icons/alert-circle-sharp.svg";
-import BulbIcon from "@client/icons/bulb-sharp.svg";
-import WarningIcon from "@client/icons/warning-sharp.svg";
-import Utils from "@common/utils";
-import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "@common/typings";
-import {
-    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
-    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
-    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
-    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewSubDirectionType,
-    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
-    updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
-} from "@client/store/recipe/actions";
 
 import styles from "./DirectionsBlock.scss";
 

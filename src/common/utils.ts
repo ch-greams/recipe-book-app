@@ -1,8 +1,9 @@
 import { NutritionFact } from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import { RoutePath } from "@client/components/Root";
+
+import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import { NUTRIENTS, NutritionFactType } from "./nutritionFacts";
 import type { Dictionary } from "./typings";
-import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import { RoutePath } from "@client/components/Root";
 import { CustomUnit, CustomUnitInput } from "./units";
 
 

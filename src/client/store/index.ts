@@ -1,11 +1,12 @@
 import { applyMiddleware, combineReducers, createStore, Store } from "redux";
-import { createLogger } from "redux-logger";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { createLogger } from "redux-logger";
+import createSagaMiddleware from "redux-saga";
+
 import foodPageReducer from "./food/reducers";
 import recipePageReducer from "./recipe/reducers";
-import rootSaga from "./rootSaga";
-import createSagaMiddleware from "redux-saga";
 import searchPageReducer from "./search/reducers";
+import rootSaga from "./rootSaga";
 
 
 

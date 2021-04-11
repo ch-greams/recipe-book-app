@@ -1,10 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
+
 import { NutritionFactType, nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
-import { updateNutritionFact } from "@client/store/food/actions";
+import { InputChangeCallback } from "@common/typings";
 import { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
-import { InputChangeCallback } from "@common/typings";
+import { updateNutritionFact } from "@client/store/food/actions";
+
 import styles from "./NutritionFactsBlock.scss";
 
 

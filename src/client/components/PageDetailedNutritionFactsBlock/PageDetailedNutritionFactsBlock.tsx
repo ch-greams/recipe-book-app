@@ -1,17 +1,19 @@
 import React, { Component } from "react";
+
 import {
     CARBOHYDRATES_GROUP,
     LIPIDS_GROUP,
     MINERALS_GROUP,
+    NutrientGroupType,
+    NutritionFactType,
     OTHER_GROUP,
     PROTEINS_GROUP,
     VITAMINS_GROUP,
-    NutrientGroupType,
-    NutritionFactType,
 } from "@common/nutritionFacts";
 import type { Dictionary } from "@common/typings";
 import Utils from "@common/utils";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+
 import styles from "./PageDetailedNutritionFactsBlock.scss";
 
 

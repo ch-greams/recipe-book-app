@@ -1,4 +1,5 @@
 import superagent from "superagent";
+
 import { NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA } from "@common/nutritionFacts";
 import { Food } from "@common/typings";
 

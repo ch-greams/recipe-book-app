@@ -1,37 +1,39 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RecipePageStore, UpdateCustomUnitsAction } from "@client/store/recipe/types";
-import {
-    updateName, updateBrand, updateSubtitle, updateDescription, removeDirection,
-    removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
-    updateSubDirectionNote, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
-    createSubDirectionIngredient, createSubDirection, updateNewSubDirectionType,
-    updateDirectionStepNumber, updateDirectionName, updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
-    updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
-    createDirection, removeIngredient, removeAltIngredient, replaceIngredientWithAlternative,
-    toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
-    updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
-    updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits, requestRecipeItem,
-} from "@client/store/recipe/actions";
-import { AppState } from "@client/store";
-import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
-import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
-import SelectInput from "@client/components/SelectInput/SelectInput";
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
-import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
-import Utils from "@common/utils";
+import { RouteComponentProps } from "react-router-dom";
+
 import { NutritionFactType } from "@common/nutritionFacts";
-import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
-import IngredientsBlock from "@client/components/IngredientsBlock/IngredientsBlock";
+import type { Dictionary } from "@common/typings";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
 import DirectionsBlock from "@client/components/DirectionsBlock/DirectionsBlock";
-import styles from "./RecipePage.scss";
+import IngredientsBlock from "@client/components/IngredientsBlock/IngredientsBlock";
+import Loader from "@client/components/Loader/Loader";
+import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import SelectInput from "@client/components/SelectInput/SelectInput";
+import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
+import { AppState } from "@client/store";
+import {
+addAltIngredient, addIngredient,
+    createDirection, createSubDirection,     createSubDirectionIngredient, removeAltIngredient, removeDirection,
+removeIngredient,     removeSubDirection, replaceIngredientWithAlternative,
+requestRecipeItem,
+toggleDirectionMark, toggleDirectionOpen, toggleIngredientMark,     toggleIngredientOpen, toggleSubDirectionMark,
+updateAltIngredientAmount, updateAltIngredientUnit,
+updateAltNutritionFacts, updateBrand, updateCustomUnits, updateDescription, updateDirectionName,     updateDirectionStepNumber, updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
+    updateIngredientAmount, updateIngredientUnit,     updateName, updateNewDirectionName,     updateNewDirectionStepNumber, updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
+updateNewSubDirectionType,
+    updateServingSizeAmount, updateServingSizeUnit, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
+    updateSubDirectionNote, updateSubtitle, updateType } from "@client/store/recipe/actions";
+import { RecipePageStore, UpdateCustomUnitsAction } from "@client/store/recipe/types";
 import { requestIngredients } from "@client/store/search/actions";
 import { SearchPageStore } from "@client/store/search/types";
-import { RouteComponentProps } from "react-router-dom";
-import Loader from "@client/components/Loader/Loader";
-import type { Dictionary } from "@common/typings";
+
+import styles from "./RecipePage.scss";
 
 
 

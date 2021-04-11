@@ -1,5 +1,6 @@
 import { NutritionFactType } from "@common/nutritionFacts";
 import { Units } from "@common/units";
+
 import FoodType from "./food";
 import RecipeType from "./recipe";
 
