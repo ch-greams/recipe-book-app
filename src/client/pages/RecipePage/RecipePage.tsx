@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { RecipePageStore, UpdateCustomUnitsAction } from "../../store/recipe/types";
+import { RecipePageStore, UpdateCustomUnitsAction } from "@client/store/recipe/types";
 import {
     updateName, updateBrand, updateSubtitle, updateDescription, removeDirection,
     removeSubDirection, toggleDirectionOpen, toggleDirectionMark, toggleSubDirectionMark,
@@ -14,24 +14,24 @@ import {
     toggleIngredientOpen, toggleIngredientMark, updateAltIngredientAmount, updateAltIngredientUnit,
     updateIngredientAmount, updateIngredientUnit, updateAltNutritionFacts, addAltIngredient, addIngredient,
     updateServingSizeAmount, updateServingSizeUnit, updateType, updateCustomUnits, requestRecipeItem,
-} from "../../store/recipe/actions";
-import { AppState } from "../../store";
-import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
-import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
-import SelectInput from "../../components/SelectInput/SelectInput";
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
-import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
-import Utils from "../../../common/utils";
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
-import IngredientsBlock from "../../components/IngredientsBlock/IngredientsBlock";
-import DirectionsBlock from "../../components/DirectionsBlock/DirectionsBlock";
+} from "@client/store/recipe/actions";
+import { AppState } from "@client/store";
+import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import SelectInput from "@client/components/SelectInput/SelectInput";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import Utils from "@common/utils";
+import { NutritionFactType } from "@common/nutritionFacts";
+import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
+import IngredientsBlock from "@client/components/IngredientsBlock/IngredientsBlock";
+import DirectionsBlock from "@client/components/DirectionsBlock/DirectionsBlock";
 import styles from "./RecipePage.scss";
-import { requestIngredients } from "../../store/search/actions";
-import { SearchPageStore } from "../../store/search/types";
+import { requestIngredients } from "@client/store/search/actions";
+import { SearchPageStore } from "@client/store/search/types";
 import { RouteComponentProps } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
-import { Dictionary } from "../../../common/typings";
+import Loader from "@client/components/Loader/Loader";
+import type { Dictionary } from "@common/typings";
 
 
 

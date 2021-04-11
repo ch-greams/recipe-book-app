@@ -6,8 +6,8 @@ import {
     FOOD_ITEM_FETCH_REQUESTED,
     FOOD_ITEM_FETCH_SUCCESS,
 } from "./types";
-import FoodApi from "../../../api/client/foodApi";
-import { Food } from "../../../common/typings";
+import FoodApi from "@api/client/foodApi";
+import { Food } from "@common/typings";
 
 
 

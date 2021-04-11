@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { NutritionFactType, nutritionFactTypeLabelMapping } from "../../../common/nutritionFacts";
-import { updateNutritionFact } from "../../store/food/actions";
-import { NutritionFactUnit } from "../../../common/units";
+import { NutritionFactType, nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
+import { updateNutritionFact } from "@client/store/food/actions";
+import { NutritionFactUnit } from "@common/units";
+import Utils from "@common/utils";
+import { InputChangeCallback } from "@common/typings";
 import styles from "./NutritionFactsBlock.scss";
-import Utils from "../../../common/utils";
-import { InputChangeCallback } from "../../../common/typings";
 
 
 export interface NutritionFact {

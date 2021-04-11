@@ -1,6 +1,6 @@
-import { NutritionFactDescription, NutritionFactType } from "../nutritionFacts";
-import { Dictionary } from "../typings";
-import { NutritionFactUnit } from "../units";
+import { NutritionFactDescription, NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary } from "@common/typings";
+import { NutritionFactUnit } from "@common/units";
 
 
 

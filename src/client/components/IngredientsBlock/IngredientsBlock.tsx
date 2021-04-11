@@ -1,25 +1,25 @@
 import React, { Component } from "react";
-import { Units, VolumeUnit, WeightUnit } from "../../../common/units";
-import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
-import LinkIcon from "../../icons/link-sharp.svg";
-import SearchIcon from "../../icons/search-sharp.svg";
-import RemoveIcon from "../../icons/close-sharp.svg";
-import IconWrapper from "../../icons/IconWrapper";
+import { Units, VolumeUnit, WeightUnit } from "@common/units";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+import LinkIcon from "@client/icons/link-sharp.svg";
+import SearchIcon from "@client/icons/search-sharp.svg";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import IconWrapper from "@client/icons/IconWrapper";
 import styles from "./IngredientsBlock.scss";
-import { RecipeIngredientDefault, RecipeIngredient } from "../../store/recipe/types";
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
-import Utils from "../../../common/utils";
+import { RecipeIngredientDefault, RecipeIngredient } from "@client/store/recipe/types";
+import { NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback } from "@common/typings";
+import Utils from "@common/utils";
 import { Link } from "react-router-dom";
-import { SearchPageStore } from "../../store/search/types";
-import { RoutePath } from "../Root";
+import { SearchPageStore } from "@client/store/search/types";
+import { RoutePath } from "@client/components/Root";
 import {
     addAltIngredient,
     addIngredient,
     removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
     toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount,
     updateAltIngredientUnit, updateAltNutritionFacts, updateIngredientAmount, updateIngredientUnit,
-} from "../../store/recipe/actions";
+} from "@client/store/recipe/actions";
 
 
 

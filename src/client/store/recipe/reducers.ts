@@ -1,7 +1,7 @@
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "../../../common/units";
-import Utils, { DecimalPlaces } from "../../../common/utils";
+import { NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "@common/typings";
+import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
+import Utils, { DecimalPlaces } from "@common/utils";
 import {
     RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_BRAND,

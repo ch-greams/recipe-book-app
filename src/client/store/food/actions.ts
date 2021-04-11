@@ -1,5 +1,5 @@
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { CustomUnitInput } from "../../../common/units";
+import { NutritionFactType } from "@common/nutritionFacts";
+import { CustomUnitInput } from "@common/units";
 import {
     FOOD_ITEM_UPDATE_NAME,
     FOOD_ITEM_UPDATE_BRAND,

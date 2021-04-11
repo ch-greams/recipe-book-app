@@ -1,4 +1,4 @@
-import Logger, { LogLevel } from "../common/server/logger";
+import Logger, { LogLevel } from "@common/server/logger";
 import Database from "./service/database";
 import WebApp from "./service/webApp";
 

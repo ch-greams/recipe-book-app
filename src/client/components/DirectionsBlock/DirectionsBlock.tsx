@@ -1,20 +1,19 @@
 import React, { Component } from "react";
-import IconWrapper from "../../icons/IconWrapper";
-import { WeightUnit, TemperatureUnit, TimeUnit, VolumeUnit, Units } from "../../../common/units";
-import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
-import styles from "./DirectionsBlock.scss";
+import IconWrapper from "@client/icons/IconWrapper";
+import { WeightUnit, TemperatureUnit, TimeUnit, VolumeUnit, Units } from "@common/units";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import {
     RecipeDirection,
     RecipeIngredientDefault,
     RecipeSubDirectionIngredient,
     SubDirectionType,
-} from "../../store/recipe/types";
-import RemoveIcon from "../../icons/close-sharp.svg";
-import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
-import BulbIcon from "../../icons/bulb-sharp.svg";
-import WarningIcon from "../../icons/warning-sharp.svg";
-import Utils from "../../../common/utils";
-import { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
+} from "@client/store/recipe/types";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import InfoBlockIcon from "@client/icons/alert-circle-sharp.svg";
+import BulbIcon from "@client/icons/bulb-sharp.svg";
+import WarningIcon from "@client/icons/warning-sharp.svg";
+import Utils from "@common/utils";
+import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "@common/typings";
 import {
     createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
     toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
@@ -23,7 +22,9 @@ import {
     updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
     updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
     updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
-} from "../../store/recipe/actions";
+} from "@client/store/recipe/actions";
+
+import styles from "./DirectionsBlock.scss";
 
 
 

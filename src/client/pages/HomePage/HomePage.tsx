@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import styles from "./HomePage.scss";
 import { connect } from "react-redux";
-import { AppState } from "../../store";
-import { updateName } from "../../store/food/actions";
-import { FoodPageStore } from "../../store/food/types";
+import { AppState } from "@client/store";
+import { updateName } from "@client/store/food/actions";
+import { FoodPageStore } from "@client/store/food/types";
 import { Link } from "react-router-dom";
-import { RoutePath } from "../../components/Root";
+import { RoutePath } from "@client/components/Root";
 
 
 

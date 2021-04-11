@@ -1,4 +1,4 @@
-import { TimeUnit, TemperatureUnit } from "../../../../common/units";
+import { TimeUnit, TemperatureUnit } from "@common/units";
 
 
 // NOTE: Ingredients

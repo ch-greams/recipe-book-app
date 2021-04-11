@@ -11,10 +11,10 @@ import {
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
     FOOD_ITEM_UPDATE_SERVING_SIZE,
 } from "./types";
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { CustomUnitInput, VolumeUnit, WeightUnit } from "../../../common/units";
-import { Dictionary } from "../../../common/typings";
-import Utils from "../../../common/utils";
+import { NutritionFactType } from "@common/nutritionFacts";
+import { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { Dictionary } from "@common/typings";
+import Utils from "@common/utils";
 
 
 

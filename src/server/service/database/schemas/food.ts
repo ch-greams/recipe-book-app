@@ -1,6 +1,6 @@
-import { NUTRIENTS, NutritionFactType } from "../../../../common/nutritionFacts";
-import { Dictionary } from "../../../../common/typings";
-import { Units } from "../../../../common/units";
+import { NUTRIENTS, NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary } from "@common/typings";
+import { Units } from "@common/units";
 import { SchemaValidator, Validator } from "./types";
 
 

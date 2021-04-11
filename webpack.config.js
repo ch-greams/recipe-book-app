@@ -16,6 +16,12 @@ const server = {
     },
     devtool: "source-map",
     resolve: {
+        alias: {
+            "@common": path.resolve(__dirname, "src/common"),
+            "@client": path.resolve(__dirname, "src/client"),
+            "@server": path.resolve(__dirname, "src/server"),
+            "@api": path.resolve(__dirname, "src/api"),
+        },
         extensions: [ ".ts", ".js" ],
     },
     module: {
@@ -51,6 +57,12 @@ const client = {
     },
     devtool: "source-map",
     resolve: {
+        alias: {
+            "@common": path.resolve(__dirname, "src/common"),
+            "@client": path.resolve(__dirname, "src/client"),
+            "@server": path.resolve(__dirname, "src/server"),
+            "@api": path.resolve(__dirname, "src/api"),
+        },
         extensions: [ ".ts", ".tsx", ".js", ".svg" ],
     },
     module: {

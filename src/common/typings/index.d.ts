@@ -1,6 +1,6 @@
-import { SubDirectionType } from "../../client/store/recipe/types";
-import { NutritionFactType } from "../nutritionFacts";
-import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "../units";
+import { SubDirectionType } from "@client/store/recipe/types";
+import { NutritionFactType } from "@common/nutritionFacts";
+import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 
 export type Dictionary<TKey extends string | number | symbol, TValue> = {
     [key in TKey]?: TValue;

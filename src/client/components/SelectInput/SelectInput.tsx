@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { SelectChangeCallback } from "../../../common/typings";
-import Utils from "../../../common/utils";
+import { SelectChangeCallback } from "@common/typings";
+import Utils from "@common/utils";
 import styles from "./SelectInput.scss";
 
 

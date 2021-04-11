@@ -1,5 +1,5 @@
-import { IngredientItem } from "../../../common/typings";
-import { WeightUnit, VolumeUnit, TemperatureUnit, TimeUnit, CustomUnitInput } from "../../../common/units";
+import { IngredientItem } from "@common/typings";
+import { WeightUnit, VolumeUnit, TemperatureUnit, TimeUnit, CustomUnitInput } from "@common/units";
 import {
     CreateSubDirectionAction,
     CreateSubDirectionIngredientAction,

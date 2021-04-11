@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { FoodPageStore, UpdateCustomUnitsAction } from "../../store/food/types";
+import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
 import {
     requestFoodItem, updateName, updateBrand, updateSubtitle, updateCustomUnits, updateServingSize,
-} from "../../store/food/actions";
-import { AppState } from "../../store";
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "../../../common/units";
-import NutritionFactsBlock from "../../components/NutritionFactsBlock/NutritionFactsBlock";
-import PageTitleBlock from "../../components/PageTitleBlock/PageTitleBlock";
-import ServingSizesBlock from "../../components/ServingSizesBlock/ServingSizesBlock";
-import SelectInput from "../../components/SelectInput/SelectInput";
+} from "@client/store/food/actions";
+import { AppState } from "@client/store";
+import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
+import SelectInput from "@client/components/SelectInput/SelectInput";
 import styles from "./FoodPage.scss";
-import Utils from "../../../common/utils";
-import PageDetailedNutritionFactsBlock from "../../components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
+import Utils from "@common/utils";
+import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import { RouteComponentProps } from "react-router-dom";
-import Loader from "../../components/Loader/Loader";
+import Loader from "@client/components/Loader/Loader";
 
 
 

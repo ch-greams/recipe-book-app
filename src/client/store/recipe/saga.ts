@@ -6,8 +6,8 @@ import {
     RECIPE_ITEM_FETCH_REQUESTED,
     RECIPE_ITEM_FETCH_SUCCESS,
 } from "./types";
-import RecipeApi from "../../../api/client/recipeApi";
-import { Recipe } from "../../../common/typings";
+import RecipeApi from "@api/client/recipeApi";
+import { Recipe } from "@common/typings";
 
 
 
