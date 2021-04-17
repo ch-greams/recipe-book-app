@@ -47,22 +47,23 @@ rules:
     simple-import-sort/imports:
         - 2
         - groups:
-            -
+            -   # Packages. `react` related packages come first.
                 - "^react"
+                - "^redux"
                 - "^@?\\w"
-            -
+            -   # Internal packages.
                 - "^@common"
                 - "^@api"
                 - "^@server"
                 - "^@client"
-            -
+            -   # Parent imports. Put `..` last.
                 - "^\\.\\.(?!/?$)"
                 - "^\\.\\./?$"
-            -
+            -   # Other relative imports. Put same-folder imports and `.` last.
                 - "^\\./(?=.*/)(?!/?$)"
                 - "^\\.(?!/?$)"
                 - "^\\./?$"
-            -
+            -   # Style imports.
                 - "^.+\\.s?css$"
 
     react/jsx-curly-brace-presence:

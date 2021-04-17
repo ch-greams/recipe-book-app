@@ -2,14 +2,11 @@ import { NutritionFactType } from "@common/nutritionFacts";
 import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { SubDirectionType } from "@client/store/recipe/types";
 
-export type Dictionary<TKey extends string | number | symbol, TValue> = {
-    [key in TKey]?: TValue;
-};
+import { Dictionary } from "./common";
 
-export type InputChangeCallback = (event: React.ChangeEvent<HTMLInputElement>) => void;
-export type SelectChangeCallback = (event: React.ChangeEvent<HTMLSelectElement>) => void;
+export * from "./common";
 
-interface Food {
+export interface Food {
     id: string;
     name: string;
     brand: string;
@@ -18,44 +15,44 @@ interface Food {
     customUnits: CustomUnit[];
 }
 
-interface IngredientItem {
+export interface IngredientItem {
     id: string;
     name: string;
     nutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
-interface Ingredient {
+export interface Ingredient {
     amount: number;
     unit: WeightUnit | VolumeUnit;
     id: string;
 }
 
-interface IngredientDefault extends Ingredient {
+export interface IngredientDefault extends Ingredient {
     alternatives: Ingredient[];
 }
 
-interface Time {
+export interface Time {
     count: number;
     unit: TimeUnit;
 }
 
-interface Temperature {
+export interface Temperature {
     count: number;
     unit: TemperatureUnit;
 }
 
-interface SubDirection {
+export interface SubDirection {
     type: SubDirectionType;
     label: string;
 }
 
-interface SubDirectionIngredient extends SubDirection {
+export interface SubDirectionIngredient extends SubDirection {
     id: string;
     amount: number;
     unit: WeightUnit | VolumeUnit;
 }
 
-interface Direction {
+export interface Direction {
     stepNumber: number;
     name: string;
     time?: Time;
@@ -63,12 +60,12 @@ interface Direction {
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 
-interface References {
+export interface References {
     food: IngredientItem[];
     recipe: IngredientItem[];
 }
 
-interface Recipe {
+export interface Recipe {
     id: string;
     name: string;
     brand: string;
