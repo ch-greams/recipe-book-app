@@ -1,12 +1,10 @@
 const path = require("path");
 const NodemonPlugin = require("nodemon-webpack-plugin");
-const DotEnv = require("dotenv-webpack");
 const nodeExternals = require("webpack-node-externals");
 
 
 const server = {
     target: "node",
-    watch: true,
     node: {
         __dirname: false,
     },
@@ -18,6 +16,12 @@ const server = {
     },
     devtool: "source-map",
     resolve: {
+        alias: {
+            "@common": path.resolve(__dirname, "src/common"),
+            "@client": path.resolve(__dirname, "src/client"),
+            "@server": path.resolve(__dirname, "src/server"),
+            "@api": path.resolve(__dirname, "src/api"),
+        },
         extensions: [ ".ts", ".js" ],
     },
     module: {
@@ -35,16 +39,12 @@ const server = {
             },
         ],
     },
-    plugins: [
-        new NodemonPlugin(),
-        new DotEnv(),
-    ],
+    plugins: [ new NodemonPlugin() ],
     externals: [ nodeExternals() ],
 };
 
 const client = {
     target: "web",
-    watch: true,
     mode: "development",
     entry: {
         "client": path.join(__dirname, "src", "client", "index.tsx"),
@@ -57,6 +57,12 @@ const client = {
     },
     devtool: "source-map",
     resolve: {
+        alias: {
+            "@common": path.resolve(__dirname, "src/common"),
+            "@client": path.resolve(__dirname, "src/client"),
+            "@server": path.resolve(__dirname, "src/server"),
+            "@api": path.resolve(__dirname, "src/api"),
+        },
         extensions: [ ".ts", ".tsx", ".js", ".svg" ],
     },
     module: {
@@ -102,9 +108,6 @@ const client = {
             },
         ],
     },
-    plugins: [
-        new DotEnv(),
-    ],
     externals: {
         "react": "React",
         "react-dom": "ReactDOM",

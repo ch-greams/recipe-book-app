@@ -1,4 +1,4 @@
-import { Dictionary } from "./typings";
+import type { Dictionary, Option } from "./typings";
 import { NutritionFactUnit } from "./units";
 
 
@@ -382,6 +382,6 @@ export const NUTRIENTS: NutritionFactType[] = [
 export interface NutritionFactDescription {
     type: NutritionFactType;
     unit: NutritionFactUnit;
-    dailyValue?: number;
+    dailyValue: Option<number>;
     isFraction: boolean;
 }

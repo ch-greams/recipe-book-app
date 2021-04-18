@@ -1,29 +1,31 @@
 import React, { Component } from "react";
-import IconWrapper from "../../icons/IconWrapper";
-import { WeightUnit, TemperatureUnit, TimeUnit, VolumeUnit, Units } from "../../../common/units";
-import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
-import styles from "./DirectionsBlock.scss";
+
+import type { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "@common/typings";
+import { TemperatureUnit, TimeUnit, Units,VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+import InfoBlockIcon from "@client/icons/alert-circle-sharp.svg";
+import BulbIcon from "@client/icons/bulb-sharp.svg";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import IconWrapper from "@client/icons/IconWrapper";
+import WarningIcon from "@client/icons/warning-sharp.svg";
+import {
+createDirection,
+    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
+    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
+    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
+    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewDirectionName,     updateNewDirectionStepNumber, updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, updateNewSubDirectionType,
+    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
+} from "@client/store/recipe/actions";
 import {
     RecipeDirection,
     RecipeIngredientDefault,
     RecipeSubDirectionIngredient,
     SubDirectionType,
-} from "../../store/recipe/types";
-import RemoveIcon from "../../icons/close-sharp.svg";
-import InfoBlockIcon from "../../icons/alert-circle-sharp.svg";
-import BulbIcon from "../../icons/bulb-sharp.svg";
-import WarningIcon from "../../icons/warning-sharp.svg";
-import Utils from "../../../common/utils";
-import { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback, SubDirection } from "../../../common/typings";
-import {
-    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
-    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
-    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
-    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewSubDirectionType,
-    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
-    updateNewDirectionStepNumber, updateNewDirectionName, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, createDirection,
-} from "../../store/recipe/actions";
+} from "@client/store/recipe/types";
+
+import styles from "./DirectionsBlock.scss";
 
 
 
@@ -237,7 +239,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.subDirectionLineButton}
                 onClick={() => this.removeSubDirection(directionIndex, stepIndex)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -267,7 +269,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                 <div className={styles.subDirectionNoteInfoLine}>
 
-                    <IconWrapper width={"22px"} height={"22px"} color={"#fff"}>
+                    <IconWrapper width={22} height={22} color={"#fff"}>
                         {this.getSubDirectionNoteLineIcon(step.type)}
                     </IconWrapper>
 
@@ -300,7 +302,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.subDirectionLineButton}
                 onClick={() => this.removeSubDirection(directionIndex, subDirectionIndex)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -332,7 +334,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                     <div
                         className={styles.directionInfoLineTitle}
-                        style={( subDirection.isMarked ? { opacity: 0.25 } : null )}
+                        style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}
                     >
 
                         <div className={styles.directionInfoLineName}>
@@ -371,7 +373,7 @@ export default class DirectionsBlock extends Component<Props> {
                 >
                     <IconWrapper
                         isFullWidth={true}
-                        width={"24px"} height={"24px"} color={"#fff"}
+                        width={24} height={24} color={"#fff"}
                         style={{ transform: "rotate(0.125turn)" }}
                     >
                         <RemoveIcon />
@@ -492,13 +494,13 @@ export default class DirectionsBlock extends Component<Props> {
             <div
                 key={`directionInfo_${index}`}
                 className={styles.directionInfoLine}
-                style={( isReadOnly ? null : { paddingLeft: "12px" } )}
+                style={( isReadOnly ? undefined : { paddingLeft: "12px" } )}
             >
 
                 <div
                     className={styles.directionInfoLineTitle}
-                    style={( direction.isMarked ? { opacity: 0.25 } : null )}
-                    onClick={( isReadOnly ? () => this.toggleDirectionOpen(index) : null )}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                    onClick={( isReadOnly ? () => this.toggleDirectionOpen(index) : undefined )}
                 >
                     {( isReadOnly ? indexText : indexInput )}
 
@@ -539,7 +541,7 @@ export default class DirectionsBlock extends Component<Props> {
                 className={styles.directionLineButton}
                 onClick={() => this.removeDirection(index)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -596,7 +598,7 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(TemperatureUnit)}
-                    value={direction.temperature.unit}
+                    value={direction.temperature?.unit}
                     onChange={this.handleNewDirectionTemperatureUnitEdit}
                 />
             </div>
@@ -620,7 +622,7 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(TimeUnit)}
-                    value={direction.temperature.unit}
+                    value={direction.temperature?.unit}
                     onChange={this.handleNewDirectionTimeUnitEdit}
                 />
             </div>
@@ -635,7 +637,7 @@ export default class DirectionsBlock extends Component<Props> {
                 >
                     <IconWrapper
                         isFullWidth={true}
-                        width={"24px"} height={"24px"} color={"#00bfa5"}
+                        width={24} height={24} color={"#00bfa5"}
                         style={{ transform: "rotate(0.125turn)" }}
                     >
                         <RemoveIcon />

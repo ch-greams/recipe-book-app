@@ -1,6 +1,7 @@
 import superagent from "superagent";
-import { NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA } from "../../common/nutritionFacts";
-import { Recipe } from "../../common/typings";
+
+import { NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA } from "@common/nutritionFacts";
+import { Recipe } from "@common/typings";
 
 
 export default class RecipeApi {

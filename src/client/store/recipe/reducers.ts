@@ -1,62 +1,63 @@
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "../../../common/typings";
-import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "../../../common/units";
-import Utils, { DecimalPlaces } from "../../../common/utils";
+import { NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "@common/typings";
+import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
+import Utils, { DecimalPlaces } from "@common/utils";
+
 import {
-    RECIPE_ITEM_UPDATE_NAME,
-    RECIPE_ITEM_UPDATE_BRAND,
-    RECIPE_ITEM_UPDATE_SUBTITLE,
-    RECIPE_ITEM_UPDATE_DESCRIPTION,
-    RecipeItemActionTypes,
-    RecipePageStore,
-    RecipeIngredientDefault,
-    SubDirectionType,
-    RECIPE_ITEM_REMOVE_DIRECTION,
-    RECIPE_ITEM_REMOVE_SUBDIRECTION,
-    RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
-    RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
-    RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
-    RecipeSubDirectionIngredient,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
-    RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
+    RECIPE_ITEM_ADD_ALT_INGREDIENT,
+    RECIPE_ITEM_ADD_INGREDIENT,
+    RECIPE_ITEM_CREATE_DIRECTION,
     RECIPE_ITEM_CREATE_SUBDIRECTION,
-    RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
-    RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
+    RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
+    RECIPE_ITEM_FETCH_ERROR,
+    RECIPE_ITEM_FETCH_REQUESTED,
+    RECIPE_ITEM_FETCH_SUCCESS,
+    RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+    RECIPE_ITEM_REMOVE_DIRECTION,
+    RECIPE_ITEM_REMOVE_INGREDIENT,
+    RECIPE_ITEM_REMOVE_SUBDIRECTION,
+    RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
+    RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
+    RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
+    RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
+    RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
+    RECIPE_ITEM_UPDATE_BRAND,
+    RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
+    RECIPE_ITEM_UPDATE_DESCRIPTION,
     RECIPE_ITEM_UPDATE_DIRECTION_NAME,
+    RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
     RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT,
     RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT,
     RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER,
+    RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_NAME,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME,
+    RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
     RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
-    RECIPE_ITEM_CREATE_DIRECTION,
-    RECIPE_ITEM_REMOVE_INGREDIENT,
-    RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
-    RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
-    RecipeIngredient,
-    RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
-    RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
-    RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
-    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
-    RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
-    RECIPE_ITEM_ADD_INGREDIENT,
-    RECIPE_ITEM_ADD_ALT_INGREDIENT,
+    RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
     RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
     RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
+    RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
+    RECIPE_ITEM_UPDATE_SUBTITLE,
     RECIPE_ITEM_UPDATE_TYPE,
-    RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
-    RECIPE_ITEM_FETCH_REQUESTED,
-    RECIPE_ITEM_FETCH_SUCCESS,
-    RECIPE_ITEM_FETCH_ERROR,
     RecipeDirection,
+    RecipeIngredient,
+    RecipeIngredientDefault,
+    RecipeItemActionTypes,
+    RecipePageStore,
+    RecipeSubDirectionIngredient,
+    SubDirectionType,
 } from "./types";
 
 
@@ -161,18 +162,23 @@ function getRecipeNutritionFacts(
     const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
         .map((ingredient) => {
             
-            const nf = references[ingredient.id].nutritionFacts;
+            const nutritionFacts = references[ingredient.id].nutritionFacts;
             const multiplier = Utils.getPercentMultiplier(ingredient.amount);
 
-            return Utils.getObjectKeys(nf)
-                .reduce((acc, nfType) => ({
-                    ...acc,
-                    [nfType]: (
-                        typeof nf[nfType] === "number"
-                            ? Utils.roundToDecimal(nf[nfType] * multiplier, DecimalPlaces.Two)
-                            : null
-                    ),
-                }), {});
+            return Utils.getObjectKeys(nutritionFacts)
+                .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
+
+                    const nutritionFactValue = nutritionFacts[nutritionFactType];
+
+                    return {
+                        ...acc,
+                        [nutritionFactType]: (
+                            Utils.isSome(nutritionFactValue)
+                                ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
+                                : null
+                        ),
+                    };
+                }, {});
         });
 
     return Utils.dictionarySum(nutritionFactsById);

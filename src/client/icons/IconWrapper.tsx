@@ -1,31 +1,26 @@
-import StyledComponents from "styled-components";
+import styled from "styled-components";
 
 
 interface Props {
-    width: string;
-    height: string;
+    width: number;
+    height: number;
     color: string;
     isFullWidth?: boolean;
 }
 
-const getIsFullWidth = (props: Props): string => (props.isFullWidth ? "100%" : props.width);
-const getWidth = (props: Props): string => props.width;
-const getHeight = (props: Props): string => props.height;
-const getColor = (props: Props): string => props.color;
+const IconWrapper = styled.div<Props>`
 
-const IconWrapper = StyledComponents.div`
-
-    width: ${getIsFullWidth};
-    height: ${getHeight};
+    width: ${(props) => (props.isFullWidth ? "100%" : `${props.width}px`)};
+    height: ${(props) => props.height}px;
 
     svg {
 
-        width: ${getWidth};
-        height: ${getHeight};
-        fill: ${getColor};
+        width: ${(props) => props.width}px;
+        height: ${(props) => props.height}px;
+        fill: ${(props) => props.color};
 
         path {
-            stroke: ${getColor};
+            stroke: ${(props) => props.color};
         }
     }
 `;

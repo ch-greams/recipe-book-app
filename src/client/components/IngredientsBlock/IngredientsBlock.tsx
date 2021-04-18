@@ -1,25 +1,27 @@
 import React, { Component } from "react";
-import { Units, VolumeUnit, WeightUnit } from "../../../common/units";
-import SelectInput, { SelectInputType } from "../SelectInput/SelectInput";
-import LinkIcon from "../../icons/link-sharp.svg";
-import SearchIcon from "../../icons/search-sharp.svg";
-import RemoveIcon from "../../icons/close-sharp.svg";
-import IconWrapper from "../../icons/IconWrapper";
-import styles from "./IngredientsBlock.scss";
-import { RecipeIngredientDefault, RecipeIngredient } from "../../store/recipe/types";
-import { NutritionFactType } from "../../../common/nutritionFacts";
-import { Dictionary, IngredientItem, InputChangeCallback, SelectChangeCallback } from "../../../common/typings";
-import Utils from "../../../common/utils";
 import { Link } from "react-router-dom";
-import { SearchPageStore } from "../../store/search/types";
-import { RoutePath } from "../Root";
+
+import { NutritionFactType } from "@common/nutritionFacts";
+import type { Dictionary, IngredientItem, InputChangeCallback, Option, SelectChangeCallback } from "@common/typings";
+import { Units, VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
+import { RoutePath } from "@client/components/Root";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
+import RemoveIcon from "@client/icons/close-sharp.svg";
+import IconWrapper from "@client/icons/IconWrapper";
+import LinkIcon from "@client/icons/link-sharp.svg";
+import SearchIcon from "@client/icons/search-sharp.svg";
 import {
     addAltIngredient,
     addIngredient,
     removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
     toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount,
     updateAltIngredientUnit, updateAltNutritionFacts, updateIngredientAmount, updateIngredientUnit,
-} from "../../store/recipe/actions";
+} from "@client/store/recipe/actions";
+import { RecipeIngredient,RecipeIngredientDefault } from "@client/store/recipe/types";
+import { SearchPageStore } from "@client/store/search/types";
+
+import styles from "./IngredientsBlock.scss";
 
 
 
@@ -148,7 +150,7 @@ export default class IngredientsBlock extends Component<Props> {
                             style={(
                                 Utils.objectIsNotEmpty(altNutritionFacts)
                                     ? { color: (nutritionFacts[type] > altNutritionFacts[type]) ? "#ff6e40" : "#008e76" }
-                                    : null
+                                    : undefined
                             )}
                         >
                             {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
@@ -164,7 +166,7 @@ export default class IngredientsBlock extends Component<Props> {
 
     private getIngredientInfoLine = (ingredient: RecipeIngredientDefault, isNew: boolean = false): JSX.Element => {
 
-        const ingredientItem = this.props.references[ingredient.id];
+        const ingredientItem: Option<IngredientItem> = this.props.references[ingredient.id];
 
         const amountText = (
             <div className={styles.ingredientInfoLineAmountText}>
@@ -203,7 +205,7 @@ export default class IngredientsBlock extends Component<Props> {
 
                 <div
                     className={styles.ingredientInfoLineName}
-                    style={( ingredient.isMarked ? { opacity: 0.25 } : null )}
+                    style={( ingredient.isMarked ? { opacity: 0.25 } : undefined )}
                     onClick={() => this.toggleIngredientOpen(ingredient.id)}
                 >
                     {(isNew ? "NEW INGREDIENT" : ingredientItem.name.toUpperCase())}
@@ -225,7 +227,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.altIngredientLineButton}
                 onClick={() => this.removeAltIngredient(parentId, altIngredient.id)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -236,7 +238,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.altIngredientLineButton}
                 onClick={() => this.addAltIngredient(parentId)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#fff"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                     <SearchIcon />
                 </IconWrapper>
             </div>
@@ -289,9 +291,9 @@ export default class IngredientsBlock extends Component<Props> {
 
                     <div
                         className={styles.ingredientInfoLineName}
-                        onClick={isNew ? null : onClick}
-                        onMouseEnter={isNew ? null : onMouseEnter}
-                        onMouseLeave={isNew ? null : onMouseLeave}
+                        onClick={isNew ? undefined : onClick}
+                        onMouseEnter={isNew ? undefined : onMouseEnter}
+                        onMouseLeave={isNew ? undefined : onMouseLeave}
                     >
                         {isNew ? "NEW ALTERNATIVE" : altIngredientItem.name.toUpperCase()}
                     </div>
@@ -329,7 +331,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.ingredientLineButton}
                 onClick={() => this.removeIngredient(ingredient.id)}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <RemoveIcon />
                 </IconWrapper>
             </div>
@@ -340,7 +342,7 @@ export default class IngredientsBlock extends Component<Props> {
                 className={styles.ingredientLineButton}
                 onClick={this.addIngredient}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <SearchIcon />
                 </IconWrapper>
             </div>
@@ -350,9 +352,9 @@ export default class IngredientsBlock extends Component<Props> {
             <Link
                 to={Utils.getItemPath(RoutePath.Food, ingredient.id)}
                 className={styles.ingredientLineButton}
-                style={( isNew ? { opacity: "0.5" } : null )}
+                style={( isNew ? { opacity: "0.5" } : undefined )}
             >
-                <IconWrapper isFullWidth={true} width={"24px"} height={"24px"} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
                     <LinkIcon />
                 </IconWrapper>
             </Link>

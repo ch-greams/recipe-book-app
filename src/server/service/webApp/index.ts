@@ -1,10 +1,12 @@
 import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
-import Logger, { LogLevel } from "../../../common/server/logger";
-import Database from "../database";
-import { HttpStatusSuccess } from "../webApp";
-import GraphQL from "../graphql";
+
+import Logger, { LogLevel } from "@common/server/logger";
+import Utils from "@common/utils";
+import Database from "@server/service/database";
+import GraphQL from "@server/service/graphql";
+import { HttpStatusSuccess } from "@server/service/webApp";
 
 
 export * from "./enums";
@@ -22,7 +24,7 @@ export default class WebApp {
 
         this.app = express();
 
-        this.port = (parseInt(process.env.PORT, 10) || WebApp.DEFAULT_PORT);
+        this.port = (parseInt(Utils.unwrap(process.env.PORT, ""), 10) || WebApp.DEFAULT_PORT);
 
         this.config();
         this.routes(database, isProduction);

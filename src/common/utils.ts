@@ -1,8 +1,9 @@
-import { NutritionFact } from "../client/components/NutritionFactsBlock/NutritionFactsBlock";
-import { NUTRIENTS, NutritionFactType } from "./nutritionFacts";
-import { Dictionary } from "./typings";
+import { NutritionFact } from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
+import { RoutePath } from "@client/components/Root";
+
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import { RoutePath } from "../client/components/Root";
+import { NUTRIENTS, NutritionFactDescription, NutritionFactType } from "./nutritionFacts";
+import type { Dictionary, Option } from "./typings";
 import { CustomUnit, CustomUnitInput } from "./units";
 
 
@@ -48,6 +49,14 @@ export default class Utils {
         return DEFAULT_VALUE;
     }
 
+    public static unwrap<T>(value: Option<T>, defaultValue: T): T {
+        return (value === null) || (value === undefined) ? defaultValue : value;
+    }
+
+    public static isSome<T>(value: Option<T>): value is T {
+        return (value !== null) && (value !== undefined);
+    }
+
     // NOTE: APP-SPECIFIC CALCULATIONS
 
     public static getNutritionFacts(
@@ -59,9 +68,9 @@ export default class Utils {
         return nutritionFactTypes.reduce<NutritionFact[]>(
             (previousNutritionFacts, currentNutrientType) => {
 
-                const amount = nutritionFacts[currentNutrientType];
-                const inputValue = nutritionFactInputs[currentNutrientType];
-                const nutritionFactDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
+                const amount: Option<number> = nutritionFacts[currentNutrientType];
+                const inputValue: Option<string> = nutritionFactInputs[currentNutrientType];
+                const nutritionFactDescription: Option<NutritionFactDescription> = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
 
                 return [
                     ...previousNutritionFacts,
@@ -84,13 +93,10 @@ export default class Utils {
         return (value / Utils.CENTUM);
     }
 
-    public static getDailyValuePercent(currentValue?: number, dailyValue?: number): number | null {
-
-        const isDailyValueExist = typeof dailyValue === "number";
-        const isCurrentValueExist = typeof currentValue === "number";
+    public static getDailyValuePercent(currentValue: Option<number>, dailyValue: Option<number>): Option<number> {
 
         return (
-            ( isDailyValueExist && isCurrentValueExist )
+            ( Utils.isSome(currentValue) && Utils.isSome(dailyValue) )
                 ? Utils.roundToDecimal(( currentValue / dailyValue ) * Utils.CENTUM, DecimalPlaces.One)
                 : null
         );
@@ -104,21 +110,20 @@ export default class Utils {
         ingredients: Dictionary<NutritionFactType, number>[],
     ): Dictionary<NutritionFactType, number> {
 
-        return NUTRIENTS.reduce((acc, nutrientType) => {
+        return NUTRIENTS.reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
 
             const nutritionFactValue = ingredients.reduce(
-                (sum: number | null, ingredient) => (
-                    typeof ingredient[nutrientType] === "number"
-                        ? sum + ingredient[nutrientType]
-                        : null
-                ),
+                (sum: Option<number>, ingredient) => {
+                    const value = ingredient[nutrientType];
+                    return Utils.isSome(value) ? Utils.unwrap(sum, Utils.ZERO) + value : null;
+                },
                 null
             );
 
             return {
                 ...acc,
                 [nutrientType]: (
-                    typeof nutritionFactValue === "number"
+                    Utils.isSome(nutritionFactValue)
                         ? Utils.roundToDecimal(nutritionFactValue, DecimalPlaces.Two)
                         : null
                 ),
@@ -137,7 +142,7 @@ export default class Utils {
         const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
             .reduce((acc, cur) => ({
                 ...acc,
-                [cur]: Utils.roundToDecimal(nutritionFacts[cur] * multiplier, DecimalPlaces.Two),
+                [cur]: Utils.roundToDecimal(Utils.unwrap(nutritionFacts[cur], Utils.ZERO) * multiplier, DecimalPlaces.Two),
             }), {});
 
         return updatedNutritionFacts;
@@ -175,7 +180,7 @@ export default class Utils {
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
 
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-            (acc, nfType) => ({ ...acc, [nfType]: typeof values[nfType] === "number" ? String(values[nfType]) : null }), {}
+            (acc, nfType) => ({ ...acc, [nfType]: Utils.isSome(values[nfType]) ? String(values[nfType]) : null }), {}
         );
     }
     

@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import configureStore from "./store";
-import Root from "./components/Root";
+
+import Root from "@client/components/Root";
+import configureStore from "@client/store";
 
 
 const store = configureStore();

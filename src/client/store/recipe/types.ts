@@ -1,13 +1,14 @@
-import { NutritionFactType } from "../../../common/nutritionFacts";
+import { NutritionFactType } from "@common/nutritionFacts";
 import {
     Dictionary,
     Direction,
     Ingredient,
     IngredientItem,
+    Option,
     Recipe,
     SubDirection,
     SubDirectionIngredient,
-} from "../../../common/typings";
+} from "@common/typings";
 import {
     CustomUnit,
     CustomUnitInput,
@@ -15,7 +16,7 @@ import {
     TimeUnit,
     VolumeUnit,
     WeightUnit,
-} from "../../../common/units";
+} from "@common/units";
 
 
 
@@ -56,7 +57,7 @@ export interface RecipeDirection extends Direction {
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    errorMessage: string;
+    errorMessage: Option<string>;
     isReadOnly: boolean;
 
     id: string;

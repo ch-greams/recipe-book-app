@@ -1,6 +1,7 @@
-import { SubDirectionType } from "../../../../client/store/recipe/types";
-import { Dictionary } from "../../../../common/typings";
-import { Units, TemperatureUnit, TimeUnit } from "../../../../common/units";
+import type { Dictionary } from "@common/typings";
+import { TemperatureUnit, TimeUnit,Units } from "@common/units";
+import { SubDirectionType } from "@client/store/recipe/types";
+
 import { SchemaValidator, Validator } from "./types";
 
 

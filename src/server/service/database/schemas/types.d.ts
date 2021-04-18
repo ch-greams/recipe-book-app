@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Dictionary } from "../../../../common/typings";
+import type { Dictionary } from "@common/typings";
 
 
 type integer = number;
