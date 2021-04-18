@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 
-import { Food, Recipe } from "@common/typings";
+import { Food, Option, Recipe } from "@common/typings";
 import Database from "@server/service/database";
 import QuerySchema from "@server/service/graphql/schemas/query";
 
@@ -17,7 +17,7 @@ export default class GraphQL {
         const foodsResolver = async (args: { limit: number }): Promise<Food[]> => {
             return await database.getFoodRecords(args.limit);
         };
-        const foodResolver = async (args: { id: string }): Promise<Food> => {
+        const foodResolver = async (args: { id: string }): Promise<Option<Food>> => {
             return await database.getFoodRecord(args.id);
         };
 
@@ -25,7 +25,7 @@ export default class GraphQL {
             return await database.getRecipeRecords(args.limit);
         };
 
-        const recipeResolver = async (args: { id: string }): Promise<Recipe> => {
+        const recipeResolver = async (args: { id: string }): Promise<Option<Recipe>> => {
             return await database.getRecipeRecord(args.id);
         };
 

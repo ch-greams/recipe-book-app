@@ -162,18 +162,23 @@ function getRecipeNutritionFacts(
     const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
         .map((ingredient) => {
             
-            const nf = references[ingredient.id].nutritionFacts;
+            const nutritionFacts = references[ingredient.id].nutritionFacts;
             const multiplier = Utils.getPercentMultiplier(ingredient.amount);
 
-            return Utils.getObjectKeys(nf)
-                .reduce((acc, nfType) => ({
-                    ...acc,
-                    [nfType]: (
-                        typeof nf[nfType] === "number"
-                            ? Utils.roundToDecimal(nf[nfType] * multiplier, DecimalPlaces.Two)
-                            : null
-                    ),
-                }), {});
+            return Utils.getObjectKeys(nutritionFacts)
+                .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
+
+                    const nutritionFactValue = nutritionFacts[nutritionFactType];
+
+                    return {
+                        ...acc,
+                        [nutritionFactType]: (
+                            Utils.isSome(nutritionFactValue)
+                                ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
+                                : null
+                        ),
+                    };
+                }, {});
         });
 
     return Utils.dictionarySum(nutritionFactsById);

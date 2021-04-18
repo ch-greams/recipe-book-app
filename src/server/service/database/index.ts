@@ -1,7 +1,7 @@
 import { Db, MongoClient, MongoError } from "mongodb";
 
 import Logger, { LogLevel } from "@common/server/logger";
-import { Food, Recipe } from "@common/typings";
+import { Food, Option, Recipe } from "@common/typings";
 
 import foodSchema from "./schemas/food";
 import recipeSchema from "./schemas/recipe";
@@ -73,7 +73,7 @@ export default class Database {
         }
     }
 
-    public async getFoodRecord(id: string): Promise<Food> {
+    public async getFoodRecord(id: string): Promise<Option<Food>> {
 
         try {
             const collection = this.db.collection("food");
@@ -112,7 +112,7 @@ export default class Database {
         }
     }
 
-    public async getRecipeRecord(id: string): Promise<Recipe> {
+    public async getRecipeRecord(id: string): Promise<Option<Recipe>> {
 
         try {
             const collection = this.db.collection("recipe");

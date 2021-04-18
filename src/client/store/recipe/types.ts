@@ -4,6 +4,7 @@ import {
     Direction,
     Ingredient,
     IngredientItem,
+    Option,
     Recipe,
     SubDirection,
     SubDirectionIngredient,
@@ -56,7 +57,7 @@ export interface RecipeDirection extends Direction {
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    errorMessage: string;
+    errorMessage: Option<string>;
     isReadOnly: boolean;
 
     id: string;

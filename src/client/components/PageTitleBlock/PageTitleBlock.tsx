@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { AnyAction } from "redux";
 
+import type { Option } from "@common/typings";
 import Utils from "@common/utils";
 
 import styles from "./PageTitleBlock.scss";
@@ -16,7 +17,7 @@ interface Props {
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
-    updateDescription?: (value: string) => AnyAction;
+    updateDescription?: Option<(value: string) => AnyAction>;
 }
 interface State {
     isTitleInputsOpen: boolean;
@@ -69,7 +70,9 @@ export default class PageTitleBlock extends Component<Props, State> {
 
         Utils.keepCaretInPlace(window, event);
 
-        this.props.updateDescription(event.target.value || "");
+        if (Utils.isSome(this.props.updateDescription)) {
+            this.props.updateDescription(event.target.value || "");
+        }
     };
 
     private getTitleBlockStatic = (name: string, brand: string, subtitle: string, description?: string): JSX.Element => {

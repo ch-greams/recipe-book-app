@@ -441,7 +441,6 @@ const OTHER: Dictionary<NutritionFactType, NutritionFactDescription> = {
 };
 
 export default {
-
     ...ENERGY,
     ...CARBOHYDRATES,
     ...LIPIDS,

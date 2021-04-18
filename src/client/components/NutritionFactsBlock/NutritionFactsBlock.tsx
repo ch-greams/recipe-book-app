@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { NutritionFactType, nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
-import { InputChangeCallback } from "@common/typings";
+import { InputChangeCallback, Option } from "@common/typings";
 import { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
 import { updateNutritionFact } from "@client/store/food/actions";
@@ -50,27 +50,27 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
         };
     };
 
+    private dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
+        return (
+            Utils.isSome(dailyValue)
+                ? (
+                    <>
+                        <div className={styles.nutritionFactDailyValue}>
+                            {( dailyValue > Utils.MAX_DAILY_VALUE ? `${Utils.MAX_DAILY_VALUE}+` : dailyValue )}
+                        </div>
+    
+                        <div className={styles.nutritionFactPercent}>
+                            {"%"}
+                        </div>
+                    </>
+                )
+                : null
+        );
+    };
+
     private getNutritionFactLine = (nutritionFact: NutritionFact): JSX.Element => {
 
         const { isReadOnly } = this.props;
-
-        const isDailyValueNotEmpty = ( typeof nutritionFact.dailyValue === "number" );
-
-        const dailyValueBlock = (
-            <div className={styles.nutritionFactDailyValue}>
-                {(
-                    nutritionFact.dailyValue > Utils.MAX_DAILY_VALUE
-                        ? `${Utils.MAX_DAILY_VALUE}+`
-                        : nutritionFact.dailyValue
-                )}
-            </div>
-        );
-
-        const dailyValuePercentBlock = (
-            <div className={styles.nutritionFactPercent}>
-                {"%"}
-            </div>
-        );
 
         const nutritionFactAmountInput = (
             <input
@@ -104,9 +104,7 @@ class NutritionFactsBlock extends React.Component<NutritionFactsBlockProps> {
                     {nutritionFact.unit}
                 </div>
 
-                {( isDailyValueNotEmpty && dailyValueBlock )}
-
-                {( isDailyValueNotEmpty && dailyValuePercentBlock )}
+                { this.dailyValueBlock(nutritionFact.dailyValue) }
 
             </div>
         );

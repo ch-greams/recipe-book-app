@@ -334,7 +334,7 @@ export default class DirectionsBlock extends Component<Props> {
 
                     <div
                         className={styles.directionInfoLineTitle}
-                        style={( subDirection.isMarked ? { opacity: 0.25 } : null )}
+                        style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}
                     >
 
                         <div className={styles.directionInfoLineName}>
@@ -494,13 +494,13 @@ export default class DirectionsBlock extends Component<Props> {
             <div
                 key={`directionInfo_${index}`}
                 className={styles.directionInfoLine}
-                style={( isReadOnly ? null : { paddingLeft: "12px" } )}
+                style={( isReadOnly ? undefined : { paddingLeft: "12px" } )}
             >
 
                 <div
                     className={styles.directionInfoLineTitle}
-                    style={( direction.isMarked ? { opacity: 0.25 } : null )}
-                    onClick={( isReadOnly ? () => this.toggleDirectionOpen(index) : null )}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                    onClick={( isReadOnly ? () => this.toggleDirectionOpen(index) : undefined )}
                 >
                     {( isReadOnly ? indexText : indexInput )}
 
@@ -598,7 +598,7 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(TemperatureUnit)}
-                    value={direction.temperature.unit}
+                    value={direction.temperature?.unit}
                     onChange={this.handleNewDirectionTemperatureUnitEdit}
                 />
             </div>
@@ -622,7 +622,7 @@ export default class DirectionsBlock extends Component<Props> {
                 <SelectInput
                     type={SelectInputType.IngredientUnit}
                     options={Object.keys(TimeUnit)}
-                    value={direction.temperature.unit}
+                    value={direction.temperature?.unit}
                     onChange={this.handleNewDirectionTimeUnitEdit}
                 />
             </div>
