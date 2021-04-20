@@ -12,7 +12,7 @@ import Loader from "@client/components/Loader/Loader";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
-import SelectInput from "@client/components/SelectInput/SelectInput";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
 import {
@@ -162,6 +162,7 @@ class RecipePage extends Component<RecipePageProps> {
                     />
 
                     <SelectInput
+                        type={SelectInputType.Other}
                         options={Object.values(Units)}
                         value={recipeItem.servingSizeUnit}
                         onChange={this.handleServingSizeUnitEdit}

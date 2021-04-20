@@ -8,7 +8,7 @@ import Loader from "@client/components/Loader/Loader";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
-import SelectInput from "@client/components/SelectInput/SelectInput";
+import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
 import {
@@ -103,6 +103,7 @@ class FoodPage extends Component<Props> {
                     />
 
                     <SelectInput
+                        type={SelectInputType.Other}
                         options={Object.keys(WeightUnit)}
                         onChange={console.log}
                         value={foodItem.densityWeight}
@@ -111,6 +112,7 @@ class FoodPage extends Component<Props> {
                     {"/"}
 
                     <SelectInput
+                        type={SelectInputType.Other}
                         options={Object.keys(VolumeUnit)}
                         onChange={console.log}
                         value={foodItem.densityVolume}
@@ -132,6 +134,7 @@ class FoodPage extends Component<Props> {
                     />
 
                     <SelectInput
+                        type={SelectInputType.Other}
                         options={[ ...Object.values(Units), ...foodItem.customUnits.map((cu) => cu.name) ]}
                         onChange={this.handleServingSizeUnitEdit}
                     />
