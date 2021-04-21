@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 import { SelectChangeCallback } from "@common/typings";
 import Utils from "@common/utils";
@@ -55,9 +55,7 @@ const getClassName = (type: SelectInputType): string => {
     }
 };
 
-const SelectInput: FunctionComponent<Props> = (props: React.PropsWithChildren<Props>) => {
-
-    const { type, options, value, onChange } = props;
+const SelectInput: React.FC<Props> = ({ type, options, value, onChange }) => {
 
     return (
         <select

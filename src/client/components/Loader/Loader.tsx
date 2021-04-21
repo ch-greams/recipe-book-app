@@ -1,9 +1,9 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 
 import styles from "./Loader.scss";
 
 
-const Loader: FunctionComponent = () => {
+const Loader: React.FC = () => {
     return (
         <div className={styles.loaderBlock}>
             {"LOADING"}
