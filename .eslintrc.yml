@@ -74,6 +74,8 @@ rules:
     react/display-name:
         - 1
         - ignoreTranspilerName: true
+    # Next rule is disabled since typescript will validate types by default
+    react/prop-types: 0
 
     "@typescript-eslint/explicit-member-accessibility": 2
     "@typescript-eslint/explicit-function-return-type":
