@@ -9,15 +9,7 @@ import BulbIcon from "@client/icons/bulb-sharp.svg";
 import RemoveIcon from "@client/icons/close-sharp.svg";
 import IconWrapper from "@client/icons/IconWrapper";
 import WarningIcon from "@client/icons/warning-sharp.svg";
-import {
-createDirection,
-    createSubDirection, createSubDirectionIngredient, removeDirection, removeSubDirection, toggleDirectionMark,
-    toggleDirectionOpen, toggleSubDirectionMark, updateDirectionName,
-    updateDirectionStepNumber, updateDirectionTemperatureCount, updateDirectionTemperatureUnit,
-    updateDirectionTimeCount, updateDirectionTimeUnit, updateNewDirectionName,     updateNewDirectionStepNumber, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit, updateNewSubDirectionType,
-    updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit, updateSubDirectionNote,
-} from "@client/store/recipe/actions";
+import * as actions from "@client/store/recipe/actions";
 import {
     RecipeDirection,
     RecipeIngredientDefault,
@@ -36,30 +28,30 @@ interface Props {
     ingredients: RecipeIngredientDefault[];
     references: Dictionary<string, IngredientItem>;
 
-    removeDirection: typeof removeDirection;
-    removeSubDirection: typeof removeSubDirection;
-    toggleDirectionOpen: typeof toggleDirectionOpen;
-    toggleDirectionMark: typeof toggleDirectionMark;
-    toggleSubDirectionMark: typeof toggleSubDirectionMark;
-    updateSubDirectionNote: typeof updateSubDirectionNote;
-    updateSubDirectionIngredientAmount: typeof updateSubDirectionIngredientAmount;
-    updateSubDirectionIngredientUnit: typeof updateSubDirectionIngredientUnit;
-    createSubDirectionIngredient: typeof createSubDirectionIngredient;
-    createSubDirection: typeof createSubDirection;
-    updateNewSubDirectionType: typeof updateNewSubDirectionType;
-    updateDirectionStepNumber: typeof updateDirectionStepNumber;
-    updateDirectionName: typeof updateDirectionName;
-    updateDirectionTemperatureCount: typeof updateDirectionTemperatureCount;
-    updateDirectionTemperatureUnit: typeof updateDirectionTemperatureUnit;
-    updateDirectionTimeCount: typeof updateDirectionTimeCount;
-    updateDirectionTimeUnit: typeof updateDirectionTimeUnit;
-    updateNewDirectionStepNumber: typeof updateNewDirectionStepNumber;
-    updateNewDirectionName: typeof updateNewDirectionName;
-    updateNewDirectionTemperatureCount: typeof updateNewDirectionTemperatureCount;
-    updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
-    updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
-    updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
-    createDirection: typeof createDirection;
+    removeDirection: typeof actions.removeDirection;
+    removeSubDirection: typeof actions.removeSubDirection;
+    toggleDirectionOpen: typeof actions.toggleDirectionOpen;
+    toggleDirectionMark: typeof actions.toggleDirectionMark;
+    toggleSubDirectionMark: typeof actions.toggleSubDirectionMark;
+    updateSubDirectionNote: typeof actions.updateSubDirectionNote;
+    updateSubDirectionIngredientAmount: typeof actions.updateSubDirectionIngredientAmount;
+    updateSubDirectionIngredientUnit: typeof actions.updateSubDirectionIngredientUnit;
+    createSubDirectionIngredient: typeof actions.createSubDirectionIngredient;
+    createSubDirection: typeof actions.createSubDirection;
+    updateNewSubDirectionType: typeof actions.updateNewSubDirectionType;
+    updateDirectionStepNumber: typeof actions.updateDirectionStepNumber;
+    updateDirectionName: typeof actions.updateDirectionName;
+    updateDirectionTemperatureCount: typeof actions.updateDirectionTemperatureCount;
+    updateDirectionTemperatureUnit: typeof actions.updateDirectionTemperatureUnit;
+    updateDirectionTimeCount: typeof actions.updateDirectionTimeCount;
+    updateDirectionTimeUnit: typeof actions.updateDirectionTimeUnit;
+    updateNewDirectionStepNumber: typeof actions.updateNewDirectionStepNumber;
+    updateNewDirectionName: typeof actions.updateNewDirectionName;
+    updateNewDirectionTemperatureCount: typeof actions.updateNewDirectionTemperatureCount;
+    updateNewDirectionTemperatureUnit: typeof actions.updateNewDirectionTemperatureUnit;
+    updateNewDirectionTimeCount: typeof actions.updateNewDirectionTimeCount;
+    updateNewDirectionTimeUnit: typeof actions.updateNewDirectionTimeUnit;
+    createDirection: typeof actions.createDirection;
 }
 
 

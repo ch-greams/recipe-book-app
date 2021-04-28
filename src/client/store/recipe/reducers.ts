@@ -10,7 +10,7 @@ import {
     RECIPE_ITEM_CREATE_SUBDIRECTION,
     RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
     RECIPE_ITEM_FETCH_ERROR,
-    RECIPE_ITEM_FETCH_REQUESTED,
+    RECIPE_ITEM_FETCH_REQUEST,
     RECIPE_ITEM_FETCH_SUCCESS,
     RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
     RECIPE_ITEM_REMOVE_DIRECTION,
@@ -1034,7 +1034,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_FETCH_REQUESTED: {
+        case RECIPE_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,

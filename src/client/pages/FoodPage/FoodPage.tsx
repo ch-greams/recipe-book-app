@@ -11,9 +11,7 @@ import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
-import {
-    requestFoodItem, updateBrand, updateCustomUnits, updateName, updateServingSize,
-updateSubtitle } from "@client/store/food/actions";
+import * as actions from "@client/store/food/actions";
 import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
 
 import styles from "./FoodPage.scss";
@@ -25,12 +23,12 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    updateName: typeof updateName;
-    updateBrand: typeof updateBrand;
-    updateSubtitle: typeof updateSubtitle;
-    requestFoodItem: typeof requestFoodItem;
-    updateCustomUnits: typeof updateCustomUnits;
-    updateServingSize: typeof updateServingSize;
+    updateName: typeof actions.updateName;
+    updateBrand: typeof actions.updateBrand;
+    updateSubtitle: typeof actions.updateSubtitle;
+    requestFoodItem: typeof actions.fetchFoodItemRequest;
+    updateCustomUnits: typeof actions.updateCustomUnits;
+    updateServingSize: typeof actions.updateServingSize;
 }
 
 interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
@@ -232,12 +230,12 @@ const mapStateToProps = (state: AppState): StateToProps => ({
 });
 
 const mapDispatchToProps: DispatchToProps = {
-    updateName,
-    updateBrand,
-    updateSubtitle,
-    requestFoodItem,
-    updateCustomUnits,
-    updateServingSize,
+    updateName: actions.updateName,
+    updateBrand: actions.updateBrand,
+    updateSubtitle: actions.updateSubtitle,
+    requestFoodItem: actions.fetchFoodItemRequest,
+    updateCustomUnits: actions.updateCustomUnits,
+    updateServingSize: actions.updateServingSize,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FoodPage);

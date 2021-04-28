@@ -15,20 +15,7 @@ import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
 import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
-import {
-addAltIngredient, addIngredient,
-    createDirection, createSubDirection,     createSubDirectionIngredient, removeAltIngredient, removeDirection,
-removeIngredient,     removeSubDirection, replaceIngredientWithAlternative,
-requestRecipeItem,
-toggleDirectionMark, toggleDirectionOpen, toggleIngredientMark,     toggleIngredientOpen, toggleSubDirectionMark,
-updateAltIngredientAmount, updateAltIngredientUnit,
-updateAltNutritionFacts, updateBrand, updateCustomUnits, updateDescription, updateDirectionName,     updateDirectionStepNumber, updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit, updateDirectionTimeCount, updateDirectionTimeUnit,
-    updateIngredientAmount, updateIngredientUnit,     updateName, updateNewDirectionName,     updateNewDirectionStepNumber, updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit, updateNewDirectionTimeCount, updateNewDirectionTimeUnit,
-updateNewSubDirectionType,
-    updateServingSizeAmount, updateServingSizeUnit, updateSubDirectionIngredientAmount, updateSubDirectionIngredientUnit,
-    updateSubDirectionNote, updateSubtitle, updateType } from "@client/store/recipe/actions";
+import * as actions from "@client/store/recipe/actions";
 import { RecipePageStore, UpdateCustomUnitsAction } from "@client/store/recipe/types";
 import { requestIngredients } from "@client/store/search/actions";
 import { SearchPageStore } from "@client/store/search/types";
@@ -43,54 +30,54 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    updateName: typeof updateName;
-    updateBrand: typeof updateBrand;
-    updateSubtitle: typeof updateSubtitle;
-    updateDescription: typeof updateDescription;
-    updateType: typeof updateType;
-    updateServingSizeAmount: typeof updateServingSizeAmount;
-    updateServingSizeUnit: typeof updateServingSizeUnit;
-    updateCustomUnits: typeof updateCustomUnits;
+    updateName: typeof actions.updateName;
+    updateBrand: typeof actions.updateBrand;
+    updateSubtitle: typeof actions.updateSubtitle;
+    updateDescription: typeof actions.updateDescription;
+    updateType: typeof actions.updateType;
+    updateServingSizeAmount: typeof actions.updateServingSizeAmount;
+    updateServingSizeUnit: typeof actions.updateServingSizeUnit;
+    updateCustomUnits: typeof actions.updateCustomUnits;
 
     requestIngredients: typeof requestIngredients;
-    removeDirection: typeof removeDirection;
-    removeSubDirection: typeof removeSubDirection;
-    toggleDirectionOpen: typeof toggleDirectionOpen;
-    toggleDirectionMark: typeof toggleDirectionMark;
-    toggleSubDirectionMark: typeof toggleSubDirectionMark;
-    updateSubDirectionNote: typeof updateSubDirectionNote;
-    updateSubDirectionIngredientAmount: typeof updateSubDirectionIngredientAmount;
-    updateSubDirectionIngredientUnit: typeof updateSubDirectionIngredientUnit;
-    createSubDirectionIngredient: typeof createSubDirectionIngredient;
-    createSubDirection: typeof createSubDirection;
-    updateNewSubDirectionType: typeof updateNewSubDirectionType;
-    updateDirectionStepNumber: typeof updateDirectionStepNumber;
-    updateDirectionName: typeof updateDirectionName;
-    updateDirectionTemperatureCount: typeof updateDirectionTemperatureCount;
-    updateDirectionTemperatureUnit: typeof updateDirectionTemperatureUnit;
-    updateDirectionTimeCount: typeof updateDirectionTimeCount;
-    updateDirectionTimeUnit: typeof updateDirectionTimeUnit;
-    updateNewDirectionStepNumber: typeof updateNewDirectionStepNumber;
-    updateNewDirectionName: typeof updateNewDirectionName;
-    updateNewDirectionTemperatureCount: typeof updateNewDirectionTemperatureCount;
-    updateNewDirectionTemperatureUnit: typeof updateNewDirectionTemperatureUnit;
-    updateNewDirectionTimeCount: typeof updateNewDirectionTimeCount;
-    updateNewDirectionTimeUnit: typeof updateNewDirectionTimeUnit;
-    createDirection: typeof createDirection;
+    removeDirection: typeof actions.removeDirection;
+    removeSubDirection: typeof actions.removeSubDirection;
+    toggleDirectionOpen: typeof actions.toggleDirectionOpen;
+    toggleDirectionMark: typeof actions.toggleDirectionMark;
+    toggleSubDirectionMark: typeof actions.toggleSubDirectionMark;
+    updateSubDirectionNote: typeof actions.updateSubDirectionNote;
+    updateSubDirectionIngredientAmount: typeof actions.updateSubDirectionIngredientAmount;
+    updateSubDirectionIngredientUnit: typeof actions.updateSubDirectionIngredientUnit;
+    createSubDirectionIngredient: typeof actions.createSubDirectionIngredient;
+    createSubDirection: typeof actions.createSubDirection;
+    updateNewSubDirectionType: typeof actions.updateNewSubDirectionType;
+    updateDirectionStepNumber: typeof actions.updateDirectionStepNumber;
+    updateDirectionName: typeof actions.updateDirectionName;
+    updateDirectionTemperatureCount: typeof actions.updateDirectionTemperatureCount;
+    updateDirectionTemperatureUnit: typeof actions.updateDirectionTemperatureUnit;
+    updateDirectionTimeCount: typeof actions.updateDirectionTimeCount;
+    updateDirectionTimeUnit: typeof actions.updateDirectionTimeUnit;
+    updateNewDirectionStepNumber: typeof actions.updateNewDirectionStepNumber;
+    updateNewDirectionName: typeof actions.updateNewDirectionName;
+    updateNewDirectionTemperatureCount: typeof actions.updateNewDirectionTemperatureCount;
+    updateNewDirectionTemperatureUnit: typeof actions.updateNewDirectionTemperatureUnit;
+    updateNewDirectionTimeCount: typeof actions.updateNewDirectionTimeCount;
+    updateNewDirectionTimeUnit: typeof actions.updateNewDirectionTimeUnit;
+    createDirection: typeof actions.createDirection;
 
-    removeIngredient: typeof removeIngredient;
-    removeAltIngredient: typeof removeAltIngredient;
-    replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
-    toggleIngredientOpen: typeof toggleIngredientOpen;
-    toggleIngredientMark: typeof toggleIngredientMark;
-    updateIngredientAmount: typeof updateIngredientAmount;
-    updateIngredientUnit: typeof updateIngredientUnit;
-    updateAltIngredientAmount: typeof updateAltIngredientAmount;
-    updateAltIngredientUnit: typeof updateAltIngredientUnit;
-    updateAltNutritionFacts: typeof updateAltNutritionFacts;
-    addIngredient: typeof addIngredient;
-    addAltIngredient: typeof addAltIngredient;
-    requestRecipeItem: typeof requestRecipeItem;
+    removeIngredient: typeof actions.removeIngredient;
+    removeAltIngredient: typeof actions.removeAltIngredient;
+    replaceIngredientWithAlternative: typeof actions.replaceIngredientWithAlternative;
+    toggleIngredientOpen: typeof actions.toggleIngredientOpen;
+    toggleIngredientMark: typeof actions.toggleIngredientMark;
+    updateIngredientAmount: typeof actions.updateIngredientAmount;
+    updateIngredientUnit: typeof actions.updateIngredientUnit;
+    updateAltIngredientAmount: typeof actions.updateAltIngredientAmount;
+    updateAltIngredientUnit: typeof actions.updateAltIngredientUnit;
+    updateAltNutritionFacts: typeof actions.updateAltNutritionFacts;
+    addIngredient: typeof actions.addIngredient;
+    addAltIngredient: typeof actions.addAltIngredient;
+    requestRecipeItem: typeof actions.requestRecipeItem;
 }
 
 interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
@@ -391,55 +378,55 @@ const mapStateToProps = (state: AppState): StateToProps => ({
 });
 
 const mapDispatchToProps: DispatchToProps = {
-    updateName,
-    updateBrand,
-    updateSubtitle,
-    updateDescription,
-    updateType,
-    updateCustomUnits,
-    updateServingSizeAmount,
-    updateServingSizeUnit,
+    updateName: actions.updateName,
+    updateBrand: actions.updateBrand,
+    updateSubtitle: actions.updateSubtitle,
+    updateDescription: actions.updateDescription,
+    updateType: actions.updateType,
+    updateCustomUnits: actions.updateCustomUnits,
+    updateServingSizeAmount: actions.updateServingSizeAmount,
+    updateServingSizeUnit: actions.updateServingSizeUnit,
 
     requestIngredients,
-    removeDirection,
-    removeSubDirection,
-    toggleDirectionOpen,
-    toggleDirectionMark,
-    toggleSubDirectionMark,
-    updateSubDirectionNote,
-    updateSubDirectionIngredientAmount,
-    updateSubDirectionIngredientUnit,
-    createSubDirectionIngredient,
-    createSubDirection,
-    updateNewSubDirectionType,
-    updateDirectionStepNumber,
-    updateDirectionName,
-    updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit,
-    updateDirectionTimeCount,
-    updateDirectionTimeUnit,
-    updateNewDirectionStepNumber,
-    updateNewDirectionName,
-    updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit,
-    updateNewDirectionTimeCount,
-    updateNewDirectionTimeUnit,
-    createDirection,
+    removeDirection: actions.removeDirection,
+    removeSubDirection: actions.removeSubDirection,
+    toggleDirectionOpen: actions.toggleDirectionOpen,
+    toggleDirectionMark: actions.toggleDirectionMark,
+    toggleSubDirectionMark: actions.toggleSubDirectionMark,
+    updateSubDirectionNote: actions.updateSubDirectionNote,
+    updateSubDirectionIngredientAmount: actions.updateSubDirectionIngredientAmount,
+    updateSubDirectionIngredientUnit: actions.updateSubDirectionIngredientUnit,
+    createSubDirectionIngredient: actions.createSubDirectionIngredient,
+    createSubDirection: actions.createSubDirection,
+    updateNewSubDirectionType: actions.updateNewSubDirectionType,
+    updateDirectionStepNumber: actions.updateDirectionStepNumber,
+    updateDirectionName: actions.updateDirectionName,
+    updateDirectionTemperatureCount: actions.updateDirectionTemperatureCount,
+    updateDirectionTemperatureUnit: actions.updateDirectionTemperatureUnit,
+    updateDirectionTimeCount: actions.updateDirectionTimeCount,
+    updateDirectionTimeUnit: actions.updateDirectionTimeUnit,
+    updateNewDirectionStepNumber: actions.updateNewDirectionStepNumber,
+    updateNewDirectionName: actions.updateNewDirectionName,
+    updateNewDirectionTemperatureCount: actions.updateNewDirectionTemperatureCount,
+    updateNewDirectionTemperatureUnit: actions.updateNewDirectionTemperatureUnit,
+    updateNewDirectionTimeCount: actions.updateNewDirectionTimeCount,
+    updateNewDirectionTimeUnit: actions.updateNewDirectionTimeUnit,
+    createDirection: actions.createDirection,
 
-    removeIngredient,
-    removeAltIngredient,
-    replaceIngredientWithAlternative,
-    toggleIngredientOpen,
-    toggleIngredientMark,
-    updateIngredientAmount,
-    updateIngredientUnit,
-    updateAltIngredientAmount,
-    updateAltIngredientUnit,
-    updateAltNutritionFacts,
-    addIngredient,
-    addAltIngredient,
+    removeIngredient: actions.removeIngredient,
+    removeAltIngredient: actions.removeAltIngredient,
+    replaceIngredientWithAlternative: actions.replaceIngredientWithAlternative,
+    toggleIngredientOpen: actions.toggleIngredientOpen,
+    toggleIngredientMark: actions.toggleIngredientMark,
+    updateIngredientAmount: actions.updateIngredientAmount,
+    updateIngredientUnit: actions.updateIngredientUnit,
+    updateAltIngredientAmount: actions.updateAltIngredientAmount,
+    updateAltIngredientUnit: actions.updateAltIngredientUnit,
+    updateAltNutritionFacts: actions.updateAltNutritionFacts,
+    addIngredient: actions.addIngredient,
+    addAltIngredient: actions.addAltIngredient,
 
-    requestRecipeItem,
+    requestRecipeItem: actions.requestRecipeItem,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);

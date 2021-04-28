@@ -5,7 +5,7 @@ import Utils from "@common/utils";
 
 import {
     FOOD_ITEM_FETCH_ERROR,
-    FOOD_ITEM_FETCH_REQUESTED,
+    FOOD_ITEM_FETCH_REQUEST,
     FOOD_ITEM_FETCH_SUCCESS,
     FOOD_ITEM_UPDATE_BRAND,
     FOOD_ITEM_UPDATE_CUSTOM_UNITS,
@@ -91,7 +91,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_FETCH_REQUESTED: {
+        case FOOD_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,

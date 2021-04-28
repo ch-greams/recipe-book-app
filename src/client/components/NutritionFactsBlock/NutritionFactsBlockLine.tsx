@@ -1,6 +1,5 @@
 
 import React, { Dispatch } from "react";
-import { FunctionComponent } from "react";
 import { useDispatch } from "react-redux";
 
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
@@ -48,7 +47,7 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
 };
 
 
-const NutritionFactsBlockLine: FunctionComponent<NutritionFactsBlockLineProps> = ({
+const NutritionFactsBlockLine: React.FC<NutritionFactsBlockLineProps> = ({
     nutritionFact, isReadOnly,
 }) => {
 

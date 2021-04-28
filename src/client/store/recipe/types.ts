@@ -363,12 +363,12 @@ export interface AddAltIngredientAction {
     payload: { id: string, altIngredient: IngredientItem };
 }
 
-export const RECIPE_ITEM_FETCH_REQUESTED = "RECIPE_ITEM_FETCH_REQUESTED";
+export const RECIPE_ITEM_FETCH_REQUEST = "RECIPE_ITEM_FETCH_REQUEST";
 export const RECIPE_ITEM_FETCH_SUCCESS = "RECIPE_ITEM_FETCH_SUCCESS";
 export const RECIPE_ITEM_FETCH_ERROR = "RECIPE_ITEM_FETCH_ERROR";
 
 export interface RecipeItemFetchRequestedAction {
-    type: typeof RECIPE_ITEM_FETCH_REQUESTED;
+    type: typeof RECIPE_ITEM_FETCH_REQUEST;
     payload: string;
 }
 

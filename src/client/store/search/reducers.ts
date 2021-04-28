@@ -1,6 +1,6 @@
 import {
     INGREDIENTS_FETCH_ERROR,
-    INGREDIENTS_FETCH_REQUESTED,
+    INGREDIENTS_FETCH_REQUEST,
     INGREDIENTS_FETCH_SUCCESS,
     SearchPageActionTypes,
     SearchPageStore,
@@ -20,7 +20,7 @@ export default function searchPageReducer(state = initialState, action: SearchPa
 
     switch (action.type) {
 
-        case INGREDIENTS_FETCH_REQUESTED: {
+        case INGREDIENTS_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,

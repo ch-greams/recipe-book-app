@@ -49,8 +49,12 @@ export default class Utils {
         return DEFAULT_VALUE;
     }
 
+    public static isEmptyString(value: string): boolean {
+        return value.trim().length === Utils.ZERO;
+    }
+
     public static unwrap<T>(value: Option<T>, defaultValue: T): T {
-        return (value === null) || (value === undefined) ? defaultValue : value;
+        return this.isSome(value) ? value : defaultValue;
     }
 
     public static isSome<T>(value: Option<T>): value is T {

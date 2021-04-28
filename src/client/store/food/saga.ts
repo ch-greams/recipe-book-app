@@ -6,7 +6,7 @@ import FoodApi from "@api/client/foodApi";
 
 import {
     FOOD_ITEM_FETCH_ERROR,
-    FOOD_ITEM_FETCH_REQUESTED,
+    FOOD_ITEM_FETCH_REQUEST,
     FOOD_ITEM_FETCH_SUCCESS,
     FoodItemFetchRequestedAction,
 } from "./types";
@@ -30,7 +30,7 @@ function* fetchFoodItem(action: FoodItemFetchRequestedAction): Generator<StrictE
 }
 
 function* watchFetchFoodItem(): SagaIterator {
-    yield takeLatest(FOOD_ITEM_FETCH_REQUESTED, fetchFoodItem);
+    yield takeLatest(FOOD_ITEM_FETCH_REQUEST, fetchFoodItem);
 }
 
 

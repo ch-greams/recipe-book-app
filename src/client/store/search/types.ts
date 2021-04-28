@@ -9,14 +9,14 @@ export interface SearchPageStore {
 }
 
 
-export const INGREDIENTS_FETCH_REQUESTED = "INGREDIENTS_FETCH_REQUESTED";
+export const INGREDIENTS_FETCH_REQUEST = "INGREDIENTS_FETCH_REQUEST";
 export const INGREDIENTS_FETCH_SUCCESS = "INGREDIENTS_FETCH_SUCCESS";
 export const INGREDIENTS_FETCH_ERROR = "INGREDIENTS_FETCH_ERROR";
 
 
 
 export interface IngredientsFetchRequestedAction {
-    type: typeof INGREDIENTS_FETCH_REQUESTED;
+    type: typeof INGREDIENTS_FETCH_REQUEST;
 }
 
 interface IngredientsFetchSuccessAction {

@@ -40,10 +40,13 @@ export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
+export const FOOD_ITEM_ADD_CUSTOM_UNIT = "FOOD_ITEM_ADD_CUSTOM_UNIT";
+export const FOOD_ITEM_REMOVE_CUSTOM_UNIT = "FOOD_ITEM_REMOVE_CUSTOM_UNIT";
+export const FOOD_ITEM_UPDATE_CUSTOM_UNIT = "FOOD_ITEM_UPDATE_CUSTOM_UNIT";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE = "FOOD_ITEM_UPDATE_SERVING_SIZE";
 
 
-export const FOOD_ITEM_FETCH_REQUESTED = "FOOD_ITEM_FETCH_REQUESTED";
+export const FOOD_ITEM_FETCH_REQUEST = "FOOD_ITEM_FETCH_REQUEST";
 export const FOOD_ITEM_FETCH_SUCCESS = "FOOD_ITEM_FETCH_SUCCESS";
 export const FOOD_ITEM_FETCH_ERROR = "FOOD_ITEM_FETCH_ERROR";
 
@@ -73,13 +76,31 @@ export interface UpdateCustomUnitsAction {
     payload: CustomUnitInput[];
 }
 
+export interface AddCustomUnitAction {
+    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT;
+    payload: CustomUnitInput;
+}
+
+export interface RemoveCustomUnitAction {
+    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT;
+    payload: number;
+}
+
+export interface UpdateCustomUnitAction {
+    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT;
+    payload: {
+        index: number;
+        customUnit: CustomUnitInput;
+    };
+}
+
 export interface UpdateServingSizeAction {
     type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE;
     payload: string;
 }
 
 export interface FoodItemFetchRequestedAction {
-    type: typeof FOOD_ITEM_FETCH_REQUESTED;
+    type: typeof FOOD_ITEM_FETCH_REQUEST;
     payload: string;
 }
 

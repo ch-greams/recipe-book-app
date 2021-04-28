@@ -6,7 +6,7 @@ import RecipeApi from "@api/client/recipeApi";
 
 import {
     RECIPE_ITEM_FETCH_ERROR,
-    RECIPE_ITEM_FETCH_REQUESTED,
+    RECIPE_ITEM_FETCH_REQUEST,
     RECIPE_ITEM_FETCH_SUCCESS,
     RecipeItemFetchRequestedAction,
 } from "./types";
@@ -30,7 +30,7 @@ function* fetchRecipeItem(action: RecipeItemFetchRequestedAction): Generator<Str
 }
 
 function* watchFetchRecipeItem(): SagaIterator {
-    yield takeLatest(RECIPE_ITEM_FETCH_REQUESTED, fetchRecipeItem);
+    yield takeLatest(RECIPE_ITEM_FETCH_REQUEST, fetchRecipeItem);
 }
 
 

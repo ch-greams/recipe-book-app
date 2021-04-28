@@ -1,7 +1,6 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { AnyAction } from "redux";
 
-import { InputChangeCallback } from "@common/typings";
 import { CustomUnitInput, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
@@ -16,180 +15,181 @@ interface Props {
     customUnitInputs: CustomUnitInput[];
     updateCustomUnits: (customUnits: CustomUnitInput[]) => AnyAction;
 }
-interface State {
-    newCustomUnit: CustomUnitInput;
+
+interface NewProps extends Props {
+    customUnit: CustomUnitInput;
 }
 
-export default class ServingSizesBlock extends Component<Props, State> {
-    public static readonly displayName = "ServingSizesBlock";
+const NewCustomUnitLine: React.FC<Props> = ({ customUnitInputs, updateCustomUnits }) => {
 
-    public state = {
-        newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g },
-    };
+    const [ customUnit, setCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });
 
-    private createCustomUnits = (customUnit: CustomUnitInput): void => {
+    return (
+        <div className={styles.customUnitLine}>
 
-        const { customUnitInputs, updateCustomUnits } = this.props;
+            <div className={styles.customUnitLineButton}>
+                <IconWrapper
+                    isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                    onClick={() => {
+                        const isUniqueName = !customUnitInputs.some((cu) => cu.name === customUnit.name);
+                
+                        if (isUniqueName && !Utils.isEmptyString(customUnit.name)) {
+                
+                            updateCustomUnits([ ...customUnitInputs, customUnit ]);
+                    
+                            setCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
+                        }
+                        else {
+                            console.log("Custom Unit name is empty or already exist");
+                        }
+                    }}
+                >
+                    <IconAdd />
+                </IconWrapper>
+            </div>
 
-        const isUniqueName = !customUnitInputs.some((cu) => cu.name === customUnit.name);
-        const isEmpty = !customUnit.name;
+            <div className={styles.customUnitLineInfo}>
 
-        if (isUniqueName && !isEmpty) {
+                <input
+                    type={"text"}
+                    placeholder={"NAME"}
+                    className={styles.customUnitLineName}
+                    value={customUnit.name}
+                    onChange={(event) => setCustomUnit({ ...customUnit, name: event.target.value })}
+                />
 
-            updateCustomUnits([ ...customUnitInputs, customUnit ]);
-    
-            this.setState({ newCustomUnit: { name: "", amount: "100", unit: WeightUnit.g } });
-        }
-        else {
-            console.log("Custom Unit name is empty or already exist");
-        }
-    };
-    private deleteCustomUnits = (name: string): void => {
+                <div className={styles.customUnitLineEqualSign}>{"="}</div>
 
-        const { customUnitInputs, updateCustomUnits } = this.props;
-
-        updateCustomUnits(customUnitInputs.filter((cu) => cu.name !== name));
-    };
-
-    private handleCustomUnitNameEdit = (customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback => {
-
-        const { customUnitInputs, updateCustomUnits } = this.props;
-        const { newCustomUnit } = this.state;
-
-        return (event) => {
-
-            if (isNew) {
-                this.setState({
-                    newCustomUnit: { ...newCustomUnit, name: event.target.value },
-                });
-            }
-            else {
-                updateCustomUnits(
-                    customUnitInputs.map(
-                        (cui) => (cui.name === customUnit.name) ? { ...cui, name: event.target.value } : cui
-                    )
-                );
-            }
-        };
-    };
-    private handleCustomUnitAmountEdit = (customUnit: CustomUnitInput, isNew: boolean): InputChangeCallback => {
-
-        const { customUnitInputs, updateCustomUnits } = this.props;
-        const { newCustomUnit } = this.state;
-
-        return (event) => {
-
-            const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
-
-            if (isNew) {
-                this.setState({
-                    newCustomUnit: { ...newCustomUnit, amount: amount },
-                });
-            }
-            else {
-                updateCustomUnits(
-                    customUnitInputs.map(
-                        (cui) => (cui.name === customUnit.name) ? { ...cui, amount: amount } : cui
-                    )
-                );
-            }
-        };
-    };
-
-    private getCustomUnitCreateButton = (customUnit: CustomUnitInput): JSX.Element => {
-        return (
-            <IconWrapper
-                isFullWidth={true} width={20} height={20} color={"#00bfa5"}
-                onClick={() => this.createCustomUnits(customUnit)}
-            >
-                <IconAdd />
-            </IconWrapper>
-        );
-    };
-
-    private getCustomUnitDeleteButton = (name: string): JSX.Element => {
-        return (
-            <IconWrapper
-                isFullWidth={true} width={20} height={20} color={"#00bfa5"}
-                style={{ transform: "rotate(0.125turn)" }}
-                onClick={() => this.deleteCustomUnits(name)}
-            >
-                <IconAdd />
-            </IconWrapper>
-        );
-    };
-
-
-    private getCustomUnitLine = (key: string, customUnit: CustomUnitInput, isNew: boolean): JSX.Element => {
-
-        const customUnitButton = (
-            isNew
-                ? this.getCustomUnitCreateButton(customUnit)
-                : this.getCustomUnitDeleteButton(customUnit.name)
-        );
-
-        return (
-            <div
-                key={key}
-                className={styles.customUnitLine}
-            >
-
-                <div className={styles.customUnitLineButton}>
-                    {customUnitButton}
-                </div>
-
-                <div className={styles.customUnitLineInfo}>
+                <div className={styles.customUnitLineMeasure}>
 
                     <input
                         type={"text"}
-                        placeholder={"NAME"}
-                        className={styles.customUnitLineName}
-                        value={customUnit.name}
-                        onChange={this.handleCustomUnitNameEdit(customUnit, isNew)}
+                        placeholder={"#"}
+                        className={styles.customUnitLineAmount}
+                        value={customUnit.amount}
+                        onChange={(event) => {
+                            setCustomUnit({
+                                ...customUnit,
+                                amount: Utils.decimalNormalizer(event.target.value, customUnit.amount),
+                            });
+                        }}
                     />
 
-                    <div className={styles.customUnitLineEqualSign}>{"="}</div>
-
-                    <div className={styles.customUnitLineMeasure}>
-
-                        <input
-                            type={"text"}
-                            placeholder={"#"}
-                            className={styles.customUnitLineAmount}
-                            value={customUnit.amount}
-                            onChange={this.handleCustomUnitAmountEdit(customUnit, isNew)}
-                        />
-
-                        <SelectInput
-                            type={SelectInputType.CustomUnit}
-                            options={Object.keys(WeightUnit)}
-                            onChange={console.log}
-                        />
-                    </div>
+                    <SelectInput
+                        type={SelectInputType.CustomUnit}
+                        options={Object.keys(WeightUnit)}
+                        onChange={console.log}
+                    />
                 </div>
-
             </div>
-        );
-    };
 
+        </div>
+    );
+};
 
-    public render(): JSX.Element {
+NewCustomUnitLine.displayName = "NewCustomUnitLine";
 
-        const { customUnitInputs } = this.props;
-        const { newCustomUnit } = this.state;
+const CustomUnitLine: React.FC<NewProps> = ({ customUnit, customUnitInputs, updateCustomUnits }) => {
 
-        return (
-            <div className={styles.customUnitsBlock}>
+    return (
+        <div className={styles.customUnitLine}>
 
-                <div className={styles.customUnitsBlockLabel}>
-                    {"CUSTOM UNITS"}
+            <div className={styles.customUnitLineButton}>
+
+                <IconWrapper
+                    isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                    style={{ transform: "rotate(0.125turn)" }}
+                    onClick={() => updateCustomUnits(customUnitInputs.filter((cu) => cu.name !== customUnit.name))}
+                >
+                    <IconAdd />
+                </IconWrapper>
+            </div>
+
+            <div className={styles.customUnitLineInfo}>
+
+                <input
+                    type={"text"}
+                    placeholder={"NAME"}
+                    className={styles.customUnitLineName}
+                    value={customUnit.name}
+                    onChange={(event) => {
+                        updateCustomUnits(
+                            customUnitInputs.map((customUnitInput) => (
+                                (customUnitInput.name === customUnit.name)
+                                    ? { ...customUnitInput, name: event.target.value }
+                                    : customUnitInput
+                            ))
+                        );
+                    }}
+                />
+
+                <div className={styles.customUnitLineEqualSign}>{"="}</div>
+
+                <div className={styles.customUnitLineMeasure}>
+
+                    <input
+                        type={"text"}
+                        placeholder={"#"}
+                        className={styles.customUnitLineAmount}
+                        value={customUnit.amount}
+                        onChange={(event) => {
+                
+                            updateCustomUnits(
+                                customUnitInputs.map((customUnitInput) => (
+                                    (customUnitInput.name === customUnit.name)
+                                        ? {
+                                            ...customUnitInput,
+                                            amount: Utils.decimalNormalizer(event.target.value, customUnit.amount),
+                                        }
+                                        : customUnitInput
+                                ))
+                            );
+                        }}
+                    />
+
+                    <SelectInput
+                        type={SelectInputType.CustomUnit}
+                        options={Object.keys(WeightUnit)}
+                        onChange={console.log}
+                    />
                 </div>
-
-                {customUnitInputs.map( (customUnit, index) => this.getCustomUnitLine(`CU_${index}`, customUnit, false) )}
-
-                {this.getCustomUnitLine("CU", newCustomUnit, true)}
-
             </div>
-        );
-    }
-}
+
+        </div>
+    );
+};
+
+CustomUnitLine.displayName = "CustomUnitLine";
+
+
+const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnits }) => {
+
+    return (
+        <div className={styles.customUnitsBlock}>
+
+            <div className={styles.customUnitsBlockLabel}>
+                {"CUSTOM UNITS"}
+            </div>
+
+            {customUnitInputs.map((customUnit) => (
+                <CustomUnitLine
+                    key={`CU_${customUnit.name}`}
+                    customUnit={customUnit}
+                    customUnitInputs={customUnitInputs}
+                    updateCustomUnits={updateCustomUnits}
+                />
+            ))}
+
+            <NewCustomUnitLine
+                key={"NCU"}
+                customUnitInputs={customUnitInputs}
+                updateCustomUnits={updateCustomUnits}
+            />
+
+        </div>
+    );
+};
+
+ServingSizesBlock.displayName = "ServingSizesBlock";
+
+export default ServingSizesBlock;

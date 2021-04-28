@@ -11,13 +11,7 @@ import RemoveIcon from "@client/icons/close-sharp.svg";
 import IconWrapper from "@client/icons/IconWrapper";
 import LinkIcon from "@client/icons/link-sharp.svg";
 import SearchIcon from "@client/icons/search-sharp.svg";
-import {
-    addAltIngredient,
-    addIngredient,
-    removeAltIngredient, removeIngredient, replaceIngredientWithAlternative,
-    toggleIngredientMark, toggleIngredientOpen, updateAltIngredientAmount,
-    updateAltIngredientUnit, updateAltNutritionFacts, updateIngredientAmount, updateIngredientUnit,
-} from "@client/store/recipe/actions";
+import * as actions from "@client/store/recipe/actions";
 import { RecipeIngredient,RecipeIngredientDefault } from "@client/store/recipe/types";
 import { SearchPageStore } from "@client/store/search/types";
 
@@ -31,18 +25,18 @@ interface Props {
     references: Dictionary<string, IngredientItem>;
     search: SearchPageStore;
 
-    removeIngredient: typeof removeIngredient;
-    removeAltIngredient: typeof removeAltIngredient;
-    replaceIngredientWithAlternative: typeof replaceIngredientWithAlternative;
-    toggleIngredientOpen: typeof toggleIngredientOpen;
-    toggleIngredientMark: typeof toggleIngredientMark;
-    updateIngredientAmount: typeof updateIngredientAmount;
-    updateIngredientUnit: typeof updateIngredientUnit;
-    updateAltIngredientAmount: typeof updateAltIngredientAmount;
-    updateAltIngredientUnit: typeof updateAltIngredientUnit;
-    updateAltNutritionFacts: typeof updateAltNutritionFacts;
-    addIngredient: typeof addIngredient;
-    addAltIngredient: typeof addAltIngredient;
+    removeIngredient: typeof actions.removeIngredient;
+    removeAltIngredient: typeof actions.removeAltIngredient;
+    replaceIngredientWithAlternative: typeof actions.replaceIngredientWithAlternative;
+    toggleIngredientOpen: typeof actions.toggleIngredientOpen;
+    toggleIngredientMark: typeof actions.toggleIngredientMark;
+    updateIngredientAmount: typeof actions.updateIngredientAmount;
+    updateIngredientUnit: typeof actions.updateIngredientUnit;
+    updateAltIngredientAmount: typeof actions.updateAltIngredientAmount;
+    updateAltIngredientUnit: typeof actions.updateAltIngredientUnit;
+    updateAltNutritionFacts: typeof actions.updateAltNutritionFacts;
+    addIngredient: typeof actions.addIngredient;
+    addAltIngredient: typeof actions.addAltIngredient;
 }
 
 
