@@ -1,5 +1,7 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import { CustomUnitInput } from "@common/units";
+import { CustomUnit, CustomUnitInput } from "@common/units";
+
+import { Food } from "../../../common/typings";
 
 import * as types from "./types";
 
@@ -33,34 +35,6 @@ export function updateNutritionFact(key: NutritionFactType, value: string): type
     };
 }
 
-export function updateCustomUnits(customUnits: CustomUnitInput[]): types.UpdateCustomUnitsAction {
-    return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNITS,
-        payload: customUnits,
-    };
-}
-
-export function addCustomUnit(customUnit: CustomUnitInput): types.AddCustomUnitAction {
-    return {
-        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT,
-        payload: customUnit,
-    };
-}
-
-export function removeCustomUnit(index: number): types.RemoveCustomUnitAction {
-    return {
-        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT,
-        payload: index,
-    };
-}
-
-export function updateCustomUnit(index: number, customUnit: CustomUnitInput): types.UpdateCustomUnitAction {
-    return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT,
-        payload: { index, customUnit },
-    };
-}
-
 export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequestAction {
     return {
         type: types.FOOD_ITEM_FETCH_REQUEST,
@@ -68,9 +42,93 @@ export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequest
     };
 }
 
+export function fetchFoodItemSuccess(food: Food): types.FoodItemFetchSuccessAction {
+    return {
+        type: types.FOOD_ITEM_FETCH_SUCCESS,
+        payload: food,
+    };
+}
+
+export function fetchFoodItemError(error: string): types.FoodItemFetchErrorAction {
+    return {
+        type: types.FOOD_ITEM_FETCH_ERROR,
+        payload: error,
+    };
+}
+
 export function updateServingSize(servingSizeInput: string): types.UpdateServingSizeAction {
     return {
         type: types.FOOD_ITEM_UPDATE_SERVING_SIZE,
         payload: servingSizeInput,
+    };
+}
+
+export function updateCustomUnits(customUnits: CustomUnitInput[]): types.UpdateCustomUnitsAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNITS,
+        payload: customUnits,
+    };
+}
+
+export function addCustomUnitRequest(customUnit: CustomUnitInput): types.AddCustomUnitRequestAction {
+    return {
+        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST,
+        payload: customUnit,
+    };
+}
+
+export function addCustomUnitSuccess(customUnits: CustomUnit[]): types.AddCustomUnitSuccessAction {
+    return {
+        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function addCustomUnitError(error: string): types.AddCustomUnitErrorAction {
+    return {
+        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR,
+        payload: error,
+    };
+}
+
+export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitRequestAction {
+    return {
+        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST,
+        payload: index,
+    };
+}
+
+export function removeCustomUnitSuccess(customUnits: CustomUnit[]): types.RemoveCustomUnitSuccessAction {
+    return {
+        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function removeCustomUnitError(error: string): types.RemoveCustomUnitErrorAction {
+    return {
+        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR,
+        payload: error,
+    };
+}
+
+export function updateCustomUnitRequest(index: number, customUnit: CustomUnitInput): types.UpdateCustomUnitRequestAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST,
+        payload: { index, customUnit },
+    };
+}
+
+export function updateCustomUnitSuccess(customUnits: CustomUnit[]): types.UpdateCustomUnitSuccessAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function updateCustomUnitError(error: string): types.UpdateCustomUnitErrorAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR,
+        payload: error,
     };
 }

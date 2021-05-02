@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
 
 import { InputChangeCallback } from "@common/typings";
@@ -9,17 +10,27 @@ import IconWrapper from "@client/icons/IconWrapper";
 
 import CustomUnitLine from "./CustomUnitLine";
 
-import styles from "./ServingSizesBlock.scss";
+import styles from "./CustomUnitsBlock.scss";
 
 
 
 interface Props {
     customUnitInputs: CustomUnitInput[];
-    updateCustomUnits: (customUnits: CustomUnitInput[]) => AnyAction;
+    updateCustomUnits?: (customUnits: CustomUnitInput[]) => AnyAction;
+
+    addCustomUnitRequest?: (customUnit: CustomUnitInput) => AnyAction;
+    removeCustomUnitRequest?: (index: number) => AnyAction;
+    updateCustomUnitRequest?: (index: number, customUnit: CustomUnitInput) => AnyAction;
 }
 
-const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnits }) => {
+const CustomUnitsBlock: React.FC<Props> = ({
+    customUnitInputs,
+    addCustomUnitRequest,
+    removeCustomUnitRequest,
+    updateCustomUnitRequest,
+}) => {
 
+    const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });
 
     const updateNewItemName: InputChangeCallback = (event) => setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
@@ -38,29 +49,16 @@ const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnit
                 {"CUSTOM UNITS"}
             </div>
 
-            {customUnitInputs.map((customUnit) => {
+            {customUnitInputs.map((customUnit, index) => {
             
                 const updateItemName: InputChangeCallback = (event) => {
-                    updateCustomUnits(
-                        customUnitInputs.map((customUnitInput) => (
-                            (customUnitInput.name === customUnit.name)
-                                ? { ...customUnitInput, name: event.target.value }
-                                : customUnitInput
-                        ))
-                    );
+                    const name = event.target.value;
+                    dispatch(updateCustomUnitRequest(index, { ...customUnit, name }));
                 };
             
                 const updateItemAmount: InputChangeCallback = (event) => {
-                    updateCustomUnits(
-                        customUnitInputs.map((customUnitInput) => (
-                            (customUnitInput.name === customUnit.name)
-                                ? {
-                                    ...customUnitInput,
-                                    amount: Utils.decimalNormalizer(event.target.value, customUnit.amount),
-                                }
-                                : customUnitInput
-                        ))
-                    );
+                    const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
+                    dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
                 };
                 
                 return (
@@ -74,7 +72,7 @@ const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnit
                         <IconWrapper
                             isFullWidth={true} width={20} height={20} color={"#00bfa5"}
                             style={{ transform: "rotate(0.125turn)" }}
-                            onClick={() => updateCustomUnits(customUnitInputs.filter((cu) => cu.name !== customUnit.name))}
+                            onClick={() => dispatch(removeCustomUnitRequest(index))}
                         >
                             <IconAdd />
                         </IconWrapper>
@@ -93,17 +91,8 @@ const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnit
                 <IconWrapper
                     isFullWidth={true} width={20} height={20} color={"#00bfa5"}
                     onClick={() => {
-                        const isUniqueName = !customUnitInputs.some((cu) => cu.name === newCustomUnit.name);
-                
-                        if (isUniqueName && !Utils.isEmptyString(newCustomUnit.name)) {
-                
-                            updateCustomUnits([ ...customUnitInputs, newCustomUnit ]);
-                    
-                            setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
-                        }
-                        else {
-                            console.log("Custom Unit name is empty or already exist");
-                        }
+                        dispatch(addCustomUnitRequest(newCustomUnit));
+                        setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
                     }}
                 >
                     <IconAdd />
@@ -115,6 +104,6 @@ const ServingSizesBlock: React.FC<Props> = ({ customUnitInputs, updateCustomUnit
     );
 };
 
-ServingSizesBlock.displayName = "ServingSizesBlock";
+CustomUnitsBlock.displayName = "CustomUnitsBlock";
 
-export default ServingSizesBlock;
+export default CustomUnitsBlock;

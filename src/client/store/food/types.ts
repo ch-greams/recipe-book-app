@@ -40,10 +40,18 @@ export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
-export const FOOD_ITEM_ADD_CUSTOM_UNIT = "FOOD_ITEM_ADD_CUSTOM_UNIT";
-export const FOOD_ITEM_REMOVE_CUSTOM_UNIT = "FOOD_ITEM_REMOVE_CUSTOM_UNIT";
-export const FOOD_ITEM_UPDATE_CUSTOM_UNIT = "FOOD_ITEM_UPDATE_CUSTOM_UNIT";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE = "FOOD_ITEM_UPDATE_SERVING_SIZE";
+
+
+export const FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST";
+export const FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS";
+export const FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR = "FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR";
+export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST";
+export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS";
+export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR";
+export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST";
+export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS";
+export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR";
 
 
 export const FOOD_ITEM_FETCH_REQUEST = "FOOD_ITEM_FETCH_REQUEST";
@@ -76,22 +84,52 @@ export interface UpdateCustomUnitsAction {
     payload: CustomUnitInput[];
 }
 
-export interface AddCustomUnitAction {
-    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT;
+export interface AddCustomUnitRequestAction {
+    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST;
     payload: CustomUnitInput;
 }
 
-export interface RemoveCustomUnitAction {
-    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT;
+export interface AddCustomUnitSuccessAction {
+    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS;
+    payload: CustomUnit[];
+}
+
+export interface AddCustomUnitErrorAction {
+    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR;
+    payload: string;
+}
+
+export interface RemoveCustomUnitRequestAction {
+    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST;
     payload: number;
 }
 
-export interface UpdateCustomUnitAction {
-    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT;
+export interface RemoveCustomUnitSuccessAction {
+    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS;
+    payload: CustomUnit[];
+}
+
+export interface RemoveCustomUnitErrorAction {
+    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR;
+    payload: string;
+}
+
+export interface UpdateCustomUnitRequestAction {
+    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST;
     payload: {
         index: number;
         customUnit: CustomUnitInput;
     };
+}
+
+export interface UpdateCustomUnitSuccessAction {
+    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS;
+    payload: CustomUnit[];
+}
+
+export interface UpdateCustomUnitErrorAction {
+    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR;
+    payload: string;
 }
 
 export interface UpdateServingSizeAction {
@@ -104,12 +142,12 @@ export interface FoodItemFetchRequestAction {
     payload: string;
 }
 
-interface FoodItemFetchSuccessAction {
+export interface FoodItemFetchSuccessAction {
     type: typeof FOOD_ITEM_FETCH_SUCCESS;
     payload: Food;
 }
 
-interface FoodItemFetchErrorAction {
+export interface FoodItemFetchErrorAction {
     type: typeof FOOD_ITEM_FETCH_ERROR;
     payload: string;
 }
@@ -117,5 +155,8 @@ interface FoodItemFetchErrorAction {
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction |
     UpdateNutritionFactAction | UpdateCustomUnitsAction | UpdateServingSizeAction |
-    FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
+    FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
+    AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |
+    RemoveCustomUnitRequestAction | RemoveCustomUnitSuccessAction | RemoveCustomUnitErrorAction |
+    UpdateCustomUnitRequestAction | UpdateCustomUnitSuccessAction | UpdateCustomUnitErrorAction
 );

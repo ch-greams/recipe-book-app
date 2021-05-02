@@ -1,25 +1,14 @@
 import { NutritionFactType } from "@common/nutritionFacts";
 import type { Dictionary } from "@common/typings";
-import { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import { AppState } from "@client/store";
 
-import {
-    FOOD_ITEM_FETCH_ERROR,
-    FOOD_ITEM_FETCH_REQUEST,
-    FOOD_ITEM_FETCH_SUCCESS,
-    FOOD_ITEM_UPDATE_BRAND,
-    FOOD_ITEM_UPDATE_CUSTOM_UNITS,
-    FOOD_ITEM_UPDATE_NAME,
-    FOOD_ITEM_UPDATE_NUTRITION_FACT,
-    FOOD_ITEM_UPDATE_SERVING_SIZE,
-    FOOD_ITEM_UPDATE_SUBTITLE,
-    FoodItemActionTypes,
-    FoodPageStore,
-} from "./types";
+import * as types from "./types";
 
 
 
-const initialState: FoodPageStore = {
+const initialState: types.FoodPageStore = {
 
     isLoaded: false,
     errorMessage: null,
@@ -65,33 +54,41 @@ const initialState: FoodPageStore = {
 };
 
 
+function extractState(globalState: AppState): types.FoodPageStore {
+    return (globalState?.foodPage || initialState);
+}
 
-export default function foodPageReducer(state = initialState, action: FoodItemActionTypes): FoodPageStore {
+export function extractCustomUnits(globalState: AppState): CustomUnit[] {
+    return extractState(globalState).customUnits;
+}
+
+
+export default function foodPageReducer(state = initialState, action: types.FoodItemActionTypes): types.FoodPageStore {
 
     switch (action.type) {
 
-        case FOOD_ITEM_UPDATE_NAME: {
+        case types.FOOD_ITEM_UPDATE_NAME: {
             return {
                 ...state,
                 name: action.payload,
             };
         }
 
-        case FOOD_ITEM_UPDATE_BRAND: {
+        case types.FOOD_ITEM_UPDATE_BRAND: {
             return {
                 ...state,
                 brand: action.payload,
             };
         }
 
-        case FOOD_ITEM_UPDATE_SUBTITLE: {
+        case types.FOOD_ITEM_UPDATE_SUBTITLE: {
             return {
                 ...state,
                 subtitle: action.payload,
             };
         }
 
-        case FOOD_ITEM_FETCH_REQUEST: {
+        case types.FOOD_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,
@@ -101,7 +98,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_FETCH_SUCCESS: {
+        case types.FOOD_ITEM_FETCH_SUCCESS: {
             const foodItem = action.payload;
 
             return {
@@ -122,7 +119,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_FETCH_ERROR: {
+        case types.FOOD_ITEM_FETCH_ERROR: {
             return {
                 ...state,
                 isLoaded: true,
@@ -130,7 +127,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_UPDATE_NUTRITION_FACT: {
+        case types.FOOD_ITEM_UPDATE_NUTRITION_FACT: {
             const nutritionFactsByServing = {
                 ...state.nutritionFactsByServing,
                 ...Utils.convertNutritionFactInputsIntoValues(action.payload),
@@ -148,7 +145,7 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_UPDATE_CUSTOM_UNITS: {
+        case types.FOOD_ITEM_UPDATE_CUSTOM_UNITS: {
             return {
                 ...state,
 
@@ -157,7 +154,18 @@ export default function foodPageReducer(state = initialState, action: FoodItemAc
             };
         }
 
-        case FOOD_ITEM_UPDATE_SERVING_SIZE: {
+        case types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS:
+        case types.FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS:
+        case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
+            return {
+                ...state,
+                
+                customUnits: action.payload as CustomUnit[],
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_SERVING_SIZE: {
             const servingSize = Number(action.payload);
             const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 

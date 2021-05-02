@@ -43,7 +43,7 @@ rules:
     eol-last:
         - 2
         - "always"
-    no-shadow: 2
+    no-shadow: 0
 
     simple-import-sort/imports:
         - 2
@@ -98,3 +98,6 @@ rules:
         - singleline:
             delimiter: "comma"
             requireLast: false
+    "@typescript-eslint/no-shadow":
+        - 1
+        - ignoreTypeValueShadow: true

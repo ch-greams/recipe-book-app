@@ -1,35 +1,19 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import {
-    Dictionary,
-    Direction,
-    Ingredient,
-    IngredientItem,
-    Option,
-    Recipe,
-    SubDirection,
-    SubDirectionIngredient,
-} from "@common/typings";
-import {
-    CustomUnit,
-    CustomUnitInput,
-    TemperatureUnit,
-    TimeUnit,
-    VolumeUnit,
-    WeightUnit,
-} from "@common/units";
+import * as typings from "@common/typings";
+import * as units from "@common/units";
 
 
 
-export interface RecipeIngredient extends Ingredient {
+export interface RecipeIngredient extends typings.Ingredient {
     amountInput: string;
 }
 
-export interface RecipeIngredientDefault extends Ingredient {
+export interface RecipeIngredientDefault extends typings.Ingredient {
     isOpen: boolean;
     isMarked: boolean;
     amountInput: string;
     alternatives: RecipeIngredient[];
-    altNutritionFacts: Dictionary<NutritionFactType, number>;
+    altNutritionFacts: typings.Dictionary<NutritionFactType, number>;
 }
 
 
@@ -40,24 +24,24 @@ export enum SubDirectionType {
     Ingredient = "Ingredient",
 }
 
-export interface RecipeSubDirectionIngredient extends SubDirectionIngredient {
+export interface RecipeSubDirectionIngredient extends typings.SubDirectionIngredient {
     isMarked: boolean;
     amountInput: string;
 }
 
-export interface RecipeDirection extends Direction {
+export interface RecipeDirection extends typings.Direction {
     isOpen: boolean;
     isMarked: boolean;
     timeInput: string;
     temperatureInput: string;
     newStep: string;
-    steps: (SubDirection | RecipeSubDirectionIngredient)[];
+    steps: (typings.SubDirection | RecipeSubDirectionIngredient)[];
 }
 
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    errorMessage: Option<string>;
+    errorMessage: typings.Option<string>;
     isReadOnly: boolean;
 
     id: string;
@@ -66,22 +50,22 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
-    nutritionFacts: Dictionary<NutritionFactType, number>;
-    customUnits: CustomUnit[];
+    nutritionFacts: typings.Dictionary<NutritionFactType, number>;
+    customUnits: units.CustomUnit[];
 
     // NOTE: INPUTS
-    customUnitInputs: CustomUnitInput[];
+    customUnitInputs: units.CustomUnitInput[];
 
     servingSize: number;
     servingSizeInput: string;
-    servingSizeUnit: WeightUnit | VolumeUnit;
+    servingSizeUnit: units.WeightUnit | units.VolumeUnit;
 
     ingredients: RecipeIngredientDefault[];
 
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
 
-    references: Dictionary<string, IngredientItem>;
+    references: typings.Dictionary<string, typings.IngredientItem>;
 }
 
 
@@ -94,6 +78,68 @@ export const RECIPE_ITEM_UPDATE_TYPE = "RECIPE_ITEM_UPDATE_TYPE";
 export const RECIPE_ITEM_UPDATE_CUSTOM_UNITS = "RECIPE_ITEM_UPDATE_CUSTOM_UNITS";
 export const RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
 export const RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT";
+
+
+export const RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST";
+export const RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS";
+export const RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR";
+export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST";
+export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS";
+export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR";
+export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST";
+export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS";
+export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR";
+
+// NOTE: Directions
+
+export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
+export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
+export const RECIPE_ITEM_TOGGLE_DIRECTION_MARK = "RECIPE_ITEM_TOGGLE_DIRECTION_MARK";
+
+export const RECIPE_ITEM_REMOVE_SUBDIRECTION = "RECIPE_ITEM_REMOVE_SUBDIRECTION";
+export const RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK = "RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE = "RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT";
+export const RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT = "RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT";
+export const RECIPE_ITEM_CREATE_SUBDIRECTION = "RECIPE_ITEM_CREATE_SUBDIRECTION";
+export const RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE = "RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE";
+export const RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER";
+export const RECIPE_ITEM_UPDATE_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_DIRECTION_NAME";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT";
+export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT";
+
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT";
+export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT";
+export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
+
+// NOTE: Ingredients
+
+export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
+export const RECIPE_ITEM_REMOVE_ALT_INGREDIENT = "RECIPE_ITEM_REMOVE_ALT_INGREDIENT";
+export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
+export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
+export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
+
+export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
+export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT";
+export const RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS = "RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS";
+
+export const RECIPE_ITEM_ADD_INGREDIENT = "RECIPE_ITEM_ADD_INGREDIENT";
+export const RECIPE_ITEM_ADD_ALT_INGREDIENT = "RECIPE_ITEM_ADD_ALT_INGREDIENT";
+
+
+export const RECIPE_ITEM_FETCH_REQUEST = "RECIPE_ITEM_FETCH_REQUEST";
+export const RECIPE_ITEM_FETCH_SUCCESS = "RECIPE_ITEM_FETCH_SUCCESS";
+export const RECIPE_ITEM_FETCH_ERROR = "RECIPE_ITEM_FETCH_ERROR";
 
 
 export interface UpdateNameAction {
@@ -123,7 +169,7 @@ export interface UpdateServingSizeAmountAction {
 
 export interface UpdateServingSizeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT;
-    payload: WeightUnit | VolumeUnit;
+    payload: units.WeightUnit | units.VolumeUnit;
 }
 
 export interface UpdateTypeAction {
@@ -133,35 +179,8 @@ export interface UpdateTypeAction {
 
 export interface UpdateCustomUnitsAction {
     type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNITS;
-    payload: CustomUnitInput[];
+    payload: units.CustomUnitInput[];
 }
-
-export const RECIPE_ITEM_REMOVE_DIRECTION = "RECIPE_ITEM_REMOVE_DIRECTION";
-export const RECIPE_ITEM_TOGGLE_DIRECTION_OPEN = "RECIPE_ITEM_TOGGLE_DIRECTION_OPEN";
-export const RECIPE_ITEM_TOGGLE_DIRECTION_MARK = "RECIPE_ITEM_TOGGLE_DIRECTION_MARK";
-
-export const RECIPE_ITEM_REMOVE_SUBDIRECTION = "RECIPE_ITEM_REMOVE_SUBDIRECTION";
-export const RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK = "RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK";
-export const RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE = "RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE";
-export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT";
-export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT";
-export const RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT = "RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT";
-export const RECIPE_ITEM_CREATE_SUBDIRECTION = "RECIPE_ITEM_CREATE_SUBDIRECTION";
-export const RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE = "RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE";
-export const RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER";
-export const RECIPE_ITEM_UPDATE_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_DIRECTION_NAME";
-export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT";
-export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT";
-export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT";
-export const RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT";
-
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT";
-export const RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT = "RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT";
-export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
 
 // NOTE: Directions
 
@@ -202,7 +221,7 @@ export interface UpdateSubDirectionIngredientAmountAction {
 
 export interface UpdateSubDirectionIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT;
-    payload: { directionIndex: number, subDirectionIndex: number, unit: WeightUnit | VolumeUnit };
+    payload: { directionIndex: number, subDirectionIndex: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface CreateSubDirectionIngredientAction {
@@ -236,7 +255,7 @@ export interface UpdateDirectionTemperatureCountAction {
 
 export interface UpdateDirectionTemperatureUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT;
-    payload: { directionIndex: number, unit: TemperatureUnit };
+    payload: { directionIndex: number, unit: units.TemperatureUnit };
 }
 
 export interface UpdateDirectionTimeCountAction {
@@ -246,7 +265,7 @@ export interface UpdateDirectionTimeCountAction {
 
 export interface UpdateDirectionTimeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT;
-    payload: { directionIndex: number, unit: TimeUnit };
+    payload: { directionIndex: number, unit: units.TimeUnit };
 }
 
 export interface UpdateNewDirectionStepNumberAction {
@@ -266,7 +285,7 @@ export interface UpdateNewDirectionTemperatureCountAction {
 
 export interface UpdateNewDirectionTemperatureUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT;
-    payload: TemperatureUnit;
+    payload: units.TemperatureUnit;
 }
 
 export interface UpdateNewDirectionTimeCountAction {
@@ -276,7 +295,7 @@ export interface UpdateNewDirectionTimeCountAction {
 
 export interface UpdateNewDirectionTimeUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT;
-    payload: TimeUnit;
+    payload: units.TimeUnit;
 }
 
 export interface CreateDirectionAction {
@@ -285,22 +304,6 @@ export interface CreateDirectionAction {
 }
 
 // NOTE: Ingredients
-
-export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
-export const RECIPE_ITEM_REMOVE_ALT_INGREDIENT = "RECIPE_ITEM_REMOVE_ALT_INGREDIENT";
-export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
-export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
-export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
-
-export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT";
-export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
-export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT";
-export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT";
-export const RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS = "RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS";
-
-export const RECIPE_ITEM_ADD_INGREDIENT = "RECIPE_ITEM_ADD_INGREDIENT";
-export const RECIPE_ITEM_ADD_ALT_INGREDIENT = "RECIPE_ITEM_ADD_ALT_INGREDIENT";
-
 
 export interface RemoveIngredientAction {
     type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
@@ -335,7 +338,7 @@ export interface UpdateIngredientAmountAction {
 
 export interface UpdateIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_UNIT;
-    payload: { id: string, unit: WeightUnit | VolumeUnit };
+    payload: { id: string, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface UpdateAltIngredientAmountAction {
@@ -345,7 +348,7 @@ export interface UpdateAltIngredientAmountAction {
 
 export interface UpdateAltIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT;
-    payload: { parentId: string, id: string, unit: WeightUnit | VolumeUnit };
+    payload: { parentId: string, id: string, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface UpdateAltNutritionFactsAction {
@@ -355,30 +358,76 @@ export interface UpdateAltNutritionFactsAction {
 
 export interface AddIngredientAction {
     type: typeof RECIPE_ITEM_ADD_INGREDIENT;
-    payload: IngredientItem;
+    payload: typings.IngredientItem;
 }
 
 export interface AddAltIngredientAction {
     type: typeof RECIPE_ITEM_ADD_ALT_INGREDIENT;
-    payload: { id: string, altIngredient: IngredientItem };
+    payload: { id: string, altIngredient: typings.IngredientItem };
 }
 
-export const RECIPE_ITEM_FETCH_REQUEST = "RECIPE_ITEM_FETCH_REQUEST";
-export const RECIPE_ITEM_FETCH_SUCCESS = "RECIPE_ITEM_FETCH_SUCCESS";
-export const RECIPE_ITEM_FETCH_ERROR = "RECIPE_ITEM_FETCH_ERROR";
 
-export interface RecipeItemFetchRequestedAction {
+export interface RecipeItemFetchRequestAction {
     type: typeof RECIPE_ITEM_FETCH_REQUEST;
     payload: string;
 }
 
-interface RecipeItemFetchSuccessAction {
+export interface RecipeItemFetchSuccessAction {
     type: typeof RECIPE_ITEM_FETCH_SUCCESS;
-    payload: Recipe;
+    payload: typings.Recipe;
 }
 
-interface RecipeItemFetchErrorAction {
+export interface RecipeItemFetchErrorAction {
     type: typeof RECIPE_ITEM_FETCH_ERROR;
+    payload: string;
+}
+
+
+export interface AddCustomUnitRequestAction {
+    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST;
+    payload: units.CustomUnitInput;
+}
+
+export interface AddCustomUnitSuccessAction {
+    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS;
+    payload: units.CustomUnit[];
+}
+
+export interface AddCustomUnitErrorAction {
+    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR;
+    payload: string;
+}
+
+export interface RemoveCustomUnitRequestAction {
+    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST;
+    payload: number;
+}
+
+export interface RemoveCustomUnitSuccessAction {
+    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS;
+    payload: units.CustomUnit[];
+}
+
+export interface RemoveCustomUnitErrorAction {
+    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR;
+    payload: string;
+}
+
+export interface UpdateCustomUnitRequestAction {
+    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST;
+    payload: {
+        index: number;
+        customUnit: units.CustomUnitInput;
+    };
+}
+
+export interface UpdateCustomUnitSuccessAction {
+    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS;
+    payload: units.CustomUnit[];
+}
+
+export interface UpdateCustomUnitErrorAction {
+    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR;
     payload: string;
 }
 
@@ -405,5 +454,9 @@ export type RecipeItemActionTypes = (
     UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction |
     UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction |
 
-    RecipeItemFetchRequestedAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction
+    RecipeItemFetchRequestAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction |
+
+    AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |
+    RemoveCustomUnitRequestAction | RemoveCustomUnitSuccessAction | RemoveCustomUnitErrorAction |
+    UpdateCustomUnitRequestAction | UpdateCustomUnitSuccessAction | UpdateCustomUnitErrorAction
 );

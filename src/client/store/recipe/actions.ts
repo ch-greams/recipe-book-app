@@ -1,5 +1,5 @@
-import { IngredientItem } from "@common/typings";
-import { CustomUnitInput, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
+import { IngredientItem, Recipe } from "@common/typings";
+import * as units from "@common/units";
 
 import * as types from "./types";
 
@@ -85,7 +85,7 @@ export function updateSubDirectionIngredientAmount(
 }
 
 export function updateSubDirectionIngredientUnit(
-    directionIndex: number, subDirectionIndex: number, unit: (WeightUnit | VolumeUnit),
+    directionIndex: number, subDirectionIndex: number, unit: (units.WeightUnit | units.VolumeUnit),
 ): types.UpdateSubDirectionIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
@@ -135,7 +135,7 @@ export function updateDirectionTemperatureCount(directionIndex: number, inputVal
     };
 }
 
-export function updateDirectionTemperatureUnit(directionIndex: number, unit: TemperatureUnit): types.UpdateDirectionTemperatureUnitAction {
+export function updateDirectionTemperatureUnit(directionIndex: number, unit: units.TemperatureUnit): types.UpdateDirectionTemperatureUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT,
         payload: { directionIndex, unit },
@@ -149,7 +149,7 @@ export function updateDirectionTimeCount(directionIndex: number, inputValue: str
     };
 }
 
-export function updateDirectionTimeUnit(directionIndex: number, unit: TimeUnit): types.UpdateDirectionTimeUnitAction {
+export function updateDirectionTimeUnit(directionIndex: number, unit: units.TimeUnit): types.UpdateDirectionTimeUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT,
         payload: { directionIndex, unit },
@@ -177,7 +177,7 @@ export function updateNewDirectionTemperatureCount(inputValue: string): types.Up
     };
 }
 
-export function updateNewDirectionTemperatureUnit(unit: TemperatureUnit): types.UpdateNewDirectionTemperatureUnitAction {
+export function updateNewDirectionTemperatureUnit(unit: units.TemperatureUnit): types.UpdateNewDirectionTemperatureUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
         payload: unit,
@@ -191,7 +191,7 @@ export function updateNewDirectionTimeCount(inputValue: string): types.UpdateNew
     };
 }
 
-export function updateNewDirectionTimeUnit(unit: TimeUnit): types.UpdateNewDirectionTimeUnitAction {
+export function updateNewDirectionTimeUnit(unit: units.TimeUnit): types.UpdateNewDirectionTimeUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
         payload: unit,
@@ -247,7 +247,7 @@ export function updateIngredientAmount(id: string, inputValue: string): types.Up
     };
 }
 
-export function updateIngredientUnit(id: string, unit: (WeightUnit | VolumeUnit)): types.UpdateIngredientUnitAction {
+export function updateIngredientUnit(id: string, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
         payload: { id, unit },
@@ -261,7 +261,7 @@ export function updateAltIngredientAmount(parentId: string, id: string, inputVal
     };
 }
 
-export function updateAltIngredientUnit(parentId: string, id: string, unit: (WeightUnit | VolumeUnit)): types.UpdateAltIngredientUnitAction {
+export function updateAltIngredientUnit(parentId: string, id: string, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateAltIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
         payload: { parentId, id, unit },
@@ -296,7 +296,7 @@ export function updateServingSizeAmount(inputValue: string): types.UpdateServing
     };
 }
 
-export function updateServingSizeUnit(unit: WeightUnit | VolumeUnit): types.UpdateServingSizeUnitAction {
+export function updateServingSizeUnit(unit: units.WeightUnit | units.VolumeUnit): types.UpdateServingSizeUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
         payload: unit,
@@ -310,16 +310,93 @@ export function updateType(type: string): types.UpdateTypeAction {
     };
 }
 
-export function updateCustomUnits(customUnits: CustomUnitInput[]): types.UpdateCustomUnitsAction {
+export function updateCustomUnits(customUnits: units.CustomUnitInput[]): types.UpdateCustomUnitsAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
         payload: customUnits,
     };
 }
 
-export function requestRecipeItem(recipeId: string): types.RecipeItemFetchRequestedAction {
+export function fetchRecipeItemRequest(recipeId: string): types.RecipeItemFetchRequestAction {
     return {
         type: types.RECIPE_ITEM_FETCH_REQUEST,
         payload: recipeId,
+    };
+}
+
+export function fetchRecipeItemSuccess(recipe: Recipe): types.RecipeItemFetchSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_SUCCESS,
+        payload: recipe,
+    };
+}
+
+export function fetchRecipeItemError(error: string): types.RecipeItemFetchErrorAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_ERROR,
+        payload: error,
+    };
+}
+
+export function addCustomUnitRequest(customUnit: units.CustomUnitInput): types.AddCustomUnitRequestAction {
+    return {
+        type: types.RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST,
+        payload: customUnit,
+    };
+}
+
+export function addCustomUnitSuccess(customUnits: units.CustomUnit[]): types.AddCustomUnitSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function addCustomUnitError(error: string): types.AddCustomUnitErrorAction {
+    return {
+        type: types.RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR,
+        payload: error,
+    };
+}
+
+export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitRequestAction {
+    return {
+        type: types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST,
+        payload: index,
+    };
+}
+
+export function removeCustomUnitSuccess(customUnits: units.CustomUnit[]): types.RemoveCustomUnitSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function removeCustomUnitError(error: string): types.RemoveCustomUnitErrorAction {
+    return {
+        type: types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR,
+        payload: error,
+    };
+}
+
+export function updateCustomUnitRequest(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitRequestAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST,
+        payload: { index, customUnit },
+    };
+}
+
+export function updateCustomUnitSuccess(customUnits: units.CustomUnit[]): types.UpdateCustomUnitSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS,
+        payload: customUnits,
+    };
+}
+
+export function updateCustomUnitError(error: string): types.UpdateCustomUnitErrorAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR,
+        payload: error,
     };
 }

@@ -2,17 +2,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import CustomUnitsBlock from "@client/components/CustomUnitsBlock/CustomUnitsBlock";
 import Loader from "@client/components/Loader/Loader";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
-import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
 import * as actions from "@client/store/food/actions";
-import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
+import { FoodPageStore } from "@client/store/food/types";
 
 import styles from "./FoodPage.scss";
 
@@ -27,7 +27,6 @@ interface DispatchToProps {
     updateBrand: typeof actions.updateBrand;
     updateSubtitle: typeof actions.updateSubtitle;
     requestFoodItem: typeof actions.fetchFoodItemRequest;
-    updateCustomUnits: typeof actions.updateCustomUnits;
     updateServingSize: typeof actions.updateServingSize;
 }
 
@@ -56,10 +55,9 @@ class FoodPage extends Component<Props> {
         console.log(event.target.value);
     };
 
-    private getParametersBlock(
-        foodItem: FoodPageStore,
-        updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
-    ): JSX.Element {
+    private getParametersBlock(): JSX.Element {
+
+        const { foodItem } = this.props;
 
         return (
             
@@ -141,9 +139,11 @@ class FoodPage extends Component<Props> {
 
                 <div className={styles.separator} />
 
-                <ServingSizesBlock
+                <CustomUnitsBlock
                     customUnitInputs={foodItem.customUnitInputs}
-                    updateCustomUnits={updateCustomUnits}
+                    addCustomUnitRequest={actions.addCustomUnitRequest}
+                    removeCustomUnitRequest={actions.removeCustomUnitRequest}
+                    updateCustomUnitRequest={actions.updateCustomUnitRequest}
                 />
 
             </div>
@@ -154,7 +154,6 @@ class FoodPage extends Component<Props> {
     public render(): JSX.Element {
         
         const {
-            foodItem,
             foodItem: {
                 isLoaded,
                 name,
@@ -167,7 +166,6 @@ class FoodPage extends Component<Props> {
             updateName,
             updateBrand,
             updateSubtitle,
-            updateCustomUnits,
         } = this.props;
 
         if (!isLoaded) {
@@ -194,7 +192,7 @@ class FoodPage extends Component<Props> {
 
                     <div className={styles.mainBlock}>
 
-                        {this.getParametersBlock(foodItem, updateCustomUnits)}
+                        {this.getParametersBlock()}
 
                         <div className={styles.featuredNutritionFacts}>
 
@@ -234,7 +232,6 @@ const mapDispatchToProps: DispatchToProps = {
     updateBrand: actions.updateBrand,
     updateSubtitle: actions.updateSubtitle,
     requestFoodItem: actions.fetchFoodItemRequest,
-    updateCustomUnits: actions.updateCustomUnits,
     updateServingSize: actions.updateServingSize,
 };
 

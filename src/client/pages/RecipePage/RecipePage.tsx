@@ -4,8 +4,9 @@ import { RouteComponentProps } from "react-router-dom";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import type { Dictionary } from "@common/typings";
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
+import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import CustomUnitsBlock from "@client/components/CustomUnitsBlock/CustomUnitsBlock";
 import DirectionsBlock from "@client/components/DirectionsBlock/DirectionsBlock";
 import IngredientsBlock from "@client/components/IngredientsBlock/IngredientsBlock";
 import Loader from "@client/components/Loader/Loader";
@@ -13,10 +14,9 @@ import NutritionFactsBlock from "@client/components/NutritionFactsBlock/Nutritio
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
-import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
 import * as actions from "@client/store/recipe/actions";
-import { RecipePageStore, UpdateCustomUnitsAction } from "@client/store/recipe/types";
+import { RecipePageStore } from "@client/store/recipe/types";
 import { requestIngredients } from "@client/store/search/actions";
 import { SearchPageStore } from "@client/store/search/types";
 
@@ -37,7 +37,6 @@ interface DispatchToProps {
     updateType: typeof actions.updateType;
     updateServingSizeAmount: typeof actions.updateServingSizeAmount;
     updateServingSizeUnit: typeof actions.updateServingSizeUnit;
-    updateCustomUnits: typeof actions.updateCustomUnits;
 
     requestIngredients: typeof requestIngredients;
     removeDirection: typeof actions.removeDirection;
@@ -77,7 +76,7 @@ interface DispatchToProps {
     updateAltNutritionFacts: typeof actions.updateAltNutritionFacts;
     addIngredient: typeof actions.addIngredient;
     addAltIngredient: typeof actions.addAltIngredient;
-    requestRecipeItem: typeof actions.requestRecipeItem;
+    requestRecipeItem: typeof actions.fetchRecipeItemRequest;
 }
 
 interface RecipePageProps extends StateToProps, DispatchToProps, RouteComponentProps<{ recipeId: string }> { }
@@ -109,10 +108,9 @@ class RecipePage extends Component<RecipePageProps> {
 
     // NOTE: General Information
 
-    private getParametersBlock = (
-        recipeItem: RecipePageStore,
-        updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
-    ): JSX.Element => {
+    private getParametersBlock = (): JSX.Element => {
+
+        const { recipeItem } = this.props;
 
         return (
             
@@ -159,9 +157,11 @@ class RecipePage extends Component<RecipePageProps> {
 
                 <div className={styles.separator} />
 
-                <ServingSizesBlock
+                <CustomUnitsBlock
                     customUnitInputs={recipeItem.customUnitInputs}
-                    updateCustomUnits={updateCustomUnits}
+                    addCustomUnitRequest={actions.addCustomUnitRequest}
+                    removeCustomUnitRequest={actions.removeCustomUnitRequest}
+                    updateCustomUnitRequest={actions.updateCustomUnitRequest}
                 />
 
             </div>
@@ -172,8 +172,6 @@ class RecipePage extends Component<RecipePageProps> {
         nutritionFacts: Dictionary<NutritionFactType, number>,
         nutritionFactInputs: Dictionary<NutritionFactType, string>,
     ): JSX.Element => {
-
-        const { recipeItem, updateCustomUnits } = this.props;
 
         const featuredNutritionFacts = [
             NutritionFactType.Energy,
@@ -191,7 +189,7 @@ class RecipePage extends Component<RecipePageProps> {
         return (
             <div className={styles.mainBlock}>
 
-                {this.getParametersBlock(recipeItem, updateCustomUnits)}
+                {this.getParametersBlock()}
 
                 <div className={styles.featuredNutritionFacts}>
 
@@ -383,7 +381,6 @@ const mapDispatchToProps: DispatchToProps = {
     updateSubtitle: actions.updateSubtitle,
     updateDescription: actions.updateDescription,
     updateType: actions.updateType,
-    updateCustomUnits: actions.updateCustomUnits,
     updateServingSizeAmount: actions.updateServingSizeAmount,
     updateServingSizeUnit: actions.updateServingSizeUnit,
 
@@ -426,7 +423,7 @@ const mapDispatchToProps: DispatchToProps = {
     addIngredient: actions.addIngredient,
     addAltIngredient: actions.addAltIngredient,
 
-    requestRecipeItem: actions.requestRecipeItem,
+    requestRecipeItem: actions.fetchRecipeItemRequest,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RecipePage);
