@@ -43,6 +43,7 @@ rules:
     eol-last:
         - 2
         - "always"
+    no-shadow: 2
 
     simple-import-sort/imports:
         - 2

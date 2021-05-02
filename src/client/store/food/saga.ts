@@ -8,12 +8,12 @@ import {
     FOOD_ITEM_FETCH_ERROR,
     FOOD_ITEM_FETCH_REQUEST,
     FOOD_ITEM_FETCH_SUCCESS,
-    FoodItemFetchRequestedAction,
+    FoodItemFetchRequestAction,
 } from "./types";
 
 
 
-function* fetchFoodItem(action: FoodItemFetchRequestedAction): Generator<StrictEffect, void, Food> {
+function* fetchFoodItem(action: FoodItemFetchRequestAction): Generator<StrictEffect, void, Food> {
 
     try {
 

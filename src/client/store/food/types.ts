@@ -99,7 +99,7 @@ export interface UpdateServingSizeAction {
     payload: string;
 }
 
-export interface FoodItemFetchRequestedAction {
+export interface FoodItemFetchRequestAction {
     type: typeof FOOD_ITEM_FETCH_REQUEST;
     payload: string;
 }
@@ -117,5 +117,5 @@ interface FoodItemFetchErrorAction {
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction |
     UpdateNutritionFactAction | UpdateCustomUnitsAction | UpdateServingSizeAction |
-    FoodItemFetchRequestedAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
+    FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction
 );

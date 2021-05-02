@@ -61,7 +61,7 @@ export function updateCustomUnit(index: number, customUnit: CustomUnitInput): ty
     };
 }
 
-export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequestedAction {
+export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequestAction {
     return {
         type: types.FOOD_ITEM_FETCH_REQUEST,
         payload: foodId,
