@@ -23,9 +23,6 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    updateName: typeof actions.updateName;
-    updateBrand: typeof actions.updateBrand;
-    updateSubtitle: typeof actions.updateSubtitle;
     requestFoodItem: typeof actions.fetchFoodItemRequest;
     updateServingSize: typeof actions.updateServingSize;
 }
@@ -163,9 +160,6 @@ class FoodPage extends Component<Props> {
                 nutritionFactsByServingInputs,
                 featuredNutritionFacts,
             },
-            updateName,
-            updateBrand,
-            updateSubtitle,
         } = this.props;
 
         if (!isLoaded) {
@@ -183,9 +177,9 @@ class FoodPage extends Component<Props> {
                         name={name}
                         brand={brand}
                         subtitle={subtitle}
-                        updateName={updateName}
-                        updateBrand={updateBrand}
-                        updateSubtitle={updateSubtitle}
+                        updateName={actions.updateName}
+                        updateBrand={actions.updateBrand}
+                        updateSubtitle={actions.updateSubtitle}
                     />
 
                     {/* Main Block */}
@@ -228,9 +222,6 @@ const mapStateToProps = (state: AppState): StateToProps => ({
 });
 
 const mapDispatchToProps: DispatchToProps = {
-    updateName: actions.updateName,
-    updateBrand: actions.updateBrand,
-    updateSubtitle: actions.updateSubtitle,
     requestFoodItem: actions.fetchFoodItemRequest,
     updateServingSize: actions.updateServingSize,
 };

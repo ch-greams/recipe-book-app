@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import { AnyAction } from "redux";
 
 import type { Option } from "@common/typings";
-import Utils from "@common/utils";
 
-import styles from "./PageTitleBlock.scss";
+import PageTitleBlockInput from "./PageTitleBlockInput";
+import PageTitleBlockStatic from "./PageTitleBlockStatic";
 
 
 
@@ -19,175 +19,43 @@ interface Props {
     updateSubtitle: (value: string) => AnyAction;
     updateDescription?: Option<(value: string) => AnyAction>;
 }
-interface State {
-    isTitleInputsOpen: boolean;
-}
-
-export default class PageTitleBlock extends Component<Props, State> {
-    public static readonly displayName = "PageTitleBlock";
-
-    public state: State = {
-        isTitleInputsOpen: false,
-    };
 
 
-    private editTitle = (): void => {
-        this.setState({ isTitleInputsOpen: true });
-    };
+const PageTitleBlock: React.FC<Props> = ({
+    name, brand, subtitle, description, withDescription,
+    updateName, updateBrand, updateSubtitle, updateDescription,
+}) => {
+    
+    const [ isTitleInputsOpen, setIsTitleInputsOpen ] = useState(false);
 
-    private confirmTitle = (): void => {
-        this.setState({ isTitleInputsOpen: false });
-    };
-
-    private handleNameEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-        Utils.keepCaretInPlace(window, event);
-
-        this.props.updateName(
-            (event.target.value || "").toUpperCase()
-        );
-    };
-
-    private handleBrandEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-        Utils.keepCaretInPlace(window, event);
-
-        this.props.updateBrand(
-            (event.target.value || "").toUpperCase()
-        );
-    };
-
-    private handleSubtitleEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
-        Utils.keepCaretInPlace(window, event);
-
-        this.props.updateSubtitle(
-            (event.target.value || "").toUpperCase()
-        );
-    };
-
-    private handleDescriptionEdit = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-
-        Utils.keepCaretInPlace(window, event);
-
-        if (Utils.isSome(this.props.updateDescription)) {
-            this.props.updateDescription(event.target.value || "");
-        }
-    };
-
-    private getTitleBlockStatic = (name: string, brand: string, subtitle: string, description?: string): JSX.Element => {
-
-        const descriptionBlock = (
-            <div className={styles.descriptionBlock}>
-                <div className={styles.descriptionBlockText}>
-                    {description}
-                </div>
-            </div>
-        );
-
-        return (
-
-            <div
-                className={styles.titleBlock}
-                onClick={this.editTitle}
-            >
-
-                <div className={styles.nameBlock}>
-
-                    <div className={styles.nameText}>
-                        {name.toUpperCase()}
-                    </div>
-
-                    <div className={styles.brandText}>
-                        {brand.toUpperCase()}
-                    </div>
-                    
-                </div>
-
-                <div className={styles.subtitleBlock}>
-
-                    <div className={styles.subtitleText}>
-                        {subtitle.toUpperCase()}
-                    </div>
-                </div>
-
-                {description && descriptionBlock}
-
-            </div>
-        );
-    };
-
-    private getTitleBlockInput = (
-        name: string, brand: string, subtitle: string, description?: string, withDescription: boolean = false,
-    ): JSX.Element => {
-
-        const descriptionBlock = (
-            <div className={styles.descriptionBlock}>
-                <textarea
-                    className={styles.descriptionBlockInput}
-                    name={"description"} id={"description"} rows={6}
-                    placeholder={"Description"} value={(description || "")}
-                    onChange={this.handleDescriptionEdit}
+    return (
+        isTitleInputsOpen
+            ? (
+                <PageTitleBlockInput
+                    name={name}
+                    brand={brand}
+                    subtitle={subtitle}
+                    description={description}
+                    withDescription={withDescription}
+                    confirmTitle={() => setIsTitleInputsOpen(false)}
+                    updateName={updateName}
+                    updateBrand={updateBrand}
+                    updateSubtitle={updateSubtitle}
+                    updateDescription={updateDescription}
                 />
-            </div>
-        );
+            )
+            : (
+                <PageTitleBlockStatic
+                    name={name}
+                    brand={brand}
+                    subtitle={subtitle}
+                    description={description}
+                    editTitle={() => setIsTitleInputsOpen(true)}
+                />
+            )
+    );
+};
 
-        return (
+PageTitleBlock.displayName = "PageTitleBlock";
 
-            <div className={styles.titleBlock}>
-
-                <div className={styles.nameBlock}>
-
-                    <input
-                        type={"text"}
-                        className={styles.nameInput}
-                        placeholder={"NAME"}
-                        value={name.toUpperCase()}
-                        onChange={this.handleNameEdit}
-                    />
-
-                    <input
-                        type={"text"}
-                        className={styles.brandInput}
-                        placeholder={"BRAND"}
-                        value={brand.toUpperCase()}
-                        onChange={this.handleBrandEdit}
-                    />
-                    
-                </div>
-
-                <div className={styles.subtitleBlock}>
-
-                    <input
-                        type={"text"}
-                        className={styles.subtitleInput}
-                        placeholder={"SUBTITLE"}
-                        value={subtitle.toUpperCase()}
-                        onChange={this.handleSubtitleEdit}
-                    />
-
-                    <div
-                        className={styles.confirmButton}
-                        onClick={this.confirmTitle}
-                    >
-                        {"CONFIRM"}
-                    </div>
-                </div>
-
-                {withDescription && descriptionBlock}
-            </div>
-        );
-    };
-
-
-    public render(): JSX.Element {
-
-        const { name, brand, subtitle, description, withDescription } = this.props;
-
-        return (
-            this.state.isTitleInputsOpen
-                ? this.getTitleBlockInput(name, brand, subtitle, description, withDescription)
-                : this.getTitleBlockStatic(name, brand, subtitle, description)
-        );
-    }
-}
+export default PageTitleBlock;

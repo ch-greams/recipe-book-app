@@ -30,10 +30,6 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-    updateName: typeof actions.updateName;
-    updateBrand: typeof actions.updateBrand;
-    updateSubtitle: typeof actions.updateSubtitle;
-    updateDescription: typeof actions.updateDescription;
     updateType: typeof actions.updateType;
     updateServingSizeAmount: typeof actions.updateServingSizeAmount;
     updateServingSizeUnit: typeof actions.updateServingSizeUnit;
@@ -220,10 +216,6 @@ class RecipePage extends Component<RecipePageProps> {
                 nutritionFacts,
             },
             search,
-            updateName,
-            updateBrand,
-            updateSubtitle,
-            updateDescription,
             removeDirection,
             removeSubDirection,
             toggleDirectionOpen,
@@ -283,10 +275,10 @@ class RecipePage extends Component<RecipePageProps> {
                         subtitle={subtitle}
                         description={description}
                         withDescription={true}
-                        updateName={updateName}
-                        updateBrand={updateBrand}
-                        updateSubtitle={updateSubtitle}
-                        updateDescription={updateDescription}
+                        updateName={actions.updateName}
+                        updateBrand={actions.updateBrand}
+                        updateSubtitle={actions.updateSubtitle}
+                        updateDescription={actions.updateDescription}
                     />
 
                     {this.getGeneralInfoBlock(nutritionFacts, nutritionFactInputs)}
@@ -376,10 +368,6 @@ const mapStateToProps = (state: AppState): StateToProps => ({
 });
 
 const mapDispatchToProps: DispatchToProps = {
-    updateName: actions.updateName,
-    updateBrand: actions.updateBrand,
-    updateSubtitle: actions.updateSubtitle,
-    updateDescription: actions.updateDescription,
     updateType: actions.updateType,
     updateServingSizeAmount: actions.updateServingSizeAmount,
     updateServingSizeUnit: actions.updateServingSizeUnit,
