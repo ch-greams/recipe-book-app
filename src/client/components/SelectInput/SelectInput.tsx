@@ -61,17 +61,15 @@ const getGroupedOptionElements = (options: SelectOption[]): JSX.Element[] => {
 
     const groups = [ ...new Set(options.map((option) => option.group)) ];
 
-    return groups.map((group) => (
-        <>
-            <option style={{ color: "#fff" }} key={group} disabled={true}>{`- ${group}`}</option>
+    return groups.flatMap((group) => ([
+        <option key={group} style={{ color: "#fff" }} disabled={true}>{`- ${group}`}</option>,
 
-            {options.filter((option) => (option.group === group)).map((option) => (
-                <option key={option.value} value={option.value}>
-                    {Utils.unwrap(option.label, option.value)}
-                </option>
-            ))}
-        </>
-    ));
+        ...options.filter((option) => (option.group === group)).map((option) => (
+            <option key={option.value} value={option.value}>
+                {Utils.unwrap(option.label, option.value)}
+            </option>
+        )),
+    ]));
 };
 
 const getOptionElements = (options: SelectOption[]): JSX.Element[] => {
