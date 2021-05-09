@@ -35,30 +35,6 @@ interface DispatchToProps {
     updateServingSizeUnit: typeof actions.updateServingSizeUnit;
 
     requestIngredients: typeof requestIngredients;
-    removeDirection: typeof actions.removeDirection;
-    removeSubDirection: typeof actions.removeSubDirection;
-    toggleDirectionOpen: typeof actions.toggleDirectionOpen;
-    toggleDirectionMark: typeof actions.toggleDirectionMark;
-    toggleSubDirectionMark: typeof actions.toggleSubDirectionMark;
-    updateSubDirectionNote: typeof actions.updateSubDirectionNote;
-    updateSubDirectionIngredientAmount: typeof actions.updateSubDirectionIngredientAmount;
-    updateSubDirectionIngredientUnit: typeof actions.updateSubDirectionIngredientUnit;
-    createSubDirectionIngredient: typeof actions.createSubDirectionIngredient;
-    createSubDirection: typeof actions.createSubDirection;
-    updateNewSubDirectionType: typeof actions.updateNewSubDirectionType;
-    updateDirectionStepNumber: typeof actions.updateDirectionStepNumber;
-    updateDirectionName: typeof actions.updateDirectionName;
-    updateDirectionTemperatureCount: typeof actions.updateDirectionTemperatureCount;
-    updateDirectionTemperatureUnit: typeof actions.updateDirectionTemperatureUnit;
-    updateDirectionTimeCount: typeof actions.updateDirectionTimeCount;
-    updateDirectionTimeUnit: typeof actions.updateDirectionTimeUnit;
-    updateNewDirectionStepNumber: typeof actions.updateNewDirectionStepNumber;
-    updateNewDirectionName: typeof actions.updateNewDirectionName;
-    updateNewDirectionTemperatureCount: typeof actions.updateNewDirectionTemperatureCount;
-    updateNewDirectionTemperatureUnit: typeof actions.updateNewDirectionTemperatureUnit;
-    updateNewDirectionTimeCount: typeof actions.updateNewDirectionTimeCount;
-    updateNewDirectionTimeUnit: typeof actions.updateNewDirectionTimeUnit;
-    createDirection: typeof actions.createDirection;
 
     requestRecipeItem: typeof actions.fetchRecipeItemRequest;
 }
@@ -204,30 +180,6 @@ class RecipePage extends Component<RecipePageProps> {
                 nutritionFacts,
             },
             search,
-            removeDirection,
-            removeSubDirection,
-            toggleDirectionOpen,
-            toggleDirectionMark,
-            toggleSubDirectionMark,
-            updateSubDirectionNote,
-            updateSubDirectionIngredientAmount,
-            updateSubDirectionIngredientUnit,
-            createSubDirectionIngredient,
-            createSubDirection,
-            updateNewSubDirectionType,
-            updateDirectionStepNumber,
-            updateDirectionName,
-            updateDirectionTemperatureCount,
-            updateDirectionTemperatureUnit,
-            updateDirectionTimeCount,
-            updateDirectionTimeUnit,
-            updateNewDirectionStepNumber,
-            updateNewDirectionName,
-            updateNewDirectionTemperatureCount,
-            updateNewDirectionTemperatureUnit,
-            updateNewDirectionTimeCount,
-            updateNewDirectionTimeUnit,
-            createDirection,
         } = this.props;
 
         const searchParams = new URLSearchParams(location.search);
@@ -279,31 +231,6 @@ class RecipePage extends Component<RecipePageProps> {
                         directions={directions}
                         ingredients={ingredients}
                         references={references}
-
-                        removeDirection={removeDirection}
-                        removeSubDirection={removeSubDirection}
-                        toggleDirectionOpen={toggleDirectionOpen}
-                        toggleDirectionMark={toggleDirectionMark}
-                        toggleSubDirectionMark={toggleSubDirectionMark}
-                        updateSubDirectionNote={updateSubDirectionNote}
-                        updateSubDirectionIngredientAmount={updateSubDirectionIngredientAmount}
-                        updateSubDirectionIngredientUnit={updateSubDirectionIngredientUnit}
-                        createSubDirectionIngredient={createSubDirectionIngredient}
-                        createSubDirection={createSubDirection}
-                        updateNewSubDirectionType={updateNewSubDirectionType}
-                        updateDirectionStepNumber={updateDirectionStepNumber}
-                        updateDirectionName={updateDirectionName}
-                        updateDirectionTemperatureCount={updateDirectionTemperatureCount}
-                        updateDirectionTemperatureUnit={updateDirectionTemperatureUnit}
-                        updateDirectionTimeCount={updateDirectionTimeCount}
-                        updateDirectionTimeUnit={updateDirectionTimeUnit}
-                        updateNewDirectionStepNumber={updateNewDirectionStepNumber}
-                        updateNewDirectionName={updateNewDirectionName}
-                        updateNewDirectionTemperatureCount={updateNewDirectionTemperatureCount}
-                        updateNewDirectionTemperatureUnit={updateNewDirectionTemperatureUnit}
-                        updateNewDirectionTimeCount={updateNewDirectionTimeCount}
-                        updateNewDirectionTimeUnit={updateNewDirectionTimeUnit}
-                        createDirection={createDirection}
                     />
 
                     <div className={styles.recipePageBlockTitle}>
@@ -335,30 +262,6 @@ const mapDispatchToProps: DispatchToProps = {
     updateServingSizeUnit: actions.updateServingSizeUnit,
 
     requestIngredients,
-    removeDirection: actions.removeDirection,
-    removeSubDirection: actions.removeSubDirection,
-    toggleDirectionOpen: actions.toggleDirectionOpen,
-    toggleDirectionMark: actions.toggleDirectionMark,
-    toggleSubDirectionMark: actions.toggleSubDirectionMark,
-    updateSubDirectionNote: actions.updateSubDirectionNote,
-    updateSubDirectionIngredientAmount: actions.updateSubDirectionIngredientAmount,
-    updateSubDirectionIngredientUnit: actions.updateSubDirectionIngredientUnit,
-    createSubDirectionIngredient: actions.createSubDirectionIngredient,
-    createSubDirection: actions.createSubDirection,
-    updateNewSubDirectionType: actions.updateNewSubDirectionType,
-    updateDirectionStepNumber: actions.updateDirectionStepNumber,
-    updateDirectionName: actions.updateDirectionName,
-    updateDirectionTemperatureCount: actions.updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit: actions.updateDirectionTemperatureUnit,
-    updateDirectionTimeCount: actions.updateDirectionTimeCount,
-    updateDirectionTimeUnit: actions.updateDirectionTimeUnit,
-    updateNewDirectionStepNumber: actions.updateNewDirectionStepNumber,
-    updateNewDirectionName: actions.updateNewDirectionName,
-    updateNewDirectionTemperatureCount: actions.updateNewDirectionTemperatureCount,
-    updateNewDirectionTemperatureUnit: actions.updateNewDirectionTemperatureUnit,
-    updateNewDirectionTimeCount: actions.updateNewDirectionTimeCount,
-    updateNewDirectionTimeUnit: actions.updateNewDirectionTimeUnit,
-    createDirection: actions.createDirection,
 
     requestRecipeItem: actions.fetchRecipeItemRequest,
 };
