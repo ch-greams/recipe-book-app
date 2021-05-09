@@ -50,7 +50,7 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
 
     return (
 
-        <div key={"newSubDirectionLine"} className={styles.subDirectionLine}>
+        <div className={styles.subDirectionLine}>
 
             <div
                 className={styles.subDirectionLineButton}

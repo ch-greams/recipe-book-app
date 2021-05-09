@@ -117,7 +117,6 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     return (
         <div
-            key={`directionInfo_${index}`}
             className={styles.directionInfoLine}
             style={( isReadOnly ? undefined : { paddingLeft: "12px" } )}
         >

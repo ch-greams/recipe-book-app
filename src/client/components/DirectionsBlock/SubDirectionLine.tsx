@@ -65,7 +65,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     return (
 
-        <div key={`subDirectionLine_${subDirectionIndex}`} className={styles.subDirectionLine}>
+        <div className={styles.subDirectionLine}>
 
             {( isReadOnly ? checkbox : removeButton )}
 

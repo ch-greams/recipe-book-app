@@ -30,7 +30,7 @@ const DirectionsBlock: React.FC<Props> = ({
 
             {directions.map( (direction, index) => (
                 <DirectionLine
-                    key={`direction_${direction.name}`}
+                    key={`direction_${index}`}
                     isReadOnly={isReadOnly}
                     ingredients={ingredients}
                     references={references}
@@ -41,6 +41,7 @@ const DirectionsBlock: React.FC<Props> = ({
 
             {( !isReadOnly && (
                 <NewDirectionLine
+                    key={"direction_new"}
                     isReadOnly={isReadOnly}
                     direction={newDirection}
                 />

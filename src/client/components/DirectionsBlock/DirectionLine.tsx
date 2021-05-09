@@ -82,6 +82,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
                         step.type === SubDirectionType.Ingredient
                             ? (
                                 <SubDirectionLine
+                                    key={`subDirectionLine_${stepIndex}`}
                                     isReadOnly={isReadOnly}
                                     subDirection={step as RecipeSubDirectionIngredient}
                                     directionIndex={index}
@@ -90,6 +91,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
                             )
                             : (
                                 <SubDirectionNoteLine
+                                    key={`subDirectionNoteLine_${stepIndex}`} 
                                     isReadOnly={isReadOnly}
                                     step={step}
                                     directionIndex={index}
@@ -101,6 +103,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
 
                 {( !isReadOnly && (
                     <NewSubDirectionLine
+                        key={"subDirectionLine_new"}
                         references={references}
                         directionIndex={index}
                         direction={direction}

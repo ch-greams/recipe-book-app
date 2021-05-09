@@ -71,7 +71,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
 
     return (
 
-        <div key={`subDirectionNoteLine_${stepIndex}`} className={styles.subDirectionLine}>
+        <div className={styles.subDirectionLine}>
 
             {( !isReadOnly && removeButton )}
 
