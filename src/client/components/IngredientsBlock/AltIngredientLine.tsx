@@ -93,7 +93,7 @@ const AltIngredientLine: React.FC<Props> = ({
             
             <SelectInput
                 type={SelectInputType.AltIngredientUnit}
-                options={Object.values(Units)}
+                options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={altIngredient.unit}
                 onChange={(event) => {
                     dispatch(actions.updateAltIngredientUnit(

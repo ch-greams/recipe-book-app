@@ -1,6 +1,6 @@
 import React from "react";
 
-import { SelectChangeCallback } from "@common/typings";
+import { Option, SelectChangeCallback } from "@common/typings";
 import Utils from "@common/utils";
 
 import styles from "./SelectInput.scss";
@@ -15,13 +15,15 @@ export enum SelectInputType {
 }
 
 interface SelectOption {
-    label: string;
+    group?: Option<string>;
+    label?: Option<string>;
     value: string;
 }
 
 interface Props {
     type: SelectInputType;
-    options: (string | SelectOption)[];
+    withGroups?: boolean;
+    options: SelectOption[];
     value?: string;
     onChange: SelectChangeCallback;
 }
@@ -55,23 +57,41 @@ const getClassName = (type: SelectInputType): string => {
     }
 };
 
-const SelectInput: React.FC<Props> = ({ type, options, value, onChange }) => {
+const getGroupedOptionElements = (options: SelectOption[]): JSX.Element[] => {
 
+    const groups = [ ...new Set(options.map((option) => option.group)) ];
+
+    return groups.map((group) => (
+        <>
+            <option style={{ color: "#fff" }} key={group} disabled={true}>{`- ${group}`}</option>
+
+            {options.filter((option) => (option.group === group)).map((option) => (
+                <option key={option.value} value={option.value}>
+                    {Utils.unwrap(option.label, option.value)}
+                </option>
+            ))}
+        </>
+    ));
+};
+
+const getOptionElements = (options: SelectOption[]): JSX.Element[] => {
+
+    return options.map((option) => (
+        <option key={option.value} value={option.value}>
+            {Utils.unwrap(option.label, option.value)}
+        </option>
+    ));
+};
+
+const SelectInput: React.FC<Props> = ({ type, options, value, onChange, withGroups = false }) => {
+    
     return (
         <select
             className={getClassName(type)}
             value={value}
             onChange={onChange}
         >
-            {options.map((option) => (
-                (typeof option === "string")
-                    ? (
-                        (option === "----")
-                            ? <option key={option} disabled={true}>{option}</option>
-                            : <option key={option} value={option}>{option}</option>
-                    )
-                    : <option key={option.value} value={option.value}>{option.label}</option>
-            ))}
+            {( withGroups ? getGroupedOptionElements(options) : getOptionElements(options) )}
         </select>
     );
 };

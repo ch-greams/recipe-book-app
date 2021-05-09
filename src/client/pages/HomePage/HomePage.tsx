@@ -6,7 +6,6 @@ import { RoutePath } from "@client/components/Root";
 import styles from "./HomePage.scss";
 
 
-
 const HomePage: React.FC = () => {
 
     const createRecipeButtonLabel = "Create Recipe".toUpperCase();

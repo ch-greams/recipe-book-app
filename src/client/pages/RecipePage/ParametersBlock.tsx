@@ -68,7 +68,7 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={Object.values(Units)}
+                    options={Object.values(Units).map((unit) => ({ value: unit }))}
                     value={recipeItem.servingSizeUnit}
                     onChange={handleServingSizeUnitEdit}
                 />

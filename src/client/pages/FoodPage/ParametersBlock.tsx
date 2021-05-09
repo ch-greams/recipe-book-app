@@ -28,11 +28,6 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
         dispatch(actions.updateServingSize(amount));
     };
 
-    const handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        // NOTE: Unit or CustomUnit
-        console.log(event.target.value);
-    };
-
 
     return (
         <div className={styles.parametersBlock}>
@@ -74,7 +69,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={Object.keys(WeightUnit)}
+                    options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
                     onChange={console.log}
                     value={foodItem.densityWeight}
                 />
@@ -83,7 +78,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={Object.keys(VolumeUnit)}
+                    options={Object.keys(VolumeUnit).map((unit) => ({ value: unit }))}
                     onChange={console.log}
                     value={foodItem.densityVolume}
                 />
@@ -105,8 +100,11 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={[ ...Object.values(Units), ...foodItem.customUnits.map((cu) => cu.name) ]}
-                    onChange={handleServingSizeUnitEdit}
+                    options={[
+                        ...Object.values(Units).map((unit) => ({ value: unit })),
+                        ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
+                    ]}
+                    onChange={console.log}
                 />
 
             </div>

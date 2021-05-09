@@ -48,6 +48,12 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
         }
     };
 
+    const otherSubDirectionTypes = [
+        SubDirectionType.Tip,
+        SubDirectionType.Note,
+        SubDirectionType.Warning,
+    ];
+
     return (
 
         <div className={styles.subDirectionLine}>
@@ -69,15 +75,14 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
 
                 <SelectInput
                     type={SelectInputType.SubDirectionType}
+                    withGroups={true}
                     options={[
-                        SubDirectionType.Tip,
-                        SubDirectionType.Note,
-                        SubDirectionType.Warning,
-                        "----",
                         ...ingredients.map((ingredient) => ({
+                            group: "Ingredients",
                             label: references[ingredient.id].name.toUpperCase(),
                             value: `${SubDirectionType.Ingredient}_${ingredient.id}`,
                         })),
+                        ...otherSubDirectionTypes.map((type) => ({ group: "Other", value: type })),
                     ]}
                     value={direction.newStep}
                     onChange={(event) => {

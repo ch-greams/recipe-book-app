@@ -41,7 +41,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     const tempSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
-            options={Object.keys(TemperatureUnit)}
+            options={Object.keys(TemperatureUnit).map((unit) => ({ value: unit }))}
             value={direction.temperature?.unit}
             onChange={(event) => {
                 dispatch(actions.updateDirectionTemperatureUnit(index, event.target.value as TemperatureUnit));
@@ -70,7 +70,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     const timeSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
-            options={Object.keys(TimeUnit)}
+            options={Object.keys(TimeUnit).map((unit) => ({ value: unit }))}
             value={direction.time?.unit}
             onChange={(event) => {
                 dispatch(actions.updateDirectionTimeUnit(index, event.target.value as TimeUnit));

@@ -59,7 +59,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
             
             <SelectInput
                 type={SelectInputType.IngredientUnit}
-                options={Object.values(Units)}
+                options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={ingredient.unit}
                 onChange={handleIngredientUnitEdit(ingredient.id)}
             />

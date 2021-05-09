@@ -88,7 +88,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                     
                     <SelectInput
                         type={SelectInputType.AltIngredientUnit}
-                        options={Object.values(Units)}
+                        options={Object.values(Units).map((unit) => ({ value: unit }))}
                         value={subDirection.unit}
                         onChange={(event) => {
                             dispatch(actions.updateSubDirectionIngredientUnit(
