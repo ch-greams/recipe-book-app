@@ -22,8 +22,6 @@ interface Props {
 
 const FoodPage: React.FC<Props> = ({ foodItem }) => {
 
-    console.log("FoodPage");
-
     const {
         name,
         brand,
