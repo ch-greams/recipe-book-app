@@ -95,9 +95,9 @@ const AltIngredientLine: React.FC<Props> = ({
                 type={SelectInputType.AltIngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={altIngredient.unit}
-                onChange={(event) => {
+                onChange={(value: WeightUnit | VolumeUnit) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredient.id, event.target.value as WeightUnit | VolumeUnit
+                        parentId, altIngredient.id, value
                     ));
                 }}
             />

@@ -99,11 +99,12 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 />
 
                 <SelectInput
-                    type={SelectInputType.Other}
+                    type={SelectInputType.ServingSize}
                     options={[
                         ...Object.values(Units).map((unit) => ({ value: unit })),
                         ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
+                    value={WeightUnit.g}
                     onChange={console.log}
                 />
 

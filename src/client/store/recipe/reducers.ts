@@ -75,7 +75,7 @@ function convertIngredients(ingredients: typings.IngredientDefault[]): types.Rec
     return ingredients.map((ingredient) => ({
         ...ingredient,
 
-        isOpen: true,
+        isOpen: false,
         isMarked: false,
         amountInput: String(ingredient.amount),
         alternatives: ingredient.alternatives.map((alt) => ({

@@ -1,7 +1,9 @@
 import React from "react";
 
-import { Option, SelectChangeCallback } from "@common/typings";
+import { Option } from "@common/typings";
 import Utils from "@common/utils";
+
+import { useToggleList } from "./hooks";
 
 import styles from "./SelectInput.scss";
 
@@ -9,6 +11,7 @@ import styles from "./SelectInput.scss";
 export enum SelectInputType {
     IngredientUnit,
     AltIngredientUnit,
+    ServingSize,
     CustomUnit,
     SubDirectionType,
     Other,
@@ -25,7 +28,7 @@ interface Props {
     withGroups?: boolean;
     options: SelectOption[];
     value?: string;
-    onChange: SelectChangeCallback;
+    onChange: (value: string) => void;
 }
 
 
@@ -42,6 +45,11 @@ const getClassName = (type: SelectInputType): string => {
                 [styles.selectInput]: true,
                 [styles.altIngredientUnit]: true,
             });
+        case SelectInputType.ServingSize:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.servingSize]: true,
+            });
         case SelectInputType.CustomUnit:
             return Utils.classNames({
                 [styles.selectInput]: true,
@@ -57,40 +65,57 @@ const getClassName = (type: SelectInputType): string => {
     }
 };
 
-const getGroupedOptionElements = (options: SelectOption[]): JSX.Element[] => {
+const getOption = (option: SelectOption, onSelect: (value: string) => void): JSX.Element => (
+    <div
+        key={option.value}
+        className={styles.selectInputOption}
+        onClick={() => onSelect(option.value)}
+    >
+        {Utils.unwrap(option.label, option.value)}
+    </div>
+);
 
-    const groups = [ ...new Set(options.map((option) => option.group)) ];
-
-    return groups.flatMap((group) => ([
-        <option key={group} style={{ color: "#fff" }} disabled={true}>{`- ${group}`}</option>,
-
-        ...options.filter((option) => (option.group === group)).map((option) => (
-            <option key={option.value} value={option.value}>
-                {Utils.unwrap(option.label, option.value)}
-            </option>
-        )),
-    ]));
-};
-
-const getOptionElements = (options: SelectOption[]): JSX.Element[] => {
-
-    return options.map((option) => (
-        <option key={option.value} value={option.value}>
-            {Utils.unwrap(option.label, option.value)}
-        </option>
-    ));
-};
+const getItemList = (
+    withGroups: boolean,
+    options: SelectOption[],
+    onSelect: (value: string) => void,
+): JSX.Element => (
+    <div className={styles.selectInputList}>
+        {(
+            withGroups
+                ? options
+                    .map((option) => option.group)
+                    .unique()
+                    .flatMap((group) => ([
+                        <div key={group} className={styles.selectInputGroupName}>
+                            {`- ${group}`}
+                        </div>,
+            
+                        ...options
+                            .filter((option) => (option.group === group))
+                            .map((option) => getOption(option, onSelect)),
+                    ]))
+                : options.map((option) => getOption(option, onSelect))
+        )}
+    </div>
+);
 
 const SelectInput: React.FC<Props> = ({ type, options, value, onChange, withGroups = false }) => {
-    
+
+    const { isListVisible, showList, hideList } = useToggleList();
+
+    const onSelect = (option: string): void => {
+        onChange(option);
+        hideList();
+    };
+
     return (
-        <select
-            className={getClassName(type)}
-            value={value}
-            onChange={onChange}
-        >
-            {( withGroups ? getGroupedOptionElements(options) : getOptionElements(options) )}
-        </select>
+        <div className={getClassName(type)}>
+            <div className={styles.selectInputOption} onClick={showList}>
+                {value}
+            </div>
+            {( isListVisible && getItemList(withGroups, options, onSelect) )}
+        </div>
     );
 };
 

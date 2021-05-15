@@ -53,6 +53,7 @@ const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
                 <SelectInput
                     type={SelectInputType.CustomUnit}
                     options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
+                    value={WeightUnit.g}
                     onChange={console.log}
                 />
             </div>

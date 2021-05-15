@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import type { Dictionary, IngredientItem, InputChangeCallback, Option, SelectChangeCallback } from "@common/typings";
+import type { Dictionary, IngredientItem, InputChangeCallback, Option } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@client/components/SelectInput/SelectInput";
@@ -31,12 +31,6 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
         };
     };
 
-    const handleIngredientUnitEdit = (id: string): SelectChangeCallback => {
-        return (event) => {
-            dispatch(actions.updateIngredientUnit(id, event.target.value as WeightUnit | VolumeUnit));
-        };
-    };
-
     const amountText = (
         <div className={styles.ingredientInfoLineAmountText}>
             {ingredient.amount}
@@ -61,7 +55,9 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={ingredient.unit}
-                onChange={handleIngredientUnitEdit(ingredient.id)}
+                onChange={(value: WeightUnit | VolumeUnit) => {
+                    dispatch(actions.updateIngredientUnit(ingredient.id, value));
+                }}
             />
         </div>
     );

@@ -27,11 +27,6 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
         dispatch(actions.updateServingSizeAmount(event.target.value));
     };
 
-    const handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-        dispatch(actions.updateServingSizeUnit(event.target.value as WeightUnit | VolumeUnit));
-    };
-
-
     return (
         
         <div className={styles.parametersBlock}>
@@ -67,10 +62,12 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
                 />
 
                 <SelectInput
-                    type={SelectInputType.Other}
+                    type={SelectInputType.ServingSize}
                     options={Object.values(Units).map((unit) => ({ value: unit }))}
                     value={recipeItem.servingSizeUnit}
-                    onChange={handleServingSizeUnitEdit}
+                    onChange={(value: WeightUnit | VolumeUnit): void => {
+                        dispatch(actions.updateServingSizeUnit(value));
+                    }}
                 />
 
             </div>

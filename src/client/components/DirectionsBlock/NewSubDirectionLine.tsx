@@ -85,8 +85,8 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
                         ...otherSubDirectionTypes.map((type) => ({ group: "Other", value: type })),
                     ]}
                     value={direction.newStep}
-                    onChange={(event) => {
-                        dispatch(actions.updateNewSubDirectionType(directionIndex, event.target.value as SubDirectionType));
+                    onChange={(value: SubDirectionType) => {
+                        dispatch(actions.updateNewSubDirectionType(directionIndex, value));
                     }}
                 />
 

@@ -50,8 +50,8 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                 type={SelectInputType.IngredientUnit}
                 options={Object.keys(TemperatureUnit).map((unit) => ({ value: unit }))}
                 value={direction.temperature?.unit}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    dispatch(actions.updateNewDirectionTemperatureUnit(event.target.value as TemperatureUnit));
+                onChange={(value: TemperatureUnit) => {
+                    dispatch(actions.updateNewDirectionTemperatureUnit(value));
                 }}
             />
         </div>
@@ -78,8 +78,8 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                 type={SelectInputType.IngredientUnit}
                 options={Object.keys(TimeUnit).map((unit) => ({ value: unit }))}
                 value={direction.temperature?.unit}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>): void => {
-                    dispatch(actions.updateNewDirectionTimeUnit(event.target.value as TimeUnit));
+                onChange={(value: TimeUnit) => {
+                    dispatch(actions.updateNewDirectionTimeUnit(value));
                 }}
             />
         </div>
