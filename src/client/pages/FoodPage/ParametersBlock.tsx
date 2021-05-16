@@ -25,7 +25,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
         const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
 
-        dispatch(actions.updateServingSize(amount));
+        dispatch(actions.updateServingSizeAmount(amount));
     };
 
 
@@ -104,8 +104,8 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                         ...Object.values(Units).map((unit) => ({ value: unit })),
                         ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
-                    value={WeightUnit.g}
-                    onChange={console.log}
+                    value={foodItem.servingSizeUnit}
+                    onChange={(unit: WeightUnit | VolumeUnit) => dispatch(actions.updateServingSizeUnit(unit))}
                 />
 
             </div>

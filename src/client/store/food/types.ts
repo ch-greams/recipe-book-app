@@ -30,7 +30,7 @@ export interface FoodPageStore {
     densityWeight: WeightUnit;
     servingSize: number;
     servingSizeInput: string;
-    unit: WeightUnit | VolumeUnit;
+    servingSizeUnit: WeightUnit | VolumeUnit;
     featuredNutritionFacts: NutritionFactType[];
 }
 
@@ -40,7 +40,8 @@ export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
-export const FOOD_ITEM_UPDATE_SERVING_SIZE = "FOOD_ITEM_UPDATE_SERVING_SIZE";
+export const FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
+export const FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT = "FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT";
 
 
 export const FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST";
@@ -132,9 +133,14 @@ export interface UpdateCustomUnitErrorAction {
     payload: string;
 }
 
-export interface UpdateServingSizeAction {
-    type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE;
+export interface UpdateServingSizeAmountAction {
+    type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT;
     payload: string;
+}
+
+export interface UpdateServingSizeUnitAction {
+    type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT;
+    payload: WeightUnit | VolumeUnit;
 }
 
 export interface FoodItemFetchRequestAction {
@@ -154,7 +160,8 @@ export interface FoodItemFetchErrorAction {
 
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction |
-    UpdateNutritionFactAction | UpdateCustomUnitsAction | UpdateServingSizeAction |
+    UpdateNutritionFactAction | UpdateCustomUnitsAction |
+    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
     AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |
     RemoveCustomUnitRequestAction | RemoveCustomUnitSuccessAction | RemoveCustomUnitErrorAction |

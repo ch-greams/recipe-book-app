@@ -1,7 +1,6 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import { CustomUnit, CustomUnitInput } from "@common/units";
-
-import { Food } from "../../../common/typings";
+import { Food } from "@common/typings";
+import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 
 import * as types from "./types";
 
@@ -56,10 +55,17 @@ export function fetchFoodItemError(error: string): types.FoodItemFetchErrorActio
     };
 }
 
-export function updateServingSize(servingSizeInput: string): types.UpdateServingSizeAction {
+export function updateServingSizeAmount(servingSizeAmountInput: string): types.UpdateServingSizeAmountAction {
     return {
-        type: types.FOOD_ITEM_UPDATE_SERVING_SIZE,
-        payload: servingSizeInput,
+        type: types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
+        payload: servingSizeAmountInput,
+    };
+}
+
+export function updateServingSizeUnit(servingSizeUnit: WeightUnit | VolumeUnit): types.UpdateServingSizeUnitAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT,
+        payload: servingSizeUnit,
     };
 }
 

@@ -36,7 +36,7 @@ const initialState: types.FoodPageStore = {
 
     servingSize: 100,
     servingSizeInput: "100",
-    unit: WeightUnit.g,
+    servingSizeUnit: WeightUnit.g,
 
 
     featuredNutritionFacts: [
@@ -165,7 +165,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_SERVING_SIZE: {
+        case types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
             const servingSize = Number(action.payload);
             const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
@@ -177,6 +177,19 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 nutritionFactsByServing: nutritionFactsByServing,
                 nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT: {
+
+            return {
+                ...state,
+
+                servingSizeUnit: action.payload,
+
+                // TODO: Update nutritionFacts values on change
+                // nutritionFactsByServing: nutritionFactsByServing,
+                // nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
