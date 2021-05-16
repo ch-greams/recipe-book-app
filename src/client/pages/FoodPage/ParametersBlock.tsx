@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
+import { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import CustomUnitsBlock from "@client/components/CustomUnitsBlock/CustomUnitsBlock";
@@ -21,14 +22,15 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
     const dispatch = useDispatch();
 
 
-    const handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
-
+    const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
         const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
-
         dispatch(actions.updateServingSizeAmount(amount));
     };
 
-
+    const handleFoodTypeEdit: InputChangeCallback = (event) => {
+        dispatch(actions.updateType(event.target.value));
+    };
+    
     return (
         <div className={styles.parametersBlock}>
 
@@ -42,7 +44,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     type={"text"}
                     value={foodItem.type}
                     className={styles.typeSelectInput}
-                    onChange={console.log}
+                    onChange={handleFoodTypeEdit}
                 />
 
             </div>

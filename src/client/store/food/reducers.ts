@@ -88,6 +88,13 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
+        case types.FOOD_ITEM_UPDATE_TYPE: {
+            return {
+                ...state,
+                type: action.payload,
+            };
+        }
+        
         case types.FOOD_ITEM_FETCH_REQUEST: {
             return {
                 ...state,

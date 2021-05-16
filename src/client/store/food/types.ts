@@ -42,6 +42,7 @@ export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT"
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT = "FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT";
+export const FOOD_ITEM_UPDATE_TYPE = "FOOD_ITEM_UPDATE_TYPE";
 
 
 export const FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST";
@@ -72,6 +73,11 @@ export interface UpdateBrandAction {
 
 export interface UpdateSubtitleAction {
     type: typeof FOOD_ITEM_UPDATE_SUBTITLE;
+    payload: string;
+}
+
+export interface UpdateTypeAction {
+    type: typeof FOOD_ITEM_UPDATE_TYPE;
     payload: string;
 }
 
@@ -159,7 +165,7 @@ export interface FoodItemFetchErrorAction {
 }
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateTypeAction |
     UpdateNutritionFactAction | UpdateCustomUnitsAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
