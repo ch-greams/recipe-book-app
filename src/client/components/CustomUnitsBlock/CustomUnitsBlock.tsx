@@ -42,6 +42,8 @@ const CustomUnitsBlock: React.FC<Props> = ({
         });
     };
 
+    const updateNewItemUnit = (unit: WeightUnit): void => setNewCustomUnit({ ...newCustomUnit, unit});
+
     return (
         <div className={styles.customUnitsBlock}>
 
@@ -61,12 +63,17 @@ const CustomUnitsBlock: React.FC<Props> = ({
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
                 };
                 
+                const updateItemUnit = (unit: WeightUnit): void => {
+                    dispatch(updateCustomUnitRequest(index, { ...customUnit, unit }));
+                };
+                
                 return (
                     <CustomUnitLine
                         key={`CU_${customUnit.name}`}
                         customUnit={customUnit}
                         updateItemName={updateItemName}
-                        updateItemAmount={updateItemAmount}    
+                        updateItemAmount={updateItemAmount}
+                        updateItemUnit={updateItemUnit}
                     >
 
                         <IconWrapper
@@ -86,6 +93,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                 customUnit={newCustomUnit}
                 updateItemName={updateNewItemName}
                 updateItemAmount={updateNewItemAmount}
+                updateItemUnit={updateNewItemUnit}
             >
 
                 <IconWrapper

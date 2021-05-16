@@ -11,6 +11,7 @@ interface CustomUnitLineProps {
     customUnit: CustomUnitInput;
     updateItemName: InputChangeCallback;
     updateItemAmount: InputChangeCallback;
+    updateItemUnit: (unit: WeightUnit) => void;
 }
 
 
@@ -19,6 +20,7 @@ const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
     children,
     updateItemName,
     updateItemAmount,
+    updateItemUnit,
 }) => (
     <div className={styles.customUnitLine}>
 
@@ -53,8 +55,8 @@ const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
                 <SelectInput
                     type={SelectInputType.CustomUnit}
                     options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
-                    value={WeightUnit.g}
-                    onChange={console.log}
+                    value={customUnit.unit}
+                    onChange={updateItemUnit}
                 />
             </div>
         </div>
