@@ -25,9 +25,12 @@ export interface FoodPageStore {
     // NOTE: STATIC
 
     type: string;
+
     density: number;
+    densityInput: string;
     densityVolume: VolumeUnit;
     densityWeight: WeightUnit;
+
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: WeightUnit | VolumeUnit;
@@ -38,12 +41,16 @@ export interface FoodPageStore {
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
+export const FOOD_ITEM_UPDATE_TYPE = "FOOD_ITEM_UPDATE_TYPE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
+
+export const FOOD_ITEM_UPDATE_DENSITY_AMOUNT = "FOOD_ITEM_UPDATE_DENSITY_AMOUNT";
+export const FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT = "FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT";
+export const FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT = "FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT";
+
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT = "FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT";
-export const FOOD_ITEM_UPDATE_TYPE = "FOOD_ITEM_UPDATE_TYPE";
-
 
 export const FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST";
 export const FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS";
@@ -139,6 +146,21 @@ export interface UpdateCustomUnitErrorAction {
     payload: string;
 }
 
+export interface UpdateDensityAmountAction {
+    type: typeof FOOD_ITEM_UPDATE_DENSITY_AMOUNT;
+    payload: string;
+}
+
+export interface UpdateDensityVolumeUnitAction {
+    type: typeof FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT;
+    payload: VolumeUnit;
+}
+
+export interface UpdateDensityWeightUnitAction {
+    type: typeof FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT;
+    payload: WeightUnit;
+}
+
 export interface UpdateServingSizeAmountAction {
     type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT;
     payload: string;
@@ -167,6 +189,7 @@ export interface FoodItemFetchErrorAction {
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateTypeAction |
     UpdateNutritionFactAction | UpdateCustomUnitsAction |
+    UpdateDensityAmountAction | UpdateDensityVolumeUnitAction | UpdateDensityWeightUnitAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
     AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |

@@ -31,6 +31,7 @@ const initialState: types.FoodPageStore = {
     type: "Nuts",
 
     density: 1,
+    densityInput: "1",
     densityVolume: VolumeUnit.ml,
     densityWeight: WeightUnit.g,
 
@@ -172,15 +173,42 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
+        case types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT: {
+
+            const amount = Utils.decimalNormalizer(action.payload, state.densityInput);
+
+            return {
+                ...state,
+                density: Number(amount),
+                densityInput: amount,
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT: {
+            return {
+                ...state,
+                densityVolume: action.payload,
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT: {
+            return {
+                ...state,
+                densityWeight: action.payload,
+            };
+        }
+
         case types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
-            const servingSize = Number(action.payload);
+
+            const amount = Utils.decimalNormalizer(action.payload, state.servingSizeInput);
+            const servingSize = Number(amount);
             const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
             return {
                 ...state,
 
                 servingSize: servingSize,
-                servingSizeInput: action.payload,
+                servingSizeInput: amount,
 
                 nutritionFactsByServing: nutritionFactsByServing,
                 nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),

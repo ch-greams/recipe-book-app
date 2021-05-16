@@ -61,6 +61,26 @@ export function fetchFoodItemError(error: string): types.FoodItemFetchErrorActio
         payload: error,
     };
 }
+export function updateDensityAmount(densityAmountInput: string): types.UpdateDensityAmountAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT,
+        payload: densityAmountInput,
+    };
+}
+
+export function updateDensityVolumeUnit(densityVolumeUnit: VolumeUnit): types.UpdateDensityVolumeUnitAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT,
+        payload: densityVolumeUnit,
+    };
+}
+
+export function updateDensityWeightUnit(densityWeightUnit: WeightUnit): types.UpdateDensityWeightUnitAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT,
+        payload: densityWeightUnit,
+    };
+}
 
 export function updateServingSizeAmount(servingSizeAmountInput: string): types.UpdateServingSizeAmountAction {
     return {

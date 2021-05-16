@@ -26,10 +26,6 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
         const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
         dispatch(actions.updateServingSizeAmount(amount));
     };
-
-    const handleFoodTypeEdit: InputChangeCallback = (event) => {
-        dispatch(actions.updateType(event.target.value));
-    };
     
     return (
         <div className={styles.parametersBlock}>
@@ -44,7 +40,9 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     type={"text"}
                     value={foodItem.type}
                     className={styles.typeSelectInput}
-                    onChange={handleFoodTypeEdit}
+                    onChange={(event) => {
+                        dispatch(actions.updateType(event.target.value));
+                    }}
                 />
 
             </div>
@@ -64,15 +62,17 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 
                 <input
                     type={"text"}
-                    value={foodItem.density}
+                    value={foodItem.densityInput}
                     className={styles.densityLineInput}
-                    onChange={console.log}
+                    onChange={(event) => {
+                        dispatch(actions.updateDensityAmount(event.target.value));
+                    }}
                 />
 
                 <SelectInput
                     type={SelectInputType.Other}
                     options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
-                    onChange={console.log}
+                    onChange={(unit: WeightUnit) => dispatch(actions.updateDensityWeightUnit(unit))}
                     value={foodItem.densityWeight}
                 />
 
@@ -81,7 +81,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 <SelectInput
                     type={SelectInputType.Other}
                     options={Object.keys(VolumeUnit).map((unit) => ({ value: unit }))}
-                    onChange={console.log}
+                    onChange={(unit: VolumeUnit) => dispatch(actions.updateDensityVolumeUnit(unit))}
                     value={foodItem.densityVolume}
                 />
 
@@ -95,7 +95,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 
                 <input
                     type={"text"}
-                    value={foodItem.servingSize}
+                    value={foodItem.servingSizeInput}
                     className={styles.servingSizeLineInput}
                     onChange={handleServingSizeAmountEdit}
                 />
