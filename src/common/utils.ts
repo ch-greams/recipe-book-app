@@ -49,8 +49,12 @@ export default class Utils {
         return DEFAULT_VALUE;
     }
 
+    public static isEmptyString(value: string): boolean {
+        return value.trim().length === Utils.ZERO;
+    }
+
     public static unwrap<T>(value: Option<T>, defaultValue: T): T {
-        return (value === null) || (value === undefined) ? defaultValue : value;
+        return this.isSome(value) ? value : defaultValue;
     }
 
     public static isSome<T>(value: Option<T>): value is T {
@@ -193,11 +197,20 @@ export default class Utils {
     
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
     
-        return customUnits.map((customUnit: CustomUnit) => ({ ...customUnit, amount: String(customUnit.amount) }));
+        return customUnits.map(this.convertCustomUnitIntoInput);
     }
     
     public static convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
     
-        return customUnits.map((customUnit: CustomUnitInput) => ({ ...customUnit, amount: Number(customUnit.amount) }));
+        return customUnits.map(this.convertCustomUnitIntoValue);
+    }
+
+    public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {
+    
+        return { ...customUnit, amount: String(customUnit.amount) };
+    }
+
+    public static convertCustomUnitIntoValue(customUnit: CustomUnitInput): CustomUnit {
+        return { ...customUnit, amount: Number(customUnit.amount) };
     }
 }

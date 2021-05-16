@@ -17,27 +17,27 @@ export interface RootProps {
 }
 
 
-export default class Root extends React.Component<RootProps> {
-    public static readonly displayName = "Root";
+const Root: React.FC<RootProps> = ({ store }) => {
 
-    public render(): JSX.Element {
+    const FoodPage = React.lazy(() => import(/* webpackChunkName: "food-page" */ "../pages/FoodPage/FoodPage"));
+    const RecipePage = React.lazy(() => import(/* webpackChunkName: "recipe-page" */ "../pages/RecipePage/RecipePage"));
+    const HomePage = React.lazy(() => import(/* webpackChunkName: "home-page" */ "../pages/HomePage/HomePage"));
 
-        const FoodPage = React.lazy(() => import(/* webpackChunkName: "food-page" */ "../pages/FoodPage/FoodPage"));
-        const RecipePage = React.lazy(() => import(/* webpackChunkName: "recipe-page" */ "../pages/RecipePage/RecipePage"));
-        const HomePage = React.lazy(() => import(/* webpackChunkName: "home-page" */ "../pages/HomePage/HomePage"));
+    return (
+        <Provider store={store}>
+            <BrowserRouter>
+                <Suspense fallback={<Loader />}>
+                    <Switch>
+                        <Route path={"/food/:foodId?"} component={FoodPage} />
+                        <Route path={"/recipe/:recipeId?"} component={RecipePage} />
+                        <Route path={"/"} component={HomePage} />
+                    </Switch>
+                </Suspense>
+            </BrowserRouter>
+        </Provider>
+    );
+};
 
-        return (
-            <Provider store={this.props.store}>
-                <BrowserRouter>
-                    <Suspense fallback={<Loader />}>
-                        <Switch>
-                            <Route path={"/food/:foodId?"} component={FoodPage} />
-                            <Route path={"/recipe/:recipeId?"} component={RecipePage} />
-                            <Route path={"/"} component={HomePage} />
-                        </Switch>
-                    </Suspense>
-                </BrowserRouter>
-            </Provider>
-        );
-    }
-}
+
+Root.displayName = "Root";
+export default Root;

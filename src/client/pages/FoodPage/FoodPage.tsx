@@ -1,240 +1,113 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 
-import { CustomUnitInput, Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import Loader from "@client/components/Loader/Loader";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
-import SelectInput from "@client/components/SelectInput/SelectInput";
-import ServingSizesBlock from "@client/components/ServingSizesBlock/ServingSizesBlock";
 import { AppState } from "@client/store";
-import {
-    requestFoodItem, updateBrand, updateCustomUnits, updateName, updateServingSize,
-updateSubtitle } from "@client/store/food/actions";
-import { FoodPageStore, UpdateCustomUnitsAction } from "@client/store/food/types";
+import * as actions from "@client/store/food/actions";
+import type { FoodPageStore } from "@client/store/food/types";
+
+import ParametersBlock from "./ParametersBlock";
 
 import styles from "./FoodPage.scss";
 
 
-
-interface StateToProps {
+interface Props {
     foodItem: FoodPageStore;
 }
 
-interface DispatchToProps {
-    updateName: typeof updateName;
-    updateBrand: typeof updateBrand;
-    updateSubtitle: typeof updateSubtitle;
-    requestFoodItem: typeof requestFoodItem;
-    updateCustomUnits: typeof updateCustomUnits;
-    updateServingSize: typeof updateServingSize;
-}
+const FoodPage: React.FC<Props> = ({ foodItem }) => {
 
-interface Props extends StateToProps, DispatchToProps, RouteComponentProps<{ foodId: string }> { }
+    const {
+        name,
+        brand,
+        subtitle,
+        nutritionFactsByServing,
+        nutritionFactsByServingInputs,
+        featuredNutritionFacts,
+    } = foodItem;
 
+    return (
+        <div className={styles.foodPage}>
 
-class FoodPage extends Component<Props> {
-    public static readonly displayName = "FoodPage";
+            <div className={styles.foodPageElements}>
 
-    public componentDidMount(): void {
-        this.props.requestFoodItem(this.props.match.params.foodId);
-    }
+                {/* Title Block */}
 
-    private handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
+                <PageTitleBlock
+                    name={name}
+                    brand={brand}
+                    subtitle={subtitle}
+                    updateName={actions.updateName}
+                    updateBrand={actions.updateBrand}
+                    updateSubtitle={actions.updateSubtitle}
+                />
 
-        const { foodItem, updateServingSize } = this.props;
+                {/* Main Block */}
 
-        const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
+                <div className={styles.mainBlock}>
 
-        updateServingSize(amount);
-    };
+                    <ParametersBlock foodItem={foodItem} />
 
-    private handleServingSizeUnitEdit = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+                    <div className={styles.featuredNutritionFacts}>
 
-        // NOTE: Unit or CustomUnit
-        console.log(event.target.value);
-    };
-
-    private getParametersBlock(
-        foodItem: FoodPageStore,
-        updateCustomUnits: (customUnits: CustomUnitInput[]) => UpdateCustomUnitsAction,
-    ): JSX.Element {
-
-        return (
-            
-            <div className={styles.parametersBlock}>
-
-                <div className={styles.typeSelect}>
-
-                    <div className={styles.typeSelectLabel}>
-                        {"TYPE"}
+                        <NutritionFactsBlock
+                            title={"NUTRITION FACTS"}
+                            nutritionFacts={
+                                Utils.getNutritionFacts(
+                                    featuredNutritionFacts,
+                                    nutritionFactsByServing,
+                                    nutritionFactsByServingInputs
+                                )
+                            }
+                        />
                     </div>
-
-                    <input
-                        type={"text"}
-                        value={foodItem.type}
-                        className={styles.typeSelectInput}
-                        onChange={console.log}
-                    />
 
                 </div>
 
-                <div className={styles.separator} />
+                {/* Detailed Nutrition Information  */}
 
-                <div className={styles.densityLine}>
-                    
-                    {/* BULK DENSITY */}
-
-                    <div
-                        className={styles.densityLineLabel}
-                        title={"Use Bulk Density for foods like rice or beans"}
-                    >
-                        {"DENSITY"}
-                    </div>
-                    
-                    <input
-                        type={"text"}
-                        value={foodItem.density}
-                        className={styles.densityLineInput}
-                        onChange={console.log}
-                    />
-
-                    <SelectInput
-                        options={Object.keys(WeightUnit)}
-                        onChange={console.log}
-                        value={foodItem.densityWeight}
-                    />
-
-                    {"/"}
-
-                    <SelectInput
-                        options={Object.keys(VolumeUnit)}
-                        onChange={console.log}
-                        value={foodItem.densityVolume}
-                    />
-
+                <div className={styles.pageBlockTitle}>
+                    {"DETAILED NUTRITION INFORMATION"}
                 </div>
 
-                <div className={styles.servingSizeLine}>
-                    
-                    <div className={styles.servingSizeLineLabel}>
-                        {"SERVING SIZE"}
-                    </div>
-                    
-                    <input
-                        type={"text"}
-                        value={foodItem.servingSize}
-                        className={styles.servingSizeLineInput}
-                        onChange={this.handleServingSizeAmountEdit}
-                    />
-
-                    <SelectInput
-                        options={[ ...Object.values(Units), ...foodItem.customUnits.map((cu) => cu.name) ]}
-                        onChange={this.handleServingSizeUnitEdit}
-                    />
-
-                </div>
-
-                <div className={styles.separator} />
-
-                <ServingSizesBlock
-                    customUnitInputs={foodItem.customUnitInputs}
-                    updateCustomUnits={updateCustomUnits}
+                <PageDetailedNutritionFactsBlock
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
                 />
 
             </div>
-        );
-    }
+        </div>
 
+    );
 
-    public render(): JSX.Element {
-        
-        const {
-            foodItem,
-            foodItem: {
-                isLoaded,
-                name,
-                brand,
-                subtitle,
-                nutritionFactsByServing,
-                nutritionFactsByServingInputs,
-                featuredNutritionFacts,
-            },
-            updateName,
-            updateBrand,
-            updateSubtitle,
-            updateCustomUnits,
-        } = this.props;
-
-        if (!isLoaded) {
-            return <Loader />;
-        }
-
-        return (
-            <div className={styles.foodPage}>
-
-                <div className={styles.foodPageElements}>
-
-                    {/* Title Block */}
-
-                    <PageTitleBlock
-                        name={name}
-                        brand={brand}
-                        subtitle={subtitle}
-                        updateName={updateName}
-                        updateBrand={updateBrand}
-                        updateSubtitle={updateSubtitle}
-                    />
-
-                    {/* Main Block */}
-
-                    <div className={styles.mainBlock}>
-
-                        {this.getParametersBlock(foodItem, updateCustomUnits)}
-
-                        <div className={styles.featuredNutritionFacts}>
-
-                            <NutritionFactsBlock
-                                title={"NUTRITION FACTS"}
-                                nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFactsByServing, nutritionFactsByServingInputs)}
-                            />
-                        </div>
-
-                    </div>
-
-                    {/* Detailed Nutrition Information  */}
-
-                    <div className={styles.pageBlockTitle}>
-                        {"DETAILED NUTRITION INFORMATION"}
-                    </div>
-
-                    <PageDetailedNutritionFactsBlock
-                        nutritionFacts={nutritionFactsByServing}
-                        nutritionFactInputs={nutritionFactsByServingInputs}
-                    />
-
-                </div>
-            </div>
-        );
-    }
-}
-
-
-
-const mapStateToProps = (state: AppState): StateToProps => ({
-    foodItem: state.foodPage,
-});
-
-const mapDispatchToProps: DispatchToProps = {
-    updateName,
-    updateBrand,
-    updateSubtitle,
-    requestFoodItem,
-    updateCustomUnits,
-    updateServingSize,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FoodPage);
+FoodPage.displayName = "FoodPage";
+
+
+const FoodPageConnected: React.FC<RouteComponentProps<{ foodId: string }>> = ({ match }) => {
+
+    const dispatch = useDispatch();
+
+    const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
+
+    useEffect(() => {
+        dispatch(actions.fetchFoodItemRequest(match.params.foodId));
+    }, [ dispatch ]);
+
+    return (
+        foodItem.isLoaded
+            ? <FoodPage foodItem={foodItem} />
+            : <Loader />
+    );
+};
+
+FoodPageConnected.displayName = "FoodPageConnected";
+
+
+export default FoodPageConnected;

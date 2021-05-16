@@ -1,68 +1,41 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React from "react";
 import { Link } from "react-router-dom";
 
 import { RoutePath } from "@client/components/Root";
-import { AppState } from "@client/store";
-import { updateName } from "@client/store/food/actions";
-import { FoodPageStore } from "@client/store/food/types";
 
 import styles from "./HomePage.scss";
 
 
+const HomePage: React.FC = () => {
 
-interface HomePageStateToProps {
-    foodItem: FoodPageStore;
-}
+    const createRecipeButtonLabel = "Create Recipe".toUpperCase();
+    const createFoodButtonLabel = "Create Food".toUpperCase();
 
-interface HomePageDispatchToProps {
-    updateName: typeof updateName;
-}
+    return (
+        <div className={styles.homePage}>
 
-interface HomePageProps extends HomePageStateToProps, HomePageDispatchToProps { }
+            <input
+                className={styles.searchInput}
+                type={"text"}
+                placeholder={"WHAT’S FOR DINNER?"}
+            />
 
+            <div className={styles.homePageButtons}>
 
-class HomePage extends Component<HomePageProps> {
-    public static readonly displayName = "HomePage";
+                <Link to={RoutePath.Recipe} className={styles.homePageButton}>
+                    {createRecipeButtonLabel}
+                </Link>
 
-    public render(): JSX.Element {
-
-        const createRecipeButtonLabel = "Create Recipe".toUpperCase();
-        const createFoodButtonLabel = "Create Food".toUpperCase();
-
-        return (
-            <div className={styles.homePage}>
-
-                <input
-                    className={styles.searchInput}
-                    type={"text"}
-                    placeholder={"WHAT’S FOR DINNER?"}
-                />
-
-                <div className={styles.homePageButtons}>
-
-                    <Link to={RoutePath.Recipe} className={styles.homePageButton}>
-                        {createRecipeButtonLabel}
-                    </Link>
-
-                    <Link to={RoutePath.Food} className={styles.homePageButton}>
-                        {createFoodButtonLabel}
-                    </Link>
-
-                </div>
+                <Link to={RoutePath.Food} className={styles.homePageButton}>
+                    {createFoodButtonLabel}
+                </Link>
 
             </div>
-        );
-    }
-}
+
+        </div>
+    );
+}; 
 
 
-const mapStateToProps = (state: AppState): HomePageStateToProps => ({
-    foodItem: state.foodPage,
-});
-
-const mapDispatchToProps: HomePageDispatchToProps = {
-    updateName,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
+HomePage.displayName = "HomePage";
+export default HomePage;

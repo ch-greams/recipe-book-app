@@ -17,13 +17,6 @@ $color-input: #707070;
 $font-default: "Montserrat", sans-serif;
 
 
-@mixin reset_select {
-    appearance: none;
-    padding: 0;
-    border: none;
-    border-radius: none;
-}
-
 html,
 body {
     select:focus,

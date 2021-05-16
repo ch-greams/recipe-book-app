@@ -43,6 +43,7 @@ rules:
     eol-last:
         - 2
         - "always"
+    no-shadow: 0
 
     simple-import-sort/imports:
         - 2
@@ -74,6 +75,9 @@ rules:
     react/display-name:
         - 1
         - ignoreTranspilerName: true
+    # Next rule is disabled since typescript will validate types by default
+    react/prop-types: 0
+    react/prefer-stateless-function: 2
 
     "@typescript-eslint/explicit-member-accessibility": 2
     "@typescript-eslint/explicit-function-return-type":
@@ -94,3 +98,6 @@ rules:
         - singleline:
             delimiter: "comma"
             requireLast: false
+    "@typescript-eslint/no-shadow":
+        - 1
+        - ignoreTypeValueShadow: true

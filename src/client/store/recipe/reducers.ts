@@ -1,68 +1,15 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary, Direction, IngredientDefault, IngredientItem, SubDirectionIngredient } from "@common/typings";
-import { CustomUnitInput, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
+import type * as typings from "@common/typings";
+import * as units from "@common/units";
+import { CustomUnit } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
+import { AppState } from "@client/store";
 
-import {
-    RECIPE_ITEM_ADD_ALT_INGREDIENT,
-    RECIPE_ITEM_ADD_INGREDIENT,
-    RECIPE_ITEM_CREATE_DIRECTION,
-    RECIPE_ITEM_CREATE_SUBDIRECTION,
-    RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
-    RECIPE_ITEM_FETCH_ERROR,
-    RECIPE_ITEM_FETCH_REQUESTED,
-    RECIPE_ITEM_FETCH_SUCCESS,
-    RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
-    RECIPE_ITEM_REMOVE_DIRECTION,
-    RECIPE_ITEM_REMOVE_INGREDIENT,
-    RECIPE_ITEM_REMOVE_SUBDIRECTION,
-    RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
-    RECIPE_ITEM_TOGGLE_DIRECTION_MARK,
-    RECIPE_ITEM_TOGGLE_DIRECTION_OPEN,
-    RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
-    RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
-    RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
-    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
-    RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
-    RECIPE_ITEM_UPDATE_BRAND,
-    RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
-    RECIPE_ITEM_UPDATE_DESCRIPTION,
-    RECIPE_ITEM_UPDATE_DIRECTION_NAME,
-    RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER,
-    RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT,
-    RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT,
-    RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT,
-    RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT,
-    RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
-    RECIPE_ITEM_UPDATE_NAME,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT,
-    RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT,
-    RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
-    RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
-    RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
-    RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
-    RECIPE_ITEM_UPDATE_SUBTITLE,
-    RECIPE_ITEM_UPDATE_TYPE,
-    RecipeDirection,
-    RecipeIngredient,
-    RecipeIngredientDefault,
-    RecipeItemActionTypes,
-    RecipePageStore,
-    RecipeSubDirectionIngredient,
-    SubDirectionType,
-} from "./types";
+import * as types from "./types";
 
 
 
-const initialState: RecipePageStore = {
+const initialState: types.RecipePageStore = {
 
     isLoaded: false,
     errorMessage: null,
@@ -82,7 +29,7 @@ const initialState: RecipePageStore = {
 
     servingSize: 100,
     servingSizeInput: "100",
-    servingSizeUnit: WeightUnit.g,
+    servingSizeUnit: units.WeightUnit.g,
 
     ingredients: [],
 
@@ -95,17 +42,17 @@ const initialState: RecipePageStore = {
 
         time: {
             count: 0,
-            unit: TimeUnit.min,
+            unit: units.TimeUnit.min,
         },
         temperature: {
             count: 0,
-            unit: TemperatureUnit.C,
+            unit: units.TemperatureUnit.C,
         },
 
         timeInput: "",
         temperatureInput: "",
 
-        newStep: SubDirectionType.Note,
+        newStep: types.SubDirectionType.Note,
         steps: [],
     },
     directions: [],
@@ -114,13 +61,21 @@ const initialState: RecipePageStore = {
 };
 
 
+function extractState(globalState: AppState): types.RecipePageStore {
+    return (globalState?.recipePage || initialState);
+}
 
-function convertIngredients(ingredients: IngredientDefault[]): RecipeIngredientDefault[] {
+export function extractCustomUnits(globalState: AppState): units.CustomUnit[] {
+    return extractState(globalState).customUnits;
+}
+
+
+function convertIngredients(ingredients: typings.IngredientDefault[]): types.RecipeIngredientDefault[] {
 
     return ingredients.map((ingredient) => ({
         ...ingredient,
 
-        isOpen: true,
+        isOpen: false,
         isMarked: false,
         amountInput: String(ingredient.amount),
         alternatives: ingredient.alternatives.map((alt) => ({
@@ -131,7 +86,7 @@ function convertIngredients(ingredients: IngredientDefault[]): RecipeIngredientD
     }));
 }
 
-function convertDirections(directions: Direction[]): RecipeDirection[] {
+function convertDirections(directions: typings.Direction[]): types.RecipeDirection[] {
 
     return directions.map((direction) => ({
         ...direction,
@@ -140,33 +95,33 @@ function convertDirections(directions: Direction[]): RecipeDirection[] {
         isMarked: false,
         timeInput: direction.time?.count ? String(direction.time?.count) : "",
         temperatureInput: direction.temperature?.count ? String(direction.temperature?.count) : "",
-        newStep: SubDirectionType.Note,
+        newStep: types.SubDirectionType.Note,
 
         steps: direction.steps.map((step) => 
-            step.type !== SubDirectionType.Ingredient
+            step.type !== types.SubDirectionType.Ingredient
                 ? step
                 : ({
                     ...step,
                     isMarked: false,
-                    amountInput: String((step as SubDirectionIngredient).amount),
+                    amountInput: String((step as typings.SubDirectionIngredient).amount),
                 })
         ),
     }));
 }
 
 function getRecipeNutritionFacts(
-    ingredients: IngredientDefault[],
-    references: Dictionary<string, IngredientItem>,
-): Dictionary<NutritionFactType, number> {
+    ingredients: typings.IngredientDefault[],
+    references: typings.Dictionary<string, typings.IngredientItem>,
+): typings.Dictionary<NutritionFactType, number> {
 
-    const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
+    const nutritionFactsById: typings.Dictionary<NutritionFactType, number>[] = ingredients
         .map((ingredient) => {
             
             const nutritionFacts = references[ingredient.id].nutritionFacts;
             const multiplier = Utils.getPercentMultiplier(ingredient.amount);
 
             return Utils.getObjectKeys(nutritionFacts)
-                .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
+                .reduce((acc: typings.Dictionary<NutritionFactType, number>, nutritionFactType) => {
 
                     const nutritionFactValue = nutritionFacts[nutritionFactType];
 
@@ -185,55 +140,66 @@ function getRecipeNutritionFacts(
 }
 
 
-export default function recipePageReducer(state = initialState, action: RecipeItemActionTypes): RecipePageStore {
+export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
 
     switch (action.type) {
 
-        case RECIPE_ITEM_UPDATE_NAME: {
+        case types.RECIPE_ITEM_UPDATE_NAME: {
             return {
                 ...state,
                 name: action.payload,
             };
         }
 
-        case RECIPE_ITEM_UPDATE_BRAND: {
+        case types.RECIPE_ITEM_UPDATE_BRAND: {
             return {
                 ...state,
                 brand: action.payload,
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SUBTITLE: {
+        case types.RECIPE_ITEM_UPDATE_SUBTITLE: {
             return {
                 ...state,
                 subtitle: action.payload,
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DESCRIPTION: {
+        case types.RECIPE_ITEM_UPDATE_DESCRIPTION: {
             return {
                 ...state,
                 description: action.payload,
             };
         }
 
-        case RECIPE_ITEM_UPDATE_TYPE: {
+        case types.RECIPE_ITEM_UPDATE_TYPE: {
             return {
                 ...state,
                 type: action.payload,
             };
         }
 
-        case RECIPE_ITEM_UPDATE_CUSTOM_UNITS: {
+        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNITS: {
             return {
                 ...state,
 
                 customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
-                customUnitInputs: action.payload as CustomUnitInput[],
+                customUnitInputs: action.payload as units.CustomUnitInput[],
             };
         }
 
-        case RECIPE_ITEM_REMOVE_DIRECTION: {
+        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS:
+        case types.RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS:
+        case types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
+            return {
+                ...state,
+                
+                customUnits: action.payload as CustomUnit[],
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
+            };
+        }
+
+        case types.RECIPE_ITEM_REMOVE_DIRECTION: {
             const directionIndex = action.payload;
             return {
                 ...state,
@@ -241,7 +207,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_REMOVE_SUBDIRECTION: {
+        case types.RECIPE_ITEM_REMOVE_SUBDIRECTION: {
             const { directionIndex, subDirectionIndex } = action.payload;
             return {
                 ...state,
@@ -258,7 +224,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_TOGGLE_DIRECTION_OPEN: {
+        case types.RECIPE_ITEM_TOGGLE_DIRECTION_OPEN: {
             const directionIndex = action.payload;
             return {
                 ...state,
@@ -270,7 +236,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_TOGGLE_DIRECTION_MARK: {
+        case types.RECIPE_ITEM_TOGGLE_DIRECTION_MARK: {
             const directionIndex = action.payload;
             return {
                 ...state,
@@ -284,7 +250,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                 direction.isMarked
                                     ? direction.steps
                                     : direction.steps.map((subDirection) => (
-                                        (subDirection.type === SubDirectionType.Ingredient)
+                                        (subDirection.type === types.SubDirectionType.Ingredient)
                                             ? { ...subDirection, isMarked: true }
                                             : subDirection
                                     ))
@@ -295,7 +261,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK: {
+        case types.RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK: {
             const { directionIndex, subDirectionIndex } = action.payload;
             return {
                 ...state,
@@ -303,14 +269,14 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
                     if (directionIndex === iDirection) {
 
-                        const steps = direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) =>
-                            (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                        const steps = direction.steps.map((subDirection: types.RecipeSubDirectionIngredient, iSubDirection) =>
+                            (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                 ? { ...subDirection, isMarked: !subDirection.isMarked }
                                 : subDirection
                         );
 
                         const areAllStepsMarked = steps.every((step) => (
-                            (step.type !== SubDirectionType.Ingredient) || step.isMarked
+                            (step.type !== types.SubDirectionType.Ingredient) || step.isMarked
                         ));
 
                         return {
@@ -327,7 +293,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE: {
+        case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE: {
             const { directionIndex, subDirectionIndex, note } = action.payload;
 
             return {
@@ -337,7 +303,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         ? {
                             ...direction,
                             steps: direction.steps.map((subDirection, iSubDirection) =>
-                                (subDirection.type !== SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                (subDirection.type !== types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                     ? { ...subDirection, label: note }
                                     : subDirection
                             ),
@@ -347,7 +313,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT: {
+        case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT: {
 
             const { directionIndex, subDirectionIndex, inputValue } = action.payload;
 
@@ -357,10 +323,10 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) => {
+                            steps: direction.steps.map((subDirection: types.RecipeSubDirectionIngredient, iSubDirection) => {
 
                                 if (
-                                    (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                    (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                 ) {
                                     const amount = Utils.decimalNormalizer(inputValue, subDirection.amountInput);
 
@@ -380,7 +346,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT: {
 
             const { directionIndex, subDirectionIndex, unit } = action.payload;
 
@@ -390,8 +356,8 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection: RecipeSubDirectionIngredient, iSubDirection) => (
-                                (subDirection.type === SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                            steps: direction.steps.map((subDirection: types.RecipeSubDirectionIngredient, iSubDirection) => (
+                                (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
                                     ? { ...subDirection, unit: unit }
                                     : subDirection
                             )),
@@ -401,12 +367,12 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT: {
+        case types.RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT: {
 
             const { directionIndex, ingredientId } = action.payload;
 
             const ingredientItem = state.references[ingredientId];
-            const ingredient = state.ingredients.find((ingredient) => ingredient.id === ingredientId);
+            const ingredient = state.ingredients.find((_ingredient) => _ingredient.id === ingredientId);
 
             return {
                 ...state,
@@ -417,7 +383,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                             steps: [
                                 ...direction.steps,
                                 {
-                                    type: SubDirectionType.Ingredient,
+                                    type: types.SubDirectionType.Ingredient,
                                     label: ingredientItem.name,
                 
                                     id: ingredientItem.id,
@@ -433,7 +399,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_CREATE_SUBDIRECTION: {
+        case types.RECIPE_ITEM_CREATE_SUBDIRECTION: {
 
             const { directionIndex, type } = action.payload;
 
@@ -453,7 +419,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE: {
+        case types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE: {
 
             const { directionIndex, type } = action.payload;
 
@@ -467,7 +433,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER: {
 
             const { directionIndex, stepNumber } = action.payload;
 
@@ -481,7 +447,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_NAME: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_NAME: {
 
             const { directionIndex, name } = action.payload;
 
@@ -495,7 +461,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT: {
 
             const { directionIndex, inputValue } = action.payload;
 
@@ -521,7 +487,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_UNIT: {
 
             const { directionIndex, unit } = action.payload;
 
@@ -541,7 +507,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_TIME_COUNT: {
 
             const { directionIndex, inputValue } = action.payload;
 
@@ -567,7 +533,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_DIRECTION_TIME_UNIT: {
 
             const { directionIndex, unit } = action.payload;
 
@@ -587,7 +553,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_STEP_NUMBER: {
 
             const stepNumber = action.payload;
 
@@ -597,7 +563,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_NAME: {
 
             const name = action.payload;
 
@@ -607,7 +573,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT: {
 
             const inputValue = action.payload;
 
@@ -626,7 +592,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT: {
 
             const unit = action.payload;
 
@@ -642,7 +608,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_COUNT: {
 
             const inputValue = action.payload;
 
@@ -661,7 +627,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_NEW_DIRECTION_TIME_UNIT: {
 
             const unit = action.payload;
 
@@ -677,7 +643,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_CREATE_DIRECTION: {
+        case types.RECIPE_ITEM_CREATE_DIRECTION: {
 
             const direction = action.payload;
 
@@ -698,7 +664,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                         timeInput: direction.timeInput,
                         temperatureInput: direction.temperatureInput,
                 
-                        newStep: SubDirectionType.Note,
+                        newStep: types.SubDirectionType.Note,
                         steps: [],
                     },
                 ],
@@ -711,23 +677,23 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
 
                     time: {
                         count: 0,
-                        unit: TimeUnit.min,
+                        unit: units.TimeUnit.min,
                     },
                     temperature: {
                         count: 0,
-                        unit: TemperatureUnit.C,
+                        unit: units.TemperatureUnit.C,
                     },
             
                     timeInput: "",
                     temperatureInput: "",
             
-                    newStep: SubDirectionType.Note,
+                    newStep: types.SubDirectionType.Note,
                     steps: [],
                 },
             };
         }
 
-        case RECIPE_ITEM_REMOVE_INGREDIENT: {
+        case types.RECIPE_ITEM_REMOVE_INGREDIENT: {
 
             const id = action.payload;
 
@@ -744,7 +710,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_REMOVE_ALT_INGREDIENT: {
+        case types.RECIPE_ITEM_REMOVE_ALT_INGREDIENT: {
 
             const { parentId, id } = action.payload;
 
@@ -764,16 +730,16 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
+        case types.RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
 
             const { parentId, id } = action.payload;
 
-            const ingredients = state.ingredients.reduce<RecipeIngredientDefault[]>((accIngredients, curIngredient) => {
+            const ingredients = state.ingredients.reduce<types.RecipeIngredientDefault[]>((accIngredients, curIngredient) => {
 
                 if (curIngredient.id === parentId) {
 
                     const alternative = curIngredient.alternatives.find((alt) => alt.id === id);
-                    const newAlternative: RecipeIngredient = {
+                    const newAlternative: types.RecipeIngredient = {
                         amount: curIngredient.amount,
                         amountInput: curIngredient.amountInput,
                         unit: curIngredient.unit,
@@ -807,7 +773,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN: {
+        case types.RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN: {
 
             const id = action.payload;
 
@@ -820,7 +786,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_TOGGLE_INGREDIENT_MARK: {
+        case types.RECIPE_ITEM_TOGGLE_INGREDIENT_MARK: {
 
             const id = action.payload;
 
@@ -834,7 +800,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
         }
 
 
-        case RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT: {
+        case types.RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT: {
 
             const { id, inputValue } = action.payload;
 
@@ -862,7 +828,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_INGREDIENT_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT: {
 
             const { id, unit } = action.payload;
 
@@ -875,7 +841,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
         }
 
 
-        case RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT: {
+        case types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT: {
 
             const { parentId, id, inputValue } = action.payload;
 
@@ -901,7 +867,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT: {
 
             const { parentId, id, unit } = action.payload;
 
@@ -920,7 +886,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS: {
+        case types.RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS: {
 
             const { parentId, id, isSelected } = action.payload;
 
@@ -939,7 +905,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_ADD_INGREDIENT: {
+        case types.RECIPE_ITEM_ADD_INGREDIENT: {
 
             const ingredient = action.payload;
 
@@ -957,7 +923,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
     
                     amount: 100,
                     amountInput: "100",
-                    unit: WeightUnit.g,
+                    unit: units.WeightUnit.g,
         
                     altNutritionFacts: {},
         
@@ -978,7 +944,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_ADD_ALT_INGREDIENT: {
+        case types.RECIPE_ITEM_ADD_ALT_INGREDIENT: {
 
             const { id, altIngredient } = action.payload;
 
@@ -997,7 +963,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
                                 {
                                     amount: 100,
                                     amountInput: "100",
-                                    unit: WeightUnit.g,
+                                    unit: units.WeightUnit.g,
                                     id: altIngredient.id,
                                 },
                             ],
@@ -1011,7 +977,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
+        case types.RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
 
             const inputValue = action.payload;
 
@@ -1024,7 +990,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT: {
 
             const unit = action.payload;
 
@@ -1034,7 +1000,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_FETCH_REQUESTED: {
+        case types.RECIPE_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,
@@ -1044,15 +1010,15 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_FETCH_SUCCESS: {
+        case types.RECIPE_ITEM_FETCH_SUCCESS: {
             const recipeItem = action.payload;
 
-            const referenceItems: IngredientItem[] = [
+            const referenceItems: typings.IngredientItem[] = [
                 ...(recipeItem.references?.food || []),
                 ...(recipeItem.references?.recipe || []),
             ];
 
-            const references: Dictionary<string, IngredientItem> = referenceItems
+            const references: typings.Dictionary<string, typings.IngredientItem> = referenceItems
                 .reduce((refs, item) => ({ ...refs, [item.id]: item }), {});
 
             return {
@@ -1079,7 +1045,7 @@ export default function recipePageReducer(state = initialState, action: RecipeIt
             };
         }
 
-        case RECIPE_ITEM_FETCH_ERROR: {
+        case types.RECIPE_ITEM_FETCH_ERROR: {
             return {
                 ...state,
                 isLoaded: true,

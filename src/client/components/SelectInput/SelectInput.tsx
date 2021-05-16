@@ -1,7 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 
-import { SelectChangeCallback } from "@common/typings";
+import { Option } from "@common/typings";
 import Utils from "@common/utils";
+
+import { useToggleList } from "./hooks";
 
 import styles from "./SelectInput.scss";
 
@@ -9,74 +11,114 @@ import styles from "./SelectInput.scss";
 export enum SelectInputType {
     IngredientUnit,
     AltIngredientUnit,
+    ServingSize,
     CustomUnit,
     SubDirectionType,
+    Other,
 }
 
 interface SelectOption {
-    label: string;
+    group?: Option<string>;
+    label?: Option<string>;
     value: string;
 }
 
 interface Props {
-    type?: SelectInputType;
-    options: (string | SelectOption)[];
+    type: SelectInputType;
+    withGroups?: boolean;
+    options: SelectOption[];
     value?: string;
-    onChange: SelectChangeCallback;
+    onChange: (value: string) => void;
 }
 
 
-export default class SelectInput extends Component<Props> {
-    public static readonly displayName = "SelectInput";
+const getClassName = (type: SelectInputType): string => {
 
-    private getClassName(type?: SelectInputType): string {
-
-        switch (type) {
-            case SelectInputType.IngredientUnit:
-                return Utils.classNames({
-                    [styles.selectInput]: true,
-                    [styles.ingredientUnit]: true,
-                });
-            case SelectInputType.AltIngredientUnit:
-                return Utils.classNames({
-                    [styles.selectInput]: true,
-                    [styles.altIngredientUnit]: true,
-                });
-            case SelectInputType.CustomUnit:
-                return Utils.classNames({
-                    [styles.selectInput]: true,
-                    [styles.customUnit]: true,
-                });
-            case SelectInputType.SubDirectionType:
-                return Utils.classNames({
-                    [styles.selectInput]: true,
-                    [styles.subDirectionType]: true,
-                });
-            default:
-                return styles.selectInput;
-        }
+    switch (type) {
+        case SelectInputType.IngredientUnit:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.ingredientUnit]: true,
+            });
+        case SelectInputType.AltIngredientUnit:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.altIngredientUnit]: true,
+            });
+        case SelectInputType.ServingSize:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.servingSize]: true,
+            });
+        case SelectInputType.CustomUnit:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.customUnit]: true,
+            });
+        case SelectInputType.SubDirectionType:
+            return Utils.classNames({
+                [styles.selectInput]: true,
+                [styles.subDirectionType]: true,
+            });
+        case SelectInputType.Other:
+            return styles.selectInput;
     }
+};
 
-    public render(): JSX.Element {
+const getOption = (option: SelectOption, onSelect: (value: string) => void): JSX.Element => (
+    <div
+        key={option.value}
+        className={styles.selectInputOption}
+        onClick={() => onSelect(option.value)}
+    >
+        {Utils.unwrap(option.label, option.value)}
+    </div>
+);
 
-        const { type, options, value, onChange } = this.props;
+const getItemList = (
+    withGroups: boolean,
+    options: SelectOption[],
+    onSelect: (value: string) => void,
+): JSX.Element => (
+    <div className={styles.selectInputList}>
+        {(
+            withGroups
+                ? options
+                    .map((option) => option.group)
+                    .unique()
+                    .flatMap((group) => ([
+                        <div key={group} className={styles.selectInputGroupName}>
+                            {`- ${group}`}
+                        </div>,
+            
+                        ...options
+                            .filter((option) => (option.group === group))
+                            .map((option) => getOption(option, onSelect)),
+                    ]))
+                : options.map((option) => getOption(option, onSelect))
+        )}
+    </div>
+);
 
-        return (
-            <select
-                className={this.getClassName(type)}
-                value={value}
-                onChange={onChange}
-            >
-                {options.map((option) => (
-                    (typeof option === "string")
-                        ? (
-                            (option === "----")
-                                ? <option key={option} disabled={true}>{option}</option>
-                                : <option key={option} value={option}>{option}</option>
-                        )
-                        : <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-            </select>
-        );
-    }
-}
+const SelectInput: React.FC<Props> = ({ type, options, value, onChange, withGroups = false }) => {
+
+    const { isListVisible, showList, hideList } = useToggleList();
+
+    const onSelect = (option: string): void => {
+        onChange(option);
+        hideList();
+    };
+
+    return (
+        <div className={getClassName(type)}>
+            <div className={styles.selectInputOption} onClick={showList}>
+                {value}
+            </div>
+            {( isListVisible && getItemList(withGroups, options, onSelect) )}
+        </div>
+    );
+};
+
+SelectInput.displayName = "SelectInput";
+
+export default SelectInput;
