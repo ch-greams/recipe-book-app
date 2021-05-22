@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { RouteComponentProps } from "react-router-dom";
 
 import Utils from "@common/utils";
-import Loader from "@client/components/Loader/Loader";
 import NutritionFactsBlock from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import SingleMessagePage from "@client/components/SingleMessagePage/SingleMessagePage";
 import { AppState } from "@client/store";
 import * as actions from "@client/store/food/actions";
 import type { FoodPageStore } from "@client/store/food/types";
@@ -102,8 +102,12 @@ const FoodPageConnected: React.FC<RouteComponentProps<{ foodId: string }>> = ({ 
 
     return (
         foodItem.isLoaded
-            ? <FoodPage foodItem={foodItem} />
-            : <Loader />
+            ? (
+                foodItem.errorMessage
+                    ? <SingleMessagePage text={foodItem.errorMessage} />
+                    : <FoodPage foodItem={foodItem} />
+            )
+            : <SingleMessagePage text={"LOADING"} />
     );
 };
 

@@ -5,9 +5,9 @@ import { RouteComponentProps } from "react-router-dom";
 import Utils from "@common/utils";
 import DirectionsBlock from "@client/components/DirectionsBlock/DirectionsBlock";
 import IngredientsBlock from "@client/components/IngredientsBlock/IngredientsBlock";
-import Loader from "@client/components/Loader/Loader";
 import PageDetailedNutritionFactsBlock from "@client/components/PageDetailedNutritionFactsBlock/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@client/components/PageTitleBlock/PageTitleBlock";
+import SingleMessagePage from "@client/components/SingleMessagePage/SingleMessagePage";
 import { AppState } from "@client/store";
 import * as actions from "@client/store/recipe/actions";
 import { RecipePageStore } from "@client/store/recipe/types";
@@ -126,13 +126,17 @@ const RecipePageConnected: React.FC<RouteComponentProps<{ recipeId: string }>> =
     return (
         recipeItem.isLoaded
             ? (
-                <RecipePage
-                    isReadOnly={!isEdit}
-                    recipeItem={recipeItem}
-                    search={search}
-                />
+                recipeItem.errorMessage
+                    ? <SingleMessagePage text={recipeItem.errorMessage} />
+                    : (
+                        <RecipePage
+                            isReadOnly={!isEdit}
+                            recipeItem={recipeItem}
+                            search={search}
+                        />
+                    )
             )
-            : <Loader />
+            : <SingleMessagePage text={"LOADING"} />
     );
 };
 

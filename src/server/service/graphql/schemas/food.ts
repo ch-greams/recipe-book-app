@@ -6,6 +6,8 @@ const FoodType = `
         brand: String!
         subtitle: String!
 
+        density: Float!
+
         nutritionFacts: NutritionFactValues!
         customUnits: [CustomUnit!]!
     }

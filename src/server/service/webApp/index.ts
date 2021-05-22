@@ -1,4 +1,3 @@
-import bodyParser from "body-parser";
 import express from "express";
 import path from "path";
 
@@ -39,8 +38,8 @@ export default class WebApp {
         this.app.use(express.static("view"));
         this.app.use(express.static("out/client"));
 
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: false }));
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: false }));
     }
 
     private static getStatusEndpoint(_request: express.Request, response: express.Response): void {
