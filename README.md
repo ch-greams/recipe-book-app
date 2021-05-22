@@ -7,5 +7,3 @@ docker run --name recipe-book-app-db \
     -v $HOME/dev/personal/recipe-book/recipe-book-app/mongodb:/data/db \
     mongo:4.4
 ```
-
-![data-model](./data-model.svg)
