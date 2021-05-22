@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Store } from "redux";
 
-import Loader from "@client/components/Loader/Loader";
+import SingleMessagePage from "@client/components/SingleMessagePage/SingleMessagePage";
 
 
 export enum RoutePath {
@@ -26,7 +26,7 @@ const Root: React.FC<RootProps> = ({ store }) => {
     return (
         <Provider store={store}>
             <BrowserRouter>
-                <Suspense fallback={<Loader />}>
+                <Suspense fallback={<SingleMessagePage text={"LOADING"} />}>
                     <Switch>
                         <Route path={"/food/:foodId?"} component={FoodPage} />
                         <Route path={"/recipe/:recipeId?"} component={RecipePage} />

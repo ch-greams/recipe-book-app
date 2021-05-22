@@ -12,6 +12,7 @@ export default class FoodApi {
         name
         brand
         subtitle
+        density
         nutritionFacts {
             ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
         }

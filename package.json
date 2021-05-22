@@ -50,7 +50,7 @@
     "@types/superagent": "^4.1.10",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
-    "css-loader": "^3.6.0",
+    "css-loader": "^5.2.5",
     "eslint": "^7.4.0",
     "eslint-plugin-react": "^7.20.3",
     "eslint-plugin-simple-import-sort": "^7.0.0",
