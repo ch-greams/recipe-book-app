@@ -27,7 +27,7 @@ function getFoodRecord(database: Database) {
             response.send(record);
         }
         else {
-            response.send(HttpStatusClientError.NotFound);
+            response.sendStatus(HttpStatusClientError.NotFound);
         }
 
     };
