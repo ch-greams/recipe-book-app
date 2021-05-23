@@ -15,6 +15,7 @@ export enum HttpStatusSuccess {
 export enum HttpStatusClientError {
     BadRequest = 400,
     Forbidden = 403,
+    NotFound = 404,
     PreconditionRequired = 428,
 }
 

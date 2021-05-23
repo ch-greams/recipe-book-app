@@ -88,8 +88,6 @@ export enum NutritionFactType {
     Caffeine = "Caffeine",
 }
 
-export const NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA = Object.values(NutritionFactType).join(", ");
-
 enum NutritionFactTypeLabel {
 
     Energy = "Energy",
