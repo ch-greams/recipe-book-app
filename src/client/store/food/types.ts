@@ -26,10 +26,11 @@ export interface FoodPageStore {
 
     type: string;
 
+    densityMetric: number;
     density: number;
     densityInput: string;
-    densityVolume: VolumeUnit;
-    densityWeight: WeightUnit;
+    densityVolumeUnit: VolumeUnit;
+    densityWeightUnit: WeightUnit;
 
     servingSize: number;
     servingSizeInput: string;

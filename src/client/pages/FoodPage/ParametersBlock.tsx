@@ -73,7 +73,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     type={SelectInputType.Other}
                     options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
                     onChange={(unit: WeightUnit) => dispatch(actions.updateDensityWeightUnit(unit))}
-                    value={foodItem.densityWeight}
+                    value={foodItem.densityWeightUnit}
                 />
 
                 {"/"}
@@ -82,7 +82,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     type={SelectInputType.Other}
                     options={Object.keys(VolumeUnit).map((unit) => ({ value: unit }))}
                     onChange={(unit: VolumeUnit) => dispatch(actions.updateDensityVolumeUnit(unit))}
-                    value={foodItem.densityVolume}
+                    value={foodItem.densityVolumeUnit}
                 />
 
             </div>
