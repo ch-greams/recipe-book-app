@@ -1,110 +1,24 @@
 import superagent from "superagent";
 
-import { NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA } from "@common/nutritionFacts";
 import { Recipe } from "@common/typings";
 
 
 export default class RecipeApi {
 
-    public static readonly API_PATH: string = "/graphql";
-
-    public static readonly INGREDIENT_TYPE_FIELDS: string = `
-        amount
-        unit
-        id
-
-        alternatives {
-
-            amount
-            unit
-            id
-        }
-    `;
-    public static readonly INGREDIENT_DATA_TYPE_FIELDS: string = `
-        id
-        name
-        nutritionFacts {
-            ${NUTRITION_FACT_TYPES_SEPARATED_BY_COMMA}
-        }
-    `;
-    public static readonly DIRECTION_TYPE_FIELDS: string = `
-        stepNumber
-        name
-
-        time {
-            count, unit
-        }
-
-        temperature {
-            count, unit
-        }
-
-        steps {
-            type, label, id, amount
-        }
-    `;
-    public static readonly RECIPE_TYPE_FIELDS: string = `
-        id
-        name
-        brand
-        subtitle
-        description
-        type
-
-        customUnits {
-            name, amount, unit
-        }
-
-        ingredients {
-            ${RecipeApi.INGREDIENT_TYPE_FIELDS}
-        }
-
-        directions {
-            ${RecipeApi.DIRECTION_TYPE_FIELDS}
-        }
-
-        references {
-            food {
-                ${RecipeApi.INGREDIENT_DATA_TYPE_FIELDS}
-            }
-            recipe {
-                ${RecipeApi.INGREDIENT_DATA_TYPE_FIELDS}
-            }
-        }
-    `;
+    public static readonly API_PATH: string = "/api/recipe";
 
 
     public static async getRecipeItem(id: string): Promise<Recipe> {
 
-        const query = `
-            {
-                recipe(id: "${id}") {
-                    ${RecipeApi.RECIPE_TYPE_FIELDS}
-                }
-            }
-        `;
+        const { body: recipeItem } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
 
-        const response = await superagent.get(RecipeApi.API_PATH).query({ query });
-
-        const { data: { recipe: record } } = response.body;
-
-        return record;
+        return recipeItem;
     }
 
     public static async getRecipeItems(): Promise<Recipe[]> {
 
-        const query = `
-            {
-                recipes {
-                    ${RecipeApi.RECIPE_TYPE_FIELDS}
-                }
-            }
-        `;
+        const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
 
-        const response = await superagent.get(RecipeApi.API_PATH).query({ query });
-
-        const { data: { recipes: records } } = response.body;
-
-        return records;
+        return recipeItems;
     }
 }

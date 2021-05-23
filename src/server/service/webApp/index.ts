@@ -3,8 +3,9 @@ import path from "path";
 
 import Logger, { LogLevel } from "@common/server/logger";
 import Utils from "@common/utils";
+import { foodApiRouter } from "@server/service/api/foodApi";
+import { recipeApiRouter } from "@server/service/api/recipeApi";
 import Database from "@server/service/database";
-import GraphQL from "@server/service/graphql";
 import { HttpStatusSuccess } from "@server/service/webApp";
 
 
@@ -19,14 +20,14 @@ export default class WebApp {
     private port: number;
 
 
-    public constructor(database: Database, isProduction: boolean = false) {
+    public constructor(database: Database) {
 
         this.app = express();
 
         this.port = (parseInt(Utils.unwrap(process.env.PORT, ""), 10) || WebApp.DEFAULT_PORT);
 
         this.config();
-        this.routes(database, isProduction);
+        this.routes(database);
     }
 
     public run(): void {
@@ -55,13 +56,15 @@ export default class WebApp {
     }
 
 
-    private routes(database: Database, isProduction: boolean): void {
+    private routes(database: Database): void {
 
         // WebApp Endpoints
 
         this.app.get("/status", WebApp.log, WebApp.getStatusEndpoint);
 
-        this.app.use("/graphql", GraphQL.getMiddleware(database, isProduction));
+        this.app.use("/api/food", foodApiRouter(database));
+
+        this.app.use("/api/recipe", recipeApiRouter(database));
 
         this.app.get("*", WebApp.log, (_req, res) => {
             res.sendFile( path.join(__dirname, "..", "..", "view", "index.html") );
