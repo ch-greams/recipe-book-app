@@ -11,6 +11,7 @@ export interface Food {
     name: string;
     brand: string;
     subtitle: string;
+    density: number;
     nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 }

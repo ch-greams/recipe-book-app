@@ -4,23 +4,71 @@ import { RoutePath } from "@client/components/Root";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import { NUTRIENTS, NutritionFactDescription, NutritionFactType } from "./nutritionFacts";
 import type { Dictionary, Option } from "./typings";
-import { CustomUnit, CustomUnitInput } from "./units";
+import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "./units";
 
 
 export enum DecimalPlaces {
     Zero = 0,
     One = 1,
     Two = 2,
+    Three = 3,
+    Four = 4,
 }
 
 export default class Utils {
 
-    public static readonly ENERGY_DAILY_VALUE_CALORIES: number = 2000;
     public static readonly MAX_DAILY_VALUE: number = 999;
 
     public static readonly ZERO: number = 0;
     private static readonly CENTUM: number = 100;
 
+    public static readonly CUP_TO_ML: number = 240;
+    public static readonly TBSP_TO_ML: number = 14.7868;
+    public static readonly TSP_TO_ML: number = 4.92892;
+    public static readonly OZ_TO_G: number = 28.3495;
+
+    public static convertDensity(
+        value: number,
+        weightUnit: WeightUnit,
+        volumeUnit: VolumeUnit,
+        toMetric: boolean = false,
+    ): number {
+
+        const convertedWeight = Utils.convertDensityWeight(value, weightUnit, toMetric);
+        const convertedVolume = Utils.convertDensityVolume(convertedWeight, volumeUnit, toMetric);
+
+        return convertedVolume;
+    }
+    
+    public static convertDensityVolume(value: number, volumeUnit: VolumeUnit, toMetric: boolean = false): number {
+
+        switch (volumeUnit) {
+
+            case VolumeUnit.cup:
+                return toMetric ? ( value / Utils.CUP_TO_ML )  : ( value * Utils.CUP_TO_ML );
+            case VolumeUnit.tbsp:
+                return toMetric ? ( value / Utils.TBSP_TO_ML ) : ( value * Utils.TBSP_TO_ML );
+            case VolumeUnit.tsp:
+                return toMetric ? ( value / Utils.TSP_TO_ML )  : ( value * Utils.TSP_TO_ML );
+
+            case VolumeUnit.ml:
+            default:
+                return value;
+        }
+    }
+
+    public static convertDensityWeight(value: number, weightUnit: WeightUnit, toMetric: boolean = false): number {
+
+        switch (weightUnit) {
+
+            case WeightUnit.oz:
+                return toMetric ? ( value * Utils.OZ_TO_G ) : ( value / Utils.OZ_TO_G );
+
+            case WeightUnit.g:
+            default:
+                return value;
+        }
+    }
 
     // NOTE: CALCULATIONS
 

@@ -1,7 +1,7 @@
 import { NutritionFactType } from "@common/nutritionFacts";
 import type { Dictionary } from "@common/typings";
 import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
+import Utils, { DecimalPlaces } from "@common/utils";
 import { AppState } from "@client/store";
 
 import * as types from "./types";
@@ -30,10 +30,11 @@ const initialState: types.FoodPageStore = {
 
     type: "Nuts",
 
+    densityMetric: 1,
     density: 1,
     densityInput: "1",
-    densityVolume: VolumeUnit.ml,
-    densityWeight: WeightUnit.g,
+    densityVolumeUnit: VolumeUnit.ml,
+    densityWeightUnit: WeightUnit.g,
 
     servingSize: 100,
     servingSizeInput: "100",
@@ -118,6 +119,11 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 name: foodItem.name,
                 brand: foodItem.brand,
                 subtitle: foodItem.subtitle,
+
+                densityMetric: foodItem.density,
+                density: foodItem.density,
+                densityInput: String(foodItem.density),
+
                 nutritionFacts: foodItem.nutritionFacts,
                 customUnits: foodItem.customUnits,
 
@@ -175,26 +181,41 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
         case types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT: {
 
-            const amount = Utils.decimalNormalizer(action.payload, state.densityInput);
+            const densityInput = Utils.decimalNormalizer(action.payload, state.densityInput);
+            const density = Number(densityInput);
+            const densityMetric = Utils.convertDensity(density, state.densityWeightUnit, state.densityVolumeUnit, true);
 
             return {
                 ...state,
-                density: Number(amount),
-                densityInput: amount,
+                densityMetric: densityMetric,
+                density: density,
+                densityInput: densityInput,
             };
         }
 
         case types.FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT: {
+
+            const density = Utils.convertDensity(state.densityMetric, state.densityWeightUnit, action.payload);
+            const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
+
             return {
                 ...state,
-                densityVolume: action.payload,
+                density: densityRounded,
+                densityInput: String(densityRounded),
+                densityVolumeUnit: action.payload,
             };
         }
 
         case types.FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT: {
+
+            const density = Utils.convertDensity(state.densityMetric, action.payload, state.densityVolumeUnit);
+            const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
+
             return {
                 ...state,
-                densityWeight: action.payload,
+                density: densityRounded,
+                densityInput: String(densityRounded),
+                densityWeightUnit: action.payload,
             };
         }
 
