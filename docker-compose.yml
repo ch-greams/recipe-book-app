@@ -20,13 +20,13 @@ services:
   mongodb:
     image: mongo:4.4
     volumes:
-      - rba-mongodb-data:/data/db
+      - $HOME/dev/personal/recipe-book/recipe-book-app/mongodb:/data/db
     ports:
       - 27017:27017
     # environment: 
     #   MONGO_INITDB_ROOT_USERNAME: root
     #   MONGO_INITDB_ROOT_PASSWORD: example
 
-volumes:
-  rba-mongodb-data:
+# volumes:
+#   rba-mongodb-data:
 
