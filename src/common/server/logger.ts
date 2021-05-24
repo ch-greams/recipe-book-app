@@ -12,7 +12,7 @@ export enum LogLevel {
 
 class Logger {
 
-    public static setup(level: LogLevel): winston.Logger {
+    public static setup(logLevel: LogLevel): winston.Logger {
 
         const _logger = winston.createLogger({
             format: winston.format.combine(
@@ -20,7 +20,7 @@ class Logger {
                 winston.format.timestamp(),
                 winston.format.printf(({ level, timestamp, message }) => `${timestamp} ${level}: ${message}`),
             ),
-            level: level,
+            level: logLevel,
             levels: { ERROR: 0, WARNING: 1, INFO: 2, VERBOSE: 3, DEBUG: 4, SILLY: 5 },
             transports: [ new winston.transports.Console() ],
         });

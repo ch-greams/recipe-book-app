@@ -12,9 +12,10 @@
     "start": "node ./out/server/server.bundle.js",
     "dev": "npm run build && npm start",
     "dev:watch": "webpack --watch",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "npx eslint . && npx stylelint src/",
+    "test": "echo \"Add tests you lazy fuck\"",
+    "lint": "npx eslint .",
     "lint-fix": "npx eslint --fix .",
+    "lint-all": "npx eslint . && npx stylelint src/",
     "purge": "rm -rf out node_modules package-lock.json"
   },
   "author": "Andrei Khvalko",
