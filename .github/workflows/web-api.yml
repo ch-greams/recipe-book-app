@@ -1,20 +1,20 @@
-name: web-app
+name: web-api
 
 defaults:
     run:
-        working-directory: services/web-app
+        working-directory: services/web-api
 
 on:
     push:
         branches:
             - main
         paths:
-            - services/web-app/**
+            - services/web-api/**
     pull_request:
         branches:
             - main
         paths:
-            - services/web-app/**
+            - services/web-api/**
 
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
