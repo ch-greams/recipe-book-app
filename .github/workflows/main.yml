@@ -11,12 +11,16 @@ on:
 
 jobs:
 
-    build:
+    build-web-app:
         runs-on: ubuntu-20.04
-        
+
+        defaults:
+            run:
+                working-directory: services/web-app
+
         strategy:
             matrix:
-                node-version: [ 15.x, 16.x ]
+                node-version: [ 16.x ]
 
         steps:
             - uses: actions/checkout@v2
@@ -29,13 +33,16 @@ jobs:
             - run: npm install
             - run: npm run build
 
-
-    lint:
+    lint-web-app:
         runs-on: ubuntu-20.04
-        
+
+        defaults:
+            run:
+                working-directory: services/web-app
+
         strategy:
             matrix:
-                node-version: [ 15.x, 16.x ]
+                node-version: [ 16.x ]
 
         steps:
             - uses: actions/checkout@v2
@@ -48,12 +55,16 @@ jobs:
             - run: npm install
             - run: npm run lint
 
-    test:
+    test-web-app:
         runs-on: ubuntu-20.04
-        
+
+        defaults:
+            run:
+                working-directory: services/web-app
+
         strategy:
             matrix:
-                node-version: [ 15.x, 16.x ]
+                node-version: [ 16.x ]
 
         steps:
             - uses: actions/checkout@v2
