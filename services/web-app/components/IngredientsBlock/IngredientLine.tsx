@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import Link from "next/link";
 
 import type { Dictionary, IngredientItem } from "@common/typings";
 import { WeightUnit } from "@common/units";
@@ -18,7 +19,6 @@ import IngredientInfoLine from "./IngredientInfoLine";
 import IngredientInfoLineNutritionFacts from "./IngredientInfoLineNutritionFacts";
 
 import styles from "./IngredientsBlock.module.scss";
-import Link from "next/link";
 
 
 
