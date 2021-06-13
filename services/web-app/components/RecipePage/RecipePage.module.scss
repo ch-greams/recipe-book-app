@@ -1,0 +1,150 @@
+@import "../../styles/variables";
+
+
+.recipePage {
+
+    display: flex;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    background-color: $color-default;
+
+    .recipePageElements {
+
+        flex-basis: 60%;
+
+        margin-top: 40px;
+        margin-bottom: 80px;
+
+        .recipePageBlockTitle {
+
+            padding: 14px 0;
+            margin: 30px 0;
+
+            font-family: $font-default;
+            font-size: 28px;
+            font-weight: 700;
+
+            color: $color-white;
+
+            text-align: center;
+
+            border-top-color: $color-white;
+            border-top-style: solid;
+            border-top-width: 2px;
+            border-bottom-color: $color-white;
+            border-bottom-style: solid;
+            border-bottom-width: 2px;
+        }
+
+        .mainBlock {
+
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+
+            .parametersBlock {
+
+                width: calc(50% - 20px);
+
+                padding-right: 20px;
+
+                .typeSelect {
+
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+
+                    padding: 20px 0;
+
+                    line-height: 32px;
+
+                    .typeSelectLabel {
+
+                        margin-right: 30px;
+
+                        font-family: $font-default;
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        color: $color-white;
+                    }
+
+                    .typeSelectInput {
+
+                        flex-grow: 2;
+                        padding-left: 8px;
+                        margin-right: 10px;
+
+                        font-family: $font-default;
+                        font-size: 20px;
+                        font-weight: 500;
+
+                        color: $color-white;
+
+                        background-color: $color-default-dark;
+
+                        border-color: $color-white;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+                }
+
+                .servingSizeLine {
+
+                    display: flex;
+
+                    flex-direction: row;
+
+                    margin: 12px 0;
+
+                    font-family: $font-default;
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    line-height: 32px;
+
+                    color: $color-white;
+
+                    .servingSizeLineLabel {
+
+                        width: 36%;
+                    }
+
+                    .servingSizeLineInput {
+
+                        width: 30%;
+                        padding-right: 8px;
+
+                        margin-right: 4px;
+
+                        font-family: $font-default;
+                        font-size: 18px;
+                        font-weight: 500;
+
+                        color: $color-white;
+
+                        text-align: right;
+
+                        background-color: $color-default-dark;
+
+                        border-color: $color-white;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+                }
+            }
+
+            .featuredNutritionFacts {
+
+                width: 49%;
+            }
+
+            .separator {
+                height: 1px;
+                background-color: $color-white;
+            }
+        }
+    }
+}

@@ -1,0 +1,78 @@
+
+root: true
+parser: "@typescript-eslint/parser"
+plugins:
+    - "@typescript-eslint"
+    - "simple-import-sort"
+
+extends:
+    - "eslint:recommended"
+    - "plugin:@typescript-eslint/recommended"
+
+env: 
+    browser: true
+    node: true
+
+rules:
+    max-len:
+        - 2
+        - code: 160
+    no-cond-assign: 2
+    no-multiple-empty-lines:
+        - 1
+        - max: 3
+    semi: 0
+    comma-dangle:
+        - 2
+        - "always-multiline"
+    quotes:
+        - 2
+        - "double"
+    no-console: 1
+    interface-name: 0
+    one-line: 0
+    member-ordering: 0
+    object-literal-sort-keys: 0
+    eol-last:
+        - 2
+        - "always"
+    no-shadow: 0
+
+    simple-import-sort/imports:
+        - 2
+        - groups:
+            -   # Packages come first.
+                - "^@?\\w"
+            -   # Internal packages.
+                - "^@common"
+                - "^@server"
+            -   # Parent imports. Put `..` last.
+                - "^\\.\\.(?!/?$)"
+                - "^\\.\\./?$"
+            -   # Other relative imports. Put same-folder imports and `.` last.
+                - "^\\./(?=.*/)(?!/?$)"
+                - "^\\.(?!/?$)"
+                - "^\\./?$"
+
+    "@typescript-eslint/explicit-member-accessibility": 2
+    "@typescript-eslint/explicit-function-return-type":
+        - 2
+        - allowExpressions: true
+    "@typescript-eslint/no-inferrable-types": 0
+    "@typescript-eslint/no-magic-numbers":
+        - 2
+        - ignoreReadonlyClassProperties: true
+          ignoreEnums: true
+    "@typescript-eslint/array-type":
+        - 2
+        - array: true
+    "@typescript-eslint/semi":
+        - 2
+    "@typescript-eslint/member-delimiter-style":
+        - 2
+        - singleline:
+            delimiter: "comma"
+            requireLast: false
+    "@typescript-eslint/no-shadow":
+        - 1
+        - ignoreTypeValueShadow: true
