@@ -1,3 +1,3 @@
-import FoodPage from "components/FoodPage/FoodPage";
+import FoodPage from "@views/food/FoodPage";
 
 export default FoodPage;

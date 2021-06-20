@@ -4,7 +4,7 @@ import { all, AllEffect, call, put, select, StrictEffect, takeLatest } from "red
 import { Food } from "@common/typings";
 import { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
-import FoodApi from "@api/client/foodApi";
+import FoodApi from "@api/foodApi";
 
 import * as actions from "./actions";
 import { extractCustomUnits } from "./reducers";

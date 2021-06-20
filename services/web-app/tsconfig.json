@@ -21,21 +21,15 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": [ "components/*" ],
+      "@views/*": [ "views/*" ],
       "@api/*": [ "api/*" ],
-      "@client/store/*": [ "store/*" ],
-      "@client/store": [ "store/index.ts" ],
-      "@client/components/*": [ "components/*" ],
-      "@client/icons/*": [ "icons/*" ],
-      "@common/*": [ "common/*" ]
+      "@store/*": [ "store/*" ],
+      "@store": [ "store/index.ts" ],
+      "@icons/*": [ "icons/*" ],
+      "@common/*": [ "common/*" ],
+      "@styles/*": [ "styles/*" ]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": [ "next-env.d.ts", "**/*.ts", "**/*.tsx" ],
+  "exclude": [ "node_modules" ]
 }

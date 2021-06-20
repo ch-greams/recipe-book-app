@@ -1,11 +1,16 @@
-import { NutritionFact } from "@client/components/NutritionFactsBlock/NutritionFactsBlock";
-import { RoutePath } from "@client/components/Root";
+import { NutritionFact } from "@views/shared/NutritionFactsBlock";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import { NUTRIENTS, NutritionFactDescription, NutritionFactType } from "./nutritionFacts";
 import type { Dictionary, Option } from "./typings";
 import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "./units";
 
+
+export enum RoutePath {
+    Home = "",
+    Food = "food",
+    Recipe = "recipe",
+}
 
 export enum DecimalPlaces {
     Zero = 0,

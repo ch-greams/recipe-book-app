@@ -4,7 +4,7 @@ import * as effects from "redux-saga/effects";
 import { Recipe } from "@common/typings";
 import { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
-import RecipeApi from "@api/client/recipeApi";
+import RecipeApi from "@api/recipeApi";
 
 import * as actions from "./actions";
 import { extractCustomUnits } from "./reducers";

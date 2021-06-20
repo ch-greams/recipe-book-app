@@ -1,3 +1,3 @@
-import RecipePage from "components/RecipePage/RecipePage";
+import RecipePage from "@views/recipe/RecipePage/RecipePage";
 
 export default RecipePage;

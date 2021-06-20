@@ -1,8 +1,7 @@
 import React from "react";
 import { Provider } from "react-redux";
 import type { AppProps } from "next/app";
-
-import { useStore } from "@client/store";
+import { useStore } from "@store";
 
 import "../styles/globals.scss";
 

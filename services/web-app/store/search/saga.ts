@@ -2,7 +2,7 @@ import { SagaIterator } from "redux-saga";
 import { all, AllEffect, call, put, StrictEffect, takeLatest } from "redux-saga/effects";
 
 import { Food, IngredientItem } from "@common/typings";
-import FoodApi from "@api/client/foodApi";
+import FoodApi from "@api/foodApi";
 
 import {
     INGREDIENTS_FETCH_ERROR,

@@ -3,7 +3,7 @@ import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import { CustomUnit } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
-import { AppState } from "@client/store";
+import { AppState } from "@store";
 
 import * as types from "./types";
 
