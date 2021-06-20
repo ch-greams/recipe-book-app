@@ -1,4 +1,3 @@
-
 root: true
 parser: "@typescript-eslint/parser"
 plugins:
@@ -9,6 +8,12 @@ extends:
     - "eslint:recommended"
     - "plugin:@typescript-eslint/recommended"
     - "plugin:react/recommended"
+
+ignorePatterns:
+    # don't ever lint node_modules
+    - "node_modules"
+    # don't lint next folder
+    - ".next"
 
 env: 
     browser: true
@@ -22,28 +27,26 @@ settings:
 
 rules:
     max-len:
-        - 2
+        - warn
         - code: 160
-    no-cond-assign: 2
+    no-cond-assign: warn
     no-multiple-empty-lines:
-        - 1
+        - error
         - max: 3
-    semi: 0
-    comma-dangle:
-        - 2
-        - "always-multiline"
+    semi: "off"
+    comma-dangle: "off"
     quotes:
-        - 2
+        - error
         - "double"
-    no-console: 1
-    interface-name: 0
-    one-line: 0
-    member-ordering: 0
-    object-literal-sort-keys: 0
+    no-console: error
+    interface-name: "off"
+    one-line: "off"
+    member-ordering: "off"
+    object-literal-sort-keys: "off"
     eol-last:
-        - 2
+        - error
         - "always"
-    no-shadow: 0
+    no-shadow: "off"
 
     simple-import-sort/imports:
         - 2
@@ -69,36 +72,39 @@ rules:
                 - "^.+\\.s?css$"
 
     react/jsx-curly-brace-presence:
-        - 2
+        - error
         - props: always
           children: always
-    react/jsx-key: 1
+    react/jsx-key: warn
     react/display-name:
-        - 1
+        - warn
         - ignoreTranspilerName: true
     # Next rule is disabled since typescript will validate types by default
-    react/prop-types: 0
-    react/prefer-stateless-function: 2
+    react/prop-types: "off"
+    react/prefer-stateless-function: error
 
-    "@typescript-eslint/explicit-member-accessibility": 2
+    "@typescript-eslint/explicit-member-accessibility": error
     "@typescript-eslint/explicit-function-return-type":
-        - 2
+        - error
         - allowExpressions: true
-    "@typescript-eslint/no-inferrable-types": 0
+    "@typescript-eslint/no-inferrable-types": "off"
     "@typescript-eslint/no-magic-numbers":
-        - 2
+        - error
         - ignoreReadonlyClassProperties: true
           ignoreEnums: true
     "@typescript-eslint/array-type":
-        - 2
+        - error
         - array: true
     "@typescript-eslint/semi":
-        - 2
+        - error
+    "@typescript-eslint/comma-dangle":
+        - error
+        - always-multiline
     "@typescript-eslint/member-delimiter-style":
-        - 2
+        - error
         - singleline:
             delimiter: "comma"
             requireLast: false
     "@typescript-eslint/no-shadow":
-        - 1
+        - warn
         - ignoreTypeValueShadow: true

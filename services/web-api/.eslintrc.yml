@@ -1,4 +1,3 @@
-
 root: true
 parser: "@typescript-eslint/parser"
 plugins:
@@ -9,43 +8,51 @@ extends:
     - "eslint:recommended"
     - "plugin:@typescript-eslint/recommended"
 
-env: 
-    browser: true
+ignorePatterns:
+    # don't ever lint node_modules
+    - "node_modules"
+    # don't lint build output (make sure it's set to your correct build folder name)
+    - "out"
+
+env:
     node: true
 
 rules:
     max-len:
-        - 2
+        - warn
         - code: 160
-    no-cond-assign: 2
+    no-cond-assign: warn
     no-multiple-empty-lines:
-        - 1
+        - error
         - max: 3
-    semi: 0
-    comma-dangle:
-        - 2
-        - "always-multiline"
+    semi: "off"
+    comma-dangle: "off"
     quotes:
-        - 2
+        - error
         - "double"
-    no-console: 1
-    interface-name: 0
-    one-line: 0
-    member-ordering: 0
-    object-literal-sort-keys: 0
+    no-console: error
+    interface-name: "off"
+    one-line: "off"
+    member-ordering: "off"
+    object-literal-sort-keys: "off"
     eol-last:
-        - 2
+        - error
         - "always"
-    no-shadow: 0
+    no-shadow: "off"
 
     simple-import-sort/imports:
         - 2
         - groups:
-            -   # Packages come first.
+            -   # Packages. `react` related packages come first.
+                - "^react"
+                - "^redux"
+                - "^next"
                 - "^@?\\w"
             -   # Internal packages.
                 - "^@common"
+                - "^@api"
                 - "^@server"
+                - "^@client"
             -   # Parent imports. Put `..` last.
                 - "^\\.\\.(?!/?$)"
                 - "^\\.\\./?$"
@@ -53,26 +60,31 @@ rules:
                 - "^\\./(?=.*/)(?!/?$)"
                 - "^\\.(?!/?$)"
                 - "^\\./?$"
+            -   # Style imports.
+                - "^.+\\.s?css$"
 
-    "@typescript-eslint/explicit-member-accessibility": 2
+    "@typescript-eslint/explicit-member-accessibility": error
     "@typescript-eslint/explicit-function-return-type":
-        - 2
+        - error
         - allowExpressions: true
-    "@typescript-eslint/no-inferrable-types": 0
+    "@typescript-eslint/no-inferrable-types": "off"
     "@typescript-eslint/no-magic-numbers":
-        - 2
+        - error
         - ignoreReadonlyClassProperties: true
           ignoreEnums: true
     "@typescript-eslint/array-type":
-        - 2
+        - error
         - array: true
     "@typescript-eslint/semi":
-        - 2
+        - error
+    "@typescript-eslint/comma-dangle":
+        - error
+        - always-multiline
     "@typescript-eslint/member-delimiter-style":
-        - 2
+        - error
         - singleline:
             delimiter: "comma"
             requireLast: false
     "@typescript-eslint/no-shadow":
-        - 1
+        - warn
         - ignoreTypeValueShadow: true
