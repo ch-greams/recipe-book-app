@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "lib": [ "es2020", "DOM" ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    // TODO: make "strict:true" possible
+    "strict": false,
+    "strictNullChecks": false,
+    "noImplicitAny": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+    
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@views/*": [ "views/*" ],
+      "@api/*": [ "api/*" ],
+      "@store/*": [ "store/*" ],
+      "@store": [ "store/index.ts" ],
+      "@icons/*": [ "icons/*" ],
+      "@common/*": [ "common/*" ],
+      "@styles/*": [ "styles/*" ]
+    }
+  },
+  "include": [ "next-env.d.ts", "**/*.ts", "**/*.tsx" ],
+  "exclude": [ "node_modules" ]
+}

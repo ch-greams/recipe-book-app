@@ -1,0 +1,388 @@
+@import "@styles/variables";
+
+
+.directionsBlock {
+    .directionLine {
+
+        display: flex;
+        flex-direction: row;
+
+        gap: 8px;
+        margin: 8px 0;
+
+        .lineCheckbox {
+
+            margin: 10px;
+        }
+
+        .directionInfoLines {
+
+            display: flex;
+            flex-direction: column;
+            flex-grow: 2;
+
+            .directionInfoLine {
+
+                display: flex;
+                justify-content: space-between;
+
+                padding: 10px 12px 10px 20px;
+
+                font-family: $font-default;
+                font-size: 16px;
+                font-weight: 500;
+
+                color: $color-default;
+
+                background-color: $color-white;
+
+                border-color: $color-grey-light;
+                border-style: solid;
+                border-width: 1px;
+
+                box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
+                &.newDirection {
+
+                    padding: 10px 12px;
+
+                    font-weight: 700;
+
+                    color: rgba($color: $color-default, $alpha: 0.25);
+                }
+
+                .directionInfoLineTitle {
+
+                    display: flex;
+                    flex-direction: row;
+                    flex-grow: 2;
+
+                    cursor: pointer;
+
+                    .directionInfoLineIndex {
+
+                        width: 28px;
+
+                        font-weight: 700;
+
+                        line-height: 24px;
+                    }
+
+                    .directionInfoLineName {
+
+                        line-height: 24px;
+                    }
+
+                    .directionInfoLineIndexInput {
+
+                        width: 24px;
+
+                        margin-right: 4px;
+
+                        font-family: $font-default;
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        line-height: 20px;
+
+                        color: $color-default;
+
+                        text-align: center;
+
+                        border-color: $color-default;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+
+                    .directionInfoLineNameInput {
+
+                        flex-grow: 2;
+
+                        padding-left: 4px;
+                        margin-right: 4px;
+
+                        font-family: $font-default;
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        line-height: 20px;
+
+                        color: $color-default;
+
+                        text-align: left;
+
+                        border-color: $color-default;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+                }
+
+
+                .directionInfoLineMeasure {
+
+                    display: flex;
+                    flex-direction: row;
+                    gap: 4px;
+
+                    .directionInfoLineAmount {
+
+                        width: 80px;
+
+                        padding-right: 4px;
+
+                        line-height: 22px;
+
+                        color: $color-grey-dark;
+
+                        text-align: right;
+
+                        border-color: $color-grey-light;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+
+                    .directionInfoLineAmountInput {
+
+                        width: 60px;
+
+                        padding-right: 4px;
+
+                        font-family: $font-default;
+                        font-size: 16px;
+                        font-weight: 500;
+
+                        line-height: 20px;
+
+                        color: $color-default;
+
+                        text-align: right;
+
+                        border-color: $color-default;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+                }
+            }
+
+            .subDirectionLine {
+
+                display: flex;
+                flex-direction: row;
+
+                gap: 4px;
+                margin: 8px 2px 0 2px;
+
+                .lineCheckbox {
+
+                    width: 20px;
+                    height: 20px;
+
+                    margin: 6px;
+
+                    .lineCheckboxMark {
+
+                        width: 14px;
+                        height: 14px;
+                    }
+                }
+
+                .subDirectionLineButton {
+
+                    width: 36px;
+                    height: 24px;
+
+                    padding: 6px 0;
+
+                    line-height: 24px;
+
+                    color: $color-white;
+
+                    text-align: center;
+
+                    cursor: pointer;
+
+                    background-color: $color-default;
+
+                    border-color: $color-white;
+                    border-style: solid;
+                    border-width: 1px;
+                }
+
+                .subDirectionInfoLine {
+
+                    display: flex;
+                    flex-grow: 2;
+                    justify-content: space-between;
+
+                    padding: 6px 12px;
+
+                    font-family: $font-default;
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    color: $color-white;
+
+                    background-color: $color-default;
+
+                    border-color: $color-white;
+                    border-style: solid;
+                    border-width: 1px;
+
+                    .directionInfoLineName {
+
+                        line-height: 24px;
+                    }
+
+                    .directionInfoLineMeasure {
+
+                        display: flex;
+                        flex-direction: row;
+                        gap: 4px;
+
+                        .directionInfoLineAmount {
+
+                            width: 80px;
+
+                            padding-right: 4px;
+
+                            line-height: 20px;
+
+                            text-align: right;
+
+                            border-color: rgba($color: $color-white, $alpha: 0.5);
+                            border-style: solid;
+                            border-width: 1px;
+                        }
+
+                        .directionInfoLineAmountInput {
+
+                            width: 80px;
+
+                            padding-right: 4px;
+
+                            font-family: $font-default;
+                            font-size: 16px;
+                            font-weight: 500;
+
+                            line-height: 18px;
+
+                            color: $color-white;
+
+                            text-align: right;
+
+                            background-color: $color-default-dark;
+
+                            border-color: $color-white;
+                            border-style: solid;
+                            border-width: 1px;
+                        }
+                    }
+                }
+
+                .subDirectionNoteInfoLine {
+
+                    display: flex;
+                    flex-grow: 2;
+                    justify-content: flex-start;
+
+                    padding: 6px 12px;
+
+                    font-family: $font-default;
+                    font-size: 16px;
+                    font-weight: 500;
+
+                    color: $color-white;
+
+                    background-color: $color-default;
+
+                    border-color: $color-white;
+                    border-style: solid;
+                    border-width: 1px;
+
+                    .directionInfoLineDescription {
+
+                        margin-left: 10px;
+
+                        font-size: 14px;
+
+                        line-height: 24px;
+                    }
+
+                    .directionInfoLineDescriptionInput {
+
+                        flex-grow: 2;
+
+                        padding-left: 8px;
+                        margin-left: 10px;
+
+                        font-family: $font-default;
+                        font-size: 14px;
+                        font-weight: 500;
+
+                        line-height: 20px;
+
+                        color: $color-white;
+
+                        background-color: $color-default-dark;
+
+                        border-color: $color-white;
+                        border-style: solid;
+                        border-width: 1px;
+                    }
+                }
+            }
+        }
+
+        .directionLineButton {
+
+            width: 44px;
+            height: 24px;
+
+            padding: 10px 0;
+
+            font-family: $font-default;
+            font-size: 16px;
+            font-weight: 500;
+
+            line-height: 24px;
+
+            color: $color-default;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            background-color: $color-white;
+
+            border-color: $color-grey-light;
+            border-style: solid;
+            border-width: 1px;
+
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        }
+    }
+}
+
+.lineCheckbox {
+
+    width: 22px;
+    height: 22px;
+
+    cursor: pointer;
+
+    background-color: $color-default-dark;
+
+    border-color: $color-white;
+    border-style: solid;
+    border-width: 2px;
+
+    .lineCheckboxMark {
+
+        width: 16px;
+        height: 16px;
+
+        margin: 3px;
+
+        background-color: $color-white;
+    }
+}

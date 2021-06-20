@@ -1,0 +1,185 @@
+@import "@styles/variables";
+
+
+.titleBlock {
+
+    margin-bottom: 8px;
+
+    .nameBlock {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+
+        .nameText {
+
+            font-family: $font-default;
+            font-size: 32px;
+            font-weight: 700;
+
+            color: $color-white;
+        }
+
+        .nameInput {
+
+            width: calc(50% - 14px);
+
+            padding-left: 8px;
+            margin-right: 4px;
+
+            font-family: $font-default;
+            font-size: 32px;
+            font-weight: 700;
+
+            color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .brandText {
+
+            font-family: $font-default;
+            font-size: 32px;
+            font-weight: 700;
+
+            color: $color-white;
+
+            text-align: right;
+        }
+
+        .brandInput {
+
+            width: calc(50% - 14px);
+
+            padding-right: 8px;
+
+            font-family: $font-default;
+            font-size: 32px;
+            font-weight: 700;
+
+            color: $color-white;
+
+            text-align: right;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+    }
+
+    .subtitleBlock {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        height: 24px;
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        line-height: 24px;
+
+        border-bottom-color: $color-white;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+
+        .subtitleText {
+
+            font-family: $font-default;
+            font-size: 18px;
+            font-weight: 700;
+
+            color: $color-white;
+        }
+
+        .subtitleInput {
+
+            width: calc(75% - 8px);
+
+            padding-left: 8px;
+            margin-right: 4px;
+
+            font-family: $font-default;
+            font-size: 18px;
+            font-weight: 700;
+
+            color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .confirmButton {
+
+            width: 25%;
+
+            font-family: $font-default;
+            font-size: 14px;
+            font-weight: 500;
+
+            line-height: 24px;
+
+            color: $color-default;
+
+            text-align: center;
+
+            cursor: pointer;
+
+            user-select: none;
+
+            background-color: $color-white;
+        }
+    }
+
+    .descriptionBlock {
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        border-bottom-color: $color-white;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
+
+        .descriptionBlockInput {
+
+            width: calc(100% - 18px);
+
+            padding: 8px;
+
+            font-family: $font-default;
+            font-size: 16px;
+            font-weight: 500;
+
+            color: $color-white;
+
+            resize: none;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .descriptionBlockText {
+
+            font-family: $font-default;
+            font-size: 16px;
+            font-weight: 500;
+
+            color: $color-white;
+        }
+    }
+}

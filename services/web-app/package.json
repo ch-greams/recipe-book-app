@@ -1,0 +1,41 @@
+{
+  "name": "web-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "npx eslint .",
+    "test": "echo \"Add tests you lazy fuck\""
+  },
+  "dependencies": {
+    "next": "10.2.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^1.1.3",
+    "sass": "^1.34.0",
+    "styled-components": "^5.3.0",
+    "superagent": "^6.1.0"
+  },
+  "devDependencies": {
+    "@svgr/webpack": "^5.4.0",
+    "@types/react": "17.0.8",
+    "@types/redux-logger": "^3.0.8",
+    "@types/styled-components": "^5.1.10",
+    "@types/superagent": "^4.1.11",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "eslint": "^7.28.0",
+    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "stylelint": "^13.13.1",
+    "stylelint-config-recess-order": "^2.4.0",
+    "stylelint-config-standard": "^22.0.0",
+    "typescript": "4.3.2"
+  }
+}

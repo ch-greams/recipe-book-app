@@ -1,4 +1,7 @@
 
+# data
+mongodb
+
 # node
 node_modules
 .env
@@ -11,6 +14,3 @@ out
 
 # ide
 # .vscode
-
-# other
-# data
