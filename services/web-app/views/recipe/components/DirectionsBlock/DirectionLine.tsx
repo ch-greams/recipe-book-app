@@ -2,8 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
 import * as actions from "@store/recipe/actions";
 import {
     RecipeDirection,
@@ -11,6 +9,8 @@ import {
     RecipeSubDirectionIngredient,
     SubDirectionType,
 } from "@store/recipe/types";
+
+import type { Dictionary, IngredientItem } from "@common/typings";
 
 import DirectionInfoLine from "./DirectionInfoLine";
 import NewSubDirectionLine from "./NewSubDirectionLine";

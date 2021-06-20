@@ -1,8 +1,9 @@
+import { AppState } from "@store";
+
 import { NutritionFactType } from "@common/nutritionFacts";
 import type { Dictionary } from "@common/typings";
 import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
-import { AppState } from "@store";
 
 import * as types from "./types";
 

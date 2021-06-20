@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import * as actions from "@store/recipe/actions";
+import { RecipeDirection } from "@store/recipe/types";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import * as actions from "@store/recipe/actions";
-import { RecipeDirection } from "@store/recipe/types";
 
 import styles from "./DirectionsBlock.module.scss";
 

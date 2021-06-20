@@ -1,12 +1,12 @@
 
 import React, { Dispatch } from "react";
 import { useDispatch } from "react-redux";
+import { updateNutritionFact } from "@store/food/actions";
+import { UpdateNutritionFactAction } from "@store/food/types";
 
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
 import { InputChangeCallback, Option } from "@common/typings";
 import Utils from "@common/utils";
-import { updateNutritionFact } from "@store/food/actions";
-import { UpdateNutritionFactAction } from "@store/food/types";
 
 import { NutritionFact } from ".";
 

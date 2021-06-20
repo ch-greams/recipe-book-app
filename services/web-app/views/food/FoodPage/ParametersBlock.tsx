@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import * as actions from "@store/food/actions";
+import type { FoodPageStore } from "@store/food/types";
 import CustomUnitsBlock from "@views/shared/CustomUnitsBlock";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
 
 import styles from "./FoodPage.module.scss";
 

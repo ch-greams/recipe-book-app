@@ -3,14 +3,14 @@ import { useDispatch } from "react-redux";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import SearchIcon from "@icons/search-sharp.svg";
+import * as actions from "@store/recipe/actions";
+import { RecipeIngredient } from "@store/recipe/types";
+import { SearchPageStore } from "@store/search/types";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import type { Dictionary, IngredientItem } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import * as actions from "@store/recipe/actions";
-import { RecipeIngredient } from "@store/recipe/types";
-import { SearchPageStore } from "@store/search/types";
 
 import styles from "./IngredientsBlock.module.scss";
 

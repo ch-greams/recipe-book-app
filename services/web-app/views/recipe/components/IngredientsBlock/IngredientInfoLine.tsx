@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import * as actions from "@store/recipe/actions";
+import { RecipeIngredientDefault } from "@store/recipe/types";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import type { Dictionary, IngredientItem, InputChangeCallback, Option } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import * as actions from "@store/recipe/actions";
-import { RecipeIngredientDefault } from "@store/recipe/types";
 
 import styles from "./IngredientsBlock.module.scss";
 

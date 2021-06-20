@@ -1,9 +1,5 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import Utils from "@common/utils";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import * as actions from "@store/recipe/actions";
@@ -12,6 +8,10 @@ import {
     RecipeIngredientDefault,
     SubDirectionType,
 } from "@store/recipe/types";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+
+import type { Dictionary, IngredientItem } from "@common/typings";
+import Utils from "@common/utils";
 
 import styles from "./DirectionsBlock.module.scss";
 

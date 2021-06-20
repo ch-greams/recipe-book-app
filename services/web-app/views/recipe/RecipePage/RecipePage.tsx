@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { AppState } from "@store";
+import * as actions from "@store/recipe/actions";
+import { RecipePageStore } from "@store/recipe/types";
+import { requestIngredients } from "@store/search/actions";
+import { SearchPageStore } from "@store/search/types";
 import DirectionsBlock from "@views/recipe/components/DirectionsBlock";
 import IngredientsBlock from "@views/recipe/components/IngredientsBlock";
 import PageDetailedNutritionFactsBlock from "@views/shared/PageDetailedNutritionFactsBlock";
@@ -9,11 +14,6 @@ import SingleMessagePage from "@views/shared/SingleMessagePage";
 import { ParsedUrlQuery } from "querystring";
 
 import Utils from "@common/utils";
-import { AppState } from "@store";
-import * as actions from "@store/recipe/actions";
-import { RecipePageStore } from "@store/recipe/types";
-import { requestIngredients } from "@store/search/actions";
-import { SearchPageStore } from "@store/search/types";
 
 import GeneralInfoBlock from "./GeneralInfoBlock";
 

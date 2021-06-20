@@ -2,12 +2,12 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
+import * as actions from "@store/recipe/actions";
+import { RecipeDirection } from "@store/recipe/types";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
-import * as actions from "@store/recipe/actions";
-import { RecipeDirection } from "@store/recipe/types";
 
 import styles from "./DirectionsBlock.module.scss";
 

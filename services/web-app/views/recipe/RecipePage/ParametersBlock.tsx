@@ -1,11 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import * as actions from "@store/recipe/actions";
+import { RecipePageStore } from "@store/recipe/types";
 import CustomUnitsBlock from "@views/shared/CustomUnitsBlock";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
-import * as actions from "@store/recipe/actions";
-import { RecipePageStore } from "@store/recipe/types";
 
 import styles from "./RecipePage.module.scss";
 

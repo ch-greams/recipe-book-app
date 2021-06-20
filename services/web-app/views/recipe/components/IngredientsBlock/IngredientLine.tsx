@@ -1,10 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import { WeightUnit } from "@common/units";
-import Utils, { RoutePath } from "@common/utils";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
@@ -12,6 +8,10 @@ import SearchIcon from "@icons/search-sharp.svg";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientDefault } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
+
+import type { Dictionary, IngredientItem } from "@common/typings";
+import { WeightUnit } from "@common/units";
+import Utils, { RoutePath } from "@common/utils";
 
 import AltIngredientLine from "./AltIngredientLine";
 import IngredientInfoLine from "./IngredientInfoLine";
