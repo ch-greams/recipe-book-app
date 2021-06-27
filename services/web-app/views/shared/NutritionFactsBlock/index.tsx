@@ -1,7 +1,7 @@
 import React from "react";
 
-import { NutritionFactType } from "@common/nutritionFacts";
-import { NutritionFactUnit } from "@common/units";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutritionFactUnit } from "@common/units";
 
 import NutritionFactsBlockLine from "./NutritionFactsBlockLine";
 
@@ -9,11 +9,11 @@ import styles from "./NutritionFactsBlock.module.scss";
 
 export interface NutritionFact {
 
-    amount: number;
+    amount?: Option<number>;
     inputValue: string;
     type: NutritionFactType;
     unit: NutritionFactUnit;
-    dailyValue?: number;
+    dailyValue?: Option<number>;
     isFraction: boolean;
 }
 

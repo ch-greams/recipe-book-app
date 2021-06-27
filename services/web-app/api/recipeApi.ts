@@ -1,6 +1,6 @@
 import superagent from "superagent";
 
-import { Recipe } from "@common/typings";
+import type { Recipe } from "@common/typings";
 
 
 export default class RecipeApi {

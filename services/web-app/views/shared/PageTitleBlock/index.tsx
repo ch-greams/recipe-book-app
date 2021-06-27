@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { AnyAction } from "redux";
-
-import type { Option } from "@common/typings";
+import type { AnyAction } from "redux";
 
 import PageTitleBlockInput from "./PageTitleBlockInput";
 import PageTitleBlockStatic from "./PageTitleBlockStatic";

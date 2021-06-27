@@ -1,6 +1,6 @@
-import { NutritionFactType } from "@common/nutritionFacts";
-import * as typings from "@common/typings";
-import * as units from "@common/units";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type * as typings from "@common/typings";
+import type * as units from "@common/units";
 
 
 
@@ -13,7 +13,7 @@ export interface RecipeIngredientDefault extends typings.Ingredient {
     isMarked: boolean;
     amountInput: string;
     alternatives: RecipeIngredient[];
-    altNutritionFacts: typings.Dictionary<NutritionFactType, number>;
+    altNutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 
@@ -41,7 +41,7 @@ export interface RecipeDirection extends typings.Direction {
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    errorMessage: typings.Option<string>;
+    errorMessage?: Option<string>;
     isReadOnly: boolean;
 
     id: string;
@@ -50,7 +50,7 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
-    nutritionFacts: typings.Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: units.CustomUnit[];
 
     // NOTE: INPUTS
@@ -65,7 +65,7 @@ export interface RecipePageStore {
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
 
-    references: typings.Dictionary<string, typings.IngredientItem>;
+    references: Dictionary<string, typings.IngredientItem>;
 }
 
 
@@ -235,7 +235,7 @@ export interface CreateSubDirectionAction {
 
 export interface UpdateNewSubDirectionTypeAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE;
-    payload: { directionIndex: number, type: SubDirectionType };
+    payload: { directionIndex: number, type: SubDirectionType | string };
 }
 
 export interface UpdateDirectionStepNumberAction {

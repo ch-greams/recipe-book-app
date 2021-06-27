@@ -1,7 +1,8 @@
-import { SagaIterator } from "redux-saga";
-import { all, AllEffect, call, put, StrictEffect, takeLatest } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import type { AllEffect, StrictEffect } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 
-import { Food, IngredientItem } from "@common/typings";
+import type { Food, IngredientItem } from "@common/typings";
 import FoodApi from "@api/foodApi";
 
 import {

@@ -1,6 +1,6 @@
 import superagent from "superagent";
 
-import { Food } from "@common/typings";
+import type { Food } from "@common/typings";
 
 
 export default class FoodApi {

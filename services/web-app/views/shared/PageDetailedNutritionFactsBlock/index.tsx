@@ -1,18 +1,19 @@
 import React from "react";
-import NutritionFactsBlock from "@views/shared/NutritionFactsBlock";
 
+import type { NutritionFactType } from "@common/nutritionFacts";
 import {
-    CARBOHYDRATES_GROUP,
-    LIPIDS_GROUP,
-    MINERALS_GROUP,
-    NutrientGroupType,
-    NutritionFactType,
-    OTHER_GROUP,
-    PROTEINS_GROUP,
-    VITAMINS_GROUP,
+    LipidNutritionFactType,
+    MineralNutritionFactType,
+    OtherNutritionFactType,
+    ProteinNutritionFactType,
+    VitaminNutritionFactType,
 } from "@common/nutritionFacts";
-import type { Dictionary } from "@common/typings";
+import {
+    CarbohydrateNutritionFactType,
+    NutrientGroupType,
+} from "@common/nutritionFacts";
 import Utils from "@common/utils";
+import NutritionFactsBlock from "@views/shared/NutritionFactsBlock";
 
 import styles from "./PageDetailedNutritionFactsBlock.module.scss";
 
@@ -30,15 +31,15 @@ const PageDetailedNutritionFactsBlock: React.FC<Props> = ({
 }) => {
 
     const leftColumn: [ NutrientGroupType, NutritionFactType[] ][] = [
-        [ NutrientGroupType.Carbohydrates, CARBOHYDRATES_GROUP ],
-        [ NutrientGroupType.Lipids, LIPIDS_GROUP ],
-        [ NutrientGroupType.Proteins, PROTEINS_GROUP ],
+        [ NutrientGroupType.Carbohydrates, Object.values(CarbohydrateNutritionFactType) ],
+        [ NutrientGroupType.Lipids, Object.values(LipidNutritionFactType) ],
+        [ NutrientGroupType.Proteins, Object.values(ProteinNutritionFactType) ],
     ];
 
     const rightColumn: [ NutrientGroupType, NutritionFactType[] ][] = [
-        [ NutrientGroupType.Vitamins, VITAMINS_GROUP ],
-        [ NutrientGroupType.Minerals, MINERALS_GROUP ],
-        [ NutrientGroupType.Other, OTHER_GROUP ],
+        [ NutrientGroupType.Vitamins, Object.values(VitaminNutritionFactType) ],
+        [ NutrientGroupType.Minerals, Object.values(MineralNutritionFactType) ],
+        [ NutrientGroupType.Other, Object.values(OtherNutritionFactType) ],
     ];
 
     return (

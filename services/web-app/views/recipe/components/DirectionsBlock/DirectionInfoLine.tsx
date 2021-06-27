@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as actions from "@store/recipe/actions";
-import { RecipeDirection } from "@store/recipe/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeDirection } from "@store/recipe/types";
 
 import styles from "./DirectionsBlock.module.scss";
 
@@ -41,7 +41,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     const tempSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
-            options={Object.keys(TemperatureUnit).map((unit) => ({ value: unit }))}
+            options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
             value={direction.temperature?.unit}
             onChange={(value: TemperatureUnit) => {
                 dispatch(actions.updateDirectionTemperatureUnit(index, value));
@@ -70,7 +70,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     const timeSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
-            options={Object.keys(TimeUnit).map((unit) => ({ value: unit }))}
+            options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
             value={direction.time?.unit}
             onChange={(value: TimeUnit) => {
                 dispatch(actions.updateDirectionTimeUnit(index, value));

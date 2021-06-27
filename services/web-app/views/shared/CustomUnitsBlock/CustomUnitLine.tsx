@@ -1,8 +1,9 @@
 import React from "react";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
-import { InputChangeCallback } from "@common/typings";
-import { CustomUnitInput, WeightUnit } from "@common/units";
+import type { InputChangeCallback } from "@common/typings";
+import type { CustomUnitInput } from "@common/units";
+import { WeightUnit } from "@common/units";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
 import styles from "./CustomUnitLine.module.scss";
 
@@ -54,7 +55,7 @@ const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
 
                 <SelectInput
                     type={SelectInputType.CustomUnit}
-                    options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
+                    options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
                     value={customUnit.unit}
                     onChange={updateItemUnit}
                 />

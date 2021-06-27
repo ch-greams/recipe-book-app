@@ -39,6 +39,12 @@ rules:
         - error
         - "always"
     no-shadow: "off"
+    object-curly-spacing:
+        - warn
+        - "always"
+    array-bracket-spacing:
+        - warn
+        - "always"
 
     simple-import-sort/imports:
         - 2
@@ -79,7 +85,15 @@ rules:
         - error
     "@typescript-eslint/comma-dangle":
         - error
-        - always-multiline
+        -   # General rule for everything doesn't work with functions
+            enums: "always-multiline"
+            generics: "always-multiline"
+            tuples: "always-multiline"
+            arrays: "always-multiline"
+            objects: "always-multiline"
+            imports: "always-multiline"
+            exports: "always-multiline"
+            functions: "always-multiline"
     "@typescript-eslint/member-delimiter-style":
         - error
         - singleline:
@@ -88,3 +102,6 @@ rules:
     "@typescript-eslint/no-shadow":
         - warn
         - ignoreTypeValueShadow: true
+    "@typescript-eslint/consistent-type-imports":
+        - warn
+        - prefer: type-imports

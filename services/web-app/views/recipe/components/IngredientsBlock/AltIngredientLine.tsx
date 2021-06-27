@@ -1,16 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import type { IngredientItem } from "@common/typings";
+import type { VolumeUnit } from "@common/units";
+import { Units, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeIngredient } from "@store/recipe/types";
+import type { SearchPageStore } from "@store/search/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import SearchIcon from "@icons/search-sharp.svg";
-import * as actions from "@store/recipe/actions";
-import { RecipeIngredient } from "@store/recipe/types";
-import { SearchPageStore } from "@store/search/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import { Units, VolumeUnit, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
 
 import styles from "./IngredientsBlock.module.scss";
 
@@ -97,7 +98,7 @@ const AltIngredientLine: React.FC<Props> = ({
                 value={altIngredient.unit}
                 onChange={(value: WeightUnit | VolumeUnit) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredient.id, value
+                        parentId, altIngredient.id, value,
                     ));
                 }}
             />
@@ -125,7 +126,7 @@ const AltIngredientLine: React.FC<Props> = ({
                     onMouseEnter={isNew ? undefined : onMouseEnter}
                     onMouseLeave={isNew ? undefined : onMouseLeave}
                 >
-                    {isNew ? "NEW ALTERNATIVE" : altIngredientItem.name.toUpperCase()}
+                    {isNew ? "NEW ALTERNATIVE" : altIngredientItem?.name.toUpperCase()}
                 </div>
 
                 {( !isNew && measureInput )}

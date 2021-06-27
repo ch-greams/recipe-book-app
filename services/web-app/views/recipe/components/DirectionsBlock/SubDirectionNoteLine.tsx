@@ -1,14 +1,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import type { SubDirection } from "@common/typings";
+import * as actions from "@store/recipe/actions";
+import { SubDirectionType } from "@store/recipe/types";
 import InfoBlockIcon from "@icons/alert-circle-sharp.svg";
 import BulbIcon from "@icons/bulb-sharp.svg";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import WarningIcon from "@icons/warning-sharp.svg";
-import * as actions from "@store/recipe/actions";
-import { SubDirectionType } from "@store/recipe/types";
-
-import type { SubDirection } from "@common/typings";
 
 import styles from "./DirectionsBlock.module.scss";
 

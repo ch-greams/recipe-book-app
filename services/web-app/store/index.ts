@@ -1,5 +1,6 @@
 import { useMemo } from "react";
-import { AnyAction, applyMiddleware, combineReducers, createStore, Store } from "redux";
+import type { AnyAction, Store } from "redux";
+import { applyMiddleware, combineReducers, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from "redux-logger";
 import createSagaMiddleware from "redux-saga";

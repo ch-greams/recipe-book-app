@@ -1,5 +1,5 @@
-import { IngredientItem, Recipe } from "@common/typings";
-import * as units from "@common/units";
+import type { IngredientItem, Recipe } from "@common/typings";
+import type * as units from "@common/units";
 
 import * as types from "./types";
 
@@ -107,7 +107,7 @@ export function createSubDirection(directionIndex: number, type: types.SubDirect
     };
 }
 
-export function updateNewSubDirectionType(directionIndex: number, type: types.SubDirectionType): types.UpdateNewSubDirectionTypeAction {
+export function updateNewSubDirectionType(directionIndex: number, type: types.SubDirectionType | string): types.UpdateNewSubDirectionTypeAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
         payload: { directionIndex, type },

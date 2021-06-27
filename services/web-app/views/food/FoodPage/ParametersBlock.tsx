@@ -1,13 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
-import CustomUnitsBlock from "@views/shared/CustomUnitsBlock";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
-import { InputChangeCallback } from "@common/typings";
+import type { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import CustomUnitsBlock from "@views/shared/CustomUnitsBlock";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/food/actions";
+import type { FoodPageStore } from "@store/food/types";
 
 import styles from "./FoodPage.module.scss";
 
@@ -71,7 +71,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={Object.keys(WeightUnit).map((unit) => ({ value: unit }))}
+                    options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
                     onChange={(unit: WeightUnit) => dispatch(actions.updateDensityWeightUnit(unit))}
                     value={foodItem.densityWeightUnit}
                 />
@@ -80,7 +80,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <SelectInput
                     type={SelectInputType.Other}
-                    options={Object.keys(VolumeUnit).map((unit) => ({ value: unit }))}
+                    options={Object.values(VolumeUnit).map((unit) => ({ value: unit }))}
                     onChange={(unit: VolumeUnit) => dispatch(actions.updateDensityVolumeUnit(unit))}
                     value={foodItem.densityVolumeUnit}
                 />
@@ -107,7 +107,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                         ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
                     value={foodItem.servingSizeUnit}
-                    onChange={(unit: WeightUnit | VolumeUnit) => dispatch(actions.updateServingSizeUnit(unit))}
+                    onChange={(unit: WeightUnit | VolumeUnit | string) => dispatch(actions.updateServingSizeUnit(unit))}
                 />
 
             </div>
