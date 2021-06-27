@@ -1,22 +1,21 @@
-import type { Dictionary, Option } from "./typings";
-import { NutritionFactUnit } from "./units";
+import type { NutritionFactUnit } from "./units";
 
 
-export enum NutritionFactType {
-
-    // Energy
+export enum EnergyNutritionFactType {
     Energy = "Energy",
     CarbohydrateEnergy = "CarbohydrateEnergy",
     FatEnergy = "FatEnergy",
     ProteinEnergy = "ProteinEnergy",
+}
 
-    // Carbohydrates
+export enum CarbohydrateNutritionFactType {
     Carbohydrate = "Carbohydrate",
     DietaryFiber = "DietaryFiber",
     Starch = "Starch",
     Sugars = "Sugars",
+}
 
-    // Lipids
+export enum LipidNutritionFactType {
     Fat = "Fat",
     Monounsaturated = "Monounsaturated",
     Polyunsaturated = "Polyunsaturated",
@@ -26,8 +25,9 @@ export enum NutritionFactType {
     TransFats = "TransFats",
     Cholesterol = "Cholesterol",
     Phytosterol = "Phytosterol",
+}
 
-    // Proteins & Amino Acids
+export enum ProteinNutritionFactType {
     Protein = "Protein",
     Tryptophan = "Tryptophan",
     Threonine = "Threonine",
@@ -48,8 +48,9 @@ export enum NutritionFactType {
     Proline = "Proline",
     Serine = "Serine",
     Hydroxyproline = "Hydroxyproline",
+}
 
-    // Vitamins
+export enum VitaminNutritionFactType {
     VitaminA = "VitaminA",
     VitaminC = "VitaminC",
     VitaminD = "VitaminD",
@@ -64,8 +65,9 @@ export enum NutritionFactType {
     VitaminB12 = "VitaminB12",
     Choline = "Choline",
     Betaine = "Betaine",
+}
 
-    // Minerals
+export enum MineralNutritionFactType {
     Calcium = "Calcium",
     Iron = "Iron",
     Magnesium = "Magnesium",
@@ -80,13 +82,27 @@ export enum NutritionFactType {
     Chromium = "Chromium",
     Iodine = "Iodine",
     Molybdenum = "Molybdenum",
+}
 
-    // Other
+export enum OtherNutritionFactType {
     Alcohol = "Alcohol",
     Water = "Water",
     Ash = "Ash",
     Caffeine = "Caffeine",
 }
+
+export const NutritionFactType = {
+    ...EnergyNutritionFactType,
+    ...CarbohydrateNutritionFactType,
+    ...LipidNutritionFactType,
+    ...ProteinNutritionFactType,
+    ...VitaminNutritionFactType,
+    ...MineralNutritionFactType,
+    ...OtherNutritionFactType,
+};
+
+export type NutritionFactType = EnergyNutritionFactType | CarbohydrateNutritionFactType | LipidNutritionFactType |
+    ProteinNutritionFactType | VitaminNutritionFactType | MineralNutritionFactType | OtherNutritionFactType;
 
 enum NutritionFactTypeLabel {
 
@@ -258,103 +274,6 @@ export const nutritionFactTypeLabelMapping: Dictionary<NutritionFactType, Nutrit
     [NutritionFactType.Caffeine]: NutritionFactTypeLabel.Caffeine,
 };
 
-export const ENERGY_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Energy,
-    NutritionFactType.CarbohydrateEnergy,
-    NutritionFactType.FatEnergy,
-    NutritionFactType.ProteinEnergy,
-];
-
-export const CARBOHYDRATES_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Carbohydrate,
-    NutritionFactType.DietaryFiber,
-    NutritionFactType.Starch,
-    NutritionFactType.Sugars,
-];
-
-export const LIPIDS_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Fat,
-    NutritionFactType.Monounsaturated,
-    NutritionFactType.Polyunsaturated,
-    NutritionFactType.Omega3,
-    NutritionFactType.Omega6,
-    NutritionFactType.Saturated,
-    NutritionFactType.TransFats,
-    NutritionFactType.Cholesterol,
-];
-
-export const PROTEINS_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Protein,
-    NutritionFactType.Tryptophan,
-    NutritionFactType.Threonine,
-    NutritionFactType.Isoleucine,
-    NutritionFactType.Leucine,
-    NutritionFactType.Lysine,
-    NutritionFactType.Methionine,
-    NutritionFactType.Cystine,
-    NutritionFactType.Phenylalanine,
-    NutritionFactType.Tyrosine,
-    NutritionFactType.Valine,
-    NutritionFactType.Arginine,
-    NutritionFactType.Histidine,
-    NutritionFactType.Alanine,
-    NutritionFactType.AsparticAcid,
-    NutritionFactType.GlutamicAcid,
-    NutritionFactType.Glycine,
-    NutritionFactType.Proline,
-    NutritionFactType.Serine,
-    NutritionFactType.Hydroxyproline,
-];
-
-export const VITAMINS_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.VitaminA,
-    NutritionFactType.VitaminC,
-    NutritionFactType.VitaminD,
-    NutritionFactType.VitaminE,
-    NutritionFactType.VitaminK,
-    NutritionFactType.VitaminB1,
-    NutritionFactType.VitaminB2,
-    NutritionFactType.VitaminB3,
-    NutritionFactType.VitaminB5,
-    NutritionFactType.VitaminB6,
-    NutritionFactType.VitaminB9,
-    NutritionFactType.VitaminB12,
-    NutritionFactType.Choline,
-    NutritionFactType.Betaine,
-];
-
-export const MINERALS_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Calcium,
-    NutritionFactType.Iron,
-    NutritionFactType.Magnesium,
-    NutritionFactType.Phosphorus,
-    NutritionFactType.Potassium,
-    NutritionFactType.Sodium,
-    NutritionFactType.Zinc,
-    NutritionFactType.Copper,
-    NutritionFactType.Manganese,
-    NutritionFactType.Selenium,
-    NutritionFactType.Fluoride,
-    NutritionFactType.Chromium,
-    NutritionFactType.Iodine,
-    NutritionFactType.Molybdenum,
-];
-
-export const OTHER_GROUP: NutritionFactType[] = [
-
-    NutritionFactType.Alcohol,
-    NutritionFactType.Water,
-    NutritionFactType.Ash,
-    NutritionFactType.Caffeine,
-];
-
-
 export enum NutrientGroupType {
 
     Carbohydrates = "Carbohydrates",
@@ -364,18 +283,6 @@ export enum NutrientGroupType {
     Minerals = "Minerals",
     Other = "Other",
 }
-
-export const NUTRIENTS: NutritionFactType[] = [
-
-    ...ENERGY_GROUP,
-    ...CARBOHYDRATES_GROUP,
-    ...LIPIDS_GROUP,
-    ...PROTEINS_GROUP,
-    ...VITAMINS_GROUP,
-    ...MINERALS_GROUP,
-    ...OTHER_GROUP,
-];
-
 
 export interface NutritionFactDescription {
     type: NutritionFactType;

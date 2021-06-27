@@ -1,12 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as actions from "@store/recipe/actions";
-import { RecipeIngredientDefault } from "@store/recipe/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 
-import type { Dictionary, IngredientItem, InputChangeCallback, Option } from "@common/typings";
-import { Units, VolumeUnit, WeightUnit } from "@common/units";
+import type { IngredientItem, InputChangeCallback } from "@common/typings";
+import type { VolumeUnit, WeightUnit } from "@common/units";
+import { Units } from "@common/units";
 import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeIngredientDefault } from "@store/recipe/types";
 
 import styles from "./IngredientsBlock.module.scss";
 
@@ -23,7 +24,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
 
     const dispatch = useDispatch();
 
-    const ingredientItem: Option<IngredientItem> = references[ingredient.id];
+    const ingredientItemName = Utils.unwrap(references[ingredient.id]?.name, "NEW INGREDIENT");
 
     const handleIngredientAmountEdit = (id: string): InputChangeCallback => {
         return (event) => {
@@ -64,7 +65,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
 
     return (
         <div
-            key={(isNew ? "NEW" : ingredientItem.name)}
+            key={(isNew ? "NEW INGREDIENT" : ingredientItemName)}
             className={Utils.classNames({ [styles.ingredientInfoLine]: true, [styles.newIngredient]: isNew })}
         >
 
@@ -73,7 +74,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
                 style={( ingredient.isMarked ? { opacity: 0.25 } : undefined )}
                 onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
             >
-                {( isNew ? "NEW INGREDIENT" : ingredientItem.name.toUpperCase() )}
+                {( isNew ? "NEW INGREDIENT" : ingredientItemName.toUpperCase() )}
             </div>
 
             {( !isNew && measureInput )}

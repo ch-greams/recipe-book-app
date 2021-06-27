@@ -2,7 +2,7 @@ import { SubDirectionType } from "@common/enums";
 import type { Dictionary } from "@common/typings";
 import { TemperatureUnit, TimeUnit,Units } from "@common/units";
 
-import { SchemaValidator, Validator } from "./types";
+import type { SchemaValidator, Validator } from "./types";
 
 
 const customUnitProperties: Dictionary<string, Validator> = {

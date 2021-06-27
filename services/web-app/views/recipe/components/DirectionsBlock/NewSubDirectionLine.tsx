@@ -1,17 +1,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import type { IngredientItem } from "@common/typings";
+import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeDirection, RecipeIngredientDefault } from "@store/recipe/types";
+import { SubDirectionType } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
-import * as actions from "@store/recipe/actions";
-import {
-    RecipeDirection,
-    RecipeIngredientDefault,
-    SubDirectionType,
-} from "@store/recipe/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import Utils from "@common/utils";
 
 import styles from "./DirectionsBlock.module.scss";
 
@@ -79,13 +76,13 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: references[ingredient.id].name.toUpperCase(),
+                            label: Utils.unwrapForced(references[ingredient.id], `references["${ingredient.id}"]`).name.toUpperCase(),
                             value: `${SubDirectionType.Ingredient}_${ingredient.id}`,
                         })),
                         ...otherSubDirectionTypes.map((type) => ({ group: "Other", value: type })),
                     ]}
                     value={direction.newStep}
-                    onChange={(value: SubDirectionType) => {
+                    onChange={(value: SubDirectionType | string) => {
                         dispatch(actions.updateNewSubDirectionType(directionIndex, value));
                     }}
                 />

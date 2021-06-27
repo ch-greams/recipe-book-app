@@ -1,8 +1,9 @@
-import { SagaIterator } from "redux-saga";
-import { all, AllEffect, call, put, select, StrictEffect, takeLatest } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import type { AllEffect, StrictEffect } from "redux-saga/effects";
+import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
-import { Food } from "@common/typings";
-import { CustomUnit } from "@common/units";
+import type { Food } from "@common/typings";
+import type { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
 import FoodApi from "@api/foodApi";
 
@@ -64,7 +65,7 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
         // TODO: API CALL
 
         yield put(actions.removeCustomUnitSuccess(
-            customUnits.filter((_customUnit, index) => index !== customUnitIndex)
+            customUnits.filter((_customUnit, index) => index !== customUnitIndex),
         ));
     }
     catch (error) {
@@ -88,7 +89,7 @@ function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generat
                 index === customUnitIndex
                     ? Utils.convertCustomUnitIntoValue(updatedCustomUnit)
                     : customUnit
-            ))
+            )),
         ));
     }
     catch (error) {

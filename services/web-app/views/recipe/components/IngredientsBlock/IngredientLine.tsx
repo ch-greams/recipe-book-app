@@ -1,17 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+
+import type { IngredientItem } from "@common/typings";
+import { WeightUnit } from "@common/units";
+import Utils, { RoutePath } from "@common/utils";
+import * as actions from "@store/recipe/actions";
+import type { RecipeIngredientDefault } from "@store/recipe/types";
+import type { SearchPageStore } from "@store/search/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredientDefault } from "@store/recipe/types";
-import type { SearchPageStore } from "@store/search/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import { WeightUnit } from "@common/units";
-import Utils, { RoutePath } from "@common/utils";
 
 import AltIngredientLine from "./AltIngredientLine";
 import IngredientInfoLine from "./IngredientInfoLine";
@@ -66,8 +66,6 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
         dispatch(actions.addIngredient(item));
     };
-
-    const ingredientItem = references[ingredient.id];
 
     const checkbox = (
         <div
@@ -135,7 +133,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                 {(
                     ingredient.isOpen && (
                         <IngredientInfoLineNutritionFacts
-                            nutritionFacts={ingredientItem.nutritionFacts}
+                            nutritionFacts={Utils.unwrapForced(references[ingredient.id], `references["${ingredient.id}"]`).nutritionFacts}
                             altNutritionFacts={ingredient.altNutritionFacts}
                         />
                     )

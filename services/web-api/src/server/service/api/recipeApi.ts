@@ -1,8 +1,9 @@
-import express, { Router } from "express";
+import type { Router } from "express";
+import express from "express";
 
-import { Option, Recipe } from "@common/typings";
+import type { Option, Recipe } from "@common/typings";
 import Utils from "@common/utils";
-import Database from "@server/service/database";
+import type Database from "@server/service/database";
 import { HttpStatusClientError } from "@server/service/webApp";
 
 

@@ -1,10 +1,10 @@
 import React from "react";
-import {
+
+import type { IngredientItem } from "@common/typings";
+import type {
     RecipeDirection,
     RecipeIngredientDefault,
 } from "@store/recipe/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
 
 import DirectionLine from "./DirectionLine";
 import NewDirectionLine from "./NewDirectionLine";

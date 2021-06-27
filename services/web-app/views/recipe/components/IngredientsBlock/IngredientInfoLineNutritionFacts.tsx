@@ -1,7 +1,6 @@
 import React from "react";
 
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary } from "@common/typings";
 import Utils from "@common/utils";
 
 import styles from "./IngredientsBlock.module.scss";
@@ -26,26 +25,32 @@ const IngredientInfoLineNutritionFacts: React.FC<IngredientInfoLineNutritionFact
     return (
         <div className={styles.ingredientInfoLineNutritionFacts}>
 
-            {nutritionFactTypes.map( (type) => (
-                <div
-                    key={`nutritionFact_${type}`}
-                    className={styles.ingredientInfoLineNutritionFact}
-                >
+            {nutritionFactTypes.map( (type) => {
+
+                const curNutritionValue: Option<number> = nutritionFacts[type];
+                const altNutritionValue: Option<number> = altNutritionFacts[type];
+
+                return (
                     <div
-                        className={styles.ingredientInfoLineNutritionFactAmount}
-                        style={(
-                            Utils.objectIsNotEmpty(altNutritionFacts)
-                                ? { color: (nutritionFacts[type] > altNutritionFacts[type]) ? "#ff6e40" : "#008e76" }
-                                : undefined
-                        )}
+                        key={`nutritionFact_${type}`}
+                        className={styles.ingredientInfoLineNutritionFact}
                     >
-                        {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
+                        <div
+                            className={styles.ingredientInfoLineNutritionFactAmount}
+                            style={(
+                                Utils.isSome(curNutritionValue) && Utils.isSome(altNutritionValue)
+                                    ? { color: (curNutritionValue > altNutritionValue) ? "#ff6e40" : "#008e76" }
+                                    : undefined
+                            )}
+                        >
+                            {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
+                        </div>
+                        <div className={styles.ingredientInfoLineNutritionFactType}>
+                            {type.toUpperCase()}
+                        </div>
                     </div>
-                    <div className={styles.ingredientInfoLineNutritionFactType}>
-                        {type.toUpperCase()}
-                    </div>
-                </div>
-            ) )}
+                );
+            } )}
         </div>
     );
 };

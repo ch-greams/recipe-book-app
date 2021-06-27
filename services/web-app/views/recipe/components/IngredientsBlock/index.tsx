@@ -1,8 +1,8 @@
 import React from "react";
+
+import type { IngredientItem } from "@common/typings";
 import type { RecipeIngredientDefault } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
 
 import IngredientLine from "./IngredientLine";
 

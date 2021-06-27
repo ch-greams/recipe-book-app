@@ -1,10 +1,10 @@
-import { IngredientItem } from "@common/typings";
+import type { IngredientItem } from "@common/typings";
 
 
 
 export interface SearchPageStore {
     isLoaded: boolean;
-    errorMessage: string;
+    errorMessage?: Option<string>;
     ingredients: IngredientItem[];
 }
 

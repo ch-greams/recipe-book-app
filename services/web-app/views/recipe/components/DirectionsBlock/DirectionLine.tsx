@@ -1,16 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
+
+import type { IngredientItem } from "@common/typings";
 import * as actions from "@store/recipe/actions";
-import {
+import type {
     RecipeDirection,
     RecipeIngredientDefault,
-    RecipeSubDirectionIngredient,
+    RecipeSubDirectionIngredient } from "@store/recipe/types";
+import {
     SubDirectionType,
 } from "@store/recipe/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
+import RemoveIcon from "@icons/close-sharp.svg";
+import IconWrapper from "@icons/IconWrapper";
 
 import DirectionInfoLine from "./DirectionInfoLine";
 import NewSubDirectionLine from "./NewSubDirectionLine";

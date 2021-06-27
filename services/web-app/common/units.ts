@@ -23,7 +23,7 @@ export enum VolumeUnit {
 }
 
 export const Units = { ...WeightUnit, ...VolumeUnit };
-export type Units = typeof Units;
+export type Units = WeightUnit | VolumeUnit;
 
 
 export enum TemperatureUnit {
@@ -47,3 +47,8 @@ export interface CustomUnitInput {
     amount: string;
     unit: WeightUnit;
 }
+
+export const DEFAULT_WEIGHT_UNIT: WeightUnit = WeightUnit.g;
+export const DEFAULT_VOLUME_UNIT: VolumeUnit = VolumeUnit.ml;
+export const DEFAULT_TIME_UNIT: TimeUnit = TimeUnit.min;
+export const DEFAULT_TEMPERATURE_UNIT: TemperatureUnit = TemperatureUnit.C;

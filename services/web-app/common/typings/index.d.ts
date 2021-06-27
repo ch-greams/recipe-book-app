@@ -1,9 +1,6 @@
-import { SubDirectionType } from "@store/recipe/types";
-
-import { NutritionFactType } from "@common/nutritionFacts";
-import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
-
-import { Dictionary } from "./common";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
+import type { SubDirectionType } from "@store/recipe/types";
 
 export * from "./common";
 
@@ -57,8 +54,8 @@ export interface SubDirectionIngredient extends SubDirection {
 export interface Direction {
     stepNumber: number;
     name: string;
-    time?: Time;
-    temperature?: Temperature;
+    time?: Option<Time>;
+    temperature?: Option<Temperature>;
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 

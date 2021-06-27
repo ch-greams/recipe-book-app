@@ -1,6 +1,6 @@
+import type { PropsWithChildren, ReactElement } from "react";
 import React from "react";
 
-import { Option } from "@common/typings";
 import Utils from "@common/utils";
 
 import { useToggleList } from "./hooks";
@@ -17,18 +17,18 @@ export enum SelectInputType {
     Other,
 }
 
-interface SelectOption {
+interface SelectOption<T> {
     group?: Option<string>;
     label?: Option<string>;
-    value: string;
+    value: T;
 }
 
-interface Props {
+interface Props<T> {
     type: SelectInputType;
     withGroups?: boolean;
-    options: SelectOption[];
-    value?: string;
-    onChange: (value: string) => void;
+    options: SelectOption<T>[];
+    value?: T;
+    onChange: (value: T) => void;
 }
 
 
@@ -65,20 +65,20 @@ const getClassName = (type: SelectInputType): string => {
     }
 };
 
-const getOption = (option: SelectOption, onSelect: (value: string) => void): JSX.Element => (
+const getOption = <T extends ID>(option: SelectOption<T>, onSelect: (value: T) => void): JSX.Element => (
     <div
         key={option.value}
         className={styles.selectInputOption}
         onClick={() => onSelect(option.value)}
     >
-        {Utils.unwrap(option.label, option.value)}
+        {Utils.unwrap(option.label, String(option.value))}
     </div>
 );
 
-const getItemList = (
+const getItemList = <T extends ID>(
     withGroups: boolean,
-    options: SelectOption[],
-    onSelect: (value: string) => void,
+    options: SelectOption<T>[],
+    onSelect: (value: T) => void,
 ): JSX.Element => (
     <div className={styles.selectInputList}>
         {(
@@ -100,11 +100,11 @@ const getItemList = (
     </div>
 );
 
-const SelectInput: React.FC<Props> = ({ type, options, value, onChange, withGroups = false }) => {
+const SelectInput = <T extends ID>({ type, options, value, onChange, withGroups = false }: PropsWithChildren<Props<T>>): ReactElement => {
 
     const { isListVisible, showList, hideList } = useToggleList();
 
-    const onSelect = (option: string): void => {
+    const onSelect = (option: T): void => {
         onChange(option);
         hideList();
     };

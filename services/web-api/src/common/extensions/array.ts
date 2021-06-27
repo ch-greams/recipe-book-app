@@ -1,4 +1,4 @@
-import { Option } from "../typings";
+import type { Option } from "../typings";
 import Utils from "../utils";
 
 

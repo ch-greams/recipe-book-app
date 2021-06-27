@@ -13,8 +13,7 @@
         "jsx": "react",
         "sourceMap": true,
         "esModuleInterop": true,
-        "strictNullChecks": false,
-        "noImplicitAny": true,
+        "strict": true,
         "noUnusedParameters": true,
         "noUnusedLocals": true,
         "typeRoots": [ "./node_modules/@types" ]

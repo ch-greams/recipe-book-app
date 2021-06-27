@@ -1,10 +1,9 @@
 import React from "react";
-import { RecipePageStore } from "@store/recipe/types";
-import NutritionFactsBlock from "@views/shared/NutritionFactsBlock";
 
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary } from "@common/typings";
 import Utils from "@common/utils";
+import NutritionFactsBlock from "@views/shared/NutritionFactsBlock";
+import type { RecipePageStore } from "@store/recipe/types";
 
 import ParametersBlock from "./ParametersBlock";
 

@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:ts": "next dev & npm run ts:watch",
+    "ts:watch": "tsc --noEmit --incremental --watch",
     "build": "next build",
     "start": "next start",
     "lint": "npx eslint .",

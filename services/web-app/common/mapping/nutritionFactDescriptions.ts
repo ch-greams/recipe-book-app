@@ -1,10 +1,10 @@
-import { NutritionFactDescription, NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary } from "@common/typings";
+import type * as nutritionFacts from "@common/nutritionFacts";
+import { NutritionFactType } from "@common/nutritionFacts";
 import { NutritionFactUnit } from "@common/units";
 
 
 
-const ENERGY: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const ENERGY: Record<nutritionFacts.EnergyNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Energy]: {
         type: NutritionFactType.Energy,
@@ -32,7 +32,7 @@ const ENERGY: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-const CARBOHYDRATES: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const CARBOHYDRATES: Record<nutritionFacts.CarbohydrateNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Carbohydrate]: {
         type: NutritionFactType.Carbohydrate,
@@ -60,7 +60,7 @@ const CARBOHYDRATES: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-const LIPIDS: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const LIPIDS: Record<nutritionFacts.LipidNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Fat]: {
         type: NutritionFactType.Fat,
@@ -110,9 +110,15 @@ const LIPIDS: Dictionary<NutritionFactType, NutritionFactDescription> = {
         dailyValue: 300,
         isFraction: true,
     },
+    [NutritionFactType.Phytosterol]: {
+        type: NutritionFactType.Phytosterol,
+        unit: NutritionFactUnit.mg,
+        dailyValue: null,
+        isFraction: true,
+    },
 };
 
-const PROTEINS: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const PROTEINS: Record<nutritionFacts.ProteinNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Protein]: {
         type: NutritionFactType.Protein,
@@ -236,7 +242,7 @@ const PROTEINS: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-const VITAMINS: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const VITAMINS: Record<nutritionFacts.VitaminNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.VitaminA]: {
         type: NutritionFactType.VitaminA,
@@ -324,7 +330,7 @@ const VITAMINS: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-const MINERALS: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const MINERALS: Record<nutritionFacts.MineralNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Calcium]: {
         type: NutritionFactType.Calcium,
@@ -412,7 +418,7 @@ const MINERALS: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-const OTHER: Dictionary<NutritionFactType, NutritionFactDescription> = {
+const OTHER: Record<nutritionFacts.OtherNutritionFactType, nutritionFacts.NutritionFactDescription> = {
 
     [NutritionFactType.Alcohol]: {
         type: NutritionFactType.Alcohol,
@@ -440,7 +446,7 @@ const OTHER: Dictionary<NutritionFactType, NutritionFactDescription> = {
     },
 };
 
-export default {
+const NUTRITION_FACT_DESCRIPTIONS: Record<NutritionFactType, nutritionFacts.NutritionFactDescription> = {
     ...ENERGY,
     ...CARBOHYDRATES,
     ...LIPIDS,
@@ -449,3 +455,5 @@ export default {
     ...MINERALS,
     ...OTHER,
 };
+
+export default NUTRITION_FACT_DESCRIPTIONS;
