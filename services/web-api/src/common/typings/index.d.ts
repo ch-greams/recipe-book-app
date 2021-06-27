@@ -1,8 +1,8 @@
-import { SubDirectionType } from "@common/enums";
-import { NutritionFactType } from "@common/nutritionFacts";
-import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
+import type { SubDirectionType } from "@common/enums";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 
-import { Dictionary } from "./common";
+import type { Dictionary } from "./common";
 
 export * from "./common";
 

@@ -1,5 +1,5 @@
 import type { Dictionary, Option } from "./typings";
-import { NutritionFactUnit } from "./units";
+import type { NutritionFactUnit } from "./units";
 
 
 export enum NutritionFactType {

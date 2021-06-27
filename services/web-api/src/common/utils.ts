@@ -1,4 +1,4 @@
-import { NutritionFactType } from "./nutritionFacts";
+import type { NutritionFactType } from "./nutritionFacts";
 import type { Dictionary, Option } from "./typings";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -85,6 +85,14 @@ export default class Utils {
 
     public static unwrap<T>(value: Option<T>, defaultValue: T): T {
         return this.isSome(value) ? value : defaultValue;
+    }
+
+    public static unwrapForced<T>(value: Option<T>, name: string): T {
+        if (!this.isSome(value)) {
+            throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
+        }
+
+        return value;
     }
 
     public static isSome<T>(value: Option<T>): value is T {

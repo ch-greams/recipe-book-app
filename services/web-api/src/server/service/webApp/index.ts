@@ -4,7 +4,7 @@ import Logger, { LogLevel } from "@common/logger";
 import Utils from "@common/utils";
 import { foodApiRouter } from "@server/service/api/foodApi";
 import { recipeApiRouter } from "@server/service/api/recipeApi";
-import Database from "@server/service/database";
+import type Database from "@server/service/database";
 import { HttpStatusSuccess } from "@server/service/webApp";
 
 

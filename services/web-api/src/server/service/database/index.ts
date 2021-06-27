@@ -1,11 +1,12 @@
-import { Db, MongoClient, MongoError } from "mongodb";
+import type { Db, MongoError } from "mongodb";
+import { MongoClient } from "mongodb";
 
 import Logger, { LogLevel } from "@common/logger";
-import { Food, Option, Recipe } from "@common/typings";
+import type { Food, Option, Recipe } from "@common/typings";
+import Utils from "@common/utils";
 
 import foodSchema from "./schemas/food";
 import recipeSchema from "./schemas/recipe";
-import { SchemaValidator } from "./schemas/types";
 
 
 
@@ -16,7 +17,7 @@ export default class Database {
 
     private path: string;
 
-    private db: Db;
+    private db: Option<Db>;
 
     public constructor() {
 
@@ -32,7 +33,7 @@ export default class Database {
     
             this.db = client.db(Database.DB_NAME);
     
-            this.config(foodSchema, recipeSchema);
+            this.config();
 
             // client.close();
         }
@@ -42,12 +43,14 @@ export default class Database {
         }
     }
 
-    private async config(foodSchema: SchemaValidator, recipeSchema: SchemaValidator): Promise<void> {
+    private async config(): Promise<void> {
 
         Logger.log(LogLevel.INFO, "Database.config", "Updating schema validators for collections...");
 
-        await this.db.command({ collMod: "food", validator: foodSchema });
-        await this.db.command({ collMod: "recipe", validator: recipeSchema });
+        const db = Utils.unwrapForced(this.db, "this.db");
+
+        await db.command({ collMod: "food", validator: foodSchema });
+        await db.command({ collMod: "recipe", validator: recipeSchema });
 
         Logger.log(LogLevel.INFO, "Database.config", "Done");
     }
@@ -56,7 +59,7 @@ export default class Database {
     public async getFoodRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Food[]> {
 
         try {
-            const collection = this.db.collection("food");
+            const collection = Utils.unwrapForced(this.db, "this.db").collection("food");
 
             const options = { sort: { id: 1 }, limit: limit };
             const records = await collection.find<Food>({}, options).toArray();
@@ -76,7 +79,7 @@ export default class Database {
     public async getFoodRecord(id: string): Promise<Option<Food>> {
 
         try {
-            const collection = this.db.collection("food");
+            const collection = Utils.unwrapForced(this.db, "this.db").collection("food");
 
             const record = await collection.findOne<Food>({ id });
     
@@ -95,7 +98,7 @@ export default class Database {
     public async getRecipeRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Recipe[]> {
 
         try {
-            const collection = this.db.collection("recipe");
+            const collection = Utils.unwrapForced(this.db, "this.db").collection("recipe");
 
             const options = { sort: { id: 1 }, limit: limit };
             const records = await collection.find<Recipe>({}, options).toArray();
@@ -115,7 +118,7 @@ export default class Database {
     public async getRecipeRecord(id: string): Promise<Option<Recipe>> {
 
         try {
-            const collection = this.db.collection("recipe");
+            const collection = Utils.unwrapForced(this.db, "this.db").collection("recipe");
 
             // const record = await collection.findOne<Recipe>({ id });
     
