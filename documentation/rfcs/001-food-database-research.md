@@ -1,4 +1,6 @@
 # Food Database Research
+
+In order to find reliable source of nutritional value estimation for recipe calculations several data sources were investigated.
 ## [NCCDB](http://www.ncc.umn.edu/food-and-nutrient-database/)
 1. Not free to use; detailed pricing can be requested
 2. Does not have an API. After purchasing the database, you're provided with excel files. Database is renewed annually
@@ -61,3 +63,32 @@ Also, users can't be charged for the use of data that comes from this database.
 2. Does not have an API
 3. Excel files [can be downloaded from here](https://www.foodstandards.gov.au/science/monitoringnutrients/afcd/Pages/downloadableexcelfiles.aspx)
 4. Excel database comprises 5 core files (Food, Nutrient, Recipe, Retention factor, Measures)
+
+# Conclusions
+## For consideration
+Apart from ease of use and price for using the data, I found that there are two distinct approaches combined in the development of most nutrition databases:
+
+* Generic data collection: nutritional dataset gives approximate values for certain products known to vary in nutritional content. 
+    * Less items needed to comprehensiveness
+    * Less precise
+
+* Gather more available items with nutritional data provided by manufacturer
+    * Allows better precision
+    * Manufacturers often provide limited information on nutrients beyond macros
+    * Nutritional value of certain products may vary in different countries (e.g. sugar content of Coca-Cola)
+
+
+## Viable options for MVP:
+* USDA
+    * Easy to use
+    * Free
+    * Comprehensive
+* CNF
+    * Free
+    * Comprehensive
+
+For further consideration:
+* Nutritionix 
+    * Easy to use
+    * Comprehensive
+    * Pricey
