@@ -151,9 +151,9 @@ GRANT ALL ON TABLE private.direction_part TO postgres;
 CREATE TABLE private.ingredient (
 	id int8 NOT NULL DEFAULT nextval('private.ingredient_id'::regclass),
 	recipe_id int8 NOT NULL,
-	product_id int8 NOT NULL,
+	product_id int8 NULL,
 	CONSTRAINT ingredient_pk PRIMARY KEY (id),
-	CONSTRAINT ingredient_fk FOREIGN KEY (product_id) REFERENCES private.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT ingredient_fk FOREIGN KEY (product_id) REFERENCES private.product(id)
 );
 
 -- Permissions
@@ -268,6 +268,122 @@ CREATE TABLE private.nutrition_fact (
 
 ALTER TABLE private.nutrition_fact OWNER TO postgres;
 GRANT ALL ON TABLE private.nutrition_fact TO postgres;
+
+
+-- private.food_json source
+
+CREATE OR REPLACE VIEW private.food_json
+AS WITH food AS (
+         SELECT product.id,
+            product.name,
+            product.brand,
+            product.subtitle,
+            product.density
+           FROM private.product
+          WHERE product.type = 'food'::private.product_type
+        ), custom_unit AS (
+         SELECT custom_unit.product_id,
+            json_agg(json_build_object('name', custom_unit.name, 'amount', custom_unit.amount, 'unit', custom_unit.unit)) AS json
+           FROM private.custom_unit
+          GROUP BY custom_unit.product_id
+        ), nutrition_fact AS (
+         SELECT nutrition_fact.product_id,
+            jsonb_build_object('energy', nutrition_fact.energy) AS group_energy,
+            jsonb_build_object('carbohydrate', nutrition_fact.carbohydrate, 'dietary_fiber', nutrition_fact.dietary_fiber, 'starch', nutrition_fact.starch, 'sugars', nutrition_fact.sugars) AS group_carbohydrate,
+            jsonb_build_object('fat', nutrition_fact.fat, 'monounsaturated', nutrition_fact.monounsaturated, 'polyunsaturated', nutrition_fact.polyunsaturated, 'omega_3', nutrition_fact.omega_3, 'omega_6', nutrition_fact.omega_6, 'saturated', nutrition_fact.saturated, 'trans_fats', nutrition_fact.trans_fats, 'cholesterol', nutrition_fact.cholesterol, 'phytosterol', nutrition_fact.phytosterol) AS group_fat,
+            jsonb_build_object('protein', nutrition_fact.protein, 'tryptophan', nutrition_fact.tryptophan, 'threonine', nutrition_fact.threonine, 'isoleucine', nutrition_fact.isoleucine, 'leucine', nutrition_fact.leucine, 'lysine', nutrition_fact.lysine, 'methionine', nutrition_fact.methionine, 'cystine', nutrition_fact.cystine, 'phenylalanine', nutrition_fact.phenylalanine, 'tyrosine', nutrition_fact.tyrosine, 'valine', nutrition_fact.valine, 'arginine', nutrition_fact.arginine, 'histidine', nutrition_fact.histidine, 'alanine', nutrition_fact.alanine, 'aspartic_acid', nutrition_fact.aspartic_acid, 'glutamic_acid', nutrition_fact.glutamic_acid, 'glycine', nutrition_fact.glycine, 'proline', nutrition_fact.proline, 'serine', nutrition_fact.serine, 'hydroxyproline', nutrition_fact.hydroxyproline) AS group_protein,
+            jsonb_build_object('vitamin_a', nutrition_fact.vitamin_a, 'vitamin_c', nutrition_fact.vitamin_c, 'vitamin_d', nutrition_fact.vitamin_d, 'vitamin_e', nutrition_fact.vitamin_e, 'vitamin_k', nutrition_fact.vitamin_k, 'vitamin_b1', nutrition_fact.vitamin_b1, 'vitamin_b2', nutrition_fact.vitamin_b2, 'vitamin_b3', nutrition_fact.vitamin_b3, 'vitamin_b5', nutrition_fact.vitamin_b5, 'vitamin_b6', nutrition_fact.vitamin_b6, 'vitamin_b9', nutrition_fact.vitamin_b9, 'vitamin_b12', nutrition_fact.vitamin_b12, 'choline', nutrition_fact.choline, 'betaine', nutrition_fact.betaine, 'calcium', nutrition_fact.calcium, 'iron', nutrition_fact.iron, 'magnesium', nutrition_fact.magnesium, 'phosphorus', nutrition_fact.phosphorus, 'potassium', nutrition_fact.potassium, 'sodium', nutrition_fact.sodium, 'zinc', nutrition_fact.zinc, 'copper', nutrition_fact.copper, 'manganese', nutrition_fact.manganese, 'selenium', nutrition_fact.selenium, 'fluoride', nutrition_fact.fluoride, 'chromium', nutrition_fact.chromium, 'iodine', nutrition_fact.iodine, 'molybdenum', nutrition_fact.molybdenum) AS group_vitamin,
+            jsonb_build_object('alcohol', nutrition_fact.alcohol, 'water', nutrition_fact.water, 'ash', nutrition_fact.ash, 'caffeine', nutrition_fact.caffeine) AS group_other
+           FROM private.nutrition_fact
+        )
+ SELECT food.id,
+    json_build_object('id', food.id, 'name', food.name, 'brand', food.brand, 'subtitle', food.subtitle, 'density', food.density, 'nutritionFacts', ( SELECT ((((nutrition_fact.group_energy || nutrition_fact.group_carbohydrate) || nutrition_fact.group_fat) || nutrition_fact.group_protein) || nutrition_fact.group_vitamin) || nutrition_fact.group_other
+           FROM nutrition_fact
+          WHERE nutrition_fact.product_id = food.id), 'customUnits', ( SELECT custom_unit.json
+           FROM custom_unit
+          WHERE custom_unit.product_id = food.id)) AS json
+   FROM food;
+
+-- Permissions
+
+ALTER TABLE private.food_json OWNER TO postgres;
+GRANT ALL ON TABLE private.food_json TO postgres;
+
+
+-- private.nutrition_fact_json source
+
+CREATE OR REPLACE VIEW private.nutrition_fact_json
+AS WITH nutrition_fact AS (
+         SELECT nutrition_fact_1.product_id,
+            jsonb_build_object('energy', nutrition_fact_1.energy) AS group_energy,
+            jsonb_build_object('carbohydrate', nutrition_fact_1.carbohydrate, 'dietary_fiber', nutrition_fact_1.dietary_fiber, 'starch', nutrition_fact_1.starch, 'sugars', nutrition_fact_1.sugars) AS group_carbohydrate,
+            jsonb_build_object('fat', nutrition_fact_1.fat, 'monounsaturated', nutrition_fact_1.monounsaturated, 'polyunsaturated', nutrition_fact_1.polyunsaturated, 'omega_3', nutrition_fact_1.omega_3, 'omega_6', nutrition_fact_1.omega_6, 'saturated', nutrition_fact_1.saturated, 'trans_fats', nutrition_fact_1.trans_fats, 'cholesterol', nutrition_fact_1.cholesterol, 'phytosterol', nutrition_fact_1.phytosterol) AS group_fat,
+            jsonb_build_object('protein', nutrition_fact_1.protein, 'tryptophan', nutrition_fact_1.tryptophan, 'threonine', nutrition_fact_1.threonine, 'isoleucine', nutrition_fact_1.isoleucine, 'leucine', nutrition_fact_1.leucine, 'lysine', nutrition_fact_1.lysine, 'methionine', nutrition_fact_1.methionine, 'cystine', nutrition_fact_1.cystine, 'phenylalanine', nutrition_fact_1.phenylalanine, 'tyrosine', nutrition_fact_1.tyrosine, 'valine', nutrition_fact_1.valine, 'arginine', nutrition_fact_1.arginine, 'histidine', nutrition_fact_1.histidine, 'alanine', nutrition_fact_1.alanine, 'aspartic_acid', nutrition_fact_1.aspartic_acid, 'glutamic_acid', nutrition_fact_1.glutamic_acid, 'glycine', nutrition_fact_1.glycine, 'proline', nutrition_fact_1.proline, 'serine', nutrition_fact_1.serine, 'hydroxyproline', nutrition_fact_1.hydroxyproline) AS group_protein,
+            jsonb_build_object('vitamin_a', nutrition_fact_1.vitamin_a, 'vitamin_c', nutrition_fact_1.vitamin_c, 'vitamin_d', nutrition_fact_1.vitamin_d, 'vitamin_e', nutrition_fact_1.vitamin_e, 'vitamin_k', nutrition_fact_1.vitamin_k, 'vitamin_b1', nutrition_fact_1.vitamin_b1, 'vitamin_b2', nutrition_fact_1.vitamin_b2, 'vitamin_b3', nutrition_fact_1.vitamin_b3, 'vitamin_b5', nutrition_fact_1.vitamin_b5, 'vitamin_b6', nutrition_fact_1.vitamin_b6, 'vitamin_b9', nutrition_fact_1.vitamin_b9, 'vitamin_b12', nutrition_fact_1.vitamin_b12, 'choline', nutrition_fact_1.choline, 'betaine', nutrition_fact_1.betaine, 'calcium', nutrition_fact_1.calcium, 'iron', nutrition_fact_1.iron, 'magnesium', nutrition_fact_1.magnesium, 'phosphorus', nutrition_fact_1.phosphorus, 'potassium', nutrition_fact_1.potassium, 'sodium', nutrition_fact_1.sodium, 'zinc', nutrition_fact_1.zinc, 'copper', nutrition_fact_1.copper, 'manganese', nutrition_fact_1.manganese, 'selenium', nutrition_fact_1.selenium, 'fluoride', nutrition_fact_1.fluoride, 'chromium', nutrition_fact_1.chromium, 'iodine', nutrition_fact_1.iodine, 'molybdenum', nutrition_fact_1.molybdenum) AS group_vitamin,
+            jsonb_build_object('alcohol', nutrition_fact_1.alcohol, 'water', nutrition_fact_1.water, 'ash', nutrition_fact_1.ash, 'caffeine', nutrition_fact_1.caffeine) AS group_other
+           FROM private.nutrition_fact nutrition_fact_1
+        )
+ SELECT nutrition_fact.product_id,
+    ((((nutrition_fact.group_energy || nutrition_fact.group_carbohydrate) || nutrition_fact.group_fat) || nutrition_fact.group_protein) || nutrition_fact.group_vitamin) || nutrition_fact.group_other AS json
+   FROM nutrition_fact;
+
+-- Permissions
+
+ALTER TABLE private.nutrition_fact_json OWNER TO postgres;
+GRANT ALL ON TABLE private.nutrition_fact_json TO postgres;
+
+
+-- private.recipe_json source
+
+CREATE OR REPLACE VIEW private.recipe_json
+AS WITH recipe AS (
+         SELECT product.id,
+            product.name,
+            product.brand,
+            product.subtitle,
+            product.density
+           FROM private.product
+          WHERE product.type = 'recipe'::private.product_type
+        ), custom_unit AS (
+         SELECT custom_unit.product_id,
+            json_agg(json_build_object('name', custom_unit.name, 'amount', custom_unit.amount, 'unit', custom_unit.unit)) AS json
+           FROM private.custom_unit
+          GROUP BY custom_unit.product_id
+        ), ingredient_product AS (
+         SELECT ingredient_product.ingredient_id,
+            json_agg(json_build_object('id', ingredient_product.product_id, 'name', ( SELECT product.name
+                   FROM private.product
+                  WHERE product.id = ingredient_product.product_id), 'amount', ingredient_product.amount, 'unit', ingredient_product.unit, 'nutritionFacts', ( SELECT nutrition_fact_json.json
+                   FROM private.nutrition_fact_json
+                  WHERE nutrition_fact_json.product_id = ingredient_product.product_id))) AS json
+           FROM private.ingredient_product
+          GROUP BY ingredient_product.ingredient_id
+        ), ingredient AS (
+         SELECT ingredient.recipe_id,
+            json_agg(json_build_object('id', ingredient.id, 'name', ( SELECT product.name
+                   FROM private.product
+                  WHERE product.id = ingredient.product_id), 'amount', ( SELECT ingredient_product.amount
+                   FROM private.ingredient_product
+                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient_product.product_id = ingredient.product_id), 'unit', ( SELECT ingredient_product.unit
+                   FROM private.ingredient_product
+                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient_product.product_id = ingredient.product_id), 'alternatives', ( SELECT ingredient_product.json
+                   FROM ingredient_product
+                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient.product_id = ingredient.product_id))) AS json
+           FROM private.ingredient
+          GROUP BY ingredient.recipe_id
+        )
+ SELECT recipe.id,
+    json_build_object('id', recipe.id, 'name', recipe.name, 'brand', recipe.brand, 'subtitle', recipe.subtitle, 'density', recipe.density, 'customUnits', ( SELECT custom_unit.json
+           FROM custom_unit
+          WHERE custom_unit.product_id = recipe.id), 'ingredients', ( SELECT ingredient.json
+           FROM ingredient
+          WHERE ingredient.recipe_id = recipe.id)) AS json
+   FROM recipe;
+
+-- Permissions
+
+ALTER TABLE private.recipe_json OWNER TO postgres;
+GRANT ALL ON TABLE private.recipe_json TO postgres;
 
 
 
