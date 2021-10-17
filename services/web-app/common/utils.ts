@@ -176,7 +176,7 @@ export default class Utils {
         ingredients: Dictionary<NutritionFactType, number>[],
     ): Dictionary<NutritionFactType, number> {
 
-        return Utils.getObjectKeys(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
+        return Object.values(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
 
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
