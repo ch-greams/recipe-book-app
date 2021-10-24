@@ -351,7 +351,7 @@ AS WITH recipe AS (
           GROUP BY custom_unit.product_id
         ), ingredient_product AS (
          SELECT ingredient_product.ingredient_id,
-            json_agg(json_build_object('id', ingredient_product.product_id, 'name', ( SELECT product.name
+            json_object_agg(ingredient_product.product_id, json_build_object('id', ingredient_product.product_id, 'name', ( SELECT product.name
                    FROM private.product
                   WHERE product.id = ingredient_product.product_id), 'amount', ingredient_product.amount, 'unit', ingredient_product.unit, 'nutritionFacts', ( SELECT nutrition_fact_json.json
                    FROM private.nutrition_fact_json
@@ -360,24 +360,18 @@ AS WITH recipe AS (
           GROUP BY ingredient_product.ingredient_id
         ), ingredient AS (
          SELECT ingredient.recipe_id,
-            json_agg(json_build_object('id', ingredient.id, 'name', ( SELECT product.name
-                   FROM private.product
-                  WHERE product.id = ingredient.product_id), 'amount', ( SELECT ingredient_product.amount
-                   FROM private.ingredient_product
-                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient_product.product_id = ingredient.product_id), 'unit', ( SELECT ingredient_product.unit
-                   FROM private.ingredient_product
-                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient_product.product_id = ingredient.product_id), 'alternatives', ( SELECT ingredient_product.json
+            json_agg(json_build_object('id', ingredient.id, 'product_id', ingredient.product_id, 'products', ( SELECT ingredient_product.json
                    FROM ingredient_product
-                  WHERE ingredient_product.ingredient_id = ingredient.id AND ingredient.product_id = ingredient.product_id))) AS json
+                  WHERE ingredient_product.ingredient_id = ingredient.id))) AS json
            FROM private.ingredient
           GROUP BY ingredient.recipe_id
         )
  SELECT recipe.id,
-    json_build_object('id', recipe.id, 'name', recipe.name, 'brand', recipe.brand, 'subtitle', recipe.subtitle, 'density', recipe.density, 'customUnits', ( SELECT custom_unit.json
+    json_build_object('id', recipe.id, 'name', recipe.name, 'brand', recipe.brand, 'subtitle', recipe.subtitle, 'density', recipe.density, 'customUnits', COALESCE(( SELECT custom_unit.json
            FROM custom_unit
-          WHERE custom_unit.product_id = recipe.id), 'ingredients', ( SELECT ingredient.json
+          WHERE custom_unit.product_id = recipe.id), '[]'::json), 'ingredients', ( SELECT ingredient.json
            FROM ingredient
-          WHERE ingredient.recipe_id = recipe.id)) AS json
+          WHERE ingredient.recipe_id = recipe.id), 'directions', '[]'::json) AS json
    FROM recipe;
 
 -- Permissions

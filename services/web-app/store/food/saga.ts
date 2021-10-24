@@ -24,8 +24,8 @@ function* fetchFoodItem(action: types.FoodItemFetchRequestAction): Generator<Str
         yield put(actions.fetchFoodItemSuccess(foodItem));
     }
     catch (error) {
-
-        yield put(actions.fetchFoodItemError(error.message));
+        const { message } = error as Error;
+        yield put(actions.fetchFoodItemError(message));
     }
 }
 
@@ -49,8 +49,8 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<Str
         ]));
     }
     catch (error) {
-
-        yield put(actions.addCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.addCustomUnitError(message));
     }
 }
 
@@ -69,8 +69,8 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
         ));
     }
     catch (error) {
-
-        yield put(actions.removeCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.removeCustomUnitError(message));
     }
 }
 
@@ -93,8 +93,8 @@ function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generat
         ));
     }
     catch (error) {
-
-        yield put(actions.updateCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.updateCustomUnitError(message));
     }
 }
 

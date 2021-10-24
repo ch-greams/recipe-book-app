@@ -5,7 +5,7 @@ import type { SubDirectionType } from "@store/recipe/types";
 export * from "./common";
 
 export interface Food {
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -14,20 +14,18 @@ export interface Food {
     customUnits: CustomUnit[];
 }
 
-export interface IngredientItem {
-    id: string;
+export interface IngredientProduct {
+    id: number;
     name: string;
+    amount: number;
+    unit: WeightUnit | VolumeUnit;
     nutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 export interface Ingredient {
-    amount: number;
-    unit: WeightUnit | VolumeUnit;
-    id: string;
-}
-
-export interface IngredientDefault extends Ingredient {
-    alternatives: Ingredient[];
+    id: number;
+    product_id: number;
+    products: Dictionary<number, IngredientProduct>;
 }
 
 export interface Time {
@@ -59,13 +57,8 @@ export interface Direction {
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 
-export interface References {
-    food: IngredientItem[];
-    recipe: IngredientItem[];
-}
-
 export interface Recipe {
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -74,7 +67,6 @@ export interface Recipe {
 
     customUnits: CustomUnit[];
 
-    ingredients: IngredientDefault[];
+    ingredients: Ingredient[];
     directions: Direction[];
-    references: References;
 }

@@ -9,7 +9,7 @@ export interface FoodPageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
 
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -174,7 +174,7 @@ export interface UpdateServingSizeUnitAction {
 
 export interface FoodItemFetchRequestAction {
     type: typeof FOOD_ITEM_FETCH_REQUEST;
-    payload: string;
+    payload: number;
 }
 
 export interface FoodItemFetchSuccessAction {

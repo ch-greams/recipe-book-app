@@ -12,7 +12,7 @@ const initialState: types.FoodPageStore = {
     isLoaded: false,
     errorMessage: null,
 
-    id: "",
+    id: -1,
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
@@ -102,7 +102,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 isLoaded: false,
                 errorMessage: null,
 
-                id: action.payload as string,
+                id: action.payload,
             };
         }
 

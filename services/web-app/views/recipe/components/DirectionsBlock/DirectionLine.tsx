@@ -1,11 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import type { IngredientItem } from "@common/typings";
 import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
-    RecipeIngredientDefault,
+    RecipeIngredient,
     RecipeSubDirectionIngredient } from "@store/recipe/types";
 import {
     SubDirectionType,
@@ -24,23 +23,20 @@ import styles from "./DirectionsBlock.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    ingredients: RecipeIngredientDefault[];
-    references: Dictionary<string, IngredientItem>;
+    ingredients: RecipeIngredient[];
     direction: RecipeDirection;
     index: number;
 }
 
-const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, direction, index }) => {
+const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, index }) => {
 
     const dispatch = useDispatch();
 
     const removeDirection = (directionIndex: number): void => {
-
         dispatch(actions.removeDirection(directionIndex));
     };
 
     const toggleDirectionMark = (directionIndex: number): void => {
-
         dispatch(actions.toggleDirectionMark(directionIndex));
     };
 
@@ -105,7 +101,6 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
                 {( !isReadOnly && (
                     <NewSubDirectionLine
                         key={"subDirectionLine_new"}
-                        references={references}
                         directionIndex={index}
                         direction={direction}
                         ingredients={ingredients}

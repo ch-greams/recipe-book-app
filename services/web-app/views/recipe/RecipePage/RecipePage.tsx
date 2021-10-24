@@ -37,7 +37,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
         ingredients,
         newDirection,
         directions,
-        references,
         nutritionFacts,
     } = recipeItem;
 
@@ -74,7 +73,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                 <IngredientsBlock
                     isReadOnly={isReadOnly}
                     ingredients={ingredients}
-                    references={references}
                     search={search}
                 />
 
@@ -87,7 +85,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     newDirection={newDirection}
                     directions={directions}
                     ingredients={ingredients}
-                    references={references}
                 />
 
                 <div className={styles.recipePageBlockTitle}>

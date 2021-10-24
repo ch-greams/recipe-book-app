@@ -41,7 +41,7 @@ export function updateNutritionFact(key: NutritionFactType, value: string): type
     };
 }
 
-export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequestAction {
+export function fetchFoodItemRequest(foodId: number): types.FoodItemFetchRequestAction {
     return {
         type: types.FOOD_ITEM_FETCH_REQUEST,
         payload: foodId,

@@ -8,7 +8,7 @@ export default class RecipeApi {
     public static readonly API_PATH: string = "/api/recipe";
 
 
-    public static async getRecipeItem(id: string): Promise<Recipe> {
+    public static async getRecipeItem(id: number): Promise<Recipe> {
 
         const { body: recipeItem } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
 
