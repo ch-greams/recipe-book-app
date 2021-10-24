@@ -968,12 +968,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             products: {
                                 ...ingredient.products,
                                 [altIngredientProduct.id]: {
-                                    id: altIngredientProduct.id,
-                                    name: altIngredientProduct.name,
+                                    ...altIngredientProduct,
                                     amount: 100,
                                     amountInput: "100",
                                     unit: units.WeightUnit.g,
-                                    nutritionFacts: altIngredientProduct.nutritionFacts,
                                 },
                             },
                         }
