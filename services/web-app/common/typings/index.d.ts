@@ -16,6 +16,7 @@ export interface Food {
 
 export interface IngredientProduct {
     id: number;
+    type: "food" | "recipe";
     name: string;
     amount: number;
     unit: WeightUnit | VolumeUnit;

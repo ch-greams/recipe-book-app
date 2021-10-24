@@ -26,6 +26,7 @@ interface Props {
 
 export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
     id: -1,
+    type: "food",
     name: "NEW INGREDIENT",
     amount: 100,
     amountInput: "100",

@@ -92,8 +92,17 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
         </div>
     );
 
+    const linkPath = Utils.getItemPath(
+        (
+            ingredient.products[ingredient.product_id]?.type === "food"
+                ? RoutePath.Food
+                : RoutePath.Recipe
+        ),
+        ingredient.product_id,
+    );
+
     const linkButton = (
-        <Link href={Utils.getItemPath(RoutePath.Food, ingredient.id)}>
+        <Link href={linkPath}>
             <a
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : undefined )}

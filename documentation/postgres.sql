@@ -299,9 +299,9 @@ AS WITH food AS (
  SELECT food.id,
     json_build_object('id', food.id, 'name', food.name, 'brand', food.brand, 'subtitle', food.subtitle, 'density', food.density, 'nutritionFacts', ( SELECT ((((nutrition_fact.group_energy || nutrition_fact.group_carbohydrate) || nutrition_fact.group_fat) || nutrition_fact.group_protein) || nutrition_fact.group_vitamin) || nutrition_fact.group_other
            FROM nutrition_fact
-          WHERE nutrition_fact.product_id = food.id), 'customUnits', ( SELECT custom_unit.json
+          WHERE nutrition_fact.product_id = food.id), 'customUnits', COALESCE(( SELECT custom_unit.json
            FROM custom_unit
-          WHERE custom_unit.product_id = food.id)) AS json
+          WHERE custom_unit.product_id = food.id), '[]'::json)) AS json
    FROM food;
 
 -- Permissions
@@ -351,7 +351,9 @@ AS WITH recipe AS (
           GROUP BY custom_unit.product_id
         ), ingredient_product AS (
          SELECT ingredient_product.ingredient_id,
-            json_object_agg(ingredient_product.product_id, json_build_object('id', ingredient_product.product_id, 'name', ( SELECT product.name
+            json_object_agg(ingredient_product.product_id, json_build_object('id', ingredient_product.product_id, 'type', ( SELECT product.type
+                   FROM private.product
+                  WHERE product.id = ingredient_product.product_id), 'name', ( SELECT product.name
                    FROM private.product
                   WHERE product.id = ingredient_product.product_id), 'amount', ingredient_product.amount, 'unit', ingredient_product.unit, 'nutritionFacts', ( SELECT nutrition_fact_json.json
                    FROM private.nutrition_fact_json
