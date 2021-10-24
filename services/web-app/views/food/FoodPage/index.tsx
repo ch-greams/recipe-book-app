@@ -93,7 +93,7 @@ FoodPage.displayName = "FoodPage";
 const FoodPageConnected: React.FC = () => {
 
     const router = useRouter();
-    const foodId = router.query.fid as string;
+    const foodId = Number(router.query.fid);
     
     const dispatch = useDispatch();
 

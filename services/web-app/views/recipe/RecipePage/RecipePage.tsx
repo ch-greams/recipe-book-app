@@ -122,7 +122,7 @@ const RecipePageConnected: React.FC = () => {
 
     useEffect(() => {
         if (Utils.isSome(recipeId)) {
-            dispatch(actions.fetchRecipeItemRequest(recipeId));
+            dispatch(actions.fetchRecipeItemRequest(Number(recipeId)));
             dispatch(requestIngredients());
         }
     }, [ dispatch, recipeId ]);
