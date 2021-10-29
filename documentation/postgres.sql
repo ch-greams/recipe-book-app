@@ -2,6 +2,12 @@
 
 CREATE SCHEMA private AUTHORIZATION postgres;
 
+-- DROP TYPE private.direction_part_type;
+
+CREATE TYPE private.direction_part_type AS ENUM (
+	'ingredient',
+	'note');
+
 -- DROP TYPE private."product_type";
 
 CREATE TYPE private."product_type" AS ENUM (
@@ -128,10 +134,10 @@ GRANT ALL ON TABLE private.direction TO postgres;
 CREATE TABLE private.direction_part (
 	direction_id int8 NOT NULL,
 	step_number int2 NOT NULL,
-	"type" text NOT NULL,
-	"label" text NOT NULL,
+	"label" text NULL,
 	product_id int8 NULL,
 	product_amount float8 NULL,
+	"type" private.direction_part_type NOT NULL,
 	CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
 	CONSTRAINT direction_part_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -367,13 +373,27 @@ AS WITH recipe AS (
                   WHERE ingredient_product.ingredient_id = ingredient.id))) AS json
            FROM private.ingredient
           GROUP BY ingredient.recipe_id
+        ), direction_part AS (
+         SELECT direction_part.direction_id,
+            json_agg(json_build_object('stepNumber', direction_part.step_number, 'type', direction_part.type, 'label', direction_part.label, 'id', direction_part.product_id, 'amount', direction_part.product_amount)) AS json
+           FROM private.direction_part
+          GROUP BY direction_part.direction_id
+        ), direction AS (
+         SELECT direction.recipe_id,
+            json_agg(json_build_object('id', direction.id, 'stepNumber', direction.step_number, 'name', direction.name, 'temperature', json_build_object('count', (direction.temperature).value, 'unit', (direction.temperature).unit), 'duration', json_build_object('count', (direction.duration).value, 'unit', (direction.duration).unit), 'steps', COALESCE(( SELECT direction_part.json
+                   FROM direction_part
+                  WHERE direction_part.direction_id = direction.id), '[]'::json))) AS json
+           FROM private.direction
+          GROUP BY direction.recipe_id
         )
  SELECT recipe.id,
     json_build_object('id', recipe.id, 'name', recipe.name, 'brand', recipe.brand, 'subtitle', recipe.subtitle, 'density', recipe.density, 'customUnits', COALESCE(( SELECT custom_unit.json
            FROM custom_unit
-          WHERE custom_unit.product_id = recipe.id), '[]'::json), 'ingredients', ( SELECT ingredient.json
+          WHERE custom_unit.product_id = recipe.id), '[]'::json), 'ingredients', COALESCE(( SELECT ingredient.json
            FROM ingredient
-          WHERE ingredient.recipe_id = recipe.id), 'directions', '[]'::json) AS json
+          WHERE ingredient.recipe_id = recipe.id), '[]'::json), 'directions', COALESCE(( SELECT direction.json
+           FROM direction
+          WHERE direction.recipe_id = recipe.id), '[]'::json)) AS json
    FROM recipe;
 
 -- Permissions
