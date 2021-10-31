@@ -1,11 +1,11 @@
-import type { IngredientItem } from "@common/typings";
+import type { IngredientProduct } from "@common/typings";
 
 
 
 export interface SearchPageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
-    ingredients: IngredientItem[];
+    ingredients: IngredientProduct[];
 }
 
 
@@ -21,7 +21,7 @@ export interface IngredientsFetchRequestedAction {
 
 interface IngredientsFetchSuccessAction {
     type: typeof INGREDIENTS_FETCH_SUCCESS;
-    payload: IngredientItem[];
+    payload: IngredientProduct[];
 }
 
 interface IngredientsFetchErrorAction {

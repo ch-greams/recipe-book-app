@@ -1,9 +1,6 @@
 
 
 module.exports = {
-    future: {
-        webpack5: true,
-    },
     rewrites: async () => ([
         {
             source: "/api/:path*",

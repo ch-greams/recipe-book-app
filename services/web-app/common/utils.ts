@@ -172,11 +172,15 @@ export default class Utils {
         return Object.keys(obj) as (keyof T)[];
     }
 
+    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
+        return Object.values(obj) as T[];
+    }
+
     public static dictionarySum(
         ingredients: Dictionary<NutritionFactType, number>[],
     ): Dictionary<NutritionFactType, number> {
 
-        return Utils.getObjectKeys(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
+        return Object.values(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
 
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
@@ -224,7 +228,7 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath, id: string): string {
+    public static getItemPath(route: RoutePath, id: number): string {
         return `/${route}/${id}`;
     }
 
@@ -251,24 +255,20 @@ export default class Utils {
     }
     
     public static convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
-    
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
             (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {},
         );
     }
     
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-    
         return customUnits.map(this.convertCustomUnitIntoInput);
     }
     
     public static convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-    
         return customUnits.map(this.convertCustomUnitIntoValue);
     }
 
     public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {
-    
         return { ...customUnit, amount: String(customUnit.amount) };
     }
 

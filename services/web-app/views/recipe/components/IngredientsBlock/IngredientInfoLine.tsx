@@ -1,13 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import type { IngredientItem, InputChangeCallback } from "@common/typings";
+import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
-import type { RecipeIngredientDefault } from "@store/recipe/types";
+import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
+
+import { DEFAULT_INGREDIENT_PRODUCT } from "./AltIngredientLine";
 
 import styles from "./IngredientsBlock.module.scss";
 
@@ -15,18 +17,19 @@ import styles from "./IngredientsBlock.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    ingredient: RecipeIngredientDefault;
-    references: Dictionary<string, IngredientItem>;
+    ingredient: RecipeIngredient;
     isNew?: boolean;
 }
 
-const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnly, isNew = false }) => {
+const IngredientInfoLine: React.FC<Props> = ({ ingredient, isReadOnly, isNew = false }) => {
 
     const dispatch = useDispatch();
 
-    const ingredientItemName = Utils.unwrap(references[ingredient.id]?.name, "NEW INGREDIENT");
+    const ingredientProduct: RecipeIngredientProduct = Utils.unwrap(
+        ingredient.products[ingredient.product_id], DEFAULT_INGREDIENT_PRODUCT,
+    );
 
-    const handleIngredientAmountEdit = (id: string): InputChangeCallback => {
+    const handleIngredientAmountEdit = (id: number): InputChangeCallback => {
         return (event) => {
             dispatch(actions.updateIngredientAmount(id, event.target.value));
         };
@@ -34,7 +37,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
 
     const amountText = (
         <div className={styles.ingredientInfoLineAmountText}>
-            {ingredient.amount}
+            {ingredientProduct.amount}
         </div>
     );
 
@@ -42,7 +45,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
         <input
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
-            value={(ingredient.amountInput || "")}
+            value={(ingredientProduct.amountInput || "")}
             onChange={handleIngredientAmountEdit(ingredient.id)}
         />
     );
@@ -55,7 +58,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
-                value={ingredient.unit}
+                value={ingredientProduct.unit}
                 onChange={(value: WeightUnit | VolumeUnit) => {
                     dispatch(actions.updateIngredientUnit(ingredient.id, value));
                 }}
@@ -65,7 +68,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
 
     return (
         <div
-            key={(isNew ? "NEW INGREDIENT" : ingredientItemName)}
+            key={(isNew ? "NEW INGREDIENT" : ingredientProduct.name)}
             className={Utils.classNames({ [styles.ingredientInfoLine]: true, [styles.newIngredient]: isNew })}
         >
 
@@ -74,7 +77,7 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, references, isReadOnl
                 style={( ingredient.isMarked ? { opacity: 0.25 } : undefined )}
                 onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
             >
-                {( isNew ? "NEW INGREDIENT" : ingredientItemName.toUpperCase() )}
+                {( isNew ? "NEW INGREDIENT" : ingredientProduct.name.toUpperCase() )}
             </div>
 
             {( !isNew && measureInput )}

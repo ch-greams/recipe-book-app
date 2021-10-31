@@ -1,13 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import type { IngredientItem } from "@common/typings";
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
-import type { RecipeIngredient } from "@store/recipe/types";
+import type { RecipeIngredientProduct } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
@@ -20,37 +19,37 @@ import styles from "./IngredientsBlock.module.scss";
 interface Props {
     search: SearchPageStore;
     isReadOnly: boolean;
-    references: Dictionary<string, IngredientItem>;
-    parentId: string;
-    altIngredient?: RecipeIngredient;
+    parentId: number;
+    altIngredientProduct?: RecipeIngredientProduct;
     isNew?: boolean;
 }
 
-const DEFAULT_ALT_INGREDIENT: RecipeIngredient = {
+export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
+    id: -1,
+    type: "food",
+    name: "NEW INGREDIENT",
     amount: 100,
     amountInput: "100",
     unit: WeightUnit.g,
-    id: "NEW ALTERNATIVE",
+    nutritionFacts: {},
 };
 
 
 const AltIngredientLine: React.FC<Props> = ({
-    search, isReadOnly, references, parentId, altIngredient = DEFAULT_ALT_INGREDIENT, isNew = false,
+    search, isReadOnly, parentId, altIngredientProduct = DEFAULT_INGREDIENT_PRODUCT, isNew = false,
 }) => {
 
     const dispatch = useDispatch();
 
-    const addAltIngredient = (id: string): void => {
+    const addAltIngredient = (id: number): void => {
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
         dispatch(actions.addAltIngredient(id, item));
     };
 
-    const altIngredientItem = references[altIngredient.id];
-
     const removeButton = (
         <div
             className={styles.altIngredientLineButton}
-            onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredient.id))}
+            onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.id))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
                 <RemoveIcon />
@@ -71,7 +70,7 @@ const AltIngredientLine: React.FC<Props> = ({
 
     const amountText = (
         <div className={styles.ingredientInfoLineAmountText}>
-            {altIngredient.amount}
+            {altIngredientProduct.amount}
         </div>
     );
 
@@ -79,9 +78,9 @@ const AltIngredientLine: React.FC<Props> = ({
         <input
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
-            value={(altIngredient.amountInput|| "")}
+            value={(altIngredientProduct.amountInput|| "")}
             onChange={(event) => {
-                dispatch(actions.updateAltIngredientAmount(parentId, altIngredient.id, event.target.value));
+                dispatch(actions.updateAltIngredientAmount(parentId, altIngredientProduct.id, event.target.value));
             }}
         />
     );
@@ -95,19 +94,19 @@ const AltIngredientLine: React.FC<Props> = ({
             <SelectInput
                 type={SelectInputType.AltIngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
-                value={altIngredient.unit}
+                value={altIngredientProduct.unit}
                 onChange={(value: WeightUnit | VolumeUnit) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredient.id, value,
+                        parentId, altIngredientProduct.id, value,
                     ));
                 }}
             />
         </div>
     );
 
-    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, altIngredient.id)); };
-    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredient.id, true)); };
-    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredient.id, false)); };
+    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, altIngredientProduct.id)); };
+    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.id, true)); };
+    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.id, false)); };
 
     return (
 
@@ -126,7 +125,7 @@ const AltIngredientLine: React.FC<Props> = ({
                     onMouseEnter={isNew ? undefined : onMouseEnter}
                     onMouseLeave={isNew ? undefined : onMouseLeave}
                 >
-                    {isNew ? "NEW ALTERNATIVE" : altIngredientItem?.name.toUpperCase()}
+                    {isNew ? "NEW ALTERNATIVE" : altIngredientProduct.name.toUpperCase()}
                 </div>
 
                 {( !isNew && measureInput )}

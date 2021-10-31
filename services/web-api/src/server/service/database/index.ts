@@ -1,75 +1,52 @@
-import type { Db, MongoError } from "mongodb";
-import { MongoClient } from "mongodb";
+import type { DatabaseError } from "pg";
+import { Client } from "pg";
 
 import Logger, { LogLevel } from "@common/logger";
 import type { Food, Option, Recipe } from "@common/typings";
-import Utils from "@common/utils";
-
-import foodSchema from "./schemas/food";
-import recipeSchema from "./schemas/recipe";
-
 
 
 export default class Database {
 
-    private static readonly DB_NAME: string = "recipe_book_app";
     private static readonly DEFAULT_LIMIT: number = 100;
 
-    private path: string;
+    private client: Client;
 
-    private db: Option<Db>;
 
     public constructor() {
 
-        this.path = `mongodb://${process.env.MONGODB_URL}`;
+        this.client = new Client({
+            user: "postgres",
+            password: "password",
+        });
     }
 
     public async connect(): Promise<void> {
 
         try {
-            const client = await MongoClient.connect(this.path, { useUnifiedTopology: true });
+            await this.client.connect();
 
             Logger.log(LogLevel.INFO, "Database.connect", "Connected successfully to a server");
     
-            this.db = client.db(Database.DB_NAME);
-    
-            this.config();
-
-            // client.close();
+            // await this.client.end();
         }
         catch (err) {
-            const { message } = err as MongoError;
+            const { message } = err as DatabaseError;
             Logger.log(LogLevel.WARNING, "Database.connect", message);
         }
     }
 
-    private async config(): Promise<void> {
-
-        Logger.log(LogLevel.INFO, "Database.config", "Updating schema validators for collections...");
-
-        const db = Utils.unwrapForced(this.db, "this.db");
-
-        await db.command({ collMod: "food", validator: foodSchema });
-        await db.command({ collMod: "recipe", validator: recipeSchema });
-
-        Logger.log(LogLevel.INFO, "Database.config", "Done");
-    }
-
-
     public async getFoodRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Food[]> {
 
         try {
-            const collection = Utils.unwrapForced(this.db, "this.db").collection("food");
 
-            const options = { sort: { id: 1 }, limit: limit };
-            const records = await collection.find<Food>({}, options).toArray();
-    
-            Logger.log(LogLevel.DEBUG, "Database.getFoodRecords", records);
+            const response = await this.client.query(`SELECT json FROM private.food_json LIMIT ${limit}`);
+            
+            Logger.log(LogLevel.DEBUG, "Database.getFoodRecords", response);
 
-            return records;
+            return response.rows.map((row) => row.json);
         }
         catch (err) {
-            const { message } = err as MongoError;
+            const { message } = err as DatabaseError;
             Logger.log(LogLevel.WARNING, "Database.getFoodRecords", message);
 
             return [];
@@ -79,16 +56,15 @@ export default class Database {
     public async getFoodRecord(id: string): Promise<Option<Food>> {
 
         try {
-            const collection = Utils.unwrapForced(this.db, "this.db").collection("food");
 
-            const record = await collection.findOne<Food>({ id });
-    
-            Logger.log(LogLevel.DEBUG, "Database.getFoodRecord", record);
+            const response = await this.client.query(`SELECT json FROM private.food_json WHERE id = ${id}`);
+            
+            Logger.log(LogLevel.DEBUG, "Database.getFoodRecord", response);
 
-            return record;
+            return response?.rows?.first()?.json;
         }
         catch (err) {
-            const { message } = err as MongoError;
+            const { message } = err as DatabaseError;
             Logger.log(LogLevel.WARNING, "Database.getFoodRecord", message);
 
             return null;
@@ -98,17 +74,15 @@ export default class Database {
     public async getRecipeRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Recipe[]> {
 
         try {
-            const collection = Utils.unwrapForced(this.db, "this.db").collection("recipe");
 
-            const options = { sort: { id: 1 }, limit: limit };
-            const records = await collection.find<Recipe>({}, options).toArray();
-    
-            Logger.log(LogLevel.DEBUG, "Database.getRecipeRecords", records);
+            const response = await this.client.query(`SELECT json FROM private.recipe_json LIMIT ${limit}`);
+            
+            Logger.log(LogLevel.DEBUG, "Database.getRecipeRecords", response);
 
-            return records;
+            return response.rows.map((row) => row.json);
         }
         catch (err) {
-            const { message } = err as MongoError;
+            const { message } = err as DatabaseError;
             Logger.log(LogLevel.WARNING, "Database.getRecipeRecords", message);
 
             return [];
@@ -118,35 +92,15 @@ export default class Database {
     public async getRecipeRecord(id: string): Promise<Option<Recipe>> {
 
         try {
-            const collection = Utils.unwrapForced(this.db, "this.db").collection("recipe");
 
-            // const record = await collection.findOne<Recipe>({ id });
-    
-            const records = await collection.aggregate([
-                {
-                    $match: { id },
-                },
-                {
-                    $lookup: {
-                        from: "food",
-                        let: { "fid": "$references.food" },
-                        pipeline: [
-                            { $match: { $expr: { $in: [ "$id", "$$fid" ] } } },
-                            { $project: { "_id": 0, "customUnits": 0 } },
-                        ],
-                        as: "references.food",
-                    },
-                },
-            ]).toArray();
+            const response = await this.client.query(`SELECT json FROM private.recipe_json WHERE id = ${id}`);
+            
+            Logger.log(LogLevel.DEBUG, "Database.getRecipeRecord", response);
 
-            const [ record ] = records;
-
-            Logger.log(LogLevel.DEBUG, "Database.getRecipeRecord", record);
-
-            return record;
+            return response?.rows?.first()?.json;
         }
         catch (err) {
-            const { message } = err as MongoError;
+            const { message } = err as DatabaseError;
             Logger.log(LogLevel.WARNING, "Database.getRecipeRecord", message);
 
             return null;
