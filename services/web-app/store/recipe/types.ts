@@ -17,10 +17,10 @@ export interface RecipeIngredient extends typings.Ingredient {
 
 
 export enum SubDirectionType {
-    Tip = "Tip",
-    Note = "Note",
-    Warning = "Warning",
-    Ingredient = "Ingredient",
+    Tip = "tip",
+    Note = "note",
+    Warning = "warning",
+    Ingredient = "ingredient",
 }
 
 export interface RecipeSubDirectionIngredient extends typings.SubDirectionIngredient {

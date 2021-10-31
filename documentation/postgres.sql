@@ -6,7 +6,9 @@ CREATE SCHEMA private AUTHORIZATION postgres;
 
 CREATE TYPE private.direction_part_type AS ENUM (
 	'ingredient',
-	'note');
+	'note',
+	'warning',
+	'tip');
 
 -- DROP TYPE private."product_type";
 
