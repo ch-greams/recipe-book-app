@@ -13,7 +13,6 @@ Logger.log(LogLevel.INFO, "server", `LOG_LEVEL = ${LOG_LEVEL}`);
 Logger.log(LogLevel.INFO, "server", `IS_PRODUCTION = ${IS_PRODUCTION}`);
 
 const database = new Database();
-database.connect();
 
 const app = new WebApp(database);
 app.run();
