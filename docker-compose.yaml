@@ -2,8 +2,8 @@ version: "3.9"
 
 services:
 
-  api:
-    build: .
+  recipe-book-api:
+    build: ./services/web-api
     depends_on:
       - recipe-book-db
     command: npm run dev:watch
@@ -17,6 +17,21 @@ services:
       PORT: 8080
       LOG_LEVEL: DEBUG
       PG_HOST: recipe-book-db
+
+  recipe-book-app:
+    build: ./services/web-app
+    depends_on:
+      - recipe-book-api
+    command: npm run dev
+    ports:
+      - 3000:3000
+    working_dir: /app
+    volumes:
+      - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-app:/app
+    environment:
+      NODE_ENV: development     # options: production, development
+      PORT: 3000
+      LOG_LEVEL: DEBUG
 
   recipe-book-db:
     image: postgres:14
