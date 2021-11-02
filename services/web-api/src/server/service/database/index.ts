@@ -1,5 +1,5 @@
-import type { DatabaseError } from "pg";
-import { Client } from "pg";
+import type { DatabaseError, PoolClient, QueryResult } from "pg";
+import { Pool } from "pg";
 
 import Logger, { LogLevel } from "@common/logger";
 import type { Food, Option, Recipe } from "@common/typings";
@@ -9,45 +9,65 @@ export default class Database {
 
     private static readonly DEFAULT_LIMIT: number = 100;
 
-    private client: Client;
+    private pool: Pool;
 
 
     public constructor() {
 
-        this.client = new Client({
+        this.pool = new Pool({
+            host: process.env.PG_HOST || "127.0.0.1",
             user: "postgres",
             password: "password",
         });
+
+        this.pool.on("error", (error, client) => {
+            Logger.log(LogLevel.ERROR, "Pool.event", error.message);
+            client.release();
+        });
     }
 
-    public async connect(): Promise<void> {
+    private async call<T>(query: (client: PoolClient) => Promise<T>): Promise<Option<T>> {
+        return new Promise((resolve, reject) => {
 
-        try {
-            await this.client.connect();
+            this.pool.connect((connectionError: Error, client: PoolClient, done: () => void) => {
 
-            Logger.log(LogLevel.INFO, "Database.connect", "Connected successfully to a server");
-    
-            // await this.client.end();
-        }
-        catch (err) {
-            const { message } = err as DatabaseError;
-            Logger.log(LogLevel.WARNING, "Database.connect", message);
-        }
+                if (connectionError) {
+                    reject(connectionError);
+                }
+                else {
+                    query(client)
+                        .then((value) => {
+                            done();
+                            resolve(value);
+                        })
+                        .catch((queryError) => {
+                            done();
+                            reject(queryError);
+                        });
+                }
+            });
+        });
+    }
+
+    private getRows<T>(response: Option<QueryResult<T>>): T[] {
+        return response?.rows || [];
     }
 
     public async getFoodRecords(limit: number = Database.DEFAULT_LIMIT): Promise<Food[]> {
 
         try {
 
-            const response = await this.client.query(`SELECT json FROM private.food_json LIMIT ${limit}`);
-            
+            const response = await this.call(
+                (client: PoolClient) => client.query(`SELECT json FROM private.food_json LIMIT ${limit}`),
+            );
+
             Logger.log(LogLevel.DEBUG, "Database.getFoodRecords", response);
 
-            return response.rows.map((row) => row.json);
+            return this.getRows(response).map((row) => row.json);
         }
         catch (err) {
             const { message } = err as DatabaseError;
-            Logger.log(LogLevel.WARNING, "Database.getFoodRecords", message);
+            Logger.log(LogLevel.ERROR, "Database.getFoodRecords", message);
 
             return [];
         }
@@ -57,15 +77,17 @@ export default class Database {
 
         try {
 
-            const response = await this.client.query(`SELECT json FROM private.food_json WHERE id = ${id}`);
+            const response = await this.call(
+                (client: PoolClient) => client.query(`SELECT json FROM private.food_json WHERE id = ${id}`),
+            );
             
             Logger.log(LogLevel.DEBUG, "Database.getFoodRecord", response);
 
-            return response?.rows?.first()?.json;
+            return this.getRows(response).first()?.json;
         }
         catch (err) {
             const { message } = err as DatabaseError;
-            Logger.log(LogLevel.WARNING, "Database.getFoodRecord", message);
+            Logger.log(LogLevel.ERROR, "Database.getFoodRecord", message);
 
             return null;
         }
@@ -75,15 +97,17 @@ export default class Database {
 
         try {
 
-            const response = await this.client.query(`SELECT json FROM private.recipe_json LIMIT ${limit}`);
+            const response = await this.call(
+                (client: PoolClient) => client.query(`SELECT json FROM private.recipe_json LIMIT ${limit}`),
+            );
             
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecords", response);
 
-            return response.rows.map((row) => row.json);
+            return this.getRows(response).map((row) => row.json);
         }
         catch (err) {
             const { message } = err as DatabaseError;
-            Logger.log(LogLevel.WARNING, "Database.getRecipeRecords", message);
+            Logger.log(LogLevel.ERROR, "Database.getRecipeRecords", message);
 
             return [];
         }
@@ -93,15 +117,17 @@ export default class Database {
 
         try {
 
-            const response = await this.client.query(`SELECT json FROM private.recipe_json WHERE id = ${id}`);
+            const response = await this.call(
+                (client: PoolClient) => client.query(`SELECT json FROM private.recipe_json WHERE id = ${id}`),
+            );
             
             Logger.log(LogLevel.DEBUG, "Database.getRecipeRecord", response);
 
-            return response?.rows?.first()?.json;
+            return this.getRows(response).first()?.json;
         }
         catch (err) {
             const { message } = err as DatabaseError;
-            Logger.log(LogLevel.WARNING, "Database.getRecipeRecord", message);
+            Logger.log(LogLevel.ERROR, "Database.getRecipeRecord", message);
 
             return null;
         }

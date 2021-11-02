@@ -2,6 +2,7 @@
 # data
 mongodb
 postgres
+postgres-admin
 
 # node
 node_modules
