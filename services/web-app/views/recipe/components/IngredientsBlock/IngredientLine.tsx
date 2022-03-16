@@ -75,7 +75,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
             className={styles.ingredientLineButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -86,7 +86,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
             className={styles.ingredientLineButton}
             onClick={addIngredient}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <SearchIcon />
             </IconWrapper>
         </div>
@@ -107,7 +107,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : undefined )}
             >
-                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                     <LinkIcon />
                 </IconWrapper>
             </a>

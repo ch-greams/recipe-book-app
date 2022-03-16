@@ -3,20 +3,16 @@ version: "3.9"
 services:
 
   recipe-book-api:
+    image: web-api
     build: ./services/web-api
     depends_on:
       - recipe-book-db
-    command: npm run dev:watch
     ports:
       - 8080:8080
-    working_dir: /app
-    volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-api/src:/app/src
+    working_dir: /web-api
     environment:
-      NODE_ENV: development     # options: production, development
-      PORT: 8080
-      LOG_LEVEL: DEBUG
-      PG_HOST: recipe-book-db
+      RB__listen_addr: 0.0.0.0:8080
+      RB__database_url: postgres://postgres:password@recipe-book-db
 
   recipe-book-app:
     build: ./services/web-app

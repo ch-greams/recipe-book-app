@@ -1,15 +1,18 @@
-FROM node:16-alpine
+FROM rust:1.59-slim-buster
 
-WORKDIR /app
+# 1 - Empty project
+RUN cargo new --bin web-api
+WORKDIR /web-api
 
-COPY package*.json ./
+# 2 - Copy manifests & build dependencies
+COPY ./Cargo.toml ./Cargo.toml
+COPY ./Cargo.lock ./Cargo.lock
 
-RUN npm install
+RUN cargo build --release & rm src/*.rs
 
-COPY . .
+# 3 - Copy source code
+COPY ./src ./src
 
 EXPOSE 8080
 
-RUN npm run build
-
-CMD npm start
+CMD cargo run

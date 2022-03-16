@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
+import Utils from "@common/utils";
 import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
@@ -54,7 +55,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
             className={styles.directionLineButton}
             onClick={() => removeDirection(index)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>

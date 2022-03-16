@@ -82,7 +82,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                     >
 
                         <IconWrapper
-                            isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                            isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
                             style={{ transform: "rotate(0.125turn)" }}
                             onClick={() => dispatch(removeCustomUnitRequest(index))}
                         >
@@ -102,7 +102,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
             >
 
                 <IconWrapper
-                    isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                    isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
                     onClick={() => {
                         dispatch(addCustomUnitRequest(newCustomUnit));
                         setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });

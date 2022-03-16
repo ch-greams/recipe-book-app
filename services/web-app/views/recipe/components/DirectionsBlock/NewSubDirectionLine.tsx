@@ -59,7 +59,7 @@ const NewSubDirectionLine: React.FC<Props> = ({ directionIndex, direction, ingre
             >
                 <IconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={"#fff"}
+                    width={24} height={24} color={Utils.COLOR_WHITE}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />

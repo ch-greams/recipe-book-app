@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
+import Utils from "@common/utils";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
@@ -38,7 +39,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, subDirectionIndex))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>

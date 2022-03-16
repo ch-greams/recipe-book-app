@@ -15,5 +15,8 @@ dist
 # typescript
 out
 
+# rust
+target
+
 # ide
 # .vscode
