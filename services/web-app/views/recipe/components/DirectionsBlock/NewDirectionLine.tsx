@@ -94,7 +94,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
             >
                 <IconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={"#00bfa5"}
+                    width={24} height={24} color={Utils.COLOR_DEFAULT}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />

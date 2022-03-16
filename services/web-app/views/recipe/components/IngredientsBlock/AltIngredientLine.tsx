@@ -51,7 +51,7 @@ const AltIngredientLine: React.FC<Props> = ({
             className={styles.altIngredientLineButton}
             onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.id))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -62,7 +62,7 @@ const AltIngredientLine: React.FC<Props> = ({
             className={styles.altIngredientLineButton}
             onClick={() => addAltIngredient(parentId)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <SearchIcon />
             </IconWrapper>
         </div>

@@ -2,9 +2,9 @@ version: "3.9"
 
 services:
 
-  recipe-book-api:
+  api:
     image: web-api-v2
-    build: ./services/web-api-v2
+    build: .
     depends_on:
       - recipe-book-db
     ports:
@@ -13,21 +13,6 @@ services:
     environment:
       RB__listen_addr: 0.0.0.0:8080
       RB__database_url: postgres://postgres:password@recipe-book-db
-
-  recipe-book-app:
-    build: ./services/web-app
-    depends_on:
-      - recipe-book-api
-    command: npm run dev
-    ports:
-      - 3000:3000
-    working_dir: /app
-    volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-app:/app
-    environment:
-      NODE_ENV: development     # options: production, development
-      PORT: 3000
-      LOG_LEVEL: DEBUG
 
   recipe-book-db:
     image: postgres:14

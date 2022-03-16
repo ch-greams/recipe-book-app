@@ -5,7 +5,7 @@ import type { Recipe } from "@common/typings";
 
 export default class RecipeApi {
 
-    public static readonly API_PATH: string = "/api/recipe";
+    public static readonly API_PATH: string = "/api/v1/recipe";
 
 
     public static async getRecipeItem(id: number): Promise<Recipe> {
@@ -15,10 +15,10 @@ export default class RecipeApi {
         return recipeItem;
     }
 
-    public static async getRecipeItems(): Promise<Recipe[]> {
+    // public static async getRecipeItems(): Promise<Recipe[]> {
 
-        const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
+    //     const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
 
-        return recipeItems;
-    }
+    //     return recipeItems;
+    // }
 }

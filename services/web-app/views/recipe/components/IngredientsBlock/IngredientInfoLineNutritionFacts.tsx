@@ -39,7 +39,7 @@ const IngredientInfoLineNutritionFacts: React.FC<IngredientInfoLineNutritionFact
                             className={styles.ingredientInfoLineNutritionFactAmount}
                             style={(
                                 Utils.isSome(curNutritionValue) && Utils.isSome(altNutritionValue)
-                                    ? { color: (curNutritionValue > altNutritionValue) ? "#ff6e40" : "#008e76" }
+                                    ? { color: (curNutritionValue > altNutritionValue) ? Utils.COLOR_ALTERNATIVE : Utils.COLOR_DEFAULT_DARK }
                                     : undefined
                             )}
                         >
