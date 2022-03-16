@@ -1,5 +1,5 @@
-import { IngredientItem, Recipe } from "@common/typings";
-import * as units from "@common/units";
+import type { IngredientProduct, Recipe } from "@common/typings";
+import type * as units from "@common/units";
 
 import * as types from "./types";
 
@@ -93,7 +93,7 @@ export function updateSubDirectionIngredientUnit(
     };
 }
 
-export function createSubDirectionIngredient(directionIndex: number, ingredientId: string): types.CreateSubDirectionIngredientAction {
+export function createSubDirectionIngredient(directionIndex: number, ingredientId: number): types.CreateSubDirectionIngredientAction {
     return {
         type: types.RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT,
         payload: { directionIndex, ingredientId },
@@ -107,7 +107,7 @@ export function createSubDirection(directionIndex: number, type: types.SubDirect
     };
 }
 
-export function updateNewSubDirectionType(directionIndex: number, type: types.SubDirectionType): types.UpdateNewSubDirectionTypeAction {
+export function updateNewSubDirectionType(directionIndex: number, type: types.SubDirectionType | string): types.UpdateNewSubDirectionTypeAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
         payload: { directionIndex, type },
@@ -205,87 +205,87 @@ export function createDirection(direction: types.RecipeDirection): types.CreateD
     };
 }
 
-export function removeIngredient(id: string): types.RemoveIngredientAction {
+export function removeIngredient(id: number): types.RemoveIngredientAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_INGREDIENT,
         payload: id,
     };
 }
 
-export function removeAltIngredient(parentId: string, id: string): types.RemoveAltIngredientAction {
+export function removeAltIngredient(parentId: number, id: number): types.RemoveAltIngredientAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
         payload: { parentId, id },
     };
 }
 
-export function replaceIngredientWithAlternative(parentId: string, id: string): types.ReplaceIngredientWithAlternativeAction {
+export function replaceIngredientWithAlternative(parentId: number, id: number): types.ReplaceIngredientWithAlternativeAction {
     return {
         type: types.RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE,
         payload: { parentId, id },
     };
 }
 
-export function toggleIngredientOpen(id: string): types.ToggleIngredientOpenAction {
+export function toggleIngredientOpen(id: number): types.ToggleIngredientOpenAction {
     return {
         type: types.RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN,
         payload: id,
     };
 }
 
-export function toggleIngredientMark(id: string): types.ToggleIngredientMarkAction {
+export function toggleIngredientMark(id: number): types.ToggleIngredientMarkAction {
     return {
         type: types.RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
         payload: id,
     };
 }
 
-export function updateIngredientAmount(id: string, inputValue: string): types.UpdateIngredientAmountAction {
+export function updateIngredientAmount(id: number, inputValue: string): types.UpdateIngredientAmountAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
         payload: { id, inputValue },
     };
 }
 
-export function updateIngredientUnit(id: string, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateIngredientUnitAction {
+export function updateIngredientUnit(id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
         payload: { id, unit },
     };
 }
 
-export function updateAltIngredientAmount(parentId: string, id: string, inputValue: string): types.UpdateAltIngredientAmountAction {
+export function updateAltIngredientAmount(parentId: number, id: number, inputValue: string): types.UpdateAltIngredientAmountAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
         payload: { parentId, id, inputValue },
     };
 }
 
-export function updateAltIngredientUnit(parentId: string, id: string, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateAltIngredientUnitAction {
+export function updateAltIngredientUnit(parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateAltIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
         payload: { parentId, id, unit },
     };
 }
 
-export function updateAltNutritionFacts(parentId: string, id: string, isSelected: boolean): types.UpdateAltNutritionFactsAction {
+export function updateAltNutritionFacts(parentId: number, id: number, isSelected: boolean): types.UpdateAltNutritionFactsAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS,
         payload: { parentId, id, isSelected },
     };
 }
 
-export function addIngredient(ingredient: IngredientItem): types.AddIngredientAction {
+export function addIngredient(ingredient: IngredientProduct): types.AddIngredientAction {
     return {
         type: types.RECIPE_ITEM_ADD_INGREDIENT,
         payload: ingredient,
     };
 }
 
-export function addAltIngredient(id: string, altIngredient: IngredientItem): types.AddAltIngredientAction {
+export function addAltIngredient(id: number, altIngredientProduct: IngredientProduct): types.AddAltIngredientAction {
     return {
         type: types.RECIPE_ITEM_ADD_ALT_INGREDIENT,
-        payload: { id, altIngredient },
+        payload: { id, altIngredientProduct },
     };
 }
 
@@ -317,7 +317,7 @@ export function updateCustomUnits(customUnits: units.CustomUnitInput[]): types.U
     };
 }
 
-export function fetchRecipeItemRequest(recipeId: string): types.RecipeItemFetchRequestAction {
+export function fetchRecipeItemRequest(recipeId: number): types.RecipeItemFetchRequestAction {
     return {
         type: types.RECIPE_ITEM_FETCH_REQUEST,
         payload: recipeId,

@@ -1,30 +1,25 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeDirection, RecipeIngredient } from "@store/recipe/types";
+import { SubDirectionType } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
-import * as actions from "@store/recipe/actions";
-import {
-    RecipeDirection,
-    RecipeIngredientDefault,
-    SubDirectionType,
-} from "@store/recipe/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import Utils from "@common/utils";
 
 import styles from "./DirectionsBlock.module.scss";
 
 
 
 interface Props {
-    references: Dictionary<string, IngredientItem>;
     directionIndex: number;
     direction: RecipeDirection;
-    ingredients: RecipeIngredientDefault[];
+    ingredients: RecipeIngredient[];
 }
 
-const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, direction, ingredients }) => {
+const NewSubDirectionLine: React.FC<Props> = ({ directionIndex, direction, ingredients }) => {
 
     const dispatch = useDispatch();
 
@@ -39,7 +34,7 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
         if (type === SubDirectionType.Ingredient) {
 
             const LAST_INDEX = 1;
-            const id = value.split("_")[LAST_INDEX];
+            const id = Number(value.split("_")[LAST_INDEX]);
 
             dispatch(actions.createSubDirectionIngredient(directionIndex, id));
         }
@@ -64,7 +59,7 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
             >
                 <IconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={"#fff"}
+                    width={24} height={24} color={Utils.COLOR_WHITE}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />
@@ -79,13 +74,16 @@ const NewSubDirectionLine: React.FC<Props> = ({ references, directionIndex, dire
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: references[ingredient.id].name.toUpperCase(),
+                            label: Utils.unwrapForced(
+                                ingredient.products[ingredient.product_id],
+                                `ingredient.products["${ingredient.product_id}"]`,
+                            ).name.toUpperCase(),
                             value: `${SubDirectionType.Ingredient}_${ingredient.id}`,
                         })),
                         ...otherSubDirectionTypes.map((type) => ({ group: "Other", value: type })),
                     ]}
                     value={direction.newStep}
-                    onChange={(value: SubDirectionType) => {
+                    onChange={(value: SubDirectionType | string) => {
                         dispatch(actions.updateNewSubDirectionType(directionIndex, value));
                     }}
                 />

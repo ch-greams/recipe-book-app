@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
-import { AppState } from "@store";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
+
+import Utils from "@common/utils";
 import NutritionFactsBlock from "@views/shared/NutritionFactsBlock";
 import PageDetailedNutritionFactsBlock from "@views/shared/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@views/shared/PageTitleBlock";
 import SingleMessagePage from "@views/shared/SingleMessagePage";
-
-import Utils from "@common/utils";
+import type { AppState } from "@store";
+import * as actions from "@store/food/actions";
+import type { FoodPageStore } from "@store/food/types";
 
 import ParametersBlock from "./ParametersBlock";
 
@@ -61,7 +61,7 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
                                 Utils.getNutritionFacts(
                                     featuredNutritionFacts,
                                     nutritionFactsByServing,
-                                    nutritionFactsByServingInputs
+                                    nutritionFactsByServingInputs,
                                 )
                             }
                         />
@@ -93,7 +93,7 @@ FoodPage.displayName = "FoodPage";
 const FoodPageConnected: React.FC = () => {
 
     const router = useRouter();
-    const foodId = router.query.fid as string;
+    const foodId = Number(router.query.fid);
     
     const dispatch = useDispatch();
 

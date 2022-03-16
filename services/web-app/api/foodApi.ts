@@ -1,13 +1,14 @@
 import superagent from "superagent";
 
-import { Food } from "@common/typings";
+import type { Food } from "@common/typings";
 
 
 export default class FoodApi {
 
-    public static readonly API_PATH: string = "/api/food";
+    public static readonly API_PATH: string = "/api/v1/food";
 
-    public static async getFoodItem(id: string): Promise<Food> {
+
+    public static async getFoodItem(id: number): Promise<Food> {
 
         const { body: foodItem } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
 

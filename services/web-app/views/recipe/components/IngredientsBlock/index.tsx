@@ -1,8 +1,7 @@
 import React from "react";
-import type { RecipeIngredientDefault } from "@store/recipe/types";
-import type { SearchPageStore } from "@store/search/types";
 
-import type { Dictionary, IngredientItem } from "@common/typings";
+import type { RecipeIngredient } from "@store/recipe/types";
+import type { SearchPageStore } from "@store/search/types";
 
 import IngredientLine from "./IngredientLine";
 
@@ -12,14 +11,13 @@ import styles from "./IngredientsBlock.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    ingredients: RecipeIngredientDefault[];
-    references: Dictionary<string, IngredientItem>;
+    ingredients: RecipeIngredient[];
     search: SearchPageStore;
 }
 
 
 
-const IngredientsBlock: React.FC<Props> = ({ search, references, ingredients, isReadOnly = false }) => {
+const IngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly = false }) => {
 
     return (
         <div className={styles.ingredientsBlock}>
@@ -29,7 +27,6 @@ const IngredientsBlock: React.FC<Props> = ({ search, references, ingredients, is
                     key={`ingredient_${ingredient.id}`}
                     search={search}
                     isReadOnly={isReadOnly}
-                    references={references}
                     ingredient={ingredient}
                 />
             ) )}
@@ -39,7 +36,6 @@ const IngredientsBlock: React.FC<Props> = ({ search, references, ingredients, is
                     key={"ingredient_new"}
                     search={search}
                     isReadOnly={isReadOnly}
-                    references={references}
                     isNew={true}
                 />
             ) )}

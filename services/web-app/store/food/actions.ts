@@ -1,6 +1,6 @@
-import { NutritionFactType } from "@common/nutritionFacts";
-import { Food } from "@common/typings";
-import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { Food } from "@common/typings";
+import type { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 
 import * as types from "./types";
 
@@ -41,7 +41,7 @@ export function updateNutritionFact(key: NutritionFactType, value: string): type
     };
 }
 
-export function fetchFoodItemRequest(foodId: string): types.FoodItemFetchRequestAction {
+export function fetchFoodItemRequest(foodId: number): types.FoodItemFetchRequestAction {
     return {
         type: types.FOOD_ITEM_FETCH_REQUEST,
         payload: foodId,
@@ -89,7 +89,7 @@ export function updateServingSizeAmount(servingSizeAmountInput: string): types.U
     };
 }
 
-export function updateServingSizeUnit(servingSizeUnit: WeightUnit | VolumeUnit): types.UpdateServingSizeUnitAction {
+export function updateServingSizeUnit(servingSizeUnit: WeightUnit | VolumeUnit | string): types.UpdateServingSizeUnitAction {
     return {
         type: types.FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT,
         payload: servingSizeUnit,

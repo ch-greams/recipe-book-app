@@ -1,27 +1,26 @@
-import { NutritionFactType } from "@common/nutritionFacts";
-import * as typings from "@common/typings";
-import * as units from "@common/units";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type * as typings from "@common/typings";
+import type * as units from "@common/units";
 
 
 
-export interface RecipeIngredient extends typings.Ingredient {
+export interface RecipeIngredientProduct extends typings.IngredientProduct {
     amountInput: string;
 }
 
-export interface RecipeIngredientDefault extends typings.Ingredient {
+export interface RecipeIngredient extends typings.Ingredient {
     isOpen: boolean;
     isMarked: boolean;
-    amountInput: string;
-    alternatives: RecipeIngredient[];
-    altNutritionFacts: typings.Dictionary<NutritionFactType, number>;
+    products: Dictionary<number, RecipeIngredientProduct>;
+    altNutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 
 export enum SubDirectionType {
-    Tip = "Tip",
-    Note = "Note",
-    Warning = "Warning",
-    Ingredient = "Ingredient",
+    Tip = "tip",
+    Note = "note",
+    Warning = "warning",
+    Ingredient = "ingredient",
 }
 
 export interface RecipeSubDirectionIngredient extends typings.SubDirectionIngredient {
@@ -41,16 +40,16 @@ export interface RecipeDirection extends typings.Direction {
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    errorMessage: typings.Option<string>;
+    errorMessage?: Option<string>;
     isReadOnly: boolean;
 
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
     description: string;
     type: string;
-    nutritionFacts: typings.Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: units.CustomUnit[];
 
     // NOTE: INPUTS
@@ -60,12 +59,10 @@ export interface RecipePageStore {
     servingSizeInput: string;
     servingSizeUnit: units.WeightUnit | units.VolumeUnit;
 
-    ingredients: RecipeIngredientDefault[];
+    ingredients: RecipeIngredient[];
 
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
-
-    references: typings.Dictionary<string, typings.IngredientItem>;
 }
 
 
@@ -226,7 +223,7 @@ export interface UpdateSubDirectionIngredientUnitAction {
 
 export interface CreateSubDirectionIngredientAction {
     type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT;
-    payload: { directionIndex: number, ingredientId: string };
+    payload: { directionIndex: number, ingredientId: number };
 }
 export interface CreateSubDirectionAction {
     type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION;
@@ -235,7 +232,7 @@ export interface CreateSubDirectionAction {
 
 export interface UpdateNewSubDirectionTypeAction {
     type: typeof RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE;
-    payload: { directionIndex: number, type: SubDirectionType };
+    payload: { directionIndex: number, type: SubDirectionType | string };
 }
 
 export interface UpdateDirectionStepNumberAction {
@@ -307,69 +304,69 @@ export interface CreateDirectionAction {
 
 export interface RemoveIngredientAction {
     type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
-    payload: string;
+    payload: number;
 }
 
 export interface RemoveAltIngredientAction {
     type: typeof RECIPE_ITEM_REMOVE_ALT_INGREDIENT;
-    payload: { parentId: string, id: string };
+    payload: { parentId: number, id: number };
 }
 
 export interface ReplaceIngredientWithAlternativeAction {
     type: typeof RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE;
-    payload: { parentId: string, id: string };
+    payload: { parentId: number, id: number };
 }
 
 export interface ToggleIngredientOpenAction {
     type: typeof RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN;
-    payload: string;
+    payload: number;
 }
 
 export interface ToggleIngredientMarkAction {
     type: typeof RECIPE_ITEM_TOGGLE_INGREDIENT_MARK;
-    payload: string;
+    payload: number;
 }
 
 
 export interface UpdateIngredientAmountAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT;
-    payload: { id: string, inputValue: string };
+    payload: { id: number, inputValue: string };
 }
 
 export interface UpdateIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_UNIT;
-    payload: { id: string, unit: units.WeightUnit | units.VolumeUnit };
+    payload: { id: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface UpdateAltIngredientAmountAction {
     type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT;
-    payload: { parentId: string, id: string, inputValue: string };
+    payload: { parentId: number, id: number, inputValue: string };
 }
 
 export interface UpdateAltIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT;
-    payload: { parentId: string, id: string, unit: units.WeightUnit | units.VolumeUnit };
+    payload: { parentId: number, id: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface UpdateAltNutritionFactsAction {
     type: typeof RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS;
-    payload: { parentId: string, id: string, isSelected: boolean };
+    payload: { parentId: number, id: number, isSelected: boolean };
 }
 
 export interface AddIngredientAction {
     type: typeof RECIPE_ITEM_ADD_INGREDIENT;
-    payload: typings.IngredientItem;
+    payload: typings.IngredientProduct;
 }
 
 export interface AddAltIngredientAction {
     type: typeof RECIPE_ITEM_ADD_ALT_INGREDIENT;
-    payload: { id: string, altIngredient: typings.IngredientItem };
+    payload: { id: number, altIngredientProduct: typings.IngredientProduct };
 }
 
 
 export interface RecipeItemFetchRequestAction {
     type: typeof RECIPE_ITEM_FETCH_REQUEST;
-    payload: string;
+    payload: number;
 }
 
 export interface RecipeItemFetchSuccessAction {

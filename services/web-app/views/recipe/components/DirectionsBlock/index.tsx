@@ -1,10 +1,9 @@
 import React from "react";
-import {
-    RecipeDirection,
-    RecipeIngredientDefault,
-} from "@store/recipe/types";
 
-import type { Dictionary, IngredientItem } from "@common/typings";
+import type {
+    RecipeDirection,
+    RecipeIngredient,
+} from "@store/recipe/types";
 
 import DirectionLine from "./DirectionLine";
 import NewDirectionLine from "./NewDirectionLine";
@@ -16,13 +15,12 @@ interface Props {
     isReadOnly: boolean;
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
-    ingredients: RecipeIngredientDefault[];
-    references: Dictionary<string, IngredientItem>;
+    ingredients: RecipeIngredient[];
 }
 
 
 const DirectionsBlock: React.FC<Props> = ({
-    isReadOnly = false, ingredients, references, directions = [], newDirection,
+    isReadOnly = false, ingredients, directions = [], newDirection,
 }) => {
 
     return (
@@ -33,7 +31,6 @@ const DirectionsBlock: React.FC<Props> = ({
                     key={`direction_${index}`}
                     isReadOnly={isReadOnly}
                     ingredients={ingredients}
-                    references={references}
                     direction={direction}
                     index={index}
                 />

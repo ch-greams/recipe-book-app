@@ -1,8 +1,9 @@
-import { SagaIterator } from "redux-saga";
-import { all, AllEffect, call, put, select, StrictEffect, takeLatest } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import type { AllEffect, StrictEffect } from "redux-saga/effects";
+import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
-import { Food } from "@common/typings";
-import { CustomUnit } from "@common/units";
+import type { Food } from "@common/typings";
+import type { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
 import FoodApi from "@api/foodApi";
 
@@ -23,8 +24,8 @@ function* fetchFoodItem(action: types.FoodItemFetchRequestAction): Generator<Str
         yield put(actions.fetchFoodItemSuccess(foodItem));
     }
     catch (error) {
-
-        yield put(actions.fetchFoodItemError(error.message));
+        const { message } = error as Error;
+        yield put(actions.fetchFoodItemError(message));
     }
 }
 
@@ -48,8 +49,8 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<Str
         ]));
     }
     catch (error) {
-
-        yield put(actions.addCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.addCustomUnitError(message));
     }
 }
 
@@ -64,12 +65,12 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
         // TODO: API CALL
 
         yield put(actions.removeCustomUnitSuccess(
-            customUnits.filter((_customUnit, index) => index !== customUnitIndex)
+            customUnits.filter((_customUnit, index) => index !== customUnitIndex),
         ));
     }
     catch (error) {
-
-        yield put(actions.removeCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.removeCustomUnitError(message));
     }
 }
 
@@ -88,12 +89,12 @@ function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generat
                 index === customUnitIndex
                     ? Utils.convertCustomUnitIntoValue(updatedCustomUnit)
                     : customUnit
-            ))
+            )),
         ));
     }
     catch (error) {
-
-        yield put(actions.updateCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield put(actions.updateCustomUnitError(message));
     }
 }
 

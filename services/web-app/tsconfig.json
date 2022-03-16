@@ -4,14 +4,10 @@
     "lib": [ "es2020", "DOM" ],
     "allowJs": true,
     "skipLibCheck": true,
-    // TODO: make "strict:true" possible
-    "strict": false,
-    "strictNullChecks": false,
-    "noImplicitAny": true,
+    "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
-    
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -30,6 +26,6 @@
       "@styles/*": [ "styles/*" ]
     }
   },
-  "include": [ "next-env.d.ts", "**/*.ts", "**/*.tsx" ],
+  "include": [ "next-env.d.ts", "common.d.ts", "**/*.ts", "**/*.tsx" ],
   "exclude": [ "node_modules" ]
 }

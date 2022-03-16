@@ -1,17 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
+
+import Utils, { RoutePath } from "@common/utils";
+import * as actions from "@store/recipe/actions";
+import type { RecipeIngredient } from "@store/recipe/types";
+import type { SearchPageStore } from "@store/search/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredientDefault } from "@store/recipe/types";
-import type { SearchPageStore } from "@store/search/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
-import { WeightUnit } from "@common/units";
-import Utils, { RoutePath } from "@common/utils";
 
 import AltIngredientLine from "./AltIngredientLine";
 import IngredientInfoLine from "./IngredientInfoLine";
@@ -24,41 +22,37 @@ import styles from "./IngredientsBlock.module.scss";
 interface IngredientLineProps {
     search: SearchPageStore;
     isReadOnly: boolean;
-    references: Dictionary<string, IngredientItem>;
-    ingredient?: RecipeIngredientDefault;
+    ingredient?: RecipeIngredient;
     isNew?: boolean;
 }
 
 
 
-const DEFAULT_INGREDIENT: RecipeIngredientDefault = {
+const DEFAULT_INGREDIENT: RecipeIngredient = {
 
     isOpen: false,
     isMarked: false,
 
-    id: "new",
-
-    amount: 100,
-    amountInput: "100",
-    unit: WeightUnit.g,
+    id: -1,
+    product_id: -1,
 
     altNutritionFacts: {},
 
-    alternatives: [],
+    products: {},
 };
 
 const IngredientLine: React.FC<IngredientLineProps> = ({
-    search, isReadOnly, references, ingredient = DEFAULT_INGREDIENT, isNew = false,
+    search, isReadOnly, ingredient = DEFAULT_INGREDIENT, isNew = false,
 }) => {
 
     const dispatch = useDispatch();
 
-    const removeIngredient = (id: string): void => {
+    const removeIngredient = (id: number): void => {
         dispatch(actions.removeIngredient(id));
     };
 
 
-    const toggleIngredientMark = (id: string): void => {
+    const toggleIngredientMark = (id: number): void => {
         dispatch(actions.toggleIngredientMark(id));
     };
 
@@ -66,8 +60,6 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
         const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
         dispatch(actions.addIngredient(item));
     };
-
-    const ingredientItem = references[ingredient.id];
 
     const checkbox = (
         <div
@@ -83,7 +75,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
             className={styles.ingredientLineButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -94,26 +86,35 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
             className={styles.ingredientLineButton}
             onClick={addIngredient}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <SearchIcon />
             </IconWrapper>
         </div>
     );
 
+    const linkPath = Utils.getItemPath(
+        (
+            ingredient.products[ingredient.product_id]?.type === "food"
+                ? RoutePath.Food
+                : RoutePath.Recipe
+        ),
+        ingredient.product_id,
+    );
+
     const linkButton = (
-        <Link href={Utils.getItemPath(RoutePath.Food, ingredient.id)}>
+        <Link href={linkPath}>
             <a
                 className={styles.ingredientLineButton}
                 style={( isNew ? { opacity: "0.5" } : undefined )}
             >
-                <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+                <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                     <LinkIcon />
                 </IconWrapper>
             </a>
         </Link>
     );
 
-    const showAlternativeIngredients: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(ingredient.alternatives);
+    const showAlternativeIngredients: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
     const showNewAlternativeIngredient: boolean = ingredient.isOpen && !isNew && !isReadOnly;
     const showSeparator: boolean = showAlternativeIngredients || showNewAlternativeIngredient;
 
@@ -127,7 +128,6 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
 
                 <IngredientInfoLine
                     isReadOnly={isReadOnly}
-                    references={references}
                     ingredient={ingredient}
                     isNew={isNew}
                 />
@@ -135,7 +135,10 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                 {(
                     ingredient.isOpen && (
                         <IngredientInfoLineNutritionFacts
-                            nutritionFacts={ingredientItem.nutritionFacts}
+                            nutritionFacts={Utils.unwrapForced(
+                                ingredient.products[ingredient.product_id],
+                                `ingredient.products["${ingredient.product_id}"]`,
+                            ).nutritionFacts}
                             altNutritionFacts={ingredient.altNutritionFacts}
                         />
                     )
@@ -145,14 +148,13 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
 
                 {(
                     showAlternativeIngredients &&
-                    ingredient.alternatives.map((alt) => (
+                    Utils.getObjectValues(ingredient.products).map((product) => (
                         <AltIngredientLine
-                            key={`alt_ingredient_${alt.id}`}
+                            key={`alt_ingredient_${product.id}`}
                             search={search}
                             isReadOnly={isReadOnly}
-                            references={references}
                             parentId={ingredient.id}
-                            altIngredient={alt}
+                            altIngredientProduct={product}
                         />
                     ))
                 )}
@@ -162,7 +164,6 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                         key={"alt_ingredient_new"}
                         search={search}
                         isReadOnly={isReadOnly}
-                        references={references}
                         parentId={ingredient.id}
                         isNew={true}
                     />

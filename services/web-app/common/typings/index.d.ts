@@ -1,14 +1,11 @@
-import { SubDirectionType } from "@store/recipe/types";
-
-import { NutritionFactType } from "@common/nutritionFacts";
-import { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
-
-import { Dictionary } from "./common";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
+import type { SubDirectionType } from "@store/recipe/types";
 
 export * from "./common";
 
 export interface Food {
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -17,20 +14,19 @@ export interface Food {
     customUnits: CustomUnit[];
 }
 
-export interface IngredientItem {
-    id: string;
+export interface IngredientProduct {
+    id: number;
+    type: "food" | "recipe";
     name: string;
+    amount: number;
+    unit: WeightUnit | VolumeUnit;
     nutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 export interface Ingredient {
-    amount: number;
-    unit: WeightUnit | VolumeUnit;
-    id: string;
-}
-
-export interface IngredientDefault extends Ingredient {
-    alternatives: Ingredient[];
+    id: number;
+    product_id: number;
+    products: Dictionary<number, IngredientProduct>;
 }
 
 export interface Time {
@@ -57,18 +53,13 @@ export interface SubDirectionIngredient extends SubDirection {
 export interface Direction {
     stepNumber: number;
     name: string;
-    time?: Time;
-    temperature?: Temperature;
+    time?: Option<Time>;
+    temperature?: Option<Temperature>;
     steps: (SubDirection | SubDirectionIngredient)[];
 }
 
-export interface References {
-    food: IngredientItem[];
-    recipe: IngredientItem[];
-}
-
 export interface Recipe {
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -77,7 +68,6 @@ export interface Recipe {
 
     customUnits: CustomUnit[];
 
-    ingredients: IngredientDefault[];
+    ingredients: Ingredient[];
     directions: Direction[];
-    references: References;
 }

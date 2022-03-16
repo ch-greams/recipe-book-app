@@ -1,16 +1,17 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
+
+import Utils from "@common/utils";
 import * as actions from "@store/recipe/actions";
-import {
+import type {
     RecipeDirection,
-    RecipeIngredientDefault,
-    RecipeSubDirectionIngredient,
+    RecipeIngredient,
+    RecipeSubDirectionIngredient } from "@store/recipe/types";
+import {
     SubDirectionType,
 } from "@store/recipe/types";
-
-import type { Dictionary, IngredientItem } from "@common/typings";
+import RemoveIcon from "@icons/close-sharp.svg";
+import IconWrapper from "@icons/IconWrapper";
 
 import DirectionInfoLine from "./DirectionInfoLine";
 import NewSubDirectionLine from "./NewSubDirectionLine";
@@ -23,23 +24,20 @@ import styles from "./DirectionsBlock.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    ingredients: RecipeIngredientDefault[];
-    references: Dictionary<string, IngredientItem>;
+    ingredients: RecipeIngredient[];
     direction: RecipeDirection;
     index: number;
 }
 
-const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, direction, index }) => {
+const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, index }) => {
 
     const dispatch = useDispatch();
 
     const removeDirection = (directionIndex: number): void => {
-
         dispatch(actions.removeDirection(directionIndex));
     };
 
     const toggleDirectionMark = (directionIndex: number): void => {
-
         dispatch(actions.toggleDirectionMark(directionIndex));
     };
 
@@ -57,7 +55,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
             className={styles.directionLineButton}
             onClick={() => removeDirection(index)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#00bfa5"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -104,7 +102,6 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, references, d
                 {( !isReadOnly && (
                     <NewSubDirectionLine
                         key={"subDirectionLine_new"}
-                        references={references}
                         directionIndex={index}
                         direction={direction}
                         ingredients={ingredients}

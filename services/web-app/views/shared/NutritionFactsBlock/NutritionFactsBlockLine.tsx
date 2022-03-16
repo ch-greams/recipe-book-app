@@ -1,14 +1,15 @@
 
-import React, { Dispatch } from "react";
+import type { Dispatch } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { updateNutritionFact } from "@store/food/actions";
-import { UpdateNutritionFactAction } from "@store/food/types";
 
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
-import { InputChangeCallback, Option } from "@common/typings";
+import type { InputChangeCallback } from "@common/typings";
 import Utils from "@common/utils";
+import { updateNutritionFact } from "@store/food/actions";
+import type { UpdateNutritionFactAction } from "@store/food/types";
 
-import { NutritionFact } from ".";
+import type { NutritionFact } from ".";
 
 import styles from "./NutritionFactsBlockLine.module.scss";
 

@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
+
+import type { InputChangeCallback } from "@common/typings";
+import type { CustomUnitInput } from "@common/units";
+import { WeightUnit } from "@common/units";
+import Utils from "@common/utils";
 import IconAdd from "@icons/add-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
-
-import { InputChangeCallback } from "@common/typings";
-import { CustomUnitInput, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
 
 import CustomUnitLine from "./CustomUnitLine";
 
@@ -25,10 +26,14 @@ interface Props {
 
 const CustomUnitsBlock: React.FC<Props> = ({
     customUnitInputs,
-    addCustomUnitRequest,
-    removeCustomUnitRequest,
-    updateCustomUnitRequest,
+    addCustomUnitRequest: _addCustomUnitRequest,
+    removeCustomUnitRequest: _removeCustomUnitRequest,
+    updateCustomUnitRequest: _updateCustomUnitRequest,
 }) => {
+
+    const addCustomUnitRequest = Utils.unwrapForced(_addCustomUnitRequest, "addCustomUnitRequest");
+    const removeCustomUnitRequest = Utils.unwrapForced(_removeCustomUnitRequest, "removeCustomUnitRequest");
+    const updateCustomUnitRequest = Utils.unwrapForced(_updateCustomUnitRequest, "updateCustomUnitRequest");
 
     const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });
@@ -42,7 +47,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
         });
     };
 
-    const updateNewItemUnit = (unit: WeightUnit): void => setNewCustomUnit({ ...newCustomUnit, unit});
+    const updateNewItemUnit = (unit: WeightUnit): void => setNewCustomUnit({ ...newCustomUnit, unit });
 
     return (
         <div className={styles.customUnitsBlock}>
@@ -77,7 +82,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                     >
 
                         <IconWrapper
-                            isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                            isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
                             style={{ transform: "rotate(0.125turn)" }}
                             onClick={() => dispatch(removeCustomUnitRequest(index))}
                         >
@@ -97,7 +102,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
             >
 
                 <IconWrapper
-                    isFullWidth={true} width={20} height={20} color={"#00bfa5"}
+                    isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
                     onClick={() => {
                         dispatch(addCustomUnitRequest(newCustomUnit));
                         setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });

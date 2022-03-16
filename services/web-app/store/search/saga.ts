@@ -1,7 +1,9 @@
-import { SagaIterator } from "redux-saga";
-import { all, AllEffect, call, put, StrictEffect, takeLatest } from "redux-saga/effects";
+import type { SagaIterator } from "redux-saga";
+import type { AllEffect, StrictEffect } from "redux-saga/effects";
+import { all, call, put, takeLatest } from "redux-saga/effects";
 
-import { Food, IngredientItem } from "@common/typings";
+import type { Food, IngredientProduct } from "@common/typings";
+import { WeightUnit } from "@common/units";
 import FoodApi from "@api/foodApi";
 
 import {
@@ -18,17 +20,18 @@ function* fetchIngredients(): Generator<StrictEffect, void, Food[]> {
 
         const foodItems = yield call(FoodApi.getFoodItems);
 
-        const ingredients = foodItems.map<IngredientItem>((foodItem) => ({
-            id: foodItem.id,
-            name: foodItem.name,
-            nutritionFacts: foodItem.nutritionFacts,
+        const ingredients = foodItems.map<IngredientProduct>((foodItem) => ({
+            ...foodItem,
+            type: "food",
+            amount: 100,
+            unit: WeightUnit.g,
         }));
 
         yield put({ type: INGREDIENTS_FETCH_SUCCESS, payload: ingredients });
     }
     catch (error) {
-
-        yield put({ type: INGREDIENTS_FETCH_ERROR, payload: error.message });
+        const { message } = error as Error;
+        yield put({ type: INGREDIENTS_FETCH_ERROR, payload: message });
     }
 }
 

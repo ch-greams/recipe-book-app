@@ -1,15 +1,15 @@
-import { NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary, Food } from "@common/typings";
-import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { NutritionFactType } from "@common/nutritionFacts";
+import type { Food } from "@common/typings";
+import type { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 
 
 
 export interface FoodPageStore {
 
     isLoaded: boolean;
-    errorMessage: string;
+    errorMessage?: Option<string>;
 
-    id: string;
+    id: number;
     name: string;
     brand: string;
     subtitle: string;
@@ -34,7 +34,7 @@ export interface FoodPageStore {
 
     servingSize: number;
     servingSizeInput: string;
-    servingSizeUnit: WeightUnit | VolumeUnit;
+    servingSizeUnit: WeightUnit | VolumeUnit | string;
     featuredNutritionFacts: NutritionFactType[];
 }
 
@@ -169,12 +169,12 @@ export interface UpdateServingSizeAmountAction {
 
 export interface UpdateServingSizeUnitAction {
     type: typeof FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT;
-    payload: WeightUnit | VolumeUnit;
+    payload: WeightUnit | VolumeUnit | string;
 }
 
 export interface FoodItemFetchRequestAction {
     type: typeof FOOD_ITEM_FETCH_REQUEST;
-    payload: string;
+    payload: number;
 }
 
 export interface FoodItemFetchSuccessAction {

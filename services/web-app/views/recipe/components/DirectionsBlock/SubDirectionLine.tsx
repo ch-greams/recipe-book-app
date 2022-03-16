@@ -1,12 +1,14 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+
+import type { VolumeUnit, WeightUnit } from "@common/units";
+import { Units } from "@common/units";
+import Utils from "@common/utils";
+import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
+import * as actions from "@store/recipe/actions";
+import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
-import * as actions from "@store/recipe/actions";
-import { RecipeSubDirectionIngredient } from "@store/recipe/types";
-import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
-
-import { Units, VolumeUnit, WeightUnit } from "@common/units";
 
 import styles from "./DirectionsBlock.module.scss";
 
@@ -37,7 +39,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, subDirectionIndex))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={"#fff"}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>

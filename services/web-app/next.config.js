@@ -1,13 +1,10 @@
 
 
 module.exports = {
-    future: {
-        webpack5: true,
-    },
     rewrites: async () => ([
         {
             source: "/api/:path*",
-            destination: "http://localhost:8080/api/:path*",
+            destination: "http://recipe-book-api:8080/api/:path*",
             basePath: false,
         },
     ]),
@@ -19,7 +16,7 @@ module.exports = {
                 ...config.module.rules,
                 {
                     test: /\.svg$/,
-                    use: ["@svgr/webpack"],
+                    use: [ "@svgr/webpack" ],
                 },
             ],
         },

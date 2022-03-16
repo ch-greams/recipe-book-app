@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { AnyAction } from "redux";
+import type { AnyAction } from "redux";
 
-import type { Option } from "@common/typings";
 import Utils from "@common/utils";
 
 import styles from "./PageTitleBlock.module.scss";
@@ -29,8 +28,10 @@ const formatInput = (value: Option<string>, uppercase: boolean = true): string =
 
 const PageTitleBlockInput: React.FC<Props> = ({
     name, brand, subtitle, description, withDescription, confirmTitle,
-    updateName, updateBrand, updateSubtitle, updateDescription,
+    updateName, updateBrand, updateSubtitle, updateDescription: _updateDescription,
 }) => {
+
+    const updateDescription = Utils.unwrapForced(_updateDescription, "updateDescription");
 
     const dispatch = useDispatch();
 

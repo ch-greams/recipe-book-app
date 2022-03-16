@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
-import { AppState } from "@store";
-import * as actions from "@store/recipe/actions";
-import { RecipePageStore } from "@store/recipe/types";
-import { requestIngredients } from "@store/search/actions";
-import { SearchPageStore } from "@store/search/types";
+import type { ParsedUrlQuery } from "querystring";
+
+import Utils from "@common/utils";
 import DirectionsBlock from "@views/recipe/components/DirectionsBlock";
 import IngredientsBlock from "@views/recipe/components/IngredientsBlock";
 import PageDetailedNutritionFactsBlock from "@views/shared/PageDetailedNutritionFactsBlock";
 import PageTitleBlock from "@views/shared/PageTitleBlock";
 import SingleMessagePage from "@views/shared/SingleMessagePage";
-import { ParsedUrlQuery } from "querystring";
-
-import Utils from "@common/utils";
+import type { AppState } from "@store";
+import * as actions from "@store/recipe/actions";
+import type { RecipePageStore } from "@store/recipe/types";
+import { requestIngredients } from "@store/search/actions";
+import type { SearchPageStore } from "@store/search/types";
 
 import GeneralInfoBlock from "./GeneralInfoBlock";
 
@@ -37,7 +37,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
         ingredients,
         newDirection,
         directions,
-        references,
         nutritionFacts,
     } = recipeItem;
 
@@ -74,7 +73,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                 <IngredientsBlock
                     isReadOnly={isReadOnly}
                     ingredients={ingredients}
-                    references={references}
                     search={search}
                 />
 
@@ -87,7 +85,6 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     newDirection={newDirection}
                     directions={directions}
                     ingredients={ingredients}
-                    references={references}
                 />
 
                 <div className={styles.recipePageBlockTitle}>
@@ -125,7 +122,7 @@ const RecipePageConnected: React.FC = () => {
 
     useEffect(() => {
         if (Utils.isSome(recipeId)) {
-            dispatch(actions.fetchRecipeItemRequest(recipeId));
+            dispatch(actions.fetchRecipeItemRequest(Number(recipeId)));
             dispatch(requestIngredients());
         }
     }, [ dispatch, recipeId ]);

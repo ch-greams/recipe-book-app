@@ -1,9 +1,10 @@
-import { NutritionFact } from "@views/shared/NutritionFactsBlock";
+import type { NutritionFact } from "@views/shared/NutritionFactsBlock";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import { NUTRIENTS, NutritionFactDescription, NutritionFactType } from "./nutritionFacts";
-import type { Dictionary, Option } from "./typings";
-import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "./units";
+import type { NutritionFactDescription } from "./nutritionFacts";
+import { NutritionFactType } from "./nutritionFacts";
+import type { CustomUnit, CustomUnitInput } from "./units";
+import { VolumeUnit, WeightUnit } from "./units";
 
 
 export enum RoutePath {
@@ -31,6 +32,11 @@ export default class Utils {
     public static readonly TBSP_TO_ML: number = 14.7868;
     public static readonly TSP_TO_ML: number = 4.92892;
     public static readonly OZ_TO_G: number = 28.3495;
+
+    public static readonly COLOR_DEFAULT: string = "#00bfa5";
+    public static readonly COLOR_DEFAULT_DARK: string = "#008e76";
+    public static readonly COLOR_ALTERNATIVE: string = "#ff6e40";
+    public static readonly COLOR_WHITE: string = "#fff";
 
     public static convertDensity(
         value: number,
@@ -110,6 +116,14 @@ export default class Utils {
         return this.isSome(value) ? value : defaultValue;
     }
 
+    public static unwrapForced<T>(value: Option<T>, name: string): T {
+        if (!this.isSome(value)) {
+            throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
+        }
+
+        return value;
+    }
+
     public static isSome<T>(value: Option<T>): value is T {
         return (value !== null) && (value !== undefined);
     }
@@ -123,25 +137,25 @@ export default class Utils {
     ): NutritionFact[] {
 
         return nutritionFactTypes.reduce<NutritionFact[]>(
-            (previousNutritionFacts, currentNutrientType) => {
+            (previousNutritionFacts: NutritionFact[], currentNutrientType: NutritionFactType): NutritionFact[] => {
 
                 const amount: Option<number> = nutritionFacts[currentNutrientType];
                 const inputValue: Option<string> = nutritionFactInputs[currentNutrientType];
-                const nutritionFactDescription: Option<NutritionFactDescription> = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
+                const nutritionFactDescription: NutritionFactDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
 
                 return [
                     ...previousNutritionFacts,
                     {
                         type: currentNutrientType,
                         amount: amount,
-                        inputValue: inputValue,
+                        inputValue: inputValue || "",
                         unit: nutritionFactDescription.unit,
                         dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
                         isFraction: nutritionFactDescription.isFraction,
                     },
                 ];
             },
-            []
+            [],
         );
     }
 
@@ -163,18 +177,22 @@ export default class Utils {
         return Object.keys(obj) as (keyof T)[];
     }
 
+    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
+        return Object.values(obj) as T[];
+    }
+
     public static dictionarySum(
         ingredients: Dictionary<NutritionFactType, number>[],
     ): Dictionary<NutritionFactType, number> {
 
-        return NUTRIENTS.reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
+        return Object.values(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
 
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
                     return Utils.isSome(value) ? Utils.unwrap(sum, Utils.ZERO) + value : null;
                 },
-                null
+                null,
             );
 
             return {
@@ -215,7 +233,7 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath, id: string): string {
+    public static getItemPath(route: RoutePath, id: number): string {
         return `/${route}/${id}`;
     }
 
@@ -237,29 +255,25 @@ export default class Utils {
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
 
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Utils.isSome(values[nfType]) ? String(values[nfType]) : null }), {}
+            (acc, nfType) => ({ ...acc, [nfType]: Utils.isSome(values[nfType]) ? String(values[nfType]) : null }), {},
         );
     }
     
     public static convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
-    
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {}
+            (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {},
         );
     }
     
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-    
         return customUnits.map(this.convertCustomUnitIntoInput);
     }
     
     public static convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-    
         return customUnits.map(this.convertCustomUnitIntoValue);
     }
 
     public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {
-    
         return { ...customUnit, amount: String(customUnit.amount) };
     }
 

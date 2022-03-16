@@ -1,8 +1,8 @@
-import { SagaIterator } from "redux-saga";
+import type { SagaIterator } from "redux-saga";
 import * as effects from "redux-saga/effects";
 
-import { Recipe } from "@common/typings";
-import { CustomUnit } from "@common/units";
+import type { Recipe } from "@common/typings";
+import type { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
 import RecipeApi from "@api/recipeApi";
 
@@ -23,8 +23,8 @@ function* fetchRecipeItem(action: types.RecipeItemFetchRequestAction): Generator
         yield effects.put(actions.fetchRecipeItemSuccess(recipeItem));
     }
     catch (error) {
-
-        yield effects.put(actions.fetchRecipeItemError(error.message));
+        const { message } = error as Error;
+        yield effects.put(actions.fetchRecipeItemError(message));
     }
 }
 
@@ -49,8 +49,8 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<eff
         ]));
     }
     catch (error) {
-
-        yield effects.put(actions.addCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield effects.put(actions.addCustomUnitError(message));
     }
 }
 
@@ -65,12 +65,12 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
         // TODO: API CALL
 
         yield effects.put(actions.removeCustomUnitSuccess(
-            customUnits.filter((_customUnit, index) => index !== customUnitIndex)
+            customUnits.filter((_customUnit, index) => index !== customUnitIndex),
         ));
     }
     catch (error) {
-
-        yield effects.put(actions.removeCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield effects.put(actions.removeCustomUnitError(message));
     }
 }
 
@@ -89,12 +89,12 @@ function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generat
                 index === customUnitIndex
                     ? Utils.convertCustomUnitIntoValue(updatedCustomUnit)
                     : customUnit
-            ))
+            )),
         ));
     }
     catch (error) {
-
-        yield effects.put(actions.updateCustomUnitError(error.message));
+        const { message } = error as Error;
+        yield effects.put(actions.updateCustomUnitError(message));
     }
 }
 

@@ -1,32 +1,39 @@
-version: "3.8"
+version: "3.9"
 
 services:
 
-  app:
+  api:
+    image: web-api
     build: .
-    command: npm run dev:watch
+    depends_on:
+      - recipe-book-db
     ports:
       - 8080:8080
-    working_dir: /app
-    volumes:
-      - ./src:/app/src
+    working_dir: /web-api
     environment:
-      # options: production, development
-      NODE_ENV: development
-      PORT: 8080
-      LOG_LEVEL: DEBUG
-      MONGODB_URL: mongodb:27017
+      RB__listen_addr: 0.0.0.0:8080
+      RB__database_url: postgres://postgres:password@recipe-book-db
 
-  mongodb:
-    image: mongo:4.4
-    volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/mongodb:/data/db
+  recipe-book-db:
+    image: postgres:14
     ports:
-      - 27017:27017
-    # environment: 
-    #   MONGO_INITDB_ROOT_USERNAME: root
-    #   MONGO_INITDB_ROOT_PASSWORD: example
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - $HOME/dev/personal/recipe-book/recipe-book-app/postgres:/var/lib/postgresql/data
 
-# volumes:
-#   rba-mongodb-data:
-
+  recipe-book-db-admin:
+    image: dpage/pgadmin4:latest
+    depends_on:
+      - recipe-book-db
+    ports:
+      - 5050:5050
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.local
+      - PGADMIN_DEFAULT_PASSWORD=password
+      - PGADMIN_LISTEN_PORT=5050
+    volumes:
+      - $HOME/dev/personal/recipe-book/recipe-book-app/postgres-admin:/var/lib/pgadmin
+    links:
+      - recipe-book-db:pgsql-server

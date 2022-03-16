@@ -1,12 +1,10 @@
-import { AppState } from "@store";
-
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { Dictionary } from "@common/typings";
-import { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { CustomUnit, CustomUnitInput } from "@common/units";
+import { DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
+import type { AppState } from "@store";
 
 import * as types from "./types";
-
 
 
 const initialState: types.FoodPageStore = {
@@ -14,7 +12,7 @@ const initialState: types.FoodPageStore = {
     isLoaded: false,
     errorMessage: null,
 
-    id: "",
+    id: -1,
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
@@ -34,12 +32,12 @@ const initialState: types.FoodPageStore = {
     densityMetric: 1,
     density: 1,
     densityInput: "1",
-    densityVolumeUnit: VolumeUnit.ml,
-    densityWeightUnit: WeightUnit.g,
+    densityVolumeUnit: DEFAULT_VOLUME_UNIT,
+    densityWeightUnit: DEFAULT_WEIGHT_UNIT,
 
     servingSize: 100,
     servingSizeInput: "100",
-    servingSizeUnit: WeightUnit.g,
+    servingSizeUnit: DEFAULT_WEIGHT_UNIT,
 
 
     featuredNutritionFacts: [
@@ -104,7 +102,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 isLoaded: false,
                 errorMessage: null,
 
-                id: action.payload as string,
+                id: action.payload,
             };
         }
 
@@ -222,15 +220,15 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
         case types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
 
-            const amount = Utils.decimalNormalizer(action.payload, state.servingSizeInput);
-            const servingSize = Number(amount);
+            const servingSizeInput = Utils.decimalNormalizer(action.payload, state.servingSizeInput);
+            const servingSize = Number(servingSizeInput);
             const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
             return {
                 ...state,
 
                 servingSize: servingSize,
-                servingSizeInput: amount,
+                servingSizeInput: servingSizeInput,
 
                 nutritionFactsByServing: nutritionFactsByServing,
                 nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),

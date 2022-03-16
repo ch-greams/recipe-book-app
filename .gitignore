@@ -1,16 +1,22 @@
 
 # data
 mongodb
+postgres
+postgres-admin
 
 # node
 node_modules
 .env
+tsconfig.tsbuildinfo
 
 # electron-builder
 dist
 
 # typescript
 out
+
+# rust
+target
 
 # ide
 # .vscode
