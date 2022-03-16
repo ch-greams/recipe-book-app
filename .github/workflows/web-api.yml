@@ -23,56 +23,64 @@ on:
 
 jobs:
 
-    build:
+    check:
         runs-on: ubuntu-20.04
-
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
 
         steps:
             - uses: actions/checkout@v2
-            
-            - name: use node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
 
-            - run: npm install
-            - run: npm run build
+            - name: Install stable toolchain
+              uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: stable
+                  override: true
+
+            - name: Run cargo check
+              uses: actions-rs/cargo@v1
+              with:
+                  command: check
 
     lint:
         runs-on: ubuntu-20.04
 
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
-
         steps:
             - uses: actions/checkout@v2
-            
-            - name: use node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
 
-            - run: npm install
-            - run: npm run lint
+            - name: Install stable toolchain
+              uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: stable
+                  override: true
+                  components: rustfmt, clippy
+
+            - name: Run cargo fmt
+              uses: actions-rs/cargo@v1
+              with:
+                  command: fmt
+                  args: --all -- --check
+
+            - name: Run cargo clippy
+              uses: actions-rs/cargo@v1
+              with:
+                  command: clippy
+                  args: -- -D warnings
 
     test:
         runs-on: ubuntu-20.04
 
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
-
         steps:
             - uses: actions/checkout@v2
-            
-            - name: use node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
 
-            - run: npm install
-            - run: npm run test
+            - name: Install stable toolchain
+              uses: actions-rs/toolchain@v1
+              with:
+                  profile: minimal
+                  toolchain: stable
+                  override: true
+
+            - name: Run cargo test
+              uses: actions-rs/cargo@v1
+              with:
+                  command: test
