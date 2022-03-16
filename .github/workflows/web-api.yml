@@ -1,9 +1,5 @@
 name: web-api
 
-defaults:
-    run:
-        working-directory: services/web-api
-
 on:
     push:
         branches:
@@ -40,6 +36,7 @@ jobs:
               uses: actions-rs/cargo@v1
               with:
                   command: check
+                  args: --manifest-path services/web-api/Cargo.toml
 
     lint:
         runs-on: ubuntu-20.04
@@ -59,13 +56,13 @@ jobs:
               uses: actions-rs/cargo@v1
               with:
                   command: fmt
-                  args: --all -- --check
+                  args: --manifest-path services/web-api/Cargo.toml --all -- --check
 
             - name: Run cargo clippy
               uses: actions-rs/cargo@v1
               with:
                   command: clippy
-                  args: -- -D warnings
+                  args: --manifest-path services/web-api/Cargo.toml -- -D warnings
 
     test:
         runs-on: ubuntu-20.04
@@ -84,3 +81,4 @@ jobs:
               uses: actions-rs/cargo@v1
               with:
                   command: test
+                  args: --manifest-path services/web-api/Cargo.toml
