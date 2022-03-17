@@ -54,3 +54,59 @@ impl Product {
         .bind(id)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::product::Product};
+    use sqlx::{PgPool, Pool, Postgres};
+
+    fn get_pool() -> Pool<Postgres> {
+        let config = Config::new().unwrap();
+        PgPool::connect_lazy(&config.database_url).unwrap()
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_food_by_id() {
+        let food_id = 1;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let product = Product::find_food_by_id(food_id)
+            .fetch_optional(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(product.is_some());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_food_all() {
+        let food_limit = 10;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products = Product::find_food_all(food_limit)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(products.len() > 0);
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_recipe_by_id() {
+        let recipe_id = 29;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let product = Product::find_recipe_by_id(recipe_id)
+            .fetch_optional(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(product.is_some());
+    }
+}
