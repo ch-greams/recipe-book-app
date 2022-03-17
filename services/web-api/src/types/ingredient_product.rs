@@ -35,3 +35,29 @@ impl IngredientProductDetails {
         .bind(ingredient_ids)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::ingredient_product::IngredientProductDetails};
+    use sqlx::PgPool;
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_by_product_ids() {
+        let ingredient_ids = vec![10, 11];
+
+        let config = Config::new().unwrap();
+        let mut txn = PgPool::connect_lazy(&config.database_url)
+            .unwrap()
+            .begin()
+            .await
+            .unwrap();
+
+        let ingredient_products = IngredientProductDetails::find_by_ingredient_ids(ingredient_ids)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(ingredient_products.len(), 4);
+    }
+}

@@ -60,3 +60,29 @@ impl DirectionPartDetails {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::direction_part::DirectionPart};
+    use sqlx::PgPool;
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_by_product_ids() {
+        let direction_ids = vec![1, 3];
+
+        let config = Config::new().unwrap();
+        let mut txn = PgPool::connect_lazy(&config.database_url)
+            .unwrap()
+            .begin()
+            .await
+            .unwrap();
+
+        let direction_parts = DirectionPart::find_by_direction_ids(direction_ids)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(direction_parts.len(), 2);
+    }
+}

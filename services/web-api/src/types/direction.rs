@@ -67,3 +67,29 @@ impl DirectionDetails {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::direction::Direction};
+    use sqlx::PgPool;
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_by_product_id() {
+        let recipe_id = 29;
+
+        let config = Config::new().unwrap();
+        let mut txn = PgPool::connect_lazy(&config.database_url)
+            .unwrap()
+            .begin()
+            .await
+            .unwrap();
+
+        let directions = Direction::find_by_recipe_id(recipe_id)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(directions.len(), 2);
+    }
+}
