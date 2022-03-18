@@ -24,7 +24,8 @@
       "@icons/*": [ "icons/*" ],
       "@common/*": [ "common/*" ],
       "@styles/*": [ "styles/*" ]
-    }
+    },
+    "incremental": true
   },
   "include": [ "next-env.d.ts", "common.d.ts", "**/*.ts", "**/*.tsx" ],
   "exclude": [ "node_modules" ]
