@@ -25,13 +25,13 @@ interface Props {
 }
 
 export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
-    id: -1,
-    type: "food",
+    product_id: -1,
+    product_type: "food",
     name: "NEW INGREDIENT",
     amount: 100,
     amountInput: "100",
     unit: WeightUnit.g,
-    nutritionFacts: {},
+    nutrition_facts: {},
 };
 
 
@@ -49,7 +49,7 @@ const AltIngredientLine: React.FC<Props> = ({
     const removeButton = (
         <div
             className={styles.altIngredientLineButton}
-            onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.id))}
+            onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.product_id))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
@@ -80,7 +80,7 @@ const AltIngredientLine: React.FC<Props> = ({
             className={styles.ingredientInfoLineAmountInput}
             value={(altIngredientProduct.amountInput|| "")}
             onChange={(event) => {
-                dispatch(actions.updateAltIngredientAmount(parentId, altIngredientProduct.id, event.target.value));
+                dispatch(actions.updateAltIngredientAmount(parentId, altIngredientProduct.product_id, event.target.value));
             }}
         />
     );
@@ -97,16 +97,16 @@ const AltIngredientLine: React.FC<Props> = ({
                 value={altIngredientProduct.unit}
                 onChange={(value: WeightUnit | VolumeUnit) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredientProduct.id, value,
+                        parentId, altIngredientProduct.product_id, value,
                     ));
                 }}
             />
         </div>
     );
 
-    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, altIngredientProduct.id)); };
-    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.id, true)); };
-    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.id, false)); };
+    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, altIngredientProduct.product_id)); };
+    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.product_id, true)); };
+    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.product_id, false)); };
 
     return (
 

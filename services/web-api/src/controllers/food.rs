@@ -41,7 +41,7 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
     Ok(Json(food))
 }
 
-#[get("/")]
+#[get("")]
 async fn find_all(db_pool: Data<Pool<Postgres>>) -> Result<Json<Vec<Food>>, Error> {
     let mut txn = db_pool.begin().await?;
 

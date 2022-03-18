@@ -10,9 +10,7 @@ pub struct Food {
     pub subtitle: Option<String>,
     pub description: Option<String>,
     pub density: f64,
-    #[serde(rename = "nutritionFacts")]
     pub nutrition_facts: NutritionFacts,
-    #[serde(rename = "customUnits")]
     pub custom_units: Vec<CustomUnit>,
 }
 

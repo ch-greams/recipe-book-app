@@ -17,7 +17,6 @@ pub struct DirectionPart {
     pub label: String,
     pub product_id: Option<i64>,
     pub product_amount: Option<f64>,
-    #[sqlx(rename = "type")]
     pub direction_part_type: DirectionPartType,
 }
 
@@ -27,7 +26,7 @@ impl DirectionPart {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT direction_id, step_number, label, product_id, product_amount, type
+            SELECT direction_id, step_number, label, product_id, product_amount, direction_part_type
             FROM private.direction_part
             WHERE direction_id = ANY($1)
         "#,
@@ -38,14 +37,10 @@ impl DirectionPart {
 
 #[derive(Serialize, Deserialize, Clone)]
 pub struct DirectionPartDetails {
-    #[serde(rename = "stepNumber")]
     pub step_number: i16,
     pub label: String,
-    #[serde(rename = "id")]
     pub product_id: Option<i64>,
-    #[serde(rename = "amount")]
     pub product_amount: Option<f64>,
-    #[serde(rename = "type")]
     pub direction_part_type: DirectionPartType,
 }
 
@@ -58,5 +53,31 @@ impl DirectionPartDetails {
             product_amount: direction_part.product_amount,
             direction_part_type: direction_part.direction_part_type.to_owned(),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::direction_part::DirectionPart};
+    use sqlx::PgPool;
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_by_product_ids() {
+        let direction_ids = vec![1, 3];
+
+        let config = Config::new().unwrap();
+        let mut txn = PgPool::connect_lazy(&config.database_url)
+            .unwrap()
+            .begin()
+            .await
+            .unwrap();
+
+        let direction_parts = DirectionPart::find_by_direction_ids(direction_ids)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(direction_parts.len(), 2);
     }
 }

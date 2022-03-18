@@ -44,3 +44,29 @@ impl IngredientDetails {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::{config::Config, types::ingredient::Ingredient};
+    use sqlx::PgPool;
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_by_product_id() {
+        let recipe_id = 29;
+
+        let config = Config::new().unwrap();
+        let mut txn = PgPool::connect_lazy(&config.database_url)
+            .unwrap()
+            .begin()
+            .await
+            .unwrap();
+
+        let ingredients = Ingredient::find_by_recipe_id(recipe_id)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(ingredients.len(), 2);
+    }
+}

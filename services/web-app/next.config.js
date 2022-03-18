@@ -4,7 +4,7 @@ module.exports = {
     rewrites: async () => ([
         {
             source: "/api/:path*",
-            destination: "http://recipe-book-api:8080/api/:path*",
+            destination: `http://${process.env.RB__API_ADDR || "127.0.0.1:8080"}/api/:path*`,
             basePath: false,
         },
     ]),
