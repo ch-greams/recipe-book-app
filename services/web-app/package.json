@@ -12,7 +12,7 @@
     "test": "echo \"Add tests you lazy fuck\""
   },
   "dependencies": {
-    "next": "^11.1.2",
+    "next": "^12.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-redux": "^7.2.5",
@@ -25,7 +25,7 @@
     "superagent": "^6.1.0"
   },
   "devDependencies": {
-    "@svgr/webpack": "^5.5.0",
+    "@svgr/webpack": "^6.2.1",
     "@types/react": "17.0.32",
     "@types/redux-logger": "^3.0.9",
     "@types/styled-components": "^5.1.15",
