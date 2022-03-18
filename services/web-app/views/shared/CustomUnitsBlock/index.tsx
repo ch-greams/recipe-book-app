@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import type { AnyAction } from "redux";
 
 import type { InputChangeCallback } from "@common/typings";
-import type { CustomUnitInput } from "@common/units";
+import type { CustomUnitInput, Units } from "@common/units";
 import { WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import IconAdd from "@icons/add-sharp.svg";
@@ -47,7 +47,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
         });
     };
 
-    const updateNewItemUnit = (unit: WeightUnit): void => setNewCustomUnit({ ...newCustomUnit, unit });
+    const updateNewItemUnit = (unit: Units): void => setNewCustomUnit({ ...newCustomUnit, unit });
 
     return (
         <div className={styles.customUnitsBlock}>
@@ -68,7 +68,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
                 };
                 
-                const updateItemUnit = (unit: WeightUnit): void => {
+                const updateItemUnit = (unit: Units): void => {
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, unit }));
                 };
                 
