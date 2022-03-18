@@ -22,7 +22,7 @@ function* fetchIngredients(): Generator<StrictEffect, void, Food[]> {
 
         const ingredients = foodItems.map<IngredientProduct>((foodItem) => ({
             ...foodItem,
-            type: "food",
+            product_type: "food",
             amount: 100,
             unit: WeightUnit.g,
         }));

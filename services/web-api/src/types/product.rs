@@ -5,6 +5,7 @@ use sqlx::Postgres;
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum ProductType {
     Food,
     Recipe,

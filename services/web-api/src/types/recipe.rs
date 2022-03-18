@@ -13,7 +13,6 @@ pub struct Recipe {
     pub subtitle: Option<String>,
     pub description: Option<String>,
     pub density: f64,
-    #[serde(rename = "customUnits")]
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetails>,
     pub directions: Vec<DirectionDetails>,

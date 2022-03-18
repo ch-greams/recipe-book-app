@@ -41,7 +41,6 @@ impl Direction {
 #[derive(Serialize, Deserialize)]
 pub struct DirectionDetails {
     pub id: i64,
-    #[serde(rename = "stepNumber")]
     pub step_number: i16,
     pub name: String,
     pub temperature: Option<Temperature>,

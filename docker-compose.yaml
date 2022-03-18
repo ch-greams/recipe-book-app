@@ -25,6 +25,7 @@ services:
     volumes:
       - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-app:/app
     environment:
+      RB__API_ADDR: recipe-book-api:8080
       NODE_ENV: development     # options: production, development
       PORT: 3000
       LOG_LEVEL: DEBUG

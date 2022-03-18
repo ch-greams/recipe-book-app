@@ -123,12 +123,12 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 density: foodItem.density,
                 densityInput: String(foodItem.density),
 
-                nutritionFacts: foodItem.nutritionFacts,
-                customUnits: foodItem.customUnits,
+                nutritionFacts: foodItem.nutrition_facts,
+                customUnits: foodItem.custom_units,
 
-                nutritionFactsByServing: foodItem.nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(foodItem.nutritionFacts),
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(foodItem.customUnits),
+                nutritionFactsByServing: foodItem.nutrition_facts,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(foodItem.nutrition_facts),
+                customUnitInputs: Utils.convertCustomUnitsIntoInputs(foodItem.custom_units),
             };
         }
 

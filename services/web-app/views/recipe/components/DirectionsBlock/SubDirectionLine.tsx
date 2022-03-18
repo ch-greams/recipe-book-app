@@ -47,7 +47,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     const ingredientAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {subDirection.amount}
+            {subDirection.product_amount}
         </div>
     );
 

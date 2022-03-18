@@ -62,7 +62,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
         <input
             type={"text"}
             className={styles.directionInfoLineDescriptionInput}
-            placeholder={step.type.toUpperCase()}
+            placeholder={step.direction_part_type.toUpperCase()}
             value={step.label}
             onChange={(event) => {
                 dispatch(actions.updateSubDirectionNote(directionIndex, stepIndex, event.target.value));
@@ -79,7 +79,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
             <div className={styles.subDirectionNoteInfoLine}>
 
                 <IconWrapper width={22} height={22} color={Utils.COLOR_WHITE}>
-                    {getSubDirectionNoteLineIcon(step.type)}
+                    {getSubDirectionNoteLineIcon(step.direction_part_type)}
                 </IconWrapper>
 
                 {( isReadOnly ? noteText : noteInput )}

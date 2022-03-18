@@ -94,7 +94,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
 
     const linkPath = Utils.getItemPath(
         (
-            ingredient.products[ingredient.product_id]?.type === "food"
+            ingredient.products[ingredient.product_id]?.product_type === "food"
                 ? RoutePath.Food
                 : RoutePath.Recipe
         ),
@@ -138,7 +138,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                             nutritionFacts={Utils.unwrapForced(
                                 ingredient.products[ingredient.product_id],
                                 `ingredient.products["${ingredient.product_id}"]`,
-                            ).nutritionFacts}
+                            ).nutrition_facts}
                             altNutritionFacts={ingredient.altNutritionFacts}
                         />
                     )
@@ -150,7 +150,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
                     showAlternativeIngredients &&
                     Utils.getObjectValues(ingredient.products).map((product) => (
                         <AltIngredientLine
-                            key={`alt_ingredient_${product.id}`}
+                            key={`alt_ingredient_${product.product_id}`}
                             search={search}
                             isReadOnly={isReadOnly}
                             parentId={ingredient.id}
