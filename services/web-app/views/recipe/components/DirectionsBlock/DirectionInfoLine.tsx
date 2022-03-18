@@ -80,7 +80,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const indexText = (
         <div className={styles.directionInfoLineIndex}>
-            {`${direction.stepNumber}.`}
+            {`${direction.step_number}.`}
         </div>
     );
 
@@ -88,7 +88,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         <input
             type={"text"}
             className={styles.directionInfoLineIndexInput}
-            value={direction.stepNumber}
+            value={direction.step_number}
             placeholder={"#"}
             maxLength={2}
             onChange={(event) => {

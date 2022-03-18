@@ -112,7 +112,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                         <input
                             type={"text"}
                             className={styles.directionInfoLineIndexInput}
-                            value={direction.stepNumber}
+                            value={direction.step_number}
                             placeholder={"#"}
                             maxLength={2}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {

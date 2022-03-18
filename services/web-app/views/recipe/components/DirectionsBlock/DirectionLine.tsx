@@ -77,7 +77,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
                 {(
                     ( direction.isOpen || !isReadOnly ) &&
                     direction.steps.map((step, stepIndex) => (
-                        step.type === SubDirectionType.Ingredient
+                        step.direction_part_type === SubDirectionType.Ingredient
                             ? (
                                 <SubDirectionLine
                                     key={`subDirectionLine_${stepIndex}`}
