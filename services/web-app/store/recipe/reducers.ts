@@ -801,17 +801,19 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const ingredients = state.ingredients.map((ingredient) => {
 
                 if (ingredient.id === id) {
-
-                    const product = Utils.unwrapForced(
-                        ingredient.products[ingredient.product_id],
-                        `ingredient.products[${ingredient.product_id}]`,
-                    );
+                    const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
                     const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
 
                     return {
                         ...ingredient,
-                        amountInput: amount,
-                        amount: Number(amount),
+                        products: {
+                            ...ingredient.products,
+                            [ingredient.product_id]: {
+                                ...product,
+                                amountInput: amount,
+                                amount: Number(amount),
+                            },
+                        },
                     };
                 }
                 else {
@@ -832,9 +834,23 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.id === id) ? { ...ingredient, unit: unit } : ingredient
-                )),
+                ingredients: state.ingredients.map((ingredient) => {
+                    if (ingredient.id === id) {
+
+                        const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
+
+                        return {
+                            ...ingredient,
+                            products: {
+                                ...ingredient.products,
+                                [ingredient.product_id]: { ...product, unit },
+                            },
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                }),
             };
         }
 
