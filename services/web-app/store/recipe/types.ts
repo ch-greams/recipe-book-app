@@ -31,7 +31,7 @@ export interface RecipeSubDirectionIngredient extends typings.SubDirectionIngred
 export interface RecipeDirection extends typings.Direction {
     isOpen: boolean;
     isMarked: boolean;
-    timeInput: string;
+    durationInput: string;
     temperatureInput: string;
     newStep: string;
     steps: (typings.SubDirection | RecipeSubDirectionIngredient)[];

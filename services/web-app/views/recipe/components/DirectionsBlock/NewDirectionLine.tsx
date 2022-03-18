@@ -62,7 +62,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={direction.timeInput}
+            value={direction.durationInput}
             onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                 dispatch(actions.updateNewDirectionTimeCount(event.target.value));
             }}
@@ -77,7 +77,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-                value={direction.time?.unit || DEFAULT_TIME_UNIT}
+                value={direction.duration?.unit || DEFAULT_TIME_UNIT}
                 onChange={(value: TimeUnit) => {
                     dispatch(actions.updateNewDirectionTimeUnit(value));
                 }}

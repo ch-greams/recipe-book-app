@@ -40,16 +40,16 @@ const initialState: types.RecipePageStore = {
         step_number: 4,
         name: "",
 
-        time: {
-            count: 0,
+        duration: {
+            value: 0,
             unit: units.DEFAULT_TIME_UNIT,
         },
         temperature: {
-            count: 0,
+            value: 0,
             unit: units.DEFAULT_TEMPERATURE_UNIT,
         },
 
-        timeInput: "",
+        durationInput: "",
         temperatureInput: "",
 
         newStep: types.SubDirectionType.Note,
@@ -93,8 +93,8 @@ function convertDirections(directions: typings.Direction[]): types.RecipeDirecti
 
         isOpen: true,
         isMarked: false,
-        timeInput: direction.time?.count ? String(direction.time?.count) : "",
-        temperatureInput: direction.temperature?.count ? String(direction.temperature?.count) : "",
+        durationInput: direction.duration?.value ? String(direction.duration?.value) : "",
+        temperatureInput: direction.temperature?.value ? String(direction.temperature?.value) : "",
         newStep: types.SubDirectionType.Note,
 
         steps: direction.steps.map((step) => 
@@ -487,7 +487,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                 temperature: {
                                     unit: units.DEFAULT_TEMPERATURE_UNIT,
                                     ...direction.temperature,
-                                    count: Number(count),
+                                    value: Number(count),
                                 },
                                 temperatureInput: count,
                             }
@@ -508,7 +508,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         ? {
                             ...direction,
                             temperature: {
-                                count: 0,
+                                value: 0,
                                 ...direction.temperature,
                                 unit: unit,
                             },
@@ -526,18 +526,18 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.timeInput);
+                    const count = Utils.decimalNormalizer(inputValue, direction.durationInput);
 
                     return (
                         (directionIndex === iDirection)
                             ? {
                                 ...direction,
-                                time: {
+                                duration: {
                                     unit: units.DEFAULT_TIME_UNIT,
-                                    ...direction.time,
-                                    count: Number(count),
+                                    ...direction.duration,
+                                    value: Number(count),
                                 },
-                                timeInput: count,
+                                durationInput: count,
                             }
                             : direction
                     );
@@ -555,9 +555,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            time: {
-                                count: 0,
-                                ...direction.time,
+                            duration: {
+                                value: 0,
+                                ...direction.duration,
                                 unit: unit,
                             },
                         }
@@ -599,7 +599,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     temperature: {
                         unit: units.DEFAULT_TEMPERATURE_UNIT,
                         ...state.newDirection.temperature,
-                        count: Number(count),
+                        value: Number(count),
                     },
                     temperatureInput: count,
                 },
@@ -615,7 +615,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 newDirection: {
                     ...state.newDirection,
                     temperature: {
-                        count: 0,
+                        value: 0,
                         ...state.newDirection.temperature,
                         unit: unit,
                     },
@@ -627,18 +627,18 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.timeInput);
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationInput);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    time: {
+                    duration: {
                         unit: units.DEFAULT_TIME_UNIT,
-                        ...state.newDirection.time,
-                        count: Number(count),
+                        ...state.newDirection.duration,
+                        value: Number(count),
                     },
-                    timeInput: count,
+                    durationInput: count,
                 },  
             };
         }
@@ -651,9 +651,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    time: {
-                        count: 0,
-                        ...state.newDirection.time,
+                    duration: {
+                        value: 0,
+                        ...state.newDirection.duration,
                         unit: unit,
                     },
                 },  
@@ -675,10 +675,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         step_number: direction.step_number,
                         name: direction.name,
                 
-                        time: ( !direction.timeInput ? null : direction.time  ),
+                        duration: ( !direction.durationInput ? null : direction.duration  ),
                         temperature: ( !direction.temperatureInput ? null : direction.temperature ),
                 
-                        timeInput: direction.timeInput,
+                        durationInput: direction.durationInput,
                         temperatureInput: direction.temperatureInput,
                 
                         newStep: types.SubDirectionType.Note,
@@ -692,16 +692,16 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     step_number: 0,
                     name: "",
 
-                    time: {
-                        count: 0,
+                    duration: {
+                        value: 0,
                         unit: units.TimeUnit.min,
                     },
                     temperature: {
-                        count: 0,
+                        value: 0,
                         unit: units.TemperatureUnit.C,
                     },
             
-                    timeInput: "",
+                    durationInput: "",
                     temperatureInput: "",
             
                     newStep: types.SubDirectionType.Note,

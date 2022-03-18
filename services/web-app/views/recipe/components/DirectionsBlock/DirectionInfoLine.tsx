@@ -22,7 +22,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const tempAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.temperature?.count}
+            {direction.temperature?.value}
         </div>
     );
 
@@ -51,7 +51,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const timeAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.time?.count}
+            {direction.duration?.value}
         </div>
     );
 
@@ -60,7 +60,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={direction.timeInput}
+            value={direction.durationInput}
             onChange={(event) => {
                 dispatch(actions.updateDirectionTimeCount(index, event.target.value));
             }}
@@ -71,7 +71,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-            value={direction.time?.unit}
+            value={direction.duration?.unit}
             onChange={(value: TimeUnit) => {
                 dispatch(actions.updateDirectionTimeUnit(index, value));
             }}
@@ -138,9 +138,9 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
                 {( isReadOnly ? ( direction.temperature && tempSelectInput ) : tempSelectInput )}
 
-                {( isReadOnly ? ( direction.time && timeAmountText ) : timeAmountInput )}
+                {( isReadOnly ? ( direction.duration && timeAmountText ) : timeAmountInput )}
 
-                {( isReadOnly ? ( direction.time && timeSelectInput ) : timeSelectInput )}
+                {( isReadOnly ? ( direction.duration && timeSelectInput ) : timeSelectInput )}
 
             </div>
         </div>
