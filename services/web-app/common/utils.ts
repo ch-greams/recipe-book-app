@@ -173,8 +173,8 @@ export default class Utils {
         );
     }
 
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>): (keyof T)[] {
-        return Object.keys(obj) as (keyof T)[];
+    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
+        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
     }
 
     public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
