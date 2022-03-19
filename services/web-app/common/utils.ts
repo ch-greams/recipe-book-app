@@ -3,6 +3,7 @@ import type { NutritionFact } from "@views/shared/NutritionFactsBlock";
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
+import type { Comparer } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -20,6 +21,13 @@ export enum DecimalPlaces {
     Three = 3,
     Four = 4,
 }
+
+export enum ComparerResult {
+    Negative = -1,
+    Zero = 0,
+    Positive = 1,
+}
+
 
 export default class Utils {
 
@@ -224,6 +232,10 @@ export default class Utils {
     }
 
     // NOTE: OTHER
+
+    public static sortBy<T>(field: keyof T): Comparer<T> {
+        return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
+    }
 
     public static arrayIsNotEmpty(array: unknown[]): boolean {
         return (Array.isArray(array) && array.length > Utils.ZERO);

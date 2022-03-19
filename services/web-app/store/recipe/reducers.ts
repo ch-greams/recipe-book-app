@@ -448,11 +448,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? { ...direction, step_number: stepNumber }
-                        : direction
-                )),  
+                directions: state.directions
+                    .map((direction, iDirection) => (
+                        (directionIndex === iDirection)
+                            ? { ...direction, step_number: stepNumber }
+                            : direction
+                    ))
+                    .sort(Utils.sortBy("step_number")),
             };
         }
 
