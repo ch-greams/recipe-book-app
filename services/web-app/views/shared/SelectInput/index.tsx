@@ -17,7 +17,7 @@ export enum SelectInputType {
     Other,
 }
 
-interface SelectOption<T> {
+export interface SelectOption<T> {
     group?: Option<string>;
     label?: Option<string>;
     value: T;
@@ -28,9 +28,13 @@ interface Props<T> {
     withGroups?: boolean;
     options: SelectOption<T>[];
     value?: T;
-    onChange: (value: T) => void;
+    onChange: (option: SelectOption<T>) => void;
 }
 
+
+export const getOptionLabel = <T extends ID>(option: SelectOption<T>): string => {
+    return Utils.unwrap(option.label, String(option.value));
+};
 
 const getClassName = (type: SelectInputType): string => {
 
@@ -65,20 +69,20 @@ const getClassName = (type: SelectInputType): string => {
     }
 };
 
-const getOption = <T extends ID>(option: SelectOption<T>, onSelect: (value: T) => void): JSX.Element => (
+const getOption = <T extends ID>(option: SelectOption<T>, onSelect: (option: SelectOption<T>) => void): JSX.Element => (
     <div
         key={option.value}
         className={styles.selectInputOption}
-        onClick={() => onSelect(option.value)}
+        onClick={() => onSelect(option)}
     >
-        {Utils.unwrap(option.label, String(option.value))}
+        {getOptionLabel(option)}
     </div>
 );
 
 const getItemList = <T extends ID>(
     withGroups: boolean,
     options: SelectOption<T>[],
-    onSelect: (value: T) => void,
+    onSelect: (option: SelectOption<T>) => void,
 ): JSX.Element => (
     <div className={styles.selectInputList}>
         {(
@@ -104,7 +108,7 @@ const SelectInput = <T extends ID>({ type, options, value, onChange, withGroups 
 
     const { isListVisible, showList, hideList } = useToggleList();
 
-    const onSelect = (option: T): void => {
+    const onSelect = (option: SelectOption<T>): void => {
         onChange(option);
         hideList();
     };

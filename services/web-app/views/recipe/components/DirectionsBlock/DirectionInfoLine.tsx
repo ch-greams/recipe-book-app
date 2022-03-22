@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -22,7 +23,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const tempAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.temperature?.count}
+            {direction.temperature?.value}
         </div>
     );
 
@@ -43,15 +44,15 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
             type={SelectInputType.IngredientUnit}
             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
             value={direction.temperature?.unit}
-            onChange={(value: TemperatureUnit) => {
-                dispatch(actions.updateDirectionTemperatureUnit(index, value));
+            onChange={(option: SelectOption<TemperatureUnit>) => {
+                dispatch(actions.updateDirectionTemperatureUnit(index, option.value));
             }}
         />
     );
 
     const timeAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.time?.count}
+            {direction.duration?.value}
         </div>
     );
 
@@ -60,7 +61,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={direction.timeInput}
+            value={direction.durationInput}
             onChange={(event) => {
                 dispatch(actions.updateDirectionTimeCount(index, event.target.value));
             }}
@@ -71,9 +72,9 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-            value={direction.time?.unit}
-            onChange={(value: TimeUnit) => {
-                dispatch(actions.updateDirectionTimeUnit(index, value));
+            value={direction.duration?.unit}
+            onChange={(option: SelectOption<TimeUnit>) => {
+                dispatch(actions.updateDirectionTimeUnit(index, option.value));
             }}
         />
     );
@@ -138,9 +139,9 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
                 {( isReadOnly ? ( direction.temperature && tempSelectInput ) : tempSelectInput )}
 
-                {( isReadOnly ? ( direction.time && timeAmountText ) : timeAmountInput )}
+                {( isReadOnly ? ( direction.duration && timeAmountText ) : timeAmountInput )}
 
-                {( isReadOnly ? ( direction.time && timeSelectInput ) : timeSelectInput )}
+                {( isReadOnly ? ( direction.duration && timeSelectInput ) : timeSelectInput )}
 
             </div>
         </div>

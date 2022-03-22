@@ -39,13 +39,13 @@ export enum TimeUnit {
 export interface CustomUnit {
     name: string;
     amount: number;
-    unit: WeightUnit;
+    unit: Units;
 }
 
 export interface CustomUnitInput {
     name: string;
     amount: string;
-    unit: WeightUnit;
+    unit: Units;
 }
 
 export const DEFAULT_WEIGHT_UNIT: WeightUnit = WeightUnit.g;

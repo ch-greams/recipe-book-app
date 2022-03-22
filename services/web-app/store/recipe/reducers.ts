@@ -40,19 +40,18 @@ const initialState: types.RecipePageStore = {
         step_number: 4,
         name: "",
 
-        time: {
-            count: 0,
+        duration: {
+            value: 0,
             unit: units.DEFAULT_TIME_UNIT,
         },
         temperature: {
-            count: 0,
+            value: 0,
             unit: units.DEFAULT_TEMPERATURE_UNIT,
         },
 
-        timeInput: "",
+        durationInput: "",
         temperatureInput: "",
 
-        newStep: types.SubDirectionType.Note,
         steps: [],
     },
     directions: [],
@@ -93,9 +92,8 @@ function convertDirections(directions: typings.Direction[]): types.RecipeDirecti
 
         isOpen: true,
         isMarked: false,
-        timeInput: direction.time?.count ? String(direction.time?.count) : "",
-        temperatureInput: direction.temperature?.count ? String(direction.temperature?.count) : "",
-        newStep: types.SubDirectionType.Note,
+        durationInput: direction.duration?.value ? String(direction.duration?.value) : "",
+        temperatureInput: direction.temperature?.value ? String(direction.temperature?.value) : "",
 
         steps: direction.steps.map((step) => 
             step.direction_part_type !== types.SubDirectionType.Ingredient
@@ -408,7 +406,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_CREATE_SUBDIRECTION: {
+        case types.RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT: {
 
             const { directionIndex, type } = action.payload;
 
@@ -428,31 +426,19 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE: {
-
-            const { directionIndex, type } = action.payload;
-
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? { ...direction, newStep: type }
-                        : direction
-                )),  
-            };
-        }
-
         case types.RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER: {
 
             const { directionIndex, stepNumber } = action.payload;
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? { ...direction, step_number: stepNumber }
-                        : direction
-                )),  
+                directions: state.directions
+                    .map((direction, iDirection) => (
+                        (directionIndex === iDirection)
+                            ? { ...direction, step_number: stepNumber }
+                            : direction
+                    ))
+                    .sort(Utils.sortBy("step_number")),
             };
         }
 
@@ -487,7 +473,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                 temperature: {
                                     unit: units.DEFAULT_TEMPERATURE_UNIT,
                                     ...direction.temperature,
-                                    count: Number(count),
+                                    value: Number(count),
                                 },
                                 temperatureInput: count,
                             }
@@ -508,7 +494,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         ? {
                             ...direction,
                             temperature: {
-                                count: 0,
+                                value: 0,
                                 ...direction.temperature,
                                 unit: unit,
                             },
@@ -526,18 +512,18 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.timeInput);
+                    const count = Utils.decimalNormalizer(inputValue, direction.durationInput);
 
                     return (
                         (directionIndex === iDirection)
                             ? {
                                 ...direction,
-                                time: {
+                                duration: {
                                     unit: units.DEFAULT_TIME_UNIT,
-                                    ...direction.time,
-                                    count: Number(count),
+                                    ...direction.duration,
+                                    value: Number(count),
                                 },
-                                timeInput: count,
+                                durationInput: count,
                             }
                             : direction
                     );
@@ -555,9 +541,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            time: {
-                                count: 0,
-                                ...direction.time,
+                            duration: {
+                                value: 0,
+                                ...direction.duration,
                                 unit: unit,
                             },
                         }
@@ -599,7 +585,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     temperature: {
                         unit: units.DEFAULT_TEMPERATURE_UNIT,
                         ...state.newDirection.temperature,
-                        count: Number(count),
+                        value: Number(count),
                     },
                     temperatureInput: count,
                 },
@@ -615,7 +601,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 newDirection: {
                     ...state.newDirection,
                     temperature: {
-                        count: 0,
+                        value: 0,
                         ...state.newDirection.temperature,
                         unit: unit,
                     },
@@ -627,18 +613,18 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.timeInput);
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationInput);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    time: {
+                    duration: {
                         unit: units.DEFAULT_TIME_UNIT,
-                        ...state.newDirection.time,
-                        count: Number(count),
+                        ...state.newDirection.duration,
+                        value: Number(count),
                     },
-                    timeInput: count,
+                    durationInput: count,
                 },  
             };
         }
@@ -651,9 +637,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    time: {
-                        count: 0,
-                        ...state.newDirection.time,
+                    duration: {
+                        value: 0,
+                        ...state.newDirection.duration,
                         unit: unit,
                     },
                 },  
@@ -675,13 +661,12 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         step_number: direction.step_number,
                         name: direction.name,
                 
-                        time: ( !direction.timeInput ? null : direction.time  ),
+                        duration: ( !direction.durationInput ? null : direction.duration  ),
                         temperature: ( !direction.temperatureInput ? null : direction.temperature ),
                 
-                        timeInput: direction.timeInput,
+                        durationInput: direction.durationInput,
                         temperatureInput: direction.temperatureInput,
                 
-                        newStep: types.SubDirectionType.Note,
                         steps: [],
                     },
                 ],
@@ -692,19 +677,18 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     step_number: 0,
                     name: "",
 
-                    time: {
-                        count: 0,
+                    duration: {
+                        value: 0,
                         unit: units.TimeUnit.min,
                     },
                     temperature: {
-                        count: 0,
+                        value: 0,
                         unit: units.TemperatureUnit.C,
                     },
             
-                    timeInput: "",
+                    durationInput: "",
                     temperatureInput: "",
             
-                    newStep: types.SubDirectionType.Note,
                     steps: [],
                 },
             };
@@ -733,8 +717,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     ( ingredient.id === parentId )
                         ? {
                             ...ingredient,
-                            products: Utils.getObjectKeys(ingredient.products).reduce((acc, product_id) => (
-                                product_id !== id
+                            products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
+                                product_id !== id || ingredient.product_id === id
                                     ? { ...acc, [product_id]: ingredient.products[product_id] }
                                     : acc
                             ), {}),
@@ -801,17 +785,19 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const ingredients = state.ingredients.map((ingredient) => {
 
                 if (ingredient.id === id) {
-
-                    const product = Utils.unwrapForced(
-                        ingredient.products[ingredient.product_id],
-                        `ingredient.products[${ingredient.product_id}]`,
-                    );
+                    const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
                     const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
 
                     return {
                         ...ingredient,
-                        amountInput: amount,
-                        amount: Number(amount),
+                        products: {
+                            ...ingredient.products,
+                            [ingredient.product_id]: {
+                                ...product,
+                                amountInput: amount,
+                                amount: Number(amount),
+                            },
+                        },
                     };
                 }
                 else {
@@ -832,9 +818,23 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.id === id) ? { ...ingredient, unit: unit } : ingredient
-                )),
+                ingredients: state.ingredients.map((ingredient) => {
+                    if (ingredient.id === id) {
+
+                        const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
+
+                        return {
+                            ...ingredient,
+                            products: {
+                                ...ingredient.products,
+                                [ingredient.product_id]: { ...product, unit },
+                            },
+                        };
+                    }
+                    else {
+                        return ingredient;
+                    }
+                }),
             };
         }
 
@@ -931,7 +931,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     isMarked: false,
     
                     // NOTE: new id that will be generated by postgres
-                    id: -1, // ingredient.id,
+                    id: Date.now(), // ingredient.id,
 
                     product_id: ingredientProduct.product_id,
             

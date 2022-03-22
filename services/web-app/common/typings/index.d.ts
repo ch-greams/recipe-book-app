@@ -30,12 +30,12 @@ export interface Ingredient {
 }
 
 export interface Time {
-    count: number;
+    value: number;
     unit: TimeUnit;
 }
 
 export interface Temperature {
-    count: number;
+    value: number;
     unit: TemperatureUnit;
 }
 
@@ -53,7 +53,7 @@ export interface SubDirectionIngredient extends SubDirection {
 export interface Direction {
     step_number: number;
     name: string;
-    time?: Option<Time>;
+    duration?: Option<Time>;
     temperature?: Option<Temperature>;
     steps: (SubDirection | SubDirectionIngredient)[];
 }

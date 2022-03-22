@@ -100,16 +100,9 @@ export function createSubDirectionIngredient(directionIndex: number, ingredientI
     };
 }
 
-export function createSubDirection(directionIndex: number, type: types.SubDirectionType): types.CreateSubDirectionAction {
+export function createSubDirectionComment(directionIndex: number, type: types.SubDirectionType): types.CreateSubDirectionAction {
     return {
-        type: types.RECIPE_ITEM_CREATE_SUBDIRECTION,
-        payload: { directionIndex, type },
-    };
-}
-
-export function updateNewSubDirectionType(directionIndex: number, type: types.SubDirectionType | string): types.UpdateNewSubDirectionTypeAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE,
+        type: types.RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT,
         payload: { directionIndex, type },
     };
 }

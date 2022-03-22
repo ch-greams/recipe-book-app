@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 
 import { DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -50,8 +51,8 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
                 value={direction.temperature?.unit}
-                onChange={(value: TemperatureUnit) => {
-                    dispatch(actions.updateNewDirectionTemperatureUnit(value));
+                onChange={(option: SelectOption<TemperatureUnit>) => {
+                    dispatch(actions.updateNewDirectionTemperatureUnit(option.value));
                 }}
             />
         </div>
@@ -62,7 +63,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={direction.timeInput}
+            value={direction.durationInput}
             onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                 dispatch(actions.updateNewDirectionTimeCount(event.target.value));
             }}
@@ -77,9 +78,9 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-                value={direction.time?.unit || DEFAULT_TIME_UNIT}
-                onChange={(value: TimeUnit) => {
-                    dispatch(actions.updateNewDirectionTimeUnit(value));
+                value={direction.duration?.unit || DEFAULT_TIME_UNIT}
+                onChange={(option: SelectOption<TimeUnit>) => {
+                    dispatch(actions.updateNewDirectionTimeUnit(option.value));
                 }}
             />
         </div>
