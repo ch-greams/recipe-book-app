@@ -103,7 +103,6 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
                     <NewSubDirectionLine
                         key={"subDirectionLine_new"}
                         directionIndex={index}
-                        direction={direction}
                         ingredients={ingredients}
                     />
                 ) )}

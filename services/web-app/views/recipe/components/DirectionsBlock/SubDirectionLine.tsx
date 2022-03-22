@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils from "@common/utils";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
@@ -92,9 +93,9 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                         type={SelectInputType.AltIngredientUnit}
                         options={Object.values(Units).map((unit) => ({ value: unit }))}
                         value={subDirection.unit}
-                        onChange={(value: WeightUnit | VolumeUnit) => {
+                        onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
                             dispatch(actions.updateSubDirectionIngredientUnit(
-                                directionIndex, subDirectionIndex, value,
+                                directionIndex, subDirectionIndex, option.value,
                             ));
                         }}
                     />

@@ -5,6 +5,7 @@ import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils from "@common/utils";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
@@ -59,8 +60,8 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, isReadOnly, isNew = f
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={ingredientProduct.unit}
-                onChange={(value: WeightUnit | VolumeUnit) => {
-                    dispatch(actions.updateIngredientUnit(ingredient.id, value));
+                onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
+                    dispatch(actions.updateIngredientUnit(ingredient.id, option.value));
                 }}
             />
         </div>

@@ -3,6 +3,7 @@ use sqlx::{postgres::PgArguments, query::QueryAs, Postgres};
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "direction_part_type", rename_all = "snake_case")]
+#[serde(rename_all = "snake_case")]
 pub enum DirectionPartType {
     Ingredient,
     Note,

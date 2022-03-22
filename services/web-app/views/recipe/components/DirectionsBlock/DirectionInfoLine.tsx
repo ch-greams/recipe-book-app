@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -43,8 +44,8 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
             type={SelectInputType.IngredientUnit}
             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
             value={direction.temperature?.unit}
-            onChange={(value: TemperatureUnit) => {
-                dispatch(actions.updateDirectionTemperatureUnit(index, value));
+            onChange={(option: SelectOption<TemperatureUnit>) => {
+                dispatch(actions.updateDirectionTemperatureUnit(index, option.value));
             }}
         />
     );
@@ -72,8 +73,8 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
             type={SelectInputType.IngredientUnit}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
             value={direction.duration?.unit}
-            onChange={(value: TimeUnit) => {
-                dispatch(actions.updateDirectionTimeUnit(index, value));
+            onChange={(option: SelectOption<TimeUnit>) => {
+                dispatch(actions.updateDirectionTimeUnit(index, option.value));
             }}
         />
     );

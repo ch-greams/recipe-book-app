@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
@@ -95,9 +96,9 @@ const AltIngredientLine: React.FC<Props> = ({
                 type={SelectInputType.AltIngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={altIngredientProduct.unit}
-                onChange={(value: WeightUnit | VolumeUnit) => {
+                onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredientProduct.product_id, value,
+                        parentId, altIngredientProduct.product_id, option.value,
                     ));
                 }}
             />

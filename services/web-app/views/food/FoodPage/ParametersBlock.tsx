@@ -5,6 +5,7 @@ import type { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import CustomUnitsBlock from "@views/shared/CustomUnitsBlock";
+import type { SelectOption } from "@views/shared/SelectInput";
 import SelectInput, { SelectInputType } from "@views/shared/SelectInput";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
@@ -72,7 +73,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 <SelectInput
                     type={SelectInputType.Other}
                     options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
-                    onChange={(unit: WeightUnit) => dispatch(actions.updateDensityWeightUnit(unit))}
+                    onChange={(option: SelectOption<WeightUnit>) => dispatch(actions.updateDensityWeightUnit(option.value))}
                     value={foodItem.densityWeightUnit}
                 />
 
@@ -81,7 +82,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 <SelectInput
                     type={SelectInputType.Other}
                     options={Object.values(VolumeUnit).map((unit) => ({ value: unit }))}
-                    onChange={(unit: VolumeUnit) => dispatch(actions.updateDensityVolumeUnit(unit))}
+                    onChange={(option: SelectOption<VolumeUnit>) => dispatch(actions.updateDensityVolumeUnit(option.value))}
                     value={foodItem.densityVolumeUnit}
                 />
 
@@ -107,7 +108,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                         ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
                     value={foodItem.servingSizeUnit}
-                    onChange={(unit: WeightUnit | VolumeUnit | string) => dispatch(actions.updateServingSizeUnit(unit))}
+                    onChange={(option: SelectOption<WeightUnit | VolumeUnit | string>) => dispatch(actions.updateServingSizeUnit(option.value))}
                 />
 
             </div>

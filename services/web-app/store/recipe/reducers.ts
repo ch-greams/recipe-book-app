@@ -52,7 +52,6 @@ const initialState: types.RecipePageStore = {
         durationInput: "",
         temperatureInput: "",
 
-        newStep: types.SubDirectionType.Note,
         steps: [],
     },
     directions: [],
@@ -95,7 +94,6 @@ function convertDirections(directions: typings.Direction[]): types.RecipeDirecti
         isMarked: false,
         durationInput: direction.duration?.value ? String(direction.duration?.value) : "",
         temperatureInput: direction.temperature?.value ? String(direction.temperature?.value) : "",
-        newStep: types.SubDirectionType.Note,
 
         steps: direction.steps.map((step) => 
             step.direction_part_type !== types.SubDirectionType.Ingredient
@@ -408,7 +406,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_CREATE_SUBDIRECTION: {
+        case types.RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT: {
 
             const { directionIndex, type } = action.payload;
 
@@ -423,20 +421,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                 { direction_part_type: type, label: type },
                             ],
                         }
-                        : direction
-                )),  
-            };
-        }
-
-        case types.RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE: {
-
-            const { directionIndex, type } = action.payload;
-
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? { ...direction, newStep: type }
                         : direction
                 )),  
             };
@@ -683,7 +667,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         durationInput: direction.durationInput,
                         temperatureInput: direction.temperatureInput,
                 
-                        newStep: types.SubDirectionType.Note,
                         steps: [],
                     },
                 ],
@@ -706,7 +689,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     durationInput: "",
                     temperatureInput: "",
             
-                    newStep: types.SubDirectionType.Note,
                     steps: [],
                 },
             };

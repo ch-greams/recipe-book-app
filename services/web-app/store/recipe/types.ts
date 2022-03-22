@@ -33,7 +33,6 @@ export interface RecipeDirection extends typings.Direction {
     isMarked: boolean;
     durationInput: string;
     temperatureInput: string;
-    newStep: string;
     steps: (typings.SubDirection | RecipeSubDirectionIngredient)[];
 }
 
@@ -99,8 +98,7 @@ export const RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE = "RECIPE_ITEM_UPDATE_SUBDIREC
 export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT";
 export const RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT";
 export const RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT = "RECIPE_ITEM_CREATE_SUBDIRECTION_INGREDIENT";
-export const RECIPE_ITEM_CREATE_SUBDIRECTION = "RECIPE_ITEM_CREATE_SUBDIRECTION";
-export const RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE = "RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE";
+export const RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT = "RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT";
 export const RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER = "RECIPE_ITEM_UPDATE_DIRECTION_STEP_NUMBER";
 export const RECIPE_ITEM_UPDATE_DIRECTION_NAME = "RECIPE_ITEM_UPDATE_DIRECTION_NAME";
 export const RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT = "RECIPE_ITEM_UPDATE_DIRECTION_TEMPERATURE_COUNT";
@@ -226,13 +224,8 @@ export interface CreateSubDirectionIngredientAction {
     payload: { directionIndex: number, ingredientId: number };
 }
 export interface CreateSubDirectionAction {
-    type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION;
+    type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT;
     payload: { directionIndex: number, type: SubDirectionType };
-}
-
-export interface UpdateNewSubDirectionTypeAction {
-    type: typeof RECIPE_ITEM_UPDATE_NEW_SUBDIRECTION_TYPE;
-    payload: { directionIndex: number, type: SubDirectionType | string };
 }
 
 export interface UpdateDirectionStepNumberAction {
@@ -437,7 +430,7 @@ export type RecipeItemActionTypes = (
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |
     
     UpdateSubDirectionIngredientAmountAction | UpdateSubDirectionIngredientUnitAction |
-    CreateSubDirectionIngredientAction | CreateSubDirectionAction | UpdateNewSubDirectionTypeAction |
+    CreateSubDirectionIngredientAction | CreateSubDirectionAction |
     UpdateDirectionStepNumberAction | UpdateDirectionNameAction |
     UpdateDirectionTemperatureCountAction | UpdateDirectionTemperatureUnitAction |
     UpdateDirectionTimeCountAction | UpdateDirectionTimeUnitAction | CreateDirectionAction |
