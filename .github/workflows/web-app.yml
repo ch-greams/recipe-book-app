@@ -81,11 +81,3 @@ jobs:
                 browser: chrome
                 build: npm run build
                 start: npm start
-
-            - name: run cypress tests in firefox
-              uses: cypress-io/github-action@v2
-              with:
-                working-directory: services/web-app
-                browser: firefox
-                build: npm run build
-                start: npm start
