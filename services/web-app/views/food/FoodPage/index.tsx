@@ -98,7 +98,7 @@ const FoodPageConnected: React.FC = () => {
 
     const router = useRouter();
     const foodId = Number(router.query.fid);
-    
+
     const dispatch = useDispatch();
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;

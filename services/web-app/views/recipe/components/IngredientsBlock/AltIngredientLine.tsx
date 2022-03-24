@@ -89,9 +89,9 @@ const AltIngredientLine: React.FC<Props> = ({
     const measureInput = (
 
         <div className={styles.ingredientInfoLineMeasure}>
-                        
+
             {( isReadOnly ? amountText : amountInput )}
-            
+
             <SelectInput
                 type={SelectInputType.AltIngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}

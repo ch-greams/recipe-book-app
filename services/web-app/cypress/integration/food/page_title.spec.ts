@@ -39,7 +39,7 @@ describe("food_page", () => {
             cy.get(`[data-cy=${CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(newPageTitleName.toUpperCase())
                 .should("be.visible");
-            cy.get(`[data-cy=${CY_PAGE_TITLE_NAME_INPUT}]`).should("not.exist");    
+            cy.get(`[data-cy=${CY_PAGE_TITLE_NAME_INPUT}]`).should("not.exist");
         });
 
         it("can update brand", () => {
@@ -67,7 +67,7 @@ describe("food_page", () => {
             cy.get(`[data-cy=${CY_PAGE_TITLE_BRAND_TEXT}]`)
                 .contains(newPageTitleBrand.toUpperCase())
                 .should("be.visible");
-            cy.get(`[data-cy=${CY_PAGE_TITLE_BRAND_INPUT}]`).should("not.exist");    
+            cy.get(`[data-cy=${CY_PAGE_TITLE_BRAND_INPUT}]`).should("not.exist");
         });
 
         it("can update subtitle", () => {
@@ -95,7 +95,7 @@ describe("food_page", () => {
             cy.get(`[data-cy=${CY_PAGE_TITLE_SUBTITLE_TEXT}]`)
                 .contains(newPageTitleSubtitle.toUpperCase())
                 .should("be.visible");
-            cy.get(`[data-cy=${CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");    
+            cy.get(`[data-cy=${CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
         });
 
         it("can update description", () => {
@@ -122,7 +122,7 @@ describe("food_page", () => {
             cy.get(`[data-cy=${CY_PAGE_TITLE_DESCRIPTION_TEXT}]`)
                 .contains(newPageTitleDescription)
                 .should("be.visible");
-            cy.get(`[data-cy=${CY_PAGE_TITLE_DESCRIPTION_INPUT}]`).should("not.exist");    
+            cy.get(`[data-cy=${CY_PAGE_TITLE_DESCRIPTION_INPUT}]`).should("not.exist");
         });
     });
 });

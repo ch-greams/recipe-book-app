@@ -44,9 +44,9 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
 
     const tempMeasureInput = (
         <div className={styles.directionInfoLineMeasure}>
-                
+
             {( isReadOnly ? amountText : tempAmountInput )}
-            
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
@@ -72,9 +72,9 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
 
     const timeMeasureInput = (
         <div className={styles.directionInfoLineMeasure}>
-                
+
             {( isReadOnly ? amountText : timeAmountInput )}
-            
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}

@@ -81,7 +81,7 @@ const PageTitleBlockInput: React.FC<Props> = ({
                         dispatch(updateBrand(formatInput(event.target.value)));
                     }}
                 />
-                
+
             </div>
 
             <div className={styles.subtitleBlock}>

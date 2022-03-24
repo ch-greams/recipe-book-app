@@ -53,9 +53,9 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, isReadOnly, isNew = f
 
     const measureInput = (
         <div className={styles.ingredientInfoLineMeasure}>
-                
+
             {( isReadOnly ? amountText : amountInput )}
-            
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}

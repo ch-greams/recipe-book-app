@@ -46,7 +46,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
             className={styles.lineCheckbox}
             onClick={() => toggleDirectionMark(index)}
         >
-            {( direction.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
+            {( direction.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
         </div>
     );
 
@@ -89,7 +89,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
                             )
                             : (
                                 <SubDirectionNoteLine
-                                    key={`subDirectionNoteLine_${stepIndex}`} 
+                                    key={`subDirectionNoteLine_${stepIndex}`}
                                     isReadOnly={isReadOnly}
                                     step={step}
                                     directionIndex={index}

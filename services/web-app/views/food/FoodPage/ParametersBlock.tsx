@@ -27,7 +27,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
         const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
         dispatch(actions.updateServingSizeAmount(amount));
     };
-    
+
     return (
         <div className={styles.parametersBlock}>
 
@@ -51,7 +51,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
             <div className={styles.separator} />
 
             <div className={styles.densityLine}>
-                
+
                 {/* BULK DENSITY */}
 
                 <div
@@ -60,7 +60,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 >
                     {"DENSITY"}
                 </div>
-                
+
                 <input
                     type={"text"}
                     value={foodItem.densityInput}
@@ -89,11 +89,11 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
             </div>
 
             <div className={styles.servingSizeLine}>
-                
+
                 <div className={styles.servingSizeLineLabel}>
                     {"SERVING SIZE"}
                 </div>
-                
+
                 <input
                     type={"text"}
                     value={foodItem.servingSizeInput}

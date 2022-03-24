@@ -31,7 +31,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             className={styles.lineCheckbox}
             onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, subDirectionIndex))}
         >
-            {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
+            {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
         </div>
     );
 
@@ -88,7 +88,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                 <div className={styles.directionInfoLineMeasure}>
 
                     {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
-                    
+
                     <SelectInput
                         type={SelectInputType.AltIngredientUnit}
                         options={Object.values(Units).map((unit) => ({ value: unit }))}

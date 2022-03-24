@@ -65,7 +65,7 @@ describe("food_page", () => {
             const cuNameUpdated = "updated name";
             // FIXME: Change cuAmountUpdated value to decimal (part of the RBA-48 issue)
             const cuAmountUpdated = "125";
-    
+
             cy.get(`[data-cy=${CY_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .parent()
                 .within(() => {
@@ -105,13 +105,13 @@ describe("food_page", () => {
                     cy.get(`[data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
                         .should("not.exist");
                     cy.get(`[data-cy=${CY_SELECT_INPUT}]`).contains(WeightUnit.oz).should("be.visible");
-                });            
+                });
         });
 
         it("can remove custom_unit", () => {
 
             cy.visit(`${CY_FOOD_PATH}/1`);
-    
+
             const cuName = "package";
 
             cy.get(`[data-cy=${CY_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)

@@ -95,7 +95,7 @@ function convertDirections(directions: typings.Direction[]): types.RecipeDirecti
         durationInput: direction.duration?.value ? String(direction.duration?.value) : "",
         temperatureInput: direction.temperature?.value ? String(direction.temperature?.value) : "",
 
-        steps: direction.steps.map((step) => 
+        steps: direction.steps.map((step) =>
             step.direction_part_type !== types.SubDirectionType.Ingredient
                 ? step
                 : ({
@@ -116,7 +116,7 @@ function getRecipeNutritionFacts(ingredients: typings.Ingredient[]): Dictionary<
                 ingredient.products[ingredient.product_id],
                 `ingredient.products["${ingredient.product_id}"]`,
             );
-            
+
             const nutritionFacts = ingredientProduct.nutrition_facts;
             const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
 
@@ -193,7 +193,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
             return {
                 ...state,
-                
+
                 customUnits: action.payload as CustomUnit[],
                 customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
             };
@@ -392,7 +392,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                 {
                                     direction_part_type: types.SubDirectionType.Ingredient,
                                     label: ingredientProduct.name,
-                
+
                                     id: ingredientProduct.product_id,
                                     isMarked: false,
                                     amount: ingredientProduct.amount,
@@ -402,7 +402,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ],
                         }
                         : direction
-                )),  
+                )),
             };
         }
 
@@ -422,7 +422,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ],
                         }
                         : direction
-                )),  
+                )),
             };
         }
 
@@ -452,7 +452,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? { ...direction, name: name }
                         : direction
-                )),  
+                )),
             };
         }
 
@@ -479,7 +479,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             }
                             : direction
                     );
-                }),  
+                }),
             };
         }
 
@@ -500,7 +500,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             },
                         }
                         : direction
-                )),  
+                )),
             };
         }
 
@@ -527,7 +527,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             }
                             : direction
                     );
-                }),  
+                }),
             };
         }
 
@@ -548,7 +548,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             },
                         }
                         : direction
-                )),  
+                )),
             };
         }
 
@@ -558,7 +558,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                newDirection: { ...state.newDirection, step_number: stepNumber },  
+                newDirection: { ...state.newDirection, step_number: stepNumber },
             };
         }
 
@@ -568,7 +568,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                newDirection: { ...state.newDirection, name: name },  
+                newDirection: { ...state.newDirection, name: name },
             };
         }
 
@@ -605,7 +605,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         ...state.newDirection.temperature,
                         unit: unit,
                     },
-                },  
+                },
             };
         }
 
@@ -625,7 +625,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         value: Number(count),
                     },
                     durationInput: count,
-                },  
+                },
             };
         }
 
@@ -642,7 +642,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         ...state.newDirection.duration,
                         unit: unit,
                     },
-                },  
+                },
             };
         }
 
@@ -657,16 +657,16 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     {
                         isOpen: false,
                         isMarked: false,
-                
+
                         step_number: direction.step_number,
                         name: direction.name,
-                
+
                         duration: ( !direction.durationInput ? null : direction.duration  ),
                         temperature: ( !direction.temperatureInput ? null : direction.temperature ),
-                
+
                         durationInput: direction.durationInput,
                         temperatureInput: direction.temperatureInput,
-                
+
                         steps: [],
                     },
                 ],
@@ -685,10 +685,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         value: 0,
                         unit: units.TemperatureUnit.C,
                     },
-            
+
                     durationInput: "",
                     temperatureInput: "",
-            
+
                     steps: [],
                 },
             };
@@ -850,7 +850,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     if (ingredient.id === parentId) {
                         const product = Utils.unwrapForced(ingredient.products[id], `ingredient.products[${id}]`);
                         const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
-    
+
                         return {
                             ...ingredient,
                             products: {
@@ -929,14 +929,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 {
                     isOpen: true,
                     isMarked: false,
-    
+
                     // NOTE: new id that will be generated by postgres
                     id: Date.now(), // ingredient.id,
 
                     product_id: ingredientProduct.product_id,
-            
+
                     altNutritionFacts: {},
-        
+
                     products: {
                         [ingredientProduct.product_id]: {
                             ...ingredientProduct,
@@ -944,7 +944,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             amountInput: "100",
                             unit: units.WeightUnit.g,
                         },
-                    },    
+                    },
                 },
             ];
 

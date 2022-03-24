@@ -60,21 +60,21 @@ const CustomUnitsBlock: React.FC<Props> = ({
             </div>
 
             {customUnitInputs.map((customUnit, index) => {
-            
+
                 const updateItemName: InputChangeCallback = (event) => {
                     const name = event.target.value;
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, name }));
                 };
-            
+
                 const updateItemAmount: InputChangeCallback = (event) => {
                     const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
                 };
-                
+
                 const updateItemUnit = (unit: Units): void => {
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, unit }));
                 };
-                
+
                 const saveCustomUnit = (): void => {
                     dispatch(removeCustomUnitRequest(index));
                 };

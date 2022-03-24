@@ -23,7 +23,7 @@ const PageTitleBlock: React.FC<Props> = ({
     name, brand, subtitle, description, withDescription,
     updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
-    
+
     const [ isTitleInputsOpen, setIsTitleInputsOpen ] = useState(false);
 
     return (

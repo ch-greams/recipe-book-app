@@ -58,7 +58,7 @@ export default class Utils {
 
         return convertedVolume;
     }
-    
+
     public static convertDensityVolume(value: number, volumeUnit: VolumeUnit, toMetric: boolean = false): number {
 
         switch (volumeUnit) {
@@ -270,17 +270,17 @@ export default class Utils {
             (acc, nfType) => ({ ...acc, [nfType]: Utils.isSome(values[nfType]) ? String(values[nfType]) : null }), {},
         );
     }
-    
+
     public static convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
             (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {},
         );
     }
-    
+
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
         return customUnits.map(this.convertCustomUnitIntoInput);
     }
-    
+
     public static convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
         return customUnits.map(this.convertCustomUnitIntoValue);
     }

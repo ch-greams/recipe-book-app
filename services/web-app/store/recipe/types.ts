@@ -428,7 +428,7 @@ export type RecipeItemActionTypes = (
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |
-    
+
     UpdateSubDirectionIngredientAmountAction | UpdateSubDirectionIngredientUnitAction |
     CreateSubDirectionIngredientAction | CreateSubDirectionAction |
     UpdateDirectionStepNumberAction | UpdateDirectionNameAction |

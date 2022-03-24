@@ -39,7 +39,7 @@ const HomePage: React.FC = () => {
 
         </div>
     );
-}; 
+};
 
 
 HomePage.displayName = "HomePage";

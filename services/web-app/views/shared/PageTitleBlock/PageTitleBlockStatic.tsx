@@ -52,7 +52,7 @@ const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, descript
                 >
                     {brand.toUpperCase()}
                 </div>
-                
+
             </div>
 
             <div className={styles.subtitleBlock}>

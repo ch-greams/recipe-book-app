@@ -66,7 +66,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
             className={styles.lineCheckbox}
             onClick={() => toggleIngredientMark(ingredient.id)}
         >
-            {( ingredient.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}                
+            {( ingredient.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
         </div>
     );
 

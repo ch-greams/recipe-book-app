@@ -103,7 +103,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 type: action.payload,
             };
         }
-        
+
         case types.FOOD_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
@@ -180,7 +180,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
         case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
             return {
                 ...state,
-                
+
                 customUnits: action.payload as CustomUnit[],
                 customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
             };

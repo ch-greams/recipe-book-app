@@ -96,7 +96,7 @@ const getItemList = <T extends ID>(
                         <div key={group} className={styles.selectInputGroupName}>
                             {`- ${group}`}
                         </div>,
-            
+
                         ...options
                             .filter((option) => (option.group === group))
                             .map((option) => getOption(option, onSelect)),
