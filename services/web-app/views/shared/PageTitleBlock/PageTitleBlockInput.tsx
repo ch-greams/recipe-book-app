@@ -1,6 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import type { AnyAction } from "redux";
+import {
+    CY_PAGE_TITLE_BRAND_INPUT, CY_PAGE_TITLE_CONFIRM_BUTTON, CY_PAGE_TITLE_DESCRIPTION_INPUT,
+    CY_PAGE_TITLE_NAME_INPUT, CY_PAGE_TITLE_SUBTITLE_INPUT,
+} from "cypress/constants";
 
 import Utils from "@common/utils";
 
@@ -18,7 +22,7 @@ interface Props {
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
-    updateDescription?: Option<(value: string) => AnyAction>;
+    updateDescription: (value: string) => AnyAction;
 
 }
 
@@ -28,16 +32,15 @@ const formatInput = (value: Option<string>, uppercase: boolean = true): string =
 
 const PageTitleBlockInput: React.FC<Props> = ({
     name, brand, subtitle, description, withDescription, confirmTitle,
-    updateName, updateBrand, updateSubtitle, updateDescription: _updateDescription,
+    updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
-
-    const updateDescription = Utils.unwrapForced(_updateDescription, "updateDescription");
 
     const dispatch = useDispatch();
 
     const descriptionBlock = (
         <div className={styles.descriptionBlock}>
             <textarea
+                data-cy={CY_PAGE_TITLE_DESCRIPTION_INPUT}
                 className={styles.descriptionBlockInput}
                 name={"description"} id={"description"} rows={6}
                 placeholder={"Description"} value={(description || "")}
@@ -56,6 +59,7 @@ const PageTitleBlockInput: React.FC<Props> = ({
             <div className={styles.nameBlock}>
 
                 <input
+                    data-cy={CY_PAGE_TITLE_NAME_INPUT}
                     type={"text"}
                     className={styles.nameInput}
                     placeholder={"NAME"}
@@ -67,6 +71,7 @@ const PageTitleBlockInput: React.FC<Props> = ({
                 />
 
                 <input
+                    data-cy={CY_PAGE_TITLE_BRAND_INPUT}
                     type={"text"}
                     className={styles.brandInput}
                     placeholder={"BRAND"}
@@ -82,6 +87,7 @@ const PageTitleBlockInput: React.FC<Props> = ({
             <div className={styles.subtitleBlock}>
 
                 <input
+                    data-cy={CY_PAGE_TITLE_SUBTITLE_INPUT}
                     type={"text"}
                     className={styles.subtitleInput}
                     placeholder={"SUBTITLE"}
@@ -92,7 +98,11 @@ const PageTitleBlockInput: React.FC<Props> = ({
                     }}
                 />
 
-                <div className={styles.confirmButton} onClick={confirmTitle}>
+                <div
+                    data-cy={CY_PAGE_TITLE_CONFIRM_BUTTON}
+                    className={styles.confirmButton}
+                    onClick={confirmTitle}
+                >
                     {"CONFIRM"}
                 </div>
             </div>

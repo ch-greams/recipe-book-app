@@ -1,4 +1,8 @@
 import React from "react";
+import {
+    CY_PAGE_TITLE_BLOCK, CY_PAGE_TITLE_BRAND_TEXT, CY_PAGE_TITLE_DESCRIPTION_TEXT,
+    CY_PAGE_TITLE_NAME_TEXT, CY_PAGE_TITLE_SUBTITLE_TEXT,
+} from "cypress/constants";
 
 import styles from "./PageTitleBlock.module.scss";
 
@@ -16,7 +20,10 @@ const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, descript
 
     const descriptionBlock = (
         <div className={styles.descriptionBlock}>
-            <div className={styles.descriptionBlockText}>
+            <div
+                data-cy={CY_PAGE_TITLE_DESCRIPTION_TEXT}
+                className={styles.descriptionBlockText}
+            >
                 {description}
             </div>
         </div>
@@ -24,15 +31,25 @@ const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, descript
 
     return (
 
-        <div className={styles.titleBlock} onClick={editTitle}>
+        <div
+            data-cy={CY_PAGE_TITLE_BLOCK}
+            className={styles.titleBlock}
+            onClick={editTitle}
+        >
 
             <div className={styles.nameBlock}>
 
-                <div className={styles.nameText}>
+                <div
+                    data-cy={CY_PAGE_TITLE_NAME_TEXT}
+                    className={styles.nameText}
+                >
                     {name.toUpperCase()}
                 </div>
 
-                <div className={styles.brandText}>
+                <div
+                    data-cy={CY_PAGE_TITLE_BRAND_TEXT}
+                    className={styles.brandText}
+                >
                     {brand.toUpperCase()}
                 </div>
                 
@@ -40,7 +57,10 @@ const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, descript
 
             <div className={styles.subtitleBlock}>
 
-                <div className={styles.subtitleText}>
+                <div
+                    data-cy={CY_PAGE_TITLE_SUBTITLE_TEXT}
+                    className={styles.subtitleText}
+                >
                     {subtitle.toUpperCase()}
                 </div>
             </div>

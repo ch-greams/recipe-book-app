@@ -26,6 +26,7 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
         name,
         brand,
         subtitle,
+        description,
         nutritionFactsByServing,
         nutritionFactsByServingInputs,
         featuredNutritionFacts,
@@ -42,9 +43,12 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
+                    description={description}
+                    withDescription={true}
                     updateName={actions.updateName}
                     updateBrand={actions.updateBrand}
                     updateSubtitle={actions.updateSubtitle}
+                    updateDescription={actions.updateDescription}
                 />
 
                 {/* Main Block */}

@@ -16,6 +16,7 @@ const initialState: types.FoodPageStore = {
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
+    description: "",
     nutritionFacts: {},
     customUnits: [],
 
@@ -86,6 +87,13 @@ export default function foodPageReducer(state = initialState, action: types.Food
             return {
                 ...state,
                 subtitle: action.payload,
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_DESCRIPTION: {
+            return {
+                ...state,
+                description: action.payload,
             };
         }
 

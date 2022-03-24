@@ -13,6 +13,7 @@ export interface FoodPageStore {
     name: string;
     brand: string;
     subtitle: string;
+    description: string;
     nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
 
@@ -42,6 +43,7 @@ export interface FoodPageStore {
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
 export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
+export const FOOD_ITEM_UPDATE_DESCRIPTION = "FOOD_ITEM_UPDATE_DESCRIPTION";
 export const FOOD_ITEM_UPDATE_TYPE = "FOOD_ITEM_UPDATE_TYPE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
 export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
@@ -81,6 +83,11 @@ export interface UpdateBrandAction {
 
 export interface UpdateSubtitleAction {
     type: typeof FOOD_ITEM_UPDATE_SUBTITLE;
+    payload: string;
+}
+
+export interface UpdateDescriptionAction {
+    type: typeof FOOD_ITEM_UPDATE_DESCRIPTION;
     payload: string;
 }
 
@@ -188,8 +195,8 @@ export interface FoodItemFetchErrorAction {
 }
 
 export type FoodItemActionTypes = (
-    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateTypeAction |
-    UpdateNutritionFactAction | UpdateCustomUnitsAction |
+    UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
+    UpdateTypeAction | UpdateNutritionFactAction | UpdateCustomUnitsAction |
     UpdateDensityAmountAction | UpdateDensityVolumeUnitAction | UpdateDensityWeightUnitAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |

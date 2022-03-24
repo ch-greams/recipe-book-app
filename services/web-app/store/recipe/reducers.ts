@@ -19,7 +19,7 @@ const initialState: types.RecipePageStore = {
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
-    description: "Description",
+    description: "",
     type: "",
 
     nutritionFacts: {},

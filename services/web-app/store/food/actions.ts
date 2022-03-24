@@ -27,6 +27,13 @@ export function updateSubtitle(subtitle: string): types.UpdateSubtitleAction {
     };
 }
 
+export function updateDescription(description: string): types.UpdateDescriptionAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_DESCRIPTION,
+        payload: description,
+    };
+}
+
 export function updateType(type: string): types.UpdateTypeAction {
     return {
         type: types.FOOD_ITEM_UPDATE_TYPE,
