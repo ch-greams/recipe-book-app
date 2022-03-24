@@ -74,5 +74,16 @@ jobs:
               with:
                 node-version: ${{ matrix.node-version }}
 
-            - run: npm install
-            - run: npm run test
+            - name: run cypress tests in chrome
+              uses: cypress-io/github-action@v2
+              with:
+                browser: chrome
+                build: npm run build
+                start: npm start
+
+            - name: run cypress tests in firefox
+              uses: cypress-io/github-action@v2
+              with:
+                browser: firefox
+                build: npm run build
+                start: npm start

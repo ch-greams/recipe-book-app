@@ -1,13 +1,19 @@
 import {
+    CY_FOOD_API_PATH,
     CY_PAGE_TITLE_BLOCK, CY_PAGE_TITLE_BRAND_INPUT, CY_PAGE_TITLE_BRAND_TEXT, CY_PAGE_TITLE_CONFIRM_BUTTON,
     CY_PAGE_TITLE_DESCRIPTION_INPUT, CY_PAGE_TITLE_DESCRIPTION_TEXT, CY_PAGE_TITLE_NAME_INPUT,
-    CY_PAGE_TITLE_NAME_TEXT, CY_PAGE_TITLE_SUBTITLE_INPUT, CY_PAGE_TITLE_SUBTITLE_TEXT, CY_RECIPE_PATH,
+    CY_PAGE_TITLE_NAME_TEXT, CY_PAGE_TITLE_SUBTITLE_INPUT, CY_PAGE_TITLE_SUBTITLE_TEXT, CY_RECIPE_API_PATH, CY_RECIPE_PATH,
 } from "cypress/constants";
 
 
-describe("food_page", () => {
+describe("recipe_page", () => {
 
     describe("page_title", () => {
+
+        beforeEach(() => {
+            cy.intercept(`${CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
+            cy.intercept(`${CY_FOOD_API_PATH}`, { fixture: "food_items.json" });
+        });
 
         it("can update name", () => {
 

@@ -1,6 +1,7 @@
 import {
     CY_CUSTOM_UNIT_AMOUNT, CY_CUSTOM_UNIT_BUTTON, CY_CUSTOM_UNIT_LINE, CY_CUSTOM_UNIT_NAME,
-    CY_NEW_CUSTOM_UNIT_LINE, CY_RECIPE_PATH, CY_SELECT_INPUT, CY_SELECT_INPUT_OPTION,
+    CY_FOOD_API_PATH, CY_NEW_CUSTOM_UNIT_LINE, CY_RECIPE_API_PATH, CY_RECIPE_PATH, CY_SELECT_INPUT,
+    CY_SELECT_INPUT_OPTION,
 } from "cypress/constants";
 
 import { WeightUnit } from "@common/units";
@@ -9,6 +10,11 @@ import { WeightUnit } from "@common/units";
 describe("recipe_page", () => {
 
     describe("custom_units", () => {
+
+        beforeEach(() => {
+            cy.intercept(`${CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
+            cy.intercept(`${CY_FOOD_API_PATH}`, { fixture: "food_items.json" });
+        });
 
         it("can create custom_unit", () => {
 
@@ -54,11 +60,11 @@ describe("recipe_page", () => {
         });
 
 
-        it.skip("can update custom_unit", () => {
+        it("can update custom_unit", () => {
 
             cy.visit(`${CY_RECIPE_PATH}/29`);
 
-            const cuName = "nulla";
+            const cuName = "package";
             const cuNameUpdated = "updated name";
             // FIXME: Change cuAmountUpdated value to decimal (part of the RBA-48 issue)
             const cuAmountUpdated = "125";
@@ -67,7 +73,7 @@ describe("recipe_page", () => {
                 .parent()
                 .within(() => {
 
-                    // NOTE: Update name
+                    // Update name
 
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                         .should("be.visible")
@@ -77,7 +83,7 @@ describe("recipe_page", () => {
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuNameUpdated}"]`)
                         .should("be.visible");
 
-                    // NOTE: Update value
+                    // Update value
 
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_AMOUNT}]`)
                         .should("be.visible")
@@ -87,7 +93,7 @@ describe("recipe_page", () => {
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_AMOUNT}][value="${cuAmountUpdated}"]`)
                         .should("be.visible");
 
-                    // NOTE: Update unit
+                    // Update unit
 
                     cy.get(`[data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
                         .should("not.exist");
@@ -105,11 +111,11 @@ describe("recipe_page", () => {
                 });            
         });
 
-        it.skip("can remove custom_unit", () => {
+        it("can remove custom_unit", () => {
 
             cy.visit(`${CY_RECIPE_PATH}/29`);
     
-            const cuName = "nulla";
+            const cuName = "package";
 
             cy.get(`[data-cy=${CY_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .should("be.visible")

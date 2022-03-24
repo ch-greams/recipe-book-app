@@ -1,6 +1,6 @@
 import {
     CY_CUSTOM_UNIT_AMOUNT, CY_CUSTOM_UNIT_BUTTON, CY_CUSTOM_UNIT_LINE, CY_CUSTOM_UNIT_NAME,
-    CY_FOOD_PATH, CY_NEW_CUSTOM_UNIT_LINE, CY_SELECT_INPUT, CY_SELECT_INPUT_OPTION,
+    CY_FOOD_API_PATH, CY_FOOD_PATH, CY_NEW_CUSTOM_UNIT_LINE, CY_SELECT_INPUT, CY_SELECT_INPUT_OPTION,
 } from "cypress/constants";
 
 import { WeightUnit } from "@common/units";
@@ -10,6 +10,10 @@ describe("food_page", () => {
 
     describe("custom_units", () => {
 
+        beforeEach(() => {
+            cy.intercept(`${CY_FOOD_API_PATH}/1`, { fixture: "food_item.json" });
+        });
+
         it("can create custom_unit", () => {
 
             cy.visit(`${CY_FOOD_PATH}/1`);
@@ -17,7 +21,7 @@ describe("food_page", () => {
             const cuName = "test unit";
             const cuAmount = "1234.5";
 
-            // NOTE: Name and amount
+            // Name and amount
 
             cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_NAME}]`)
                 .type(cuName);
@@ -25,7 +29,7 @@ describe("food_page", () => {
                 .clear()
                 .type(cuAmount);
 
-            // NOTE: Unit
+            // Unit
 
             cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
                 .should("not.exist");
@@ -57,7 +61,7 @@ describe("food_page", () => {
 
             cy.visit(`${CY_FOOD_PATH}/1`);
 
-            const cuName = "nulla";
+            const cuName = "package";
             const cuNameUpdated = "updated name";
             // FIXME: Change cuAmountUpdated value to decimal (part of the RBA-48 issue)
             const cuAmountUpdated = "125";
@@ -66,7 +70,7 @@ describe("food_page", () => {
                 .parent()
                 .within(() => {
 
-                    // NOTE: Update name
+                    // Update name
 
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                         .should("be.visible")
@@ -76,7 +80,7 @@ describe("food_page", () => {
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuNameUpdated}"]`)
                         .should("be.visible");
 
-                    // NOTE: Update value
+                    // Update value
 
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_AMOUNT}]`)
                         .should("be.visible")
@@ -86,7 +90,7 @@ describe("food_page", () => {
                     cy.get(`[data-cy=${CY_CUSTOM_UNIT_AMOUNT}][value="${cuAmountUpdated}"]`)
                         .should("be.visible");
 
-                    // NOTE: Update unit
+                    // Update unit
 
                     cy.get(`[data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
                         .should("not.exist");
@@ -108,7 +112,7 @@ describe("food_page", () => {
 
             cy.visit(`${CY_FOOD_PATH}/1`);
     
-            const cuName = "nulla";
+            const cuName = "package";
 
             cy.get(`[data-cy=${CY_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .should("be.visible")
