@@ -1,0 +1,13 @@
+
+export const CY_RECIPE_PATH = "/recipe";
+export const CY_FOOD_PATH = "/food";
+
+export const CY_NEW_CUSTOM_UNIT_LINE = "CY_NEW_CUSTOM_UNIT_LINE";
+export const CY_CUSTOM_UNIT_LINE = "CY_CUSTOM_UNIT_LINE";
+
+export const CY_CUSTOM_UNIT_BUTTON = "CY_CUSTOM_UNIT_BUTTON";
+export const CY_CUSTOM_UNIT_NAME = "CY_CUSTOM_UNIT_NAME";
+export const CY_CUSTOM_UNIT_AMOUNT = "CY_CUSTOM_UNIT_AMOUNT";
+
+export const CY_SELECT_INPUT = "CY_SELECT_INPUT";
+export const CY_SELECT_INPUT_OPTION = "CY_SELECT_INPUT_OPTION";

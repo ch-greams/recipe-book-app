@@ -9,7 +9,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "npx eslint .",
-    "test": "echo \"Add tests you lazy fuck\""
+    "test": "echo \"Add tests you lazy fuck\"",
+    "cy:run": "cypress run",
+    "cy:open": "cypress open"
   },
   "dependencies": {
     "next": "^12.1.0",
@@ -32,7 +34,9 @@
     "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
     "@typescript-eslint/parser": "^5.1.0",
+    "cypress": "^9.5.2",
     "eslint": "^8.1.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "stylelint": "^14.0.0",

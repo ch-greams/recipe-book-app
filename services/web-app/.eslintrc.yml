@@ -3,11 +3,13 @@ parser: "@typescript-eslint/parser"
 plugins:
     - "@typescript-eslint"
     - "simple-import-sort"
+    - "cypress"
 
 extends:
     - "eslint:recommended"
     - "plugin:@typescript-eslint/recommended"
     - "plugin:react/recommended"
+    - "plugin:cypress/recommended"
 
 ignorePatterns:
     # don't ever lint node_modules

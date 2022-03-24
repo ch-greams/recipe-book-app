@@ -15,18 +15,16 @@ services:
       RB__database_url: postgres://postgres:password@recipe-book-db
 
   recipe-book-app:
+    image: web-app
     build: ./services/web-app
     depends_on:
       - recipe-book-api
-    command: npm run dev
     ports:
       - 3000:3000
     working_dir: /app
-    volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-app:/app
     environment:
       RB__API_ADDR: recipe-book-api:8080
-      NODE_ENV: development     # options: production, development
+      NODE_ENV: production     # options: production, development
       PORT: 3000
       LOG_LEVEL: DEBUG
 

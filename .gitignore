@@ -20,3 +20,7 @@ target
 
 # ide
 # .vscode
+
+# cypress
+**/cypress/videos
+**/cypress/screenshots
