@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { CY_ALT_INGREDIENT_INFO_LINE_NAME, CY_ALT_INGREDIENT_LINE, CY_ALT_INGREDIENT_LINE_REMOVE_BUTTON, CY_ALT_INGREDIENT_LINE_SEARCH_BUTTON } from "cypress/constants";
 
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
@@ -49,6 +50,7 @@ const AltIngredientLine: React.FC<Props> = ({
 
     const removeButton = (
         <div
+            data-cy={CY_ALT_INGREDIENT_LINE_REMOVE_BUTTON}
             className={styles.altIngredientLineButton}
             onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.product_id))}
         >
@@ -60,6 +62,7 @@ const AltIngredientLine: React.FC<Props> = ({
 
     const searchButton = (
         <div
+            data-cy={CY_ALT_INGREDIENT_LINE_SEARCH_BUTTON}
             className={styles.altIngredientLineButton}
             onClick={() => addAltIngredient(parentId)}
         >
@@ -111,7 +114,10 @@ const AltIngredientLine: React.FC<Props> = ({
 
     return (
 
-        <div className={styles.altIngredientLine}>
+        <div
+            data-cy={CY_ALT_INGREDIENT_LINE}
+            className={styles.altIngredientLine}
+        >
 
             {( !isReadOnly && ( isNew ? searchButton : removeButton ) )}
 
@@ -121,6 +127,7 @@ const AltIngredientLine: React.FC<Props> = ({
             })}>
 
                 <div
+                    data-cy={CY_ALT_INGREDIENT_INFO_LINE_NAME}
                     className={styles.ingredientInfoLineName}
                     onClick={isNew ? undefined : onClick}
                     onMouseEnter={isNew ? undefined : onMouseEnter}

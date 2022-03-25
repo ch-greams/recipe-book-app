@@ -12,11 +12,11 @@ describe("food_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${CY_FOOD_API_PATH}/1`, { fixture: "food_item.json" });
+
+            cy.visit(`${CY_FOOD_PATH}/1`);
         });
 
         it("can update name", () => {
-
-            cy.visit(`${CY_FOOD_PATH}/1`);
 
             const newPageTitleName = "new name";
 
@@ -44,8 +44,6 @@ describe("food_page", () => {
 
         it("can update brand", () => {
 
-            cy.visit(`${CY_FOOD_PATH}/1`);
-
             const newPageTitleBrand = "new brand";
 
             cy.get(`[data-cy=${CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
@@ -72,8 +70,6 @@ describe("food_page", () => {
 
         it("can update subtitle", () => {
 
-            cy.visit(`${CY_FOOD_PATH}/1`);
-
             const newPageTitleSubtitle = "new subtitle";
 
             cy.get(`[data-cy=${CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
@@ -99,8 +95,6 @@ describe("food_page", () => {
         });
 
         it("can update description", () => {
-
-            cy.visit(`${CY_FOOD_PATH}/1`);
 
             const newPageTitleDescription = "new description";
 

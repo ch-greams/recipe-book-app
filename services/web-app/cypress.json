@@ -2,6 +2,6 @@
     "baseUrl": "http://127.0.0.1:3000",
     "viewportWidth": 1280,
     "viewportHeight": 720,
-    "supportFile": false,
-    "pluginsFile": false
+    "pluginsFile": false,
+    "video": false
 }

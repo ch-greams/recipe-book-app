@@ -13,11 +13,11 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
             cy.intercept(`${CY_FOOD_API_PATH}`, { fixture: "food_items.json" });
+
+            cy.visit(`${CY_RECIPE_PATH}/29`);
         });
 
         it("can update name", () => {
-
-            cy.visit(`${CY_RECIPE_PATH}/29`);
 
             const newPageTitleName = "new name";
 
@@ -45,8 +45,6 @@ describe("recipe_page", () => {
 
         it("can update brand", () => {
 
-            cy.visit(`${CY_RECIPE_PATH}/29`);
-
             const newPageTitleBrand = "new brand";
 
             cy.get(`[data-cy=${CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
@@ -73,8 +71,6 @@ describe("recipe_page", () => {
 
         it("can update subtitle", () => {
 
-            cy.visit(`${CY_RECIPE_PATH}/29`);
-
             const newPageTitleSubtitle = "new subtitle";
 
             cy.get(`[data-cy=${CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
@@ -100,8 +96,6 @@ describe("recipe_page", () => {
         });
 
         it("can update description", () => {
-
-            cy.visit(`${CY_RECIPE_PATH}/29`);
 
             const newPageTitleDescription = "new description";
 

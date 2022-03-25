@@ -25,7 +25,7 @@
       "@common/*": [ "common/*" ],
       "@styles/*": [ "styles/*" ]
     },
-    "types": [ "cypress" ],
+    "types": [ "cypress", "cypress-real-events" ],
     "incremental": true
   },
   "include": [ "next-env.d.ts", "common.d.ts", "**/*.ts", "**/*.tsx" ],

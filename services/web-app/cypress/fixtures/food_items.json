@@ -1,13 +1,13 @@
 [
     {
-        "id": 1,
+        "id": 12,
         "name": "English Muffin",
         "brand": "BlogXS",
         "subtitle": "rhoncus aliquam",
         "description": null,
         "density": 1.04,
         "nutrition_facts": {
-            "product_id": 1,
+            "product_id": 12,
             "energy": 191.6,
             "carbohydrate": 157.3,
             "dietary_fiber": 5.9,
@@ -91,14 +91,14 @@
         ]
     },
     {
-        "id": 2,
+        "id": 21,
         "name": "Wine - Red, Cooking",
         "brand": "Blognation",
         "subtitle": "ac nibh fusce lacus purus aliquet",
         "description": null,
         "density": 0.87,
         "nutrition_facts": {
-            "product_id": 2,
+            "product_id": 21,
             "energy": 115.5,
             "carbohydrate": 151.8,
             "dietary_fiber": 7.8,

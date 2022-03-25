@@ -14,11 +14,11 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
             cy.intercept(`${CY_FOOD_API_PATH}`, { fixture: "food_items.json" });
+
+            cy.visit(`${CY_RECIPE_PATH}/29`);
         });
 
         it("can create custom_unit", () => {
-
-            cy.visit(`${CY_RECIPE_PATH}/29`);
 
             const cuName = "test unit";
             const cuAmount = "1234.5";
@@ -30,21 +30,15 @@ describe("recipe_page", () => {
                 .clear()
                 .type(cuAmount);
 
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
+            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}]`)
+                .as("selectInput")
+                .get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`)
                 .should("not.exist");
 
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}]`)
-                .click();
-
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
-                .should("be.visible");
-
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}]`)
-                .contains(WeightUnit.oz)
-                .click();
-
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
-                .should("not.exist");
+            cy.get("@selectInput").click();
+            cy.get("@selectInput").get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`).should("be.visible");
+            cy.get("@selectInput").contains(WeightUnit.oz).click();
+            cy.get("@selectInput").get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`).should("not.exist");
 
             cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_BUTTON}]`)
                 .click();
@@ -61,8 +55,6 @@ describe("recipe_page", () => {
 
 
         it("can update custom_unit", () => {
-
-            cy.visit(`${CY_RECIPE_PATH}/29`);
 
             const cuName = "package";
             const cuNameUpdated = "updated name";
@@ -112,8 +104,6 @@ describe("recipe_page", () => {
         });
 
         it("can remove custom_unit", () => {
-
-            cy.visit(`${CY_RECIPE_PATH}/29`);
 
             const cuName = "package";
 

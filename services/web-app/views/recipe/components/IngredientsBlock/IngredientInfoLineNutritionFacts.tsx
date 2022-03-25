@@ -1,4 +1,5 @@
 import React from "react";
+import { CY_INGREDIENT_INFO_LINE_NF_AMOUNT, CY_INGREDIENT_INFO_LINE_NF_TYPE } from "cypress/constants";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import Utils from "@common/utils";
@@ -36,6 +37,7 @@ const IngredientInfoLineNutritionFacts: React.FC<IngredientInfoLineNutritionFact
                         className={styles.ingredientInfoLineNutritionFact}
                     >
                         <div
+                            data-cy={CY_INGREDIENT_INFO_LINE_NF_AMOUNT}
                             className={styles.ingredientInfoLineNutritionFactAmount}
                             style={(
                                 Utils.isSome(curNutritionValue) && Utils.isSome(altNutritionValue)
@@ -45,7 +47,10 @@ const IngredientInfoLineNutritionFacts: React.FC<IngredientInfoLineNutritionFact
                         >
                             {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
                         </div>
-                        <div className={styles.ingredientInfoLineNutritionFactType}>
+                        <div
+                            data-cy={CY_INGREDIENT_INFO_LINE_NF_TYPE}
+                            className={styles.ingredientInfoLineNutritionFactType}
+                        >
                             {type.toUpperCase()}
                         </div>
                     </div>

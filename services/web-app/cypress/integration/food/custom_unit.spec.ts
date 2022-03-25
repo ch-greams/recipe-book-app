@@ -31,18 +31,15 @@ describe("food_page", () => {
 
             // Unit
 
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
-                .should("not.exist");
             cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}]`)
-                .click();
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
-                .should("be.visible");
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}]`)
-                .contains(WeightUnit.oz)
-                .click();
-            cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_SELECT_INPUT}] [data-cy=${CY_SELECT_INPUT_OPTION}]`)
+                .as("selectInput")
+                .get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`)
                 .should("not.exist");
 
+            cy.get("@selectInput").click();
+            cy.get("@selectInput").get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`).should("be.visible");
+            cy.get("@selectInput").contains(WeightUnit.oz).click();
+            cy.get("@selectInput").get(`[data-cy=${CY_SELECT_INPUT_OPTION}]`).should("not.exist");
 
             cy.get(`[data-cy=${CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${CY_CUSTOM_UNIT_BUTTON}]`)
                 .should("be.visible")
