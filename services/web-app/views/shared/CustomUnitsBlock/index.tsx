@@ -6,8 +6,6 @@ import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput, Units } from "@common/units";
 import { WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import IconAdd from "@icons/add-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import CustomUnitLine from "./CustomUnitLine";
 
@@ -49,6 +47,11 @@ const CustomUnitsBlock: React.FC<Props> = ({
 
     const updateNewItemUnit = (unit: Units): void => setNewCustomUnit({ ...newCustomUnit, unit });
 
+    const createCustomUnit = (): void => {
+        dispatch(addCustomUnitRequest(newCustomUnit));
+        setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
+    };
+
     return (
         <div className={styles.customUnitsBlock}>
 
@@ -57,61 +60,47 @@ const CustomUnitsBlock: React.FC<Props> = ({
             </div>
 
             {customUnitInputs.map((customUnit, index) => {
-            
+
                 const updateItemName: InputChangeCallback = (event) => {
                     const name = event.target.value;
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, name }));
                 };
-            
+
                 const updateItemAmount: InputChangeCallback = (event) => {
                     const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
                 };
-                
+
                 const updateItemUnit = (unit: Units): void => {
                     dispatch(updateCustomUnitRequest(index, { ...customUnit, unit }));
                 };
-                
+
+                const saveCustomUnit = (): void => {
+                    dispatch(removeCustomUnitRequest(index));
+                };
+
                 return (
                     <CustomUnitLine
-                        key={`CU_${customUnit.name}`}
+                        key={`CU_${index}`}
+                        isNew={false}
                         customUnit={customUnit}
                         updateItemName={updateItemName}
                         updateItemAmount={updateItemAmount}
                         updateItemUnit={updateItemUnit}
-                    >
-
-                        <IconWrapper
-                            isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
-                            style={{ transform: "rotate(0.125turn)" }}
-                            onClick={() => dispatch(removeCustomUnitRequest(index))}
-                        >
-                            <IconAdd />
-                        </IconWrapper>
-
-                    </CustomUnitLine>
+                        upsertCustomUnit={saveCustomUnit}
+                    />
                 );
             })}
 
             <CustomUnitLine
                 key={"NCU"}
+                isNew={true}
                 customUnit={newCustomUnit}
                 updateItemName={updateNewItemName}
                 updateItemAmount={updateNewItemAmount}
                 updateItemUnit={updateNewItemUnit}
-            >
-
-                <IconWrapper
-                    isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
-                    onClick={() => {
-                        dispatch(addCustomUnitRequest(newCustomUnit));
-                        setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
-                    }}
-                >
-                    <IconAdd />
-                </IconWrapper>
-
-            </CustomUnitLine>
+                upsertCustomUnit={createCustomUnit}
+            />
 
         </div>
     );

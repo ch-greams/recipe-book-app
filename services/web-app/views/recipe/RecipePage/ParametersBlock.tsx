@@ -30,7 +30,7 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
     };
 
     return (
-        
+
         <div className={styles.parametersBlock}>
 
             <div className={styles.typeSelect}>
@@ -51,11 +51,11 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
             <div className={styles.separator} />
 
             <div className={styles.servingSizeLine}>
-                
+
                 <div className={styles.servingSizeLineLabel}>
                     {"SERVING SIZE"}
                 </div>
-                
+
                 <input
                     type={"text"}
                     value={recipeItem.servingSizeInput}

@@ -1,5 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import {
+    CY_NEW_DIRECTION_INFO_LINE_DURATION_INPUT, CY_NEW_DIRECTION_INFO_LINE_DURATION_MEASURE,
+    CY_NEW_DIRECTION_INFO_LINE_NAME_INPUT, CY_NEW_DIRECTION_INFO_LINE_STEP_INPUT,
+    CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_INPUT, CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE,
+    CY_NEW_DIRECTION_LINE, CY_NEW_DIRECTION_LINE_CREATE_BUTTON,
+} from "cypress/constants";
 
 import { DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
@@ -15,38 +21,30 @@ import styles from "./DirectionsBlock.module.scss";
 
 
 interface Props {
-    isReadOnly: boolean;
     direction: RecipeDirection;
 }
 
 
-const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
+const NewDirectionLine: React.FC<Props> = ({ direction }) => {
 
     const dispatch = useDispatch();
 
-    const amountText = (
-        <div className={styles.directionInfoLineAmount}>
-            {""}
-        </div>
-    );
-
-    const tempAmountInput = (
-        <input
-            type={"text"}
-            className={styles.directionInfoLineAmountInput}
-            placeholder={"#"}
-            value={direction.temperatureInput}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                dispatch(actions.updateNewDirectionTemperatureCount(event.target.value));
-            }}
-        />
-    );
-
     const tempMeasureInput = (
-        <div className={styles.directionInfoLineMeasure}>
-                
-            {( isReadOnly ? amountText : tempAmountInput )}
-            
+        <div
+            data-cy={CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+            className={styles.directionInfoLineMeasure}
+        >
+            <input
+                data-cy={CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_INPUT}
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                value={direction.temperatureInput}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                    dispatch(actions.updateNewDirectionTemperatureCount(event.target.value));
+                }}
+            />
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
@@ -58,23 +56,23 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
         </div>
     );
 
-    const timeAmountInput = (
-        <input
-            type={"text"}
-            className={styles.directionInfoLineAmountInput}
-            placeholder={"#"}
-            value={direction.durationInput}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                dispatch(actions.updateNewDirectionTimeCount(event.target.value));
-            }}
-        />
-    );
-
     const timeMeasureInput = (
-        <div className={styles.directionInfoLineMeasure}>
-                
-            {( isReadOnly ? amountText : timeAmountInput )}
-            
+        <div
+            data-cy={CY_NEW_DIRECTION_INFO_LINE_DURATION_MEASURE}
+            className={styles.directionInfoLineMeasure}
+        >
+
+            <input
+                data-cy={CY_NEW_DIRECTION_INFO_LINE_DURATION_INPUT}
+                type={"text"}
+                className={styles.directionInfoLineAmountInput}
+                placeholder={"#"}
+                value={direction.durationInput}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
+                    dispatch(actions.updateNewDirectionTimeCount(event.target.value));
+                }}
+            />
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
@@ -87,9 +85,13 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
     );
 
     return (
-        <div className={styles.directionLine}>
+        <div
+            data-cy={CY_NEW_DIRECTION_LINE}
+            className={styles.directionLine}
+        >
 
             <div
+                data-cy={CY_NEW_DIRECTION_LINE_CREATE_BUTTON}
                 className={styles.directionLineButton}
                 onClick={() => dispatch(actions.createDirection(direction))}
             >
@@ -111,6 +113,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                     <div className={styles.directionInfoLineTitle}>
 
                         <input
+                            data-cy={CY_NEW_DIRECTION_INFO_LINE_STEP_INPUT}
                             type={"text"}
                             className={styles.directionInfoLineIndexInput}
                             value={direction.step_number}
@@ -122,6 +125,7 @@ const NewDirectionLine: React.FC<Props> = ({ isReadOnly, direction }) => {
                         />
 
                         <input
+                            data-cy={CY_NEW_DIRECTION_INFO_LINE_NAME_INPUT}
                             type={"text"}
                             className={styles.directionInfoLineNameInput}
                             value={direction.name}

@@ -98,7 +98,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                 />
 
             </div>
-            
+
         </div>
     );
 };

@@ -15,7 +15,7 @@ interface Props {
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
-    updateDescription?: Option<(value: string) => AnyAction>;
+    updateDescription: (value: string) => AnyAction;
 }
 
 
@@ -23,7 +23,7 @@ const PageTitleBlock: React.FC<Props> = ({
     name, brand, subtitle, description, withDescription,
     updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
-    
+
     const [ isTitleInputsOpen, setIsTitleInputsOpen ] = useState(false);
 
     return (

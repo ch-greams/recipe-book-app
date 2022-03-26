@@ -16,6 +16,7 @@ const initialState: types.FoodPageStore = {
     name: "Name",
     brand: "Brand",
     subtitle: "Subtitle",
+    description: "",
     nutritionFacts: {},
     customUnits: [],
 
@@ -89,13 +90,20 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
+        case types.FOOD_ITEM_UPDATE_DESCRIPTION: {
+            return {
+                ...state,
+                description: action.payload,
+            };
+        }
+
         case types.FOOD_ITEM_UPDATE_TYPE: {
             return {
                 ...state,
                 type: action.payload,
             };
         }
-        
+
         case types.FOOD_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
@@ -172,7 +180,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
         case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
             return {
                 ...state,
-                
+
                 customUnits: action.payload as CustomUnit[],
                 customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
             };

@@ -22,7 +22,7 @@ interface NutritionFactsBlockLineProps {
 const handleOnChange = (dispatch: Dispatch<UpdateNutritionFactAction>, nutritionFact: NutritionFact): InputChangeCallback => {
 
     return (event) => {
-        
+
         const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
 
         dispatch(updateNutritionFact(nutritionFact.type, inputValue));

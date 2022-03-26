@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON } from "cypress/constants";
 
 import type { SubDirection } from "@common/typings";
 import Utils from "@common/utils";
@@ -43,6 +44,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
 
     const removeButton = (
         <div
+            data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepIndex))}
         >
@@ -72,7 +74,10 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
 
     return (
 
-        <div className={styles.subDirectionLine}>
+        <div
+            data-cy={CY_SUB_DIRECTION_LINE}
+            className={styles.subDirectionLine}
+        >
 
             {( !isReadOnly && removeButton )}
 

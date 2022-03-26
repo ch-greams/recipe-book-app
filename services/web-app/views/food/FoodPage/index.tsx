@@ -26,6 +26,7 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
         name,
         brand,
         subtitle,
+        description,
         nutritionFactsByServing,
         nutritionFactsByServingInputs,
         featuredNutritionFacts,
@@ -42,9 +43,12 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
+                    description={description}
+                    withDescription={true}
                     updateName={actions.updateName}
                     updateBrand={actions.updateBrand}
                     updateSubtitle={actions.updateSubtitle}
+                    updateDescription={actions.updateDescription}
                 />
 
                 {/* Main Block */}
@@ -94,7 +98,7 @@ const FoodPageConnected: React.FC = () => {
 
     const router = useRouter();
     const foodId = Number(router.query.fid);
-    
+
     const dispatch = useDispatch();
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;

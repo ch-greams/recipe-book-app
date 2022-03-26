@@ -7,7 +7,7 @@ interface ToggleListHook {
 }
 
 export function useToggleList(): ToggleListHook {
-    
+
     const [ isListVisible, toggleList ] = useState(false);
 
     useEffect(() => {

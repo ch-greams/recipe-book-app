@@ -1,5 +1,6 @@
 import type { PropsWithChildren, ReactElement } from "react";
 import React from "react";
+import { CY_SELECT_INPUT, CY_SELECT_INPUT_OPTION } from "cypress/constants";
 
 import Utils from "@common/utils";
 
@@ -71,6 +72,7 @@ const getClassName = (type: SelectInputType): string => {
 
 const getOption = <T extends ID>(option: SelectOption<T>, onSelect: (option: SelectOption<T>) => void): JSX.Element => (
     <div
+        data-cy={CY_SELECT_INPUT_OPTION}
         key={option.value}
         className={styles.selectInputOption}
         onClick={() => onSelect(option)}
@@ -94,7 +96,7 @@ const getItemList = <T extends ID>(
                         <div key={group} className={styles.selectInputGroupName}>
                             {`- ${group}`}
                         </div>,
-            
+
                         ...options
                             .filter((option) => (option.group === group))
                             .map((option) => getOption(option, onSelect)),
@@ -104,7 +106,9 @@ const getItemList = <T extends ID>(
     </div>
 );
 
-const SelectInput = <T extends ID>({ type, options, value, onChange, withGroups = false }: PropsWithChildren<Props<T>>): ReactElement => {
+const SelectInput = <T extends ID>({
+    type, options, value, onChange, withGroups = false,
+}: PropsWithChildren<Props<T>>): ReactElement => {
 
     const { isListVisible, showList, hideList } = useToggleList();
 
@@ -114,7 +118,10 @@ const SelectInput = <T extends ID>({ type, options, value, onChange, withGroups 
     };
 
     return (
-        <div className={getClassName(type)}>
+        <div
+            data-cy={CY_SELECT_INPUT}
+            className={getClassName(type)}
+        >
             <div className={styles.selectInputOption} onClick={showList}>
                 {value}
             </div>

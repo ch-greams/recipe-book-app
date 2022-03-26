@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { CY_INGREDIENT_INFO_LINE, CY_INGREDIENT_INFO_LINE_NAME } from "cypress/constants";
 
 import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
@@ -53,9 +54,9 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, isReadOnly, isNew = f
 
     const measureInput = (
         <div className={styles.ingredientInfoLineMeasure}>
-                
+
             {( isReadOnly ? amountText : amountInput )}
-            
+
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
@@ -69,11 +70,13 @@ const IngredientInfoLine: React.FC<Props> = ({ ingredient, isReadOnly, isNew = f
 
     return (
         <div
+            data-cy={CY_INGREDIENT_INFO_LINE}
             key={(isNew ? "NEW INGREDIENT" : ingredientProduct.name)}
             className={Utils.classNames({ [styles.ingredientInfoLine]: true, [styles.newIngredient]: isNew })}
         >
-
+            {/* FIXME: Whole line should be clickable, but it shouldn't mess with amount and unit */}
             <div
+                data-cy={CY_INGREDIENT_INFO_LINE_NAME}
                 className={styles.ingredientInfoLineName}
                 style={( ingredient.isMarked ? { opacity: 0.25 } : undefined )}
                 onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}

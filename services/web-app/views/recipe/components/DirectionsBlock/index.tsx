@@ -36,13 +36,7 @@ const DirectionsBlock: React.FC<Props> = ({
                 />
             ) )}
 
-            {( !isReadOnly && (
-                <NewDirectionLine
-                    key={"direction_new"}
-                    isReadOnly={isReadOnly}
-                    direction={newDirection}
-                />
-            ) )}
+            {( !isReadOnly && ( <NewDirectionLine key={"direction_new"} direction={newDirection} /> ) )}
 
         </div>
     );

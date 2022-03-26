@@ -36,7 +36,7 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<Str
         const { payload: customUnit } = action;
 
         const customUnits = (yield select(extractCustomUnits)) as CustomUnit[];
-                
+
         if (customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
             throw new Error("Custom Unit name is empty or already exist");
         }
