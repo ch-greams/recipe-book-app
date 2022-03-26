@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CY_ALT_INGREDIENT_INFO_LINE_NAME, CY_ALT_INGREDIENT_LINE, CY_ALT_INGREDIENT_LINE_REMOVE_BUTTON, CY_ALT_INGREDIENT_LINE_SEARCH_BUTTON } from "cypress/constants";
+import {
+    CY_ALT_INGREDIENT_INFO_LINE_NAME, CY_ALT_INGREDIENT_LINE, CY_ALT_INGREDIENT_LINE_REMOVE_BUTTON,
+    CY_ALT_INGREDIENT_LINE_SEARCH_BUTTON,
+} from "cypress/constants";
 
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";

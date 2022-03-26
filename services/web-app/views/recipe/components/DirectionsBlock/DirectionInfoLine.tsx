@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import { CY_DIRECTION_INFO_LINE_NAME_INPUT,CY_DIRECTION_INFO_LINE_NAME_TEXT } from "cypress/constants";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
 import type { SelectOption } from "@views/shared/SelectInput";
@@ -99,13 +100,17 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     );
 
     const titleText = (
-        <div className={styles.directionInfoLineName}>
+        <div
+            data-cy={CY_DIRECTION_INFO_LINE_NAME_TEXT}
+            className={styles.directionInfoLineName}
+        >
             {direction.name.toUpperCase()}
         </div>
     );
 
     const titleInput = (
         <input
+            data-cy={CY_DIRECTION_INFO_LINE_NAME_INPUT}
             type={"text"}
             className={styles.directionInfoLineNameInput}
             value={direction.name.toUpperCase()}
