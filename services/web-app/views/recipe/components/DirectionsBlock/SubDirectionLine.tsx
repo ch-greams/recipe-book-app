@@ -53,7 +53,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     const ingredientAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {subDirection.product_amount}
+            {subDirection.ingredientAmount}
         </div>
     );
 
@@ -62,7 +62,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={subDirection.amountInput}
+            value={subDirection.ingredientAmountInput}
             onChange={(event) => {
                 dispatch(actions.updateSubDirectionIngredientAmount(
                     directionIndex, subDirectionIndex, event.target.value,
@@ -88,7 +88,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                 >
 
                     <div className={styles.directionInfoLineName}>
-                        {subDirection.label.toUpperCase()}
+                        {subDirection.ingredientName.toUpperCase()}
                     </div>
 
                 </div>
@@ -100,7 +100,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                     <SelectInput
                         type={SelectInputType.AltIngredientUnit}
                         options={Object.values(Units).map((unit) => ({ value: unit }))}
-                        value={subDirection.unit}
+                        value={subDirection.ingredientUnit}
                         onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
                             dispatch(actions.updateSubDirectionIngredientUnit(
                                 directionIndex, subDirectionIndex, option.value,

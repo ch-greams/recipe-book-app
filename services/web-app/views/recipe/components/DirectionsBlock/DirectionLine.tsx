@@ -7,7 +7,9 @@ import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
     RecipeIngredient,
-    RecipeSubDirectionIngredient } from "@store/recipe/types";
+    RecipeSubDirectionComment,
+    RecipeSubDirectionIngredient,
+} from "@store/recipe/types";
 import {
     SubDirectionType,
 } from "@store/recipe/types";
@@ -83,7 +85,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
                 {(
                     ( direction.isOpen || !isReadOnly ) &&
                     direction.steps.map((step, stepIndex) => (
-                        step.direction_part_type === SubDirectionType.Ingredient
+                        step.type === SubDirectionType.Ingredient
                             ? (
                                 <SubDirectionLine
                                     key={`subDirectionLine_${stepIndex}`}
@@ -97,7 +99,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
                                 <SubDirectionNoteLine
                                     key={`subDirectionNoteLine_${stepIndex}`}
                                     isReadOnly={isReadOnly}
-                                    step={step}
+                                    step={step as RecipeSubDirectionComment}
                                     directionIndex={index}
                                     stepIndex={stepIndex}
                                 />

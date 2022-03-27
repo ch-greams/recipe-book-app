@@ -282,23 +282,23 @@
             "steps": [
                 {
                     "step_number": 0,
-                    "label": "Add Cottage Cheese first",
-                    "product_id": null,
-                    "product_amount": null,
+                    "comment_text": "Add Cottage Cheese first",
+                    "ingredient_id": null,
+                    "ingredient_amount": null,
                     "direction_part_type": "note"
                 },
                 {
                     "step_number": 1,
-                    "label": "Cottage Cheese",
-                    "product_id": 3,
-                    "product_amount": 150,
+                    "comment_text": null,
+                    "ingredient_id": 11,
+                    "ingredient_amount": 1,
                     "direction_part_type": "ingredient"
                 },
                 {
                     "step_number": 2,
-                    "label": "Sour Cream",
-                    "product_id": 2,
-                    "product_amount": 100,
+                    "comment_text": null,
+                    "ingredient_id": 10,
+                    "ingredient_amount": 0.75,
                     "direction_part_type": "ingredient"
                 }
             ]

@@ -15,10 +15,10 @@ pub enum DirectionPartType {
 pub struct DirectionPart {
     pub direction_id: i64,
     pub step_number: i16,
-    pub label: String,
-    pub product_id: Option<i64>,
-    pub product_amount: Option<f64>,
     pub direction_part_type: DirectionPartType,
+    pub comment_text: Option<String>,
+    pub ingredient_id: Option<i64>,
+    pub ingredient_amount: Option<f64>,
 }
 
 impl DirectionPart {
@@ -27,7 +27,7 @@ impl DirectionPart {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT direction_id, step_number, label, product_id, product_amount, direction_part_type
+            SELECT direction_id, step_number, direction_part_type, comment_text, ingredient_id, ingredient_amount
             FROM private.direction_part
             WHERE direction_id = ANY($1)
         "#,
@@ -39,20 +39,20 @@ impl DirectionPart {
 #[derive(Serialize, Deserialize, Clone)]
 pub struct DirectionPartDetails {
     pub step_number: i16,
-    pub label: String,
-    pub product_id: Option<i64>,
-    pub product_amount: Option<f64>,
     pub direction_part_type: DirectionPartType,
+    pub comment_text: Option<String>,
+    pub ingredient_id: Option<i64>,
+    pub ingredient_amount: Option<f64>,
 }
 
 impl DirectionPartDetails {
     pub fn new(direction_part: &DirectionPart) -> Self {
         DirectionPartDetails {
             step_number: direction_part.step_number,
-            label: direction_part.label.to_owned(),
-            product_id: direction_part.product_id,
-            product_amount: direction_part.product_amount,
             direction_part_type: direction_part.direction_part_type.to_owned(),
+            comment_text: direction_part.comment_text.to_owned(),
+            ingredient_id: direction_part.ingredient_id,
+            ingredient_amount: direction_part.ingredient_amount,
         }
     }
 }

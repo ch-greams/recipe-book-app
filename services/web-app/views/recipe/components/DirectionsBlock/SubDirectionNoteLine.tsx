@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON } from "cypress/constants";
 
-import type { SubDirection } from "@common/typings";
 import Utils from "@common/utils";
 import * as actions from "@store/recipe/actions";
+import type { RecipeSubDirectionComment } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
 import InfoBlockIcon from "@icons/alert-circle-sharp.svg";
 import BulbIcon from "@icons/bulb-sharp.svg";
@@ -32,7 +32,7 @@ const getSubDirectionNoteLineIcon = (type: SubDirectionType): JSX.Element => {
 
 interface Props {
     isReadOnly: boolean;
-    step: SubDirection;
+    step: RecipeSubDirectionComment;
     directionIndex: number;
     stepIndex: number;
 }
@@ -56,7 +56,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
 
     const noteText = (
         <div className={styles.directionInfoLineDescription}>
-            {step.label}
+            {step.commentText}
         </div>
     );
 
@@ -64,8 +64,8 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
         <input
             type={"text"}
             className={styles.directionInfoLineDescriptionInput}
-            placeholder={step.direction_part_type.toUpperCase()}
-            value={step.label}
+            placeholder={step.type.toUpperCase()}
+            value={step.commentText}
             onChange={(event) => {
                 dispatch(actions.updateSubDirectionNote(directionIndex, stepIndex, event.target.value));
             }}
@@ -84,7 +84,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
             <div className={styles.subDirectionNoteInfoLine}>
 
                 <IconWrapper width={22} height={22} color={Utils.COLOR_WHITE}>
-                    {getSubDirectionNoteLineIcon(step.direction_part_type)}
+                    {getSubDirectionNoteLineIcon(step.type)}
                 </IconWrapper>
 
                 {( isReadOnly ? noteText : noteInput )}

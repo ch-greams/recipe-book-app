@@ -22,25 +22,13 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const dispatch = useDispatch();
 
-    const tempAmountText = (
+    const temperatureAmountText = (
         <div className={styles.directionInfoLineAmount}>
             {direction.temperature?.value}
         </div>
     );
 
-    const tempAmountInput = (
-        <input
-            type={"text"}
-            className={styles.directionInfoLineAmountInput}
-            placeholder={"#"}
-            value={direction.temperatureInput}
-            onChange={(event) => {
-                dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
-            }}
-        />
-    );
-
-    const tempSelectInput = (
+    const temperatureSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
@@ -51,25 +39,13 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         />
     );
 
-    const timeAmountText = (
+    const durationAmountText = (
         <div className={styles.directionInfoLineAmount}>
             {direction.duration?.value}
         </div>
     );
 
-    const timeAmountInput = (
-        <input
-            type={"text"}
-            className={styles.directionInfoLineAmountInput}
-            placeholder={"#"}
-            value={direction.durationInput}
-            onChange={(event) => {
-                dispatch(actions.updateDirectionTimeCount(index, event.target.value));
-            }}
-        />
-    );
-
-    const timeSelectInput = (
+    const durationSelectInput = (
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
@@ -80,76 +56,96 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         />
     );
 
-    const indexText = (
-        <div className={styles.directionInfoLineIndex}>
-            {`${direction.step_number}.`}
-        </div>
-    );
-
-    const indexInput = (
-        <input
-            type={"text"}
-            className={styles.directionInfoLineIndexInput}
-            value={direction.step_number}
-            placeholder={"#"}
-            maxLength={2}
-            onChange={(event) => {
-                dispatch(actions.updateDirectionStepNumber(index, Number(event.target.value)));
-            }}
-        />
-    );
-
-    const titleText = (
-        <div
-            data-cy={CY_DIRECTION_INFO_LINE_NAME_TEXT}
-            className={styles.directionInfoLineName}
-        >
-            {direction.name.toUpperCase()}
-        </div>
-    );
-
-    const titleInput = (
-        <input
-            data-cy={CY_DIRECTION_INFO_LINE_NAME_INPUT}
-            type={"text"}
-            className={styles.directionInfoLineNameInput}
-            value={direction.name.toUpperCase()}
-            placeholder={"TITLE"}
-            onChange={(event) => {
-                dispatch(actions.updateDirectionName(index, event.target.value));
-            }}
-        />
-    );
-
     return (
-        <div
-            className={styles.directionInfoLine}
-            style={( isReadOnly ? undefined : { paddingLeft: "12px" } )}
-        >
+        isReadOnly
+        ? (
+            <div className={styles.directionInfoLine}>
 
-            <div
-                className={styles.directionInfoLineTitle}
-                style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
-                onClick={( isReadOnly ? () => dispatch(actions.toggleDirectionOpen(index)) : undefined )}
-            >
-                {( isReadOnly ? indexText : indexInput )}
+                <div
+                    className={styles.directionInfoLineTitle}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                    onClick={() => dispatch(actions.toggleDirectionOpen(index))}
+                >
+                    <div className={styles.directionInfoLineIndex}>
+                        {`${direction.stepNumber}.`}
+                    </div>
 
-                {( isReadOnly ? titleText : titleInput )}
+                    <div
+                        data-cy={CY_DIRECTION_INFO_LINE_NAME_TEXT}
+                        className={styles.directionInfoLineName}
+                    >
+                        {direction.name.toUpperCase()}
+                    </div>
+                </div>
 
+                <div className={styles.directionInfoLineMeasure}>
+
+                    {( direction.temperature && temperatureAmountText )}
+                    {( direction.temperature && temperatureSelectInput )}
+                    {( direction.duration && durationAmountText )}
+                    {( direction.duration && durationSelectInput )}
+
+                </div>
             </div>
+        )
+        : (
+            <div className={styles.directionInfoLine} style={{ paddingLeft: "12px" }}>
 
-            <div className={styles.directionInfoLineMeasure}>
+                <div
+                    className={styles.directionInfoLineTitle}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                >
+                    <input
+                        type={"text"}
+                        className={styles.directionInfoLineIndexInput}
+                        value={direction.stepNumber}
+                        placeholder={"#"}
+                        maxLength={2}
+                        onChange={(event) => {
+                            dispatch(actions.updateDirectionStepNumber(index, Number(event.target.value)));
+                        }}
+                    />
+                    <input
+                        data-cy={CY_DIRECTION_INFO_LINE_NAME_INPUT}
+                        type={"text"}
+                        className={styles.directionInfoLineNameInput}
+                        value={direction.name.toUpperCase()}
+                        placeholder={"TITLE"}
+                        onChange={(event) => {
+                            dispatch(actions.updateDirectionName(index, event.target.value));
+                        }}
+                    />
+                </div>
 
-                {( isReadOnly ? ( direction.temperature && tempAmountText ) : tempAmountInput )}
+                <div className={styles.directionInfoLineMeasure}>
 
-                {( isReadOnly ? ( direction.temperature && tempSelectInput ) : tempSelectInput )}
+                    <input
+                        type={"text"}
+                        className={styles.directionInfoLineAmountInput}
+                        placeholder={"#"}
+                        value={direction.temperatureInput}
+                        onChange={(event) => {
+                            dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
+                        }}
+                    />
 
-                {( isReadOnly ? ( direction.duration && timeAmountText ) : timeAmountInput )}
+                    {temperatureSelectInput}
 
-                {( isReadOnly ? ( direction.duration && timeSelectInput ) : timeSelectInput )}
+                    <input
+                        type={"text"}
+                        className={styles.directionInfoLineAmountInput}
+                        placeholder={"#"}
+                        value={direction.durationInput}
+                        onChange={(event) => {
+                            dispatch(actions.updateDirectionTimeCount(index, event.target.value));
+                        }}
+                    />
 
+                    {durationSelectInput}
+
+                </div>
             </div>
-        </div>
+        )
     );
 };
 

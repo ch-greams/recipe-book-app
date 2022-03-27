@@ -1,5 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type * as typings from "@common/typings";
+import type { Temperature, Time } from "@common/typings";
 import type * as units from "@common/units";
 
 
@@ -23,17 +24,34 @@ export enum SubDirectionType {
     Ingredient = "ingredient",
 }
 
-export interface RecipeSubDirectionIngredient extends typings.SubDirectionIngredient {
-    isMarked: boolean;
-    amountInput: string;
+export interface RecipeSubDirectionComment {
+    type: SubDirectionType;
+    commentText: string;
 }
 
-export interface RecipeDirection extends typings.Direction {
+export interface RecipeSubDirectionIngredient {
+    type: SubDirectionType;
+    isMarked: boolean;
+    ingredientId: number;
+    ingredientAmount: number;
+    ingredientAmountInput: string;
+    ingredientName: string;
+    ingredientUnit: units.Units;
+}
+
+export interface RecipeDirection {
+    stepNumber: number;
+    name: string;
+
+    duration?: Option<Time>;
+    durationInput: string;
+    temperature?: Option<Temperature>;
+    temperatureInput: string;
+
     isOpen: boolean;
     isMarked: boolean;
-    durationInput: string;
-    temperatureInput: string;
-    steps: (typings.SubDirection | RecipeSubDirectionIngredient)[];
+
+    steps: (RecipeSubDirectionComment | RecipeSubDirectionIngredient)[];
 }
 
 

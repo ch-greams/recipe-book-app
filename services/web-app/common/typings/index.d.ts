@@ -40,14 +40,11 @@ export interface Temperature {
 }
 
 export interface SubDirection {
+    step_number: number;
     direction_part_type: SubDirectionType;
-    label: string;
-}
-
-export interface SubDirectionIngredient extends SubDirection {
-    product_id: string;
-    product_amount: number;
-    unit: WeightUnit | VolumeUnit;
+    comment_text?: Option<string>;
+    ingredient_id?: Option<number>;
+    ingredient_amount?: Option<number>;
 }
 
 export interface Direction {
@@ -55,7 +52,7 @@ export interface Direction {
     name: string;
     duration?: Option<Time>;
     temperature?: Option<Temperature>;
-    steps: (SubDirection | SubDirectionIngredient)[];
+    steps: SubDirection[];
 }
 
 export interface Recipe {

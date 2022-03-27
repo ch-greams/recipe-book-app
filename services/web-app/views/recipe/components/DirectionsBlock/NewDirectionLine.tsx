@@ -116,7 +116,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
                             data-cy={CY_NEW_DIRECTION_INFO_LINE_STEP_INPUT}
                             type={"text"}
                             className={styles.directionInfoLineIndexInput}
-                            value={direction.step_number}
+                            value={direction.stepNumber}
                             placeholder={"#"}
                             maxLength={2}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
