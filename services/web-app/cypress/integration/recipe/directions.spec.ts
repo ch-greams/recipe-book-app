@@ -1,5 +1,6 @@
 import {
-    CY_DIRECTION_INFO_LINE_NAME_INPUT, CY_DIRECTION_INFO_LINE_NAME_TEXT, CY_DIRECTION_LINE,
+    CY_DIRECTION_INFO_LINE_DURATION_MEASURE, CY_DIRECTION_INFO_LINE_NAME_INPUT,
+    CY_DIRECTION_INFO_LINE_NAME_TEXT, CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE, CY_DIRECTION_LINE,
     CY_DIRECTION_LINE_CHECKBOX, CY_DIRECTION_LINE_REMOVE_BUTTON, CY_FOOD_API_PATH,
     CY_NEW_DIRECTION_INFO_LINE_DURATION_INPUT, CY_NEW_DIRECTION_INFO_LINE_DURATION_MEASURE,
     CY_NEW_DIRECTION_INFO_LINE_NAME_INPUT, CY_NEW_DIRECTION_INFO_LINE_STEP_INPUT,
@@ -28,15 +29,13 @@ describe("recipe_page", () => {
 
         it("can switch temperature unit", () => {
 
-            // TODO: This test is fragile, and will fail if direction has both temperature and duration (fix it as a part of RBA-47)
-
             const STEP_NAME = "test step";
 
             cy.get(`[data-cy=${CY_DIRECTION_LINE}] [data-cy=${CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
                 .parents(`[data-cy=${CY_DIRECTION_LINE}]`)
-                .find(`[data-cy=${CY_SELECT_INPUT}]`)
+                .find(`[data-cy=${CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}] [data-cy=${CY_SELECT_INPUT}]`)
                 .as("temperatureSelect")
                 .contains(TemperatureUnit.C)
                 .should("be.visible");
@@ -59,16 +58,14 @@ describe("recipe_page", () => {
         });
 
         it("can switch duration unit", () => {
-            // TODO: This test is fragile, and will fail if direction has both temperature and duration (fix it as a part of RBA-47)
 
             const STEP_NAME = "stir";
 
             cy.get(`[data-cy=${CY_DIRECTION_LINE}] [data-cy=${CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
-                .click()    // FIXME: Close direction as a bit of a hack until rework related to RBA-47 will be done
                 .parents(`[data-cy=${CY_DIRECTION_LINE}]`)
-                .find(`[data-cy=${CY_SELECT_INPUT}]`)
+                .find(`[data-cy=${CY_DIRECTION_INFO_LINE_DURATION_MEASURE}] [data-cy=${CY_SELECT_INPUT}]`)
                 .as("temperatureSelect")
                 .contains(TimeUnit.min)
                 .should("be.visible");

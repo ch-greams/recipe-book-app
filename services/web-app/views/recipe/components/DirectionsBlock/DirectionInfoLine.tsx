@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CY_DIRECTION_INFO_LINE_NAME_INPUT,CY_DIRECTION_INFO_LINE_NAME_TEXT } from "cypress/constants";
+import {
+    CY_DIRECTION_INFO_LINE_DURATION_MEASURE, CY_DIRECTION_INFO_LINE_NAME_INPUT,
+    CY_DIRECTION_INFO_LINE_NAME_TEXT, CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE,
+} from "cypress/constants";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
 import type { SelectOption } from "@views/shared/SelectInput";
@@ -78,12 +81,27 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                     </div>
                 </div>
 
-                <div className={styles.directionInfoLineMeasure}>
+                <div className={styles.directionInfoLineMeasures}>
 
-                    {( direction.temperature && temperatureAmountText )}
-                    {( direction.temperature && temperatureSelectInput )}
-                    {( direction.duration && durationAmountText )}
-                    {( direction.duration && durationSelectInput )}
+                    {( direction.temperature && (
+                        <div
+                            data-cy={CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                            className={styles.directionInfoLineMeasure}
+                        >
+                            {temperatureAmountText}
+                            {temperatureSelectInput}
+                        </div>
+                    ))}
+
+                    {( direction.duration && (
+                        <div
+                            data-cy={CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                            className={styles.directionInfoLineMeasure}
+                        >
+                            {durationAmountText}
+                            {durationSelectInput}
+                        </div>
+                    ))}
 
                 </div>
             </div>
@@ -117,31 +135,45 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                     />
                 </div>
 
-                <div className={styles.directionInfoLineMeasure}>
+                <div className={styles.directionInfoLineMeasures}>
 
-                    <input
-                        type={"text"}
-                        className={styles.directionInfoLineAmountInput}
-                        placeholder={"#"}
-                        value={direction.temperatureInput}
-                        onChange={(event) => {
-                            dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
-                        }}
-                    />
+                    <div
+                        data-cy={CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                        className={styles.directionInfoLineMeasure}
+                    >
 
-                    {temperatureSelectInput}
+                        <input
+                            type={"text"}
+                            className={styles.directionInfoLineAmountInput}
+                            placeholder={"#"}
+                            value={direction.temperatureInput}
+                            onChange={(event) => {
+                                dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
+                            }}
+                        />
 
-                    <input
-                        type={"text"}
-                        className={styles.directionInfoLineAmountInput}
-                        placeholder={"#"}
-                        value={direction.durationInput}
-                        onChange={(event) => {
-                            dispatch(actions.updateDirectionTimeCount(index, event.target.value));
-                        }}
-                    />
+                        {temperatureSelectInput}
 
-                    {durationSelectInput}
+                    </div>
+
+                    <div
+                        data-cy={CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                        className={styles.directionInfoLineMeasure}
+                    >
+
+                        <input
+                            type={"text"}
+                            className={styles.directionInfoLineAmountInput}
+                            placeholder={"#"}
+                            value={direction.durationInput}
+                            onChange={(event) => {
+                                dispatch(actions.updateDirectionTimeCount(index, event.target.value));
+                            }}
+                        />
+
+                        {durationSelectInput}
+
+                    </div>
 
                 </div>
             </div>

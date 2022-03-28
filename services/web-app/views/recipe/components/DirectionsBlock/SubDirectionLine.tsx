@@ -91,20 +91,23 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
                 </div>
 
-                <div className={styles.directionInfoLineMeasure}>
+                <div className={styles.directionInfoLineMeasures}>
 
-                    {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
+                    <div className={styles.directionInfoLineMeasure}>
 
-                    <SelectInput
-                        type={SelectInputType.AltIngredientUnit}
-                        options={Object.values(Units).map((unit) => ({ value: unit }))}
-                        value={subDirection.ingredientUnit}
-                        onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
-                            dispatch(actions.updateSubDirectionIngredientUnit(
-                                directionIndex, stepNumber, option.value,
-                            ));
-                        }}
-                    />
+                        {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
+
+                        <SelectInput
+                            type={SelectInputType.AltIngredientUnit}
+                            options={Object.values(Units).map((unit) => ({ value: unit }))}
+                            value={subDirection.ingredientUnit}
+                            onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
+                                dispatch(actions.updateSubDirectionIngredientUnit(
+                                    directionIndex, stepNumber, option.value,
+                                ));
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

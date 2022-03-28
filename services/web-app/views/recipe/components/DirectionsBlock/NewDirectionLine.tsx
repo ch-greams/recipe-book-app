@@ -136,7 +136,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
                         />
                     </div>
 
-                    <div className={styles.directionInfoLineMeasure}>
+                    <div className={styles.directionInfoLineMeasures}>
 
                         {tempMeasureInput}
 

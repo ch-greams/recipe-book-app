@@ -118,48 +118,54 @@
                 }
 
 
-                .directionInfoLineMeasure {
+                .directionInfoLineMeasures {
 
                     display: flex;
                     flex-direction: row;
                     gap: 4px;
 
-                    .directionInfoLineAmount {
+                    .directionInfoLineMeasure {
 
-                        width: 80px;
+                        display: flex;
+                        gap: 4px;    
 
-                        padding-right: 4px;
+                        .directionInfoLineAmount {
 
-                        line-height: 22px;
+                            width: 80px;
 
-                        color: $color-grey-dark;
+                            padding-right: 4px;
 
-                        text-align: right;
+                            line-height: 22px;
 
-                        border-color: $color-grey-light;
-                        border-style: solid;
-                        border-width: 1px;
-                    }
+                            color: $color-grey-dark;
 
-                    .directionInfoLineAmountInput {
+                            text-align: right;
 
-                        width: 60px;
+                            border-color: $color-grey-light;
+                            border-style: solid;
+                            border-width: 1px;
+                        }
 
-                        padding-right: 4px;
+                        .directionInfoLineAmountInput {
 
-                        font-family: $font-default;
-                        font-size: 16px;
-                        font-weight: 500;
+                            width: 60px;
 
-                        line-height: 20px;
+                            padding-right: 4px;
 
-                        color: $color-default;
+                            font-family: $font-default;
+                            font-size: 16px;
+                            font-weight: 500;
 
-                        text-align: right;
+                            line-height: 20px;
 
-                        border-color: $color-default;
-                        border-style: solid;
-                        border-width: 1px;
+                            color: $color-default;
+
+                            text-align: right;
+
+                            border-color: $color-default;
+                            border-style: solid;
+                            border-width: 1px;
+                        }
                     }
                 }
             }
