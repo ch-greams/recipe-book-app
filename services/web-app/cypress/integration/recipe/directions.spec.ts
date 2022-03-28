@@ -8,10 +8,11 @@ import {
     CY_NEW_DIRECTION_LINE, CY_NEW_DIRECTION_LINE_CREATE_BUTTON, CY_NEW_SUB_DIRECTION_LINE,
     CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON, CY_RECIPE_API_PATH, CY_RECIPE_PATH, CY_SELECT_INPUT,
     CY_SELECT_INPUT_OPTION, CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX,
+    CY_SUB_DIRECTION_LINE_NAME,
     CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
 } from "cypress/constants";
 
-import { TemperatureUnit, TimeUnit } from "@common/units";
+import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { SubDirectionType } from "@store/recipe/types";
 
 
@@ -87,7 +88,7 @@ describe("recipe_page", () => {
                 .should("be.visible");
         });
 
-        it("can complete sub_direction", () => {
+        it("can complete direction", () => {
 
             const STEP_NAME = "stir";
 
@@ -110,7 +111,7 @@ describe("recipe_page", () => {
                 .should("have.length", CHECKBOX_ON);
         });
 
-        it("can complete sub_direction from children", () => {
+        it("can complete direction from children", () => {
 
             const STEP_NAME = "stir";
 
@@ -137,6 +138,32 @@ describe("recipe_page", () => {
                 .each((checkbox) => cy.wrap(checkbox).click());
 
             cy.get("@directionLineCheckbox").children().should("have.length", CHECKBOX_ON);
+        });
+
+        it("can switch sub_direction ingredient unit", () => {
+
+            const INGREDIENT_NAME = "Sour Cream";
+
+            cy.get(`[data-cy=${CY_SUB_DIRECTION_LINE}] [data-cy=${CY_SUB_DIRECTION_LINE_NAME}]`)
+                .contains(INGREDIENT_NAME.toUpperCase())
+                .should("be.visible")
+                .parents(`[data-cy=${CY_SUB_DIRECTION_LINE}]`)
+                .as("subDirectionLine")
+                .find(`[data-cy=${CY_SELECT_INPUT}]`)
+                .contains(VolumeUnit.ml)
+                .should("be.visible")
+                .click();
+
+            cy.get("@subDirectionLine")
+                .find(`[data-cy=${CY_SELECT_INPUT_OPTION}]`)
+                .contains(WeightUnit.g)
+                .should("be.visible")
+                .click();
+
+            cy.get("@subDirectionLine")
+                .find(`[data-cy=${CY_SELECT_INPUT}]`)
+                .contains(WeightUnit.g)
+                .should("be.visible");
         });
     });
 

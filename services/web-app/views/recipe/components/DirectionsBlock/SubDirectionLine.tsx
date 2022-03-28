@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import {
-    CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
+    CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX,
+    CY_SUB_DIRECTION_LINE_NAME, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
 } from "cypress/constants";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
@@ -85,7 +86,10 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                     style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}
                 >
 
-                    <div className={styles.directionInfoLineName}>
+                    <div
+                        data-cy={CY_SUB_DIRECTION_LINE_NAME}
+                        className={styles.directionInfoLineName}
+                    >
                         {subDirection.ingredientName.toUpperCase()}
                     </div>
 
