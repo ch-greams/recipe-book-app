@@ -112,6 +112,7 @@ function convertDirectionPart(
         const ingredientAmount = product.amount * Utils.unwrap(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
 
         return {
+            stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
             ingredientId: ingredientId,
 
@@ -126,6 +127,7 @@ function convertDirectionPart(
     }
     else {
         return {
+            stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
             commentText: Utils.unwrap(directionPart.comment_text, directionPart.direction_part_type),
         };
@@ -253,7 +255,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_ITEM_REMOVE_SUBDIRECTION: {
-            const { directionIndex, subDirectionIndex } = action.payload;
+            const { directionIndex, stepNumber } = action.payload;
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => (
@@ -261,7 +263,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         ? {
                             ...direction,
                             steps: direction.steps.filter(
-                                (_sd, iSubDirection) => (iSubDirection !== subDirectionIndex),
+                                (subDirection) => (subDirection.stepNumber !== stepNumber),
                             ),
                         }
                         : direction
@@ -307,15 +309,15 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK: {
-            const { directionIndex, subDirectionIndex } = action.payload;
+            const { directionIndex, stepNumber } = action.payload;
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
                     if (directionIndex === iDirection) {
 
-                        const steps = direction.steps.map((subDirection, iSubDirection) => (
-                            (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                        const steps = direction.steps.map((subDirection) => (
+                            (subDirection.type === types.SubDirectionType.Ingredient) && (stepNumber === subDirection.stepNumber)
                                 ? { ...subDirection, isMarked: !(subDirection as types.RecipeSubDirectionIngredient).isMarked }
                                 : subDirection
                         ));
@@ -339,7 +341,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE: {
-            const { directionIndex, subDirectionIndex, note } = action.payload;
+            const { directionIndex, stepNumber, note } = action.payload;
 
             return {
                 ...state,
@@ -347,8 +349,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection, iSubDirection) =>
-                                (subDirection.type !== types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                            steps: direction.steps.map((subDirection) =>
+                                (subDirection.type !== types.SubDirectionType.Ingredient) && (stepNumber === subDirection.stepNumber)
                                     ? { ...subDirection, commentText: note }
                                     : subDirection,
                             ),
@@ -360,7 +362,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT: {
 
-            const { directionIndex, subDirectionIndex, inputValue } = action.payload;
+            const { directionIndex, stepNumber, inputValue } = action.payload;
 
             return {
                 ...state,
@@ -368,10 +370,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection, iSubDirection) => {
+                            steps: direction.steps.map((subDirection) => {
 
                                 if (
-                                    (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
+                                    (subDirection.type === types.SubDirectionType.Ingredient) && (stepNumber === subDirection.stepNumber)
                                 ) {
                                     const amount = Utils.decimalNormalizer(
                                         inputValue,
@@ -396,7 +398,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT: {
 
-            const { directionIndex, subDirectionIndex, unit } = action.payload;
+            const { directionIndex, stepNumber, unit } = action.payload;
 
             return {
                 ...state,
@@ -404,9 +406,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection, iSubDirection) => (
-                                (subDirection.type === types.SubDirectionType.Ingredient) && (subDirectionIndex === iSubDirection)
-                                    ? { ...subDirection, unit: unit }
+                            steps: direction.steps.map((subDirection) => (
+                                (subDirection.type === types.SubDirectionType.Ingredient) && (stepNumber === subDirection.stepNumber)
+                                    ? { ...subDirection, ingredientUnit: unit }
                                     : subDirection
                             )),
                         }
@@ -429,24 +431,25 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 `IngredientProduct with id = ${ingredient.product_id} is not found`,
             );
 
-            const newDirectionIngredient: types.RecipeSubDirectionIngredient = {
-                type: types.SubDirectionType.Ingredient,
-                ingredientName: ingredientProduct.name,
-
-                ingredientId: ingredientId,
-                isMarked: false,
-                ingredientAmount: ingredientProduct.amount,
-                ingredientAmountInput: ingredientProduct.amountInput,
-                ingredientUnit: ingredientProduct.unit,
-            };
-
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => (
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: [ ...direction.steps, newDirectionIngredient ],
+                            steps: [
+                                ...direction.steps,
+                                {
+                                    stepNumber: direction.steps.length,
+                                    type: types.SubDirectionType.Ingredient,
+                                    ingredientName: ingredientProduct.name,
+                                    ingredientId: ingredientId,
+                                    isMarked: false,
+                                    ingredientAmount: ingredientProduct.amount,
+                                    ingredientAmountInput: ingredientProduct.amountInput,
+                                    ingredientUnit: ingredientProduct.unit,
+                                } as types.RecipeSubDirectionIngredient,
+                            ],
                         }
                         : direction
                 )),
@@ -457,18 +460,20 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { directionIndex, type } = action.payload;
 
-            const newDirectionComment: types.RecipeSubDirectionComment = {
-                type: type,
-                commentText: type,
-            };
-
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => (
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: [ ...direction.steps, newDirectionComment ],
+                            steps: [
+                                ...direction.steps,
+                                {
+                                    stepNumber: direction.steps.length,
+                                    type: type,
+                                    commentText: type,
+                                } as types.RecipeSubDirectionComment,
+                            ],
                         }
                         : direction
                 )),
@@ -484,7 +489,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 directions: state.directions
                     .map((direction, iDirection) => (
                         (directionIndex === iDirection)
-                            ? { ...direction, stepNumber: stepNumber }
+                            ? { ...direction, stepNumber }
                             : direction
                     ))
                     .sort(Utils.sortBy("stepNumber")),
@@ -499,7 +504,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => (
                     (directionIndex === iDirection)
-                        ? { ...direction, name: name }
+                        ? { ...direction, name }
                         : direction
                 )),
             };

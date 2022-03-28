@@ -34,11 +34,11 @@ interface Props {
     isReadOnly: boolean;
     step: RecipeSubDirectionComment;
     directionIndex: number;
-    stepIndex: number;
+    stepNumber: number;
 }
 
 
-const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionIndex, stepIndex }) => {
+const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
@@ -46,7 +46,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
         <div
             data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
-            onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepIndex))}
+            onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
@@ -67,7 +67,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
             placeholder={step.type.toUpperCase()}
             value={step.commentText}
             onChange={(event) => {
-                dispatch(actions.updateSubDirectionNote(directionIndex, stepIndex, event.target.value));
+                dispatch(actions.updateSubDirectionNote(directionIndex, stepNumber, event.target.value));
             }}
         />
     );

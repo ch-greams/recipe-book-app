@@ -21,11 +21,11 @@ interface Props {
     isReadOnly: boolean;
     subDirection: RecipeSubDirectionIngredient;
     directionIndex: number;
-    subDirectionIndex: number;
+    stepNumber: number;
 }
 
 
-const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, subDirectionIndex }) => {
+const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
         <div
             data-cy={CY_SUB_DIRECTION_LINE_CHECKBOX}
             className={styles.lineCheckbox}
-            onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, subDirectionIndex))}
+            onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, stepNumber))}
         >
             {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
         </div>
@@ -43,7 +43,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
         <div
             data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
-            onClick={() => dispatch(actions.removeSubDirection(directionIndex, subDirectionIndex))}
+            onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
@@ -64,9 +64,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             placeholder={"#"}
             value={subDirection.ingredientAmountInput}
             onChange={(event) => {
-                dispatch(actions.updateSubDirectionIngredientAmount(
-                    directionIndex, subDirectionIndex, event.target.value,
-                ));
+                dispatch(actions.updateSubDirectionIngredientAmount(directionIndex, stepNumber, event.target.value));
             }}
         />
     );
@@ -103,7 +101,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                         value={subDirection.ingredientUnit}
                         onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
                             dispatch(actions.updateSubDirectionIngredientUnit(
-                                directionIndex, subDirectionIndex, option.value,
+                                directionIndex, stepNumber, option.value,
                             ));
                         }}
                     />

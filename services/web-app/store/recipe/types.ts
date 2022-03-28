@@ -25,11 +25,13 @@ export enum SubDirectionType {
 }
 
 export interface RecipeSubDirectionComment {
+    stepNumber: number;
     type: SubDirectionType;
     commentText: string;
 }
 
 export interface RecipeSubDirectionIngredient {
+    stepNumber: number;
     type: SubDirectionType;
     isMarked: boolean;
     ingredientId: number;
@@ -214,27 +216,27 @@ export interface ToggleDirectionMarkAction {
 
 export interface RemoveSubDirectionAction {
     type: typeof RECIPE_ITEM_REMOVE_SUBDIRECTION;
-    payload: { directionIndex: number, subDirectionIndex: number };
+    payload: { directionIndex: number, stepNumber: number };
 }
 
 export interface ToggleSubDirectionMarkAction {
     type: typeof RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK;
-    payload: { directionIndex: number, subDirectionIndex: number };
+    payload: { directionIndex: number, stepNumber: number };
 }
 
 export interface UpdateSubDirectionNoteAction {
     type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE;
-    payload: { directionIndex: number, subDirectionIndex: number, note: string };
+    payload: { directionIndex: number, stepNumber: number, note: string };
 }
 
 export interface UpdateSubDirectionIngredientAmountAction {
     type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT;
-    payload: { directionIndex: number, subDirectionIndex: number, inputValue: string };
+    payload: { directionIndex: number, stepNumber: number, inputValue: string };
 }
 
 export interface UpdateSubDirectionIngredientUnitAction {
     type: typeof RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT;
-    payload: { directionIndex: number, subDirectionIndex: number, unit: units.WeightUnit | units.VolumeUnit };
+    payload: { directionIndex: number, stepNumber: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
 export interface CreateSubDirectionIngredientAction {
