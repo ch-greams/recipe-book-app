@@ -128,29 +128,6 @@ ALTER TABLE private.direction OWNER TO postgres;
 GRANT ALL ON TABLE private.direction TO postgres;
 
 
--- private.direction_part definition
-
--- Drop table
-
--- DROP TABLE private.direction_part;
-
-CREATE TABLE private.direction_part (
-	direction_id int8 NOT NULL,
-	step_number int2 NOT NULL,
-	"label" text NULL,
-	product_id int8 NULL,
-	product_amount float8 NULL,
-	"direction_part_type" private."direction_part_type" NOT NULL,
-	CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
-	CONSTRAINT direction_part_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
--- Permissions
-
-ALTER TABLE private.direction_part OWNER TO postgres;
-GRANT ALL ON TABLE private.direction_part TO postgres;
-
-
 -- private.ingredient definition
 
 -- Drop table
@@ -277,6 +254,35 @@ CREATE TABLE private.nutrition_fact (
 
 ALTER TABLE private.nutrition_fact OWNER TO postgres;
 GRANT ALL ON TABLE private.nutrition_fact TO postgres;
+
+
+-- private.direction_part definition
+
+-- Drop table
+
+-- DROP TABLE private.direction_part;
+
+CREATE TABLE private.direction_part (
+	direction_id int8 NOT NULL,
+	step_number int2 NOT NULL,
+	"direction_part_type" private."direction_part_type" NOT NULL,
+	comment_text text NULL,
+	ingredient_id int8 NULL,
+	ingredient_amount float8 NULL,
+	CONSTRAINT direction_part_ingredient_amount_check CHECK (((ingredient_amount > (0)::double precision) AND (ingredient_amount <= (1)::double precision))) NOT VALID,
+	CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
+	CONSTRAINT direction_part_type_check CHECK (
+CASE
+    WHEN (direction_part_type = 'ingredient'::private.direction_part_type) THEN ((comment_text IS NULL) AND (ingredient_id IS NOT NULL) AND (ingredient_amount IS NOT NULL))
+    ELSE ((comment_text IS NOT NULL) AND (ingredient_id IS NULL) AND (ingredient_amount IS NULL))
+END),
+	CONSTRAINT direction_part_fk FOREIGN KEY (ingredient_id) REFERENCES private.ingredient(id)
+);
+
+-- Permissions
+
+ALTER TABLE private.direction_part OWNER TO postgres;
+GRANT ALL ON TABLE private.direction_part TO postgres;
 
 
 -- private.ingredient_product_details source

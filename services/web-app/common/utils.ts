@@ -231,7 +231,7 @@ export default class Utils {
         return updatedNutritionFacts;
     }
 
-    // NOTE: OTHER
+    // NOTE: OTHER GENERIC THINGS
 
     public static sortBy<T>(field: keyof T): Comparer<T> {
         return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;

@@ -7,7 +7,9 @@ import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
     RecipeIngredient,
-    RecipeSubDirectionIngredient } from "@store/recipe/types";
+    RecipeSubDirectionComment,
+    RecipeSubDirectionIngredient,
+} from "@store/recipe/types";
 import {
     SubDirectionType,
 } from "@store/recipe/types";
@@ -82,24 +84,24 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
 
                 {(
                     ( direction.isOpen || !isReadOnly ) &&
-                    direction.steps.map((step, stepIndex) => (
-                        step.direction_part_type === SubDirectionType.Ingredient
+                    direction.steps.map((step) => (
+                        step.type === SubDirectionType.Ingredient
                             ? (
                                 <SubDirectionLine
-                                    key={`subDirectionLine_${stepIndex}`}
+                                    key={`subDirectionLine_${step.stepNumber}`}
                                     isReadOnly={isReadOnly}
                                     subDirection={step as RecipeSubDirectionIngredient}
                                     directionIndex={index}
-                                    subDirectionIndex={stepIndex}
+                                    stepNumber={step.stepNumber}
                                 />
                             )
                             : (
                                 <SubDirectionNoteLine
-                                    key={`subDirectionNoteLine_${stepIndex}`}
+                                    key={`subDirectionNoteLine_${step.stepNumber}`}
                                     isReadOnly={isReadOnly}
-                                    step={step}
+                                    step={step as RecipeSubDirectionComment}
                                     directionIndex={index}
-                                    stepIndex={stepIndex}
+                                    stepNumber={step.stepNumber}
                                 />
                             )
                     ))

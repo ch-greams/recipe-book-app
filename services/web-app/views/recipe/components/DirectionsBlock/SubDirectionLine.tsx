@@ -1,7 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import {
-    CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
+    CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX,
+    CY_SUB_DIRECTION_LINE_NAME, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
 } from "cypress/constants";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
@@ -21,11 +22,11 @@ interface Props {
     isReadOnly: boolean;
     subDirection: RecipeSubDirectionIngredient;
     directionIndex: number;
-    subDirectionIndex: number;
+    stepNumber: number;
 }
 
 
-const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, subDirectionIndex }) => {
+const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
@@ -33,7 +34,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
         <div
             data-cy={CY_SUB_DIRECTION_LINE_CHECKBOX}
             className={styles.lineCheckbox}
-            onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, subDirectionIndex))}
+            onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, stepNumber))}
         >
             {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
         </div>
@@ -43,7 +44,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
         <div
             data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
-            onClick={() => dispatch(actions.removeSubDirection(directionIndex, subDirectionIndex))}
+            onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
@@ -53,7 +54,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     const ingredientAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {subDirection.product_amount}
+            {subDirection.ingredientAmount}
         </div>
     );
 
@@ -62,11 +63,9 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
             type={"text"}
             className={styles.directionInfoLineAmountInput}
             placeholder={"#"}
-            value={subDirection.amountInput}
+            value={subDirection.ingredientAmountInput}
             onChange={(event) => {
-                dispatch(actions.updateSubDirectionIngredientAmount(
-                    directionIndex, subDirectionIndex, event.target.value,
-                ));
+                dispatch(actions.updateSubDirectionIngredientAmount(directionIndex, stepNumber, event.target.value));
             }}
         />
     );
@@ -87,26 +86,32 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                     style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}
                 >
 
-                    <div className={styles.directionInfoLineName}>
-                        {subDirection.label.toUpperCase()}
+                    <div
+                        data-cy={CY_SUB_DIRECTION_LINE_NAME}
+                        className={styles.directionInfoLineName}
+                    >
+                        {subDirection.ingredientName.toUpperCase()}
                     </div>
 
                 </div>
 
-                <div className={styles.directionInfoLineMeasure}>
+                <div className={styles.directionInfoLineMeasures}>
 
-                    {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
+                    <div className={styles.directionInfoLineMeasure}>
 
-                    <SelectInput
-                        type={SelectInputType.AltIngredientUnit}
-                        options={Object.values(Units).map((unit) => ({ value: unit }))}
-                        value={subDirection.unit}
-                        onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
-                            dispatch(actions.updateSubDirectionIngredientUnit(
-                                directionIndex, subDirectionIndex, option.value,
-                            ));
-                        }}
-                    />
+                        {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
+
+                        <SelectInput
+                            type={SelectInputType.AltIngredientUnit}
+                            options={Object.values(Units).map((unit) => ({ value: unit }))}
+                            value={subDirection.ingredientUnit}
+                            onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
+                                dispatch(actions.updateSubDirectionIngredientUnit(
+                                    directionIndex, stepNumber, option.value,
+                                ));
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

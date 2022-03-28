@@ -54,42 +54,42 @@ export function toggleDirectionMark(directionIndex: number): types.ToggleDirecti
     };
 }
 
-export function removeSubDirection(directionIndex: number, subDirectionIndex: number): types.RemoveSubDirectionAction {
+export function removeSubDirection(directionIndex: number, stepNumber: number): types.RemoveSubDirectionAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_SUBDIRECTION,
-        payload: { directionIndex, subDirectionIndex },
+        payload: { directionIndex, stepNumber },
     };
 }
 
-export function toggleSubDirectionMark(directionIndex: number, subDirectionIndex: number): types.ToggleSubDirectionMarkAction {
+export function toggleSubDirectionMark(directionIndex: number, stepNumber: number): types.ToggleSubDirectionMarkAction {
     return {
         type: types.RECIPE_ITEM_TOGGLE_SUBDIRECTION_MARK,
-        payload: { directionIndex, subDirectionIndex },
+        payload: { directionIndex, stepNumber },
     };
 }
 
-export function updateSubDirectionNote(directionIndex: number, subDirectionIndex: number, note: string): types.UpdateSubDirectionNoteAction {
+export function updateSubDirectionNote(directionIndex: number, stepNumber: number, note: string): types.UpdateSubDirectionNoteAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SUBDIRECTION_NOTE,
-        payload: { directionIndex, subDirectionIndex, note },
+        payload: { directionIndex, stepNumber, note },
     };
 }
 
 export function updateSubDirectionIngredientAmount(
-    directionIndex: number, subDirectionIndex: number, inputValue: string,
+    directionIndex: number, stepNumber: number, inputValue: string,
 ): types.UpdateSubDirectionIngredientAmountAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_AMOUNT,
-        payload: { directionIndex, subDirectionIndex, inputValue },
+        payload: { directionIndex, stepNumber, inputValue },
     };
 }
 
 export function updateSubDirectionIngredientUnit(
-    directionIndex: number, subDirectionIndex: number, unit: (units.WeightUnit | units.VolumeUnit),
+    directionIndex: number, stepNumber: number, unit: (units.WeightUnit | units.VolumeUnit),
 ): types.UpdateSubDirectionIngredientUnitAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SUBDIRECTION_INGREDIENT_UNIT,
-        payload: { directionIndex, subDirectionIndex, unit },
+        payload: { directionIndex, stepNumber, unit },
     };
 }
 
