@@ -1,4 +1,4 @@
-import type { NutritionFact } from "@views/shared/NutritionFactsBlock";
+import type { NutritionFact } from "@views/shared/nutrition-facts-block";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
