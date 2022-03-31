@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "npx eslint .",
+    "lint:style": "npx stylelint \"**/*.scss\"",
     "test": "echo \"Add tests you lazy fuck\"",
     "cy:run": "cypress run",
     "cy:open": "cypress open"
@@ -42,7 +43,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "stylelint": "^14.0.0",
     "stylelint-config-recess-order": "^2.5.0",
-    "stylelint-config-standard": "^23.0.0",
+    "stylelint-config-standard-scss": "^3.0.0",
     "typescript": "4.4.4"
   }
 }

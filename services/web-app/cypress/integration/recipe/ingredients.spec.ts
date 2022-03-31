@@ -43,31 +43,35 @@ describe("recipe_page", () => {
                 .contains(NutritionFactType.Carbohydrate.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("2.9");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Fat.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("15");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Protein.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("2.7");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Energy.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("157");
 
             // Confirm that alternative is visible and hover over it
             cy.get(`[data-cy=${CY_ALT_INGREDIENT_LINE}] [data-cy=${CY_ALT_INGREDIENT_INFO_LINE_NAME}]`)
                 .contains(ALT_INGREDIENT_NAME.toUpperCase())
-                .realHover()
-                .should("be.visible");
+                .should("be.visible")
+                .realHover({ scrollBehavior: false });
 
             // - Alternative product nutrition facts -
 
@@ -75,24 +79,28 @@ describe("recipe_page", () => {
                 .contains(NutritionFactType.Carbohydrate.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("4.2");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Fat.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("2");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Protein.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("8");
 
             cy.get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
                 .contains(NutritionFactType.Energy.toUpperCase())
                 .parent()
                 .get(`[data-cy=${CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .should("be.visible")
                 .contains("66.8");
 
             // Confirm that alternative is visible and change ingredient_product
