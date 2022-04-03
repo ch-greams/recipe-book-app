@@ -1,0 +1,53 @@
+@import "@styles/variables";
+
+
+.navbar {
+    display: flex;
+    height: 60px;
+    background-color: $color-default;
+
+    // position: fixed;
+    // width: 100%;
+    // z-index: $z-index-navbar-0;
+
+    .navbarLabel,
+    .navbarSearch,
+    .navbarUser {
+        display: flex;
+        flex: 1;
+        font-family: $font-default;
+        line-height: 60px;
+        color: $color-white;
+        border-bottom: 1px solid $color-white;
+    }
+
+    .navbarLabel > a,
+    .navbarUser > a {
+        flex: 1;
+        padding-left: 20px;
+        font-size: 24px;
+        font-weight: 800;
+        color: $color-white;
+        text-decoration: none;
+    }
+
+    .navbarUser {
+        padding-left: 20px;
+        cursor: pointer;
+
+        .navbarUserName {
+            padding-left: 20px;
+            font-weight: 800;
+        }
+    }
+
+    .navbarUser:hover {
+        background-color: $color-default-dark;
+    }
+
+    .navbarSearch {
+        flex: 2;
+
+        padding: 8px;
+    }
+}

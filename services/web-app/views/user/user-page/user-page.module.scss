@@ -1,0 +1,13 @@
+@import "@styles/variables";
+
+.homePage {
+
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    background-color: $color-default;
+}
