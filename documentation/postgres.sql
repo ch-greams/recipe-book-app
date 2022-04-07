@@ -60,6 +60,43 @@ CREATE SEQUENCE private.product_id
 
 ALTER SEQUENCE private.product_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.product_id TO postgres;
+
+-- DROP SEQUENCE private.user_id;
+
+CREATE SEQUENCE private.user_id
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE private.user_id OWNER TO postgres;
+GRANT ALL ON SEQUENCE private.user_id TO postgres;
+-- private."user" definition
+
+-- Drop table
+
+-- DROP TABLE private."user";
+
+CREATE TABLE private."user" (
+	id int8 NOT NULL DEFAULT nextval('private.user_id'::regclass),
+	email text NOT NULL,
+	"password" text NOT NULL,
+	first_name text NOT NULL,
+	last_name text NOT NULL,
+	CONSTRAINT user_email_unique UNIQUE (email),
+	CONSTRAINT user_pkey PRIMARY KEY (id)
+);
+
+-- Permissions
+
+ALTER TABLE private."user" OWNER TO postgres;
+GRANT ALL ON TABLE private."user" TO postgres;
+
+
 -- private.product definition
 
 -- Drop table
@@ -74,7 +111,9 @@ CREATE TABLE private.product (
 	subtitle text NULL,
 	description text NULL,
 	density float8 NULL DEFAULT 1,
-	CONSTRAINT product_pk PRIMARY KEY (id)
+	created_by int8 NULL,
+	CONSTRAINT product_pk PRIMARY KEY (id),
+	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );
 
 -- Permissions
@@ -126,6 +165,26 @@ CREATE TABLE private.direction (
 
 ALTER TABLE private.direction OWNER TO postgres;
 GRANT ALL ON TABLE private.direction TO postgres;
+
+
+-- private.favorite_product definition
+
+-- Drop table
+
+-- DROP TABLE private.favorite_product;
+
+CREATE TABLE private.favorite_product (
+	user_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	CONSTRAINT favorite_product_pk PRIMARY KEY (user_id, product_id),
+	CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES private."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Permissions
+
+ALTER TABLE private.favorite_product OWNER TO postgres;
+GRANT ALL ON TABLE private.favorite_product TO postgres;
 
 
 -- private.ingredient definition

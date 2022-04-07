@@ -75,7 +75,7 @@ pub struct NutritionFacts {
 
 impl NutritionFacts {
     pub fn new(id: i64) -> Self {
-        NutritionFacts {
+        Self {
             product_id: id,
             energy: None,
             carbohydrate: None,

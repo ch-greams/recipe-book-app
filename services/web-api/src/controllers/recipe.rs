@@ -1,8 +1,9 @@
 use actix_web::{
     get,
-    web::{Data, Json, Path},
+    web::{Data, Json, Path, Query},
     Scope,
 };
+use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
 use crate::types::{
@@ -13,12 +14,13 @@ use crate::types::{
     ingredient::{Ingredient, IngredientDetails},
     ingredient_product::IngredientProductDetails,
     product::Product,
-    recipe::Recipe,
+    recipe::{Recipe, RecipeShort},
 };
 
 pub fn scope() -> Scope {
-    actix_web::web::scope("recipe").service(find_by_id)
-    // .service(find_all)
+    actix_web::web::scope("recipe")
+        .service(find_by_id)
+        .service(find_all)
 }
 
 #[get("/{id}")]
@@ -81,9 +83,24 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
     Ok(Json(recipe))
 }
 
-// #[get("/")]
-// async fn find_all(db_pool: Data<Pool<Postgres>>) -> Result<Json<Vec<Recipe>>, Error> {
-//     let mut txn = db_pool.begin().await?;
-//     let recipe = Recipe::find_all(100).fetch_all(&mut txn).await?;
-//     Ok(Json(recipe))
-// }
+#[derive(Debug, Deserialize)]
+pub struct FindAllQuery {
+    limit: Option<u32>,
+    offset: Option<u32>,
+}
+
+#[get("")]
+async fn find_all(
+    query: Query<FindAllQuery>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Vec<RecipeShort>>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let products = Product::find_recipe_all(query.limit.unwrap_or(100), query.offset.unwrap_or(0))
+        .fetch_all(&mut txn)
+        .await?;
+
+    let recipes = products.iter().map(RecipeShort::new).collect();
+
+    Ok(Json(recipes))
+}

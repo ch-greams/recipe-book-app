@@ -20,7 +20,7 @@ impl Food {
         nutrition_facts: &NutritionFacts,
         custom_units: Vec<CustomUnit>,
     ) -> Self {
-        Food {
+        Self {
             id: product.id,
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),

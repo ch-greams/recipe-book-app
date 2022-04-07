@@ -47,7 +47,7 @@ pub struct DirectionPartDetails {
 
 impl DirectionPartDetails {
     pub fn new(direction_part: &DirectionPart) -> Self {
-        DirectionPartDetails {
+        Self {
             step_number: direction_part.step_number,
             direction_part_type: direction_part.direction_part_type.to_owned(),
             comment_text: direction_part.comment_text.to_owned(),

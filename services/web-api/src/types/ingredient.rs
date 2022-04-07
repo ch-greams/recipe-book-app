@@ -37,7 +37,7 @@ impl IngredientDetails {
             .map(|ip| (ip.product_id, ip.to_owned()))
             .collect::<HashMap<i64, IngredientProductDetails>>();
 
-        IngredientDetails {
+        Self {
             id: ingredient.id.to_owned(),
             product_id: ingredient.product_id.to_owned(),
             products,

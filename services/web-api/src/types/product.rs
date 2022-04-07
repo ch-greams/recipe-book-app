@@ -33,15 +33,16 @@ impl Product {
         .bind(id)
     }
 
-    pub fn find_food_all(limit: u32) -> QueryAs<'static, Postgres, Self, PgArguments> {
+    pub fn find_food_all(limit: u32, offset: u32) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT id, name, brand, subtitle, description, density
             FROM private.product
-            WHERE type = 'food' LIMIT $1
+            WHERE type = 'food' LIMIT $1 OFFSET $2
         "#,
         )
         .bind(limit)
+        .bind(offset)
     }
 
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
@@ -53,6 +54,21 @@ impl Product {
         "#,
         )
         .bind(id)
+    }
+
+    pub fn find_recipe_all(
+        limit: u32,
+        offset: u32,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, name, brand, subtitle, description, density
+            FROM private.product
+            WHERE type = 'recipe' LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
     }
 }
 
@@ -85,15 +101,16 @@ mod tests {
     #[ignore]
     async fn find_food_all() {
         let food_limit = 10;
+        let food_offset = 0;
 
         let mut txn = get_pool().begin().await.unwrap();
 
-        let products = Product::find_food_all(food_limit)
+        let products = Product::find_food_all(food_limit, food_offset)
             .fetch_all(&mut txn)
             .await
             .unwrap();
 
-        assert!(products.len() > 0);
+        assert!(!products.is_empty());
     }
 
     #[tokio::test]
@@ -109,5 +126,21 @@ mod tests {
             .unwrap();
 
         assert!(product.is_some());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_recipe_all() {
+        let recipe_limit = 10;
+        let recipe_offset = 0;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products = Product::find_recipe_all(recipe_limit, recipe_offset)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(!products.is_empty());
     }
 }

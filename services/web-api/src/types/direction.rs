@@ -56,7 +56,7 @@ impl DirectionDetails {
             .map(DirectionPartDetails::new)
             .collect();
 
-        DirectionDetails {
+        Self {
             id: direction.id,
             step_number: direction.step_number,
             name: direction.name.to_owned(),
