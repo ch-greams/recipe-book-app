@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import Utils from "@common/utils";
 import SearchInput from "@views/shared/search-input";
-import PersonIcon from "@icons/person-circle-outline.svg";
+import PersonIcon from "@icons/person-circle-sharp.svg";
 
 import styles from "./navbar.module.scss";
 

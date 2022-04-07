@@ -1,11 +1,11 @@
 import React from "react";
 
-import Utils from "@common/utils";
+import styles from "./footer.module.scss";
 
 
 const Footer: React.FC = () => {
     return (
-        <div style={{ height: "200px", background: Utils.COLOR_DEFAULT_DARK }}></div>
+        <div className={styles.footer}></div>
     );
 };
 

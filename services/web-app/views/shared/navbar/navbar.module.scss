@@ -6,6 +6,8 @@
     height: 60px;
     background-color: $color-default;
 
+    border-bottom: 2px solid $color-white;
+
     // position: fixed;
     // width: 100%;
     // z-index: $z-index-navbar-0;
@@ -15,10 +17,11 @@
     .navbarUser {
         display: flex;
         flex: 1;
+
         font-family: $font-default;
         line-height: 60px;
+
         color: $color-white;
-        border-bottom: 1px solid $color-white;
     }
 
     .navbarLabel > a,
@@ -37,7 +40,7 @@
 
         .navbarUserName {
             padding-left: 20px;
-            font-weight: 800;
+            font-weight: 600;
         }
     }
 

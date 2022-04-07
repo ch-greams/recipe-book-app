@@ -6,6 +6,7 @@ import type { ParsedUrlQuery } from "querystring";
 import Utils from "@common/utils";
 import DirectionsBlock from "@views/recipe/components/directions-block";
 import IngredientsBlock from "@views/recipe/components/ingredients-block";
+import BlockTitle from "@views/shared/block-title";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
 import SingleMessagePage from "@views/shared/single-message-page";
@@ -66,9 +67,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     nutritionFactInputs={nutritionFactInputs}
                 />
 
-                <div className={styles.recipePageBlockTitle}>
-                    {"INGREDIENTS"}
-                </div>
+                <BlockTitle text={"INGREDIENTS"} />
 
                 <IngredientsBlock
                     isReadOnly={isReadOnly}
@@ -76,9 +75,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     search={search}
                 />
 
-                <div className={styles.recipePageBlockTitle}>
-                    {"DIRECTIONS"}
-                </div>
+                <BlockTitle text={"DIRECTIONS"} />
 
                 <DirectionsBlock
                     isReadOnly={isReadOnly}
@@ -87,9 +84,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     ingredients={ingredients}
                 />
 
-                <div className={styles.recipePageBlockTitle}>
-                    {"DETAILED NUTRITION INFORMATION"}
-                </div>
+                <BlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <PageDetailedNutritionFactsBlock
                     isReadOnly={true}

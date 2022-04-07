@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import Utils from "@common/utils";
+import BlockTitle from "@views/shared/block-title";
 import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
@@ -75,9 +76,7 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
 
                 {/* Detailed Nutrition Information  */}
 
-                <div className={styles.pageBlockTitle}>
-                    {"DETAILED NUTRITION INFORMATION"}
-                </div>
+                <BlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <PageDetailedNutritionFactsBlock
                     nutritionFacts={nutritionFactsByServing}
