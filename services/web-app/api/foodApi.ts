@@ -21,4 +21,12 @@ export default class FoodApi {
 
         return foodItems;
     }
+
+    // TODO: Deprecate
+    public static async getFoodItemsDetailed(): Promise<Food[]> {
+
+        const { body: foodItems } = await superagent.get(`${FoodApi.API_PATH}/detailed`);
+
+        return foodItems;
+    }
 }

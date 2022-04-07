@@ -32,3 +32,22 @@ impl Food {
         }
     }
 }
+
+#[derive(Deserialize, Serialize)]
+pub struct FoodShort {
+    pub id: i64,
+    pub name: String,
+    pub brand: Option<String>,
+    pub subtitle: Option<String>,
+}
+
+impl FoodShort {
+    pub fn new(product: &Product) -> Self {
+        Self {
+            id: product.id,
+            name: product.name.to_owned(),
+            brand: product.brand.to_owned(),
+            subtitle: product.subtitle.to_owned(),
+        }
+    }
+}

@@ -12,7 +12,7 @@ describe("recipe_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
-            cy.intercept(`${CY_FOOD_API_PATH}`, { fixture: "food_items.json" });
+            cy.intercept(`${CY_FOOD_API_PATH}/detailed`, { fixture: "food_items.json" });
 
             cy.visit(`${CY_RECIPE_PATH}/29`);
         });

@@ -9,12 +9,16 @@ use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
 use crate::types::{
-    custom_unit::CustomUnit, error::Error, food::Food, nutrition_facts::NutritionFacts,
+    custom_unit::CustomUnit,
+    error::Error,
+    food::{Food, FoodShort},
+    nutrition_facts::NutritionFacts,
     product::Product,
 };
 
 pub fn scope() -> Scope {
     actix_web::web::scope("food")
+        .service(find_all_detailed)
         .service(find_by_id)
         .service(find_all)
 }
@@ -50,6 +54,22 @@ pub struct FindAllQuery {
 
 #[get("")]
 async fn find_all(
+    query: Query<FindAllQuery>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Vec<FoodShort>>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let products = Product::find_food_all(query.limit.unwrap_or(100), query.offset.unwrap_or(0))
+        .fetch_all(&mut txn)
+        .await?;
+
+    let foods = products.iter().map(FoodShort::new).collect();
+
+    Ok(Json(foods))
+}
+
+#[get("/detailed")]
+async fn find_all_detailed(
     query: Query<FindAllQuery>,
     db_pool: Data<Pool<Postgres>>,
 ) -> Result<Json<Vec<Food>>, Error> {

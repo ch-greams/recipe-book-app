@@ -15,10 +15,10 @@ export default class RecipeApi {
         return recipeItem;
     }
 
-    // public static async getRecipeItems(): Promise<Recipe[]> {
+    public static async getRecipeItems(): Promise<Recipe[]> {
 
-    //     const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
+        const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
 
-    //     return recipeItems;
-    // }
+        return recipeItems;
+    }
 }
