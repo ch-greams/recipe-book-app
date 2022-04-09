@@ -73,7 +73,9 @@ impl Product {
             r#"
             SELECT id, name, brand, subtitle, description, density
             FROM private.product
-            WHERE type = 'food' AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+            WHERE type = 'food'
+                AND (is_private = false OR created_by = $3)
+                AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -136,7 +138,9 @@ impl Product {
             r#"
             SELECT id, name, brand, subtitle, description, density
             FROM private.product
-            WHERE type = 'recipe' AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+            WHERE type = 'recipe' 
+                AND (is_private = false OR created_by = $3)
+                AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
