@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import * as constants from "cypress/constants";
 
 import Utils, { RoutePath } from "@common/utils";
 import BlockTitle from "@views/shared/block-title";
@@ -29,7 +30,7 @@ const FoodsBlock: React.FC<FoodsBlockProps> = ({ favoriteFoods, customFoods }) =
             <div className={styles.itemList}>
                 {favoriteFoods.map((food) => (
                     <Link key={food.id} href={Utils.getItemPath(RoutePath.Food, food.id)}>
-                        <div className={styles.infoLine}>
+                        <div data-cy={constants.CY_USER_FOOD_FAVORITE_ITEM} className={styles.infoLine}>
                             {food.name}
                         </div>
                     </Link>
@@ -41,7 +42,7 @@ const FoodsBlock: React.FC<FoodsBlockProps> = ({ favoriteFoods, customFoods }) =
             <div className={styles.itemList}>
                 {customFoods.map((food) => (
                     <Link key={food.id} href={Utils.getItemPath(RoutePath.Food, food.id)}>
-                        <div className={styles.infoLine}>
+                        <div data-cy={constants.CY_USER_FOOD_CUSTOM_ITEM} className={styles.infoLine}>
                             {food.name}
                         </div>
                     </Link>

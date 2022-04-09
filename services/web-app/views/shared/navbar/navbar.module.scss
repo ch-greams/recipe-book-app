@@ -8,13 +8,7 @@
 
     border-bottom: 2px solid $color-white;
 
-    // position: fixed;
-    // width: 100%;
-    // z-index: $z-index-navbar-0;
-
-    .navbarLabel,
-    .navbarSearch,
-    .navbarUser {
+    .navbarLogoSection {
         display: flex;
         flex: 1;
 
@@ -22,35 +16,55 @@
         line-height: 60px;
 
         color: $color-white;
-    }
 
-    .navbarLabel > a,
-    .navbarUser > a {
-        flex: 1;
-        padding-left: 20px;
-        font-size: 24px;
-        font-weight: 800;
-        color: $color-white;
-        text-decoration: none;
-    }
-
-    .navbarUser {
-        padding-left: 20px;
-        cursor: pointer;
-
-        .navbarUserName {
+        .navbarLogo {
+            flex: 1;
             padding-left: 20px;
-            font-weight: 600;
+
+            font-size: 24px;
+            font-weight: 800;
+
+            color: $color-white;
+            cursor: pointer;
         }
     }
 
-    .navbarUser:hover {
-        background-color: $color-default-dark;
+    .navbarSearchSection {
+
+        display: flex;
+        flex: 2;
+        padding: 8px;
+
+        font-family: $font-default;
+        line-height: 60px;
+
+        color: $color-white;
     }
 
-    .navbarSearch {
-        flex: 2;
+    .navbarUserSection {
 
-        padding: 8px;
+        display: flex;
+        flex: 1;
+        padding-left: 20px;
+
+        font-family: $font-default;
+        line-height: 60px;
+
+        color: $color-white;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $color-default-dark;
+        }
+
+        .navbarUser {
+            display: flex;
+            align-items: center;
+
+            .navbarUserName {
+                padding-left: 20px;
+                font-weight: 600;
+            }
+        }
     }
 }
