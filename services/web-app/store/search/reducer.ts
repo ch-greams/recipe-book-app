@@ -1,6 +1,4 @@
-import type {
-    SearchPageActionTypes,
-    SearchPageStore } from "./types";
+import type { SearchPageActionTypes, SearchPageStore } from "./types";
 import {
     INGREDIENTS_FETCH_ERROR,
     INGREDIENTS_FETCH_REQUEST,

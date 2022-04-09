@@ -19,6 +19,7 @@ use crate::types::{
 pub fn scope() -> Scope {
     actix_web::web::scope("food")
         .service(find_all_detailed)
+        .service(find_all_favorite)
         .service(find_by_id)
         .service(find_all)
 }
@@ -50,6 +51,7 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
 pub struct FindAllQuery {
     limit: Option<u32>,
     offset: Option<u32>,
+    user_id: Option<i64>,
 }
 
 #[get("")]
@@ -59,9 +61,40 @@ async fn find_all(
 ) -> Result<Json<Vec<FoodShort>>, Error> {
     let mut txn = db_pool.begin().await?;
 
-    let products = Product::find_food_all(query.limit.unwrap_or(100), query.offset.unwrap_or(0))
+    let products = if let Some(user_id) = query.user_id {
+        Product::find_food_all_created_by_user(
+            query.limit.unwrap_or(100),
+            query.offset.unwrap_or(0),
+            user_id,
+        )
         .fetch_all(&mut txn)
-        .await?;
+        .await?
+    } else {
+        Product::find_food_all(query.limit.unwrap_or(100), query.offset.unwrap_or(0))
+            .fetch_all(&mut txn)
+            .await?
+    };
+
+    let foods = products.iter().map(FoodShort::new).collect();
+
+    Ok(Json(foods))
+}
+
+#[get("/favorite/{user_id}")]
+async fn find_all_favorite(
+    user_id: Path<i64>,
+    query: Query<FindAllQuery>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Vec<FoodShort>>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let products = Product::find_food_all_favorite(
+        query.limit.unwrap_or(100),
+        query.offset.unwrap_or(0),
+        *user_id,
+    )
+    .fetch_all(&mut txn)
+    .await?;
 
     let foods = products.iter().map(FoodShort::new).collect();
 

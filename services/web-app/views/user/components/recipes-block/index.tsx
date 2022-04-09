@@ -1,5 +1,7 @@
 import React from "react";
+import Link from "next/link";
 
+import Utils, { RoutePath } from "@common/utils";
 import BlockTitle from "@views/shared/block-title";
 
 import styles from "./recipes-block.module.scss";
@@ -12,11 +14,12 @@ interface RecipeItem {
 }
 
 interface RecipesBlockProps {
-    recipes: RecipeItem[];
+    favoriteRecipes: RecipeItem[];
+    customRecipes: RecipeItem[];
 }
 
 
-const RecipesBlock: React.FC<RecipesBlockProps> = ({ recipes }) => {
+const RecipesBlock: React.FC<RecipesBlockProps> = ({ favoriteRecipes, customRecipes }) => {
 
     return (
         <div className={styles.recipesBlock}>
@@ -24,20 +27,24 @@ const RecipesBlock: React.FC<RecipesBlockProps> = ({ recipes }) => {
             <BlockTitle text={"Favorites"} />
 
             <div className={styles.itemList}>
-                {recipes.map((recipe) => (
-                    <div key={recipe.id} className={styles.infoLine}>
-                        {recipe.name}
-                    </div>
+                {favoriteRecipes.map((recipe) => (
+                    <Link key={recipe.id} href={Utils.getItemPath(RoutePath.Recipe, recipe.id)}>
+                        <div className={styles.infoLine}>
+                            {recipe.name}
+                        </div>
+                    </Link>
                 ))}
             </div>
 
             <BlockTitle text={"My Own"} />
 
             <div className={styles.itemList}>
-                {recipes.map((recipe) => (
-                    <div key={recipe.id} className={styles.infoLine}>
-                        {recipe.name}
-                    </div>
+                {customRecipes.map((recipe) => (
+                    <Link key={recipe.id} href={Utils.getItemPath(RoutePath.Recipe, recipe.id)}>
+                        <div className={styles.infoLine}>
+                            {recipe.name}
+                        </div>
+                    </Link>
                 ))}
             </div>
 

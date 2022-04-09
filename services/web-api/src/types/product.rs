@@ -38,11 +38,48 @@ impl Product {
             r#"
             SELECT id, name, brand, subtitle, description, density
             FROM private.product
-            WHERE type = 'food' LIMIT $1 OFFSET $2
+            WHERE type = 'food' AND is_private = false
+            LIMIT $1 OFFSET $2
         "#,
         )
         .bind(limit)
         .bind(offset)
+    }
+
+    pub fn find_food_all_created_by_user(
+        limit: u32,
+        offset: u32,
+        user_id: i64,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, name, brand, subtitle, description, density
+            FROM private.product
+            WHERE type = 'food' AND created_by = $3
+            LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
+        .bind(user_id)
+    }
+
+    pub fn find_food_all_favorite(
+        limit: u32,
+        offset: u32,
+        user_id: i64,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, name, brand, subtitle, description, density
+            FROM private.product
+            WHERE type = 'food' AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+            LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
+        .bind(user_id)
     }
 
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
@@ -64,11 +101,48 @@ impl Product {
             r#"
             SELECT id, name, brand, subtitle, description, density
             FROM private.product
-            WHERE type = 'recipe' LIMIT $1 OFFSET $2
+            WHERE type = 'recipe' AND is_private = false
+            LIMIT $1 OFFSET $2
         "#,
         )
         .bind(limit)
         .bind(offset)
+    }
+
+    pub fn find_recipe_all_created_by_user(
+        limit: u32,
+        offset: u32,
+        user_id: i64,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, name, brand, subtitle, description, density
+            FROM private.product
+            WHERE type = 'recipe' AND created_by = $3
+            LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
+        .bind(user_id)
+    }
+
+    pub fn find_recipe_all_favorite(
+        limit: u32,
+        offset: u32,
+        user_id: i64,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, name, brand, subtitle, description, density
+            FROM private.product
+            WHERE type = 'recipe' AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+            LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
+        .bind(user_id)
     }
 }
 
@@ -115,6 +189,41 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
+    async fn find_food_all_created_by_user() {
+        let food_limit = 10;
+        let food_offset = 0;
+        let food_user_id = 1;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products =
+            Product::find_food_all_created_by_user(food_limit, food_offset, food_user_id)
+                .fetch_all(&mut txn)
+                .await
+                .unwrap();
+
+        assert!(!products.is_empty());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_food_all_favorite() {
+        let food_limit = 10;
+        let food_offset = 0;
+        let food_user_id = 1;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products = Product::find_food_all_favorite(food_limit, food_offset, food_user_id)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(!products.is_empty());
+    }
+
+    #[tokio::test]
+    #[ignore]
     async fn find_recipe_by_id() {
         let recipe_id = 29;
 
@@ -140,6 +249,42 @@ mod tests {
             .fetch_all(&mut txn)
             .await
             .unwrap();
+
+        assert!(!products.is_empty());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_recipe_all_created_by_user() {
+        let recipe_limit = 10;
+        let recipe_offset = 0;
+        let recipe_user_id = 1;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products =
+            Product::find_recipe_all_created_by_user(recipe_limit, recipe_offset, recipe_user_id)
+                .fetch_all(&mut txn)
+                .await
+                .unwrap();
+
+        assert!(!products.is_empty());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn find_recipe_all_favorite() {
+        let recipe_limit = 10;
+        let recipe_offset = 0;
+        let recipe_user_id = 1;
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let products =
+            Product::find_recipe_all_favorite(recipe_limit, recipe_offset, recipe_user_id)
+                .fetch_all(&mut txn)
+                .await
+                .unwrap();
 
         assert!(!products.is_empty());
     }

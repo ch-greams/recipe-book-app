@@ -8,7 +8,7 @@ import Utils from "@common/utils";
 import FoodApi from "@api/foodApi";
 
 import * as actions from "./actions";
-import { extractCustomUnits } from "./reducers";
+import { extractCustomUnits } from "./reducer";
 import * as types from "./types";
 
 

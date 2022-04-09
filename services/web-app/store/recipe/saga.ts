@@ -7,7 +7,7 @@ import Utils from "@common/utils";
 import RecipeApi from "@api/recipeApi";
 
 import * as actions from "./actions";
-import { extractCustomUnits } from "./reducers";
+import { extractCustomUnits } from "./reducer";
 import * as types from "./types";
 
 

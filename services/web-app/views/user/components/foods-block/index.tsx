@@ -1,5 +1,7 @@
 import React from "react";
+import Link from "next/link";
 
+import Utils, { RoutePath } from "@common/utils";
 import BlockTitle from "@views/shared/block-title";
 
 import styles from "./foods-block.module.scss";
@@ -12,11 +14,12 @@ interface FoodItem {
 }
 
 interface FoodsBlockProps {
-    foods: FoodItem[];
+    favoriteFoods: FoodItem[];
+    customFoods: FoodItem[];
 }
 
 
-const FoodsBlock: React.FC<FoodsBlockProps> = ({ foods }) => {
+const FoodsBlock: React.FC<FoodsBlockProps> = ({ favoriteFoods, customFoods }) => {
 
     return (
         <div className={styles.foodsBlock}>
@@ -24,20 +27,24 @@ const FoodsBlock: React.FC<FoodsBlockProps> = ({ foods }) => {
             <BlockTitle text={"Favorites"} />
 
             <div className={styles.itemList}>
-                {foods.map((food) => (
-                    <div key={food.id} className={styles.infoLine}>
-                        {food.name}
-                    </div>
+                {favoriteFoods.map((food) => (
+                    <Link key={food.id} href={Utils.getItemPath(RoutePath.Food, food.id)}>
+                        <div className={styles.infoLine}>
+                            {food.name}
+                        </div>
+                    </Link>
                 ))}
             </div>
 
             <BlockTitle text={"My Own"} />
 
             <div className={styles.itemList}>
-                {foods.map((food) => (
-                    <div key={food.id} className={styles.infoLine}>
-                        {food.name}
-                    </div>
+                {customFoods.map((food) => (
+                    <Link key={food.id} href={Utils.getItemPath(RoutePath.Food, food.id)}>
+                        <div className={styles.infoLine}>
+                            {food.name}
+                        </div>
+                    </Link>
                 ))}
             </div>
 
