@@ -1,15 +1,12 @@
+import { UserMenuItem } from "@common/utils";
+
 import type { UserActionTypes, UserStore } from "./types";
-import {
-    FOODS_FETCH_ERROR,
-    FOODS_FETCH_REQUEST,
-    FOODS_FETCH_SUCCESS,
-    RECIPES_FETCH_ERROR,
-    RECIPES_FETCH_REQUEST,
-    RECIPES_FETCH_SUCCESS,
-} from "./types";
+import * as types from "./types";
+
 
 
 const initialState: UserStore = {
+    selectedMenuItem: UserMenuItem.Diary,
 
     favoriteRecipes: [],
     customRecipes: [],
@@ -26,7 +23,14 @@ export default function searchPageReducer(state = initialState, action: UserActi
 
     switch (action.type) {
 
-        case RECIPES_FETCH_REQUEST: {
+        case types.USER_UPDATE_MENU_ITEM: {
+            return {
+                ...state,
+                selectedMenuItem: action.payload,
+            };
+        }
+
+        case types.USER_RECIPES_FETCH_REQUEST: {
             return {
                 ...state,
 
@@ -38,7 +42,7 @@ export default function searchPageReducer(state = initialState, action: UserActi
             };
         }
 
-        case RECIPES_FETCH_SUCCESS: {
+        case types.USER_RECIPES_FETCH_SUCCESS: {
             return {
                 ...state,
 
@@ -50,7 +54,7 @@ export default function searchPageReducer(state = initialState, action: UserActi
             };
         }
 
-        case RECIPES_FETCH_ERROR: {
+        case types.USER_RECIPES_FETCH_ERROR: {
             return {
                 ...state,
 
@@ -62,7 +66,7 @@ export default function searchPageReducer(state = initialState, action: UserActi
             };
         }
 
-        case FOODS_FETCH_REQUEST: {
+        case types.USER_FOODS_FETCH_REQUEST: {
             return {
                 ...state,
 
@@ -74,7 +78,7 @@ export default function searchPageReducer(state = initialState, action: UserActi
             };
         }
 
-        case FOODS_FETCH_SUCCESS: {
+        case types.USER_FOODS_FETCH_SUCCESS: {
             return {
                 ...state,
 
@@ -86,7 +90,7 @@ export default function searchPageReducer(state = initialState, action: UserActi
             };
         }
 
-        case FOODS_FETCH_ERROR: {
+        case types.USER_FOODS_FETCH_ERROR: {
             return {
                 ...state,
 

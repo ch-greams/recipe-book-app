@@ -8,6 +8,12 @@ import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
 
+export enum UserMenuItem {
+    Diary = "Diary",
+    Recipes = "Recipes",
+    Foods = "Foods",
+}
+
 export enum RoutePath {
     Home = "",
     Food = "food",

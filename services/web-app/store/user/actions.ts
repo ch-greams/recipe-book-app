@@ -1,16 +1,24 @@
-import type { FoodsFetchRequestedAction, RecipesFetchRequestedAction } from "./types";
-import { FOODS_FETCH_REQUEST, RECIPES_FETCH_REQUEST } from "./types";
+import type { UserMenuItem } from "@common/utils";
+
+import type { UserFoodsFetchRequestedAction, UserRecipesFetchRequestedAction, UserUpdateMenuItem } from "./types";
+import * as types from "./types";
 
 
-
-export function requestRecipes(): RecipesFetchRequestedAction {
+export function updateMenuItem(menuItem: UserMenuItem): UserUpdateMenuItem {
     return {
-        type: RECIPES_FETCH_REQUEST,
+        type: types.USER_UPDATE_MENU_ITEM,
+        payload: menuItem,
     };
 }
 
-export function requestFoods(): FoodsFetchRequestedAction {
+export function requestRecipes(): UserRecipesFetchRequestedAction {
     return {
-        type: FOODS_FETCH_REQUEST,
+        type: types.USER_RECIPES_FETCH_REQUEST,
+    };
+}
+
+export function requestFoods(): UserFoodsFetchRequestedAction {
+    return {
+        type: types.USER_FOODS_FETCH_REQUEST,
     };
 }
