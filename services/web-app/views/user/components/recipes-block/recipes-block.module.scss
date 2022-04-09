@@ -1,0 +1,36 @@
+@import "@styles/variables";
+
+
+.recipesBlock {
+    .itemList {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .infoLine {
+
+            display: flex;
+            justify-content: space-between;
+
+            min-width: 300px;
+
+            padding: 10px 12px 10px 20px;
+
+            font-family: $font-default;
+            font-size: 16px;
+            font-weight: 500;
+
+            color: $color-default;
+
+            cursor: pointer;
+
+            background-color: $color-white;
+
+            border-color: $color-grey-light;
+            border-style: solid;
+            border-width: 1px;
+
+            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        }
+    }
+}

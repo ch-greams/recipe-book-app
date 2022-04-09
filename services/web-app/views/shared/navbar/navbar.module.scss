@@ -1,0 +1,70 @@
+@import "@styles/variables";
+
+
+.navbar {
+    display: flex;
+    height: 60px;
+    background-color: $color-default;
+
+    border-bottom: 2px solid $color-white;
+
+    .navbarLogoSection {
+        display: flex;
+        flex: 1;
+
+        font-family: $font-default;
+        line-height: 60px;
+
+        color: $color-white;
+
+        .navbarLogo {
+            flex: 1;
+            padding-left: 20px;
+
+            font-size: 24px;
+            font-weight: 800;
+
+            color: $color-white;
+            cursor: pointer;
+        }
+    }
+
+    .navbarSearchSection {
+
+        display: flex;
+        flex: 2;
+        padding: 8px;
+
+        font-family: $font-default;
+        line-height: 60px;
+
+        color: $color-white;
+    }
+
+    .navbarUserSection {
+
+        display: flex;
+        flex: 1;
+        padding-left: 20px;
+
+        font-family: $font-default;
+        line-height: 60px;
+
+        color: $color-white;
+        cursor: pointer;
+
+        &:hover {
+            background-color: $color-default-dark;
+        }
+
+        .navbarUser {
+            display: flex;
+            align-items: center;
+
+            .navbarUserName {
+                padding-left: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+}

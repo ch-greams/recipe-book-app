@@ -25,7 +25,7 @@ impl Recipe {
         ingredients: Vec<IngredientDetails>,
         directions: Vec<DirectionDetails>,
     ) -> Self {
-        Recipe {
+        Self {
             id: product.id,
             name: product.name,
             brand: product.brand,
@@ -35,6 +35,25 @@ impl Recipe {
             custom_units,
             ingredients,
             directions,
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct RecipeShort {
+    pub id: i64,
+    pub name: String,
+    pub brand: Option<String>,
+    pub subtitle: Option<String>,
+}
+
+impl RecipeShort {
+    pub fn new(product: &Product) -> Self {
+        Self {
+            id: product.id,
+            name: product.name.to_owned(),
+            brand: product.brand.to_owned(),
+            subtitle: product.subtitle.to_owned(),
         }
     }
 }

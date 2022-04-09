@@ -1,3 +1,3 @@
-import FoodPage from "@views/food/FoodPage";
+import FoodPage from "@views/food/food-page";
 
 export default FoodPage;

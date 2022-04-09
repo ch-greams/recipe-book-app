@@ -16,6 +16,7 @@ module.exports = {
                 ...config.module.rules,
                 {
                     test: /\.svg$/,
+                    issuer: /\.tsx$/,
                     use: [ "@svgr/webpack" ],
                 },
             ],

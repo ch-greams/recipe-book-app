@@ -1,0 +1,37 @@
+@import "@styles/variables";
+
+
+.searchInput {
+
+    display: flex;
+    flex: 2;
+    align-items: center;
+
+    background-color: $color-default-dark;
+
+    border: 1px solid $color-white;
+
+    .icon {
+        flex: 1;
+    }
+
+    .input {
+        flex: 10;
+
+        font-family: $font-default;
+        font-size: 20px;
+        font-weight: 500;
+
+        color: $color-white;
+
+        background-color: $color-default-dark;
+
+        border: none;
+    }
+
+    .input::placeholder {
+        line-height: normal;
+        color: $color-input-placeholder;
+    }
+}
+

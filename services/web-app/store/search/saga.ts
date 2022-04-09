@@ -18,7 +18,7 @@ function* fetchIngredients(): Generator<StrictEffect, void, Food[]> {
 
     try {
 
-        const foodItems = yield call(FoodApi.getFoodItems);
+        const foodItems = yield call(FoodApi.getFoodItemsDetailed);
 
         const ingredients = foodItems.map<IngredientProduct>((foodItem) => ({
             product_id: foodItem.id,

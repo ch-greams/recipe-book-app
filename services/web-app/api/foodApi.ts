@@ -1,6 +1,6 @@
 import superagent from "superagent";
 
-import type { Food } from "@common/typings";
+import type { Food, FoodShort } from "@common/typings";
 
 
 export default class FoodApi {
@@ -15,9 +15,24 @@ export default class FoodApi {
         return foodItem;
     }
 
-    public static async getFoodItems(): Promise<Food[]> {
+    public static async getFavoriteFoodItems(): Promise<FoodShort[]> {
 
-        const { body: foodItems } = await superagent.get(FoodApi.API_PATH);
+        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}/favorite/1`);
+
+        return recipeItems;
+    }
+
+    public static async getCustomFoodItems(): Promise<FoodShort[]> {
+
+        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}?limit=20&user_id=1`);
+
+        return recipeItems;
+    }
+
+    // TODO: Deprecate
+    public static async getFoodItemsDetailed(): Promise<Food[]> {
+
+        const { body: foodItems } = await superagent.get(`${FoodApi.API_PATH}/detailed`);
 
         return foodItems;
     }

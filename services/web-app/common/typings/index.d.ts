@@ -14,6 +14,13 @@ export interface Food {
     custom_units: CustomUnit[];
 }
 
+export interface FoodShort {
+    id: number;
+    name: string;
+    brand: string;
+    subtitle: string;
+}
+
 export interface IngredientProduct {
     product_id: number;
     product_type: "food" | "recipe";
@@ -67,4 +74,11 @@ export interface Recipe {
 
     ingredients: Ingredient[];
     directions: Direction[];
+}
+
+export interface RecipeShort{
+    id: number;
+    name: string;
+    brand: string;
+    subtitle: string;
 }

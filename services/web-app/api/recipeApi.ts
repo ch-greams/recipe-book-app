@@ -1,6 +1,6 @@
 import superagent from "superagent";
 
-import type { Recipe } from "@common/typings";
+import type { Recipe, RecipeShort } from "@common/typings";
 
 
 export default class RecipeApi {
@@ -15,10 +15,17 @@ export default class RecipeApi {
         return recipeItem;
     }
 
-    // public static async getRecipeItems(): Promise<Recipe[]> {
+    public static async getFavoriteRecipeItems(): Promise<RecipeShort[]> {
 
-    //     const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
+        const { body: recipeItems } = await superagent.get(`${RecipeApi.API_PATH}/favorite/1`);
 
-    //     return recipeItems;
-    // }
+        return recipeItems;
+    }
+
+    public static async getCustomRecipeItems(): Promise<RecipeShort[]> {
+
+        const { body: recipeItems } = await superagent.get(`${RecipeApi.API_PATH}?limit=20&user_id=1`);
+
+        return recipeItems;
+    }
 }

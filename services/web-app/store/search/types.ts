@@ -1,7 +1,7 @@
 import type { IngredientProduct } from "@common/typings";
 
 
-
+// FIXME: Not really a page (should be a part of RBA-12 rework)
 export interface SearchPageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
