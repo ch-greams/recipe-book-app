@@ -1,10 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
-import {
-    CY_INGREDIENT_LINE, CY_INGREDIENT_LINE_REMOVE_BUTTON,
-    CY_NEW_INGREDIENT_LINE, CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON,
-} from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import Utils, { RoutePath } from "@common/utils";
 import * as actions from "@store/recipe/actions";
@@ -76,7 +73,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
 
     const removeButton = (
         <div
-            data-cy={CY_INGREDIENT_LINE_REMOVE_BUTTON}
+            data-cy={constants.CY_INGREDIENT_LINE_REMOVE_BUTTON}
             className={styles.ingredientLineButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
@@ -88,7 +85,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
 
     const searchButton = (
         <div
-            data-cy={CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON}
+            data-cy={constants.CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON}
             className={styles.ingredientLineButton}
             onClick={addIngredient}
         >
@@ -127,7 +124,7 @@ const IngredientLine: React.FC<IngredientLineProps> = ({
     return (
 
         <div
-            data-cy={( isNew ? CY_NEW_INGREDIENT_LINE : CY_INGREDIENT_LINE )}
+            data-cy={( isNew ? constants.CY_NEW_INGREDIENT_LINE : constants.CY_INGREDIENT_LINE )}
             key={`ingredient_${ingredient.id}`}
             className={styles.ingredientLine}
         >

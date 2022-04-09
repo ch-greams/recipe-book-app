@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { CY_NEW_SUB_DIRECTION_LINE, CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON } from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import Utils from "@common/utils";
 import type { SelectOption } from "@views/shared/select-input";
@@ -49,12 +49,12 @@ const NewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }) =
     return (
 
         <div
-            data-cy={CY_NEW_SUB_DIRECTION_LINE}
+            data-cy={constants.CY_NEW_SUB_DIRECTION_LINE}
             className={styles.subDirectionLine}
         >
 
             <div
-                data-cy={CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON}
+                data-cy={constants.CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON}
                 className={styles.subDirectionLineButton}
                 onClick={() => createSubDirection(currentDirectionPart)}
             >

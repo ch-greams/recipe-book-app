@@ -1,6 +1,6 @@
 import type { PropsWithChildren, ReactElement } from "react";
 import React from "react";
-import { CY_SELECT_INPUT, CY_SELECT_INPUT_OPTION } from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import Utils from "@common/utils";
 
@@ -72,7 +72,7 @@ const getClassName = (type: SelectInputType): string => {
 
 const getOption = <T extends ID>(option: SelectOption<T>, onSelect: (option: SelectOption<T>) => void): JSX.Element => (
     <div
-        data-cy={CY_SELECT_INPUT_OPTION}
+        data-cy={constants.CY_SELECT_INPUT_OPTION}
         key={option.value}
         className={styles.selectInputOption}
         onClick={() => onSelect(option)}
@@ -119,7 +119,7 @@ const SelectInput = <T extends ID>({
 
     return (
         <div
-            data-cy={CY_SELECT_INPUT}
+            data-cy={constants.CY_SELECT_INPUT}
             className={getClassName(type)}
         >
             <div className={styles.selectInputOption} onClick={showList}>

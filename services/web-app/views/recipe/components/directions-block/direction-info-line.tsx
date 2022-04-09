@@ -1,9 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-    CY_DIRECTION_INFO_LINE_DURATION_MEASURE, CY_DIRECTION_INFO_LINE_NAME_INPUT,
-    CY_DIRECTION_INFO_LINE_NAME_TEXT, CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE,
-} from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
 import type { SelectOption } from "@views/shared/select-input";
@@ -74,7 +71,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                     </div>
 
                     <div
-                        data-cy={CY_DIRECTION_INFO_LINE_NAME_TEXT}
+                        data-cy={constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}
                         className={styles.directionInfoLineName}
                     >
                         {direction.name.toUpperCase()}
@@ -85,7 +82,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
                     {( direction.temperature && (
                         <div
-                            data-cy={CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                            data-cy={constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
                             className={styles.directionInfoLineMeasure}
                         >
                             {temperatureAmountText}
@@ -95,7 +92,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
                     {( direction.duration && (
                         <div
-                            data-cy={CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                            data-cy={constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
                             className={styles.directionInfoLineMeasure}
                         >
                             {durationAmountText}
@@ -124,7 +121,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                         }}
                     />
                     <input
-                        data-cy={CY_DIRECTION_INFO_LINE_NAME_INPUT}
+                        data-cy={constants.CY_DIRECTION_INFO_LINE_NAME_INPUT}
                         type={"text"}
                         className={styles.directionInfoLineNameInput}
                         value={direction.name.toUpperCase()}
@@ -138,7 +135,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                 <div className={styles.directionInfoLineMeasures}>
 
                     <div
-                        data-cy={CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                        data-cy={constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
                         className={styles.directionInfoLineMeasure}
                     >
 
@@ -157,7 +154,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                     </div>
 
                     <div
-                        data-cy={CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                        data-cy={constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
                         className={styles.directionInfoLineMeasure}
                     >
 

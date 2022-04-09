@@ -3,7 +3,6 @@ import * as constants from "cypress/constants";
 import { UserMenuItem } from "@common/utils";
 
 
-
 describe("user", () => {
 
     describe("navbar", () => {

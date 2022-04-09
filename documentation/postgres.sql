@@ -112,6 +112,7 @@ CREATE TABLE private.product (
 	description text NULL,
 	density float8 NULL DEFAULT 1,
 	created_by int8 NULL,
+	is_private bool NOT NULL DEFAULT true,
 	CONSTRAINT product_pk PRIMARY KEY (id),
 	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );

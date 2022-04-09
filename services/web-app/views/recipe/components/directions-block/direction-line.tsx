@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CY_DIRECTION_LINE, CY_DIRECTION_LINE_CHECKBOX, CY_DIRECTION_LINE_REMOVE_BUTTON } from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import Utils from "@common/utils";
 import * as actions from "@store/recipe/actions";
@@ -46,7 +46,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
 
     const checkbox = (
         <div
-            data-cy={CY_DIRECTION_LINE_CHECKBOX}
+            data-cy={constants.CY_DIRECTION_LINE_CHECKBOX}
             className={styles.lineCheckbox}
             onClick={() => toggleDirectionMark(index)}
         >
@@ -56,7 +56,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
 
     const removeButton = (
         <div
-            data-cy={CY_DIRECTION_LINE_REMOVE_BUTTON}
+            data-cy={constants.CY_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.directionLineButton}
             onClick={() => removeDirection(index)}
         >
@@ -68,7 +68,7 @@ const DirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction, in
 
     return (
         <div
-            data-cy={CY_DIRECTION_LINE}
+            data-cy={constants.CY_DIRECTION_LINE}
             className={styles.directionLine}
         >
 

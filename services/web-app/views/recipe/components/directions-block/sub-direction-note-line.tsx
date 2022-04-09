@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON } from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import Utils from "@common/utils";
 import * as actions from "@store/recipe/actions";
@@ -44,7 +44,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
 
     const removeButton = (
         <div
-            data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
+            data-cy={constants.CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
@@ -75,7 +75,7 @@ const SubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionInde
     return (
 
         <div
-            data-cy={CY_SUB_DIRECTION_LINE}
+            data-cy={constants.CY_SUB_DIRECTION_LINE}
             className={styles.subDirectionLine}
         >
 

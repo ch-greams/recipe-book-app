@@ -1,9 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import {
-    CY_SUB_DIRECTION_LINE, CY_SUB_DIRECTION_LINE_CHECKBOX,
-    CY_SUB_DIRECTION_LINE_NAME, CY_SUB_DIRECTION_LINE_REMOVE_BUTTON,
-} from "cypress/constants";
+import * as constants from "cypress/constants";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
@@ -32,7 +29,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     const checkbox = (
         <div
-            data-cy={CY_SUB_DIRECTION_LINE_CHECKBOX}
+            data-cy={constants.CY_SUB_DIRECTION_LINE_CHECKBOX}
             className={styles.lineCheckbox}
             onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, stepNumber))}
         >
@@ -42,7 +39,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
     const removeButton = (
         <div
-            data-cy={CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
+            data-cy={constants.CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
@@ -73,7 +70,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
     return (
 
         <div
-            data-cy={CY_SUB_DIRECTION_LINE}
+            data-cy={constants.CY_SUB_DIRECTION_LINE}
             className={styles.subDirectionLine}
         >
 
@@ -87,7 +84,7 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
                 >
 
                     <div
-                        data-cy={CY_SUB_DIRECTION_LINE_NAME}
+                        data-cy={constants.CY_SUB_DIRECTION_LINE_NAME}
                         className={styles.directionInfoLineName}
                     >
                         {subDirection.ingredientName.toUpperCase()}
