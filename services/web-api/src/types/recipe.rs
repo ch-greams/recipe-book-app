@@ -9,9 +9,9 @@ use serde::{Deserialize, Serialize};
 pub struct Recipe {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
-    pub description: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
     pub density: f64,
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetails>,
@@ -43,8 +43,8 @@ impl Recipe {
 pub struct RecipeShort {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
 }
 
 impl RecipeShort {

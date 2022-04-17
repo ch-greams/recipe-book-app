@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 
 use actix_web::{
-    get,
+    get, post,
     web::{Data, Json, Path, Query},
     Scope,
 };
@@ -22,6 +22,7 @@ pub fn scope() -> Scope {
         .service(find_all_favorite)
         .service(find_by_id)
         .service(find_all)
+        .service(create_food)
 }
 
 #[get("/{id}")]
@@ -41,6 +42,32 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
         .fetch_optional(&mut txn)
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
+
+    let food = Food::new(&product, &nutrition_facts, custom_units);
+
+    Ok(Json(food))
+}
+
+#[post("")]
+async fn create_food(
+    request: Json<Food>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Food>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let product = request.get_product(1).insert_food(&mut txn).await?;
+
+    let custom_units = CustomUnit::insert_mutliple(request.get_custom_units(product.id))
+        .fetch_all(&mut txn)
+        .await?;
+
+    let nutrition_facts = request
+        .nutrition_facts
+        .clone()
+        .insert(product.id, &mut txn)
+        .await?;
+
+    txn.commit().await?;
 
     let food = Food::new(&product, &nutrition_facts, custom_units);
 

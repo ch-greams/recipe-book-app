@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgArguments;
 use sqlx::query::QueryAs;
-use sqlx::Postgres;
+use sqlx::{Executor, Postgres};
+
+use super::error::Error;
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
@@ -11,21 +13,22 @@ pub enum ProductType {
     Recipe,
 }
 
-#[derive(sqlx::FromRow, Deserialize, Serialize, Clone)]
+#[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
-    pub description: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
     pub density: f64,
+    pub created_by: i64,
 }
 
 impl Product {
     pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'food' AND id = $1
         "#,
@@ -36,7 +39,7 @@ impl Product {
     pub fn find_food_all(limit: u32, offset: u32) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'food' AND is_private = false
             LIMIT $1 OFFSET $2
@@ -53,7 +56,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'food' AND created_by = $3
             LIMIT $1 OFFSET $2
@@ -71,7 +74,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'food'
                 AND (is_private = false OR created_by = $3)
@@ -87,7 +90,7 @@ impl Product {
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'recipe' AND id = $1
         "#,
@@ -101,7 +104,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'recipe' AND is_private = false
             LIMIT $1 OFFSET $2
@@ -118,7 +121,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'recipe' AND created_by = $3
             LIMIT $1 OFFSET $2
@@ -136,7 +139,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density
+            SELECT id, name, brand, subtitle, description, density, created_by
             FROM private.product
             WHERE type = 'recipe' 
                 AND (is_private = false OR created_by = $3)
@@ -147,6 +150,32 @@ impl Product {
         .bind(limit)
         .bind(offset)
         .bind(user_id)
+    }
+
+    pub async fn insert_food(
+        self,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let query = sqlx::query_as(
+            r#"
+            INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private)
+            VALUES ('food', $1, $2, $3, $4, $5, $6, false)
+            RETURNING id, name, brand, subtitle, description, density, created_by;
+        "#,
+        )
+            .bind(self.name)
+            .bind(self.brand)
+            .bind(self.subtitle)
+            .bind(self.description)
+            .bind(self.density)
+            .bind(self.created_by);
+
+        let result = query
+            .fetch_optional(txn)
+            .await?
+            .ok_or_else(|| Error::not_created("product"))?;
+
+        Ok(result)
     }
 }
 
@@ -291,5 +320,30 @@ mod tests {
                 .unwrap();
 
         assert!(!products.is_empty());
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn insert_food() {
+        let product = Product {
+            id: 0,
+            name: "test-name".to_string(),
+            brand: "test-brand".to_string(),
+            subtitle: "test-subtitle".to_string(),
+            description: "test-description".to_string(),
+            density: 1.0,
+            created_by: 1,
+        };
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let product_result = product.insert_food(&mut txn).await.unwrap();
+
+        assert_ne!(
+            0, product_result.id,
+            "product_result should not have a placeholder value for id"
+        );
+
+        txn.rollback().await.unwrap();
     }
 }

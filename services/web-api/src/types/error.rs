@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 pub enum ErrorKind {
     Database,
     NotFound,
+    NotCreated,
 }
 
 impl std::fmt::Display for ErrorKind {
@@ -53,7 +54,14 @@ impl Error {
     pub fn not_found(id: i64) -> Error {
         Error {
             kind: ErrorKind::NotFound,
-            text: format!("Record with id = {} is not found", id),
+            text: format!("Record with id = {} was not found", id),
+        }
+    }
+
+    pub fn not_created(table: &str) -> Error {
+        Error {
+            kind: ErrorKind::NotCreated,
+            text: format!("Error during {} creation", table),
         }
     }
 }

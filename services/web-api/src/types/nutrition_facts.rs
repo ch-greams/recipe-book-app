@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgArguments, query::QueryAs, Postgres};
+use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-#[derive(sqlx::FromRow, sqlx::Type, Serialize, Deserialize, Clone)]
+use super::error::Error;
+
+#[derive(sqlx::FromRow, sqlx::Type, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "nutrition_fact")]
 pub struct NutritionFacts {
     pub product_id: i64,
@@ -72,6 +74,76 @@ pub struct NutritionFacts {
     pub ash: Option<f64>,
     pub caffeine: Option<f64>,
 }
+
+const NUTRITION_FACTS_FIELDS: &[&str] = &[
+    "product_id",
+    "energy",
+    "carbohydrate",
+    "dietary_fiber",
+    "starch",
+    "sugars",
+    "fat",
+    "monounsaturated",
+    "polyunsaturated",
+    "omega_3",
+    "omega_6",
+    "saturated",
+    "trans_fats",
+    "cholesterol",
+    "phytosterol",
+    "protein",
+    "tryptophan",
+    "threonine",
+    "isoleucine",
+    "leucine",
+    "lysine",
+    "methionine",
+    "cystine",
+    "phenylalanine",
+    "tyrosine",
+    "valine",
+    "arginine",
+    "histidine",
+    "alanine",
+    "aspartic_acid",
+    "glutamic_acid",
+    "glycine",
+    "proline",
+    "serine",
+    "hydroxyproline",
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_b1",
+    "vitamin_b2",
+    "vitamin_b3",
+    "vitamin_b5",
+    "vitamin_b6",
+    "vitamin_b9",
+    "vitamin_b12",
+    "choline",
+    "betaine",
+    "calcium",
+    "iron",
+    "magnesium",
+    "phosphorus",
+    "potassium",
+    "sodium",
+    "zinc",
+    "copper",
+    "manganese",
+    "selenium",
+    "fluoride",
+    "chromium",
+    "iodine",
+    "molybdenum",
+    "alcohol",
+    "water",
+    "ash",
+    "caffeine",
+];
 
 impl NutritionFacts {
     pub fn new(id: i64) -> Self {
@@ -157,11 +229,111 @@ impl NutritionFacts {
         sqlx::query_as("SELECT * FROM private.nutrition_fact WHERE product_id = ANY($1)")
             .bind(product_ids)
     }
+
+    pub async fn insert(
+        self,
+        product_id: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let field_places = (1..=NUTRITION_FACTS_FIELDS.len())
+            .map(|count| format!("${}", count))
+            .collect::<Vec<String>>()
+            .join(", ");
+
+        let query_text = format!(
+            r#"
+                INSERT INTO private.nutrition_fact ({field_names})
+                VALUES ({field_places})
+                RETURNING {field_names};
+            "#,
+            field_names = NUTRITION_FACTS_FIELDS.join(", "),
+            field_places = field_places
+        );
+
+        let query = sqlx::query_as(&query_text)
+            .bind(product_id)
+            .bind(self.energy)
+            .bind(self.carbohydrate)
+            .bind(self.dietary_fiber)
+            .bind(self.starch)
+            .bind(self.sugars)
+            .bind(self.fat)
+            .bind(self.monounsaturated)
+            .bind(self.polyunsaturated)
+            .bind(self.omega_3)
+            .bind(self.omega_6)
+            .bind(self.saturated)
+            .bind(self.trans_fats)
+            .bind(self.cholesterol)
+            .bind(self.phytosterol)
+            .bind(self.protein)
+            .bind(self.tryptophan)
+            .bind(self.threonine)
+            .bind(self.isoleucine)
+            .bind(self.leucine)
+            .bind(self.lysine)
+            .bind(self.methionine)
+            .bind(self.cystine)
+            .bind(self.phenylalanine)
+            .bind(self.tyrosine)
+            .bind(self.valine)
+            .bind(self.arginine)
+            .bind(self.histidine)
+            .bind(self.alanine)
+            .bind(self.aspartic_acid)
+            .bind(self.glutamic_acid)
+            .bind(self.glycine)
+            .bind(self.proline)
+            .bind(self.serine)
+            .bind(self.hydroxyproline)
+            .bind(self.vitamin_a)
+            .bind(self.vitamin_c)
+            .bind(self.vitamin_d)
+            .bind(self.vitamin_e)
+            .bind(self.vitamin_k)
+            .bind(self.vitamin_b1)
+            .bind(self.vitamin_b2)
+            .bind(self.vitamin_b3)
+            .bind(self.vitamin_b5)
+            .bind(self.vitamin_b6)
+            .bind(self.vitamin_b9)
+            .bind(self.vitamin_b12)
+            .bind(self.choline)
+            .bind(self.betaine)
+            .bind(self.calcium)
+            .bind(self.iron)
+            .bind(self.magnesium)
+            .bind(self.phosphorus)
+            .bind(self.potassium)
+            .bind(self.sodium)
+            .bind(self.zinc)
+            .bind(self.copper)
+            .bind(self.manganese)
+            .bind(self.selenium)
+            .bind(self.fluoride)
+            .bind(self.chromium)
+            .bind(self.iodine)
+            .bind(self.molybdenum)
+            .bind(self.alcohol)
+            .bind(self.water)
+            .bind(self.ash)
+            .bind(self.caffeine);
+
+        let result = query
+            .fetch_optional(txn)
+            .await?
+            .ok_or_else(|| Error::not_created("nutrition_facts"))?;
+
+        Ok(result)
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{config::Config, types::nutrition_facts::NutritionFacts};
+    use crate::{
+        config::Config,
+        types::{nutrition_facts::NutritionFacts, product::Product},
+    };
     use sqlx::{PgPool, Pool, Postgres};
 
     fn get_pool() -> Pool<Postgres> {
@@ -197,5 +369,44 @@ mod tests {
             .unwrap();
 
         assert!(nutrition_facts.len() == 2);
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn insert() {
+        let ph_product_id = 0;
+
+        let product = Product {
+            id: ph_product_id,
+            name: "test-name".to_string(),
+            brand: "test-brand".to_string(),
+            subtitle: "test-subtitle".to_string(),
+            description: "test-description".to_string(),
+            density: 1.0,
+            created_by: 1,
+        };
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let product_result = product.insert_food(&mut txn).await.unwrap();
+
+        assert_ne!(
+            ph_product_id, product_result.id,
+            "product_result should not have a placeholder value for id"
+        );
+
+        let nutrition_facts = NutritionFacts::new(ph_product_id);
+
+        let nutrition_facts_result = nutrition_facts
+            .insert(product_result.id, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            ph_product_id, nutrition_facts_result.product_id,
+            "nutrition_facts_result should not have a placeholder value for product_id"
+        );
+
+        txn.rollback().await.unwrap();
     }
 }
