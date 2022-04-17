@@ -68,6 +68,7 @@ mod tests {
         config::Config,
         types::{custom_unit::CustomUnit, product::Product},
     };
+    use chrono::Utc;
     use sqlx::{PgPool, Pool, Postgres};
 
     fn get_pool() -> Pool<Postgres> {
@@ -116,6 +117,8 @@ mod tests {
             description: "test-description".to_string(),
             density: 1.0,
             created_by: 1,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
         };
 
         let mut txn = get_pool().begin().await.unwrap();

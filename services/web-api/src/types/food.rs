@@ -1,3 +1,4 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use super::{custom_unit::CustomUnit, nutrition_facts::NutritionFacts, product::Product};
@@ -12,6 +13,8 @@ pub struct Food {
     pub density: f64,
     pub nutrition_facts: NutritionFacts,
     pub custom_units: Vec<CustomUnit>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl Food {
@@ -29,6 +32,8 @@ impl Food {
             density: product.density,
             nutrition_facts: nutrition_facts.to_owned(),
             custom_units,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 
@@ -41,6 +46,8 @@ impl Food {
             description: self.description.clone(),
             density: self.density,
             created_by: user_id,
+            created_at: Utc::now(),
+            updated_at: Utc::now(),
         }
     }
 
@@ -63,6 +70,8 @@ pub struct FoodShort {
     pub name: String,
     pub brand: String,
     pub subtitle: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl FoodShort {
@@ -72,6 +81,8 @@ impl FoodShort {
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }

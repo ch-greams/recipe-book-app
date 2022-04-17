@@ -3,6 +3,7 @@ use super::direction::DirectionDetails;
 use super::ingredient::IngredientDetails;
 use super::product::Product;
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
@@ -16,6 +17,8 @@ pub struct Recipe {
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetails>,
     pub directions: Vec<DirectionDetails>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl Recipe {
@@ -35,6 +38,8 @@ impl Recipe {
             custom_units,
             ingredients,
             directions,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }
@@ -45,6 +50,8 @@ pub struct RecipeShort {
     pub name: String,
     pub brand: String,
     pub subtitle: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl RecipeShort {
@@ -54,6 +61,8 @@ impl RecipeShort {
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }
