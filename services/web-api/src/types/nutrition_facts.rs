@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::error::Error;
+use super::{error::Error, food::CreateNutritionFactsPayload};
 
 #[derive(sqlx::FromRow, sqlx::Type, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "nutrition_fact")]
@@ -231,7 +231,7 @@ impl NutritionFacts {
     }
 
     pub async fn insert(
-        self,
+        nutrition_facts_payload: &CreateNutritionFactsPayload,
         product_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
@@ -252,72 +252,72 @@ impl NutritionFacts {
 
         let query = sqlx::query_as(&query_text)
             .bind(product_id)
-            .bind(self.energy)
-            .bind(self.carbohydrate)
-            .bind(self.dietary_fiber)
-            .bind(self.starch)
-            .bind(self.sugars)
-            .bind(self.fat)
-            .bind(self.monounsaturated)
-            .bind(self.polyunsaturated)
-            .bind(self.omega_3)
-            .bind(self.omega_6)
-            .bind(self.saturated)
-            .bind(self.trans_fats)
-            .bind(self.cholesterol)
-            .bind(self.phytosterol)
-            .bind(self.protein)
-            .bind(self.tryptophan)
-            .bind(self.threonine)
-            .bind(self.isoleucine)
-            .bind(self.leucine)
-            .bind(self.lysine)
-            .bind(self.methionine)
-            .bind(self.cystine)
-            .bind(self.phenylalanine)
-            .bind(self.tyrosine)
-            .bind(self.valine)
-            .bind(self.arginine)
-            .bind(self.histidine)
-            .bind(self.alanine)
-            .bind(self.aspartic_acid)
-            .bind(self.glutamic_acid)
-            .bind(self.glycine)
-            .bind(self.proline)
-            .bind(self.serine)
-            .bind(self.hydroxyproline)
-            .bind(self.vitamin_a)
-            .bind(self.vitamin_c)
-            .bind(self.vitamin_d)
-            .bind(self.vitamin_e)
-            .bind(self.vitamin_k)
-            .bind(self.vitamin_b1)
-            .bind(self.vitamin_b2)
-            .bind(self.vitamin_b3)
-            .bind(self.vitamin_b5)
-            .bind(self.vitamin_b6)
-            .bind(self.vitamin_b9)
-            .bind(self.vitamin_b12)
-            .bind(self.choline)
-            .bind(self.betaine)
-            .bind(self.calcium)
-            .bind(self.iron)
-            .bind(self.magnesium)
-            .bind(self.phosphorus)
-            .bind(self.potassium)
-            .bind(self.sodium)
-            .bind(self.zinc)
-            .bind(self.copper)
-            .bind(self.manganese)
-            .bind(self.selenium)
-            .bind(self.fluoride)
-            .bind(self.chromium)
-            .bind(self.iodine)
-            .bind(self.molybdenum)
-            .bind(self.alcohol)
-            .bind(self.water)
-            .bind(self.ash)
-            .bind(self.caffeine);
+            .bind(nutrition_facts_payload.energy)
+            .bind(nutrition_facts_payload.carbohydrate)
+            .bind(nutrition_facts_payload.dietary_fiber)
+            .bind(nutrition_facts_payload.starch)
+            .bind(nutrition_facts_payload.sugars)
+            .bind(nutrition_facts_payload.fat)
+            .bind(nutrition_facts_payload.monounsaturated)
+            .bind(nutrition_facts_payload.polyunsaturated)
+            .bind(nutrition_facts_payload.omega_3)
+            .bind(nutrition_facts_payload.omega_6)
+            .bind(nutrition_facts_payload.saturated)
+            .bind(nutrition_facts_payload.trans_fats)
+            .bind(nutrition_facts_payload.cholesterol)
+            .bind(nutrition_facts_payload.phytosterol)
+            .bind(nutrition_facts_payload.protein)
+            .bind(nutrition_facts_payload.tryptophan)
+            .bind(nutrition_facts_payload.threonine)
+            .bind(nutrition_facts_payload.isoleucine)
+            .bind(nutrition_facts_payload.leucine)
+            .bind(nutrition_facts_payload.lysine)
+            .bind(nutrition_facts_payload.methionine)
+            .bind(nutrition_facts_payload.cystine)
+            .bind(nutrition_facts_payload.phenylalanine)
+            .bind(nutrition_facts_payload.tyrosine)
+            .bind(nutrition_facts_payload.valine)
+            .bind(nutrition_facts_payload.arginine)
+            .bind(nutrition_facts_payload.histidine)
+            .bind(nutrition_facts_payload.alanine)
+            .bind(nutrition_facts_payload.aspartic_acid)
+            .bind(nutrition_facts_payload.glutamic_acid)
+            .bind(nutrition_facts_payload.glycine)
+            .bind(nutrition_facts_payload.proline)
+            .bind(nutrition_facts_payload.serine)
+            .bind(nutrition_facts_payload.hydroxyproline)
+            .bind(nutrition_facts_payload.vitamin_a)
+            .bind(nutrition_facts_payload.vitamin_c)
+            .bind(nutrition_facts_payload.vitamin_d)
+            .bind(nutrition_facts_payload.vitamin_e)
+            .bind(nutrition_facts_payload.vitamin_k)
+            .bind(nutrition_facts_payload.vitamin_b1)
+            .bind(nutrition_facts_payload.vitamin_b2)
+            .bind(nutrition_facts_payload.vitamin_b3)
+            .bind(nutrition_facts_payload.vitamin_b5)
+            .bind(nutrition_facts_payload.vitamin_b6)
+            .bind(nutrition_facts_payload.vitamin_b9)
+            .bind(nutrition_facts_payload.vitamin_b12)
+            .bind(nutrition_facts_payload.choline)
+            .bind(nutrition_facts_payload.betaine)
+            .bind(nutrition_facts_payload.calcium)
+            .bind(nutrition_facts_payload.iron)
+            .bind(nutrition_facts_payload.magnesium)
+            .bind(nutrition_facts_payload.phosphorus)
+            .bind(nutrition_facts_payload.potassium)
+            .bind(nutrition_facts_payload.sodium)
+            .bind(nutrition_facts_payload.zinc)
+            .bind(nutrition_facts_payload.copper)
+            .bind(nutrition_facts_payload.manganese)
+            .bind(nutrition_facts_payload.selenium)
+            .bind(nutrition_facts_payload.fluoride)
+            .bind(nutrition_facts_payload.chromium)
+            .bind(nutrition_facts_payload.iodine)
+            .bind(nutrition_facts_payload.molybdenum)
+            .bind(nutrition_facts_payload.alcohol)
+            .bind(nutrition_facts_payload.water)
+            .bind(nutrition_facts_payload.ash)
+            .bind(nutrition_facts_payload.caffeine);
 
         let result = query
             .fetch_optional(txn)
@@ -332,9 +332,10 @@ impl NutritionFacts {
 mod tests {
     use crate::{
         config::Config,
-        types::{nutrition_facts::NutritionFacts, product::Product},
+        types::{food::CreateFoodPayload, nutrition_facts::NutritionFacts, product::Product},
+        utils,
     };
-    use chrono::Utc;
+
     use sqlx::{PgPool, Pool, Postgres};
 
     fn get_pool() -> Pool<Postgres> {
@@ -377,33 +378,27 @@ mod tests {
     async fn insert() {
         let ph_product_id = 0;
 
-        let product = Product {
-            id: ph_product_id,
-            name: "test-name".to_string(),
-            brand: "test-brand".to_string(),
-            subtitle: "test-subtitle".to_string(),
-            description: "test-description".to_string(),
-            density: 1.0,
-            created_by: 1,
-            created_at: Utc::now(),
-            updated_at: Utc::now(),
-        };
+        let create_product_payload: CreateFoodPayload =
+            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
         let mut txn = get_pool().begin().await.unwrap();
 
-        let product_result = product.insert_food(&mut txn).await.unwrap();
+        let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             ph_product_id, product_result.id,
             "product_result should not have a placeholder value for id"
         );
 
-        let nutrition_facts = NutritionFacts::new(ph_product_id);
-
-        let nutrition_facts_result = nutrition_facts
-            .insert(product_result.id, &mut txn)
-            .await
-            .unwrap();
+        let nutrition_facts_result = NutritionFacts::insert(
+            &create_product_payload.nutrition_facts,
+            product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
 
         assert_ne!(
             ph_product_id, nutrition_facts_result.product_id,

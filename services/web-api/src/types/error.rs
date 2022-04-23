@@ -8,6 +8,7 @@ pub enum ErrorKind {
     Database,
     NotFound,
     NotCreated,
+    NotUpdated,
 }
 
 impl std::fmt::Display for ErrorKind {
@@ -62,6 +63,13 @@ impl Error {
         Error {
             kind: ErrorKind::NotCreated,
             text: format!("Error during {} creation", table),
+        }
+    }
+
+    pub fn not_updated(table: &str, id: i64) -> Error {
+        Error {
+            kind: ErrorKind::NotUpdated,
+            text: format!("Error during update of {} with id {}", table, id),
         }
     }
 }

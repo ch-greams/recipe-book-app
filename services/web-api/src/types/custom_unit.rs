@@ -1,6 +1,8 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Postgres};
 
+use super::food::CreateCustomUnitPayload;
+
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct CustomUnit {
     pub name: String,
@@ -35,17 +37,18 @@ impl CustomUnit {
     }
 
     pub fn insert_mutliple(
-        custom_units: Vec<CustomUnit>,
+        custom_unit_payloads: &[CreateCustomUnitPayload],
+        product_id: i64,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         let mut names: Vec<String> = Vec::new();
         let mut amounts: Vec<f64> = Vec::new();
         let mut units: Vec<String> = Vec::new();
         let mut product_ids: Vec<i64> = Vec::new();
-        custom_units.into_iter().for_each(|cu| {
-            names.push(cu.name);
-            amounts.push(cu.amount);
-            units.push(cu.unit);
-            product_ids.push(cu.product_id);
+        custom_unit_payloads.iter().for_each(|cu_payload| {
+            names.push(cu_payload.name.to_owned());
+            amounts.push(cu_payload.amount);
+            units.push(cu_payload.unit.to_owned());
+            product_ids.push(product_id);
         });
 
         sqlx::query_as(
@@ -66,9 +69,10 @@ impl CustomUnit {
 mod tests {
     use crate::{
         config::Config,
-        types::{custom_unit::CustomUnit, product::Product},
+        types::{custom_unit::CustomUnit, food::CreateFoodPayload, product::Product},
+        utils,
     };
-    use chrono::Utc;
+
     use sqlx::{PgPool, Pool, Postgres};
 
     fn get_pool() -> Pool<Postgres> {
@@ -109,46 +113,25 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn insert_mutliple() {
-        let product = Product {
-            id: 0,
-            name: "test-name".to_string(),
-            brand: "test-brand".to_string(),
-            subtitle: "test-subtitle".to_string(),
-            description: "test-description".to_string(),
-            density: 1.0,
-            created_by: 1,
-            created_at: Utc::now(),
-            updated_at: Utc::now(),
-        };
+        let create_product_payload: CreateFoodPayload =
+            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
         let mut txn = get_pool().begin().await.unwrap();
 
-        let product_result = product.insert_food(&mut txn).await.unwrap();
+        let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, product_result.id,
             "product_result should not have a placeholder value for id"
         );
 
-        let custom_units = vec![
-            CustomUnit {
-                name: "test-name-1".to_string(),
-                amount: 100.0,
-                unit: "test-unit".to_string(),
-                product_id: product_result.id,
-            },
-            CustomUnit {
-                name: "test-name-2".to_string(),
-                amount: 200.0,
-                unit: "test-unit".to_string(),
-                product_id: product_result.id,
-            },
-        ];
-
-        let custom_units_result = CustomUnit::insert_mutliple(custom_units)
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        let custom_units_result =
+            CustomUnit::insert_mutliple(&create_product_payload.custom_units, product_result.id)
+                .fetch_all(&mut txn)
+                .await
+                .unwrap();
 
         assert_eq!(custom_units_result.len(), 2);
 

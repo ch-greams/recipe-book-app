@@ -15,3 +15,6 @@ anyhow = "1.0.53"
 tokio = { version = "1.7.0", features = ["full"] }
 thiserror = "1.0.30"
 config = "0.12"
+
+[dev-dependencies]
+serde_json = "1"

@@ -11,7 +11,7 @@ use sqlx::{Pool, Postgres};
 use crate::types::{
     custom_unit::CustomUnit,
     error::Error,
-    food::{Food, FoodShort},
+    food::{CreateFoodPayload, Food, FoodShort},
     nutrition_facts::NutritionFacts,
     product::Product,
 };
@@ -50,22 +50,19 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
 
 #[post("")]
 async fn create_food(
-    request: Json<Food>,
+    request: Json<CreateFoodPayload>,
     db_pool: Data<Pool<Postgres>>,
 ) -> Result<Json<Food>, Error> {
     let mut txn = db_pool.begin().await?;
 
-    let product = request.get_product(1).insert_food(&mut txn).await?;
+    let product = Product::insert_food(&request, 1, &mut txn).await?;
 
-    let custom_units = CustomUnit::insert_mutliple(request.get_custom_units(product.id))
+    let custom_units = CustomUnit::insert_mutliple(&request.custom_units, product.id)
         .fetch_all(&mut txn)
         .await?;
 
-    let nutrition_facts = request
-        .nutrition_facts
-        .clone()
-        .insert(product.id, &mut txn)
-        .await?;
+    let nutrition_facts =
+        NutritionFacts::insert(&request.nutrition_facts, product.id, &mut txn).await?;
 
     txn.commit().await?;
 
