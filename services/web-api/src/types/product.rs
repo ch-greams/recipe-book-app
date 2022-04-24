@@ -5,7 +5,7 @@ use sqlx::query::QueryAs;
 use sqlx::{Executor, Postgres};
 
 use super::error::Error;
-use super::food::CreateFoodPayload;
+use super::food::{CreateFoodPayload, UpdateFoodPayload};
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
@@ -158,7 +158,7 @@ impl Product {
     }
 
     pub async fn insert_food(
-        payload: &CreateFoodPayload,
+        create_food_payload: &CreateFoodPayload,
         created_by: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
@@ -169,13 +169,13 @@ impl Product {
             RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
         "#,
         )
-            .bind(payload.name.to_owned())
-            .bind(payload.brand.to_owned())
-            .bind(payload.subtitle.to_owned())
-            .bind(payload.description.to_owned())
-            .bind(payload.density)
+            .bind(create_food_payload.name.to_owned())
+            .bind(create_food_payload.brand.to_owned())
+            .bind(create_food_payload.subtitle.to_owned())
+            .bind(create_food_payload.description.to_owned())
+            .bind(create_food_payload.density)
             .bind(created_by)
-            .bind(payload.is_private)
+            .bind(create_food_payload.is_private)
             .bind(Utc::now())
             .bind(Utc::now());
 
@@ -183,6 +183,42 @@ impl Product {
             .fetch_optional(txn)
             .await?
             .ok_or_else(|| Error::not_created("product"))?;
+
+        Ok(result)
+    }
+
+    pub async fn update_food(
+        update_food_payload: &UpdateFoodPayload,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let query = sqlx::query_as(
+            r#"
+            UPDATE private.product SET
+                type = 'food',
+                name = $1,
+                brand = $2,
+                subtitle = $3,
+                description = $4,
+                density = $5,
+                is_private = $6,
+                updated_at = $7
+            WHERE id = $8
+            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+        "#,
+        )
+            .bind(update_food_payload.name.to_owned())
+            .bind(update_food_payload.brand.to_owned())
+            .bind(update_food_payload.subtitle.to_owned())
+            .bind(update_food_payload.description.to_owned())
+            .bind(update_food_payload.density)
+            .bind(update_food_payload.is_private)
+            .bind(Utc::now())
+            .bind(update_food_payload.id);
+
+        let result = query
+            .fetch_optional(txn)
+            .await?
+            .ok_or_else(|| Error::not_updated("product", update_food_payload.id))?;
 
         Ok(result)
     }

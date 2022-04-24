@@ -107,6 +107,23 @@ pub struct CreateNutritionFactsPayload {
     pub caffeine: Option<f64>,
 }
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct UpdateFoodPayload {
+    pub id: i64,
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
+    pub density: f64,
+    pub nutrition_facts: UpdateNutritionFactsPayload,
+    pub custom_units: Vec<UpdateCustomUnitPayload>,
+    pub is_private: bool,
+}
+
+pub type UpdateCustomUnitPayload = CustomUnit;
+
+pub type UpdateNutritionFactsPayload = NutritionFacts;
+
 impl Food {
     pub fn new(
         product: &Product,

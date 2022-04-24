@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{error::Error, food::CreateNutritionFactsPayload};
+use super::{
+    error::Error,
+    food::{CreateNutritionFactsPayload, UpdateNutritionFactsPayload},
+};
 
 #[derive(sqlx::FromRow, sqlx::Type, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "nutrition_fact")]
@@ -323,6 +326,105 @@ impl NutritionFacts {
             .fetch_optional(txn)
             .await?
             .ok_or_else(|| Error::not_created("nutrition_facts"))?;
+
+        Ok(result)
+    }
+
+    pub async fn update(
+        nutrition_facts_payload: &UpdateNutritionFactsPayload,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let fields_with_binding = NUTRITION_FACTS_FIELDS[1..]
+            .iter()
+            .enumerate()
+            // NOTE: Using "+ 2" to count in a skip for "product_id" field which came first before
+            .map(|(i, x)| format!("{} = ${}", x, i + 2))
+            .collect::<Vec<String>>()
+            .join(", ");
+
+        let query_text = format!(
+            r#"
+                UPDATE private.nutrition_fact SET
+                    {fields_with_binding}
+                WHERE product_id = $1
+                RETURNING {field_names};
+            "#,
+            fields_with_binding = fields_with_binding,
+            field_names = NUTRITION_FACTS_FIELDS.join(", ")
+        );
+
+        let query = sqlx::query_as(&query_text)
+            .bind(nutrition_facts_payload.product_id)
+            .bind(nutrition_facts_payload.energy)
+            .bind(nutrition_facts_payload.carbohydrate)
+            .bind(nutrition_facts_payload.dietary_fiber)
+            .bind(nutrition_facts_payload.starch)
+            .bind(nutrition_facts_payload.sugars)
+            .bind(nutrition_facts_payload.fat)
+            .bind(nutrition_facts_payload.monounsaturated)
+            .bind(nutrition_facts_payload.polyunsaturated)
+            .bind(nutrition_facts_payload.omega_3)
+            .bind(nutrition_facts_payload.omega_6)
+            .bind(nutrition_facts_payload.saturated)
+            .bind(nutrition_facts_payload.trans_fats)
+            .bind(nutrition_facts_payload.cholesterol)
+            .bind(nutrition_facts_payload.phytosterol)
+            .bind(nutrition_facts_payload.protein)
+            .bind(nutrition_facts_payload.tryptophan)
+            .bind(nutrition_facts_payload.threonine)
+            .bind(nutrition_facts_payload.isoleucine)
+            .bind(nutrition_facts_payload.leucine)
+            .bind(nutrition_facts_payload.lysine)
+            .bind(nutrition_facts_payload.methionine)
+            .bind(nutrition_facts_payload.cystine)
+            .bind(nutrition_facts_payload.phenylalanine)
+            .bind(nutrition_facts_payload.tyrosine)
+            .bind(nutrition_facts_payload.valine)
+            .bind(nutrition_facts_payload.arginine)
+            .bind(nutrition_facts_payload.histidine)
+            .bind(nutrition_facts_payload.alanine)
+            .bind(nutrition_facts_payload.aspartic_acid)
+            .bind(nutrition_facts_payload.glutamic_acid)
+            .bind(nutrition_facts_payload.glycine)
+            .bind(nutrition_facts_payload.proline)
+            .bind(nutrition_facts_payload.serine)
+            .bind(nutrition_facts_payload.hydroxyproline)
+            .bind(nutrition_facts_payload.vitamin_a)
+            .bind(nutrition_facts_payload.vitamin_c)
+            .bind(nutrition_facts_payload.vitamin_d)
+            .bind(nutrition_facts_payload.vitamin_e)
+            .bind(nutrition_facts_payload.vitamin_k)
+            .bind(nutrition_facts_payload.vitamin_b1)
+            .bind(nutrition_facts_payload.vitamin_b2)
+            .bind(nutrition_facts_payload.vitamin_b3)
+            .bind(nutrition_facts_payload.vitamin_b5)
+            .bind(nutrition_facts_payload.vitamin_b6)
+            .bind(nutrition_facts_payload.vitamin_b9)
+            .bind(nutrition_facts_payload.vitamin_b12)
+            .bind(nutrition_facts_payload.choline)
+            .bind(nutrition_facts_payload.betaine)
+            .bind(nutrition_facts_payload.calcium)
+            .bind(nutrition_facts_payload.iron)
+            .bind(nutrition_facts_payload.magnesium)
+            .bind(nutrition_facts_payload.phosphorus)
+            .bind(nutrition_facts_payload.potassium)
+            .bind(nutrition_facts_payload.sodium)
+            .bind(nutrition_facts_payload.zinc)
+            .bind(nutrition_facts_payload.copper)
+            .bind(nutrition_facts_payload.manganese)
+            .bind(nutrition_facts_payload.selenium)
+            .bind(nutrition_facts_payload.fluoride)
+            .bind(nutrition_facts_payload.chromium)
+            .bind(nutrition_facts_payload.iodine)
+            .bind(nutrition_facts_payload.molybdenum)
+            .bind(nutrition_facts_payload.alcohol)
+            .bind(nutrition_facts_payload.water)
+            .bind(nutrition_facts_payload.ash)
+            .bind(nutrition_facts_payload.caffeine);
+
+        let result = query.fetch_optional(txn).await?.ok_or_else(|| {
+            Error::not_updated("nutrition_facts", nutrition_facts_payload.product_id)
+        })?;
 
         Ok(result)
     }

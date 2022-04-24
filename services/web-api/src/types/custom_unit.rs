@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgArguments, query::QueryAs, Postgres};
+use sqlx::{postgres::PgArguments, query::QueryAs, Postgres, Transaction};
 
-use super::food::CreateCustomUnitPayload;
+use super::{
+    error::Error,
+    food::{CreateCustomUnitPayload, UpdateCustomUnitPayload},
+};
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct CustomUnit {
@@ -62,6 +65,50 @@ impl CustomUnit {
         .bind(amounts)
         .bind(units)
         .bind(product_ids)
+    }
+
+    pub async fn replace_mutliple(
+        custom_unit_payloads: &[UpdateCustomUnitPayload],
+        product_id: i64,
+        txn: &mut Transaction<'_, Postgres>,
+    ) -> Result<Vec<Self>, Error> {
+        let mut names: Vec<String> = Vec::new();
+        let mut amounts: Vec<f64> = Vec::new();
+        let mut units: Vec<String> = Vec::new();
+        let mut product_ids: Vec<i64> = Vec::new();
+        custom_unit_payloads.iter().for_each(|cu_payload| {
+            names.push(cu_payload.name.to_owned());
+            amounts.push(cu_payload.amount);
+            units.push(cu_payload.unit.to_owned());
+            product_ids.push(cu_payload.product_id);
+        });
+
+        let delete_query = sqlx::query_as(
+            r#"
+            DELETE FROM private.custom_unit
+            WHERE product_id = $1
+            RETURNING name, amount, unit, product_id;
+            "#,
+        )
+        .bind(product_id);
+
+        let _delete_query_result: Vec<Self> = delete_query.fetch_all(&mut *txn).await?;
+
+        let insert_query = sqlx::query_as(
+            r#"
+            INSERT INTO private.custom_unit (name, amount, unit, product_id)
+            SELECT * FROM UNNEST($1, $2, $3, $4)
+            RETURNING name, amount, unit, product_id;
+        "#,
+        )
+        .bind(names)
+        .bind(amounts)
+        .bind(units)
+        .bind(product_ids);
+
+        let result = insert_query.fetch_all(&mut *txn).await?;
+
+        Ok(result)
     }
 }
 
