@@ -1,6 +1,6 @@
 {
     "id": 1,
-    "name": "English Muff",
+    "name": "English Muff - Updated",
     "brand": "Homemade",
     "subtitle": "rhoncus aliquam",
     "description": "",
@@ -8,7 +8,7 @@
     "density": 1.04,
     "nutrition_facts": {
         "product_id": 1,
-        "energy": 191.6,
+        "energy": 1901.6,
         "carbohydrate": 157.3,
         "dietary_fiber": 5.9,
         "starch": null,
@@ -78,12 +78,6 @@
     "custom_units": [
         {
             "name": "p1",
-            "amount": 12,
-            "unit": "tbsp",
-            "product_id": 1
-        },
-        {
-            "name": "p3",
             "amount": 12,
             "unit": "tbsp",
             "product_id": 1

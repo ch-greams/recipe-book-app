@@ -434,7 +434,11 @@ impl NutritionFacts {
 mod tests {
     use crate::{
         config::Config,
-        types::{food::CreateFoodPayload, nutrition_facts::NutritionFacts, product::Product},
+        types::{
+            food::{CreateFoodPayload, UpdateFoodPayload},
+            nutrition_facts::NutritionFacts,
+            product::Product,
+        },
         utils,
     };
 
@@ -485,26 +489,77 @@ mod tests {
 
         let mut txn = get_pool().begin().await.unwrap();
 
-        let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+        let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
             .await
             .unwrap();
 
         assert_ne!(
-            ph_product_id, product_result.id,
-            "product_result should not have a placeholder value for id"
+            ph_product_id, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
         );
 
-        let nutrition_facts_result = NutritionFacts::insert(
+        let create_nutrition_facts_result = NutritionFacts::insert(
             &create_product_payload.nutrition_facts,
-            product_result.id,
+            create_product_result.id,
             &mut txn,
         )
         .await
         .unwrap();
 
         assert_ne!(
-            ph_product_id, nutrition_facts_result.product_id,
-            "nutrition_facts_result should not have a placeholder value for product_id"
+            ph_product_id, create_nutrition_facts_result.product_id,
+            "create_nutrition_facts_result should not have a placeholder value for product_id"
+        );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn update() {
+        let ph_product_id = 0;
+
+        let create_product_payload: CreateFoodPayload =
+            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            ph_product_id, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
+        );
+
+        let create_nutrition_facts_result = NutritionFacts::insert(
+            &create_product_payload.nutrition_facts,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_ne!(
+            ph_product_id, create_nutrition_facts_result.product_id,
+            "create_nutrition_facts_result should not have a placeholder value for product_id"
+        );
+
+        let mut update_product_payload: UpdateFoodPayload =
+            utils::read_type_from_file("examples/update_food_payload.json").unwrap();
+
+        update_product_payload.nutrition_facts.product_id =
+            create_nutrition_facts_result.product_id;
+
+        let update_nutrition_facts_result =
+            NutritionFacts::update(&update_product_payload.nutrition_facts, &mut txn)
+                .await
+                .unwrap();
+
+        assert_ne!(
+            create_nutrition_facts_result.energy, update_nutrition_facts_result.energy,
+            "update_nutrition_facts_result should not have an old energy value"
         );
 
         txn.rollback().await.unwrap();

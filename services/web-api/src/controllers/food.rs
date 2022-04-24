@@ -58,9 +58,8 @@ async fn create_food(
 
     let product = Product::insert_food(&request, 1, &mut txn).await?;
 
-    let custom_units = CustomUnit::insert_mutliple(&request.custom_units, product.id)
-        .fetch_all(&mut txn)
-        .await?;
+    let custom_units =
+        CustomUnit::insert_mutliple(&request.custom_units, product.id, &mut txn).await?;
 
     let nutrition_facts =
         NutritionFacts::insert(&request.nutrition_facts, product.id, &mut txn).await?;

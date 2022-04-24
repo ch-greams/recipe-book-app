@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgArguments, query::QueryAs, Postgres, Transaction};
+use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres, Transaction};
 
 use super::{
     error::Error,
@@ -39,10 +39,11 @@ impl CustomUnit {
         .bind(product_ids)
     }
 
-    pub fn insert_mutliple(
+    pub async fn insert_mutliple(
         custom_unit_payloads: &[CreateCustomUnitPayload],
         product_id: i64,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Vec<Self>, Error> {
         let mut names: Vec<String> = Vec::new();
         let mut amounts: Vec<f64> = Vec::new();
         let mut units: Vec<String> = Vec::new();
@@ -54,7 +55,7 @@ impl CustomUnit {
             product_ids.push(product_id);
         });
 
-        sqlx::query_as(
+        let insert_query = sqlx::query_as(
             r#"
             INSERT INTO private.custom_unit (name, amount, unit, product_id)
             SELECT * FROM UNNEST($1, $2, $3, $4)
@@ -64,7 +65,11 @@ impl CustomUnit {
         .bind(names)
         .bind(amounts)
         .bind(units)
-        .bind(product_ids)
+        .bind(product_ids);
+
+        let result = insert_query.fetch_all(txn).await?;
+
+        Ok(result)
     }
 
     pub async fn replace_mutliple(
@@ -116,7 +121,11 @@ impl CustomUnit {
 mod tests {
     use crate::{
         config::Config,
-        types::{custom_unit::CustomUnit, food::CreateFoodPayload, product::Product},
+        types::{
+            custom_unit::CustomUnit,
+            food::{CreateFoodPayload, UpdateFoodPayload},
+            product::Product,
+        },
         utils,
     };
 
@@ -165,22 +174,71 @@ mod tests {
 
         let mut txn = get_pool().begin().await.unwrap();
 
-        let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+        let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
             .await
             .unwrap();
 
         assert_ne!(
-            0, product_result.id,
-            "product_result should not have a placeholder value for id"
+            0, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
         );
 
-        let custom_units_result =
-            CustomUnit::insert_mutliple(&create_product_payload.custom_units, product_result.id)
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let custom_units_result = CustomUnit::insert_mutliple(
+            &create_product_payload.custom_units,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
 
         assert_eq!(custom_units_result.len(), 2);
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn replace_mutliple() {
+        let create_product_payload: CreateFoodPayload =
+            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+
+        let mut txn = get_pool().begin().await.unwrap();
+
+        let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            0, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
+        );
+
+        let create_custom_units_result = CustomUnit::insert_mutliple(
+            &create_product_payload.custom_units,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(create_custom_units_result.len(), 2);
+
+        let mut update_product_payload: UpdateFoodPayload =
+            utils::read_type_from_file("examples/update_food_payload.json").unwrap();
+
+        for custom_unit in &mut update_product_payload.custom_units {
+            custom_unit.product_id = create_product_result.id;
+        }
+
+        let update_custom_units_result = CustomUnit::replace_mutliple(
+            &update_product_payload.custom_units,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(update_custom_units_result.len(), 1);
 
         txn.rollback().await.unwrap();
     }
