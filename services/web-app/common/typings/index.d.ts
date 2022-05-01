@@ -36,16 +36,6 @@ export interface Ingredient {
     products: Dictionary<number, IngredientProduct>;
 }
 
-export interface Time {
-    value: number;
-    unit: TimeUnit;
-}
-
-export interface Temperature {
-    value: number;
-    unit: TemperatureUnit;
-}
-
 export interface SubDirection {
     step_number: number;
     direction_part_type: SubDirectionType;
@@ -57,8 +47,10 @@ export interface SubDirection {
 export interface Direction {
     step_number: number;
     name: string;
-    duration?: Option<Time>;
-    temperature?: Option<Temperature>;
+    duration_value?: Option<number>;
+    duration_unit: TimeUnit;
+    temperature_value?: Option<number>;
+    temperature_unit: TemperatureUnit;
     steps: SubDirection[];
 }
 

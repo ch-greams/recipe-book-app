@@ -1,6 +1,5 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type * as typings from "@common/typings";
-import type { Temperature, Time } from "@common/typings";
 import type * as units from "@common/units";
 
 
@@ -45,10 +44,13 @@ export interface RecipeDirection {
     stepNumber: number;
     name: string;
 
-    duration?: Option<Time>;
-    durationInput: string;
-    temperature?: Option<Temperature>;
-    temperatureInput: string;
+    durationValue?: Option<number>;
+    durationUnit: units.TimeUnit;
+    durationValueInput: string;
+
+    temperatureValue?: Option<number>;
+    temperatureUnit: units.TemperatureUnit;
+    temperatureValueInput: string;
 
     isOpen: boolean;
     isMarked: boolean;

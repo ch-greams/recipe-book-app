@@ -1,5 +1,7 @@
+use std::collections::HashMap;
+
 use actix_web::{
-    get,
+    get, post,
     web::{Data, Json, Path, Query},
     Scope,
 };
@@ -12,9 +14,9 @@ use crate::types::{
     direction_part::DirectionPart,
     error::Error,
     ingredient::{Ingredient, IngredientDetails},
-    ingredient_product::IngredientProductDetails,
+    ingredient_product::{IngredientProduct, IngredientProductDetails},
     product::Product,
-    recipe::{Recipe, RecipeShort},
+    recipe::{CreateRecipePayload, Recipe, RecipeShort},
 };
 
 pub fn scope() -> Scope {
@@ -22,6 +24,7 @@ pub fn scope() -> Scope {
         .service(find_all_favorite)
         .service(find_by_id)
         .service(find_all)
+        .service(create_recipe)
 }
 
 #[get("/{id}")]
@@ -82,6 +85,65 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
     let recipe = Recipe::new(product, custom_units, ingredient_details, direction_details);
 
     Ok(Json(recipe))
+}
+
+#[post("/create")]
+async fn create_recipe(
+    request: Json<CreateRecipePayload>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Product>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let product = Product::insert_recipe(&request, 1, &mut txn).await?;
+
+    let _custom_units =
+        CustomUnit::insert_mutliple(&request.custom_units, product.id, &mut txn).await?;
+
+    // ingredients
+
+    let ingredients =
+        Ingredient::insert_mutliple(&request.ingredients, product.id, &mut txn).await?;
+
+    let mut temporary_to_final_id = HashMap::new();
+
+    for (index, ingredient_payload) in request.ingredients.iter().enumerate() {
+        let ingredient = ingredients
+            .get(index)
+            .ok_or_else(|| Error::not_created("ingredient"))?;
+        temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
+
+        let _ingredient_products = IngredientProduct::insert_mutliple(
+            &ingredient_payload.products,
+            ingredient.id,
+            &mut txn,
+        )
+        .await?;
+    }
+
+    // directions
+
+    let directions = Direction::insert_mutliple(&request.directions, product.id, &mut txn).await?;
+
+    for (index, direction_payload) in request.directions.iter().enumerate() {
+        let direction = directions
+            .get(index)
+            .ok_or_else(|| Error::not_created("direction"))?;
+
+        let _direction_parts = DirectionPart::insert_mutliple(
+            &direction_payload.steps,
+            direction.id,
+            &temporary_to_final_id,
+            &mut txn,
+        )
+        .await?;
+    }
+
+    txn.commit().await?;
+
+    // TODO: Finalize return type & value
+    // let recipe = Recipe::new(product, custom_units, ingredient_details, direction_details);
+
+    Ok(Json(product))
 }
 
 #[derive(Debug, Deserialize)]

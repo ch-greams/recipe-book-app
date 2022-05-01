@@ -1,10 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres, Transaction};
 
-use super::{
-    error::Error,
-    food::{CreateCustomUnitPayload, UpdateCustomUnitPayload},
-};
+use super::error::Error;
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct CustomUnit {
@@ -13,6 +10,15 @@ pub struct CustomUnit {
     pub unit: String, // WeightUnit,
     pub product_id: i64,
 }
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct CreateCustomUnitPayload {
+    pub name: String,
+    pub amount: f64,
+    pub unit: String,
+}
+
+pub type UpdateCustomUnitPayload = CustomUnit;
 
 impl CustomUnit {
     pub fn find_by_product_id(product_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {

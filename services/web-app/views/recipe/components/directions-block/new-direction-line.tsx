@@ -34,7 +34,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                value={direction.temperatureInput}
+                value={direction.temperatureValueInput}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                     dispatch(actions.updateNewDirectionTemperatureCount(event.target.value));
                 }}
@@ -43,7 +43,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
-                value={direction.temperature?.unit}
+                value={direction.temperatureUnit}
                 onChange={(option: SelectOption<TemperatureUnit>) => {
                     dispatch(actions.updateNewDirectionTemperatureUnit(option.value));
                 }}
@@ -62,7 +62,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
                 type={"text"}
                 className={styles.directionInfoLineAmountInput}
                 placeholder={"#"}
-                value={direction.durationInput}
+                value={direction.durationValueInput}
                 onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                     dispatch(actions.updateNewDirectionTimeCount(event.target.value));
                 }}
@@ -71,7 +71,7 @@ const NewDirectionLine: React.FC<Props> = ({ direction }) => {
             <SelectInput
                 type={SelectInputType.IngredientUnit}
                 options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-                value={direction.duration?.unit || DEFAULT_TIME_UNIT}
+                value={direction.durationUnit || DEFAULT_TIME_UNIT}
                 onChange={(option: SelectOption<TimeUnit>) => {
                     dispatch(actions.updateNewDirectionTimeUnit(option.value));
                 }}

@@ -6,6 +6,7 @@ use sqlx::{Executor, Postgres};
 
 use super::error::Error;
 use super::food::{CreateFoodPayload, UpdateFoodPayload};
+use super::recipe::CreateRecipePayload;
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
@@ -176,6 +177,36 @@ impl Product {
             .bind(create_food_payload.density)
             .bind(created_by)
             .bind(create_food_payload.is_private)
+            .bind(Utc::now())
+            .bind(Utc::now());
+
+        let result = query
+            .fetch_optional(txn)
+            .await?
+            .ok_or_else(|| Error::not_created("product"))?;
+
+        Ok(result)
+    }
+
+    pub async fn insert_recipe(
+        create_recipe_payload: &CreateRecipePayload,
+        created_by: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let query = sqlx::query_as(
+            r#"
+            INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at)
+            VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+        "#,
+        )
+            .bind(create_recipe_payload.name.to_owned())
+            .bind(create_recipe_payload.brand.to_owned())
+            .bind(create_recipe_payload.subtitle.to_owned())
+            .bind(create_recipe_payload.description.to_owned())
+            .bind(create_recipe_payload.density)
+            .bind(created_by)
+            .bind(create_recipe_payload.is_private)
             .bind(Utc::now())
             .bind(Utc::now());
 

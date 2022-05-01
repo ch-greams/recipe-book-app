@@ -3,7 +3,7 @@
     "name": "Cottage Cheese Dip",
     "brand": "Homemade",
     "subtitle": "integer ac leo",
-    "description": null,
+    "description": "",
     "density": 1.14,
     "custom_units": [
         {
@@ -263,22 +263,20 @@
             "id": 1,
             "step_number": 0,
             "name": "test step",
-            "temperature": {
-                "value": 180.0,
-                "unit": "C"
-            },
-            "duration": null,
+            "temperature_value": 180.0,
+            "temperature_unit": "C",
+            "duration_value": null,
+            "duration_unit": "min",
             "steps": []
         },
         {
             "id": 3,
             "step_number": 1,
             "name": "stir",
-            "temperature": null,
-            "duration": {
-                "value": 1,
-                "unit": "min"
-            },
+            "temperature_value": null,
+            "temperature_unit": "C",
+            "duration_value": 1,
+            "duration_unit": "min",
             "steps": [
                 {
                     "step_number": 0,
