@@ -239,6 +239,13 @@ export default class Utils {
 
     // NOTE: OTHER GENERIC THINGS
 
+    /**
+     * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
+     */
+    public static getTemporaryId(): number {
+        return -Date.now();
+    }
+
     public static sortBy<T>(field: keyof T): Comparer<T> {
         return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
     }
