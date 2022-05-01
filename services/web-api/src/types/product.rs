@@ -6,7 +6,7 @@ use sqlx::{Executor, Postgres};
 
 use super::error::Error;
 use super::food::{CreateFoodPayload, UpdateFoodPayload};
-use super::recipe::CreateRecipePayload;
+use super::recipe::{CreateRecipePayload, UpdateRecipePayload};
 
 #[derive(sqlx::Type, Serialize, Deserialize, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
@@ -250,6 +250,42 @@ impl Product {
             .fetch_optional(txn)
             .await?
             .ok_or_else(|| Error::not_updated("product", update_food_payload.id))?;
+
+        Ok(result)
+    }
+
+    pub async fn update_recipe(
+        update_recipe_payload: &UpdateRecipePayload,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<Self, Error> {
+        let query = sqlx::query_as(
+            r#"
+            UPDATE private.product SET
+                type = 'recipe',
+                name = $1,
+                brand = $2,
+                subtitle = $3,
+                description = $4,
+                density = $5,
+                is_private = $6,
+                updated_at = $7
+            WHERE id = $8
+            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+        "#,
+        )
+            .bind(update_recipe_payload.name.to_owned())
+            .bind(update_recipe_payload.brand.to_owned())
+            .bind(update_recipe_payload.subtitle.to_owned())
+            .bind(update_recipe_payload.description.to_owned())
+            .bind(update_recipe_payload.density)
+            .bind(update_recipe_payload.is_private)
+            .bind(Utc::now())
+            .bind(update_recipe_payload.id);
+
+        let result = query
+            .fetch_optional(txn)
+            .await?
+            .ok_or_else(|| Error::not_updated("product", update_recipe_payload.id))?;
 
         Ok(result)
     }
