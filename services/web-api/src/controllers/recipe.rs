@@ -195,7 +195,7 @@ async fn update_recipe(
             .ok_or_else(|| Error::not_updated("ingredient", ingredient_payload.id))?;
         temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
 
-        let _ingredient_products = IngredientProduct::replace_mutliple(
+        let _ingredient_products = IngredientProduct::insert_mutliple(
             &ingredient_payload.products,
             ingredient.id,
             &mut txn,
@@ -229,7 +229,7 @@ async fn update_recipe(
             .get(index)
             .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;
 
-        let mut _direction_parts = DirectionPart::replace_mutliple(
+        let mut _direction_parts = DirectionPart::insert_mutliple(
             &direction_payload.steps,
             direction.id,
             &temporary_to_final_id,

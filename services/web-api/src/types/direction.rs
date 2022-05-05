@@ -2,9 +2,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres, Transaction};
 
 use super::{
-    direction_part::{
-        CreateDirectionPartPayload, DirectionPart, DirectionPartDetails, UpdateDirectionPartPayload,
-    },
+    direction_part::{DirectionPart, DirectionPartDetails, DirectionPartPayload},
     error::Error,
 };
 
@@ -28,7 +26,7 @@ pub struct CreateDirectionPayload {
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
-    pub steps: Vec<CreateDirectionPartPayload>,
+    pub steps: Vec<DirectionPartPayload>,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -40,7 +38,7 @@ pub struct UpdateDirectionPayload {
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
-    pub steps: Vec<UpdateDirectionPartPayload>,
+    pub steps: Vec<DirectionPartPayload>,
 }
 
 impl Direction {
@@ -208,7 +206,16 @@ impl DirectionDetails {
 
 #[cfg(test)]
 mod tests {
-    use crate::{config::Config, types::direction::Direction};
+    use crate::{
+        config::Config,
+        types::{
+            direction::Direction,
+            ingredient::Ingredient,
+            product::Product,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
+        },
+        utils,
+    };
     use sqlx::PgPool;
 
     #[tokio::test]
@@ -229,5 +236,98 @@ mod tests {
             .unwrap();
 
         assert_eq!(directions.len(), 2);
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn insert_mutliple() {
+        let create_product_payload: CreateRecipePayload =
+            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            0, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
+        );
+
+        let create_ingredients_result = Ingredient::insert_mutliple(
+            &create_product_payload.ingredients,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(create_ingredients_result.len(), 2);
+
+        let create_directions_result = Direction::insert_mutliple(
+            &create_product_payload.directions,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(create_directions_result.len(), 2);
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn replace_mutliple() {
+        let create_product_payload: CreateRecipePayload =
+            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            0, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
+        );
+
+        let create_ingredients_result = Ingredient::insert_mutliple(
+            &create_product_payload.ingredients,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(create_ingredients_result.len(), 2);
+
+        let create_directions_result = Direction::insert_mutliple(
+            &create_product_payload.directions,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(create_directions_result.len(), 2);
+
+        let update_product_payload: UpdateRecipePayload =
+            utils::read_type_from_file("examples/update_recipe_payload.json").unwrap();
+
+        let update_directions_result = Direction::replace_mutliple(
+            &update_product_payload.directions,
+            create_product_result.id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
+
+        assert_eq!(update_directions_result.len(), 3);
+
+        txn.rollback().await.unwrap();
     }
 }

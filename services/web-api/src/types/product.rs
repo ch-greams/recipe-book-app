@@ -294,26 +294,20 @@ impl Product {
 #[cfg(test)]
 mod tests {
     use crate::{
-        config::Config,
         types::{
             food::{CreateFoodPayload, UpdateFoodPayload},
             product::Product,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
     };
-    use sqlx::{PgPool, Pool, Postgres};
-
-    fn get_pool() -> Pool<Postgres> {
-        let config = Config::new().unwrap();
-        PgPool::connect_lazy(&config.database_url).unwrap()
-    }
 
     #[tokio::test]
     #[ignore]
     async fn find_food_by_id() {
         let food_id = 1;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let product = Product::find_food_by_id(food_id)
             .fetch_optional(&mut txn)
@@ -329,7 +323,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products = Product::find_food_all(food_limit, food_offset)
             .fetch_all(&mut txn)
@@ -346,7 +340,7 @@ mod tests {
         let food_offset = 0;
         let food_user_id = 1;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products =
             Product::find_food_all_created_by_user(food_limit, food_offset, food_user_id)
@@ -364,7 +358,7 @@ mod tests {
         let food_offset = 0;
         let food_user_id = 1;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products = Product::find_food_all_favorite(food_limit, food_offset, food_user_id)
             .fetch_all(&mut txn)
@@ -379,7 +373,7 @@ mod tests {
     async fn find_recipe_by_id() {
         let recipe_id = 29;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let product = Product::find_recipe_by_id(recipe_id)
             .fetch_optional(&mut txn)
@@ -395,7 +389,7 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products = Product::find_recipe_all(recipe_limit, recipe_offset)
             .fetch_all(&mut txn)
@@ -412,7 +406,7 @@ mod tests {
         let recipe_offset = 0;
         let recipe_user_id = 1;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products =
             Product::find_recipe_all_created_by_user(recipe_limit, recipe_offset, recipe_user_id)
@@ -430,7 +424,7 @@ mod tests {
         let recipe_offset = 0;
         let recipe_user_id = 1;
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let products =
             Product::find_recipe_all_favorite(recipe_limit, recipe_offset, recipe_user_id)
@@ -447,7 +441,7 @@ mod tests {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
             .await
@@ -467,7 +461,7 @@ mod tests {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
-        let mut txn = get_pool().begin().await.unwrap();
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
             .await
@@ -484,6 +478,60 @@ mod tests {
         update_product_payload.id = create_product_result.id;
 
         let update_product_result = Product::update_food(&update_product_payload, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            create_product_result.name, update_product_result.name,
+            "update_product_result should not have an old name"
+        );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn insert_recipe() {
+        let create_product_payload: CreateRecipePayload =
+            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            0, product_result.id,
+            "product_result should not have a placeholder value for id"
+        );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    #[ignore]
+    async fn update_recipe() {
+        let create_product_payload: CreateRecipePayload =
+            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
+            .await
+            .unwrap();
+
+        assert_ne!(
+            0, create_product_result.id,
+            "create_product_result should not have a placeholder value for id"
+        );
+
+        let mut update_product_payload: UpdateRecipePayload =
+            utils::read_type_from_file("examples/update_recipe_payload.json").unwrap();
+
+        update_product_payload.id = create_product_result.id;
+
+        let update_product_result = Product::update_recipe(&update_product_payload, &mut txn)
             .await
             .unwrap();
 

@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
 
@@ -16,7 +15,10 @@ services:
 
   recipe-book-app:
     image: web-app
-    build: ./services/web-app
+    build:
+      context: ./services/web-app
+      args:
+        - RB__API_ADDR=recipe-book-api:8080
     depends_on:
       - recipe-book-api
     ports:
