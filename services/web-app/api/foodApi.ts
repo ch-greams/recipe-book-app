@@ -23,6 +23,14 @@ export default class FoodApi {
         return createdFoodItem;
     }
 
+    public static async updateFoodItem(foodItem: Food): Promise<Food> {
+
+        const { body: updatedFoodItem } = await superagent.post(`${FoodApi.API_PATH}/update`)
+            .send(foodItem);
+
+        return updatedFoodItem;
+    }
+
     public static async getFavoriteFoodItems(): Promise<FoodShort[]> {
 
         const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}/favorite/1`);

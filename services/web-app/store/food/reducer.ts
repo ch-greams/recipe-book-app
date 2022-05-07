@@ -337,6 +337,32 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
+        case types.FOOD_ITEM_UPDATE_REQUEST: {
+            return {
+                ...state,
+                isLoaded: false,
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_SUCCESS: {
+
+            const foodItem = action.payload;
+
+            return {
+                ...state,
+                isLoaded: true,
+                id: foodItem.id,
+            };
+        }
+
+        case types.FOOD_ITEM_UPDATE_ERROR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: action.payload as string,
+            };
+        }
+
         default:
             return state;
     }

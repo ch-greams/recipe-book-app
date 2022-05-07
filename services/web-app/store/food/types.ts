@@ -73,6 +73,10 @@ export const FOOD_ITEM_CREATE_REQUEST = "FOOD_ITEM_CREATE_REQUEST";
 export const FOOD_ITEM_CREATE_SUCCESS = "FOOD_ITEM_CREATE_SUCCESS";
 export const FOOD_ITEM_CREATE_ERROR = "FOOD_ITEM_CREATE_ERROR";
 
+export const FOOD_ITEM_UPDATE_REQUEST = "FOOD_ITEM_UPDATE_REQUEST";
+export const FOOD_ITEM_UPDATE_SUCCESS = "FOOD_ITEM_UPDATE_SUCCESS";
+export const FOOD_ITEM_UPDATE_ERROR = "FOOD_ITEM_UPDATE_ERROR";
+
 
 export interface UpdateNameAction {
     type: typeof FOOD_ITEM_UPDATE_NAME;
@@ -185,6 +189,20 @@ export interface FoodItemCreateErrorAction {
     payload: string;
 }
 
+export interface FoodItemUpdateRequestAction {
+    type: typeof FOOD_ITEM_UPDATE_REQUEST;
+}
+
+export interface FoodItemUpdateSuccessAction {
+    type: typeof FOOD_ITEM_UPDATE_SUCCESS;
+    payload: Food;
+}
+
+export interface FoodItemUpdateErrorAction {
+    type: typeof FOOD_ITEM_UPDATE_ERROR;
+    payload: string;
+}
+
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
     UpdateTypeAction | UpdateNutritionFactAction | UpdateCustomUnitsAction |
@@ -192,5 +210,6 @@ export type FoodItemActionTypes = (
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | FoodItemFetchNewAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
     AddCustomUnitAction | RemoveCustomUnitAction | UpdateCustomUnitAction |
-    FoodItemCreateRequestAction | FoodItemCreateSuccessAction | FoodItemCreateErrorAction
+    FoodItemCreateRequestAction | FoodItemCreateSuccessAction | FoodItemCreateErrorAction |
+    FoodItemUpdateRequestAction | FoodItemUpdateSuccessAction | FoodItemUpdateErrorAction
 );

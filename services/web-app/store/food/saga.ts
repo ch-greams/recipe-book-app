@@ -46,6 +46,22 @@ function* createFoodItem(): Generator<StrictEffect, void, unknown> {
     }
 }
 
+function* updateFoodItem(): Generator<StrictEffect, void, unknown> {
+
+    try {
+        const foodPage = (yield effects.select(extractState)) as FoodPageStore;
+        const foodItem = Utils.convertFoodPageIntoFood(foodPage);
+
+        const updatedFoodItem = (yield call(FoodApi.updateFoodItem, foodItem)) as Food;
+
+        yield put(actions.updateFoodItemSuccess(updatedFoodItem));
+    }
+    catch (error) {
+        const { message } = error as Error;
+        yield put(actions.updateFoodItemError(message));
+    }
+}
+
 function* watchFetchFoodItem(): SagaIterator {
     yield takeLatest(types.FOOD_ITEM_FETCH_REQUEST, fetchFoodItem);
 }
@@ -54,9 +70,14 @@ function* watchCreateFoodItem(): SagaIterator {
     yield takeLatest(types.FOOD_ITEM_CREATE_REQUEST, createFoodItem);
 }
 
+function* watchUpdateFoodItem(): SagaIterator {
+    yield takeLatest(types.FOOD_ITEM_UPDATE_REQUEST, updateFoodItem);
+}
+
 export default function* foodSaga(): Generator<AllEffect<SagaIterator>, void, unknown> {
     yield all([
         watchFetchFoodItem(),
         watchCreateFoodItem(),
+        watchUpdateFoodItem(),
     ]);
 }

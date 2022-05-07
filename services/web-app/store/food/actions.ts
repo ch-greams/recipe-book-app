@@ -157,3 +157,23 @@ export function createFoodItemError(error: string): types.FoodItemCreateErrorAct
         payload: error,
     };
 }
+
+export function updateFoodItemRequest(): types.FoodItemUpdateRequestAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_REQUEST,
+    };
+}
+
+export function updateFoodItemSuccess(food: Food): types.FoodItemUpdateSuccessAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_SUCCESS,
+        payload: food,
+    };
+}
+
+export function updateFoodItemError(error: string): types.FoodItemUpdateErrorAction {
+    return {
+        type: types.FOOD_ITEM_UPDATE_ERROR,
+        payload: error,
+    };
+}
