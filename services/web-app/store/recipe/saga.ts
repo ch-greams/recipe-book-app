@@ -29,6 +29,7 @@ function* fetchRecipeItem(action: types.RecipeItemFetchRequestAction): Generator
 }
 
 
+// TODO: Deprecate, no need for saga call
 function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
 
     try {
@@ -41,8 +42,6 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<eff
             throw new Error("Custom Unit name is empty or already exist");
         }
 
-        // TODO: API CALL
-
         yield effects.put(actions.addCustomUnitSuccess([
             ...customUnits,
             Utils.convertCustomUnitIntoValue(customUnit),
@@ -54,6 +53,7 @@ function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<eff
     }
 }
 
+// TODO: Deprecate, no need for saga call
 function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
 
     try {
@@ -61,8 +61,6 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
         const { payload: customUnitIndex } = action;
 
         const customUnits = (yield effects.select(extractCustomUnits)) as CustomUnit[];
-
-        // TODO: API CALL
 
         yield effects.put(actions.removeCustomUnitSuccess(
             customUnits.filter((_customUnit, index) => index !== customUnitIndex),
@@ -74,6 +72,7 @@ function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generat
     }
 }
 
+// TODO: Deprecate, no need for saga call
 function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
 
     try {
@@ -81,8 +80,6 @@ function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generat
         const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
 
         const customUnits = (yield effects.select(extractCustomUnits)) as CustomUnit[];
-
-        // TODO: API CALL
 
         yield effects.put(actions.updateCustomUnitSuccess(
             customUnits.map((customUnit, index) => (

@@ -1,0 +1,25 @@
+@import "@styles/variables";
+
+
+.saveButton {
+
+    padding: 4px;
+    margin-bottom: 40px;
+
+    font-family: $font-default;
+    font-size: 18px;
+    font-weight: 800;
+
+    color: $color-default;
+
+    text-align: center;
+
+    user-select: none;
+    background-color: $color-white;
+
+    &:hover {
+        color: $color-default-dark;
+        cursor: pointer;
+        background-color: $color-grey-light;
+    }
+}

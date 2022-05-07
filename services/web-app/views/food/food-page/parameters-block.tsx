@@ -117,9 +117,9 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
             <CustomUnitsBlock
                 customUnitInputs={foodItem.customUnitInputs}
-                addCustomUnitRequest={actions.addCustomUnitRequest}
-                removeCustomUnitRequest={actions.removeCustomUnitRequest}
-                updateCustomUnitRequest={actions.updateCustomUnitRequest}
+                addCustomUnit={actions.addCustomUnit}
+                removeCustomUnit={actions.removeCustomUnit}
+                updateCustomUnit={actions.updateCustomUnit}
             />
 
         </div>

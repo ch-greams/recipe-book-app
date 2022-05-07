@@ -16,6 +16,7 @@ export interface FoodPageStore {
     description: string;
     nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: CustomUnit[];
+    isPrivate: boolean;
 
     // NOTE: INPUTS
 
@@ -37,6 +38,10 @@ export interface FoodPageStore {
     servingSizeInput: string;
     servingSizeUnit: WeightUnit | VolumeUnit | string;
     featuredNutritionFacts: NutritionFactType[];
+
+    // NOTE: NEW FOOD
+
+    isCreated: boolean;
 }
 
 
@@ -55,20 +60,18 @@ export const FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT = "FOOD_ITEM_UPDATE_DENSITY_WE
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
 export const FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT = "FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT";
 
-export const FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST";
-export const FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS";
-export const FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR = "FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR";
-export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST";
-export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS";
-export const FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR = "FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR";
-export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST";
-export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS";
-export const FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR = "FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR";
+export const FOOD_ITEM_ADD_CUSTOM_UNIT = "FOOD_ITEM_ADD_CUSTOM_UNIT";
+export const FOOD_ITEM_REMOVE_CUSTOM_UNIT = "FOOD_ITEM_REMOVE_CUSTOM_UNIT";
+export const FOOD_ITEM_UPDATE_CUSTOM_UNIT = "FOOD_ITEM_UPDATE_CUSTOM_UNIT";
 
-
+export const FOOD_ITEM_FETCH_NEW = "FOOD_ITEM_FETCH_NEW";
 export const FOOD_ITEM_FETCH_REQUEST = "FOOD_ITEM_FETCH_REQUEST";
 export const FOOD_ITEM_FETCH_SUCCESS = "FOOD_ITEM_FETCH_SUCCESS";
 export const FOOD_ITEM_FETCH_ERROR = "FOOD_ITEM_FETCH_ERROR";
+
+export const FOOD_ITEM_CREATE_REQUEST = "FOOD_ITEM_CREATE_REQUEST";
+export const FOOD_ITEM_CREATE_SUCCESS = "FOOD_ITEM_CREATE_SUCCESS";
+export const FOOD_ITEM_CREATE_ERROR = "FOOD_ITEM_CREATE_ERROR";
 
 
 export interface UpdateNameAction {
@@ -106,52 +109,22 @@ export interface UpdateCustomUnitsAction {
     payload: CustomUnitInput[];
 }
 
-export interface AddCustomUnitRequestAction {
-    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST;
+export interface AddCustomUnitAction {
+    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT;
     payload: CustomUnitInput;
 }
 
-export interface AddCustomUnitSuccessAction {
-    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS;
-    payload: CustomUnit[];
-}
-
-export interface AddCustomUnitErrorAction {
-    type: typeof FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR;
-    payload: string;
-}
-
-export interface RemoveCustomUnitRequestAction {
-    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST;
+export interface RemoveCustomUnitAction {
+    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT;
     payload: number;
 }
 
-export interface RemoveCustomUnitSuccessAction {
-    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS;
-    payload: CustomUnit[];
-}
-
-export interface RemoveCustomUnitErrorAction {
-    type: typeof FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR;
-    payload: string;
-}
-
-export interface UpdateCustomUnitRequestAction {
-    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST;
+export interface UpdateCustomUnitAction {
+    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT;
     payload: {
         index: number;
         customUnit: CustomUnitInput;
     };
-}
-
-export interface UpdateCustomUnitSuccessAction {
-    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS;
-    payload: CustomUnit[];
-}
-
-export interface UpdateCustomUnitErrorAction {
-    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR;
-    payload: string;
 }
 
 export interface UpdateDensityAmountAction {
@@ -179,6 +152,10 @@ export interface UpdateServingSizeUnitAction {
     payload: WeightUnit | VolumeUnit | string;
 }
 
+export interface FoodItemFetchNewAction {
+    type: typeof FOOD_ITEM_FETCH_NEW;
+}
+
 export interface FoodItemFetchRequestAction {
     type: typeof FOOD_ITEM_FETCH_REQUEST;
     payload: number;
@@ -194,13 +171,26 @@ export interface FoodItemFetchErrorAction {
     payload: string;
 }
 
+export interface FoodItemCreateRequestAction {
+    type: typeof FOOD_ITEM_CREATE_REQUEST;
+}
+
+export interface FoodItemCreateSuccessAction {
+    type: typeof FOOD_ITEM_CREATE_SUCCESS;
+    payload: Food;
+}
+
+export interface FoodItemCreateErrorAction {
+    type: typeof FOOD_ITEM_CREATE_ERROR;
+    payload: string;
+}
+
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
     UpdateTypeAction | UpdateNutritionFactAction | UpdateCustomUnitsAction |
     UpdateDensityAmountAction | UpdateDensityVolumeUnitAction | UpdateDensityWeightUnitAction |
-    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
+    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | FoodItemFetchNewAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |
-    AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |
-    RemoveCustomUnitRequestAction | RemoveCustomUnitSuccessAction | RemoveCustomUnitErrorAction |
-    UpdateCustomUnitRequestAction | UpdateCustomUnitSuccessAction | UpdateCustomUnitErrorAction
+    AddCustomUnitAction | RemoveCustomUnitAction | UpdateCustomUnitAction |
+    FoodItemCreateRequestAction | FoodItemCreateSuccessAction | FoodItemCreateErrorAction
 );

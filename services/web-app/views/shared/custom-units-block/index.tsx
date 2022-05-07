@@ -17,21 +17,21 @@ interface Props {
     customUnitInputs: CustomUnitInput[];
     updateCustomUnits?: (customUnits: CustomUnitInput[]) => AnyAction;
 
-    addCustomUnitRequest?: (customUnit: CustomUnitInput) => AnyAction;
-    removeCustomUnitRequest?: (index: number) => AnyAction;
-    updateCustomUnitRequest?: (index: number, customUnit: CustomUnitInput) => AnyAction;
+    addCustomUnit?: (customUnit: CustomUnitInput) => AnyAction;
+    removeCustomUnit?: (index: number) => AnyAction;
+    updateCustomUnit?: (index: number, customUnit: CustomUnitInput) => AnyAction;
 }
 
 const CustomUnitsBlock: React.FC<Props> = ({
     customUnitInputs,
-    addCustomUnitRequest: _addCustomUnitRequest,
-    removeCustomUnitRequest: _removeCustomUnitRequest,
-    updateCustomUnitRequest: _updateCustomUnitRequest,
+    addCustomUnit: _addCustomUnit,
+    removeCustomUnit: _removeCustomUnit,
+    updateCustomUnit: _updateCustomUnit,
 }) => {
 
-    const addCustomUnitRequest = Utils.unwrapForced(_addCustomUnitRequest, "addCustomUnitRequest");
-    const removeCustomUnitRequest = Utils.unwrapForced(_removeCustomUnitRequest, "removeCustomUnitRequest");
-    const updateCustomUnitRequest = Utils.unwrapForced(_updateCustomUnitRequest, "updateCustomUnitRequest");
+    const addCustomUnit = Utils.unwrapForced(_addCustomUnit, "addCustomUnit");
+    const removeCustomUnit = Utils.unwrapForced(_removeCustomUnit, "removeCustomUnit");
+    const updateCustomUnit = Utils.unwrapForced(_updateCustomUnit, "updateCustomUnit");
 
     const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });
@@ -48,7 +48,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
     const updateNewItemUnit = (unit: Units): void => setNewCustomUnit({ ...newCustomUnit, unit });
 
     const createCustomUnit = (): void => {
-        dispatch(addCustomUnitRequest(newCustomUnit));
+        dispatch(addCustomUnit(newCustomUnit));
         setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
     };
 
@@ -63,20 +63,20 @@ const CustomUnitsBlock: React.FC<Props> = ({
 
                 const updateItemName: InputChangeCallback = (event) => {
                     const name = event.target.value;
-                    dispatch(updateCustomUnitRequest(index, { ...customUnit, name }));
+                    dispatch(updateCustomUnit(index, { ...customUnit, name }));
                 };
 
                 const updateItemAmount: InputChangeCallback = (event) => {
                     const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
-                    dispatch(updateCustomUnitRequest(index, { ...customUnit, amount }));
+                    dispatch(updateCustomUnit(index, { ...customUnit, amount }));
                 };
 
                 const updateItemUnit = (unit: Units): void => {
-                    dispatch(updateCustomUnitRequest(index, { ...customUnit, unit }));
+                    dispatch(updateCustomUnit(index, { ...customUnit, unit }));
                 };
 
                 const saveCustomUnit = (): void => {
-                    dispatch(removeCustomUnitRequest(index));
+                    dispatch(removeCustomUnit(index));
                 };
 
                 return (

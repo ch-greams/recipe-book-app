@@ -9,9 +9,11 @@ export interface Food {
     name: string;
     brand: string;
     subtitle: string;
+    description: string;
     density: number;
     nutrition_facts: Dictionary<NutritionFactType, number>;
     custom_units: CustomUnit[];
+    is_private: boolean;
 }
 
 export interface FoodShort {

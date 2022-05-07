@@ -1,6 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
-import type { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 
 import * as types from "./types";
 
@@ -48,6 +48,12 @@ export function updateNutritionFact(key: NutritionFactType, value: string): type
     };
 }
 
+export function fetchFoodItemNew(): types.FoodItemFetchNewAction {
+    return {
+        type: types.FOOD_ITEM_FETCH_NEW,
+    };
+}
+
 export function fetchFoodItemRequest(foodId: number): types.FoodItemFetchRequestAction {
     return {
         type: types.FOOD_ITEM_FETCH_REQUEST,
@@ -68,6 +74,7 @@ export function fetchFoodItemError(error: string): types.FoodItemFetchErrorActio
         payload: error,
     };
 }
+
 export function updateDensityAmount(densityAmountInput: string): types.UpdateDensityAmountAction {
     return {
         type: types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT,
@@ -110,65 +117,43 @@ export function updateCustomUnits(customUnits: CustomUnitInput[]): types.UpdateC
     };
 }
 
-export function addCustomUnitRequest(customUnit: CustomUnitInput): types.AddCustomUnitRequestAction {
+export function addCustomUnit(customUnit: CustomUnitInput): types.AddCustomUnitAction {
     return {
-        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST,
+        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT,
         payload: customUnit,
     };
 }
 
-export function addCustomUnitSuccess(customUnits: CustomUnit[]): types.AddCustomUnitSuccessAction {
+export function removeCustomUnit(index: number): types.RemoveCustomUnitAction {
     return {
-        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS,
-        payload: customUnits,
-    };
-}
-
-export function addCustomUnitError(error: string): types.AddCustomUnitErrorAction {
-    return {
-        type: types.FOOD_ITEM_ADD_CUSTOM_UNIT_ERROR,
-        payload: error,
-    };
-}
-
-export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitRequestAction {
-    return {
-        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST,
+        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT,
         payload: index,
     };
 }
 
-export function removeCustomUnitSuccess(customUnits: CustomUnit[]): types.RemoveCustomUnitSuccessAction {
+export function updateCustomUnit(index: number, customUnit: CustomUnitInput): types.UpdateCustomUnitAction {
     return {
-        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS,
-        payload: customUnits,
-    };
-}
-
-export function removeCustomUnitError(error: string): types.RemoveCustomUnitErrorAction {
-    return {
-        type: types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_ERROR,
-        payload: error,
-    };
-}
-
-export function updateCustomUnitRequest(index: number, customUnit: CustomUnitInput): types.UpdateCustomUnitRequestAction {
-    return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST,
+        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT,
         payload: { index, customUnit },
     };
 }
 
-export function updateCustomUnitSuccess(customUnits: CustomUnit[]): types.UpdateCustomUnitSuccessAction {
+export function createFoodItemRequest(): types.FoodItemCreateRequestAction {
     return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS,
-        payload: customUnits,
+        type: types.FOOD_ITEM_CREATE_REQUEST,
     };
 }
 
-export function updateCustomUnitError(error: string): types.UpdateCustomUnitErrorAction {
+export function createFoodItemSuccess(food: Food): types.FoodItemCreateSuccessAction {
     return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_ERROR,
+        type: types.FOOD_ITEM_CREATE_SUCCESS,
+        payload: food,
+    };
+}
+
+export function createFoodItemError(error: string): types.FoodItemCreateErrorAction {
+    return {
+        type: types.FOOD_ITEM_CREATE_ERROR,
         payload: error,
     };
 }

@@ -1,5 +1,5 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { CustomUnit, CustomUnitInput } from "@common/units";
+import type { CustomUnitInput } from "@common/units";
 import { DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
@@ -19,6 +19,7 @@ const initialState: types.FoodPageStore = {
     description: "",
     nutritionFacts: {},
     customUnits: [],
+    isPrivate: false,
 
     // NOTE: INPUTS
 
@@ -53,15 +54,15 @@ const initialState: types.FoodPageStore = {
         NutritionFactType.VitaminA,
         NutritionFactType.VitaminC,
     ],
+
+    // NOTE: NEW FOOD
+
+    isCreated: false,
 };
 
 
-function extractState(globalState: AppState): types.FoodPageStore {
+export function extractState(globalState: AppState): types.FoodPageStore {
     return (globalState?.foodPage || initialState);
-}
-
-export function extractCustomUnits(globalState: AppState): CustomUnit[] {
-    return extractState(globalState).customUnits;
 }
 
 
@@ -101,6 +102,15 @@ export default function foodPageReducer(state = initialState, action: types.Food
             return {
                 ...state,
                 type: action.payload,
+            };
+        }
+
+        case types.FOOD_ITEM_FETCH_NEW: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: null,
+                isCreated: false,
             };
         }
 
@@ -175,14 +185,58 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS:
-        case types.FOOD_ITEM_ADD_CUSTOM_UNIT_SUCCESS:
-        case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
+        case types.FOOD_ITEM_UPDATE_CUSTOM_UNIT: {
+
+            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
+
             return {
                 ...state,
 
-                customUnits: action.payload as CustomUnit[],
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
+                customUnits: state.customUnits.map((customUnit, index) => (
+                    index === customUnitIndex
+                        ? Utils.convertCustomUnitIntoValue(updatedCustomUnitInput)
+                        : customUnit
+                )),
+                customUnitInputs: state.customUnitInputs.map((customUnit, index) => (
+                    index === customUnitIndex
+                        ? updatedCustomUnitInput
+                        : customUnit
+                )),
+            };
+        }
+
+        case types.FOOD_ITEM_ADD_CUSTOM_UNIT: {
+
+            const { payload: customUnitInput } = action;
+
+            // Custom Unit name is empty or already exist
+            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+                return state;
+            }
+
+            return {
+                ...state,
+
+                customUnits: [
+                    ...state.customUnits,
+                    Utils.convertCustomUnitIntoValue(customUnitInput),
+                ],
+                customUnitInputs: [
+                    ...state.customUnitInputs,
+                    customUnitInput,
+                ],
+            };
+        }
+
+        case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT: {
+
+            const { payload: customUnitIndex } = action;
+
+            return {
+                ...state,
+
+                customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
+                customUnitInputs: state.customUnitInputs.filter((_customUnitInput, index) => index !== customUnitIndex),
             };
         }
 
@@ -253,6 +307,33 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 // TODO: Update nutritionFacts values on change
                 // nutritionFactsByServing: nutritionFactsByServing,
                 // nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+            };
+        }
+
+        case types.FOOD_ITEM_CREATE_REQUEST: {
+            return {
+                ...state,
+                isLoaded: false,
+            };
+        }
+
+        case types.FOOD_ITEM_CREATE_SUCCESS: {
+
+            const foodItem = action.payload;
+
+            return {
+                ...state,
+                isLoaded: true,
+                id: foodItem.id,
+                isCreated: true,
+            };
+        }
+
+        case types.FOOD_ITEM_CREATE_ERROR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: action.payload as string,
             };
         }
 

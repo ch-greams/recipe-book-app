@@ -1,9 +1,10 @@
 import type { NutritionFact } from "@views/shared/nutrition-facts-block";
+import type { FoodPageStore } from "@store/food/types";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer } from "./typings";
+import type { Comparer, Food } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -241,6 +242,7 @@ export default class Utils {
 
     /**
      * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
+     * Used for ingridients in a new recipe
      */
     public static getTemporaryId(): number {
         return -Date.now();
@@ -260,6 +262,10 @@ export default class Utils {
 
     public static getItemPath(route: RoutePath, id: number): string {
         return `/${route}/${id}`;
+    }
+
+    public static getNewItemPath(route: RoutePath): string {
+        return `/${route}/new`;
     }
 
     public static classNames(values: Dictionary<string, boolean>): string {
@@ -304,5 +310,19 @@ export default class Utils {
 
     public static convertCustomUnitIntoValue(customUnit: CustomUnitInput): CustomUnit {
         return { ...customUnit, amount: Number(customUnit.amount) };
+    }
+
+    public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
+        return {
+            id: foodPage.id,
+            name: foodPage.name,
+            brand: foodPage.brand,
+            subtitle: foodPage.subtitle,
+            description: foodPage.description,
+            density: foodPage.density,
+            nutrition_facts: foodPage.nutritionFacts,
+            custom_units: foodPage.customUnits,
+            is_private: foodPage.isPrivate,
+        };
     }
 }

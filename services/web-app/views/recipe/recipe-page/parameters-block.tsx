@@ -78,9 +78,9 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
             <CustomUnitsBlock
                 customUnitInputs={recipeItem.customUnitInputs}
-                addCustomUnitRequest={actions.addCustomUnitRequest}
-                removeCustomUnitRequest={actions.removeCustomUnitRequest}
-                updateCustomUnitRequest={actions.updateCustomUnitRequest}
+                addCustomUnit={actions.addCustomUnitRequest}
+                removeCustomUnit={actions.removeCustomUnitRequest}
+                updateCustomUnit={actions.updateCustomUnitRequest}
             />
 
         </div>

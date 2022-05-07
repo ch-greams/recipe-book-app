@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
-import Utils from "@common/utils";
+import Utils, { RoutePath } from "@common/utils";
 import BlockTitle from "@views/shared/block-title";
 import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
+import SaveButton from "@views/shared/save-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
@@ -37,6 +38,8 @@ const FoodPage: React.FC<Props> = ({ foodItem }) => {
         <div className={styles.foodPage}>
 
             <div className={styles.foodPageElements}>
+
+                <SaveButton saveAction={actions.createFoodItemRequest} />
 
                 {/* Title Block */}
 
@@ -95,18 +98,28 @@ FoodPage.displayName = "FoodPage";
 
 const FoodPageConnected: React.FC = () => {
 
-    const router = useRouter();
-    const foodId = Number(router.query.fid);
-
     const dispatch = useDispatch();
+    const router = useRouter();
+
+    const { query: { fid } } = router;
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
 
     useEffect(() => {
-        if (Utils.isSome(foodId)) {
+        if (Utils.isSome(fid)) {
+            const foodId = Number(fid);
             dispatch(actions.fetchFoodItemRequest(foodId));
         }
-    }, [ dispatch, foodId ]);
+        else if (router.asPath === Utils.getNewItemPath(RoutePath.Food)) {
+
+            if (foodItem.isCreated) {
+                router.push(Utils.getItemPath(RoutePath.Food, foodItem.id));
+            }
+            else {
+                dispatch(actions.fetchFoodItemNew());
+            }
+        }
+    }, [ dispatch, fid, foodItem.id ]);
 
     return (
         foodItem.isLoaded
