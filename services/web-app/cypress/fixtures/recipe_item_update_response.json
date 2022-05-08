@@ -1,38 +1,38 @@
 {
     "id": 29,
-    "name": "Cottage Cheese Dip",
+    "name": "NEW NAME",
     "brand": "Homemade",
     "subtitle": "integer ac leo",
     "description": "",
+    "density": 1.0,
     "custom_units": [
         {
             "name": "package",
-            "amount": 12,
+            "amount": 12.0,
             "unit": "tbsp",
             "product_id": 29
         }
     ],
-    "density": 1,
     "ingredients": [
         {
-            "id": 10,
+            "id": 225,
             "product_id": 1,
             "products": {
                 "1": {
-                    "ingredient_id": 10,
+                    "ingredient_id": 225,
                     "product_id": 1,
-                    "amount": 100,
+                    "amount": 100.0,
                     "unit": "ml",
                     "product_type": "food",
-                    "name": "Sour Cream",
+                    "name": "NEW NAME",
                     "nutrition_facts": {
                         "product_id": 1,
-                        "energy": 157,
-                        "carbohydrate": 2.9,
-                        "dietary_fiber": 10.6,
+                        "energy": 191.6,
+                        "carbohydrate": 157.3,
+                        "dietary_fiber": 5.9,
                         "starch": null,
-                        "sugars": 28.3,
-                        "fat": 15,
+                        "sugars": 5.9,
+                        "fat": 29.1,
                         "monounsaturated": null,
                         "polyunsaturated": null,
                         "omega_3": null,
@@ -41,7 +41,7 @@
                         "trans_fats": null,
                         "cholesterol": null,
                         "phytosterol": null,
-                        "protein": 2.7,
+                        "protein": 35.5,
                         "tryptophan": null,
                         "threonine": null,
                         "isoleucine": null,
@@ -61,8 +61,8 @@
                         "proline": null,
                         "serine": null,
                         "hydroxyproline": null,
-                        "vitamin_a": 14.9,
-                        "vitamin_c": 28.8,
+                        "vitamin_a": 28.6,
+                        "vitamin_c": 28.5,
                         "vitamin_d": null,
                         "vitamin_e": null,
                         "vitamin_k": null,
@@ -80,7 +80,7 @@
                         "magnesium": null,
                         "phosphorus": null,
                         "potassium": null,
-                        "sodium": 9.9,
+                        "sodium": 19.1,
                         "zinc": null,
                         "copper": null,
                         "manganese": null,
@@ -93,24 +93,23 @@
                         "water": null,
                         "ash": null,
                         "caffeine": null
-                    },
-                    "amountInput": "100"
+                    }
                 },
                 "2": {
-                    "ingredient_id": 10,
+                    "ingredient_id": 225,
                     "product_id": 2,
-                    "amount": 100,
+                    "amount": 100.0,
                     "unit": "ml",
                     "product_type": "food",
-                    "name": "Yogurt",
+                    "name": "Wine - Red, Cooking",
                     "nutrition_facts": {
                         "product_id": 2,
-                        "energy": 66.8,
-                        "carbohydrate": 4.2,
-                        "dietary_fiber": 19.9,
+                        "energy": 115.5,
+                        "carbohydrate": 151.8,
+                        "dietary_fiber": 7.8,
                         "starch": null,
-                        "sugars": 12.5,
-                        "fat": 2,
+                        "sugars": 21.8,
+                        "fat": 24.4,
                         "monounsaturated": null,
                         "polyunsaturated": null,
                         "omega_3": null,
@@ -119,7 +118,7 @@
                         "trans_fats": null,
                         "cholesterol": null,
                         "phytosterol": null,
-                        "protein": 8,
+                        "protein": 19.0,
                         "tryptophan": null,
                         "threonine": null,
                         "isoleucine": null,
@@ -139,8 +138,8 @@
                         "proline": null,
                         "serine": null,
                         "hydroxyproline": null,
-                        "vitamin_a": 20,
-                        "vitamin_c": 8.5,
+                        "vitamin_a": 22.9,
+                        "vitamin_c": 6.9,
                         "vitamin_d": null,
                         "vitamin_e": null,
                         "vitamin_k": null,
@@ -158,7 +157,7 @@
                         "magnesium": null,
                         "phosphorus": null,
                         "potassium": null,
-                        "sodium": 12.8,
+                        "sodium": 19.5,
                         "zinc": null,
                         "copper": null,
                         "manganese": null,
@@ -171,33 +170,29 @@
                         "water": null,
                         "ash": null,
                         "caffeine": null
-                    },
-                    "amountInput": "100"
+                    }
                 }
-            },
-            "isOpen": false,
-            "isMarked": false,
-            "altNutritionFacts": {}
+            }
         },
         {
-            "id": 11,
+            "id": 226,
             "product_id": 3,
             "products": {
                 "3": {
-                    "ingredient_id": 11,
+                    "ingredient_id": 226,
                     "product_id": 3,
-                    "amount": 150,
+                    "amount": 150.0,
                     "unit": "g",
-                    "product_type": "food",
-                    "name": "Cottage Cheese",
+                    "product_type": "recipe",
+                    "name": "Wine - White, Pelee Island",
                     "nutrition_facts": {
                         "product_id": 3,
-                        "energy": 183.1,
-                        "carbohydrate": 75.4,
-                        "dietary_fiber": 19.9,
+                        "energy": 196.0,
+                        "carbohydrate": 183.0,
+                        "dietary_fiber": 7.7,
                         "starch": null,
-                        "sugars": 12.5,
-                        "fat": 18.3,
+                        "sugars": 25.3,
+                        "fat": 8.0,
                         "monounsaturated": null,
                         "polyunsaturated": null,
                         "omega_3": null,
@@ -206,7 +201,7 @@
                         "trans_fats": null,
                         "cholesterol": null,
                         "phytosterol": null,
-                        "protein": 30.4,
+                        "protein": 30.6,
                         "tryptophan": null,
                         "threonine": null,
                         "isoleucine": null,
@@ -226,8 +221,8 @@
                         "proline": null,
                         "serine": null,
                         "hydroxyproline": null,
-                        "vitamin_a": 20,
-                        "vitamin_c": 8.5,
+                        "vitamin_a": 6.5,
+                        "vitamin_c": 5.7,
                         "vitamin_d": null,
                         "vitamin_e": null,
                         "vitamin_k": null,
@@ -245,7 +240,7 @@
                         "magnesium": null,
                         "phosphorus": null,
                         "potassium": null,
-                        "sodium": 12.8,
+                        "sodium": 24.5,
                         "zinc": null,
                         "copper": null,
                         "manganese": null,
@@ -258,34 +253,30 @@
                         "water": null,
                         "ash": null,
                         "caffeine": null
-                    },
-                    "amountInput": "150"
+                    }
                 }
-            },
-            "isOpen": false,
-            "isMarked": false,
-            "altNutritionFacts": {}
+            }
         }
     ],
     "directions": [
         {
-            "id": 500,
+            "id": 145,
             "step_number": 0,
             "name": "test step",
-            "duration_value": null,
-            "duration_unit": "min",
             "temperature_value": 180,
             "temperature_unit": "C",
+            "duration_value": null,
+            "duration_unit": "min",
             "steps": []
         },
         {
-            "id": 501,
+            "id": 146,
             "step_number": 1,
             "name": "stir",
-            "duration_value": 1,
-            "duration_unit": "min",
             "temperature_value": null,
             "temperature_unit": "C",
+            "duration_value": 1,
+            "duration_unit": "min",
             "steps": [
                 {
                     "step_number": 0,
@@ -298,18 +289,20 @@
                     "step_number": 1,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 10,
+                    "ingredient_id": 225,
                     "ingredient_amount": 1.0
                 },
                 {
                     "step_number": 2,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 11,
+                    "ingredient_id": 226,
                     "ingredient_amount": 0.75
                 }
             ]
         }
     ],
+    "created_at": "2022-04-17T03:15:59.104189Z",
+    "updated_at": "2022-05-08T20:12:46.381698Z",
     "is_private": false
 }

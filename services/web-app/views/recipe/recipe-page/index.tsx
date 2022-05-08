@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
-import Utils from "@common/utils";
+import Utils, { RoutePath } from "@common/utils";
 import DirectionsBlock from "@views/recipe/components/directions-block";
 import IngredientsBlock from "@views/recipe/components/ingredients-block";
 import BlockTitle from "@views/shared/block-title";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
+import SaveButton from "@views/shared/save-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
@@ -26,9 +27,10 @@ interface RecipePageProps {
     isReadOnly: boolean;
     recipeItem: RecipePageStore;
     search: SearchPageStore;
+    isNew: boolean;
 }
 
-const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search }) => {
+const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search, isNew }) => {
 
     const {
         name,
@@ -49,6 +51,10 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
 
             <div className={styles.recipePageElements}>
 
+                {(isReadOnly || (<SaveButton saveAction={( isNew ? actions.createRecipeItemRequest : actions.updateRecipeItemRequest )} />))}
+
+                {/* Title Block */}
+
                 <PageTitleBlock
                     name={name}
                     brand={brand}
@@ -60,6 +66,8 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search 
                     updateSubtitle={actions.updateSubtitle}
                     updateDescription={actions.updateDescription}
                 />
+
+                {/* Main Block */}
 
                 <GeneralInfoBlock
                     recipeItem={recipeItem}
@@ -107,20 +115,31 @@ interface RecipePageQuery extends ParsedUrlQuery {
 
 const RecipePageConnected: React.FC = () => {
 
-    const router = useRouter();
-    const { rid: recipeId, edit: isEdit } = router.query as RecipePageQuery;
-
     const dispatch = useDispatch();
+    const router = useRouter();
+
+    const { rid, edit: isEdit } = router.query as RecipePageQuery;
+    const isNewRecipePage = !Utils.isSome(rid);
 
     const recipeItem = useSelector<AppState>((state) => state.recipePage) as RecipePageStore;
     const search = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
 
     useEffect(() => {
-        if (Utils.isSome(recipeId)) {
-            dispatch(actions.fetchRecipeItemRequest(Number(recipeId)));
+        if (!isNewRecipePage) {
+            const recipeId = Number(rid);
+            dispatch(actions.fetchRecipeItemRequest(recipeId));
             dispatch(requestIngredients());
         }
-    }, [ dispatch, recipeId ]);
+        else if (router.asPath.includes(Utils.getNewItemPath(RoutePath.Recipe))) {
+
+            if (recipeItem.isCreated) {
+                router.push(Utils.getItemPath(RoutePath.Recipe, recipeItem.id));
+            }
+            else {
+                dispatch(actions.fetchRecipeItemNew());
+            }
+        }
+    }, [ dispatch, rid, recipeItem.id ]);
 
     return (
         recipeItem.isLoaded
@@ -132,6 +151,7 @@ const RecipePageConnected: React.FC = () => {
                             isReadOnly={!( isEdit === "true" )}
                             recipeItem={recipeItem}
                             search={search}
+                            isNew={isNewRecipePage}
                         />
                     )
             )

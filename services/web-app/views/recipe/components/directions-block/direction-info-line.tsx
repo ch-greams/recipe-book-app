@@ -24,7 +24,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const temperatureAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.temperature?.value}
+            {direction.temperatureValue}
         </div>
     );
 
@@ -32,7 +32,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
-            value={direction.temperature?.unit}
+            value={direction.temperatureUnit}
             onChange={(option: SelectOption<TemperatureUnit>) => {
                 dispatch(actions.updateDirectionTemperatureUnit(index, option.value));
             }}
@@ -41,7 +41,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
     const durationAmountText = (
         <div className={styles.directionInfoLineAmount}>
-            {direction.duration?.value}
+            {direction.durationValue}
         </div>
     );
 
@@ -49,7 +49,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
         <SelectInput
             type={SelectInputType.IngredientUnit}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-            value={direction.duration?.unit}
+            value={direction.durationUnit}
             onChange={(option: SelectOption<TimeUnit>) => {
                 dispatch(actions.updateDirectionTimeUnit(index, option.value));
             }}
@@ -80,7 +80,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
 
                 <div className={styles.directionInfoLineMeasures}>
 
-                    {( direction.temperature && (
+                    {( direction.temperatureValue && (
                         <div
                             data-cy={constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
                             className={styles.directionInfoLineMeasure}
@@ -90,7 +90,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                         </div>
                     ))}
 
-                    {( direction.duration && (
+                    {( direction.durationValue && (
                         <div
                             data-cy={constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
                             className={styles.directionInfoLineMeasure}
@@ -143,7 +143,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                             type={"text"}
                             className={styles.directionInfoLineAmountInput}
                             placeholder={"#"}
-                            value={direction.temperatureInput}
+                            value={direction.temperatureValueInput}
                             onChange={(event) => {
                                 dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
                             }}
@@ -162,7 +162,7 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
                             type={"text"}
                             className={styles.directionInfoLineAmountInput}
                             placeholder={"#"}
-                            value={direction.durationInput}
+                            value={direction.durationValueInput}
                             onChange={(event) => {
                                 dispatch(actions.updateDirectionTimeCount(index, event.target.value));
                             }}

@@ -3,12 +3,12 @@ import type { AllEffect, StrictEffect } from "redux-saga/effects";
 import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
 import type { Food } from "@common/typings";
-import type { CustomUnit } from "@common/units";
 import Utils from "@common/utils";
 import FoodApi from "@api/foodApi";
 
 import * as actions from "./actions";
-import { extractCustomUnits } from "./reducer";
+import { extractState } from "./reducer";
+import type { FoodPageStore } from "./types";
 import * as types from "./types";
 
 
@@ -29,98 +29,54 @@ function* fetchFoodItem(action: types.FoodItemFetchRequestAction): Generator<Str
     }
 }
 
-function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<StrictEffect, void, unknown> {
+function* createFoodItem(): Generator<StrictEffect, void, unknown> {
 
     try {
+        const foodPage = (yield select(extractState)) as FoodPageStore;
+        const foodItem = Utils.convertFoodPageIntoFood(foodPage);
 
-        const { payload: customUnit } = action;
+        const createdFoodItem = (yield call(FoodApi.createFoodItem, foodItem)) as Food;
 
-        const customUnits = (yield select(extractCustomUnits)) as CustomUnit[];
-
-        if (customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
-            throw new Error("Custom Unit name is empty or already exist");
-        }
-
-        // TODO: API CALL
-
-        yield put(actions.addCustomUnitSuccess([
-            ...customUnits,
-            Utils.convertCustomUnitIntoValue(customUnit),
-        ]));
+        yield put(actions.createFoodItemSuccess(createdFoodItem));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.addCustomUnitError(message));
+        yield put(actions.createFoodItemError(message));
     }
 }
 
-function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generator<StrictEffect, void, unknown> {
+function* updateFoodItem(): Generator<StrictEffect, void, unknown> {
 
     try {
+        const foodPage = (yield select(extractState)) as FoodPageStore;
+        const foodItem = Utils.convertFoodPageIntoFood(foodPage);
 
-        const { payload: customUnitIndex } = action;
+        const updatedFoodItem = (yield call(FoodApi.updateFoodItem, foodItem)) as Food;
 
-        const customUnits = (yield select(extractCustomUnits)) as CustomUnit[];
-
-        // TODO: API CALL
-
-        yield put(actions.removeCustomUnitSuccess(
-            customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-        ));
+        yield put(actions.updateFoodItemSuccess(updatedFoodItem));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.removeCustomUnitError(message));
+        yield put(actions.updateFoodItemError(message));
     }
 }
-
-function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generator<StrictEffect, void, unknown> {
-
-    try {
-
-        const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
-
-        const customUnits = (yield select(extractCustomUnits)) as CustomUnit[];
-
-        // TODO: API CALL
-
-        yield put(actions.updateCustomUnitSuccess(
-            customUnits.map((customUnit, index) => (
-                index === customUnitIndex
-                    ? Utils.convertCustomUnitIntoValue(updatedCustomUnit)
-                    : customUnit
-            )),
-        ));
-    }
-    catch (error) {
-        const { message } = error as Error;
-        yield put(actions.updateCustomUnitError(message));
-    }
-}
-
 
 function* watchFetchFoodItem(): SagaIterator {
     yield takeLatest(types.FOOD_ITEM_FETCH_REQUEST, fetchFoodItem);
 }
 
-function* watchAddCustomUnit(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_ADD_CUSTOM_UNIT_REQUEST, addCustomUnit);
+function* watchCreateFoodItem(): SagaIterator {
+    yield takeLatest(types.FOOD_ITEM_CREATE_REQUEST, createFoodItem);
 }
 
-function* watchRemoveCustomUnit(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_REMOVE_CUSTOM_UNIT_REQUEST, removeCustomUnit);
+function* watchUpdateFoodItem(): SagaIterator {
+    yield takeLatest(types.FOOD_ITEM_UPDATE_REQUEST, updateFoodItem);
 }
-
-function* watchUpdateCustomUnit(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_UPDATE_CUSTOM_UNIT_REQUEST, updateCustomUnit);
-}
-
 
 export default function* foodSaga(): Generator<AllEffect<SagaIterator>, void, unknown> {
     yield all([
         watchFetchFoodItem(),
-        watchAddCustomUnit(),
-        watchRemoveCustomUnit(),
-        watchUpdateCustomUnit(),
+        watchCreateFoodItem(),
+        watchUpdateFoodItem(),
     ]);
 }

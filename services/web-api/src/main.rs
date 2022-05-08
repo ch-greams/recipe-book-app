@@ -6,6 +6,7 @@ use crate::config::Config;
 mod config;
 mod controllers;
 mod types;
+mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

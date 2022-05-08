@@ -54,8 +54,7 @@ describe("recipe_page", () => {
 
             const cuName = "package";
             const cuNameUpdated = "updated name";
-            // FIXME: Change cuAmountUpdated value to decimal (part of the RBA-48 issue)
-            const cuAmountUpdated = "125";
+            const cuAmountUpdated = "125.67";
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .parent()

@@ -1,21 +1,52 @@
-use super::custom_unit::CustomUnit;
-use super::direction::DirectionDetails;
-use super::ingredient::IngredientDetails;
+use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
+use super::direction::{CreateDirectionPayload, DirectionDetails, UpdateDirectionPayload};
+use super::ingredient::{CreateIngredientPayload, IngredientDetails, UpdateIngredientPayload};
 use super::product::Product;
 
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
 pub struct Recipe {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
-    pub description: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
     pub density: f64,
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetails>,
     pub directions: Vec<DirectionDetails>,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+    pub is_private: bool,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct CreateRecipePayload {
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
+    pub density: f64,
+    pub custom_units: Vec<CreateCustomUnitPayload>,
+    pub ingredients: Vec<CreateIngredientPayload>,
+    pub directions: Vec<CreateDirectionPayload>,
+    pub is_private: bool,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct UpdateRecipePayload {
+    pub id: i64,
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
+    pub density: f64,
+    pub custom_units: Vec<UpdateCustomUnitPayload>,
+    pub ingredients: Vec<UpdateIngredientPayload>,
+    pub directions: Vec<UpdateDirectionPayload>,
+    pub is_private: bool,
 }
 
 impl Recipe {
@@ -35,6 +66,9 @@ impl Recipe {
             custom_units,
             ingredients,
             directions,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
+            is_private: product.is_private,
         }
     }
 }
@@ -43,8 +77,10 @@ impl Recipe {
 pub struct RecipeShort {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl RecipeShort {
@@ -54,6 +90,8 @@ impl RecipeShort {
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }

@@ -9,9 +9,11 @@ export interface Food {
     name: string;
     brand: string;
     subtitle: string;
+    description: string;
     density: number;
     nutrition_facts: Dictionary<NutritionFactType, number>;
     custom_units: CustomUnit[];
+    is_private: boolean;
 }
 
 export interface FoodShort {
@@ -36,16 +38,6 @@ export interface Ingredient {
     products: Dictionary<number, IngredientProduct>;
 }
 
-export interface Time {
-    value: number;
-    unit: TimeUnit;
-}
-
-export interface Temperature {
-    value: number;
-    unit: TemperatureUnit;
-}
-
 export interface SubDirection {
     step_number: number;
     direction_part_type: SubDirectionType;
@@ -57,8 +49,10 @@ export interface SubDirection {
 export interface Direction {
     step_number: number;
     name: string;
-    duration?: Option<Time>;
-    temperature?: Option<Temperature>;
+    duration_value?: Option<number>;
+    duration_unit: TimeUnit;
+    temperature_value?: Option<number>;
+    temperature_unit: TemperatureUnit;
     steps: SubDirection[];
 }
 
@@ -69,11 +63,14 @@ export interface Recipe {
     subtitle: string;
     description: string;
     type: string;
+    density: number;
 
     custom_units: CustomUnit[];
 
     ingredients: Ingredient[];
     directions: Direction[];
+
+    is_private: boolean;
 }
 
 export interface RecipeShort{

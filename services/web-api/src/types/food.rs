@@ -1,17 +1,50 @@
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-use super::{custom_unit::CustomUnit, nutrition_facts::NutritionFacts, product::Product};
+use super::{
+    custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload},
+    nutrition_facts::{CreateNutritionFactsPayload, NutritionFacts, UpdateNutritionFactsPayload},
+    product::Product,
+};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Food {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
-    pub description: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
     pub density: f64,
     pub nutrition_facts: NutritionFacts,
     pub custom_units: Vec<CustomUnit>,
+    pub is_private: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct CreateFoodPayload {
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
+    pub density: f64,
+    pub nutrition_facts: CreateNutritionFactsPayload,
+    pub custom_units: Vec<CreateCustomUnitPayload>,
+    pub is_private: bool,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct UpdateFoodPayload {
+    pub id: i64,
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub description: String,
+    pub density: f64,
+    pub nutrition_facts: UpdateNutritionFactsPayload,
+    pub custom_units: Vec<UpdateCustomUnitPayload>,
+    pub is_private: bool,
 }
 
 impl Food {
@@ -29,6 +62,9 @@ impl Food {
             density: product.density,
             nutrition_facts: nutrition_facts.to_owned(),
             custom_units,
+            is_private: product.is_private,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }
@@ -37,8 +73,11 @@ impl Food {
 pub struct FoodShort {
     pub id: i64,
     pub name: String,
-    pub brand: Option<String>,
-    pub subtitle: Option<String>,
+    pub brand: String,
+    pub subtitle: String,
+    pub is_private: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
 }
 
 impl FoodShort {
@@ -48,6 +87,9 @@ impl FoodShort {
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
+            is_private: product.is_private,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
         }
     }
 }

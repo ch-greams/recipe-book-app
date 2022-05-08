@@ -1,6 +1,5 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type * as typings from "@common/typings";
-import type { CustomUnit } from "@common/units";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
@@ -20,6 +19,7 @@ const initialState: types.RecipePageStore = {
     subtitle: "Subtitle",
     description: "",
     type: "",
+    density: 1,
 
     nutritionFacts: {},
 
@@ -39,30 +39,29 @@ const initialState: types.RecipePageStore = {
         stepNumber: 4,
         name: "",
 
-        duration: {
-            value: 0,
-            unit: units.DEFAULT_TIME_UNIT,
-        },
-        temperature: {
-            value: 0,
-            unit: units.DEFAULT_TEMPERATURE_UNIT,
-        },
+        durationValue: 0,
+        durationUnit: units.DEFAULT_TIME_UNIT,
 
-        durationInput: "",
-        temperatureInput: "",
+        temperatureValue: 0,
+        temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
+
+        durationValueInput: "",
+        temperatureValueInput: "",
 
         steps: [],
     },
     directions: [],
+
+    isPrivate: false,
+
+    // NOTE: NEW RECIPE
+
+    isCreated: false,
 };
 
 
-function extractState(globalState: AppState): types.RecipePageStore {
+export function extractState(globalState: AppState): types.RecipePageStore {
     return (globalState?.recipePage || initialState);
-}
-
-export function extractCustomUnits(globalState: AppState): units.CustomUnit[] {
-    return extractState(globalState).customUnits;
 }
 
 
@@ -141,11 +140,13 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
         stepNumber: direction.step_number,
         name: direction.name,
 
-        duration: direction.duration,
-        durationInput: direction.duration?.value ? String(direction.duration?.value) : "",
+        durationValue: direction.duration_value,
+        durationUnit: direction.duration_unit,
+        durationValueInput: direction.duration_value ? String(direction.duration_value) : "",
 
-        temperature: direction.temperature,
-        temperatureInput: direction.temperature?.value ? String(direction.temperature?.value) : "",
+        temperatureValue: direction.temperature_value,
+        temperatureUnit: direction.temperature_unit,
+        temperatureValueInput: direction.temperature_value ? String(direction.temperature_value) : "",
 
         isOpen: true,
         isMarked: false,
@@ -235,14 +236,58 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS:
-        case types.RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS:
-        case types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS: {
+        case types.RECIPE_ITEM_ADD_CUSTOM_UNIT: {
+
+            const { payload: customUnitInput } = action;
+
+            // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
+            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+                return state;
+            }
+
             return {
                 ...state,
 
-                customUnits: action.payload as CustomUnit[],
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(action.payload),
+                customUnits: [
+                    ...state.customUnits,
+                    Utils.convertCustomUnitIntoValue(customUnitInput),
+                ],
+                customUnitInputs: [
+                    ...state.customUnitInputs,
+                    customUnitInput,
+                ],
+            };
+        }
+
+        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT: {
+
+            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
+
+            return {
+                ...state,
+
+                customUnits: state.customUnits.map((customUnit, index) => (
+                    index === customUnitIndex
+                        ? Utils.convertCustomUnitIntoValue(updatedCustomUnitInput)
+                        : customUnit
+                )),
+                customUnitInputs: state.customUnitInputs.map((customUnit, index) => (
+                    index === customUnitIndex
+                        ? updatedCustomUnitInput
+                        : customUnit
+                )),
+            };
+        }
+
+        case types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT: {
+
+            const { payload: customUnitIndex } = action;
+
+            return {
+                ...state,
+
+                customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
+                customUnitInputs: state.customUnitInputs.filter((_customUnitInput, index) => index !== customUnitIndex),
             };
         }
 
@@ -518,18 +563,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.temperatureInput);
+                    const count = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
 
                     return (
                         (directionIndex === iDirection)
                             ? {
                                 ...direction,
-                                temperature: {
-                                    unit: units.DEFAULT_TEMPERATURE_UNIT,
-                                    ...direction.temperature,
-                                    value: Number(count),
-                                },
-                                temperatureInput: count,
+                                temperatureValue: Number(count),
+                                temperatureValueInput: count,
                             }
                             : direction
                     );
@@ -547,11 +588,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            temperature: {
-                                value: 0,
-                                ...direction.temperature,
-                                unit: unit,
-                            },
+                            temperatureUnit: unit,
                         }
                         : direction
                 )),
@@ -566,18 +603,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.durationInput);
+                    const count = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
 
                     return (
                         (directionIndex === iDirection)
                             ? {
                                 ...direction,
-                                duration: {
-                                    unit: units.DEFAULT_TIME_UNIT,
-                                    ...direction.duration,
-                                    value: Number(count),
-                                },
-                                durationInput: count,
+                                durationValue: Number(count),
+                                durationValueInput: count,
                             }
                             : direction
                     );
@@ -595,11 +628,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            duration: {
-                                value: 0,
-                                ...direction.duration,
-                                unit: unit,
-                            },
+                            durationUnit: unit,
                         }
                         : direction
                 )),
@@ -630,18 +659,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureInput);
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    temperature: {
-                        unit: units.DEFAULT_TEMPERATURE_UNIT,
-                        ...state.newDirection.temperature,
-                        value: Number(count),
-                    },
-                    temperatureInput: count,
+                    temperatureValue: Number(count),
+                    temperatureValueInput: count,
                 },
             };
         }
@@ -654,11 +679,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    temperature: {
-                        value: 0,
-                        ...state.newDirection.temperature,
-                        unit: unit,
-                    },
+                    temperatureUnit: unit,
                 },
             };
         }
@@ -667,18 +688,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationInput);
+            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    duration: {
-                        unit: units.DEFAULT_TIME_UNIT,
-                        ...state.newDirection.duration,
-                        value: Number(count),
-                    },
-                    durationInput: count,
+                    durationValue: Number(count),
+                    durationValueInput: count,
                 },
             };
         }
@@ -691,11 +708,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    duration: {
-                        value: 0,
-                        ...state.newDirection.duration,
-                        unit: unit,
-                    },
+                    durationUnit: unit,
                 },
             };
         }
@@ -715,11 +728,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         stepNumber: direction.stepNumber,
                         name: direction.name,
 
-                        duration: ( !direction.durationInput ? null : direction.duration  ),
-                        temperature: ( !direction.temperatureInput ? null : direction.temperature ),
+                        durationValue: direction.durationValue,
+                        durationUnit: direction.durationUnit,
 
-                        durationInput: direction.durationInput,
-                        temperatureInput: direction.temperatureInput,
+                        temperatureValue: direction.temperatureValue,
+                        temperatureUnit: direction.temperatureUnit,
+
+                        durationValueInput: direction.durationValueInput,
+                        temperatureValueInput: direction.temperatureValueInput,
 
                         steps: [],
                     },
@@ -731,17 +747,14 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     stepNumber: 0,
                     name: "",
 
-                    duration: {
-                        value: 0,
-                        unit: units.TimeUnit.min,
-                    },
-                    temperature: {
-                        value: 0,
-                        unit: units.TemperatureUnit.C,
-                    },
+                    durationValue: 0,
+                    durationUnit: units.DEFAULT_TIME_UNIT,
 
-                    durationInput: "",
-                    temperatureInput: "",
+                    temperatureValue: 0,
+                    temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
+
+                    durationValueInput: "",
+                    temperatureValueInput: "",
 
                     steps: [],
                 },
@@ -1057,6 +1070,15 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
+        case types.RECIPE_ITEM_FETCH_NEW: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: null,
+                isCreated: false,
+            };
+        }
+
         case types.RECIPE_ITEM_FETCH_REQUEST: {
             return {
                 ...state,
@@ -1096,6 +1118,59 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_ITEM_FETCH_ERROR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: action.payload as string,
+            };
+        }
+
+        case types.RECIPE_ITEM_CREATE_REQUEST: {
+            return {
+                ...state,
+                isLoaded: false,
+            };
+        }
+
+        case types.RECIPE_ITEM_CREATE_SUCCESS: {
+
+            const recipeItem = action.payload;
+
+            return {
+                ...state,
+                isLoaded: true,
+                id: recipeItem.id,
+                isCreated: true,
+            };
+        }
+
+        case types.RECIPE_ITEM_CREATE_ERROR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: action.payload as string,
+            };
+        }
+
+        case types.RECIPE_ITEM_UPDATE_REQUEST: {
+            return {
+                ...state,
+                isLoaded: false,
+            };
+        }
+
+        case types.RECIPE_ITEM_UPDATE_SUCCESS: {
+
+            const recipeItem = action.payload;
+
+            return {
+                ...state,
+                isLoaded: true,
+                id: recipeItem.id,
+            };
+        }
+
+        case types.RECIPE_ITEM_UPDATE_ERROR: {
             return {
                 ...state,
                 isLoaded: true,

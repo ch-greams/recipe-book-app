@@ -1,9 +1,13 @@
 import type { NutritionFact } from "@views/shared/nutrition-facts-block";
+import type { FoodPageStore } from "@store/food/types";
+import type {
+    RecipeDirection, RecipePageStore, RecipeSubDirectionComment, RecipeSubDirectionIngredient,
+} from "@store/recipe/types";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer } from "./typings";
+import type { Comparer, Direction, Food, Recipe, SubDirection } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -239,6 +243,14 @@ export default class Utils {
 
     // NOTE: OTHER GENERIC THINGS
 
+    /**
+     * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
+     * Used for ingridients in a new recipe
+     */
+    public static getTemporaryId(): number {
+        return -Date.now();
+    }
+
     public static sortBy<T>(field: keyof T): Comparer<T> {
         return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
     }
@@ -253,6 +265,10 @@ export default class Utils {
 
     public static getItemPath(route: RoutePath, id: number): string {
         return `/${route}/${id}`;
+    }
+
+    public static getNewItemPath(route: RoutePath): string {
+        return `/${route}/new`;
     }
 
     public static classNames(values: Dictionary<string, boolean>): string {
@@ -297,5 +313,59 @@ export default class Utils {
 
     public static convertCustomUnitIntoValue(customUnit: CustomUnitInput): CustomUnit {
         return { ...customUnit, amount: Number(customUnit.amount) };
+    }
+
+    public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
+        return {
+            id: foodPage.id,
+            name: foodPage.name,
+            brand: foodPage.brand,
+            subtitle: foodPage.subtitle,
+            description: foodPage.description,
+            density: foodPage.density,
+            nutrition_facts: foodPage.nutritionFacts,
+            custom_units: foodPage.customUnits,
+            is_private: foodPage.isPrivate,
+        };
+    }
+
+    private static convertRecipeDirectionStepIntoSubDirection(
+        recipeDirectionStep: RecipeSubDirectionComment | RecipeSubDirectionIngredient,
+    ): SubDirection {
+        return {
+            step_number: recipeDirectionStep.stepNumber,
+            direction_part_type: recipeDirectionStep.type,
+            comment_text: (recipeDirectionStep as RecipeSubDirectionComment).commentText,
+            ingredient_id: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientId,
+            ingredient_amount: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientAmount,
+        };
+    }
+
+    private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection): Direction {
+        return {
+            step_number: recipeDirection.stepNumber,
+            name: recipeDirection.name,
+            duration_value: recipeDirection.durationValue,
+            duration_unit: recipeDirection.durationUnit,
+            temperature_value: recipeDirection.temperatureValue,
+            temperature_unit: recipeDirection.temperatureUnit,
+            steps: recipeDirection.steps.map(Utils.convertRecipeDirectionStepIntoSubDirection),
+        };
+    }
+
+    public static convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe {
+        return {
+            id: recipePage.id,
+            name: recipePage.name,
+            brand: recipePage.brand,
+            subtitle: recipePage.subtitle,
+            description: recipePage.description,
+            custom_units: recipePage.customUnits,
+            type: recipePage.type,
+            density: recipePage.density,
+            ingredients: recipePage.ingredients,
+            directions: recipePage.directions.map(Utils.convertRecipeDirectionIntoDirection),
+            is_private: recipePage.isPrivate,
+        };
     }
 }

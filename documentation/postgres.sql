@@ -107,12 +107,14 @@ CREATE TABLE private.product (
 	id int8 NOT NULL DEFAULT nextval('private.product_id'::regclass),
 	"type" private."product_type" NOT NULL,
 	"name" text NOT NULL,
-	brand text NULL,
-	subtitle text NULL,
-	description text NULL,
-	density float8 NULL DEFAULT 1,
-	created_by int8 NULL,
+	brand text NOT NULL,
+	subtitle text NOT NULL,
+	description text NOT NULL,
+	density float8 NOT NULL DEFAULT 1,
+	created_by int8 NOT NULL,
 	is_private bool NOT NULL DEFAULT true,
+	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	CONSTRAINT product_pk PRIMARY KEY (id),
 	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );
@@ -154,9 +156,11 @@ CREATE TABLE private.direction (
 	recipe_id int8 NOT NULL,
 	step_number int2 NOT NULL,
 	"name" text NOT NULL,
-	temperature private.temperature NULL,
-	duration private.duration NULL,
 	id int8 NOT NULL DEFAULT nextval('private.direction_id'::regclass),
+	temperature_value int2 NULL,
+	temperature_unit text NOT NULL DEFAULT 'C'::text,
+	duration_value int4 NULL,
+	duration_unit text NOT NULL DEFAULT 'min'::text,
 	CONSTRAINT direction_pk PRIMARY KEY (id),
 	CONSTRAINT recipe_step_uq UNIQUE (recipe_id, step_number),
 	CONSTRAINT direction_fk FOREIGN KEY (recipe_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -336,7 +340,8 @@ CASE
     WHEN (direction_part_type = 'ingredient'::private.direction_part_type) THEN ((comment_text IS NULL) AND (ingredient_id IS NOT NULL) AND (ingredient_amount IS NOT NULL))
     ELSE ((comment_text IS NOT NULL) AND (ingredient_id IS NULL) AND (ingredient_amount IS NULL))
 END),
-	CONSTRAINT direction_part_fk FOREIGN KEY (ingredient_id) REFERENCES private.ingredient(id)
+	CONSTRAINT direction_part_direction_fk FOREIGN KEY (direction_id) REFERENCES private.direction(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT direction_part_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES private.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Permissions
