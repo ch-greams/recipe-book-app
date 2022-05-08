@@ -1,10 +1,13 @@
 import type { NutritionFact } from "@views/shared/nutrition-facts-block";
 import type { FoodPageStore } from "@store/food/types";
+import type {
+    RecipeDirection, RecipePageStore, RecipeSubDirectionComment, RecipeSubDirectionIngredient,
+} from "@store/recipe/types";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer, Food } from "./typings";
+import type { Comparer, Direction, Food, Recipe, SubDirection } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -323,6 +326,46 @@ export default class Utils {
             nutrition_facts: foodPage.nutritionFacts,
             custom_units: foodPage.customUnits,
             is_private: foodPage.isPrivate,
+        };
+    }
+
+    private static convertRecipeDirectionStepIntoSubDirection(
+        recipeDirectionStep: RecipeSubDirectionComment | RecipeSubDirectionIngredient,
+    ): SubDirection {
+        return {
+            step_number: recipeDirectionStep.stepNumber,
+            direction_part_type: recipeDirectionStep.type,
+            comment_text: (recipeDirectionStep as RecipeSubDirectionComment).commentText,
+            ingredient_id: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientId,
+            ingredient_amount: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientAmount,
+        };
+    }
+
+    private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection): Direction {
+        return {
+            step_number: recipeDirection.stepNumber,
+            name: recipeDirection.name,
+            duration_value: recipeDirection.durationValue,
+            duration_unit: recipeDirection.durationUnit,
+            temperature_value: recipeDirection.temperatureValue,
+            temperature_unit: recipeDirection.temperatureUnit,
+            steps: recipeDirection.steps.map(Utils.convertRecipeDirectionStepIntoSubDirection),
+        };
+    }
+
+    public static convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe {
+        return {
+            id: recipePage.id,
+            name: recipePage.name,
+            brand: recipePage.brand,
+            subtitle: recipePage.subtitle,
+            description: recipePage.description,
+            custom_units: recipePage.customUnits,
+            type: recipePage.type,
+            density: recipePage.density,
+            ingredients: recipePage.ingredients,
+            directions: recipePage.directions.map(Utils.convertRecipeDirectionIntoDirection),
+            is_private: recipePage.isPrivate,
         };
     }
 }

@@ -176,12 +176,36 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
+        // TODO: Check that this is necessary
         case types.FOOD_ITEM_UPDATE_CUSTOM_UNITS: {
             return {
                 ...state,
 
                 customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
                 customUnitInputs: action.payload as CustomUnitInput[],
+            };
+        }
+
+        case types.FOOD_ITEM_ADD_CUSTOM_UNIT: {
+
+            const { payload: customUnitInput } = action;
+
+            // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
+            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+                return state;
+            }
+
+            return {
+                ...state,
+
+                customUnits: [
+                    ...state.customUnits,
+                    Utils.convertCustomUnitIntoValue(customUnitInput),
+                ],
+                customUnitInputs: [
+                    ...state.customUnitInputs,
+                    customUnitInput,
+                ],
             };
         }
 
@@ -202,29 +226,6 @@ export default function foodPageReducer(state = initialState, action: types.Food
                         ? updatedCustomUnitInput
                         : customUnit
                 )),
-            };
-        }
-
-        case types.FOOD_ITEM_ADD_CUSTOM_UNIT: {
-
-            const { payload: customUnitInput } = action;
-
-            // Custom Unit name is empty or already exist
-            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
-                return state;
-            }
-
-            return {
-                ...state,
-
-                customUnits: [
-                    ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(customUnitInput),
-                ],
-                customUnitInputs: [
-                    ...state.customUnitInputs,
-                    customUnitInput,
-                ],
             };
         }
 

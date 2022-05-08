@@ -40,7 +40,6 @@ export interface FoodPageStore {
     featuredNutritionFacts: NutritionFactType[];
 
     // NOTE: NEW FOOD
-
     isCreated: boolean;
 }
 

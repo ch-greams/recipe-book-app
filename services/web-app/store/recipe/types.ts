@@ -1,5 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type * as typings from "@common/typings";
+import type { Recipe } from "@common/typings";
 import type * as units from "@common/units";
 
 
@@ -70,8 +71,11 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
+    // TODO: Expand to include density inputs just like in Food
+    density: number;
     nutritionFacts: Dictionary<NutritionFactType, number>;
     customUnits: units.CustomUnit[];
+    isPrivate: boolean;
 
     // NOTE: INPUTS
     customUnitInputs: units.CustomUnitInput[];
@@ -84,6 +88,9 @@ export interface RecipePageStore {
 
     newDirection: RecipeDirection;
     directions: RecipeDirection[];
+
+    // NOTE: NEW RECIPE
+    isCreated: boolean;
 }
 
 
@@ -98,15 +105,9 @@ export const RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "RECIPE_ITEM_UPDATE_SERVIN
 export const RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT";
 
 
-export const RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST";
-export const RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS";
-export const RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR";
-export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST";
-export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS";
-export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR";
-export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST";
-export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS";
-export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR";
+export const RECIPE_ITEM_ADD_CUSTOM_UNIT = "RECIPE_ITEM_ADD_CUSTOM_UNIT";
+export const RECIPE_ITEM_REMOVE_CUSTOM_UNIT = "RECIPE_ITEM_REMOVE_CUSTOM_UNIT";
+export const RECIPE_ITEM_UPDATE_CUSTOM_UNIT = "RECIPE_ITEM_UPDATE_CUSTOM_UNIT";
 
 // NOTE: Directions
 
@@ -154,9 +155,18 @@ export const RECIPE_ITEM_ADD_INGREDIENT = "RECIPE_ITEM_ADD_INGREDIENT";
 export const RECIPE_ITEM_ADD_ALT_INGREDIENT = "RECIPE_ITEM_ADD_ALT_INGREDIENT";
 
 
+export const RECIPE_ITEM_FETCH_NEW = "RECIPE_ITEM_FETCH_NEW";
 export const RECIPE_ITEM_FETCH_REQUEST = "RECIPE_ITEM_FETCH_REQUEST";
 export const RECIPE_ITEM_FETCH_SUCCESS = "RECIPE_ITEM_FETCH_SUCCESS";
 export const RECIPE_ITEM_FETCH_ERROR = "RECIPE_ITEM_FETCH_ERROR";
+
+export const RECIPE_ITEM_CREATE_REQUEST = "RECIPE_ITEM_CREATE_REQUEST";
+export const RECIPE_ITEM_CREATE_SUCCESS = "RECIPE_ITEM_CREATE_SUCCESS";
+export const RECIPE_ITEM_CREATE_ERROR = "RECIPE_ITEM_CREATE_ERROR";
+
+export const RECIPE_ITEM_UPDATE_REQUEST = "RECIPE_ITEM_UPDATE_REQUEST";
+export const RECIPE_ITEM_UPDATE_SUCCESS = "RECIPE_ITEM_UPDATE_SUCCESS";
+export const RECIPE_ITEM_UPDATE_ERROR = "RECIPE_ITEM_UPDATE_ERROR";
 
 
 export interface UpdateNameAction {
@@ -378,6 +388,9 @@ export interface AddAltIngredientAction {
     payload: { id: number, altIngredientProduct: typings.IngredientProduct };
 }
 
+export interface RecipeItemFetchNewAction {
+    type: typeof RECIPE_ITEM_FETCH_NEW;
+}
 
 export interface RecipeItemFetchRequestAction {
     type: typeof RECIPE_ITEM_FETCH_REQUEST;
@@ -395,54 +408,51 @@ export interface RecipeItemFetchErrorAction {
 }
 
 
-export interface AddCustomUnitRequestAction {
-    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST;
+export interface AddCustomUnitAction {
+    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT;
     payload: units.CustomUnitInput;
 }
 
-export interface AddCustomUnitSuccessAction {
-    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_SUCCESS;
-    payload: units.CustomUnit[];
-}
-
-export interface AddCustomUnitErrorAction {
-    type: typeof RECIPE_ITEM_ADD_CUSTOM_UNIT_ERROR;
-    payload: string;
-}
-
-export interface RemoveCustomUnitRequestAction {
-    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST;
+export interface RemoveCustomUnitAction {
+    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT;
     payload: number;
 }
 
-export interface RemoveCustomUnitSuccessAction {
-    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_SUCCESS;
-    payload: units.CustomUnit[];
-}
-
-export interface RemoveCustomUnitErrorAction {
-    type: typeof RECIPE_ITEM_REMOVE_CUSTOM_UNIT_ERROR;
-    payload: string;
-}
-
-export interface UpdateCustomUnitRequestAction {
-    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST;
+export interface UpdateCustomUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT;
     payload: {
         index: number;
         customUnit: units.CustomUnitInput;
     };
 }
 
-export interface UpdateCustomUnitSuccessAction {
-    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_SUCCESS;
-    payload: units.CustomUnit[];
+export interface RecipeItemCreateRequestAction {
+    type: typeof RECIPE_ITEM_CREATE_REQUEST;
 }
 
-export interface UpdateCustomUnitErrorAction {
-    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNIT_ERROR;
+export interface RecipeItemCreateSuccessAction {
+    type: typeof RECIPE_ITEM_CREATE_SUCCESS;
+    payload: Recipe;
+}
+
+export interface RecipeItemCreateErrorAction {
+    type: typeof RECIPE_ITEM_CREATE_ERROR;
     payload: string;
 }
 
+export interface RecipeItemUpdateRequestAction {
+    type: typeof RECIPE_ITEM_UPDATE_REQUEST;
+}
+
+export interface RecipeItemUpdateSuccessAction {
+    type: typeof RECIPE_ITEM_UPDATE_SUCCESS;
+    payload: Recipe;
+}
+
+export interface RecipeItemUpdateErrorAction {
+    type: typeof RECIPE_ITEM_UPDATE_ERROR;
+    payload: string;
+}
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
@@ -466,9 +476,9 @@ export type RecipeItemActionTypes = (
     UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction |
     UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction |
 
-    RecipeItemFetchRequestAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction |
+    RecipeItemFetchRequestAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction | RecipeItemFetchNewAction |
+    AddCustomUnitAction | RemoveCustomUnitAction | UpdateCustomUnitAction |
 
-    AddCustomUnitRequestAction | AddCustomUnitSuccessAction | AddCustomUnitErrorAction |
-    RemoveCustomUnitRequestAction | RemoveCustomUnitSuccessAction | RemoveCustomUnitErrorAction |
-    UpdateCustomUnitRequestAction | UpdateCustomUnitSuccessAction | UpdateCustomUnitErrorAction
+    RecipeItemCreateRequestAction | RecipeItemCreateSuccessAction | RecipeItemCreateErrorAction |
+    RecipeItemUpdateRequestAction | RecipeItemUpdateSuccessAction | RecipeItemUpdateErrorAction
 );

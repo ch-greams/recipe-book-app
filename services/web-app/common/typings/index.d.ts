@@ -63,11 +63,14 @@ export interface Recipe {
     subtitle: string;
     description: string;
     type: string;
+    density: number;
 
     custom_units: CustomUnit[];
 
     ingredients: Ingredient[];
     directions: Direction[];
+
+    is_private: boolean;
 }
 
 export interface RecipeShort{

@@ -33,14 +33,18 @@ export default class FoodApi {
 
     public static async getFavoriteFoodItems(): Promise<FoodShort[]> {
 
-        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}/favorite/1`);
+        const userId = 1;
+
+        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}/favorite/${userId}`);
 
         return recipeItems;
     }
 
     public static async getCustomFoodItems(): Promise<FoodShort[]> {
 
-        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}?limit=20&user_id=1`);
+        const userId = 1;
+
+        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}?limit=20&user_id=${userId}`);
 
         return recipeItems;
     }

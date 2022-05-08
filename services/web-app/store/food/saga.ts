@@ -1,7 +1,6 @@
 import type { SagaIterator } from "redux-saga";
 import type { AllEffect, StrictEffect } from "redux-saga/effects";
-import { all, call, put, takeLatest } from "redux-saga/effects";
-import * as effects from "redux-saga/effects";
+import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
 import type { Food } from "@common/typings";
 import Utils from "@common/utils";
@@ -33,7 +32,7 @@ function* fetchFoodItem(action: types.FoodItemFetchRequestAction): Generator<Str
 function* createFoodItem(): Generator<StrictEffect, void, unknown> {
 
     try {
-        const foodPage = (yield effects.select(extractState)) as FoodPageStore;
+        const foodPage = (yield select(extractState)) as FoodPageStore;
         const foodItem = Utils.convertFoodPageIntoFood(foodPage);
 
         const createdFoodItem = (yield call(FoodApi.createFoodItem, foodItem)) as Food;
@@ -49,7 +48,7 @@ function* createFoodItem(): Generator<StrictEffect, void, unknown> {
 function* updateFoodItem(): Generator<StrictEffect, void, unknown> {
 
     try {
-        const foodPage = (yield effects.select(extractState)) as FoodPageStore;
+        const foodPage = (yield select(extractState)) as FoodPageStore;
         const foodItem = Utils.convertFoodPageIntoFood(foodPage);
 
         const updatedFoodItem = (yield call(FoodApi.updateFoodItem, foodItem)) as Food;
