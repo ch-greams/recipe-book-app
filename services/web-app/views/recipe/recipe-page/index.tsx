@@ -130,7 +130,7 @@ const RecipePageConnected: React.FC = () => {
             dispatch(actions.fetchRecipeItemRequest(recipeId));
             dispatch(requestIngredients());
         }
-        else if (router.asPath === Utils.getNewItemPath(RoutePath.Recipe)) {
+        else if (router.asPath.includes(Utils.getNewItemPath(RoutePath.Recipe))) {
 
             if (recipeItem.isCreated) {
                 router.push(Utils.getItemPath(RoutePath.Recipe, recipeItem.id));

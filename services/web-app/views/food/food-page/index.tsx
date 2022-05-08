@@ -112,7 +112,7 @@ const FoodPageConnected: React.FC = () => {
             const foodId = Number(fid);
             dispatch(actions.fetchFoodItemRequest(foodId));
         }
-        else if (router.asPath === Utils.getNewItemPath(RoutePath.Food)) {
+        else if (router.asPath.includes(Utils.getNewItemPath(RoutePath.Food))) {
 
             if (foodItem.isCreated) {
                 router.push(Utils.getItemPath(RoutePath.Food, foodItem.id));
