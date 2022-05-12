@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import Utils, { RoutePath } from "@common/utils";
 import BlockTitle from "@views/shared/block-title";

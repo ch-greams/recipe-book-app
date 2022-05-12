@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
 .nutritionFactLine {
@@ -9,8 +9,8 @@
     margin: 4px 0;
 
     font-family: $font-default;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $font-size-12;
+    font-weight: $font-weight-500;
 
     line-height: 22px;
 
@@ -39,8 +39,8 @@
         margin-right: 4px;
 
         font-family: $font-default;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $font-size-12;
+        font-weight: $font-weight-500;
 
         color: $color-default;
 
@@ -59,8 +59,8 @@
         margin-right: 4px;
 
         font-family: $font-default;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $font-size-12;
+        font-weight: $font-weight-500;
 
         color: $color-grey-dark;
 
@@ -99,8 +99,8 @@
     margin: 4px;
 
     font-family: $font-default;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: $font-size-12;
+    font-weight: $font-weight-500;
 
     line-height: 22px;
 
@@ -127,8 +127,8 @@
         margin-right: 4px;
 
         font-family: $font-default;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $font-size-12;
+        font-weight: $font-weight-500;
 
         color: $color-white;
 
@@ -149,8 +149,8 @@
         margin-right: 4px;
 
         font-family: $font-default;
-        font-size: 12px;
-        font-weight: 500;
+        font-size: $font-size-12;
+        font-weight: $font-weight-500;
 
         color: $color-white;
 

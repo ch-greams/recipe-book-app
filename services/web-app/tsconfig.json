@@ -17,6 +17,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+      "@cypress/*": [ "cypress/*" ],
       "@views/*": [ "views/*" ],
       "@api/*": [ "api/*" ],
       "@store/*": [ "store/*" ],

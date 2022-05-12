@@ -1,4 +1,4 @@
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import { WeightUnit } from "@common/units";
 

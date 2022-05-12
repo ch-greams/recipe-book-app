@@ -5,8 +5,8 @@ import type { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import CustomUnitsBlock from "@views/shared/custom-units-block";
-import type { SelectOption } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
 
@@ -70,19 +70,25 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     }}
                 />
 
-                <SelectInput
-                    type={SelectInputType.Other}
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
                     options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
-                    onChange={(option: SelectOption<WeightUnit>) => dispatch(actions.updateDensityWeightUnit(option.value))}
+                    onChange={(option: SelectOption) => dispatch(actions.updateDensityWeightUnit(option.value as WeightUnit))}
                     value={foodItem.densityWeightUnit}
                 />
 
                 {"/"}
 
-                <SelectInput
-                    type={SelectInputType.Other}
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
                     options={Object.values(VolumeUnit).map((unit) => ({ value: unit }))}
-                    onChange={(option: SelectOption<VolumeUnit>) => dispatch(actions.updateDensityVolumeUnit(option.value))}
+                    onChange={(option: SelectOption) => dispatch(actions.updateDensityVolumeUnit(option.value as VolumeUnit))}
                     value={foodItem.densityVolumeUnit}
                 />
 
@@ -101,14 +107,17 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     onChange={handleServingSizeAmountEdit}
                 />
 
-                <SelectInput
-                    type={SelectInputType.ServingSize}
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
                     options={[
                         ...Object.values(Units).map((unit) => ({ value: unit })),
                         ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
                     value={foodItem.servingSizeUnit}
-                    onChange={(option: SelectOption<WeightUnit | VolumeUnit | string>) => dispatch(actions.updateServingSizeUnit(option.value))}
+                    onChange={(option: SelectOption) => dispatch(actions.updateServingSizeUnit(option.value))}
                 />
 
             </div>

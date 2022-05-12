@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 .homePage {
 
@@ -20,8 +20,8 @@
         padding-left: 16px;
 
         font-family: $font-default;
-        font-size: 36px;
-        font-weight: 700;
+        font-size: $font-size-36;
+        font-weight: $font-weight-700;
 
         color: $color-input;
     }
@@ -50,8 +50,8 @@
             height: 52px;
 
             font-family: $font-default;
-            font-size: 24px;
-            font-weight: 700;
+            font-size: $font-size-24;
+            font-weight: $font-weight-700;
 
             color: #fff;
 

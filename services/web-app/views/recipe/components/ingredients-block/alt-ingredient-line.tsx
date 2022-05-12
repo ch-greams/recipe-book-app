@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import type { SelectOption } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
@@ -95,13 +95,16 @@ const AltIngredientLine: React.FC<Props> = ({
 
             {( isReadOnly ? amountText : amountInput )}
 
-            <SelectInput
-                type={SelectInputType.AltIngredientUnit}
+            <RbaSelect
+                theme={SelectTheme.Alternative}
+                center={true}
+                width={SelectWidthSize.Medium}
+                height={SelectHeightSize.Medium}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
                 value={altIngredientProduct.unit}
-                onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
+                onChange={(option: SelectOption) => {
                     dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredientProduct.product_id, option.value,
+                        parentId, altIngredientProduct.product_id, option.value as WeightUnit | VolumeUnit,
                     ));
                 }}
             />

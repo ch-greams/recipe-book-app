@@ -1,4 +1,4 @@
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import Utils, { RoutePath, UserMenuItem } from "@common/utils";
 

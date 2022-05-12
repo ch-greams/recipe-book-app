@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CY_USER_MENU_ITEM } from "cypress/constants";
+import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import Utils, { UserMenuItem } from "@common/utils";
 import SingleMessagePage from "@views/shared/single-message-page";

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import Utils from "@common/utils";
-import type { SelectOption } from "@views/shared/select-input";
-import { getOptionLabel } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
+import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
@@ -25,12 +25,12 @@ const NewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }) =
 
     const dispatch = useDispatch();
 
-    const [ currentDirectionPart, setDirectionPart ] = useState<SelectOption<SubDirectionType | ID>>({
+    const [ currentDirectionPart, setDirectionPart ] = useState<SelectOption>({
         group: "Comment",
         value: SubDirectionType.Note,
     });
 
-    const createSubDirection = (option: SelectOption<SubDirectionType | ID>): void => {
+    const createSubDirection = (option: SelectOption): void => {
 
         if (option.group === "Comment") {
             dispatch(actions.createSubDirectionComment(directionIndex, option.value as SubDirectionType));
@@ -69,9 +69,10 @@ const NewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }) =
 
             <div className={styles.subDirectionInfoLine}>
 
-                <SelectInput
-                    type={SelectInputType.SubDirectionType}
-                    withGroups={true}
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    width={SelectWidthSize.Full}
+                    height={SelectHeightSize.Medium}
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",

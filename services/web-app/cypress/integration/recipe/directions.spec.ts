@@ -1,4 +1,4 @@
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { SubDirectionType } from "@store/recipe/types";

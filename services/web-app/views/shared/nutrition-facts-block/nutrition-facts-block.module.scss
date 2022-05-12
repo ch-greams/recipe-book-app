@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
 .nutritionFactsBlock {
@@ -8,8 +8,8 @@
         margin-bottom: 12px;
 
         font-family: $font-default;
-        font-size: 24px;
-        font-weight: 700;
+        font-size: $font-size-24;
+        font-weight: $font-weight-700;
 
         color: $color-white;
 

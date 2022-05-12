@@ -1,12 +1,12 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils from "@common/utils";
-import type { SelectOption } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
@@ -98,13 +98,16 @@ const SubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direction
 
                         {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
 
-                        <SelectInput
-                            type={SelectInputType.AltIngredientUnit}
+                        <RbaSelect
+                            theme={SelectTheme.Alternative}
+                            center={true}
+                            width={SelectWidthSize.Medium}
+                            height={SelectHeightSize.Medium}
                             options={Object.values(Units).map((unit) => ({ value: unit }))}
                             value={subDirection.ingredientUnit}
-                            onChange={(option: SelectOption<WeightUnit | VolumeUnit>) => {
+                            onChange={(option: SelectOption) => {
                                 dispatch(actions.updateSubDirectionIngredientUnit(
-                                    directionIndex, stepNumber, option.value,
+                                    directionIndex, stepNumber, option.value as WeightUnit | VolumeUnit,
                                 ));
                             }}
                         />

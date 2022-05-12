@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import type { SelectOption } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
 
@@ -29,12 +29,15 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     );
 
     const temperatureSelectInput = (
-        <SelectInput
-            type={SelectInputType.IngredientUnit}
+        <RbaSelect
+            theme={SelectTheme.Primary}
+            center={true}
+            width={SelectWidthSize.Medium}
+            height={SelectHeightSize.Medium}
             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
             value={direction.temperatureUnit}
-            onChange={(option: SelectOption<TemperatureUnit>) => {
-                dispatch(actions.updateDirectionTemperatureUnit(index, option.value));
+            onChange={(option: SelectOption) => {
+                dispatch(actions.updateDirectionTemperatureUnit(index, option.value as TemperatureUnit));
             }}
         />
     );
@@ -46,12 +49,15 @@ const DirectionInfoLine: React.FC<Props> = ({ isReadOnly, index, direction }) =>
     );
 
     const durationSelectInput = (
-        <SelectInput
-            type={SelectInputType.IngredientUnit}
+        <RbaSelect
+            theme={SelectTheme.Primary}
+            center={true}
+            width={SelectWidthSize.Medium}
+            height={SelectHeightSize.Medium}
             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
             value={direction.durationUnit}
-            onChange={(option: SelectOption<TimeUnit>) => {
-                dispatch(actions.updateDirectionTimeUnit(index, option.value));
+            onChange={(option: SelectOption) => {
+                dispatch(actions.updateDirectionTimeUnit(index, option.value as TimeUnit));
             }}
         />
     );

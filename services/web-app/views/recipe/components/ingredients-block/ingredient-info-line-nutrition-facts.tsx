@@ -1,5 +1,5 @@
 import React from "react";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import Utils from "@common/utils";

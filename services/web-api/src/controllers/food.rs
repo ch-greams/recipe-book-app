@@ -146,6 +146,7 @@ async fn find_all_favorite(
     Ok(Json(foods))
 }
 
+// TODO: Deprecate with RBA-12
 #[get("/detailed")]
 async fn find_all_detailed(
     query: Query<FindAllQuery>,

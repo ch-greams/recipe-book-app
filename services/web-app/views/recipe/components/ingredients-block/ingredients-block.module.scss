@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
 .ingredientsBlock {
@@ -30,8 +30,8 @@
                 padding: 10px 12px 10px 20px;
 
                 font-family: $font-default;
-                font-size: 16px;
-                font-weight: 500;
+                font-size: $font-size-16;
+                font-weight: $font-weight-500;
 
                 color: $color-default;
 
@@ -45,7 +45,7 @@
 
                 &.newIngredient {
 
-                    font-weight: 700;
+                    font-weight: $font-weight-700;
 
                     color: rgba($color: $color-default, $alpha: 0.25);
                 }
@@ -90,8 +90,8 @@
                         margin-right: 4px;
 
                         font-family: $font-default;
-                        font-size: 16px;
-                        font-weight: 500;
+                        font-size: $font-size-16;
+                        font-weight: $font-weight-500;
 
                         line-height: 20px;
 
@@ -134,8 +134,8 @@
                         margin-top: 4px;
 
                         font-family: $font-default;
-                        font-size: 32px;
-                        font-weight: 700;
+                        font-size: $font-size-32;
+                        font-weight: $font-weight-700;
 
                         color: $color-white;
 
@@ -147,8 +147,8 @@
                         margin: 4px 0;
 
                         font-family: $font-default;
-                        font-size: 14px;
-                        font-weight: 700;
+                        font-size: $font-size-14;
+                        font-weight: $font-weight-700;
 
                         color: $color-white;
                     }
@@ -220,8 +220,8 @@
             padding: 6px 12px 6px 20px;
 
             font-family: $font-default;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
 
             color: $color-white;
 
@@ -233,7 +233,7 @@
 
             &.newIngredient {
 
-                font-weight: 700;
+                font-weight: $font-weight-700;
 
                 color: rgba($color: $color-white, $alpha: 0.25);
             }
@@ -276,8 +276,8 @@
                     margin-right: 4px;
 
                     font-family: $font-default;
-                    font-size: 16px;
-                    font-weight: 500;
+                    font-size: $font-size-16;
+                    font-weight: $font-weight-500;
 
                     line-height: 18px;
 

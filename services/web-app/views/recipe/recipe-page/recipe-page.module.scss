@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
 .recipePage {
@@ -44,8 +44,8 @@
                         margin-right: 30px;
 
                         font-family: $font-default;
-                        font-size: 16px;
-                        font-weight: 500;
+                        font-size: $font-size-16;
+                        font-weight: $font-weight-500;
 
                         color: $color-white;
                     }
@@ -57,8 +57,8 @@
                         margin-right: 10px;
 
                         font-family: $font-default;
-                        font-size: 20px;
-                        font-weight: 500;
+                        font-size: $font-size-20;
+                        font-weight: $font-weight-500;
 
                         color: $color-white;
 
@@ -79,8 +79,8 @@
                     margin: 12px 0;
 
                     font-family: $font-default;
-                    font-size: 16px;
-                    font-weight: 500;
+                    font-size: $font-size-16;
+                    font-weight: $font-weight-500;
 
                     line-height: 32px;
 
@@ -99,8 +99,8 @@
                         margin-right: 4px;
 
                         font-family: $font-default;
-                        font-size: 18px;
-                        font-weight: 500;
+                        font-size: $font-size-18;
+                        font-weight: $font-weight-500;
 
                         color: $color-white;
 

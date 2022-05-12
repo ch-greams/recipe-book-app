@@ -1,4 +1,4 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
 .messageBlock {
@@ -12,8 +12,8 @@
     height: 100vh;
 
     font-family: $font-default;
-    font-size: 36px;
-    font-weight: 500;
+    font-size: $font-size-36;
+    font-weight: $font-weight-500;
 
     color: $color-white;
 

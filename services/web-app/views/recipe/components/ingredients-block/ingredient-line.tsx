@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import Utils, { RoutePath } from "@common/utils";
 import * as actions from "@store/recipe/actions";

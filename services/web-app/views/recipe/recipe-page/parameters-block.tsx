@@ -4,8 +4,8 @@ import { useDispatch } from "react-redux";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import CustomUnitsBlock from "@views/shared/custom-units-block";
-import type { SelectOption } from "@views/shared/select-input";
-import SelectInput, { SelectInputType } from "@views/shared/select-input";
+import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 
@@ -63,12 +63,15 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
                     onChange={handleServingSizeAmountEdit}
                 />
 
-                <SelectInput
-                    type={SelectInputType.ServingSize}
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
                     options={Object.values(Units).map((unit) => ({ value: unit }))}
                     value={recipeItem.servingSizeUnit}
-                    onChange={(option: SelectOption<WeightUnit | VolumeUnit>): void => {
-                        dispatch(actions.updateServingSizeUnit(option.value));
+                    onChange={(option: SelectOption): void => {
+                        dispatch(actions.updateServingSizeUnit(option.value as WeightUnit | VolumeUnit));
                     }}
                 />
 

@@ -1,21 +1,26 @@
-@import "@styles/variables";
+@import "@styles/variables.scss";
 
 
-.saveButton {
+.rbaButton {
+
+    width: 100%;
+    max-width: 600px;
+    min-height: 34px;
 
     padding: 4px;
     margin-bottom: 40px;
 
     font-family: $font-default;
-    font-size: 18px;
-    font-weight: 800;
-
+    font-size: $font-size-18;
+    font-weight: $font-weight-800;
     color: $color-default;
 
     text-align: center;
 
     user-select: none;
     background-color: $color-white;
+
+    border: none;
 
     &:hover {
         color: $color-default-dark;

@@ -9,7 +9,7 @@ import IngredientsBlock from "@views/recipe/components/ingredients-block";
 import BlockTitle from "@views/shared/block-title";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
-import SaveButton from "@views/shared/save-button";
+import RbaButton from "@views/shared/rba-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
@@ -32,6 +32,14 @@ interface RecipePageProps {
 
 const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search, isNew }) => {
 
+    const dispatch = useDispatch();
+
+    const saveButtonAction = (
+        isNew
+            ? () => dispatch(actions.createRecipeItemRequest())
+            : () => dispatch(actions.updateRecipeItemRequest())
+    );
+
     const {
         name,
         brand,
@@ -51,7 +59,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
 
             <div className={styles.recipePageElements}>
 
-                {(isReadOnly || (<SaveButton saveAction={( isNew ? actions.createRecipeItemRequest : actions.updateRecipeItemRequest )} />))}
+                {(isReadOnly || (<RbaButton label={"SAVE"} onClick={saveButtonAction} />))}
 
                 {/* Title Block */}
 

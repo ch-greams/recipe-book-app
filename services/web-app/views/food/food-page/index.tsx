@@ -7,7 +7,7 @@ import BlockTitle from "@views/shared/block-title";
 import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
-import SaveButton from "@views/shared/save-button";
+import RbaButton from "@views/shared/rba-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
@@ -25,6 +25,14 @@ interface Props {
 
 const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
+    const dispatch = useDispatch();
+
+    const saveButtonAction = (
+        isNew
+            ? () => dispatch(actions.createFoodItemRequest())
+            : () => dispatch(actions.updateFoodItemRequest())
+    );
+
     const {
         name,
         brand,
@@ -40,7 +48,7 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
             <div className={styles.foodPageElements}>
 
-                <SaveButton saveAction={( isNew ? actions.createFoodItemRequest : actions.updateFoodItemRequest )} />
+                <RbaButton label={"SAVE"} onClick={saveButtonAction} />
 
                 {/* Title Block */}
 
