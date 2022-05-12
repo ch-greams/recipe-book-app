@@ -9,7 +9,7 @@ import IngredientsBlock from "@views/recipe/components/ingredients-block";
 import BlockTitle from "@views/shared/block-title";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
-import RbaButton from "@views/shared/rba-button";
+import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
@@ -59,7 +59,13 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
 
             <div className={styles.recipePageElements}>
 
-                {(isReadOnly || (<RbaButton label={"SAVE"} onClick={saveButtonAction} />))}
+                {(isReadOnly || (
+                    <RbaButton
+                        label={"SAVE"}
+                        width={ButtonWidthSize.Full}
+                        onClick={saveButtonAction}
+                    />
+                ))}
 
                 {/* Title Block */}
 

@@ -7,7 +7,7 @@ import BlockTitle from "@views/shared/block-title";
 import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
-import RbaButton from "@views/shared/rba-button";
+import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import SingleMessagePage from "@views/shared/single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
@@ -48,7 +48,11 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
             <div className={styles.foodPageElements}>
 
-                <RbaButton label={"SAVE"} onClick={saveButtonAction} />
+                <RbaButton
+                    label={"SAVE"}
+                    width={ButtonWidthSize.Full}
+                    onClick={saveButtonAction}
+                />
 
                 {/* Title Block */}
 

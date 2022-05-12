@@ -3,8 +3,6 @@
 
 .rbaButton {
 
-    width: 100%;
-    max-width: 600px;
     min-height: 34px;
 
     padding: 4px;
@@ -26,5 +24,17 @@
         color: $color-default-dark;
         cursor: pointer;
         background-color: $color-grey-light;
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 160px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
     }
 }
