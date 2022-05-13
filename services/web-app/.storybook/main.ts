@@ -24,5 +24,21 @@ module.exports = {
             ...config.resolve,
             plugins: [ new TsconfigPathsPlugin() ],
         },
+        module: {
+            ...config.module,
+            rules: [
+                ...config.module.rules
+                    .map((rule) => (
+                        // NOTE: Exclude the .svg from existing image rule
+                        rule.test.test('.svg')
+                            ? { ...rule, exclude: /\.svg$/ }
+                            : rule
+                    )),
+                {
+                    test: /\.svg$/,
+                    use: [ "@svgr/webpack" ],
+                },
+            ],
+        },
     }),
 };

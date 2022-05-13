@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import Utils, { RoutePath } from "@common/utils";
-import BlockTitle from "@views/shared/block-title";
 import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
+import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import SingleMessagePage from "@views/shared/single-message-page";
+import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
@@ -92,7 +92,7 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
                 {/* Detailed Nutrition Information  */}
 
-                <BlockTitle text={"DETAILED NUTRITION INFORMATION"} />
+                <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <PageDetailedNutritionFactsBlock
                     nutritionFacts={nutritionFactsByServing}
@@ -139,10 +139,10 @@ const FoodPageConnected: React.FC = () => {
         foodItem.isLoaded
             ? (
                 foodItem.errorMessage
-                    ? <SingleMessagePage text={foodItem.errorMessage} />
+                    ? <RbaSingleMessagePage text={foodItem.errorMessage} />
                     : <FoodPage foodItem={foodItem} isNew={isNewFoodPage} />
             )
-            : <SingleMessagePage text={"LOADING"} />
+            : <RbaSingleMessagePage text={"LOADING"} />
     );
 };
 

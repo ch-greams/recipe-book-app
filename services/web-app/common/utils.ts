@@ -224,10 +224,10 @@ export default class Utils {
         }, {});
     }
 
-   public static convertNutritionFacts(
-       amount: number,
-       isFrom: boolean,
-       nutritionFacts: Dictionary<NutritionFactType, number>,
+    public static convertNutritionFacts(
+        amount: number,
+        isFrom: boolean,
+        nutritionFacts: Dictionary<NutritionFactType, number>,
     ): Dictionary<NutritionFactType, number> {
 
         const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );

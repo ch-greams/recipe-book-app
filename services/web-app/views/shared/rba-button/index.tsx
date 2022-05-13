@@ -12,14 +12,8 @@ export enum ButtonWidthSize {
 }
 
 interface Props {
-    /**
-     * Button label
-     */
     label: string;
     width: ButtonWidthSize;
-    /**
-     * Button action
-     */
     onClick: () => void;
 }
 

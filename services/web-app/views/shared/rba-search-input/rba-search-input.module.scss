@@ -7,6 +7,8 @@
     flex: 2;
     align-items: center;
 
+    height: 42px;
+
     background-color: $color-default-dark;
 
     border: 1px solid $color-white;
@@ -33,5 +35,16 @@
         line-height: normal;
         color: $color-input-placeholder;
     }
-}
 
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 800px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+    }
+}

@@ -6,11 +6,11 @@ import type { ParsedUrlQuery } from "querystring";
 import Utils, { RoutePath } from "@common/utils";
 import DirectionsBlock from "@views/recipe/components/directions-block";
 import IngredientsBlock from "@views/recipe/components/ingredients-block";
-import BlockTitle from "@views/shared/block-title";
 import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
 import PageTitleBlock from "@views/shared/page-title-block";
+import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import SingleMessagePage from "@views/shared/single-message-page";
+import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
@@ -89,7 +89,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
                     nutritionFactInputs={nutritionFactInputs}
                 />
 
-                <BlockTitle text={"INGREDIENTS"} />
+                <RbaBlockTitle text={"INGREDIENTS"} />
 
                 <IngredientsBlock
                     isReadOnly={isReadOnly}
@@ -97,7 +97,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
                     search={search}
                 />
 
-                <BlockTitle text={"DIRECTIONS"} />
+                <RbaBlockTitle text={"DIRECTIONS"} />
 
                 <DirectionsBlock
                     isReadOnly={isReadOnly}
@@ -106,7 +106,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
                     ingredients={ingredients}
                 />
 
-                <BlockTitle text={"DETAILED NUTRITION INFORMATION"} />
+                <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <PageDetailedNutritionFactsBlock
                     isReadOnly={true}
@@ -159,7 +159,7 @@ const RecipePageConnected: React.FC = () => {
         recipeItem.isLoaded
             ? (
                 recipeItem.errorMessage
-                    ? <SingleMessagePage text={recipeItem.errorMessage} />
+                    ? <RbaSingleMessagePage text={recipeItem.errorMessage} />
                     : (
                         <RecipePage
                             isReadOnly={!( isEdit === "true" )}
@@ -169,7 +169,7 @@ const RecipePageConnected: React.FC = () => {
                         />
                     )
             )
-            : <SingleMessagePage text={"LOADING"} />
+            : <RbaSingleMessagePage text={"LOADING"} />
     );
 };
 

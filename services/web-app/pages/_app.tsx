@@ -2,7 +2,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { AppProps } from "next/app";
 
-import Layout from "@views/shared/layout";
+import RbaLayout from "@views/shared/rba-layout";
 import { useStore } from "@store";
 
 import "@styles/globals.scss";
@@ -16,9 +16,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
 
     return (
         <Provider store={store}>
-            <Layout>
+            <RbaLayout>
                 <Component {...pageProps} />
-            </Layout>
+            </RbaLayout>
         </Provider>
     );
 };

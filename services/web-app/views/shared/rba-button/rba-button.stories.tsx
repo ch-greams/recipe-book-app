@@ -8,24 +8,25 @@ import RbaButton, { ButtonWidthSize } from ".";
 
 
 export default {
-  title: "Shared/RbaButton",
-  component: RbaButton,
-  argTypes: {
-    label: {
-      table: { type: { summary: "string" } },
+    title: "Shared/RbaButton",
+    component: RbaButton,
+    argTypes: {
+        label: {
+            type: { name: "string", required: true },
+            table: { type: { summary: "string" } },
+        },
+        width: {
+            type: { name: "enum", value: Utils.getObjectValues(ButtonWidthSize), required: true },
+            table: { type: { summary: "ButtonWidthSize" } },
+            control: { type: "select", options: ButtonWidthSize },
+        },
     },
-    width: {
-      type: { name: "enum", value: Utils.getObjectValues(ButtonWidthSize), required: true },
-      table: { type: { summary: "ButtonWidthSize" } },
-      control: { type: "select", options: ButtonWidthSize },
-    },
-  },
 } as ComponentMeta<typeof RbaButton>;
 
 const Template: ComponentStory<typeof RbaButton> = (args) => <RbaButton {...args} />;
 
-export const Primary = Template.bind({});
-Primary.args = {
-  label: "Button",
-  width: ButtonWidthSize.Medium,
+export const Default = Template.bind({});
+Default.args = {
+    label: "Button",
+    width: ButtonWidthSize.Medium,
 };

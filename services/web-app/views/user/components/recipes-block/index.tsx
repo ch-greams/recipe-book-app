@@ -3,7 +3,7 @@ import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import Utils, { RoutePath } from "@common/utils";
-import BlockTitle from "@views/shared/block-title";
+import RbaBlockTitle from "@views/shared/rba-block-title";
 
 import styles from "./recipes-block.module.scss";
 
@@ -25,7 +25,7 @@ const RecipesBlock: React.FC<RecipesBlockProps> = ({ favoriteRecipes, customReci
     return (
         <div className={styles.recipesBlock}>
 
-            <BlockTitle text={"Favorites"} />
+            <RbaBlockTitle text={"Favorites"} />
 
             <div className={styles.itemList}>
                 {favoriteRecipes.map((recipe) => (
@@ -37,7 +37,7 @@ const RecipesBlock: React.FC<RecipesBlockProps> = ({ favoriteRecipes, customReci
                 ))}
             </div>
 
-            <BlockTitle text={"My Own"} />
+            <RbaBlockTitle text={"My Own"} />
 
             <div className={styles.itemList}>
                 {customRecipes.map((recipe) => (

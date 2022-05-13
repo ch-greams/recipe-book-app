@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import Utils, { UserMenuItem } from "@common/utils";
-import SingleMessagePage from "@views/shared/single-message-page";
+import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import DiaryBlock from "@views/user/components/diary-block";
 import FoodsBlock from "@views/user/components/foods-block";
 import RecipesBlock from "@views/user/components/recipes-block";
@@ -97,10 +97,10 @@ const UserPageConnected: React.FC = () => {
         user.isLoaded
             ? (
                 user.errorMessage
-                    ? <SingleMessagePage text={user.errorMessage} />
+                    ? <RbaSingleMessagePage text={user.errorMessage} />
                     : <UserPage user={user} />
             )
-            : <SingleMessagePage text={"LOADING"} />
+            : <RbaSingleMessagePage text={"LOADING"} />
     );
 };
 
