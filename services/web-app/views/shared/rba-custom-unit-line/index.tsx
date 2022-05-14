@@ -10,7 +10,7 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import IconAdd from "@icons/add-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 
-import styles from "./custom-unit-line.module.scss";
+import styles from "./rba-custom-unit-line.module.scss";
 
 
 interface CustomUnitLineProps {
@@ -23,7 +23,7 @@ interface CustomUnitLineProps {
 }
 
 
-const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
+const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
     isNew,
     customUnit,
     updateItemName,
@@ -88,7 +88,7 @@ const CustomUnitLine: React.FC<CustomUnitLineProps> = ({
     </div>
 );
 
-CustomUnitLine.displayName = "CustomUnitLine";
+RbaCustomUnitLine.displayName = "RbaCustomUnitLine";
 
 
-export default CustomUnitLine;
+export default RbaCustomUnitLine;

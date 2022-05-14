@@ -10,8 +10,9 @@
 
     height: 100vh;
 
-    background-color: #fff;
+    background-color: $color-default;
 
+    // TODO: Re-use generic search-input
     .searchInput {
 
         width: 640px;
@@ -23,11 +24,14 @@
         font-size: $font-size-36;
         font-weight: $font-weight-700;
 
-        color: $color-input;
+        color: $color-white;
+        background-color: $color-default-dark;
+
+        border: 1px solid $color-white;
     }
 
-    ::placeholder {
-        color: $color-input-placeholder;
+    .searchInput::placeholder {
+        color: $color-white;
     }
 
     .homePageButtons {
@@ -40,6 +44,7 @@
 
         margin-top: 18px;
 
+        // TODO: Move styles into specific component like RbaButton or RbaLink
         .homePageButton {
 
             display: flex;
@@ -53,13 +58,15 @@
             font-size: $font-size-24;
             font-weight: $font-weight-700;
 
-            color: #fff;
-
+            color: $color-default;
             text-decoration: none;
+            background-color: $color-white;
 
-            cursor: pointer;
-
-            background-color: $color-input-placeholder;
+            &:hover {
+                color: $color-default-dark;
+                cursor: pointer;
+                background-color: $color-grey-light;
+            }
         }
     }
 }

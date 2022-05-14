@@ -6,23 +6,20 @@ import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput, Units } from "@common/units";
 import { WeightUnit } from "@common/units";
 import Utils from "@common/utils";
+import RbaCustomUnitLine from "@views/shared/rba-custom-unit-line";
 
-import CustomUnitLine from "./custom-unit-line";
-
-import styles from "./custom-units-block.module.scss";
+import styles from "./rba-custom-units-block.module.scss";
 
 
 
 interface Props {
     customUnitInputs: CustomUnitInput[];
-    updateCustomUnits?: (customUnits: CustomUnitInput[]) => AnyAction;
-
-    addCustomUnit?: (customUnit: CustomUnitInput) => AnyAction;
-    removeCustomUnit?: (index: number) => AnyAction;
-    updateCustomUnit?: (index: number, customUnit: CustomUnitInput) => AnyAction;
+    addCustomUnit: (customUnit: CustomUnitInput) => AnyAction;
+    removeCustomUnit: (index: number) => AnyAction;
+    updateCustomUnit: (index: number, customUnit: CustomUnitInput) => AnyAction;
 }
 
-const CustomUnitsBlock: React.FC<Props> = ({
+const RbaCustomUnitsBlock: React.FC<Props> = ({
     customUnitInputs,
     addCustomUnit: _addCustomUnit,
     removeCustomUnit: _removeCustomUnit,
@@ -80,7 +77,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                 };
 
                 return (
-                    <CustomUnitLine
+                    <RbaCustomUnitLine
                         key={`CU_${index}`}
                         isNew={false}
                         customUnit={customUnit}
@@ -92,7 +89,7 @@ const CustomUnitsBlock: React.FC<Props> = ({
                 );
             })}
 
-            <CustomUnitLine
+            <RbaCustomUnitLine
                 key={"NCU"}
                 isNew={true}
                 customUnit={newCustomUnit}
@@ -106,6 +103,6 @@ const CustomUnitsBlock: React.FC<Props> = ({
     );
 };
 
-CustomUnitsBlock.displayName = "CustomUnitsBlock";
+RbaCustomUnitsBlock.displayName = "RbaCustomUnitsBlock";
 
-export default CustomUnitsBlock;
+export default RbaCustomUnitsBlock;

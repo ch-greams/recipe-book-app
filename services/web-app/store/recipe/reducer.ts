@@ -227,15 +227,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNITS: {
-            return {
-                ...state,
-
-                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
-                customUnitInputs: action.payload as units.CustomUnitInput[],
-            };
-        }
-
         case types.RECIPE_ITEM_ADD_CUSTOM_UNIT: {
 
             const { payload: customUnitInput } = action;

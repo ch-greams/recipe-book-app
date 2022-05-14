@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
-import CustomUnitsBlock from "@views/shared/custom-units-block";
+import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
@@ -79,7 +79,7 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
             <div className={styles.separator} />
 
-            <CustomUnitsBlock
+            <RbaCustomUnitsBlock
                 customUnitInputs={recipeItem.customUnitInputs}
                 addCustomUnit={actions.addCustomUnitRequest}
                 removeCustomUnit={actions.removeCustomUnitRequest}

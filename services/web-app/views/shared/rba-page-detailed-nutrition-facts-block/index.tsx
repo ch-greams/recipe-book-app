@@ -13,9 +13,9 @@ import {
     NutrientGroupType,
 } from "@common/nutritionFacts";
 import Utils from "@common/utils";
-import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
+import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
 
-import styles from "./page-detailed-nutrition-facts-block.module.scss";
+import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
 
 
 
@@ -26,7 +26,7 @@ interface Props {
 }
 
 
-const PageDetailedNutritionFactsBlock: React.FC<Props> = ({
+const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
     isReadOnly = false, nutritionFacts, nutritionFactInputs,
 }) => {
 
@@ -48,7 +48,7 @@ const PageDetailedNutritionFactsBlock: React.FC<Props> = ({
             <div className={styles.detailedNutritionFactsColumn}>
 
                 {leftColumn.map(([ type, group ]) => (
-                    <NutritionFactsBlock
+                    <RbaNutritionFactsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
@@ -61,7 +61,7 @@ const PageDetailedNutritionFactsBlock: React.FC<Props> = ({
             <div className={styles.detailedNutritionFactsColumn}>
 
                 {rightColumn.map(([ type, group ]) => (
-                    <NutritionFactsBlock
+                    <RbaNutritionFactsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
@@ -75,5 +75,5 @@ const PageDetailedNutritionFactsBlock: React.FC<Props> = ({
     );
 };
 
-PageDetailedNutritionFactsBlock.displayName = "PageDetailedNutritionFactsBlock";
-export default PageDetailedNutritionFactsBlock;
+RbaPageDetailedNutritionFactsBlock.displayName = "RbaPageDetailedNutritionFactsBlock";
+export default RbaPageDetailedNutritionFactsBlock;

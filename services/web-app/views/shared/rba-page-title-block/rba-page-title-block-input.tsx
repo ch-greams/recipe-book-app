@@ -5,7 +5,7 @@ import * as constants from "@cypress/constants";
 
 import Utils from "@common/utils";
 
-import styles from "./page-title-block.module.scss";
+import styles from "./rba-page-title-block.module.scss";
 
 
 
@@ -14,7 +14,6 @@ interface Props {
     brand: string;
     subtitle: string;
     description?: string;
-    withDescription?: boolean;
     confirmTitle: () => void;
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
@@ -27,27 +26,12 @@ const formatInput = (value: Option<string>, uppercase: boolean = true): string =
     return uppercase ? Utils.unwrap(value, "").toUpperCase() : Utils.unwrap(value, "");
 };
 
-const PageTitleBlockInput: React.FC<Props> = ({
-    name, brand, subtitle, description, withDescription, confirmTitle,
+const RbaPageTitleBlockInput: React.FC<Props> = ({
+    name, brand, subtitle, description, confirmTitle,
     updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
 
     const dispatch = useDispatch();
-
-    const descriptionBlock = (
-        <div className={styles.descriptionBlock}>
-            <textarea
-                data-cy={constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}
-                className={styles.descriptionBlockInput}
-                name={"description"} id={"description"} rows={6}
-                placeholder={"Description"} value={(description || "")}
-                onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                    Utils.keepCaretInPlace(window, event);
-                    dispatch(updateDescription(formatInput(event.target.value, false)));
-                }}
-            />
-        </div>
-    );
 
     return (
 
@@ -104,11 +88,22 @@ const PageTitleBlockInput: React.FC<Props> = ({
                 </div>
             </div>
 
-            {withDescription && descriptionBlock}
+            <div className={styles.descriptionBlock}>
+                <textarea
+                    data-cy={constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}
+                    className={styles.descriptionBlockInput}
+                    name={"description"} id={"description"} rows={6}
+                    placeholder={"Description"} value={(description || "")}
+                    onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+                        Utils.keepCaretInPlace(window, event);
+                        dispatch(updateDescription(formatInput(event.target.value, false)));
+                    }}
+                />
+            </div>
         </div>
     );
 };
 
-PageTitleBlockInput.displayName = "PageTitleBlockInput";
+RbaPageTitleBlockInput.displayName = "RbaPageTitleBlockInput";
 
-export default PageTitleBlockInput;
+export default RbaPageTitleBlockInput;

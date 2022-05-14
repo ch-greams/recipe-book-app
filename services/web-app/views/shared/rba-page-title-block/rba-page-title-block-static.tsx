@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import styles from "./page-title-block.module.scss";
+import styles from "./rba-page-title-block.module.scss";
 
 
 
@@ -13,7 +13,7 @@ interface Props {
     editTitle: () => void;
 }
 
-const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, description, editTitle }) => {
+const RbaPageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, description, editTitle }) => {
 
     const descriptionBlock = (
         <div className={styles.descriptionBlock}>
@@ -68,6 +68,6 @@ const PageTitleBlockStatic: React.FC<Props> = ({ name, brand, subtitle, descript
     );
 };
 
-PageTitleBlockStatic.displayName = "PageTitleBlockStatic";
+RbaPageTitleBlockStatic.displayName = "RbaPageTitleBlockStatic";
 
-export default PageTitleBlockStatic;
+export default RbaPageTitleBlockStatic;

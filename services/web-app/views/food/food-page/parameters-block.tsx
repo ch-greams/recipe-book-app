@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import type { InputChangeCallback } from "@common/typings";
 import { Units, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import CustomUnitsBlock from "@views/shared/custom-units-block";
+import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/food/actions";
@@ -124,7 +124,7 @@ const ParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
             <div className={styles.separator} />
 
-            <CustomUnitsBlock
+            <RbaCustomUnitsBlock
                 customUnitInputs={foodItem.customUnitInputs}
                 addCustomUnit={actions.addCustomUnit}
                 removeCustomUnit={actions.removeCustomUnit}

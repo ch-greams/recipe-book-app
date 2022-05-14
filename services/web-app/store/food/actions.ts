@@ -110,13 +110,6 @@ export function updateServingSizeUnit(servingSizeUnit: WeightUnit | VolumeUnit |
     };
 }
 
-export function updateCustomUnits(customUnits: CustomUnitInput[]): types.UpdateCustomUnitsAction {
-    return {
-        type: types.FOOD_ITEM_UPDATE_CUSTOM_UNITS,
-        payload: customUnits,
-    };
-}
-
 export function addCustomUnit(customUnit: CustomUnitInput): types.AddCustomUnitAction {
     return {
         type: types.FOOD_ITEM_ADD_CUSTOM_UNIT,

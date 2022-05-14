@@ -3,18 +3,28 @@ import type { Dispatch } from "react";
 import React from "react";
 import { useDispatch } from "react-redux";
 
+import type { NutritionFactType } from "@common/nutritionFacts";
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
 import type { InputChangeCallback } from "@common/typings";
+import type { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
 import { updateNutritionFact } from "@store/food/actions";
 import type { UpdateNutritionFactAction } from "@store/food/types";
 
-import type { NutritionFact } from ".";
-
-import styles from "./nutrition-facts-block-line.module.scss";
+import styles from "./rba-nutrition-fact-line.module.scss";
 
 
-interface NutritionFactsBlockLineProps {
+export interface NutritionFact {
+
+    amount?: Option<number>;
+    inputValue: string;
+    type: NutritionFactType;
+    unit: NutritionFactUnit;
+    dailyValue?: Option<number>;
+    isFraction: boolean;
+}
+
+interface Props {
     isReadOnly: boolean;
     nutritionFact: NutritionFact;
 }
@@ -48,10 +58,11 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
 };
 
 
-const NutritionFactsBlockLine: React.FC<NutritionFactsBlockLineProps> = ({
+const RbaNutritionFactLine: React.FC<Props> = ({
     nutritionFact, isReadOnly,
 }) => {
 
+    // TODO: Move dispatch hook to RbaNutritionFactsBlock component (like custom-unit block & line)
     const dispatch = useDispatch();
 
     const nutritionFactAmountInput = (
@@ -89,6 +100,6 @@ const NutritionFactsBlockLine: React.FC<NutritionFactsBlockLineProps> = ({
     );
 };
 
-NutritionFactsBlockLine.displayName = "NutritionFactsBlockLine";
+RbaNutritionFactLine.displayName = "RbaNutritionFactLine";
 
-export default NutritionFactsBlockLine;
+export default RbaNutritionFactLine;

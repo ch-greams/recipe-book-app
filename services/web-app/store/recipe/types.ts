@@ -100,7 +100,6 @@ export const RECIPE_ITEM_UPDATE_BRAND = "RECIPE_ITEM_UPDATE_BRAND";
 export const RECIPE_ITEM_UPDATE_SUBTITLE = "RECIPE_ITEM_UPDATE_SUBTITLE";
 export const RECIPE_ITEM_UPDATE_DESCRIPTION = "RECIPE_ITEM_UPDATE_DESCRIPTION";
 export const RECIPE_ITEM_UPDATE_TYPE = "RECIPE_ITEM_UPDATE_TYPE";
-export const RECIPE_ITEM_UPDATE_CUSTOM_UNITS = "RECIPE_ITEM_UPDATE_CUSTOM_UNITS";
 export const RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT";
 export const RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT = "RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT";
 
@@ -202,11 +201,6 @@ export interface UpdateServingSizeUnitAction {
 export interface UpdateTypeAction {
     type: typeof RECIPE_ITEM_UPDATE_TYPE;
     payload: string;
-}
-
-export interface UpdateCustomUnitsAction {
-    type: typeof RECIPE_ITEM_UPDATE_CUSTOM_UNITS;
-    payload: units.CustomUnitInput[];
 }
 
 // NOTE: Directions
@@ -456,7 +450,7 @@ export interface RecipeItemUpdateErrorAction {
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
-    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | UpdateCustomUnitsAction |
+    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |

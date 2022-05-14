@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import type { AnyAction } from "redux";
 
-import PageTitleBlockInput from "./page-title-block-input";
-import PageTitleBlockStatic from "./page-title-block-static";
+import RbaPageTitleBlockInput from "./rba-page-title-block-input";
+import RbaPageTitleBlockStatic from "./rba-page-title-block-static";
 
 
 
@@ -11,7 +11,6 @@ interface Props {
     brand: string;
     subtitle: string;
     description?: string;
-    withDescription?: boolean;
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
     updateSubtitle: (value: string) => AnyAction;
@@ -19,8 +18,8 @@ interface Props {
 }
 
 
-const PageTitleBlock: React.FC<Props> = ({
-    name, brand, subtitle, description, withDescription,
+const RbaPageTitleBlock: React.FC<Props> = ({
+    name, brand, subtitle, description,
     updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
 
@@ -29,12 +28,11 @@ const PageTitleBlock: React.FC<Props> = ({
     return (
         isTitleInputsOpen
             ? (
-                <PageTitleBlockInput
+                <RbaPageTitleBlockInput
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
                     description={description}
-                    withDescription={withDescription}
                     confirmTitle={() => setIsTitleInputsOpen(false)}
                     updateName={updateName}
                     updateBrand={updateBrand}
@@ -43,7 +41,7 @@ const PageTitleBlock: React.FC<Props> = ({
                 />
             )
             : (
-                <PageTitleBlockStatic
+                <RbaPageTitleBlockStatic
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
@@ -54,6 +52,6 @@ const PageTitleBlock: React.FC<Props> = ({
     );
 };
 
-PageTitleBlock.displayName = "PageTitleBlock";
+RbaPageTitleBlock.displayName = "RbaPageTitleBlock";
 
-export default PageTitleBlock;
+export default RbaPageTitleBlock;

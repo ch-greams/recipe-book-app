@@ -2,7 +2,7 @@ import React from "react";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import Utils from "@common/utils";
-import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
+import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
 import type { RecipePageStore } from "@store/recipe/types";
 
 import ParametersBlock from "./parameters-block";
@@ -39,7 +39,7 @@ const GeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({ recipeItem, nutriti
 
             <div className={styles.featuredNutritionFacts}>
 
-                <NutritionFactsBlock
+                <RbaNutritionFactsBlock
                     isReadOnly={true}
                     title={"NUTRITION FACTS"}
                     nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}

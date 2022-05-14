@@ -1,5 +1,4 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import type { CustomUnitInput } from "@common/units";
 import { DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
@@ -173,16 +172,6 @@ export default function foodPageReducer(state = initialState, action: types.Food
                     ...state.nutritionFactsByServingInputs,
                     ...action.payload as Dictionary<NutritionFactType, string>,
                 },
-            };
-        }
-
-        // TODO: Check that this is necessary
-        case types.FOOD_ITEM_UPDATE_CUSTOM_UNITS: {
-            return {
-                ...state,
-
-                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
-                customUnitInputs: action.payload as CustomUnitInput[],
             };
         }
 

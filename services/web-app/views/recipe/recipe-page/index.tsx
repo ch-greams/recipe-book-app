@@ -6,10 +6,10 @@ import type { ParsedUrlQuery } from "querystring";
 import Utils, { RoutePath } from "@common/utils";
 import DirectionsBlock from "@views/recipe/components/directions-block";
 import IngredientsBlock from "@views/recipe/components/ingredients-block";
-import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
-import PageTitleBlock from "@views/shared/page-title-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
+import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
@@ -69,12 +69,11 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
 
                 {/* Title Block */}
 
-                <PageTitleBlock
+                <RbaPageTitleBlock
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
                     description={description}
-                    withDescription={true}
                     updateName={actions.updateName}
                     updateBrand={actions.updateBrand}
                     updateSubtitle={actions.updateSubtitle}
@@ -108,7 +107,7 @@ const RecipePage: React.FC<RecipePageProps> = ({ isReadOnly, recipeItem, search,
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
-                <PageDetailedNutritionFactsBlock
+                <RbaPageDetailedNutritionFactsBlock
                     isReadOnly={true}
                     nutritionFacts={nutritionFacts}
                     nutritionFactInputs={nutritionFactInputs}

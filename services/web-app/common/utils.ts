@@ -1,4 +1,4 @@
-import type { NutritionFact } from "@views/shared/nutrition-facts-block";
+import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/food/types";
 import type {
     RecipeDirection, RecipePageStore, RecipeSubDirectionComment, RecipeSubDirectionIngredient,
@@ -301,10 +301,6 @@ export default class Utils {
 
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
         return customUnits.map(this.convertCustomUnitIntoInput);
-    }
-
-    public static convertCustomUnitsIntoValues(customUnits: CustomUnitInput[]): CustomUnit[] {
-        return customUnits.map(this.convertCustomUnitIntoValue);
     }
 
     public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {

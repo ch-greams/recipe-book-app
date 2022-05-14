@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 
 import Utils, { RoutePath } from "@common/utils";
-import NutritionFactsBlock from "@views/shared/nutrition-facts-block";
-import PageDetailedNutritionFactsBlock from "@views/shared/page-detailed-nutrition-facts-block";
-import PageTitleBlock from "@views/shared/page-title-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
+import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
@@ -56,12 +56,11 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
                 {/* Title Block */}
 
-                <PageTitleBlock
+                <RbaPageTitleBlock
                     name={name}
                     brand={brand}
                     subtitle={subtitle}
                     description={description}
-                    withDescription={true}
                     updateName={actions.updateName}
                     updateBrand={actions.updateBrand}
                     updateSubtitle={actions.updateSubtitle}
@@ -76,7 +75,7 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
                     <div className={styles.featuredNutritionFacts}>
 
-                        <NutritionFactsBlock
+                        <RbaNutritionFactsBlock
                             title={"NUTRITION FACTS"}
                             nutritionFacts={
                                 Utils.getNutritionFacts(
@@ -94,7 +93,7 @@ const FoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
-                <PageDetailedNutritionFactsBlock
+                <RbaPageDetailedNutritionFactsBlock
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
                 />

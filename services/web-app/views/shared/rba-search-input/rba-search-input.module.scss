@@ -7,7 +7,9 @@
     flex: 2;
     align-items: center;
 
-    height: 42px;
+    height: 26px;
+
+    padding: 8px 8px 8px 0;
 
     background-color: $color-default-dark;
 
@@ -24,6 +26,8 @@
         font-size: $font-size-20;
         font-weight: $font-weight-500;
 
+        line-height: 26px;
+
         color: $color-white;
 
         background-color: $color-default-dark;
@@ -33,7 +37,7 @@
 
     .input::placeholder {
         line-height: normal;
-        color: $color-input-placeholder;
+        color: $color-white;
     }
 
     // -------------------------------------------------------------------------

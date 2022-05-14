@@ -22,14 +22,14 @@ const HomePage: React.FC = () => {
             <div className={styles.homePageButtons}>
 
                 {/* RoutePath.Recipe */}
-                <Link href={"/recipe/new"}>
+                <Link href={"/recipe/new?edit=true"}>
                     <a className={styles.homePageButton}>
                         {createRecipeButtonLabel}
                     </a>
                 </Link>
 
                 {/* RoutePath.Food */}
-                <Link href={"/food/new"}>
+                <Link href={"/food/new?edit=true"}>
                     <a className={styles.homePageButton}>
                         {createFoodButtonLabel}
                     </a>
