@@ -1,4 +1,5 @@
 import { UserMenuItem } from "@common/utils";
+import type { AppState } from "@store";
 
 import type { UserActionTypes, UserStore } from "./types";
 import * as types from "./types";
@@ -18,6 +19,10 @@ const initialState: UserStore = {
     errorMessage: null,
 };
 
+
+export function extractState(globalState: AppState): types.UserStore {
+    return (globalState?.user || initialState);
+}
 
 export default function searchPageReducer(state = initialState, action: UserActionTypes): UserStore {
 

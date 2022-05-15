@@ -15,7 +15,7 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/create`, { fixture: "food_item_create_response.json" })
                 .as("updateFood");
 
-            cy.visit(`${constants.CY_FOOD_PATH}/new`);
+            cy.visit(`${constants.CY_FOOD_PATH}/new?edit=true`);
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).click();
 

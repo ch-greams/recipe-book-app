@@ -1,3 +1,3 @@
-import FoodPage from "@views/food/food-page";
+import RbaFoodPage from "@views/food/rba-food-page";
 
-export default FoodPage;
+export default RbaFoodPage;

@@ -1,3 +1,3 @@
-import RecipePage from "@views/recipe/recipe-page";
+import RbaRecipePage from "@views/recipe/rba-recipe-page";
 
-export default RecipePage;
+export default RbaRecipePage;

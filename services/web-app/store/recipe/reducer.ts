@@ -36,7 +36,7 @@ const initialState: types.RecipePageStore = {
         isOpen: false,
         isMarked: false,
 
-        stepNumber: 4,
+        stepNumber: 0,
         name: "",
 
         durationValue: 0,

@@ -268,7 +268,7 @@ export default class Utils {
     }
 
     public static getNewItemPath(route: RoutePath): string {
-        return `/${route}/new`;
+        return `/${route}/new?edit=true`;
     }
 
     public static classNames(values: Dictionary<string, boolean>): string {
