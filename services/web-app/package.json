@@ -2,6 +2,10 @@
   "name": "web-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "~16",
+    "npm": "~8"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:ts": "next dev & npm run ts:watch",
@@ -12,7 +16,9 @@
     "lint:style": "npx stylelint \"**/*.scss\"",
     "test": "echo \"Add tests you lazy fuck\"",
     "cy:run": "cypress run",
-    "cy:open": "cypress open"
+    "cy:open": "cypress open",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "next": "^12.1.0",
@@ -28,6 +34,15 @@
     "superagent": "^6.1.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@storybook/addon-actions": "^6.4.22",
+    "@storybook/addon-essentials": "^6.4.22",
+    "@storybook/addon-interactions": "^6.4.22",
+    "@storybook/addon-links": "^6.4.22",
+    "@storybook/builder-webpack5": "^6.4.22",
+    "@storybook/manager-webpack5": "^6.4.22",
+    "@storybook/react": "^6.4.22",
+    "@storybook/testing-library": "^0.0.11",
     "@svgr/webpack": "^6.2.1",
     "@types/react": "17.0.32",
     "@types/redux-logger": "^3.0.9",
@@ -35,15 +50,19 @@
     "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
+    "babel-loader": "^8.2.5",
     "cypress": "^9.5.2",
     "cypress-real-events": "^1.7.0",
     "eslint": "^8.15.0",
     "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-simple-import-sort": "^7.0.0",
+    "storybook-addon-next": "^1.6.2",
+    "storybook-dark-mode": "^1.1.0",
     "stylelint": "^14.8.2",
     "stylelint-config-recess-order": "^3.0.0",
     "stylelint-config-standard-scss": "^3.0.0",
+    "tsconfig-paths-webpack-plugin": "^3.5.2",
     "typescript": "4.4.4"
   }
 }

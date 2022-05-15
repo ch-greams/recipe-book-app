@@ -1,4 +1,4 @@
-import * as constants from "cypress/constants";
+import * as constants from "@cypress/constants";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import { VolumeUnit, WeightUnit } from "@common/units";

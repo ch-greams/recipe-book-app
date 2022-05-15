@@ -303,12 +303,6 @@ export function updateType(type: string): types.UpdateTypeAction {
     };
 }
 
-export function updateCustomUnits(customUnits: units.CustomUnitInput[]): types.UpdateCustomUnitsAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNITS,
-        payload: customUnits,
-    };
-}
 
 export function fetchRecipeItemNew(): types.RecipeItemFetchNewAction {
     return {

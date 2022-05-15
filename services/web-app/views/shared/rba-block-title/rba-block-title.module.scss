@@ -1,0 +1,19 @@
+@import "@styles/variables.scss";
+
+
+.blockTitle {
+
+    padding: 14px 0;
+    margin: 30px 0;
+
+    font-family: $font-default;
+    font-size: $font-size-28;
+    font-weight: $font-weight-700;
+
+    color: $color-white;
+
+    text-align: center;
+
+    border-top: 2px solid $color-white;
+    border-bottom: 2px solid $color-white;
+}

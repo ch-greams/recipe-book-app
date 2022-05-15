@@ -50,7 +50,6 @@ export const FOOD_ITEM_UPDATE_SUBTITLE = "FOOD_ITEM_UPDATE_SUBTITLE";
 export const FOOD_ITEM_UPDATE_DESCRIPTION = "FOOD_ITEM_UPDATE_DESCRIPTION";
 export const FOOD_ITEM_UPDATE_TYPE = "FOOD_ITEM_UPDATE_TYPE";
 export const FOOD_ITEM_UPDATE_NUTRITION_FACT = "FOOD_ITEM_UPDATE_NUTRITION_FACT";
-export const FOOD_ITEM_UPDATE_CUSTOM_UNITS = "FOOD_ITEM_UPDATE_CUSTOM_UNITS";
 
 export const FOOD_ITEM_UPDATE_DENSITY_AMOUNT = "FOOD_ITEM_UPDATE_DENSITY_AMOUNT";
 export const FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT = "FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT";
@@ -105,11 +104,6 @@ export interface UpdateTypeAction {
 export interface UpdateNutritionFactAction {
     type: typeof FOOD_ITEM_UPDATE_NUTRITION_FACT;
     payload: Dictionary<NutritionFactType, string>;
-}
-
-export interface UpdateCustomUnitsAction {
-    type: typeof FOOD_ITEM_UPDATE_CUSTOM_UNITS;
-    payload: CustomUnitInput[];
 }
 
 export interface AddCustomUnitAction {
@@ -204,7 +198,7 @@ export interface FoodItemUpdateErrorAction {
 
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateTypeAction | UpdateNutritionFactAction | UpdateCustomUnitsAction |
+    UpdateTypeAction | UpdateNutritionFactAction |
     UpdateDensityAmountAction | UpdateDensityVolumeUnitAction | UpdateDensityWeightUnitAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | FoodItemFetchNewAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |

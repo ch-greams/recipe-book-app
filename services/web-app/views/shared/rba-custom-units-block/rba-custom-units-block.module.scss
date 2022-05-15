@@ -1,0 +1,18 @@
+@import "@styles/variables.scss";
+
+
+.customUnitsBlock {
+
+    margin: 16px 0;
+
+    color: $color-white;
+
+    .customUnitsBlockLabel {
+
+        margin-bottom: 14px;
+
+        font-family: $font-default;
+        font-size: $font-size-18;
+        font-weight: $font-weight-700;
+    }
+}

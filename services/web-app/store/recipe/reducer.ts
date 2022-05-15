@@ -36,7 +36,7 @@ const initialState: types.RecipePageStore = {
         isOpen: false,
         isMarked: false,
 
-        stepNumber: 4,
+        stepNumber: 0,
         name: "",
 
         durationValue: 0,
@@ -224,15 +224,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 type: action.payload,
-            };
-        }
-
-        case types.RECIPE_ITEM_UPDATE_CUSTOM_UNITS: {
-            return {
-                ...state,
-
-                customUnits: Utils.convertCustomUnitsIntoValues(action.payload),
-                customUnitInputs: action.payload as units.CustomUnitInput[],
             };
         }
 

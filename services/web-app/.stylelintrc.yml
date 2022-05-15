@@ -17,3 +17,4 @@ rules:
     color-function-notation: legacy
     alpha-value-notation: number
     scss/dollar-variable-empty-line-before: null
+    scss/at-import-partial-extension: always

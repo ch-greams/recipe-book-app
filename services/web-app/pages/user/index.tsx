@@ -1,3 +1,3 @@
-import UserPage from "@views/user/user-page";
+import RbaUserPage from "@views/user/rba-user-page";
 
-export default UserPage;
+export default RbaUserPage;

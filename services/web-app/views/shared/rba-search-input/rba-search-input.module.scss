@@ -1,0 +1,54 @@
+@import "@styles/variables.scss";
+
+
+.searchInput {
+
+    display: flex;
+    flex: 2;
+    align-items: center;
+
+    height: 26px;
+
+    padding: 8px 8px 8px 0;
+
+    background-color: $color-default-dark;
+
+    border: 1px solid $color-white;
+
+    .icon {
+        flex: 1;
+    }
+
+    .input {
+        flex: 10;
+
+        font-family: $font-default;
+        font-size: $font-size-20;
+        font-weight: $font-weight-500;
+
+        line-height: 26px;
+
+        color: $color-white;
+
+        background-color: $color-default-dark;
+
+        border: none;
+    }
+
+    .input::placeholder {
+        line-height: normal;
+        color: $color-white;
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 800px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+    }
+}

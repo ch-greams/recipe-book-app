@@ -1,0 +1,40 @@
+@import "@styles/variables.scss";
+
+
+.rbaButton {
+
+    min-height: 34px;
+
+    padding: 4px;
+    margin-bottom: 40px;
+
+    font-family: $font-default;
+    font-size: $font-size-18;
+    font-weight: $font-weight-800;
+    color: $color-default;
+
+    text-align: center;
+
+    user-select: none;
+    background-color: $color-white;
+
+    border: none;
+
+    &:hover {
+        color: $color-default-dark;
+        cursor: pointer;
+        background-color: $color-grey-light;
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 160px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+    }
+}

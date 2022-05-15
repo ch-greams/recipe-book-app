@@ -49,7 +49,7 @@ export default class FoodApi {
         return recipeItems;
     }
 
-    // TODO: Deprecate
+    // TODO: Deprecate with RBA-12
     public static async getFoodItemsDetailed(): Promise<Food[]> {
 
         const { body: foodItems } = await superagent.get(`${FoodApi.API_PATH}/detailed`);
