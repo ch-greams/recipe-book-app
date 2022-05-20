@@ -12,8 +12,8 @@ interface Props {
     altNutritionFacts?: Dictionary<NutritionFactType, number>;
 }
 
-const RbaIngredientInfoLineNutritionFacts: React.FC<Props> = ({
-    nutritionFacts, altNutritionFacts = {},
+const RbaIngredientNutritionFacts: React.FC<Props> = ({
+    nutritionFacts, altNutritionFacts: alternativeNutritionFacts = {},
 }) => {
 
     const nutritionFactTypes = [
@@ -24,12 +24,12 @@ const RbaIngredientInfoLineNutritionFacts: React.FC<Props> = ({
     ];
 
     return (
-        <div className={styles.ingredientInfoLineNutritionFacts}>
+        <div className={styles.ingredientNutritionFacts}>
 
             {nutritionFactTypes.map( (type) => {
 
                 const curNutritionValue: Option<number> = nutritionFacts[type];
-                const altNutritionValue: Option<number> = altNutritionFacts[type];
+                const altNutritionValue: Option<number> = alternativeNutritionFacts[type];
 
                 return (
                     <div
@@ -39,13 +39,14 @@ const RbaIngredientInfoLineNutritionFacts: React.FC<Props> = ({
                         <div
                             data-cy={constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}
                             className={styles.ingredientInfoLineNutritionFactAmount}
+                            // FIXME: NO STYLES!
                             style={(
                                 Utils.isSome(curNutritionValue) && Utils.isSome(altNutritionValue)
                                     ? { color: (curNutritionValue > altNutritionValue) ? Utils.COLOR_ALTERNATIVE : Utils.COLOR_DEFAULT_DARK }
                                     : undefined
                             )}
                         >
-                            {( Utils.objectIsNotEmpty(altNutritionFacts) ? altNutritionFacts[type] : nutritionFacts[type] )}
+                            {( Utils.objectIsNotEmpty(alternativeNutritionFacts) ? alternativeNutritionFacts[type] : nutritionFacts[type] )}
                         </div>
                         <div
                             data-cy={constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}
@@ -60,7 +61,7 @@ const RbaIngredientInfoLineNutritionFacts: React.FC<Props> = ({
     );
 };
 
-RbaIngredientInfoLineNutritionFacts.displayName = "RbaIngredientInfoLineNutritionFacts";
+RbaIngredientNutritionFacts.displayName = "RbaIngredientNutritionFacts";
 
 
-export default RbaIngredientInfoLineNutritionFacts;
+export default RbaIngredientNutritionFacts;

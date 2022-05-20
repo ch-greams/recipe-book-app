@@ -37,7 +37,7 @@ export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
 };
 
 
-const RbaIngredientProductLine: React.FC<Props> = ({
+const RbaIngredientProduct: React.FC<Props> = ({
     search, isReadOnly, parentId, ingredientProduct = DEFAULT_INGREDIENT_PRODUCT, isNew = false,
 }) => {
 
@@ -52,8 +52,8 @@ const RbaIngredientProductLine: React.FC<Props> = ({
 
     const removeButton = (
         <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE_REMOVE_BUTTON}
-            className={styles.ingredientProductLineButton}
+            data-cy={constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}
+            className={styles.ingredientProductButton}
             onClick={() => dispatch(actions.removeIngredientProduct(parentId, ingredientProduct.product_id))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
@@ -64,8 +64,8 @@ const RbaIngredientProductLine: React.FC<Props> = ({
 
     const searchButton = (
         <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE_SEARCH_BUTTON}
-            className={styles.ingredientProductLineButton}
+            data-cy={constants.CY_INGREDIENT_PRODUCT_SEARCH_BUTTON}
+            className={styles.ingredientProductButton}
             onClick={() => addIngredientProduct(parentId)}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
@@ -120,14 +120,14 @@ const RbaIngredientProductLine: React.FC<Props> = ({
     return (
 
         <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE}
-            className={styles.ingredientProductLine}
+            data-cy={constants.CY_INGREDIENT_PRODUCT}
+            className={styles.ingredientProduct}
         >
 
             {( !isReadOnly && ( isNew ? searchButton : removeButton ) )}
 
             <div className={Utils.classNames({
-                [styles.ingredientProductInfoLine]: true,
+                [styles.ingredientProductInfo]: true,
                 [styles.newIngredient]: isNew,
             })}>
 
@@ -147,7 +147,7 @@ const RbaIngredientProductLine: React.FC<Props> = ({
     );
 };
 
-RbaIngredientProductLine.displayName = "RbaIngredientProductLine";
+RbaIngredientProduct.displayName = "RbaIngredientProduct";
 
 
-export default RbaIngredientProductLine;
+export default RbaIngredientProduct;

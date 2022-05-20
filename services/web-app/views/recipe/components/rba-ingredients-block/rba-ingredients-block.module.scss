@@ -2,7 +2,7 @@
 
 
 .ingredientsBlock {
-    .ingredientLine {
+    .ingredient {
 
         display: flex;
         flex-direction: row;
@@ -106,7 +106,7 @@
                 }
             }
 
-            .ingredientInfoLineNutritionFacts {
+            .ingredientNutritionFacts {
 
                 display: flex;
                 flex-direction: row;
@@ -156,7 +156,7 @@
             }
         }
 
-        .ingredientLineButton {
+        .ingredientButton {
 
             width: 44px;
             height: 24px;
@@ -181,7 +181,7 @@
         }
     }
 
-    .ingredientProductLine {
+    .ingredientProduct {
 
         display: flex;
         flex-direction: row;
@@ -189,7 +189,7 @@
 
         margin: 8px 2px 0;
 
-        .ingredientProductLineButton {
+        .ingredientProductButton {
 
             width: 36px;
             height: 24px;
@@ -211,7 +211,7 @@
             border-width: 1px;
         }
 
-        .ingredientProductInfoLine {
+        .ingredientProductInfo {
 
             display: flex;
             flex-grow: 2;

@@ -12,9 +12,9 @@ import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
 
-import RbaIngredientInfoLine from "./rba-ingredient-info-line";
-import RbaIngredientInfoLineNutritionFacts from "./rba-ingredient-info-line-nutrition-facts";
-import RbaIngredientProductLine from "./rba-ingredient-product-line";
+import RbaIngredientInfo from "./rba-ingredient-info";
+import RbaIngredientNutritionFacts from "./rba-ingredient-nutrition-facts";
+import RbaIngredientProduct from "./rba-ingredient-product";
 
 import styles from "./rba-ingredients-block.module.scss";
 
@@ -42,20 +42,12 @@ const DEFAULT_INGREDIENT: RecipeIngredient = {
     products: {},
 };
 
-const RbaIngredientLine: React.FC<Props> = ({
-    search, isReadOnly, ingredient = DEFAULT_INGREDIENT, isNew = false,
-}) => {
+const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAULT_INGREDIENT, isNew = false }) => {
 
     const dispatch = useDispatch();
 
-    const removeIngredient = (id: number): void => {
-        dispatch(actions.removeIngredient(id));
-    };
-
-
-    const toggleIngredientMark = (id: number): void => {
-        dispatch(actions.toggleIngredientMark(id));
-    };
+    const removeIngredient = (id: number): void => { dispatch(actions.removeIngredient(id)); };
+    const toggleIngredientMark = (id: number): void => { dispatch(actions.toggleIngredientMark(id)); };
 
     // FIXME: Replace functionality
     const addIngredient = (): void => {
@@ -76,7 +68,7 @@ const RbaIngredientLine: React.FC<Props> = ({
     const removeButton = (
         <div
             data-cy={constants.CY_INGREDIENT_LINE_REMOVE_BUTTON}
-            className={styles.ingredientLineButton}
+            className={styles.ingredientButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
@@ -88,7 +80,7 @@ const RbaIngredientLine: React.FC<Props> = ({
     const searchButton = (
         <div
             data-cy={constants.CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON}
-            className={styles.ingredientLineButton}
+            className={styles.ingredientButton}
             onClick={addIngredient}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
@@ -106,19 +98,6 @@ const RbaIngredientLine: React.FC<Props> = ({
         ingredient.product_id,
     );
 
-    const linkButton = (
-        <Link href={linkPath}>
-            <a
-                className={styles.ingredientLineButton}
-                style={( isNew ? { opacity: "0.5" } : undefined )}
-            >
-                <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
-                    <LinkIcon />
-                </IconWrapper>
-            </a>
-        </Link>
-    );
-
     const showIngredientProducts: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
     const showNewIngredientProduct: boolean = ingredient.isOpen && !isNew && !isReadOnly;
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
@@ -128,14 +107,14 @@ const RbaIngredientLine: React.FC<Props> = ({
         <div
             data-cy={( isNew ? constants.CY_NEW_INGREDIENT_LINE : constants.CY_INGREDIENT_LINE )}
             key={`ingredient_${ingredient.id}`}
-            className={styles.ingredientLine}
+            className={styles.ingredient}
         >
 
             {( isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
 
             <div className={styles.ingredientInfoLines}>
 
-                <RbaIngredientInfoLine
+                <RbaIngredientInfo
                     isReadOnly={isReadOnly}
                     ingredient={ingredient}
                     isNew={isNew}
@@ -143,7 +122,7 @@ const RbaIngredientLine: React.FC<Props> = ({
 
                 {(
                     ingredient.isOpen && (
-                        <RbaIngredientInfoLineNutritionFacts
+                        <RbaIngredientNutritionFacts
                             nutritionFacts={Utils.unwrapForced(
                                 ingredient.products[ingredient.product_id],
                                 `ingredient.products["${ingredient.product_id}"]`,
@@ -158,7 +137,7 @@ const RbaIngredientLine: React.FC<Props> = ({
                 {(
                     showIngredientProducts &&
                     Utils.getObjectValues(ingredient.products).map((product) => (
-                        <RbaIngredientProductLine
+                        <RbaIngredientProduct
                             key={`ingredient_product_${product.product_id}`}
                             search={search}
                             isReadOnly={isReadOnly}
@@ -169,7 +148,7 @@ const RbaIngredientLine: React.FC<Props> = ({
                 )}
 
                 {( showNewIngredientProduct && (
-                    <RbaIngredientProductLine
+                    <RbaIngredientProduct
                         key={"ingredient_product_new"}
                         search={search}
                         isReadOnly={isReadOnly}
@@ -180,13 +159,22 @@ const RbaIngredientLine: React.FC<Props> = ({
 
             </div>
 
-            {linkButton}
+            <Link href={linkPath}>
+                <a
+                    className={styles.ingredientButton}
+                    style={( isNew ? { opacity: "0.5" } : undefined )}
+                >
+                    <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
+                        <LinkIcon />
+                    </IconWrapper>
+                </a>
+            </Link>
 
         </div>
     );
 };
 
-RbaIngredientLine.displayName = "RbaIngredientLine";
+RbaIngredient.displayName = "RbaIngredient";
 
 
-export default RbaIngredientLine;
+export default RbaIngredient;

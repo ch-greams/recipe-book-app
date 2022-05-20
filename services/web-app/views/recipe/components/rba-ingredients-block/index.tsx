@@ -3,7 +3,7 @@ import React from "react";
 import type { RecipeIngredient } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
 
-import RbaIngredientLine from "./rba-ingredient-line";
+import RbaIngredient from "./rba-ingredient";
 
 import styles from "./rba-ingredients-block.module.scss";
 
@@ -23,7 +23,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly 
         <div className={styles.ingredientsBlock}>
 
             {ingredients.map( (ingredient) => (
-                <RbaIngredientLine
+                <RbaIngredient
                     key={`ingredient_${ingredient.id}`}
                     search={search}
                     isReadOnly={isReadOnly}
@@ -32,7 +32,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly 
             ) )}
 
             {( !isReadOnly && (
-                <RbaIngredientLine
+                <RbaIngredient
                     key={"ingredient_new"}
                     search={search}
                     isReadOnly={isReadOnly}

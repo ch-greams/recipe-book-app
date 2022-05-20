@@ -21,7 +21,7 @@ describe("recipe_page", () => {
             const INGREDIENT_PRODUCT_NAME = "Yogurt";
 
             // Confirm that alternatives aren't visible
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .as("altIngredientInfoLineName")
                 .should("not.exist");
 
@@ -62,7 +62,7 @@ describe("recipe_page", () => {
                 .contains("157");
 
             // Confirm that alternative is visible and hover over it
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_PRODUCT_NAME.toUpperCase())
                 .should("be.visible")
                 .realHover({ scrollBehavior: false });
@@ -98,7 +98,7 @@ describe("recipe_page", () => {
                 .contains("66.8");
 
             // Confirm that alternative is visible and change ingredient_product
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_PRODUCT_NAME.toUpperCase())
                 .should("be.visible")
                 .click();
@@ -121,9 +121,9 @@ describe("recipe_page", () => {
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_INGREDIENT_LINE}]`)
-                .as("ingredientLine");
+                .as("ingredient");
 
-            cy.get("@ingredientLine")
+            cy.get("@ingredient")
                 .get(`a[href="${constants.CY_FOOD_PATH}/1"]`)
                 .should("be.visible");
         });
@@ -141,7 +141,7 @@ describe("recipe_page", () => {
                 .click();
 
             // Check current unit in ingredient_product to be VolumeUnit.ml
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .should("be.visible")
                 .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
@@ -170,7 +170,7 @@ describe("recipe_page", () => {
                 .should("be.visible");
 
             // Confirm that unit changes in ingredient_product line too
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .should("be.visible")
                 .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
@@ -235,14 +235,14 @@ describe("recipe_page", () => {
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_PRODUCT_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}]`)
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE_REMOVE_BUTTON}]`)
+                .parents(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}]`)
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}]`)
                 .contains(INGREDIENT_PRODUCT_NAME.toUpperCase())
                 .should("not.exist");
         });
@@ -259,14 +259,14 @@ describe("recipe_page", () => {
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_BEFORE);
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE_SEARCH_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_SEARCH_BUTTON}]`)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_AFTER);
         });
     });
