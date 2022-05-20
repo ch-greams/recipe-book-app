@@ -218,7 +218,6 @@ const NUTRITION_FACTS_FIELDS: &[&str] = &[
 ];
 
 impl NutritionFacts {
-
     pub fn find_by_product_id(product_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as("SELECT * FROM private.nutrition_fact WHERE product_id = $1")
             .bind(product_id)

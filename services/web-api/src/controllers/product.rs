@@ -36,8 +36,8 @@ async fn find_all(
     let mut txn = db_pool.begin().await?;
 
     let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![ product_type.to_owned() ],
-        None => vec![ ProductType::Recipe, ProductType::Food ],
+        Some(product_type) => vec![product_type.to_owned()],
+        None => vec![ProductType::Recipe, ProductType::Food],
     };
 
     let products = Product::find_all(
@@ -47,8 +47,8 @@ async fn find_all(
         types,
         query.filter.clone().unwrap_or_default(),
     )
-        .fetch_all(&mut txn)
-        .await?;
+    .fetch_all(&mut txn)
+    .await?;
 
     let foods = products.iter().map(ProductShort::new).collect();
 
@@ -63,8 +63,8 @@ async fn find_all_created(
     let mut txn = db_pool.begin().await?;
 
     let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![ product_type.to_owned() ],
-        None => vec![ ProductType::Recipe, ProductType::Food ],
+        Some(product_type) => vec![product_type.to_owned()],
+        None => vec![ProductType::Recipe, ProductType::Food],
     };
 
     let products = Product::find_all_created_by_user(
@@ -74,8 +74,8 @@ async fn find_all_created(
         types,
         query.filter.clone().unwrap_or_default(),
     )
-        .fetch_all(&mut txn)
-        .await?;
+    .fetch_all(&mut txn)
+    .await?;
 
     let foods = products.iter().map(ProductShort::new).collect();
 
@@ -90,8 +90,8 @@ async fn find_all_favorite(
     let mut txn = db_pool.begin().await?;
 
     let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![ product_type.to_owned() ],
-        None => vec![ ProductType::Recipe, ProductType::Food ],
+        Some(product_type) => vec![product_type.to_owned()],
+        None => vec![ProductType::Recipe, ProductType::Food],
     };
 
     let products = Product::find_all_favorite(
@@ -101,8 +101,8 @@ async fn find_all_favorite(
         types,
         query.filter.clone().unwrap_or_default(),
     )
-        .fetch_all(&mut txn)
-        .await?;
+    .fetch_all(&mut txn)
+    .await?;
 
     let foods = products.iter().map(ProductShort::new).collect();
 

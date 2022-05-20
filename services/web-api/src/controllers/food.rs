@@ -85,4 +85,3 @@ async fn update_food(
 
     Ok(Json(food))
 }
-

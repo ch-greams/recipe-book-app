@@ -63,7 +63,6 @@ impl ProductShort {
     }
 }
 
-
 impl Product {
     pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
@@ -320,7 +319,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
-        let food_type = vec![ ProductType::Food ];
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -331,9 +330,9 @@ mod tests {
             food_type,
             "".to_string(),
         )
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -344,21 +343,20 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
-        let food_type = vec![ ProductType::Food ];
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_all_created_by_user(
-                food_limit,
-                food_offset,
-                food_user_id,
-                food_type,
-                "".to_string(),
-            )
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_created_by_user(
+            food_limit,
+            food_offset,
+            food_user_id,
+            food_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -369,7 +367,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
-        let food_type = vec![ ProductType::Food ];
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -380,9 +378,9 @@ mod tests {
             food_type,
             "".to_string(),
         )
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -408,7 +406,7 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
-        let recipe_type = vec![ ProductType::Recipe ];
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -419,9 +417,9 @@ mod tests {
             recipe_type,
             "".to_string(),
         )
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -432,21 +430,20 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
-        let recipe_type = vec![ ProductType::Recipe ];
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_all_created_by_user(
-                recipe_limit,
-                recipe_offset,
-                recipe_user_id,
-                recipe_type,
-                "".to_string(),
-            )
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_created_by_user(
+            recipe_limit,
+            recipe_offset,
+            recipe_user_id,
+            recipe_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -457,21 +454,20 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
-        let recipe_type = vec![ ProductType::Recipe ];
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_all_favorite(
-                recipe_limit,
-                recipe_offset,
-                recipe_user_id,
-                recipe_type,
-                "".to_string(),
-            )
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_favorite(
+            recipe_limit,
+            recipe_offset,
+            recipe_user_id,
+            recipe_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
