@@ -12,9 +12,9 @@ import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
 
-import RbaAltIngredientLine from "./rba-alt-ingredient-line";
 import RbaIngredientInfoLine from "./rba-ingredient-info-line";
 import RbaIngredientInfoLineNutritionFacts from "./rba-ingredient-info-line-nutrition-facts";
+import RbaIngredientProductLine from "./rba-ingredient-product-line";
 
 import styles from "./rba-ingredients-block.module.scss";
 
@@ -57,6 +57,7 @@ const RbaIngredientLine: React.FC<Props> = ({
         dispatch(actions.toggleIngredientMark(id));
     };
 
+    // FIXME: Replace functionality
     const addIngredient = (): void => {
         const item = search.products[Math.floor(Math.random() * search.products.length)];
         console.log("PLEASE FIX ME:", item);
@@ -118,9 +119,9 @@ const RbaIngredientLine: React.FC<Props> = ({
         </Link>
     );
 
-    const showAlternativeIngredients: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
-    const showNewAlternativeIngredient: boolean = ingredient.isOpen && !isNew && !isReadOnly;
-    const showSeparator: boolean = showAlternativeIngredients || showNewAlternativeIngredient;
+    const showIngredientProducts: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
+    const showNewIngredientProduct: boolean = ingredient.isOpen && !isNew && !isReadOnly;
+    const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
     return (
 
@@ -155,21 +156,21 @@ const RbaIngredientLine: React.FC<Props> = ({
                 {( showSeparator && (<div className={styles.separator}></div>) )}
 
                 {(
-                    showAlternativeIngredients &&
+                    showIngredientProducts &&
                     Utils.getObjectValues(ingredient.products).map((product) => (
-                        <RbaAltIngredientLine
-                            key={`alt_ingredient_${product.product_id}`}
+                        <RbaIngredientProductLine
+                            key={`ingredient_product_${product.product_id}`}
                             search={search}
                             isReadOnly={isReadOnly}
                             parentId={ingredient.id}
-                            altIngredientProduct={product}
+                            ingredientProduct={product}
                         />
                     ))
                 )}
 
-                {( showNewAlternativeIngredient && (
-                    <RbaAltIngredientLine
-                        key={"alt_ingredient_new"}
+                {( showNewIngredientProduct && (
+                    <RbaIngredientProductLine
+                        key={"ingredient_product_new"}
                         search={search}
                         isReadOnly={isReadOnly}
                         parentId={ingredient.id}

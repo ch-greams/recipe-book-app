@@ -139,19 +139,19 @@ export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
 // NOTE: Ingredients
 
 export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
-export const RECIPE_ITEM_REMOVE_ALT_INGREDIENT = "RECIPE_ITEM_REMOVE_ALT_INGREDIENT";
+export const RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT = "RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT";
 export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
 
 export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT";
 export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
-export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT";
-export const RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT";
+export const RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT";
+export const RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT";
 export const RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS = "RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS";
 
 export const RECIPE_ITEM_ADD_INGREDIENT = "RECIPE_ITEM_ADD_INGREDIENT";
-export const RECIPE_ITEM_ADD_ALT_INGREDIENT = "RECIPE_ITEM_ADD_ALT_INGREDIENT";
+export const RECIPE_ITEM_ADD_INGREDIENT_PRODUCT = "RECIPE_ITEM_ADD_INGREDIENT_PRODUCT";
 
 
 export const RECIPE_ITEM_FETCH_NEW = "RECIPE_ITEM_FETCH_NEW";
@@ -326,8 +326,8 @@ export interface RemoveIngredientAction {
     payload: number;
 }
 
-export interface RemoveAltIngredientAction {
-    type: typeof RECIPE_ITEM_REMOVE_ALT_INGREDIENT;
+export interface RemoveIngredientProductAction {
+    type: typeof RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT;
     payload: { parentId: number, id: number };
 }
 
@@ -357,13 +357,13 @@ export interface UpdateIngredientUnitAction {
     payload: { id: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
-export interface UpdateAltIngredientAmountAction {
-    type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT;
+export interface UpdateIngredientProductAmountAction {
+    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT;
     payload: { parentId: number, id: number, inputValue: string };
 }
 
-export interface UpdateAltIngredientUnitAction {
-    type: typeof RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT;
+export interface UpdateIngredientProductUnitAction {
+    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT;
     payload: { parentId: number, id: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 
@@ -377,9 +377,9 @@ export interface AddIngredientAction {
     payload: typings.IngredientProduct;
 }
 
-export interface AddAltIngredientAction {
-    type: typeof RECIPE_ITEM_ADD_ALT_INGREDIENT;
-    payload: { id: number, altIngredientProduct: typings.IngredientProduct };
+export interface AddIngredientProductAction {
+    type: typeof RECIPE_ITEM_ADD_INGREDIENT_PRODUCT;
+    payload: { id: number, ingredientProduct: typings.IngredientProduct };
 }
 
 export interface RecipeItemFetchNewAction {
@@ -464,11 +464,11 @@ export type RecipeItemActionTypes = (
     UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
     UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction |
 
-    RemoveIngredientAction | RemoveAltIngredientAction | ReplaceIngredientWithAlternativeAction |
+    RemoveIngredientAction | RemoveIngredientProductAction | ReplaceIngredientWithAlternativeAction |
     ToggleIngredientOpenAction | ToggleIngredientMarkAction |
 
-    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateAltIngredientAmountAction | UpdateAltIngredientUnitAction |
-    UpdateAltNutritionFactsAction | AddIngredientAction | AddAltIngredientAction |
+    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateIngredientProductAmountAction | UpdateIngredientProductUnitAction |
+    UpdateAltNutritionFactsAction | AddIngredientAction | AddIngredientProductAction |
 
     RecipeItemFetchRequestAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction | RecipeItemFetchNewAction |
     AddCustomUnitAction | RemoveCustomUnitAction | UpdateCustomUnitAction |

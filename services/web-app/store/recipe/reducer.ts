@@ -765,7 +765,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_REMOVE_ALT_INGREDIENT: {
+        case types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT: {
 
             const { parentId, id } = action.payload;
 
@@ -897,7 +897,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
 
-        case types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT: {
+        case types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT: {
 
             const { parentId, id, inputValue } = action.payload;
 
@@ -928,7 +928,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT: {
+        case types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT: {
 
             const { parentId, id, unit } = action.payload;
 
@@ -1013,9 +1013,9 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_ADD_ALT_INGREDIENT: {
+        case types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT: {
 
-            const { id, altIngredientProduct } = action.payload;
+            const { id, ingredientProduct } = action.payload;
 
             return {
                 ...state,
@@ -1025,8 +1025,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ...ingredient,
                             products: {
                                 ...ingredient.products,
-                                [altIngredientProduct.product_id]: {
-                                    ...altIngredientProduct,
+                                [ingredientProduct.product_id]: {
+                                    ...ingredientProduct,
                                     amount: 100,
                                     amountInput: "100",
                                     unit: units.WeightUnit.g,

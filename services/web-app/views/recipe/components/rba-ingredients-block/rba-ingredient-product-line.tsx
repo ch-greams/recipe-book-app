@@ -22,7 +22,7 @@ interface Props {
     search: SearchPageStore;
     isReadOnly: boolean;
     parentId: number;
-    altIngredientProduct?: RecipeIngredientProduct;
+    ingredientProduct?: RecipeIngredientProduct;
     isNew?: boolean;
 }
 
@@ -37,13 +37,14 @@ export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
 };
 
 
-const RbaAltIngredientLine: React.FC<Props> = ({
-    search, isReadOnly, parentId, altIngredientProduct = DEFAULT_INGREDIENT_PRODUCT, isNew = false,
+const RbaIngredientProductLine: React.FC<Props> = ({
+    search, isReadOnly, parentId, ingredientProduct = DEFAULT_INGREDIENT_PRODUCT, isNew = false,
 }) => {
 
     const dispatch = useDispatch();
 
-    const addAltIngredient = (id: number): void => {
+    // FIXME: Replace functionality
+    const addIngredientProduct = (id: number): void => {
         const item = search.products[Math.floor(Math.random() * search.products.length)];
         console.log("PLEASE FIX ME:", id, item);
         // dispatch(actions.addAltIngredient(id, item));
@@ -51,9 +52,9 @@ const RbaAltIngredientLine: React.FC<Props> = ({
 
     const removeButton = (
         <div
-            data-cy={constants.CY_ALT_INGREDIENT_LINE_REMOVE_BUTTON}
-            className={styles.altIngredientLineButton}
-            onClick={() => dispatch(actions.removeAltIngredient(parentId, altIngredientProduct.product_id))}
+            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE_REMOVE_BUTTON}
+            className={styles.ingredientProductLineButton}
+            onClick={() => dispatch(actions.removeIngredientProduct(parentId, ingredientProduct.product_id))}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <RemoveIcon />
@@ -63,9 +64,9 @@ const RbaAltIngredientLine: React.FC<Props> = ({
 
     const searchButton = (
         <div
-            data-cy={constants.CY_ALT_INGREDIENT_LINE_SEARCH_BUTTON}
-            className={styles.altIngredientLineButton}
-            onClick={() => addAltIngredient(parentId)}
+            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE_SEARCH_BUTTON}
+            className={styles.ingredientProductLineButton}
+            onClick={() => addIngredientProduct(parentId)}
         >
             <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
                 <SearchIcon />
@@ -75,7 +76,7 @@ const RbaAltIngredientLine: React.FC<Props> = ({
 
     const amountText = (
         <div className={styles.ingredientInfoLineAmountText}>
-            {altIngredientProduct.amount}
+            {ingredientProduct.amount}
         </div>
     );
 
@@ -83,9 +84,9 @@ const RbaAltIngredientLine: React.FC<Props> = ({
         <input
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
-            value={(altIngredientProduct.amountInput|| "")}
+            value={(ingredientProduct.amountInput|| "")}
             onChange={(event) => {
-                dispatch(actions.updateAltIngredientAmount(parentId, altIngredientProduct.product_id, event.target.value));
+                dispatch(actions.updateIngredientProductAmount(parentId, ingredientProduct.product_id, event.target.value));
             }}
         />
     );
@@ -102,42 +103,42 @@ const RbaAltIngredientLine: React.FC<Props> = ({
                 width={SelectWidthSize.Medium}
                 height={SelectHeightSize.Medium}
                 options={Object.values(Units).map((unit) => ({ value: unit }))}
-                value={altIngredientProduct.unit}
+                value={ingredientProduct.unit}
                 onChange={(option: SelectOption) => {
-                    dispatch(actions.updateAltIngredientUnit(
-                        parentId, altIngredientProduct.product_id, option.value as WeightUnit | VolumeUnit,
+                    dispatch(actions.updateIngredientProductUnit(
+                        parentId, ingredientProduct.product_id, option.value as WeightUnit | VolumeUnit,
                     ));
                 }}
             />
         </div>
     );
 
-    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, altIngredientProduct.product_id)); };
-    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.product_id, true)); };
-    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, altIngredientProduct.product_id, false)); };
+    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, ingredientProduct.product_id)); };
+    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, ingredientProduct.product_id, true)); };
+    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, ingredientProduct.product_id, false)); };
 
     return (
 
         <div
-            data-cy={constants.CY_ALT_INGREDIENT_LINE}
-            className={styles.altIngredientLine}
+            data-cy={constants.CY_INGREDIENT_PRODUCT_LINE}
+            className={styles.ingredientProductLine}
         >
 
             {( !isReadOnly && ( isNew ? searchButton : removeButton ) )}
 
             <div className={Utils.classNames({
-                [styles.altIngredientInfoLine]: true,
+                [styles.ingredientProductInfoLine]: true,
                 [styles.newIngredient]: isNew,
             })}>
 
                 <div
-                    data-cy={constants.CY_ALT_INGREDIENT_INFO_LINE_NAME}
+                    data-cy={constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}
                     className={styles.ingredientInfoLineName}
                     onClick={isNew ? undefined : onClick}
                     onMouseEnter={isNew ? undefined : onMouseEnter}
                     onMouseLeave={isNew ? undefined : onMouseLeave}
                 >
-                    {isNew ? "NEW ALTERNATIVE" : altIngredientProduct.name.toUpperCase()}
+                    {isNew ? "NEW ALTERNATIVE" : ingredientProduct.name.toUpperCase()}
                 </div>
 
                 {( !isNew && measureInput )}
@@ -146,7 +147,7 @@ const RbaAltIngredientLine: React.FC<Props> = ({
     );
 };
 
-RbaAltIngredientLine.displayName = "RbaAltIngredientLine";
+RbaIngredientProductLine.displayName = "RbaIngredientProductLine";
 
 
-export default RbaAltIngredientLine;
+export default RbaIngredientProductLine;

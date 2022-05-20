@@ -205,9 +205,9 @@ export function removeIngredient(id: number): types.RemoveIngredientAction {
     };
 }
 
-export function removeAltIngredient(parentId: number, id: number): types.RemoveAltIngredientAction {
+export function removeIngredientProduct(parentId: number, id: number): types.RemoveIngredientProductAction {
     return {
-        type: types.RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+        type: types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT,
         payload: { parentId, id },
     };
 }
@@ -247,16 +247,20 @@ export function updateIngredientUnit(id: number, unit: (units.WeightUnit | units
     };
 }
 
-export function updateAltIngredientAmount(parentId: number, id: number, inputValue: string): types.UpdateAltIngredientAmountAction {
+export function updateIngredientProductAmount(parentId: number, id: number, inputValue: string): types.UpdateIngredientProductAmountAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT,
         payload: { parentId, id, inputValue },
     };
 }
 
-export function updateAltIngredientUnit(parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateAltIngredientUnitAction {
+export function updateIngredientProductUnit(
+    parentId: number,
+    id: number,
+    unit: (units.WeightUnit | units.VolumeUnit),
+): types.UpdateIngredientProductUnitAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT,
         payload: { parentId, id, unit },
     };
 }
@@ -275,10 +279,10 @@ export function addIngredient(ingredient: IngredientProduct): types.AddIngredien
     };
 }
 
-export function addAltIngredient(id: number, altIngredientProduct: IngredientProduct): types.AddAltIngredientAction {
+export function addIngredientProduct(id: number, ingredientProduct: IngredientProduct): types.AddIngredientProductAction {
     return {
-        type: types.RECIPE_ITEM_ADD_ALT_INGREDIENT,
-        payload: { id, altIngredientProduct },
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT,
+        payload: { id, ingredientProduct },
     };
 }
 

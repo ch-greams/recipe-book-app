@@ -181,7 +181,7 @@
         }
     }
 
-    .altIngredientLine {
+    .ingredientProductLine {
 
         display: flex;
         flex-direction: row;
@@ -189,7 +189,7 @@
 
         margin: 8px 2px 0;
 
-        .altIngredientLineButton {
+        .ingredientProductLineButton {
 
             width: 36px;
             height: 24px;
@@ -211,7 +211,7 @@
             border-width: 1px;
         }
 
-        .altIngredientInfoLine {
+        .ingredientProductInfoLine {
 
             display: flex;
             flex-grow: 2;
