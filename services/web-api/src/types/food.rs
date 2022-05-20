@@ -68,28 +68,3 @@ impl Food {
         }
     }
 }
-
-#[derive(Deserialize, Serialize)]
-pub struct FoodShort {
-    pub id: i64,
-    pub name: String,
-    pub brand: String,
-    pub subtitle: String,
-    pub is_private: bool,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
-impl FoodShort {
-    pub fn new(product: &Product) -> Self {
-        Self {
-            id: product.id,
-            name: product.name.to_owned(),
-            brand: product.brand.to_owned(),
-            subtitle: product.subtitle.to_owned(),
-            is_private: product.is_private,
-            created_at: product.created_at,
-            updated_at: product.updated_at,
-        }
-    }
-}

@@ -3,8 +3,8 @@ import type { AllEffect, StrictEffect } from "redux-saga/effects";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 
 import type { FoodShort, RecipeShort } from "@common/typings";
-import FoodApi from "@api/foodApi";
-import RecipeApi from "@api/recipeApi";
+import { ProductType } from "@common/utils";
+import ProductApi from "@api/productApi";
 
 import type { UserFoodsFetchSuccessAction, UserRecipesFetchSuccessAction } from "./types";
 import {
@@ -21,8 +21,8 @@ import {
 function* fetchRecipes(): Generator<StrictEffect, void, RecipeShort[]> {
 
     try {
-        const favoriteRecipeItems = yield call(RecipeApi.getFavoriteRecipeItems);
-        const customRecipeItems = yield call(RecipeApi.getCustomRecipeItems);
+        const favoriteRecipeItems = yield call(ProductApi.getFavoriteProductItems, ProductType.Recipe);
+        const customRecipeItems = yield call(ProductApi.getCustomProductItems, ProductType.Recipe);
 
         const payload: UserRecipesFetchSuccessAction = {
             type: USER_RECIPES_FETCH_SUCCESS,
@@ -43,8 +43,8 @@ function* fetchRecipes(): Generator<StrictEffect, void, RecipeShort[]> {
 function* fetchFoods(): Generator<StrictEffect, void, FoodShort[]> {
 
     try {
-        const favoriteFoodItems = yield call(FoodApi.getFavoriteFoodItems);
-        const customFoodItems = yield call(FoodApi.getCustomFoodItems);
+        const favoriteFoodItems = yield call(ProductApi.getFavoriteProductItems, ProductType.Food);
+        const customFoodItems = yield call(ProductApi.getCustomProductItems, ProductType.Food);
 
         const payload: UserFoodsFetchSuccessAction = {
             type: USER_FOODS_FETCH_SUCCESS,

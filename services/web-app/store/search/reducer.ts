@@ -1,17 +1,19 @@
 import type { SearchPageActionTypes, SearchPageStore } from "./types";
+import { SEARCH_CLEAR } from "./types";
 import {
-    INGREDIENTS_FETCH_ERROR,
-    INGREDIENTS_FETCH_REQUEST,
-    INGREDIENTS_FETCH_SUCCESS,
+    SEARCH_PRODUCTS_FETCH_ERROR,
+    SEARCH_PRODUCTS_FETCH_REQUEST,
+    SEARCH_PRODUCTS_FETCH_SUCCESS,
 } from "./types";
 
 
 const initialState: SearchPageStore = {
 
-    isLoaded: false,
+    isLoaded: true,
     errorMessage: null,
 
-    ingredients: [],
+    searchInput: "",
+    products: [],
 };
 
 
@@ -19,30 +21,45 @@ export default function searchPageReducer(state = initialState, action: SearchPa
 
     switch (action.type) {
 
-        case INGREDIENTS_FETCH_REQUEST: {
+        case SEARCH_CLEAR: {
+            return {
+                ...state,
+                isLoaded: true,
+                errorMessage: null,
+
+                searchInput: "",
+                products: [],
+            };
+        }
+
+        case SEARCH_PRODUCTS_FETCH_REQUEST: {
+            const { payload: filter } = action;
+
             return {
                 ...state,
                 isLoaded: false,
                 errorMessage: null,
-                ingredients: [],
+
+                searchInput: filter,
+                products: [],
             };
         }
 
-        case INGREDIENTS_FETCH_SUCCESS: {
+        case SEARCH_PRODUCTS_FETCH_SUCCESS: {
             return {
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
-                ingredients: action.payload,
+                products: action.payload,
             };
         }
 
-        case INGREDIENTS_FETCH_ERROR: {
+        case SEARCH_PRODUCTS_FETCH_ERROR: {
             return {
                 ...state,
                 isLoaded: true,
                 errorMessage: action.payload as string,
-                ingredients: [],
+                products: [],
             };
         }
 

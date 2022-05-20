@@ -20,7 +20,7 @@ interface Props {
 const RbaSelectOption: React.FC<Props> = ({ option, onSelect }) => (
     <div
         data-cy={constants.CY_SELECT_INPUT_OPTION}
-        className={styles.selectInputOption}
+        className={styles.selectOption}
         onClick={() => onSelect(option)}
     >
         {getOptionLabel(option)}

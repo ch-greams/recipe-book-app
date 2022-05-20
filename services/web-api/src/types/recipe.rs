@@ -72,26 +72,3 @@ impl Recipe {
         }
     }
 }
-
-#[derive(Deserialize, Serialize)]
-pub struct RecipeShort {
-    pub id: i64,
-    pub name: String,
-    pub brand: String,
-    pub subtitle: String,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
-impl RecipeShort {
-    pub fn new(product: &Product) -> Self {
-        Self {
-            id: product.id,
-            name: product.name.to_owned(),
-            brand: product.brand.to_owned(),
-            subtitle: product.subtitle.to_owned(),
-            created_at: product.created_at,
-            updated_at: product.updated_at,
-        }
-    }
-}

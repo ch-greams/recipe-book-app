@@ -1,19 +1,38 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import Utils from "@common/utils";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
+import type { AppState } from "@store";
+import { searchProducts } from "@store/search/actions";
+import type { SearchPageStore } from "@store/search/types";
 import PersonIcon from "@icons/person-circle-sharp.svg";
 
 import styles from "./rba-navbar.module.scss";
 
 
 interface Props {
+    hideSearch: boolean;
     username: string;
 }
 
-const RbaNavbar: React.FC<Props> = ({ username }) => {
+const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
+
+    const dispatch = useDispatch();
+    const searchPage = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
+
+    const searchInput = (
+        <RbaSearchInput
+            width={SearchInputWidthSize.Full}
+            isLoading={!searchPage.isLoaded}
+            value={searchPage.searchInput}
+            items={searchPage.products}
+            onChange={(value) => { dispatch(searchProducts(value)); }}
+        />
+    );
+
     return (
         <div className={styles.navbar}>
 
@@ -26,7 +45,7 @@ const RbaNavbar: React.FC<Props> = ({ username }) => {
             </div>
 
             <div className={styles.navbarSearchSection}>
-                <RbaSearchInput width={SearchInputWidthSize.Full} />
+                {( !hideSearch && searchInput )}
             </div>
 
             <div className={styles.navbarUserSection}>

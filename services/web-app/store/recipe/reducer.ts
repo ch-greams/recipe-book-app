@@ -241,7 +241,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                 customUnits: [
                     ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(customUnitInput),
+                    Utils.convertCustomUnitIntoValue(state.id, customUnitInput),
                 ],
                 customUnitInputs: [
                     ...state.customUnitInputs,
@@ -259,7 +259,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                 customUnits: state.customUnits.map((customUnit, index) => (
                     index === customUnitIndex
-                        ? Utils.convertCustomUnitIntoValue(updatedCustomUnitInput)
+                        ? Utils.convertCustomUnitIntoValue(state.id, updatedCustomUnitInput)
                         : customUnit
                 )),
                 customUnitInputs: state.customUnitInputs.map((customUnit, index) => (

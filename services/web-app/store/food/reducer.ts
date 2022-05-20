@@ -189,7 +189,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 customUnits: [
                     ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(customUnitInput),
+                    Utils.convertCustomUnitIntoValue(state.id, customUnitInput),
                 ],
                 customUnitInputs: [
                     ...state.customUnitInputs,
@@ -207,7 +207,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 customUnits: state.customUnits.map((customUnit, index) => (
                     index === customUnitIndex
-                        ? Utils.convertCustomUnitIntoValue(updatedCustomUnitInput)
+                        ? Utils.convertCustomUnitIntoValue(state.id, updatedCustomUnitInput)
                         : customUnit
                 )),
                 customUnitInputs: state.customUnitInputs.map((customUnit, index) => (

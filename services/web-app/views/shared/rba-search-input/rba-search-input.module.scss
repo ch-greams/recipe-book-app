@@ -1,43 +1,109 @@
 @import "@styles/variables.scss";
 
 
-.searchInput {
+.search {
 
-    display: flex;
-    flex: 2;
-    align-items: center;
+    position: relative;
 
-    height: 26px;
+    font-family: $font-default;
+    font-size: $font-size-16;
+    font-weight: $font-weight-500;
 
-    padding: 8px 8px 8px 0;
+    .searchInput {
 
-    background-color: $color-default-dark;
+        display: flex;
+        align-items: center;
 
-    border: 1px solid $color-white;
-
-    .icon {
-        flex: 1;
-    }
-
-    .input {
-        flex: 10;
-
-        font-family: $font-default;
-        font-size: $font-size-20;
-        font-weight: $font-weight-500;
-
-        line-height: 26px;
-
-        color: $color-white;
+        padding: 8px 0;
 
         background-color: $color-default-dark;
+        border: 1px solid $color-white;
 
-        border: none;
+        .icon {
+            width: 28px;
+            height: 28px;
+
+            margin: 0 14px;
+
+            &.rotate {
+                animation: spin 1s linear infinite;
+            }
+        }
+
+        .input {
+            width: 100%;
+
+            padding: 0 14px;
+
+            font-family: $font-default;
+            font-size: $font-size-20;
+            font-weight: $font-weight-500;
+
+            line-height: 26px;
+
+            color: $color-white;
+            background-color: $color-default-dark;
+
+            border: none;
+
+            border-left-color: $color-grey-light;
+            border-left-style: solid;
+            border-left-width: 1px;
+        }
+
+        .input::placeholder {
+            line-height: normal;
+            color: $color-white;
+        }
     }
 
-    .input::placeholder {
-        line-height: normal;
-        color: $color-white;
+    .searchList {
+        position: absolute;
+        z-index: $z-index-default-1;
+
+        width: 100%;
+
+        .searchOption {
+
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 16px;
+
+            line-height: 26px;
+
+            color: $color-white;
+
+            text-decoration: none;
+
+            user-select: none;
+
+            background-color: $color-default-dark;
+            border: 1px solid $color-default;
+
+            .searchOptionType {
+
+                width: 80px;
+
+                font-size: $font-size-14;
+                font-weight: $font-weight-400;
+
+                line-height: 24px;
+
+                text-align: center;
+                border: 1px solid $color-default;
+            }
+
+            &:hover {
+                cursor: pointer;
+
+                background-color: $color-default;
+                border-color: $color-white;
+
+                .searchOptionType {
+                    border-color: $color-white;
+                }
+            }
+        }
     }
 
     // -------------------------------------------------------------------------
@@ -45,10 +111,16 @@
     // -------------------------------------------------------------------------
 
     &.widthSize_Medium {
-        width: 800px;
+        width: 640px;
     }
 
     &.widthSize_Full {
         width: 100%;
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
     }
 }

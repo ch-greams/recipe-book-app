@@ -1,11 +1,11 @@
 import superagent from "superagent";
 
-import type { Food, FoodShort } from "@common/typings";
+import type { Food } from "@common/typings";
 
 
 export default class FoodApi {
 
-    public static readonly API_PATH: string = "/api/v1/food";
+    private static readonly API_PATH: string = "/api/v1/food";
 
 
     public static async getFoodItem(id: number): Promise<Food> {
@@ -29,31 +29,5 @@ export default class FoodApi {
             .send(foodItem);
 
         return updatedFoodItem;
-    }
-
-    public static async getFavoriteFoodItems(): Promise<FoodShort[]> {
-
-        const userId = 1;
-
-        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}/favorite/${userId}`);
-
-        return recipeItems;
-    }
-
-    public static async getCustomFoodItems(): Promise<FoodShort[]> {
-
-        const userId = 1;
-
-        const { body: recipeItems } = await superagent.get(`${FoodApi.API_PATH}?limit=20&user_id=${userId}`);
-
-        return recipeItems;
-    }
-
-    // TODO: Deprecate with RBA-12
-    public static async getFoodItemsDetailed(): Promise<Food[]> {
-
-        const { body: foodItems } = await superagent.get(`${FoodApi.API_PATH}/detailed`);
-
-        return foodItems;
     }
 }

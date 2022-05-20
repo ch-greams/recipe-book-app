@@ -1,7 +1,7 @@
 @import "@styles/variables.scss";
 
 
-.selectInput {
+.select {
 
     position: relative;
 
@@ -12,12 +12,12 @@
     text-align: left;
     cursor: pointer;
 
-    .selectInputList {
+    .selectList {
         position: absolute;
         z-index: $z-index-default-1;
     }
 
-    .selectInputOption {
+    .selectOption {
         padding-left: 4px;
         user-select: none;
         border-style: solid;
@@ -31,7 +31,7 @@
     &.widthSize_Medium {
         width: 60px;
 
-        .selectInputOption {
+        .selectOption {
             width: 60px;
         }
     }
@@ -39,7 +39,7 @@
     &.widthSize_Full {
         width: 100%;
 
-        .selectInputList {
+        .selectList {
             width: 100%;
         }
     }
@@ -49,21 +49,21 @@
     // -------------------------------------------------------------------------
 
     &.heightSize_Small {
-        .selectInputOption {
+        .selectOption {
             height: 20px;
             line-height: 20px;
         }
     }
 
     &.heightSize_Medium {
-        .selectInputOption {
+        .selectOption {
             height: 22px;
             line-height: 22px;
         }
     }
 
     &.heightSize_Large {
-        .selectInputOption {
+        .selectOption {
             height: 32px;
             line-height: 32px;
         }
@@ -78,7 +78,7 @@
         background-color: $color-default-dark;
         border-color: $color-white;
 
-        .selectInputOption {
+        .selectOption {
             color: $color-white;
             background-color: $color-default-dark;
             border-color: $color-white;
@@ -90,7 +90,7 @@
         background-color: $color-white;
         border-color: $color-default;
 
-        .selectInputOption {
+        .selectOption {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-default;
@@ -104,7 +104,7 @@
     &.alignCenter {
         text-align: center;
 
-        .selectInputOption {
+        .selectOption {
             padding-left: 0;
         }
     }

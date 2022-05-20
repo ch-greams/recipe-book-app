@@ -54,7 +54,7 @@ export const RbaSelect: React.FC<Props> = ({ theme, center = false, width, heigh
     };
 
     const classNames = Utils.classNames({
-        [styles.selectInput]: true,
+        [styles.select]: true,
         [styles.alignCenter]: center,
         [styles[theme]]: true,
         [styles[width]]: true,
@@ -66,11 +66,11 @@ export const RbaSelect: React.FC<Props> = ({ theme, center = false, width, heigh
             data-cy={constants.CY_SELECT_INPUT}
             className={classNames}
         >
-            <div className={styles.selectInputOption} onClick={showList}>
+            <div className={styles.selectOption} onClick={showList}>
                 {value}
             </div>
             {( isListVisible && (
-                <div className={styles.selectInputList}>
+                <div className={styles.selectList}>
                     {(options.map((option) => (<RbaSelectOption key={option.value} option={option} onSelect={onSelect} />)))}
                 </div>
             ) )}

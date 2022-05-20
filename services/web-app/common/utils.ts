@@ -24,6 +24,11 @@ export enum RoutePath {
     Recipe = "recipe",
 }
 
+export enum ProductType {
+    Food = "food",
+    Recipe = "recipe",
+}
+
 export enum DecimalPlaces {
     Zero = 0,
     One = 1,
@@ -271,6 +276,10 @@ export default class Utils {
         return `/${route}/new?edit=true`;
     }
 
+    public static getUrlParams(obj: object): string {
+        return Utils.getObjectKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
+    }
+
     public static classNames(values: Dictionary<string, boolean>): string {
         return Object.keys(values).filter((key) => values[key]).join(" ");
     }
@@ -307,8 +316,8 @@ export default class Utils {
         return { ...customUnit, amount: String(customUnit.amount) };
     }
 
-    public static convertCustomUnitIntoValue(customUnit: CustomUnitInput): CustomUnit {
-        return { ...customUnit, amount: Number(customUnit.amount) };
+    public static convertCustomUnitIntoValue(product_id: number, customUnit: CustomUnitInput): CustomUnit {
+        return { ...customUnit, product_id, amount: Number(customUnit.amount) };
     }
 
     public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {

@@ -16,6 +16,18 @@ export interface Food {
     is_private: boolean;
 }
 
+// TODO: Create an app version of this type (camelCase) and have all necessary fields available
+export interface ProductShort {
+    id: number;
+    product_type: ProductType;
+    name: string;
+    brand: string;
+    subtitle: string;
+    // is_private: boolean;
+    // created_at: DateTime<Utc>;
+    // updated_at: DateTime<Utc>;
+}
+
 export interface FoodShort {
     id: number;
     name: string;
@@ -25,7 +37,7 @@ export interface FoodShort {
 
 export interface IngredientProduct {
     product_id: number;
-    product_type: "food" | "recipe";
+    product_type: ProductType;
     name: string;
     amount: number;
     unit: WeightUnit | VolumeUnit;

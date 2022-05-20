@@ -1,6 +1,10 @@
 /* eslint-disable react/display-name */
 import React from "react";
+import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
+
+import type { AppState } from "@store";
+import { useStore } from "@store";
 
 import RbaLayout from ".";
 
@@ -13,6 +17,13 @@ export default {
             table: { type: { summary: "React.ReactNode" } },
         },
     },
+    decorators : [
+        (Story) => (
+            <Provider store={useStore({} as AppState)}>
+                {Story()}
+            </Provider>
+        ),
+    ],
 } as ComponentMeta<typeof RbaLayout>;
 
 const Template: ComponentStory<typeof RbaLayout> = (args) => <RbaLayout {...args} />;

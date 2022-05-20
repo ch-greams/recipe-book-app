@@ -58,8 +58,9 @@ const RbaIngredientLine: React.FC<Props> = ({
     };
 
     const addIngredient = (): void => {
-        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
-        dispatch(actions.addIngredient(item));
+        const item = search.products[Math.floor(Math.random() * search.products.length)];
+        console.log("PLEASE FIX ME:", item);
+        // dispatch(actions.addIngredient(item));
     };
 
     const checkbox = (

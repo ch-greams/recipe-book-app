@@ -1,9 +1,12 @@
 /* eslint-disable react/display-name */
 import React from "react";
+import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import RbaNavbar from ".";
+import type { AppState } from "@store";
+import { useStore } from "@store";
 
+import RbaNavbar from ".";
 
 export default {
     title: "Shared/RbaNavbar",
@@ -13,7 +16,18 @@ export default {
             type: { name: "string", required: true },
             table: { type: { summary: "string" } },
         },
+        hideSearch: {
+            type: { name: "boolean", required: true },
+            table: { type: { summary: "boolean" } },
+        },
     },
+    decorators : [
+        (Story) => (
+            <Provider store={useStore({} as AppState)}>
+                {Story()}
+            </Provider>
+        ),
+    ],
 } as ComponentMeta<typeof RbaNavbar>;
 
 const Template: ComponentStory<typeof RbaNavbar> = (args) => <RbaNavbar {...args} />;
@@ -21,4 +35,11 @@ const Template: ComponentStory<typeof RbaNavbar> = (args) => <RbaNavbar {...args
 export const Default = Template.bind({});
 Default.args = {
     username: "John Doe",
+    hideSearch: false,
+};
+
+export const WithoutSearch = Template.bind({});
+WithoutSearch.args = {
+    username: "John Doe",
+    hideSearch: true,
 };

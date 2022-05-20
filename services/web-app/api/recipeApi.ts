@@ -1,11 +1,11 @@
 import superagent from "superagent";
 
-import type { Recipe, RecipeShort } from "@common/typings";
+import type { Recipe } from "@common/typings";
 
 
 export default class RecipeApi {
 
-    public static readonly API_PATH: string = "/api/v1/recipe";
+    private static readonly API_PATH: string = "/api/v1/recipe";
 
 
     public static async getRecipeItem(id: number): Promise<Recipe> {
@@ -29,23 +29,5 @@ export default class RecipeApi {
             .send(recipeItem);
 
         return updatedRecipeItem;
-    }
-
-    public static async getFavoriteRecipeItems(): Promise<RecipeShort[]> {
-
-        const userId = 1;
-
-        const { body: recipeItems } = await superagent.get(`${RecipeApi.API_PATH}/favorite/${userId}`);
-
-        return recipeItems;
-    }
-
-    public static async getCustomRecipeItems(): Promise<RecipeShort[]> {
-
-        const userId = 1;
-
-        const { body: recipeItems } = await superagent.get(`${RecipeApi.API_PATH}?limit=20&user_id=${userId}`);
-
-        return recipeItems;
     }
 }

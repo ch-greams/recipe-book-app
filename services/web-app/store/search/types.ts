@@ -1,35 +1,43 @@
-import type { IngredientProduct } from "@common/typings";
+import type { ProductShort } from "@common/typings";
 
 
-// FIXME: Not really a page (should be a part of RBA-12 rework)
 export interface SearchPageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
-    ingredients: IngredientProduct[];
+
+    searchInput: string;
+    products: ProductShort[];
 }
 
 
-export const INGREDIENTS_FETCH_REQUEST = "INGREDIENTS_FETCH_REQUEST";
-export const INGREDIENTS_FETCH_SUCCESS = "INGREDIENTS_FETCH_SUCCESS";
-export const INGREDIENTS_FETCH_ERROR = "INGREDIENTS_FETCH_ERROR";
+export const SEARCH_CLEAR= "SEARCH_CLEAR";
+
+export const SEARCH_PRODUCTS_FETCH_REQUEST = "SEARCH_PRODUCTS_FETCH_REQUEST";
+export const SEARCH_PRODUCTS_FETCH_SUCCESS = "SEARCH_PRODUCTS_FETCH_SUCCESS";
+export const SEARCH_PRODUCTS_FETCH_ERROR = "SEARCH_PRODUCTS_FETCH_ERROR";
 
 
-
-export interface IngredientsFetchRequestedAction {
-    type: typeof INGREDIENTS_FETCH_REQUEST;
+export interface SearchClearAction {
+    type: typeof SEARCH_CLEAR;
 }
 
-interface IngredientsFetchSuccessAction {
-    type: typeof INGREDIENTS_FETCH_SUCCESS;
-    payload: IngredientProduct[];
+export interface SearchProductsFetchRequestedAction {
+    type: typeof SEARCH_PRODUCTS_FETCH_REQUEST;
+    payload: string;
 }
 
-interface IngredientsFetchErrorAction {
-    type: typeof INGREDIENTS_FETCH_ERROR;
+interface SearchProductsFetchSuccessAction {
+    type: typeof SEARCH_PRODUCTS_FETCH_SUCCESS;
+    payload: ProductShort[];
+}
+
+interface SearchProductsFetchErrorAction {
+    type: typeof SEARCH_PRODUCTS_FETCH_ERROR;
     payload: string;
 }
 
 
 export type SearchPageActionTypes = (
-    IngredientsFetchRequestedAction | IngredientsFetchSuccessAction | IngredientsFetchErrorAction
+    SearchClearAction | SearchProductsFetchRequestedAction |
+    SearchProductsFetchSuccessAction | SearchProductsFetchErrorAction
 );

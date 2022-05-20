@@ -109,7 +109,7 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn find_by_product_ids() {
-        let ingredient_ids = vec![10, 11];
+        let ingredient_ids = vec![38, 40];
 
         let config = Config::new().unwrap();
         let mut txn = PgPool::connect_lazy(&config.database_url)

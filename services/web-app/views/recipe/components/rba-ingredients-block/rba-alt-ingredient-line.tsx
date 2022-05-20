@@ -44,8 +44,9 @@ const RbaAltIngredientLine: React.FC<Props> = ({
     const dispatch = useDispatch();
 
     const addAltIngredient = (id: number): void => {
-        const item = search.ingredients[Math.floor(Math.random() * search.ingredients.length)];
-        dispatch(actions.addAltIngredient(id, item));
+        const item = search.products[Math.floor(Math.random() * search.products.length)];
+        console.log("PLEASE FIX ME:", id, item);
+        // dispatch(actions.addAltIngredient(id, item));
     };
 
     const removeButton = (
