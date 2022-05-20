@@ -12,8 +12,9 @@ import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
 
+import RbaIngredientNutritionFacts from "../rba-ingredient-nutrition-facts";
+
 import RbaIngredientInfo from "./rba-ingredient-info";
-import RbaIngredientNutritionFacts from "./rba-ingredient-nutrition-facts";
 import RbaIngredientProduct from "./rba-ingredient-product";
 
 import styles from "./rba-ingredients-block.module.scss";
@@ -37,7 +38,7 @@ const DEFAULT_INGREDIENT: RecipeIngredient = {
     id: -1,
     product_id: -1,
 
-    altNutritionFacts: {},
+    alternativeNutritionFacts: {},
 
     products: {},
 };
@@ -79,7 +80,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
 
     const searchButton = (
         <div
-            data-cy={constants.CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON}
+            data-cy={constants.CY_NEW_INGREDIENT_SEARCH_BUTTON}
             className={styles.ingredientButton}
             onClick={addIngredient}
         >
@@ -105,7 +106,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
     return (
 
         <div
-            data-cy={( isNew ? constants.CY_NEW_INGREDIENT_LINE : constants.CY_INGREDIENT_LINE )}
+            data-cy={( isNew ? constants.CY_NEW_INGREDIENT : constants.CY_INGREDIENT_LINE )}
             key={`ingredient_${ingredient.id}`}
             className={styles.ingredient}
         >
@@ -127,7 +128,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                                 ingredient.products[ingredient.product_id],
                                 `ingredient.products["${ingredient.product_id}"]`,
                             ).nutrition_facts}
-                            altNutritionFacts={ingredient.altNutritionFacts}
+                            alternativeNutritionFacts={ingredient.alternativeNutritionFacts}
                         />
                     )
                 )}

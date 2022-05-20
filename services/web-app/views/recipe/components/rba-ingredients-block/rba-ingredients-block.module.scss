@@ -114,7 +114,7 @@
 
                 margin-top: 8px;
 
-                .ingredientInfoLineNutritionFact {
+                .ingredientNutritionFact {
 
                     display: flex;
                     flex: 1;
@@ -128,7 +128,7 @@
                     border-style: solid;
                     border-width: 1px;
 
-                    .ingredientInfoLineNutritionFactAmount {
+                    .ingredientNutritionFactAmount {
 
                         margin: 0 16px;
                         margin-top: 4px;
@@ -142,7 +142,7 @@
                         border-bottom: 2px solid $color-white;
                     }
 
-                    .ingredientInfoLineNutritionFactType {
+                    .ingredientNutritionFactType {
 
                         margin: 4px 0;
 

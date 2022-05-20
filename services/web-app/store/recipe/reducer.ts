@@ -964,7 +964,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (ingredient.id === parentId)
                         ? {
                             ...ingredient,
-                            altNutritionFacts: (
+                            alternativeNutritionFacts: (
                                 isSelected
                                     ? Utils.unwrapForced(
                                         ingredient.products[id],

@@ -1,0 +1,61 @@
+@import "@styles/variables.scss";
+
+
+.ingredientNutritionFacts {
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    margin-top: 8px;
+
+    .ingredientNutritionFact {
+
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        margin: 0 2px;
+
+        text-align: center;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 1px;
+
+        .ingredientNutritionFactAmount {
+
+            margin: 0 16px;
+            margin-top: 4px;
+
+            font-family: $font-default;
+            font-size: $font-size-32;
+            font-weight: $font-weight-700;
+
+            border-bottom: 2px solid $color-white;
+
+            &.increasedValue {
+                color: $color-alternative;
+            }
+
+            &.equalValue {
+                color: $color-white;
+            }
+
+            &.decreasedValue {
+                color: $color-default-dark;
+            }
+        }
+
+        .ingredientNutritionFactType {
+
+            margin: 4px 0;
+
+            font-family: $font-default;
+            font-size: $font-size-14;
+            font-weight: $font-weight-700;
+
+            color: $color-white;
+        }
+    }
+}

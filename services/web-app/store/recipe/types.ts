@@ -13,7 +13,7 @@ export interface RecipeIngredient extends typings.Ingredient {
     isOpen: boolean;
     isMarked: boolean;
     products: Dictionary<number, RecipeIngredientProduct>;
-    altNutritionFacts: Dictionary<NutritionFactType, number>;
+    alternativeNutritionFacts: Dictionary<NutritionFactType, number>;
 }
 
 

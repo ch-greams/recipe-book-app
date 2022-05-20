@@ -76,7 +76,7 @@ const INGREDIENT_0: RecipeIngredient = {
             },
         },
     },
-    altNutritionFacts: {
+    alternativeNutritionFacts: {
         [CarbohydrateNutritionFactType.Carbohydrate]: 56,
         [LipidNutritionFactType.Fat]: 11,
         [ProteinNutritionFactType.Protein]: 20.5,
@@ -105,7 +105,7 @@ const INGREDIENT_1: RecipeIngredient = {
             },
         },
     },
-    altNutritionFacts: {},
+    alternativeNutritionFacts: {},
 };
 
 
@@ -130,19 +130,19 @@ ReadOnlyClosedMarked.args = {
 export const DefaultOpen = Template.bind({});
 DefaultOpen.args = {
     isReadOnly: false,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, altNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpen = Template.bind({});
 ReadOnlyOpen.args = {
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, altNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpenMarked = Template.bind({});
 ReadOnlyOpenMarked.args = {
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, altNutritionFacts: {}, isMarked: true }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {}, isMarked: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedDefaultOpen = Template.bind({});

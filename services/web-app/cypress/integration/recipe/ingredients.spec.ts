@@ -33,31 +33,31 @@ describe("recipe_page", () => {
 
             // - Current product nutrition facts -
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Carbohydrate.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2.9");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Fat.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("15");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Protein.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2.7");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Energy.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("157");
 
@@ -69,31 +69,31 @@ describe("recipe_page", () => {
 
             // - Alternative product nutrition facts -
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Carbohydrate.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("4.2");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Fat.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Protein.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("8");
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_TYPE}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
                 .contains(NutritionFactType.Energy.toUpperCase())
                 .parent()
-                .get(`[data-cy=${constants.CY_INGREDIENT_INFO_LINE_NF_AMOUNT}]`)
+                .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("66.8");
 
@@ -197,7 +197,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_INGREDIENT_LINE}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_BEFORE);
 
-            cy.get(`[data-cy=${constants.CY_NEW_INGREDIENT_LINE}] [data-cy=${constants.CY_NEW_INGREDIENT_LINE_SEARCH_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_NEW_INGREDIENT}] [data-cy=${constants.CY_NEW_INGREDIENT_SEARCH_BUTTON}]`)
                 .should("be.visible")
                 .click();
 

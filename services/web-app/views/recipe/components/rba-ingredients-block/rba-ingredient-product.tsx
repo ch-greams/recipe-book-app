@@ -5,7 +5,7 @@ import * as constants from "@cypress/constants";
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientProduct } from "@store/recipe/types";

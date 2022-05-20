@@ -151,7 +151,7 @@ const INGREDIENT_1: RecipeIngredient = {
             },
         },
     },
-    altNutritionFacts: {},
+    alternativeNutritionFacts: {},
 };
 
 
