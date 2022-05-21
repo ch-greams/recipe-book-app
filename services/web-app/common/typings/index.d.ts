@@ -1,5 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
+import type { ProductType } from "@common/utils";
 import type { SubDirectionType } from "@store/recipe/types";
 
 export * from "./common";

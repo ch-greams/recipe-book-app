@@ -12,12 +12,18 @@ interface Props {
     alternativeNutritionFacts?: Dictionary<NutritionFactType, number>;
 }
 
-const getNutritionValueClass = (curNutritionValue: Option<number>, altNutritionValue: Option<number>): string => {
-    if (Utils.isSome(curNutritionValue) && Utils.isSome(altNutritionValue)) {
+/**
+ * Select color for the nutrition fact value based on the difference between `current` and `alternative` value
+ */
+const getNutritionValueClass = (
+    currentNutritionValue: Option<number>,
+    alternativeNutritionValue: Option<number>,
+): string => {
+    if (Utils.isSome(currentNutritionValue) && Utils.isSome(alternativeNutritionValue)) {
         return (
-            curNutritionValue === altNutritionValue
+            currentNutritionValue === alternativeNutritionValue
                 ? styles.equalValue
-                : ( curNutritionValue > altNutritionValue ? styles.increasedValue : styles.decreasedValue )
+                : ( currentNutritionValue > alternativeNutritionValue ? styles.increasedValue : styles.decreasedValue )
         );
     }
     else {

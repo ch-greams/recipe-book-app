@@ -3,7 +3,9 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import Utils, { RoutePath } from "@common/utils";
+import Utils, { ProductType, RoutePath } from "@common/utils";
+import RbaIngredientInfo from "@views/recipe/components/rba-ingredient-info";
+import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
@@ -12,12 +14,9 @@ import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 import SearchIcon from "@icons/search-sharp.svg";
 
-import RbaIngredientNutritionFacts from "../rba-ingredient-nutrition-facts";
+import RbaIngredientProduct from "../rba-ingredient-product";
 
-import RbaIngredientInfo from "./rba-ingredient-info";
-import RbaIngredientProduct from "./rba-ingredient-product";
-
-import styles from "./rba-ingredients-block.module.scss";
+import styles from "./rba-ingredient.module.scss";
 
 
 
@@ -28,20 +27,15 @@ interface Props {
     isNew?: boolean;
 }
 
-
-
 const DEFAULT_INGREDIENT: RecipeIngredient = {
-
     isOpen: false,
     isMarked: false,
-
     id: -1,
     product_id: -1,
-
     alternativeNutritionFacts: {},
-
     products: {},
 };
+
 
 const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAULT_INGREDIENT, isNew = false }) => {
 
@@ -92,7 +86,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
 
     const linkPath = Utils.getItemPath(
         (
-            ingredient.products[ingredient.product_id]?.product_type === "food"
+            ingredient.products[ingredient.product_id]?.product_type === ProductType.Food
                 ? RoutePath.Food
                 : RoutePath.Recipe
         ),

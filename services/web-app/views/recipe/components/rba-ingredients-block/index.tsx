@@ -3,10 +3,7 @@ import React from "react";
 import type { RecipeIngredient } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
 
-import RbaIngredient from "./rba-ingredient";
-
-import styles from "./rba-ingredients-block.module.scss";
-
+import RbaIngredient from "../rba-ingredient";
 
 
 interface Props {
@@ -20,8 +17,7 @@ interface Props {
 const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly = false }) => {
 
     return (
-        <div className={styles.ingredientsBlock}>
-
+        <div>
             {ingredients.map( (ingredient) => (
                 <RbaIngredient
                     key={`ingredient_${ingredient.id}`}
@@ -39,7 +35,6 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly 
                     isNew={true}
                 />
             ) )}
-
         </div>
     );
 };

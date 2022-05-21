@@ -1,0 +1,75 @@
+@import "@styles/variables.scss";
+
+
+.ingredient {
+
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    margin: 8px 0;
+
+    .lineCheckbox {
+
+        width: 22px;
+        height: 22px;
+
+        margin: 10px 2px 10px 10px;
+
+        cursor: pointer;
+
+        background-color: $color-default-dark;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 2px;
+
+        .lineCheckboxMark {
+
+            width: 16px;
+            height: 16px;
+
+            margin: 3px;
+
+            background-color: $color-white;
+        }
+    }
+
+    .ingredientInfoLines {
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 2;
+
+        .separator {
+
+            height: 2px;
+            margin: 12px 100px 4px;
+            background-color: $color-white;
+        }
+    }
+
+    .ingredientButton {
+
+        width: 44px;
+        height: 24px;
+
+        padding: 10px 0;
+
+        line-height: 24px;
+
+        color: $color-default;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        background-color: $color-white;
+
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
+
+        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+    }
+}

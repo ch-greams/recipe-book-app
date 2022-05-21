@@ -4,7 +4,7 @@ import * as constants from "@cypress/constants";
 
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
+import Utils, { ProductType } from "@common/utils";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
@@ -14,7 +14,7 @@ import RemoveIcon from "@icons/close-sharp.svg";
 import IconWrapper from "@icons/IconWrapper";
 import SearchIcon from "@icons/search-sharp.svg";
 
-import styles from "./rba-ingredients-block.module.scss";
+import styles from "./rba-ingredient-product.module.scss";
 
 
 
@@ -28,7 +28,7 @@ interface Props {
 
 export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
     product_id: -1,
-    product_type: "food",
+    product_type: ProductType.Food,
     name: "NEW INGREDIENT",
     amount: 100,
     amountInput: "100",
@@ -119,18 +119,11 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
     return (
 
-        <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT}
-            className={styles.ingredientProduct}
-        >
+        <div data-cy={constants.CY_INGREDIENT_PRODUCT} className={styles.ingredientProduct}>
 
             {( !isReadOnly && ( isNew ? searchButton : removeButton ) )}
 
-            <div className={Utils.classNames({
-                [styles.ingredientProductInfo]: true,
-                [styles.newIngredient]: isNew,
-            })}>
-
+            <div className={Utils.classNames({ [styles.ingredientProductInfo]: true, [styles.newIngredient]: isNew })}>
                 <div
                     data-cy={constants.CY_INGREDIENT_PRODUCT_INFO_LINE_NAME}
                     className={styles.ingredientInfoLineName}

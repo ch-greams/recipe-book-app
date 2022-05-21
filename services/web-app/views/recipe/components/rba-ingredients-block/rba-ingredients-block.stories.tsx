@@ -7,6 +7,7 @@ import {
     CarbohydrateNutritionFactType, EnergyNutritionFactType, LipidNutritionFactType, ProteinNutritionFactType,
 } from "@common/nutritionFacts";
 import { WeightUnit } from "@common/units";
+import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
 import type { RecipeIngredient } from "@store/recipe/types";
@@ -52,7 +53,7 @@ const INGREDIENT_0: RecipeIngredient = {
             amountInput: "100",
             unit: WeightUnit.g,
             product_id: PRODUCT_ID_1,
-            product_type: "food",
+            product_type: ProductType.Food,
             name: "Sour Cream 10%",
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 57,
@@ -66,7 +67,7 @@ const INGREDIENT_0: RecipeIngredient = {
             amountInput: "100",
             unit: WeightUnit.g,
             product_id: PRODUCT_ID_2,
-            product_type: "food",
+            product_type: ProductType.Food,
             name: "Sour Cream 15%",
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 56,
@@ -95,7 +96,7 @@ const INGREDIENT_1: RecipeIngredient = {
             amountInput: "5",
             unit: WeightUnit.oz,
             product_id: PRODUCT_ID_3,
-            product_type: "food",
+            product_type: ProductType.Food,
             name: "Cottage Cheese",
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,

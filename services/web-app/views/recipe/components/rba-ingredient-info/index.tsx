@@ -11,9 +11,9 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
 
-import { DEFAULT_INGREDIENT_PRODUCT } from "./rba-ingredient-product";
+import { DEFAULT_INGREDIENT_PRODUCT } from "../rba-ingredient-product";
 
-import styles from "./rba-ingredients-block.module.scss";
+import styles from "./rba-ingredient-info.module.scss";
 
 
 
