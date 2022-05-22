@@ -8,12 +8,12 @@ import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 
 import { DEFAULT_INGREDIENT_PRODUCT } from "../rba-ingredient-product";
@@ -74,9 +74,9 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
             className={styles.ingredientButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
-            <IconWrapper width={44} height={24} color={COLOR_DEFAULT}>
+            <RbaIconWrapper width={44} height={24} color={COLOR_DEFAULT}>
                 <RemoveIcon />
-            </IconWrapper>
+            </RbaIconWrapper>
         </div>
     );
 
@@ -125,9 +125,9 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
 
             <Link href={linkPath}>
                 <a className={styles.ingredientButton}>
-                    <IconWrapper width={44} height={24} color={COLOR_DEFAULT}>
+                    <RbaIconWrapper width={44} height={24} color={COLOR_DEFAULT}>
                         <LinkIcon />
-                    </IconWrapper>
+                    </RbaIconWrapper>
                 </a>
             </Link>
 

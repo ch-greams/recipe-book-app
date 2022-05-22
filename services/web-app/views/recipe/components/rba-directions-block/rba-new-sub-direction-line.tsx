@@ -4,6 +4,7 @@ import * as constants from "@cypress/constants";
 
 import { COLOR_WHITE } from "@common/colors";
 import Utils from "@common/utils";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -11,7 +12,6 @@ import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import styles from "./rba-directions-block.module.scss";
 
@@ -59,13 +59,13 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
                 className={styles.subDirectionLineButton}
                 onClick={() => createSubDirection(currentDirectionPart)}
             >
-                <IconWrapper
+                <RbaIconWrapper
                     isFullWidth={true}
                     width={24} height={24} color={COLOR_WHITE}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />
-                </IconWrapper>
+                </RbaIconWrapper>
             </div>
 
             <div className={styles.subDirectionInfoLine}>

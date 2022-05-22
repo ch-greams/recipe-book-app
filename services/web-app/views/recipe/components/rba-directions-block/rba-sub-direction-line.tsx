@@ -5,12 +5,12 @@ import * as constants from "@cypress/constants";
 import { COLOR_WHITE } from "@common/colors";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import styles from "./rba-directions-block.module.scss";
 
@@ -43,9 +43,9 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
-            </IconWrapper>
+            </RbaIconWrapper>
         </div>
     );
 

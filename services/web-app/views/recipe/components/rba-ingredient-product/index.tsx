@@ -7,12 +7,12 @@ import { COLOR_WHITE } from "@common/colors";
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 import LinkIcon from "@icons/link-sharp.svg";
 
 import styles from "./rba-ingredient-product.module.scss";
@@ -47,9 +47,9 @@ const RbaIngredientProduct: React.FC<Props> = ({
             className={styles.ingredientProductButtonLeft}
             onClick={() => dispatch(actions.removeIngredientProduct(parentId, ingredientProduct.product_id))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
-            </IconWrapper>
+            </RbaIconWrapper>
         </div>
     );
 
@@ -115,9 +115,9 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
             <Link href={Utils.getItemPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButtonRight}>
-                    <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+                    <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                         <LinkIcon />
-                    </IconWrapper>
+                    </RbaIconWrapper>
                 </a>
             </Link>
         </div>

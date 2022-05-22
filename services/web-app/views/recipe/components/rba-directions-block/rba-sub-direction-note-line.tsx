@@ -3,13 +3,13 @@ import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { COLOR_WHITE } from "@common/colors";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionComment } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
 import InfoBlockIcon from "@icons/alert-circle-sharp.svg";
 import BulbIcon from "@icons/bulb-sharp.svg";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 import WarningIcon from "@icons/warning-sharp.svg";
 
 import styles from "./rba-directions-block.module.scss";
@@ -48,9 +48,9 @@ const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionI
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
-            </IconWrapper>
+            </RbaIconWrapper>
         </div>
     );
 
@@ -83,9 +83,9 @@ const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionI
 
             <div className={styles.subDirectionNoteInfoLine}>
 
-                <IconWrapper width={22} height={22} color={COLOR_WHITE}>
+                <RbaIconWrapper width={22} height={22} color={COLOR_WHITE}>
                     {getSubDirectionNoteLineIcon(step.type)}
-                </IconWrapper>
+                </RbaIconWrapper>
 
                 {( isReadOnly ? noteText : noteInput )}
 
