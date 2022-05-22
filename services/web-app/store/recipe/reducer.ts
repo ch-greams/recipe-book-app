@@ -1,7 +1,6 @@
-import type { NutritionFactType } from "@common/nutritionFacts";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
-import Utils, { DecimalPlaces } from "@common/utils";
+import Utils from "@common/utils";
 import type { AppState } from "@store";
 
 import * as types from "./types";
@@ -154,39 +153,6 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
         steps: direction.steps.map((step) => convertDirectionPart(step, ingredients)),
     }));
 }
-
-function getRecipeNutritionFacts(ingredients: typings.Ingredient[]): Dictionary<NutritionFactType, number> {
-
-    const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
-        .map((ingredient) => {
-
-            const ingredientProduct = Utils.unwrap(
-                ingredient.products[ingredient.product_id],
-                `ingredient.products["${ingredient.product_id}"]`,
-            );
-
-            const nutritionFacts = ingredientProduct.nutrition_facts;
-            const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
-
-            return Utils.getObjectKeys(nutritionFacts)
-                .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
-
-                    const nutritionFactValue = nutritionFacts[nutritionFactType];
-
-                    return {
-                        ...acc,
-                        [nutritionFactType]: (
-                            Utils.isSome(nutritionFactValue)
-                                ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
-                                : null
-                        ),
-                    };
-                }, {});
-        });
-
-    return Utils.dictionarySum(nutritionFactsById);
-}
-
 
 export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
 
@@ -761,7 +727,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
             };
         }
 
@@ -805,7 +771,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
             };
         }
 
@@ -866,7 +832,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
             };
         }
 
@@ -1016,7 +982,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
             };
         }
 
@@ -1129,7 +1095,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 description: recipeItem.description,
                 type: recipeItem.type,
 
-                nutritionFacts: getRecipeNutritionFacts(recipeItem.ingredients),
+                nutritionFacts: Utils.getRecipeNutritionFacts(recipeItem.ingredients),
 
                 customUnits: recipeItem.custom_units,
                 customUnitInputs: Utils.convertCustomUnitsIntoInputs(recipeItem.custom_units),

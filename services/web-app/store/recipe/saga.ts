@@ -3,7 +3,6 @@ import type { AllEffect, StrictEffect } from "redux-saga/effects";
 import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
 import type { Food, IngredientProduct, Recipe } from "@common/typings";
-import { WeightUnit } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
@@ -12,30 +11,6 @@ import * as actions from "./actions";
 import { extractState } from "./reducer";
 import * as types from "./types";
 
-
-// TODO: Clean up
-const getIngredientProductFromFood = (food: Food): IngredientProduct => {
-    return {
-        product_id: food.id,
-        product_type: ProductType.Food,
-        name: food.name,
-        amount: 100,
-        unit: WeightUnit.g,
-        nutrition_facts: food.nutrition_facts,
-    };
-};
-
-// TODO: Clean up
-const getIngredientProductFromRecipe = (recipe: Recipe): IngredientProduct => {
-    return {
-        product_id: recipe.id,
-        product_type: ProductType.Recipe,
-        name: recipe.name,
-        amount: 100,
-        unit: WeightUnit.g,
-        nutrition_facts: {},
-    };
-};
 
 function* fetchRecipeItem(action: types.RecipeItemFetchRequestAction): Generator<StrictEffect, void, unknown> {
 
@@ -93,11 +68,11 @@ function* addIngredient(action: types.AddIngredientRequestAction): Generator<Str
 
         if (product.product_type === ProductType.Food) {
             const foodItem = (yield call(FoodApi.getFoodItem, product.id)) as Food;
-            ingredientProduct = getIngredientProductFromFood(foodItem);
+            ingredientProduct = Utils.convertFoodToIngredientProduct(foodItem);
         }
         else {
             const recipeItem = (yield call(RecipeApi.getRecipeItem, product.id)) as Recipe;
-            ingredientProduct = getIngredientProductFromRecipe(recipeItem);
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipeItem);
         }
 
         yield put(actions.addIngredientSuccess(ingredientProduct));
@@ -117,11 +92,11 @@ function* addIngredientProduct(action: types.AddIngredientProductRequestAction):
 
         if (product.product_type === ProductType.Food) {
             const foodItem = (yield call(FoodApi.getFoodItem, product.id)) as Food;
-            ingredientProduct = getIngredientProductFromFood(foodItem);
+            ingredientProduct = Utils.convertFoodToIngredientProduct(foodItem);
         }
         else {
             const recipeItem = (yield call(RecipeApi.getRecipeItem, product.id)) as Recipe;
-            ingredientProduct = getIngredientProductFromRecipe(recipeItem);
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipeItem);
         }
 
         yield put(actions.addIngredientProductSuccess(id, ingredientProduct));

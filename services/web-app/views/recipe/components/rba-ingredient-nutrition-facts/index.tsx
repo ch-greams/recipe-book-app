@@ -31,6 +31,24 @@ const getNutritionValueClass = (
     }
 };
 
+
+/**
+ * @returns If value nutrition value exist number will be returned, if not then it falls back to string constant
+ */
+const getNutritionValue = (
+    currentNutritionValue: Option<number>,
+    alternativeNutritionValue: Option<number>,
+    isAlternative: boolean,
+): string | number => {
+    const DEFAULT_VALUE: string = "-";
+
+    return (
+        isAlternative
+            ? ( Utils.isSome(alternativeNutritionValue) ? alternativeNutritionValue : DEFAULT_VALUE )
+            : ( Utils.isSome(currentNutritionValue) ? currentNutritionValue : DEFAULT_VALUE )
+    );
+};
+
 const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternativeNutritionFacts = {} }) => {
 
     const nutritionFactTypes = [
@@ -43,25 +61,36 @@ const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternat
     return (
         <div className={styles.ingredientNutritionFacts}>
 
-            {nutritionFactTypes.map( (type) => (
-                <div key={`nutritionFact_${type}`} className={styles.ingredientNutritionFact}>
-                    <div
-                        data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}
-                        className={[
-                            styles.ingredientNutritionFactAmount,
-                            getNutritionValueClass(nutritionFacts[type], alternativeNutritionFacts[type]),
-                        ].join(" ")}
-                    >
-                        {( Utils.objectIsNotEmpty(alternativeNutritionFacts) ? alternativeNutritionFacts[type] : nutritionFacts[type] )}
+            {nutritionFactTypes.map( (type) => {
+
+                const currentNutritionValue = nutritionFacts[type];
+                const alternativeNutritionValue = alternativeNutritionFacts[type];
+
+                const nutritionValue = getNutritionValue(
+                    currentNutritionValue,
+                    alternativeNutritionValue,
+                    Utils.objectIsNotEmpty(alternativeNutritionFacts),
+                );
+
+                const nutritionValueClass = getNutritionValueClass(currentNutritionValue, alternativeNutritionValue);
+
+                return (
+                    <div key={`nutritionFact_${type}`} className={styles.ingredientNutritionFact}>
+                        <div
+                            data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}
+                            className={[ styles.ingredientNutritionFactAmount, nutritionValueClass ].join(" ")}
+                        >
+                            {nutritionValue}
+                        </div>
+                        <div
+                            data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}
+                            className={styles.ingredientNutritionFactType}
+                        >
+                            {type.toUpperCase()}
+                        </div>
                     </div>
-                    <div
-                        data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}
-                        className={styles.ingredientNutritionFactType}
-                    >
-                        {type.toUpperCase()}
-                    </div>
-                </div>
-            ))}
+                );
+            })}
         </div>
     );
 };
