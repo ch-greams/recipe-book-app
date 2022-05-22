@@ -85,12 +85,12 @@ function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngr
 
 function getIngredientProduct(ingredient_id: number, ingredients: typings.Ingredient[]): typings.IngredientProduct {
 
-    const ingredient = Utils.unwrapForced(
+    const ingredient = Utils.unwrap(
         ingredients.find((i) => i.id === ingredient_id),
         "ingredients.find((i) => i.id === ingredient_id)",
     );
 
-    return Utils.unwrapForced(
+    return Utils.unwrap(
         ingredient.products[ingredient.product_id],
         "ingredient.products[ingredient.product_id]",
     );
@@ -105,10 +105,10 @@ function convertDirectionPart(
 
         const MAX_INGREDIENT_PERCENT = 1;
 
-        const ingredientId = Utils.unwrapForced(directionPart.ingredient_id, "directionPart.ingredient_id");
+        const ingredientId = Utils.unwrap(directionPart.ingredient_id, "directionPart.ingredient_id");
         const product = getIngredientProduct(ingredientId, ingredients);
 
-        const ingredientAmount = product.amount * Utils.unwrap(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
+        const ingredientAmount = product.amount * Utils.unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
 
         return {
             stepNumber: directionPart.step_number,
@@ -128,7 +128,7 @@ function convertDirectionPart(
         return {
             stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
-            commentText: Utils.unwrap(directionPart.comment_text, directionPart.direction_part_type),
+            commentText: Utils.unwrapOr(directionPart.comment_text, directionPart.direction_part_type),
         };
     }
 }
@@ -160,7 +160,7 @@ function getRecipeNutritionFacts(ingredients: typings.Ingredient[]): Dictionary<
     const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
         .map((ingredient) => {
 
-            const ingredientProduct = Utils.unwrapForced(
+            const ingredientProduct = Utils.unwrap(
                 ingredient.products[ingredient.product_id],
                 `ingredient.products["${ingredient.product_id}"]`,
             );
@@ -457,12 +457,12 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { directionIndex, ingredientId } = action.payload;
 
-            const ingredient = Utils.unwrapForced(
+            const ingredient = Utils.unwrap(
                 state.ingredients.find(_ingredient => _ingredient.id === ingredientId),
                 `Ingredient with id = ${ingredientId} is not found`,
             );
 
-            const ingredientProduct = Utils.unwrapForced(
+            const ingredientProduct = Utils.unwrap(
                 ingredient.products[ingredient.product_id],
                 `IngredientProduct with id = ${ingredient.product_id} is not found`,
             );
@@ -843,7 +843,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const ingredients = state.ingredients.map((ingredient) => {
 
                 if (ingredient.id === id) {
-                    const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
+                    const product = Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
                     const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
 
                     return {
@@ -879,7 +879,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ingredients: state.ingredients.map((ingredient) => {
                     if (ingredient.id === id) {
 
-                        const product = Utils.unwrapForced(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
+                        const product = Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
 
                         return {
                             ...ingredient,
@@ -906,7 +906,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ingredients: state.ingredients.map((ingredient) => {
 
                     if (ingredient.id === parentId) {
-                        const product = Utils.unwrapForced(ingredient.products[id], `ingredient.products[${id}]`);
+                        const product = Utils.unwrap(ingredient.products[id], `ingredient.products[${id}]`);
                         const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
 
                         return {
@@ -937,7 +937,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ingredients: state.ingredients.map((ingredient) => {
                     if (ingredient.id === parentId) {
 
-                        const product = Utils.unwrapForced(ingredient.products[id], `ingredient.products[${id}]`);
+                        const product = Utils.unwrap(ingredient.products[id], `ingredient.products[${id}]`);
 
                         return {
                             ...ingredient,
@@ -966,7 +966,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ...ingredient,
                             alternativeNutritionFacts: (
                                 isSelected
-                                    ? Utils.unwrapForced(
+                                    ? Utils.unwrap(
                                         ingredient.products[id],
                                         `ingredient.products["${id}"]`,
                                     ).nutrition_facts

@@ -59,7 +59,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                 {(
                     ingredient.isOpen && (
                         <RbaIngredientNutritionFacts
-                            nutritionFacts={Utils.unwrapForced(
+                            nutritionFacts={Utils.unwrap(
                                 ingredient.products[ingredient.product_id],
                                 `ingredient.products["${ingredient.product_id}"]`,
                             ).nutrition_facts}

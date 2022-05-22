@@ -76,7 +76,7 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: Utils.unwrapForced(
+                            label: Utils.unwrap(
                                 ingredient.products[ingredient.product_id],
                                 `ingredient.products["${ingredient.product_id}"]`,
                             ).name.toUpperCase(),

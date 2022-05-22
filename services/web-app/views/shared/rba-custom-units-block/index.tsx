@@ -26,9 +26,9 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({
     updateCustomUnit: _updateCustomUnit,
 }) => {
 
-    const addCustomUnit = Utils.unwrapForced(_addCustomUnit, "addCustomUnit");
-    const removeCustomUnit = Utils.unwrapForced(_removeCustomUnit, "removeCustomUnit");
-    const updateCustomUnit = Utils.unwrapForced(_updateCustomUnit, "updateCustomUnit");
+    const addCustomUnit = Utils.unwrap(_addCustomUnit, "addCustomUnit");
+    const removeCustomUnit = Utils.unwrap(_removeCustomUnit, "removeCustomUnit");
+    const updateCustomUnit = Utils.unwrap(_updateCustomUnit, "updateCustomUnit");
 
     const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });

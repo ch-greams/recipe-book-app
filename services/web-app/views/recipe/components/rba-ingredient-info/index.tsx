@@ -33,7 +33,7 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
     const removeIngredient = (id: number): void => { dispatch(actions.removeIngredient(id)); };
     const toggleIngredientMark = (id: number): void => { dispatch(actions.toggleIngredientMark(id)); };
 
-    const ingredientProduct: RecipeIngredientProduct = Utils.unwrap(
+    const ingredientProduct: RecipeIngredientProduct = Utils.unwrapOr(
         ingredient.products[ingredient.product_id], DEFAULT_INGREDIENT_PRODUCT,
     );
 
@@ -80,8 +80,8 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
     );
 
     const linkPath = Utils.getItemPath(
-        Utils.unwrap(ingredient.products[ingredient.product_id]?.product_type, ProductType.Food),
-        ingredient.product_id,
+        Utils.unwrapOr(ingredientProduct.product_type, ProductType.Food),
+        ingredientProduct.product_id,
     );
 
     return (

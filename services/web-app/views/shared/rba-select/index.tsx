@@ -39,7 +39,7 @@ interface Props {
 
 
 export const getOptionLabel = (option: SelectOption): string => {
-    return Utils.unwrap(option.label, String(option.value));
+    return Utils.unwrapOr(option.label, String(option.value));
 };
 
 

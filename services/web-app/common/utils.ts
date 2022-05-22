@@ -135,11 +135,11 @@ export default class Utils {
         return value.trim().length === Utils.ZERO;
     }
 
-    public static unwrap<T>(value: Option<T>, defaultValue: T): T {
+    public static unwrapOr<T>(value: Option<T>, defaultValue: T): T {
         return this.isSome(value) ? value : defaultValue;
     }
 
-    public static unwrapForced<T>(value: Option<T>, name: string): T {
+    public static unwrap<T>(value: Option<T>, name: string): T {
         if (!this.isSome(value)) {
             throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
         }
@@ -213,7 +213,7 @@ export default class Utils {
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
-                    return Utils.isSome(value) ? Utils.unwrap(sum, Utils.ZERO) + value : null;
+                    return Utils.isSome(value) ? Utils.unwrapOr(sum, Utils.ZERO) + value : null;
                 },
                 null,
             );
@@ -240,7 +240,7 @@ export default class Utils {
         const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
             .reduce((acc, cur) => ({
                 ...acc,
-                [cur]: Utils.roundToDecimal(Utils.unwrap(nutritionFacts[cur], Utils.ZERO) * multiplier, DecimalPlaces.Two),
+                [cur]: Utils.roundToDecimal(Utils.unwrapOr(nutritionFacts[cur], Utils.ZERO) * multiplier, DecimalPlaces.Two),
             }), {});
 
         return updatedNutritionFacts;
