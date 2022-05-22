@@ -56,10 +56,6 @@ export default class Utils {
     public static readonly TSP_TO_ML: number = 4.92892;
     public static readonly OZ_TO_G: number = 28.3495;
 
-    public static readonly COLOR_DEFAULT: string = "#00bfa5";
-    public static readonly COLOR_DEFAULT_DARK: string = "#008e76";
-    public static readonly COLOR_ALTERNATIVE: string = "#ff6e40";
-    public static readonly COLOR_WHITE: string = "#fff";
 
     public static convertDensity(
         value: number,

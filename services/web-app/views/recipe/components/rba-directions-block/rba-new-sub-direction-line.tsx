@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
+import { COLOR_WHITE } from "@common/colors";
 import Utils from "@common/utils";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
@@ -60,7 +61,7 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
             >
                 <IconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={Utils.COLOR_WHITE}
+                    width={24} height={24} color={COLOR_WHITE}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />

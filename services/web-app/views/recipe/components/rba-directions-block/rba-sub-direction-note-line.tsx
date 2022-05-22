@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import Utils from "@common/utils";
+import { COLOR_WHITE } from "@common/colors";
 import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionComment } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
@@ -48,7 +48,7 @@ const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionI
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -83,7 +83,7 @@ const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionI
 
             <div className={styles.subDirectionNoteInfoLine}>
 
-                <IconWrapper width={22} height={22} color={Utils.COLOR_WHITE}>
+                <IconWrapper width={22} height={22} color={COLOR_WHITE}>
                     {getSubDirectionNoteLineIcon(step.type)}
                 </IconWrapper>
 

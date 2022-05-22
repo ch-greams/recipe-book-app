@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import Utils from "@common/utils";
+import { COLOR_DEFAULT } from "@common/colors";
 import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
@@ -60,7 +60,7 @@ const RbaDirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction,
             className={styles.directionLineButton}
             onClick={() => removeDirection(index)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>

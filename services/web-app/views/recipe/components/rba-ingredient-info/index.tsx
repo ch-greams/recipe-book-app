@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
+import { COLOR_DEFAULT } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
@@ -73,7 +74,7 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
             className={styles.ingredientButton}
             onClick={() => removeIngredient(ingredient.id)}
         >
-            <IconWrapper width={44} height={24} color={Utils.COLOR_DEFAULT}>
+            <IconWrapper width={44} height={24} color={COLOR_DEFAULT}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -124,7 +125,7 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
 
             <Link href={linkPath}>
                 <a className={styles.ingredientButton}>
-                    <IconWrapper width={44} height={24} color={Utils.COLOR_DEFAULT}>
+                    <IconWrapper width={44} height={24} color={COLOR_DEFAULT}>
                         <LinkIcon />
                     </IconWrapper>
                 </a>

@@ -2,9 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
+import { COLOR_WHITE } from "@common/colors";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
-import Utils from "@common/utils";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
@@ -43,7 +43,7 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>

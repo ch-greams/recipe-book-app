@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
+import { COLOR_WHITE } from "@common/colors";
 import type { VolumeUnit } from "@common/units";
 import { Units, WeightUnit } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
@@ -46,7 +47,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
             className={styles.ingredientProductButtonLeft}
             onClick={() => dispatch(actions.removeIngredientProduct(parentId, ingredientProduct.product_id))}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
+            <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
             </IconWrapper>
         </div>
@@ -114,7 +115,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
             <Link href={Utils.getItemPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButtonRight}>
-                    <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_WHITE}>
+                    <IconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                         <LinkIcon />
                     </IconWrapper>
                 </a>
