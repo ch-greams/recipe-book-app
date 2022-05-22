@@ -1,86 +1,138 @@
 @import "@styles/variables.scss";
 
-
-.ingredientInfoLine {
+.ingredient {
 
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    gap: 4px;
 
-    padding: 10px 12px 10px 20px;
+    .ingredientCheckbox {
 
-    font-family: $font-default;
-    font-size: $font-size-16;
-    font-weight: $font-weight-500;
+        width: 22px;
+        min-width: 22px;
+        height: 22px;
 
-    color: $color-default;
+        margin: 10px;
 
-    background-color: $color-white;
+        cursor: pointer;
 
-    border-color: $color-grey-light;
-    border-style: solid;
-    border-width: 1px;
+        background-color: $color-default-dark;
 
-    box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 2px;
 
-    &.newIngredient {
+        .ingredientCheckboxMark {
 
-        font-weight: $font-weight-700;
+            width: 16px;
+            height: 16px;
 
-        color: rgba($color: $color-default, $alpha: 0.25);
+            margin: 3px;
+
+            background-color: $color-white;
+        }
     }
 
-    .ingredientInfoLineName {
+    .ingredientInfo {
 
-        flex-grow: 2;
+        display: flex;
+        justify-content: space-between;
+
+        width: 100%;
+
+        padding: 10px 12px 10px 20px;
+
+        font-family: $font-default;
+        font-size: $font-size-16;
+        font-weight: $font-weight-500;
+
+        color: $color-default;
+
+        background-color: $color-white;
+
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
+
+        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+
+        .ingredientInfoName {
+
+            flex-grow: 2;
+
+            line-height: 24px;
+
+            cursor: pointer;
+        }
+
+        .ingredientInfoMeasure {
+
+            display: flex;
+            flex-direction: row;
+
+            .ingredientInfoAmountText {
+
+                width: 80px;
+
+                padding-right: 4px;
+                margin-right: 4px;
+
+                line-height: 22px;
+
+                color: $color-grey-dark;
+
+                text-align: right;
+
+                border-color: $color-grey-light;
+                border-style: solid;
+                border-width: 1px;
+            }
+
+            .ingredientInfoAmountInput {
+
+                width: 80px;
+
+                padding-right: 4px;
+                margin-right: 4px;
+
+                font-family: $font-default;
+                font-size: $font-size-16;
+                font-weight: $font-weight-500;
+
+                line-height: 20px;
+
+                color: $color-default;
+
+                text-align: right;
+
+                border-color: $color-default;
+                border-style: solid;
+                border-width: 1px;
+            }
+        }
+    }
+
+    .ingredientButton {
+
+        width: 44px;
+        height: 24px;
+
+        padding: 10px 0;
 
         line-height: 24px;
 
+        color: $color-default;
+
+        text-align: center;
+
         cursor: pointer;
-    }
 
-    .ingredientInfoLineMeasure {
+        background-color: $color-white;
 
-        display: flex;
-        flex-direction: row;
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
 
-        .ingredientInfoLineAmountText {
-
-            width: 80px;
-
-            padding-right: 4px;
-            margin-right: 4px;
-
-            line-height: 22px;
-
-            color: $color-grey-dark;
-
-            text-align: right;
-
-            border-color: $color-grey-light;
-            border-style: solid;
-            border-width: 1px;
-        }
-
-        .ingredientInfoLineAmountInput {
-
-            width: 80px;
-
-            padding-right: 4px;
-            margin-right: 4px;
-
-            font-family: $font-default;
-            font-size: $font-size-16;
-            font-weight: $font-weight-500;
-
-            line-height: 20px;
-
-            color: $color-default;
-
-            text-align: right;
-
-            border-color: $color-default;
-            border-style: solid;
-            border-width: 1px;
-        }
+        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
     }
 }

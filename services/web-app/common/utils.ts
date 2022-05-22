@@ -268,11 +268,11 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath, id: number): string {
+    public static getItemPath(route: RoutePath | ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: RoutePath): string {
+    public static getNewItemPath(route: RoutePath | ProductType): string {
         return `/${route}/new?edit=true`;
     }
 

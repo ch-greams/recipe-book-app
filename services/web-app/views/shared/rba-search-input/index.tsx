@@ -16,22 +16,47 @@ export enum SearchInputWidthSize {
     Full = "widthSize_Full",
 }
 
+export enum SearchInputHeightSize {
+    Small = "heightSize_Small",
+    Medium = "heightSize_Medium",
+}
+
+export type OnSelectFunc = (product: ProductShort) => void;
+
 interface Props {
     width: SearchInputWidthSize;
+    height?: SearchInputHeightSize;
     isLoading: boolean;
     value: string;
     items: ProductShort[];
     onChange: (value: string) => void;
+    onSelect?: OnSelectFunc;
 }
 
-const RbaSearchInput: React.FC<Props> = ({ width, isLoading = false, value = "", items = [], onChange }) => {
+const getOnSelect = (onSelect: OnSelectFunc, searchInputClear: () => void): OnSelectFunc => {
+    return (productId) => {
+        onSelect(productId);
+        searchInputClear();
+    };
+};
+
+const RbaSearchInput: React.FC<Props> = ({
+    width,
+    height = SearchInputHeightSize.Medium,
+    isLoading = false,
+    value = "",
+    items = [],
+    onChange,
+    onSelect,
+}) => {
 
     const DEFAULT_DELAY = 700;
-    const { searchInput, searchInputHandler } = useDelayedSearchInput(onChange, value, DEFAULT_DELAY);
+    const { searchInput, searchInputHandler, searchInputClear } = useDelayedSearchInput(onChange, value, DEFAULT_DELAY);
 
     const classNames = Utils.classNames({
         [styles.search]: true,
         [styles[width]]: true,
+        [styles[height]]: true,
     });
 
     const searchIcon = (
@@ -62,7 +87,7 @@ const RbaSearchInput: React.FC<Props> = ({ width, isLoading = false, value = "",
 
             <div className={styles.searchInput}>
 
-                {( isLoading ? loadingIcon : searchIcon )}
+                {( ( !Utils.isEmptyString(searchInput) && isLoading ) ? loadingIcon : searchIcon )}
 
                 <input
                     className={styles.input}
@@ -75,7 +100,13 @@ const RbaSearchInput: React.FC<Props> = ({ width, isLoading = false, value = "",
 
             {( !Utils.isEmptyString(searchInput) && (
                 <div className={styles.searchList}>
-                    {items.map((product) => ( <RbaSearchInputOption key={product.id} product={product} /> ))}
+                    {items.map((product) => (
+                        <RbaSearchInputOption
+                            key={product.id}
+                            product={product}
+                            onSelect={Utils.isSome(onSelect) ? getOnSelect(onSelect, searchInputClear) : null}
+                        />
+                    ))}
                 </div>
             ) )}
 

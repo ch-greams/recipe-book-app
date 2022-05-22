@@ -1,18 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import Utils, { ProductType, RoutePath } from "@common/utils";
+import Utils from "@common/utils";
 import RbaIngredientInfo from "@views/recipe/components/rba-ingredient-info";
 import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
-import * as actions from "@store/recipe/actions";
+import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
+import { addIngredientProductRequest } from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
+import { searchClear, searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
-import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
-import LinkIcon from "@icons/link-sharp.svg";
-import SearchIcon from "@icons/search-sharp.svg";
 
 import RbaIngredientProduct from "../rba-ingredient-product";
 
@@ -24,7 +21,6 @@ interface Props {
     search: SearchPageStore;
     isReadOnly: boolean;
     ingredient?: RecipeIngredient;
-    isNew?: boolean;
 }
 
 const DEFAULT_INGREDIENT: RecipeIngredient = {
@@ -37,83 +33,28 @@ const DEFAULT_INGREDIENT: RecipeIngredient = {
 };
 
 
-const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAULT_INGREDIENT, isNew = false }) => {
+const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAULT_INGREDIENT }) => {
 
     const dispatch = useDispatch();
 
-    const removeIngredient = (id: number): void => { dispatch(actions.removeIngredient(id)); };
-    const toggleIngredientMark = (id: number): void => { dispatch(actions.toggleIngredientMark(id)); };
-
-    // FIXME: Replace functionality
-    const addIngredient = (): void => {
-        const item = search.products[Math.floor(Math.random() * search.products.length)];
-        console.log("PLEASE FIX ME:", item);
-        // dispatch(actions.addIngredient(item));
-    };
-
-    const checkbox = (
-        <div
-            className={styles.lineCheckbox}
-            onClick={() => toggleIngredientMark(ingredient.id)}
-        >
-            {( ingredient.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
-        </div>
-    );
-
-    const removeButton = (
-        <div
-            data-cy={constants.CY_INGREDIENT_LINE_REMOVE_BUTTON}
-            className={styles.ingredientButton}
-            onClick={() => removeIngredient(ingredient.id)}
-        >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
-                <RemoveIcon />
-            </IconWrapper>
-        </div>
-    );
-
-    const searchButton = (
-        <div
-            data-cy={constants.CY_NEW_INGREDIENT_SEARCH_BUTTON}
-            className={styles.ingredientButton}
-            onClick={addIngredient}
-        >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
-                <SearchIcon />
-            </IconWrapper>
-        </div>
-    );
-
-    const linkPath = Utils.getItemPath(
-        (
-            ingredient.products[ingredient.product_id]?.product_type === ProductType.Food
-                ? RoutePath.Food
-                : RoutePath.Recipe
-        ),
-        ingredient.product_id,
-    );
-
     const showIngredientProducts: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
-    const showNewIngredientProduct: boolean = ingredient.isOpen && !isNew && !isReadOnly;
+    const showNewIngredientProduct: boolean = ingredient.isOpen && !isReadOnly;
+
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
     return (
 
         <div
-            data-cy={( isNew ? constants.CY_NEW_INGREDIENT : constants.CY_INGREDIENT_LINE )}
+            data-cy={constants.CY_INGREDIENT}
             key={`ingredient_${ingredient.id}`}
             className={styles.ingredient}
         >
-
-            {( isReadOnly ? checkbox : ( isNew ? searchButton : removeButton ) )}
+            <RbaIngredientInfo
+                isReadOnly={isReadOnly}
+                ingredient={ingredient}
+            />
 
             <div className={styles.ingredientInfoLines}>
-
-                <RbaIngredientInfo
-                    isReadOnly={isReadOnly}
-                    ingredient={ingredient}
-                    isNew={isNew}
-                />
 
                 {(
                     ingredient.isOpen && (
@@ -134,7 +75,6 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                     Utils.getObjectValues(ingredient.products).map((product) => (
                         <RbaIngredientProduct
                             key={`ingredient_product_${product.product_id}`}
-                            search={search}
                             isReadOnly={isReadOnly}
                             parentId={ingredient.id}
                             ingredientProduct={product}
@@ -143,28 +83,21 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                 )}
 
                 {( showNewIngredientProduct && (
-                    <RbaIngredientProduct
-                        key={"ingredient_product_new"}
-                        search={search}
-                        isReadOnly={isReadOnly}
-                        parentId={ingredient.id}
-                        isNew={true}
+                    <RbaSearchInput
+                        width={SearchInputWidthSize.Full}
+                        height={SearchInputHeightSize.Small}
+                        isLoading={!search.isLoaded}
+                        value={search.searchInput}
+                        items={search.products}
+                        onChange={(value) => { dispatch(searchProducts(value)); }}
+                        onSelect={(product) => {
+                            dispatch(addIngredientProductRequest(ingredient.id, product));
+                            dispatch(searchClear());
+                        }}
                     />
                 ) )}
 
             </div>
-
-            <Link href={linkPath}>
-                <a
-                    className={styles.ingredientButton}
-                    style={( isNew ? { opacity: "0.5" } : undefined )}
-                >
-                    <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
-                        <LinkIcon />
-                    </IconWrapper>
-                </a>
-            </Link>
-
         </div>
     );
 };

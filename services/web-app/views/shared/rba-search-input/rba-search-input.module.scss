@@ -14,8 +14,6 @@
         display: flex;
         align-items: center;
 
-        padding: 8px 0;
-
         background-color: $color-default-dark;
         border: 1px solid $color-white;
 
@@ -62,6 +60,14 @@
         z-index: $z-index-default-1;
 
         width: 100%;
+
+        button.searchOption {
+            width: 100%;
+
+            font-family: $font-default;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
+        }
 
         .searchOption {
 
@@ -116,6 +122,34 @@
 
     &.widthSize_Full {
         width: 100%;
+    }
+
+    // -------------------------------------------------------------------------
+    // HEIGHT
+    // -------------------------------------------------------------------------
+
+    &.heightSize_Small {
+        .searchInput {
+            padding: 4px 0;
+        }
+
+        .searchList {
+            .searchOption {
+                padding: 4px 16px;
+            }
+        }
+    }
+
+    &.heightSize_Medium {
+        .searchInput {
+            padding: 8px 0;
+        }
+
+        .searchList {
+            .searchOption {
+                padding: 8px 16px;
+            }
+        }
     }
 }
 

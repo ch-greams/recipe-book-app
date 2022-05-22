@@ -7,6 +7,7 @@ import Utils from "@common/utils";
 interface DelayedSearchInputHook {
     searchInput: string;
     searchInputHandler: InputChangeCallback;
+    searchInputClear: () => void;
 }
 
 export function useDelayedSearchInput(onChange: (value: string) => void, value: string, delay: number): DelayedSearchInputHook {
@@ -40,6 +41,9 @@ export function useDelayedSearchInput(onChange: (value: string) => void, value: 
                 setInvokeTime(timeNow + delay);
                 setTimer(setTimeout(delayedRequest, delay));
             }
+        },
+        searchInputClear: () => {
+            setSearchInput("");
         },
     };
 }
