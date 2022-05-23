@@ -28,6 +28,7 @@ export type OnSelectFunc = (product: ProductShort) => void;
 interface Props {
     width: SearchInputWidthSize;
     height?: SearchInputHeightSize;
+    placeholder?: string;
     isLoading: boolean;
     value: string;
     items: ProductShort[];
@@ -45,6 +46,7 @@ const getOnSelect = (onSelect: OnSelectFunc, searchInputClear: () => void): OnSe
 const RbaSearchInput: React.FC<Props> = ({
     width,
     height = SearchInputHeightSize.Medium,
+    placeholder: plaseholder = "Search...",
     isLoading = false,
     value = "",
     items = [],
@@ -95,7 +97,7 @@ const RbaSearchInput: React.FC<Props> = ({
                     data-cy={constants.CY_SEARCH_INPUT}
                     className={styles.input}
                     type={"text"}
-                    placeholder={"Search..."}
+                    placeholder={plaseholder}
                     value={searchInput}
                     onChange={searchInputHandler}
                 />

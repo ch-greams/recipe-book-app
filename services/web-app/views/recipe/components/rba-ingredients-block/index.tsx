@@ -37,6 +37,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly 
             {( !isReadOnly && (
                 <RbaSearchInput
                     width={SearchInputWidthSize.Full}
+                    placeholder={"Add an ingredient..."}
                     isLoading={!search.isLoaded}
                     value={search.searchInput}
                     items={search.products}

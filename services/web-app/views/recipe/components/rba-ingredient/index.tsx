@@ -124,6 +124,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                     <RbaSearchInput
                         width={SearchInputWidthSize.Full}
                         height={SearchInputHeightSize.Small}
+                        placeholder={"Add a substitute for this ingredient..."}
                         isLoading={!search.isLoaded}
                         value={search.searchInput}
                         items={search.products}
