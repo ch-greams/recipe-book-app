@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import { COLOR_WHITE } from "@common/colors";
+import { Color } from "@common/colors";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
@@ -43,7 +43,7 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
             className={styles.subDirectionLineButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
-            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={Color.White}>
                 <RemoveIcon />
             </RbaIconWrapper>
         </div>

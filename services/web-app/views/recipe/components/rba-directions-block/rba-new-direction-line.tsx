@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import { COLOR_DEFAULT } from "@common/colors";
+import { Color } from "@common/colors";
 import { DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
@@ -99,7 +99,7 @@ const RbaNewDirectionLine: React.FC<Props> = ({ direction }) => {
             >
                 <RbaIconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={COLOR_DEFAULT}
+                    width={24} height={24} color={Color.Default}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />

@@ -1,5 +1,7 @@
 
-export const COLOR_DEFAULT: string = "#00bfa5";
-export const COLOR_DEFAULT_DARK: string = "#008e76";
-export const COLOR_ALTERNATIVE: string = "#ff6e40";
-export const COLOR_WHITE: string = "#fff";
+export enum Color {
+    Default = "#00bfa5",
+    DefaultDark = "#008e76",
+    Alternative = "#ff6e40",
+    White = "#fff",
+}

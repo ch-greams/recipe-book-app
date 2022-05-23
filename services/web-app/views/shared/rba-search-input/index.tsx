@@ -1,6 +1,6 @@
 import React from "react";
 
-import { COLOR_WHITE } from "@common/colors";
+import { Color } from "@common/colors";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
 import SearchIcon from "@icons/search-sharp.svg";
@@ -65,8 +65,8 @@ const RbaSearchInput: React.FC<Props> = ({
             <SearchIcon
                 width={"28"}
                 height={"28"}
-                fill={COLOR_WHITE}
-                stroke={COLOR_WHITE}
+                fill={Color.White}
+                stroke={Color.White}
             />
         </div>
 
@@ -77,8 +77,8 @@ const RbaSearchInput: React.FC<Props> = ({
             <LoadingIcon
                 width={"28"}
                 height={"28"}
-                fill={COLOR_WHITE}
-                stroke={COLOR_WHITE}
+                fill={Color.White}
+                stroke={Color.White}
             />
         </div>
     );

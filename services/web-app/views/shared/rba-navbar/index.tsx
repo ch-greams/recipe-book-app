@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { COLOR_WHITE } from "@common/colors";
+import { Color } from "@common/colors";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import type { AppState } from "@store";
 import { searchProducts } from "@store/search/actions";
@@ -52,7 +52,7 @@ const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
 
                 <Link href={"/user"}>
                     <div data-cy={constants.CY_NAVBAR_USER_ITEM} className={styles.navbarUser}>
-                        <PersonIcon width={"32"} height={"32"} fill={COLOR_WHITE} stroke={COLOR_WHITE} />
+                        <PersonIcon width={"32"} height={"32"} fill={Color.White} stroke={Color.White} />
                         <span className={styles.navbarUserName}>{username}</span>
                     </div>
                 </Link>

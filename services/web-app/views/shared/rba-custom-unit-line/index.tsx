@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { COLOR_DEFAULT } from "@common/colors";
+import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Units } from "@common/units";
@@ -40,7 +40,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
 
             <RbaIconWrapper
                 data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
-                isFullWidth={true} width={20} height={20} color={COLOR_DEFAULT}
+                isFullWidth={true} width={20} height={20} color={Color.Default}
                 style={(isNew ? undefined : { transform: "rotate(0.125turn)" })}
                 onClick={upsertCustomUnit}
             >

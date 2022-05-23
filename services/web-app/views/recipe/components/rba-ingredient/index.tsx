@@ -2,19 +2,16 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
-import RbaIngredientInfo from "@views/recipe/components/rba-ingredient-info";
 import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
-import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
 import { searchClear, searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
 
-import RbaIngredientProduct from "../rba-ingredient-product";
+import RbaIngredientProduct, { IngredientProductSize, IngredientProductTheme } from "../rba-ingredient-product";
 
 import styles from "./rba-ingredient.module.scss";
 
@@ -45,26 +42,9 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
 
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
-    // -------------------------------------------------------------------------
-
     const ingredientProduct: RecipeIngredientProduct = Utils.unwrap(
         ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`,
     );
-
-    const onClickIngredientInfo = (): void => { dispatch(actions.toggleIngredientOpen(ingredient.id)); };
-    const onClickMarkIngredientInfo = (): void => { dispatch(actions.toggleIngredientMark(ingredient.id)); };
-
-    const onClickRemoveIngredientInfo = (): void => {
-        dispatch(actions.removeIngredientProduct(ingredient.id, ingredient.product_id));
-    };
-    const onChangeAmountIngredientInfo: InputChangeCallback = (event) => {
-        dispatch(actions.updateIngredientProductAmount(ingredient.id, ingredient.product_id, event.target.value));
-    };
-    const onChangeUnitIngredientInfo: RbaSelectChangeCallback = (option) => {
-        dispatch(actions.updateIngredientProductUnit(
-            ingredient.id, ingredient.product_id, option.value as WeightUnit | VolumeUnit,
-        ));
-    };
 
     return (
 
@@ -73,15 +53,23 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
             key={`ingredient_${ingredient.id}`}
             className={styles.ingredient}
         >
-            <RbaIngredientInfo
+            <RbaIngredientProduct
+                theme={IngredientProductTheme.Primary}
+                size={IngredientProductSize.Default}
                 ingredientProduct={ingredientProduct}
                 isReadOnly={isReadOnly}
                 isMarked={ingredient.isMarked}
-                onClick={onClickIngredientInfo}
-                onClickRemove={onClickRemoveIngredientInfo}
-                onClickMark={onClickMarkIngredientInfo}
-                onChangeAmount={onChangeAmountIngredientInfo}
-                onChangeUnit={onChangeUnitIngredientInfo}
+                onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
+                onClickRemove={() => dispatch(actions.removeIngredientProduct(ingredient.id, ingredient.product_id))}
+                onClickMark={() => dispatch(actions.toggleIngredientMark(ingredient.id))}
+                onChangeAmount={(event) => {
+                    dispatch(actions.updateIngredientProductAmount(ingredient.id, ingredient.product_id, event.target.value));
+                }}
+                onChangeUnit={(option) => {
+                    dispatch(actions.updateIngredientProductUnit(
+                        ingredient.id, ingredient.product_id, option.value as WeightUnit | VolumeUnit,
+                    ));
+                }}
             />
 
             <div className={styles.ingredientInfoLines}>
@@ -99,44 +87,37 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
 
                 {(
                     showIngredientProducts &&
-                    Utils.getObjectValues(ingredient.products).map((product) => {
-
-                        const onClickIngredientProduct = (): void => {
-                            dispatch(actions.replaceIngredientWithAlternative(ingredient.id, product.product_id));
-                        };
-                        const onMouseEnterIngredientProduct = (): void => {
-                            dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, true));
-                        };
-                        const onMouseLeaveIngredientProduct = (): void => {
-                            dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, false));
-                        };
-
-                        const onClickRemoveIngredientProduct = (): void => {
-                            dispatch(actions.removeIngredientProduct(ingredient.id, product.product_id));
-                        };
-                        const onChangeAmountIngredientProduct: InputChangeCallback = (event) => {
-                            dispatch(actions.updateIngredientProductAmount(ingredient.id, product.product_id, event.target.value));
-                        };
-                        const onChangeUnitIngredientProduct: RbaSelectChangeCallback = (option) => {
-                            dispatch(actions.updateIngredientProductUnit(
-                                ingredient.id, product.product_id, option.value as WeightUnit | VolumeUnit,
-                            ));
-                        };
-
-                        return (
-                            <RbaIngredientProduct
-                                key={`ingredient_product_${product.product_id}`}
-                                isReadOnly={isReadOnly}
-                                ingredientProduct={product}
-                                onClick={onClickIngredientProduct}
-                                onClickRemove={onClickRemoveIngredientProduct}
-                                onMouseEnter={onMouseEnterIngredientProduct}
-                                onMouseLeave={onMouseLeaveIngredientProduct}
-                                onChangeAmount={onChangeAmountIngredientProduct}
-                                onChangeUnit={onChangeUnitIngredientProduct}
-                            />
-                        );
-                    })
+                    Utils.getObjectValues(ingredient.products).map((product) => (
+                        <RbaIngredientProduct
+                            key={`ingredient_product_${product.product_id}`}
+                            theme={IngredientProductTheme.Alternative}
+                            size={IngredientProductSize.Compact}
+                            isReadOnly={isReadOnly}
+                            ingredientProduct={product}
+                            onClick={() => {
+                                dispatch(actions.replaceIngredientWithAlternative(ingredient.id, product.product_id));
+                            }}
+                            onClickRemove={() => {
+                                dispatch(actions.removeIngredientProduct(ingredient.id, product.product_id));
+                            }}
+                            onMouseEnter={() => {
+                                dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, true));
+                            }}
+                            onMouseLeave={() => {
+                                dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, false));
+                            }}
+                            onChangeAmount={(event) => {
+                                dispatch(actions.updateIngredientProductAmount(
+                                    ingredient.id, product.product_id, event.target.value,
+                                ));
+                            }}
+                            onChangeUnit={(option) => {
+                                dispatch(actions.updateIngredientProductUnit(
+                                    ingredient.id, product.product_id, option.value as WeightUnit | VolumeUnit,
+                                ));
+                            }}
+                        />
+                    ))
                 )}
 
                 {( showNewIngredientProduct && (

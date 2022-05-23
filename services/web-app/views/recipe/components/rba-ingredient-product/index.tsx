@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { COLOR_WHITE } from "@common/colors";
+import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
-import { Units, WeightUnit } from "@common/units";
-import Utils, { ProductType } from "@common/utils";
+import { Units } from "@common/units";
+import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -16,7 +16,21 @@ import LinkIcon from "@icons/link-sharp.svg";
 import styles from "./rba-ingredient-product.module.scss";
 
 
+// NOTE: Values correspond to the class names
+export enum IngredientProductTheme {
+    Primary = "theme_Primary",
+    Alternative = "theme_Alternative",
+}
+
+export enum IngredientProductSize {
+    Compact = "size_Compact",
+    Default = "size_Default",
+}
+
+
 interface Props {
+    theme: IngredientProductTheme;
+    size: IngredientProductSize;
     isReadOnly: boolean;
     ingredientProduct: RecipeIngredientProduct;
     onClick: () => void;
@@ -25,21 +39,42 @@ interface Props {
     onMouseLeave?: () => void;
     onChangeAmount: InputChangeCallback;
     onChangeUnit: RbaSelectChangeCallback;
+    isMarked?: boolean;
+    onClickMark?: () => void;
 }
 
-// TODO: Remove, there shouldn't be a need for it
-export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
-    product_id: -1,
-    product_type: ProductType.Food,
-    name: "NEW INGREDIENT",
-    amount: 100,
-    amountInput: "100",
-    unit: WeightUnit.g,
-    nutrition_facts: {},
+
+const getCheckbox = (isMarked?: boolean, onClickMark?: Option<() => void>): Option<JSX.Element> => (
+    Utils.isSome(onClickMark)
+        ? (
+            <div className={styles.ingredientCheckbox} onClick={onClickMark}>
+                {( isMarked ? <div className={styles.ingredientCheckboxMark} /> : null )}
+            </div>
+        )
+        : null
+);
+
+const getSelectTheme = (theme: IngredientProductTheme): SelectTheme => {
+    switch (theme) {
+        case IngredientProductTheme.Primary:
+            return SelectTheme.Primary;
+        case IngredientProductTheme.Alternative:
+            return SelectTheme.Alternative;
+    }
 };
 
+const getIconColor = (theme: IngredientProductTheme): Color => {
+    switch (theme) {
+        case IngredientProductTheme.Primary:
+            return Color.Default;
+        case IngredientProductTheme.Alternative:
+            return Color.White;
+    }
+};
 
 const RbaIngredientProduct: React.FC<Props> = ({
+    theme,
+    size,
     isReadOnly,
     ingredientProduct,
     onClick,
@@ -48,15 +83,17 @@ const RbaIngredientProduct: React.FC<Props> = ({
     onMouseLeave,
     onChangeAmount,
     onChangeUnit,
+    isMarked,
+    onClickMark,
 }) => {
 
     const removeButton = (
         <div
             data-cy={constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}
-            className={styles.ingredientProductButtonLeft}
+            className={styles.ingredientProductButton}
             onClick={onClickRemove}
         >
-            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
                 <RemoveIcon />
             </RbaIconWrapper>
         </div>
@@ -81,9 +118,9 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
         <div
             data-cy={constants.CY_INGREDIENT_PRODUCT}
-            className={[ styles.ingredientProduct, styles.theme_Alternative ].join(" ")}
+            className={[ styles.ingredientProduct, styles[theme], styles[size] ].join(" ")}
         >
-            {( !isReadOnly && removeButton )}
+            {( isReadOnly ? getCheckbox(isMarked, onClickMark) : removeButton )}
 
             <div className={styles.ingredientProductInfo}>
                 {/* FIXME: Whole line should be clickable, but it shouldn't mess with amount and unit */}
@@ -102,7 +139,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                     {( isReadOnly ? amountText : amountInput )}
 
                     <RbaSelect
-                        theme={SelectTheme.Alternative}
+                        theme={getSelectTheme(theme)}
                         center={true}
                         width={SelectWidthSize.Medium}
                         height={SelectHeightSize.Medium}
@@ -114,8 +151,8 @@ const RbaIngredientProduct: React.FC<Props> = ({
             </div>
 
             <Link href={Utils.getItemPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
-                <a className={styles.ingredientProductButtonRight}>
-                    <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
+                <a className={styles.ingredientProductButton}>
+                    <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
                         <LinkIcon />
                     </RbaIconWrapper>
                 </a>
