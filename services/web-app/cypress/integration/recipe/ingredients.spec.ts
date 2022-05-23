@@ -10,6 +10,7 @@ describe("recipe_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
         });
@@ -191,6 +192,7 @@ describe("recipe_page", () => {
                 `${constants.CY_PRODUCT_API_PATH}?limit=10&user_id=1&filter=${NEW_PRODUCT_NAME_SHORT}`,
                 { fixture: "products_response.json" },
             );
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29?edit=true`);
         });
@@ -257,7 +259,7 @@ describe("recipe_page", () => {
                 .should("not.exist");
         });
 
-        it("can add ingredient_product options", () => {
+        it("can add ingredient_product", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 

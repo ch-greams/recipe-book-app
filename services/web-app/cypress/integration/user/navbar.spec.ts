@@ -8,11 +8,23 @@ describe("user", () => {
     describe("navbar", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/favorite/1`, { fixture: "recipes_favorite.json" });
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}?limit=20&user_id=1`, { fixture: "recipes_custom.json" });
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=recipe`,
+                { fixture: "recipes_favorite.json" },
+            );
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=recipe`,
+                { fixture: "recipes_custom.json" },
+            );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/favorite/1`, { fixture: "foods_favorite.json" });
-            cy.intercept(`${constants.CY_FOOD_API_PATH}?limit=20&user_id=1`, { fixture: "foods_custom.json" });
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=food`,
+                { fixture: "foods_favorite.json" },
+            );
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=food`,
+                { fixture: "foods_custom.json" },
+            );
 
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
 
