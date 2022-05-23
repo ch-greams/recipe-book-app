@@ -10,6 +10,7 @@ export const CY_NEW_FOOD_PATH = "/food/new?edit=true";
 
 export const CY_RECIPE_API_PATH = "/api/v1/recipe";
 export const CY_FOOD_API_PATH = "/api/v1/food";
+export const CY_PRODUCT_API_PATH = "/api/v1/product";
 
 // PAGE_TITLE
 

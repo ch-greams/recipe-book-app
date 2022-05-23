@@ -8,15 +8,26 @@ describe("user", () => {
     describe("user_page", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/favorite/1`, { fixture: "recipe_items_favorite.json" });
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}?limit=20&user_id=1`, { fixture: "recipe_items_custom.json" });
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=recipe`,
+                { fixture: "recipe_items_favorite.json" },
+            );
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=recipe`,
+                { fixture: "recipe_items_custom.json" },
+            );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/favorite/1`, { fixture: "food_items_favorite.json" });
-            cy.intercept(`${constants.CY_FOOD_API_PATH}?limit=20&user_id=1`, { fixture: "food_items_custom.json" });
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=food`,
+                { fixture: "food_items_favorite.json" },
+            );
+            cy.intercept(
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=food`,
+                { fixture: "food_items_custom.json" },
+            );
 
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_item.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/detailed`, { fixture: "food_items_detailed.json" });
 
             cy.visit(constants.CY_USER_PATH);
         });
