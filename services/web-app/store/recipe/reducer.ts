@@ -718,40 +718,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
-        case types.RECIPE_ITEM_REMOVE_INGREDIENT: {
-
-            const id = action.payload;
-
-            const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
-
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
-            };
-        }
-
-        case types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT: {
-
-            const { parentId, id } = action.payload;
-
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => (
-                    ( ingredient.id === parentId )
-                        ? {
-                            ...ingredient,
-                            products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
-                                product_id !== id || ingredient.product_id === id
-                                    ? { ...acc, [product_id]: ingredient.products[product_id] }
-                                    : acc
-                            ), {}),
-                        }
-                        : ingredient
-                )),
-            };
-        }
-
         case types.RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
 
             const { parentId, id } = action.payload;
@@ -800,68 +766,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 })),
             };
         }
-
-
-        case types.RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT: {
-
-            const { id, inputValue } = action.payload;
-
-            const ingredients = state.ingredients.map((ingredient) => {
-
-                if (ingredient.id === id) {
-                    const product = Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
-                    const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
-
-                    return {
-                        ...ingredient,
-                        products: {
-                            ...ingredient.products,
-                            [ingredient.product_id]: {
-                                ...product,
-                                amountInput: amount,
-                                amount: Number(amount),
-                            },
-                        },
-                    };
-                }
-                else {
-                    return ingredient;
-                }
-            });
-
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
-            };
-        }
-
-        case types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT: {
-
-            const { id, unit } = action.payload;
-
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => {
-                    if (ingredient.id === id) {
-
-                        const product = Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`);
-
-                        return {
-                            ...ingredient,
-                            products: {
-                                ...ingredient.products,
-                                [ingredient.product_id]: { ...product, unit },
-                            },
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                }),
-            };
-        }
-
 
         case types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT: {
 

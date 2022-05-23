@@ -158,14 +158,11 @@ export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
 // Ingredients
 // -----------------------------------------------------------------------------
 
-export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
 export const RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT = "RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT";
 export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_MARK = "RECIPE_ITEM_TOGGLE_INGREDIENT_MARK";
 
-export const RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT";
-export const RECIPE_ITEM_UPDATE_INGREDIENT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_UNIT";
 export const RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT = "RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT";
 export const RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT = "RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT";
 export const RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS = "RECIPE_ITEM_UPDATE_ALT_NUTRITION_FACTS";
@@ -405,11 +402,6 @@ export interface CreateDirectionAction {
 // Ingredients
 // -----------------------------------------------------------------------------
 
-export interface RemoveIngredientAction {
-    type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
-    payload: number;
-}
-
 export interface RemoveIngredientProductAction {
     type: typeof RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT;
     payload: { parentId: number, id: number };
@@ -430,16 +422,6 @@ export interface ToggleIngredientMarkAction {
     payload: number;
 }
 
-
-export interface UpdateIngredientAmountAction {
-    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT;
-    payload: { id: number, inputValue: string };
-}
-
-export interface UpdateIngredientUnitAction {
-    type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_UNIT;
-    payload: { id: number, unit: units.WeightUnit | units.VolumeUnit };
-}
 
 export interface UpdateIngredientProductAmountAction {
     type: typeof RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT;
@@ -503,10 +485,8 @@ export type RecipeItemActionTypes = (
     UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
     UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction |
 
-    RemoveIngredientAction | RemoveIngredientProductAction | ReplaceIngredientWithAlternativeAction |
-    ToggleIngredientOpenAction | ToggleIngredientMarkAction |
-
-    UpdateIngredientAmountAction | UpdateIngredientUnitAction | UpdateIngredientProductAmountAction |
+    RemoveIngredientProductAction | ReplaceIngredientWithAlternativeAction |
+    ToggleIngredientOpenAction | ToggleIngredientMarkAction | UpdateIngredientProductAmountAction |
     UpdateIngredientProductUnitAction | UpdateAltNutritionFactsAction |
     AddIngredientRequestAction | AddIngredientSuccessAction | AddIngredientErrorAction |
     AddIngredientProductRequestAction | AddIngredientProductSuccessAction | AddIngredientProductErrorAction |

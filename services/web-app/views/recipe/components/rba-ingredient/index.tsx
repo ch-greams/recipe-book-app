@@ -54,12 +54,16 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
     const onClickIngredientInfo = (): void => { dispatch(actions.toggleIngredientOpen(ingredient.id)); };
     const onClickMarkIngredientInfo = (): void => { dispatch(actions.toggleIngredientMark(ingredient.id)); };
 
-    const onClickRemoveIngredientInfo = (): void => { dispatch(actions.removeIngredient(ingredient.id)); };
+    const onClickRemoveIngredientInfo = (): void => {
+        dispatch(actions.removeIngredientProduct(ingredient.id, ingredient.product_id));
+    };
     const onChangeAmountIngredientInfo: InputChangeCallback = (event) => {
-        dispatch(actions.updateIngredientAmount(ingredient.id, event.target.value));
+        dispatch(actions.updateIngredientProductAmount(ingredient.id, ingredient.product_id, event.target.value));
     };
     const onChangeUnitIngredientInfo: RbaSelectChangeCallback = (option) => {
-        dispatch(actions.updateIngredientUnit(ingredient.id, option.value as WeightUnit | VolumeUnit));
+        dispatch(actions.updateIngredientProductUnit(
+            ingredient.id, ingredient.product_id, option.value as WeightUnit | VolumeUnit,
+        ));
     };
 
     return (

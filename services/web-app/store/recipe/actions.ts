@@ -318,13 +318,6 @@ export function createDirection(direction: types.RecipeDirection): types.CreateD
 // Ingredients
 // -----------------------------------------------------------------------------
 
-export function removeIngredient(id: number): types.RemoveIngredientAction {
-    return {
-        type: types.RECIPE_ITEM_REMOVE_INGREDIENT,
-        payload: id,
-    };
-}
-
 export function removeIngredientProduct(parentId: number, id: number): types.RemoveIngredientProductAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT,
@@ -350,20 +343,6 @@ export function toggleIngredientMark(id: number): types.ToggleIngredientMarkActi
     return {
         type: types.RECIPE_ITEM_TOGGLE_INGREDIENT_MARK,
         payload: id,
-    };
-}
-
-export function updateIngredientAmount(id: number, inputValue: string): types.UpdateIngredientAmountAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
-        payload: { id, inputValue },
-    };
-}
-
-export function updateIngredientUnit(id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateIngredientUnitAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
-        payload: { id, unit },
     };
 }
 
