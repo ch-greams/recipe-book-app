@@ -40,7 +40,7 @@ const initialState: types.FoodPageStore = {
     servingSizeInput: "100",
     servingSizeUnit: DEFAULT_WEIGHT_UNIT,
 
-
+    // TODO: Move it from this store into the User's one
     featuredNutritionFacts: [
         NutritionFactType.Energy,
         NutritionFactType.Carbohydrate,

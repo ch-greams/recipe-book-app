@@ -10,7 +10,7 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
 
-import styles from "./rba-food-page.module.scss";
+import styles from "./rba-parameters-block.module.scss";
 
 
 interface Props {

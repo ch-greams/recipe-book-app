@@ -1,16 +1,13 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
-import Utils from "@common/utils";
+import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
-
-import RbaParametersBlock from "./rba-parameters-block";
 
 import styles from "./rba-food-page.module.scss";
 
@@ -66,25 +63,12 @@ const RbaFoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
                 {/* Main Block */}
 
-                <div className={styles.mainBlock}>
-
-                    <RbaParametersBlock foodItem={foodItem} />
-
-                    <div className={styles.featuredNutritionFacts}>
-
-                        <RbaNutritionFactsBlock
-                            title={"NUTRITION FACTS"}
-                            nutritionFacts={
-                                Utils.getNutritionFacts(
-                                    featuredNutritionFacts,
-                                    nutritionFactsByServing,
-                                    nutritionFactsByServingInputs,
-                                )
-                            }
-                        />
-                    </div>
-
-                </div>
+                <RbaGeneralInfoBlock
+                    foodItem={foodItem}
+                    featuredNutritionFacts={featuredNutritionFacts}
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
+                />
 
                 {/* Detailed Nutrition Information  */}
 

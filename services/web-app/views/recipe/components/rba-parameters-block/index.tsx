@@ -9,7 +9,7 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 
-import styles from "./rba-recipe-page.module.scss";
+import styles from "./rba-parameters-block.module.scss";
 
 
 
@@ -17,7 +17,7 @@ interface ParametersBlockProps {
     recipeItem: RecipePageStore;
 }
 
-const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
+const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
     const dispatch = useDispatch();
 
@@ -90,6 +90,6 @@ const ParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
     );
 };
 
-ParametersBlock.displayName = "ParametersBlock";
+RbaParametersBlock.displayName = "RbaParametersBlock";
 
-export default ParametersBlock;
+export default RbaParametersBlock;
