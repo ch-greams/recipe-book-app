@@ -8,7 +8,7 @@ use super::error::Error;
 use super::food::{CreateFoodPayload, UpdateFoodPayload};
 use super::recipe::{CreateRecipePayload, UpdateRecipePayload};
 
-#[derive(sqlx::Type, Serialize, Deserialize, Clone)]
+#[derive(sqlx::Type, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
 #[serde(rename_all = "snake_case")]
 pub enum ProductType {
@@ -16,9 +16,15 @@ pub enum ProductType {
     Recipe,
 }
 
+#[derive(sqlx::Type, Serialize, Deserialize, Clone)]
+#[sqlx(type_name = "_product_type")]
+struct ProductTypeArray(Vec<ProductType>);
+
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
+    #[sqlx(rename = "type")]
+    pub product_type: ProductType,
     pub name: String,
     pub brand: String,
     pub subtitle: String,
@@ -30,11 +36,38 @@ pub struct Product {
     pub updated_at: DateTime<Utc>,
 }
 
+#[derive(Deserialize, Serialize)]
+pub struct ProductShort {
+    pub id: i64,
+    pub product_type: ProductType,
+    pub name: String,
+    pub brand: String,
+    pub subtitle: String,
+    pub is_private: bool,
+    pub created_at: DateTime<Utc>,
+    pub updated_at: DateTime<Utc>,
+}
+
+impl ProductShort {
+    pub fn new(product: &Product) -> Self {
+        Self {
+            id: product.id,
+            product_type: product.product_type.to_owned(),
+            name: product.name.to_owned(),
+            brand: product.brand.to_owned(),
+            subtitle: product.subtitle.to_owned(),
+            is_private: product.is_private,
+            created_at: product.created_at,
+            updated_at: product.updated_at,
+        }
+    }
+}
+
 impl Product {
     pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE type = 'food' AND id = $1
         "#,
@@ -42,47 +75,62 @@ impl Product {
         .bind(id)
     }
 
-    pub fn find_food_all(limit: u32, offset: u32) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'food' AND is_private = false
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit)
-        .bind(offset)
-    }
-
-    pub fn find_food_all_created_by_user(
+    pub fn find_all(
         limit: u32,
         offset: u32,
         user_id: i64,
+        types: Vec<ProductType>,
+        filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
             FROM private.product
-            WHERE type = 'food' AND created_by = $3
+            WHERE name ILIKE $5 AND type = ANY($4) AND (is_private = false OR created_by = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
         .bind(limit)
         .bind(offset)
         .bind(user_id)
+        .bind(ProductTypeArray(types))
+        .bind(format!("%{}%", filter))
     }
 
-    pub fn find_food_all_favorite(
+    pub fn find_all_created_by_user(
         limit: u32,
         offset: u32,
         user_id: i64,
+        types: Vec<ProductType>,
+        filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
             FROM private.product
-            WHERE type = 'food'
+            WHERE name ILIKE $5 AND type = ANY($4) AND created_by = $3
+            LIMIT $1 OFFSET $2
+        "#,
+        )
+        .bind(limit)
+        .bind(offset)
+        .bind(user_id)
+        .bind(ProductTypeArray(types))
+        .bind(format!("%{}%", filter))
+    }
+
+    pub fn find_all_favorite(
+        limit: u32,
+        offset: u32,
+        user_id: i64,
+        types: Vec<ProductType>,
+        filter: String,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            FROM private.product
+            WHERE name ILIKE $5 AND type = ANY($4)
                 AND (is_private = false OR created_by = $3)
                 AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
@@ -91,71 +139,19 @@ impl Product {
         .bind(limit)
         .bind(offset)
         .bind(user_id)
+        .bind(ProductTypeArray(types))
+        .bind(format!("%{}%", filter))
     }
 
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE type = 'recipe' AND id = $1
         "#,
         )
         .bind(id)
-    }
-
-    pub fn find_recipe_all(
-        limit: u32,
-        offset: u32,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'recipe' AND is_private = false
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit)
-        .bind(offset)
-    }
-
-    pub fn find_recipe_all_created_by_user(
-        limit: u32,
-        offset: u32,
-        user_id: i64,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'recipe' AND created_by = $3
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit)
-        .bind(offset)
-        .bind(user_id)
-    }
-
-    pub fn find_recipe_all_favorite(
-        limit: u32,
-        offset: u32,
-        user_id: i64,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'recipe' 
-                AND (is_private = false OR created_by = $3)
-                AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit)
-        .bind(offset)
-        .bind(user_id)
     }
 
     pub async fn insert_food(
@@ -167,7 +163,7 @@ impl Product {
             r#"
             INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at)
             VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_food_payload.name.to_owned())
@@ -197,7 +193,7 @@ impl Product {
             r#"
             INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at)
             VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_recipe_payload.name.to_owned())
@@ -234,7 +230,7 @@ impl Product {
                 is_private = $6,
                 updated_at = $7
             WHERE id = $8
-            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_food_payload.name.to_owned())
@@ -270,7 +266,7 @@ impl Product {
                 is_private = $6,
                 updated_at = $7
             WHERE id = $8
-            RETURNING id, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_recipe_payload.name.to_owned())
@@ -296,7 +292,7 @@ mod tests {
     use crate::{
         types::{
             food::{CreateFoodPayload, UpdateFoodPayload},
-            product::Product,
+            product::{Product, ProductType},
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
@@ -322,13 +318,21 @@ mod tests {
     async fn find_food_all() {
         let food_limit = 10;
         let food_offset = 0;
+        let food_user_id = 1;
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products = Product::find_food_all(food_limit, food_offset)
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        let products = Product::find_all(
+            food_limit,
+            food_offset,
+            food_user_id,
+            food_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -339,14 +343,20 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_food_all_created_by_user(food_limit, food_offset, food_user_id)
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_created_by_user(
+            food_limit,
+            food_offset,
+            food_user_id,
+            food_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -357,13 +367,20 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
+        let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products = Product::find_food_all_favorite(food_limit, food_offset, food_user_id)
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        let products = Product::find_all_favorite(
+            food_limit,
+            food_offset,
+            food_user_id,
+            food_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -388,13 +405,21 @@ mod tests {
     async fn find_recipe_all() {
         let recipe_limit = 10;
         let recipe_offset = 0;
+        let recipe_user_id = 1;
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products = Product::find_recipe_all(recipe_limit, recipe_offset)
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        let products = Product::find_all(
+            recipe_limit,
+            recipe_offset,
+            recipe_user_id,
+            recipe_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -405,14 +430,20 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_recipe_all_created_by_user(recipe_limit, recipe_offset, recipe_user_id)
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_created_by_user(
+            recipe_limit,
+            recipe_offset,
+            recipe_user_id,
+            recipe_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }
@@ -423,14 +454,20 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
+        let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let products =
-            Product::find_recipe_all_favorite(recipe_limit, recipe_offset, recipe_user_id)
-                .fetch_all(&mut txn)
-                .await
-                .unwrap();
+        let products = Product::find_all_favorite(
+            recipe_limit,
+            recipe_offset,
+            recipe_user_id,
+            recipe_type,
+            "".to_string(),
+        )
+        .fetch_all(&mut txn)
+        .await
+        .unwrap();
 
         assert!(!products.is_empty());
     }

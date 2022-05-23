@@ -23,7 +23,7 @@ interface Props {
 }
 
 const formatInput = (value: Option<string>, uppercase: boolean = true): string => {
-    return uppercase ? Utils.unwrap(value, "").toUpperCase() : Utils.unwrap(value, "");
+    return uppercase ? Utils.unwrapOr(value, "").toUpperCase() : Utils.unwrapOr(value, "");
 };
 
 const RbaPageTitleBlockInput: React.FC<Props> = ({

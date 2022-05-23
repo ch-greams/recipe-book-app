@@ -8,7 +8,7 @@ import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
-import { requestIngredients } from "@store/search/actions";
+import { searchClear } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
 
 import RecipePage from "./rba-recipe-page";
@@ -31,10 +31,11 @@ const RecipePageConnected: React.FC = () => {
     const search = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
 
     useEffect(() => {
+        dispatch(searchClear());
+
         if (!isNewRecipePage) {
             const recipeId = Number(rid);
             dispatch(actions.fetchRecipeItemRequest(recipeId));
-            dispatch(requestIngredients());
         }
         else if (router.asPath.includes(Utils.getNewItemPath(RoutePath.Recipe))) {
 

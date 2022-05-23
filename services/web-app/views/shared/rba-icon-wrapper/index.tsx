@@ -8,7 +8,7 @@ interface Props {
     isFullWidth?: boolean;
 }
 
-const IconWrapper = styled.div<Props>`
+const RbaIconWrapper = styled.div<Props>`
 
     width: ${(props) => (props.isFullWidth ? "100%" : `${props.width}px`)};
     height: ${(props) => props.height}px;
@@ -25,4 +25,4 @@ const IconWrapper = styled.div<Props>`
     }
 `;
 
-export default IconWrapper;
+export default RbaIconWrapper;

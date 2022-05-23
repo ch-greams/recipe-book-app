@@ -5,6 +5,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { CarbohydrateNutritionFactType, EnergyNutritionFactType,LipidNutritionFactType, ProteinNutritionFactType } from "@common/nutritionFacts";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
+import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
 import type { RecipeDirection, RecipeIngredient, RecipeSubDirectionComment, RecipeSubDirectionIngredient } from "@store/recipe/types";
@@ -141,7 +142,7 @@ const INGREDIENT_1: RecipeIngredient = {
             amountInput: "5",
             unit: WeightUnit.oz,
             product_id: PRODUCT_ID,
-            product_type: "food",
+            product_type: ProductType.Food,
             name: "Cottage Cheese",
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
@@ -151,7 +152,7 @@ const INGREDIENT_1: RecipeIngredient = {
             },
         },
     },
-    altNutritionFacts: {},
+    alternativeNutritionFacts: {},
 };
 
 

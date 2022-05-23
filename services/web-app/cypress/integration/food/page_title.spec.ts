@@ -6,7 +6,7 @@ describe("food_page", () => {
     describe("page_title", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_item.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
 
             cy.visit(`${constants.CY_FOOD_PATH}/1`);
         });

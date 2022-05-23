@@ -1,9 +1,121 @@
-import type { IngredientProduct, Recipe } from "@common/typings";
+import type { IngredientProduct, ProductShort, Recipe } from "@common/typings";
 import type * as units from "@common/units";
 
 import * as types from "./types";
 
+// -----------------------------------------------------------------------------
+// Recipe
+// -----------------------------------------------------------------------------
 
+export function updateServingSizeAmount(inputValue: string): types.UpdateServingSizeAmountAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
+        payload: inputValue,
+    };
+}
+
+export function updateServingSizeUnit(unit: units.WeightUnit | units.VolumeUnit): types.UpdateServingSizeUnitAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
+        payload: unit,
+    };
+}
+
+export function updateType(type: string): types.UpdateTypeAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_TYPE,
+        payload: type,
+    };
+}
+
+
+export function fetchRecipeItemNew(): types.RecipeItemFetchNewAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_NEW,
+    };
+}
+
+export function fetchRecipeItemRequest(recipeId: number): types.RecipeItemFetchRequestAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_REQUEST,
+        payload: recipeId,
+    };
+}
+
+export function fetchRecipeItemSuccess(recipe: Recipe): types.RecipeItemFetchSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_SUCCESS,
+        payload: recipe,
+    };
+}
+
+export function fetchRecipeItemError(error: string): types.RecipeItemFetchErrorAction {
+    return {
+        type: types.RECIPE_ITEM_FETCH_ERROR,
+        payload: error,
+    };
+}
+
+export function addCustomUnitRequest(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
+    return {
+        type: types.RECIPE_ITEM_ADD_CUSTOM_UNIT,
+        payload: customUnit,
+    };
+}
+
+export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitAction {
+    return {
+        type: types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT,
+        payload: index,
+    };
+}
+
+export function updateCustomUnitRequest(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT,
+        payload: { index, customUnit },
+    };
+}
+
+export function createRecipeItemRequest(): types.RecipeItemCreateRequestAction {
+    return {
+        type: types.RECIPE_ITEM_CREATE_REQUEST,
+    };
+}
+
+export function createRecipeItemSuccess(food: Recipe): types.RecipeItemCreateSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_CREATE_SUCCESS,
+        payload: food,
+    };
+}
+
+export function createRecipeItemError(error: string): types.RecipeItemCreateErrorAction {
+    return {
+        type: types.RECIPE_ITEM_CREATE_ERROR,
+        payload: error,
+    };
+}
+
+export function updateRecipeItemRequest(): types.RecipeItemUpdateRequestAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_REQUEST,
+    };
+}
+
+export function updateRecipeItemSuccess(food: Recipe): types.RecipeItemUpdateSuccessAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_SUCCESS,
+        payload: food,
+    };
+}
+
+export function updateRecipeItemError(error: string): types.RecipeItemUpdateErrorAction {
+    return {
+        type: types.RECIPE_ITEM_UPDATE_ERROR,
+        payload: error,
+    };
+}
 
 export function updateName(name: string): types.UpdateNameAction {
     return {
@@ -32,6 +144,10 @@ export function updateDescription(description: string): types.UpdateDescriptionA
         payload: description,
     };
 }
+
+// -----------------------------------------------------------------------------
+// Directions
+// -----------------------------------------------------------------------------
 
 export function removeDirection(directionIndex: number): types.RemoveDirectionAction {
     return {
@@ -198,6 +314,10 @@ export function createDirection(direction: types.RecipeDirection): types.CreateD
     };
 }
 
+// -----------------------------------------------------------------------------
+// Ingredients
+// -----------------------------------------------------------------------------
+
 export function removeIngredient(id: number): types.RemoveIngredientAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_INGREDIENT,
@@ -205,9 +325,9 @@ export function removeIngredient(id: number): types.RemoveIngredientAction {
     };
 }
 
-export function removeAltIngredient(parentId: number, id: number): types.RemoveAltIngredientAction {
+export function removeIngredientProduct(parentId: number, id: number): types.RemoveIngredientProductAction {
     return {
-        type: types.RECIPE_ITEM_REMOVE_ALT_INGREDIENT,
+        type: types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT,
         payload: { parentId, id },
     };
 }
@@ -233,30 +353,20 @@ export function toggleIngredientMark(id: number): types.ToggleIngredientMarkActi
     };
 }
 
-export function updateIngredientAmount(id: number, inputValue: string): types.UpdateIngredientAmountAction {
+export function updateIngredientProductAmount(parentId: number, id: number, inputValue: string): types.UpdateIngredientProductAmountAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_AMOUNT,
-        payload: { id, inputValue },
-    };
-}
-
-export function updateIngredientUnit(id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateIngredientUnitAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_UNIT,
-        payload: { id, unit },
-    };
-}
-
-export function updateAltIngredientAmount(parentId: number, id: number, inputValue: string): types.UpdateAltIngredientAmountAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_AMOUNT,
+        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_AMOUNT,
         payload: { parentId, id, inputValue },
     };
 }
 
-export function updateAltIngredientUnit(parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit)): types.UpdateAltIngredientUnitAction {
+export function updateIngredientProductUnit(
+    parentId: number,
+    id: number,
+    unit: (units.WeightUnit | units.VolumeUnit),
+): types.UpdateIngredientProductUnitAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_ALT_INGREDIENT_UNIT,
+        type: types.RECIPE_ITEM_UPDATE_INGREDIENT_PRODUCT_UNIT,
         payload: { parentId, id, unit },
     };
 }
@@ -268,126 +378,44 @@ export function updateAltNutritionFacts(parentId: number, id: number, isSelected
     };
 }
 
-export function addIngredient(ingredient: IngredientProduct): types.AddIngredientAction {
+export function addIngredientRequest(product: ProductShort): types.AddIngredientRequestAction {
     return {
-        type: types.RECIPE_ITEM_ADD_INGREDIENT,
-        payload: ingredient,
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_REQUEST,
+        payload: product,
     };
 }
 
-export function addAltIngredient(id: number, altIngredientProduct: IngredientProduct): types.AddAltIngredientAction {
+export function addIngredientSuccess(product: IngredientProduct): types.AddIngredientSuccessAction {
     return {
-        type: types.RECIPE_ITEM_ADD_ALT_INGREDIENT,
-        payload: { id, altIngredientProduct },
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_SUCCESS,
+        payload: product,
     };
 }
 
-export function updateServingSizeAmount(inputValue: string): types.UpdateServingSizeAmountAction {
+export function addIngredientError(error: string): types.AddIngredientErrorAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,
-        payload: inputValue,
-    };
-}
-
-export function updateServingSizeUnit(unit: units.WeightUnit | units.VolumeUnit): types.UpdateServingSizeUnitAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_UNIT,
-        payload: unit,
-    };
-}
-
-export function updateType(type: string): types.UpdateTypeAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_TYPE,
-        payload: type,
-    };
-}
-
-
-export function fetchRecipeItemNew(): types.RecipeItemFetchNewAction {
-    return {
-        type: types.RECIPE_ITEM_FETCH_NEW,
-    };
-}
-
-export function fetchRecipeItemRequest(recipeId: number): types.RecipeItemFetchRequestAction {
-    return {
-        type: types.RECIPE_ITEM_FETCH_REQUEST,
-        payload: recipeId,
-    };
-}
-
-export function fetchRecipeItemSuccess(recipe: Recipe): types.RecipeItemFetchSuccessAction {
-    return {
-        type: types.RECIPE_ITEM_FETCH_SUCCESS,
-        payload: recipe,
-    };
-}
-
-export function fetchRecipeItemError(error: string): types.RecipeItemFetchErrorAction {
-    return {
-        type: types.RECIPE_ITEM_FETCH_ERROR,
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_ERROR,
         payload: error,
     };
 }
 
-export function addCustomUnitRequest(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
+export function addIngredientProductRequest(id: number, product: ProductShort): types.AddIngredientProductRequestAction {
     return {
-        type: types.RECIPE_ITEM_ADD_CUSTOM_UNIT,
-        payload: customUnit,
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT_REQUEST,
+        payload: { id, product },
     };
 }
 
-export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitAction {
+export function addIngredientProductSuccess(id: number, product: IngredientProduct): types.AddIngredientProductSuccessAction {
     return {
-        type: types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT,
-        payload: index,
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT_SUCCESS,
+        payload: { id, product },
     };
 }
 
-export function updateCustomUnitRequest(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
+export function addIngredientProductError(error: string): types.AddIngredientProductErrorAction {
     return {
-        type: types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT,
-        payload: { index, customUnit },
-    };
-}
-
-export function createRecipeItemRequest(): types.RecipeItemCreateRequestAction {
-    return {
-        type: types.RECIPE_ITEM_CREATE_REQUEST,
-    };
-}
-
-export function createRecipeItemSuccess(food: Recipe): types.RecipeItemCreateSuccessAction {
-    return {
-        type: types.RECIPE_ITEM_CREATE_SUCCESS,
-        payload: food,
-    };
-}
-
-export function createRecipeItemError(error: string): types.RecipeItemCreateErrorAction {
-    return {
-        type: types.RECIPE_ITEM_CREATE_ERROR,
-        payload: error,
-    };
-}
-
-export function updateRecipeItemRequest(): types.RecipeItemUpdateRequestAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_REQUEST,
-    };
-}
-
-export function updateRecipeItemSuccess(food: Recipe): types.RecipeItemUpdateSuccessAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_SUCCESS,
-        payload: food,
-    };
-}
-
-export function updateRecipeItemError(error: string): types.RecipeItemUpdateErrorAction {
-    return {
-        type: types.RECIPE_ITEM_UPDATE_ERROR,
+        type: types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT_ERROR,
         payload: error,
     };
 }

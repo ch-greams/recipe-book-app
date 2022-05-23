@@ -1,14 +1,14 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Units } from "@common/units";
-import Utils from "@common/utils";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import IconAdd from "@icons/add-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import styles from "./rba-custom-unit-line.module.scss";
 
@@ -38,14 +38,14 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
 
         <div className={styles.customUnitLineButton}>
 
-            <IconWrapper
+            <RbaIconWrapper
                 data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
-                isFullWidth={true} width={20} height={20} color={Utils.COLOR_DEFAULT}
+                isFullWidth={true} width={20} height={20} color={Color.Default}
                 style={(isNew ? undefined : { transform: "rotate(0.125turn)" })}
                 onClick={upsertCustomUnit}
             >
                 <IconAdd />
-            </IconWrapper>
+            </RbaIconWrapper>
 
         </div>
 

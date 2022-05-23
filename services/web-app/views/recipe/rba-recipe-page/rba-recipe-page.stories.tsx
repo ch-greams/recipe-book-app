@@ -5,7 +5,8 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import type { AppState } from "@store";
 import { useStore } from "@store";
-import { extractState } from "@store/recipe/reducer";
+import { extractState as extractRecipeState } from "@store/recipe/reducer";
+import { extractState as extractSearchState } from "@store/search/reducer";
 
 import RbaRecipePage from "./rba-recipe-page";
 
@@ -37,11 +38,13 @@ export default {
 const Template: ComponentStory<typeof RbaRecipePage> = (args) => <RbaRecipePage {...args} />;
 
 
-const recipeItem = extractState({} as AppState);
+const recipeItem = extractRecipeState({} as AppState);
+const search = extractSearchState({} as AppState);
 
 export const Default = Template.bind({});
 Default.args = {
     recipeItem,
+    search,
     isNew: false,
     isReadOnly: true,
 };
@@ -49,6 +52,7 @@ Default.args = {
 export const Editable = Template.bind({});
 Editable.args = {
     recipeItem,
+    search,
     isNew: true,
     isReadOnly: false,
 };

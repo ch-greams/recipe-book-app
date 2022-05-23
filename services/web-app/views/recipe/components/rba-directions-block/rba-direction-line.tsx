@@ -2,7 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import Utils from "@common/utils";
+import { Color } from "@common/colors";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
@@ -14,7 +15,6 @@ import {
     SubDirectionType,
 } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import RbaDirectionInfoLine from "./rba-direction-info-line";
 import RbaNewSubDirectionLine from "./rba-new-sub-direction-line";
@@ -60,9 +60,9 @@ const RbaDirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction,
             className={styles.directionLineButton}
             onClick={() => removeDirection(index)}
         >
-            <IconWrapper isFullWidth={true} width={24} height={24} color={Utils.COLOR_DEFAULT}>
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={Color.Default}>
                 <RemoveIcon />
-            </IconWrapper>
+            </RbaIconWrapper>
         </div>
     );
 

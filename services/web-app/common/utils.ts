@@ -7,7 +7,7 @@ import type {
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer, Direction, Food, Recipe, SubDirection } from "./typings";
+import type { Comparer, Direction, Food, Ingredient, IngredientProduct, Recipe, SubDirection } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -20,6 +20,11 @@ export enum UserMenuItem {
 
 export enum RoutePath {
     Home = "",
+    Food = "food",
+    Recipe = "recipe",
+}
+
+export enum ProductType {
     Food = "food",
     Recipe = "recipe",
 }
@@ -51,10 +56,6 @@ export default class Utils {
     public static readonly TSP_TO_ML: number = 4.92892;
     public static readonly OZ_TO_G: number = 28.3495;
 
-    public static readonly COLOR_DEFAULT: string = "#00bfa5";
-    public static readonly COLOR_DEFAULT_DARK: string = "#008e76";
-    public static readonly COLOR_ALTERNATIVE: string = "#ff6e40";
-    public static readonly COLOR_WHITE: string = "#fff";
 
     public static convertDensity(
         value: number,
@@ -130,11 +131,11 @@ export default class Utils {
         return value.trim().length === Utils.ZERO;
     }
 
-    public static unwrap<T>(value: Option<T>, defaultValue: T): T {
+    public static unwrapOr<T>(value: Option<T>, defaultValue: T): T {
         return this.isSome(value) ? value : defaultValue;
     }
 
-    public static unwrapForced<T>(value: Option<T>, name: string): T {
+    public static unwrap<T>(value: Option<T>, name: string): T {
         if (!this.isSome(value)) {
             throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
         }
@@ -208,7 +209,7 @@ export default class Utils {
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
-                    return Utils.isSome(value) ? Utils.unwrap(sum, Utils.ZERO) + value : null;
+                    return ( Utils.isSome(value) ? Utils.unwrapOr(sum, Utils.ZERO) + value : sum );
                 },
                 null,
             );
@@ -233,10 +234,17 @@ export default class Utils {
         const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );
 
         const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
-            .reduce((acc, cur) => ({
-                ...acc,
-                [cur]: Utils.roundToDecimal(Utils.unwrap(nutritionFacts[cur], Utils.ZERO) * multiplier, DecimalPlaces.Two),
-            }), {});
+            .reduce((acc, cur) => {
+                const nutritionFact = nutritionFacts[cur];
+                return {
+                    ...acc,
+                    [cur]: (
+                        Utils.isSome(nutritionFact)
+                            ? Utils.roundToDecimal(nutritionFact * multiplier, DecimalPlaces.Two)
+                            : null
+                    ),
+                };
+            }, {});
 
         return updatedNutritionFacts;
     }
@@ -263,12 +271,16 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath, id: number): string {
+    public static getItemPath(route: RoutePath | ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: RoutePath): string {
+    public static getNewItemPath(route: RoutePath | ProductType): string {
         return `/${route}/new?edit=true`;
+    }
+
+    public static getUrlParams(obj: object): string {
+        return Utils.getObjectKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
     }
 
     public static classNames(values: Dictionary<string, boolean>): string {
@@ -286,16 +298,34 @@ export default class Utils {
 
     // NOTE: From reducers
 
+    /**
+     * @returns converted `string` or `None` if `value` was `None` in the first place
+     */
+    public static numberToString(value: Option<number>): Option<string> {
+        return Utils.isSome(value) ? String(value) : null;
+    }
+
+    /**
+     * @returns converted `number` or `None` if `value` was an empty `string` or `None` in the first place
+     */
+    public static stringToNumber(value: Option<string>): Option<number> {
+        return (
+            Utils.isSome(value)
+                ? ( Utils.isEmptyString(value) ? null : Number(value) )
+                : null
+        );
+    }
+
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
 
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Utils.isSome(values[nfType]) ? String(values[nfType]) : null }), {},
+            (acc, nfType) => ({ ...acc, [nfType]: Utils.numberToString(values[nfType]) }), {},
         );
     }
 
     public static convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Number(values[nfType]) }), {},
+            (acc, nfType) => ({ ...acc, [nfType]: Utils.stringToNumber(values[nfType]) }), {},
         );
     }
 
@@ -307,8 +337,8 @@ export default class Utils {
         return { ...customUnit, amount: String(customUnit.amount) };
     }
 
-    public static convertCustomUnitIntoValue(customUnit: CustomUnitInput): CustomUnit {
-        return { ...customUnit, amount: Number(customUnit.amount) };
+    public static convertCustomUnitIntoValue(product_id: number, customUnit: CustomUnitInput): CustomUnit {
+        return { ...customUnit, product_id, amount: Number(customUnit.amount) };
     }
 
     public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
@@ -363,5 +393,62 @@ export default class Utils {
             directions: recipePage.directions.map(Utils.convertRecipeDirectionIntoDirection),
             is_private: recipePage.isPrivate,
         };
+    }
+
+    public static convertFoodToIngredientProduct(food: Food): IngredientProduct {
+        return {
+            product_id: food.id,
+            product_type: ProductType.Food,
+            name: food.name,
+            amount: 100,
+            unit: WeightUnit.g,
+            nutrition_facts: food.nutrition_facts,
+        };
+    }
+
+    public static convertRecipeToIngredientProduct(recipe: Recipe): IngredientProduct {
+        return {
+            product_id: recipe.id,
+            product_type: ProductType.Recipe,
+            name: recipe.name,
+            amount: 100,
+            unit: WeightUnit.g,
+            nutrition_facts: Utils.getRecipeNutritionFacts(recipe.ingredients),
+        };
+    }
+
+    /**
+     * Calculate nutrition fact for a recipe based on currently selected ingredients
+     */
+    public static getRecipeNutritionFacts(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
+
+        const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
+            .map((ingredient) => {
+
+                const ingredientProduct = Utils.unwrap(
+                    ingredient.products[ingredient.product_id],
+                    `ingredient.products["${ingredient.product_id}"]`,
+                );
+
+                const nutritionFacts = ingredientProduct.nutrition_facts;
+                const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
+
+                return Utils.getObjectKeys(nutritionFacts)
+                    .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
+
+                        const nutritionFactValue = nutritionFacts[nutritionFactType];
+
+                        return {
+                            ...acc,
+                            [nutritionFactType]: (
+                                Utils.isSome(nutritionFactValue)
+                                    ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
+                                    : null
+                            ),
+                        };
+                    }, {});
+            });
+
+        return Utils.dictionarySum(nutritionFactsById);
     }
 }

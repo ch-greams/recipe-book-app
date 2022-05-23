@@ -2,14 +2,15 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
+import { Color } from "@common/colors";
 import { DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
-import IconWrapper from "@icons/IconWrapper";
 
 import styles from "./rba-directions-block.module.scss";
 
@@ -96,13 +97,13 @@ const RbaNewDirectionLine: React.FC<Props> = ({ direction }) => {
                 className={styles.directionLineButton}
                 onClick={() => dispatch(actions.createDirection(direction))}
             >
-                <IconWrapper
+                <RbaIconWrapper
                     isFullWidth={true}
-                    width={24} height={24} color={Utils.COLOR_DEFAULT}
+                    width={24} height={24} color={Color.Default}
                     style={{ transform: "rotate(0.125turn)" }}
                 >
                     <RemoveIcon />
-                </IconWrapper>
+                </RbaIconWrapper>
             </div>
 
             <div className={styles.directionInfoLines}>

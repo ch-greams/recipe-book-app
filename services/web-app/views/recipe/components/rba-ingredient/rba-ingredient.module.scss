@@ -1,0 +1,24 @@
+@import "@styles/variables.scss";
+
+
+.ingredient {
+
+    margin: 8px 0;
+
+    .ingredientInfoLines {
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 2;
+
+        gap: 4px;
+        margin: 0 48px;
+
+        .separator {
+
+            height: 2px;
+            margin: 4px 100px;
+            background-color: $color-white;
+        }
+    }
+}

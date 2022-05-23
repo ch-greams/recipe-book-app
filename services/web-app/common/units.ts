@@ -40,6 +40,7 @@ export interface CustomUnit {
     name: string;
     amount: number;
     unit: Units;
+    product_id: number;
 }
 
 export interface CustomUnitInput {

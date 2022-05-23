@@ -7,6 +7,7 @@ import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
+import { searchClear } from "@store/search/actions";
 
 import RbaFoodPage from "./rba-food-page";
 
@@ -22,6 +23,8 @@ const RbaFoodPageConnected: React.FC = () => {
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
 
     useEffect(() => {
+        dispatch(searchClear());
+
         if (!isNewFoodPage) {
             const foodId = Number(fid);
             dispatch(actions.fetchFoodItemRequest(foodId));

@@ -7,6 +7,9 @@ import * as types from "./types";
 
 
 const initialState: UserStore = {
+    userId: 1,
+    userName: "Andrei Khvalko",
+
     selectedMenuItem: UserMenuItem.Diary,
 
     favoriteRecipes: [],

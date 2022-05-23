@@ -1,6 +1,7 @@
 [
     {
         "id": 1,
+        "product_type": "food",
         "name": "English Muffin",
         "brand": "Homemade",
         "subtitle": "rhoncus aliquam"

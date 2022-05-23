@@ -3,6 +3,9 @@ import type { UserMenuItem } from "@common/utils";
 
 
 export interface UserStore {
+    userId: number;
+    userName: string;
+
     selectedMenuItem: UserMenuItem;
 
     favoriteRecipes: RecipeShort[];

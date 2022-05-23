@@ -32,19 +32,6 @@ impl CustomUnit {
         .bind(product_id)
     }
 
-    pub fn find_by_product_ids(
-        product_ids: Vec<i64>,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT name, amount, unit, product_id
-            FROM private.custom_unit
-            WHERE product_id = ANY($1)
-        "#,
-        )
-        .bind(product_ids)
-    }
-
     pub async fn insert_mutliple(
         custom_unit_payloads: &[CreateCustomUnitPayload],
         product_id: i64,
@@ -147,21 +134,6 @@ mod tests {
             .unwrap();
 
         assert_eq!(custom_units.len(), 2);
-    }
-
-    #[tokio::test]
-    #[ignore]
-    async fn find_by_product_ids() {
-        let product_ids = vec![1, 2];
-
-        let mut txn = utils::get_pg_pool().begin().await.unwrap();
-
-        let custom_units = CustomUnit::find_by_product_ids(product_ids)
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
-
-        assert_eq!(custom_units.len(), 3);
     }
 
     #[tokio::test]

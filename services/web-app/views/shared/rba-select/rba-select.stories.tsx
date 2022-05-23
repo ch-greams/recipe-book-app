@@ -50,7 +50,7 @@ const ComponentDescription: ComponentMeta<typeof RbaSelect> = {
         },
         onChange: {
             type: { name: "function", required: true },
-            table: { type: { summary: "(option: SelectOption) => void" } },
+            table: { type: { summary: "RbaSelectChangeCallback | (option: SelectOption) => void" } },
         },
     },
 };
