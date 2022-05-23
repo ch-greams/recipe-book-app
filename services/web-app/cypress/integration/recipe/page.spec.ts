@@ -12,7 +12,7 @@ describe("recipe_page", () => {
             const NEW_PAGE_TITLE_NAME = "new name";
             const NEW_RECIPE_ID = 402;
 
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/create`, { fixture: "recipe_item_create_response.json" })
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/create`, { fixture: "recipe_create_response.json" })
                 .as("updateRecipe");
 
             cy.visit(`${constants.CY_RECIPE_PATH}/new?edit=true`);
@@ -47,8 +47,8 @@ describe("recipe_page", () => {
 
             const NEW_PAGE_TITLE_NAME = "new name";
 
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_item_update_response.json" })
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_update_response.json" })
                 .as("updateRecipe");
 
 

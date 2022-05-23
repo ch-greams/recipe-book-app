@@ -718,6 +718,40 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
+        case types.RECIPE_ITEM_REMOVE_INGREDIENT: {
+
+            const id = action.payload;
+
+            const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
+
+            return {
+                ...state,
+                ingredients: ingredients,
+                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
+            };
+        }
+
+        case types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT: {
+
+            const { parentId, id } = action.payload;
+
+            return {
+                ...state,
+                ingredients: state.ingredients.map((ingredient) => (
+                    ( ingredient.id === parentId )
+                        ? {
+                            ...ingredient,
+                            products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
+                                product_id !== id || ingredient.product_id === id
+                                    ? { ...acc, [product_id]: ingredient.products[product_id] }
+                                    : acc
+                            ), {}),
+                        }
+                        : ingredient
+                )),
+            };
+        }
+
         case types.RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
 
             const { parentId, id } = action.payload;

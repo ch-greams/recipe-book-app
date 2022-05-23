@@ -8,7 +8,7 @@ describe("food_page", () => {
     describe("custom_units", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_item.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
         });
 
         it("can create custom_unit", () => {

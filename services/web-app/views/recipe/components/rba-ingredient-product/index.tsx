@@ -125,7 +125,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
             <div className={styles.ingredientProductInfo}>
                 {/* FIXME: Whole line should be clickable, but it shouldn't mess with amount and unit */}
                 <div
-                    data-cy={constants.CY_INGREDIENT_PRODUCT_INFO_NAME}
+                    data-cy={constants.CY_INGREDIENT_PRODUCT_NAME}
                     className={styles.ingredientInfoLineName}
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
+import * as constants from "@cypress/constants";
 
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { addIngredientRequest } from "@store/recipe/actions";
@@ -23,7 +24,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isReadOnly 
     const dispatch = useDispatch();
 
     return (
-        <div>
+        <div data-cy={constants.CY_INGREDIENTS_BLOCK}>
             {ingredients.map( (ingredient) => (
                 <RbaIngredient
                     key={`ingredient_${ingredient.id}`}

@@ -10,7 +10,7 @@ describe("recipe_page", () => {
     describe("directions - read-only", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
         });
@@ -157,7 +157,7 @@ describe("recipe_page", () => {
     describe("directions - edit", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe_item.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29?edit=true`);
         });

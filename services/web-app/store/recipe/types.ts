@@ -158,6 +158,7 @@ export const RECIPE_ITEM_CREATE_DIRECTION = "RECIPE_ITEM_CREATE_DIRECTION";
 // Ingredients
 // -----------------------------------------------------------------------------
 
+export const RECIPE_ITEM_REMOVE_INGREDIENT = "RECIPE_ITEM_REMOVE_INGREDIENT";
 export const RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT = "RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT";
 export const RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE = "RECIPE_ITEM_REPLACE_INGREDIENT_WITH_ALTERNATIVE";
 export const RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN = "RECIPE_ITEM_TOGGLE_INGREDIENT_OPEN";
@@ -402,6 +403,11 @@ export interface CreateDirectionAction {
 // Ingredients
 // -----------------------------------------------------------------------------
 
+export interface RemoveIngredientAction {
+    type: typeof RECIPE_ITEM_REMOVE_INGREDIENT;
+    payload: number;
+}
+
 export interface RemoveIngredientProductAction {
     type: typeof RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT;
     payload: { parentId: number, id: number };
@@ -485,7 +491,7 @@ export type RecipeItemActionTypes = (
     UpdateNewDirectionStepNumberAction | UpdateNewDirectionNameAction | UpdateNewDirectionTemperatureCountAction |
     UpdateNewDirectionTemperatureUnitAction | UpdateNewDirectionTimeCountAction | UpdateNewDirectionTimeUnitAction |
 
-    RemoveIngredientProductAction | ReplaceIngredientWithAlternativeAction |
+    RemoveIngredientAction | RemoveIngredientProductAction | ReplaceIngredientWithAlternativeAction |
     ToggleIngredientOpenAction | ToggleIngredientMarkAction | UpdateIngredientProductAmountAction |
     UpdateIngredientProductUnitAction | UpdateAltNutritionFactsAction |
     AddIngredientRequestAction | AddIngredientSuccessAction | AddIngredientErrorAction |

@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import type { ProductShort } from "@common/typings";
@@ -84,13 +85,14 @@ const RbaSearchInput: React.FC<Props> = ({
     );
 
     return (
-        <div className={classNames}>
+        <div data-cy={constants.CY_SEARCH} className={classNames}>
 
             <div className={styles.searchInput}>
 
                 {( ( !Utils.isEmptyString(searchInput) && isLoading ) ? loadingIcon : searchIcon )}
 
                 <input
+                    data-cy={constants.CY_SEARCH_INPUT}
                     className={styles.input}
                     type={"text"}
                     placeholder={"Search..."}

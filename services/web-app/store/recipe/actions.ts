@@ -318,6 +318,13 @@ export function createDirection(direction: types.RecipeDirection): types.CreateD
 // Ingredients
 // -----------------------------------------------------------------------------
 
+export function removeIngredient(id: number): types.RemoveIngredientAction {
+    return {
+        type: types.RECIPE_ITEM_REMOVE_INGREDIENT,
+        payload: id,
+    };
+}
+
 export function removeIngredientProduct(parentId: number, id: number): types.RemoveIngredientProductAction {
     return {
         type: types.RECIPE_ITEM_REMOVE_INGREDIENT_PRODUCT,

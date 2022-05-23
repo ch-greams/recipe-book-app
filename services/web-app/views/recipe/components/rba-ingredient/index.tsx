@@ -60,7 +60,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAU
                 isReadOnly={isReadOnly}
                 isMarked={ingredient.isMarked}
                 onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
-                onClickRemove={() => dispatch(actions.removeIngredientProduct(ingredient.id, ingredient.product_id))}
+                onClickRemove={() => dispatch(actions.removeIngredient(ingredient.id))}
                 onClickMark={() => dispatch(actions.toggleIngredientMark(ingredient.id))}
                 onChangeAmount={(event) => {
                     dispatch(actions.updateIngredientProductAmount(ingredient.id, ingredient.product_id, event.target.value));
