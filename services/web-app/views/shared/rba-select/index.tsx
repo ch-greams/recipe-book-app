@@ -34,9 +34,10 @@ interface Props {
     height: SelectHeightSize;
     options: SelectOption[];
     value?: string;
-    onChange: (option: SelectOption) => void;
+    onChange: RbaSelectChangeCallback;
 }
 
+export type RbaSelectChangeCallback = (option: SelectOption) => void;
 
 export const getOptionLabel = (option: SelectOption): string => {
     return Utils.unwrapOr(option.label, String(option.value));

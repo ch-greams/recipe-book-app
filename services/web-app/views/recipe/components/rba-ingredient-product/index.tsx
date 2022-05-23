@@ -1,16 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { COLOR_WHITE } from "@common/colors";
-import type { VolumeUnit } from "@common/units";
+import type { InputChangeCallback } from "@common/typings";
 import { Units, WeightUnit } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
+import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import * as actions from "@store/recipe/actions";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import LinkIcon from "@icons/link-sharp.svg";
@@ -20,10 +18,16 @@ import styles from "./rba-ingredient-product.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    parentId: number;
-    ingredientProduct?: RecipeIngredientProduct;
+    ingredientProduct: RecipeIngredientProduct;
+    onClick: () => void;
+    onClickRemove: () => void;
+    onMouseEnter?: () => void;
+    onMouseLeave?: () => void;
+    onChangeAmount: InputChangeCallback;
+    onChangeUnit: RbaSelectChangeCallback;
 }
 
+// TODO: Remove, there shouldn't be a need for it
 export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
     product_id: -1,
     product_type: ProductType.Food,
@@ -36,16 +40,21 @@ export const DEFAULT_INGREDIENT_PRODUCT: RecipeIngredientProduct = {
 
 
 const RbaIngredientProduct: React.FC<Props> = ({
-    isReadOnly, parentId, ingredientProduct = DEFAULT_INGREDIENT_PRODUCT,
+    isReadOnly,
+    ingredientProduct,
+    onClick,
+    onClickRemove,
+    onMouseEnter,
+    onMouseLeave,
+    onChangeAmount,
+    onChangeUnit,
 }) => {
-
-    const dispatch = useDispatch();
 
     const removeButton = (
         <div
             data-cy={constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}
             className={styles.ingredientProductButtonLeft}
-            onClick={() => dispatch(actions.removeIngredientProduct(parentId, ingredientProduct.product_id))}
+            onClick={onClickRemove}
         >
             <RbaIconWrapper isFullWidth={true} width={24} height={24} color={COLOR_WHITE}>
                 <RemoveIcon />
@@ -64,15 +73,9 @@ const RbaIngredientProduct: React.FC<Props> = ({
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
             value={(ingredientProduct.amountInput|| "")}
-            onChange={(event) => {
-                dispatch(actions.updateIngredientProductAmount(parentId, ingredientProduct.product_id, event.target.value));
-            }}
+            onChange={onChangeAmount}
         />
     );
-
-    const onClick = (): void => { dispatch(actions.replaceIngredientWithAlternative(parentId, ingredientProduct.product_id)); };
-    const onMouseEnter = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, ingredientProduct.product_id, true)); };
-    const onMouseLeave = (): void => { dispatch(actions.updateAltNutritionFacts(parentId, ingredientProduct.product_id, false)); };
 
     return (
 
@@ -83,6 +86,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
             {( !isReadOnly && removeButton )}
 
             <div className={styles.ingredientProductInfo}>
+                {/* FIXME: Whole line should be clickable, but it shouldn't mess with amount and unit */}
                 <div
                     data-cy={constants.CY_INGREDIENT_PRODUCT_INFO_NAME}
                     className={styles.ingredientInfoLineName}
@@ -104,11 +108,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                         height={SelectHeightSize.Medium}
                         options={Object.values(Units).map((unit) => ({ value: unit }))}
                         value={ingredientProduct.unit}
-                        onChange={(option: SelectOption) => {
-                            dispatch(actions.updateIngredientProductUnit(
-                                parentId, ingredientProduct.product_id, option.value as WeightUnit | VolumeUnit,
-                            ));
-                        }}
+                        onChange={onChangeUnit}
                     />
                 </div>
             </div>

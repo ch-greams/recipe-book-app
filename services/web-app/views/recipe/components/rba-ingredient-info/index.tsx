@@ -1,22 +1,17 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { COLOR_DEFAULT } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
-import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import Utils, { ProductType } from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
-import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
+import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
+import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { RecipeIngredientProduct } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 import LinkIcon from "@icons/link-sharp.svg";
-
-import { DEFAULT_INGREDIENT_PRODUCT } from "../rba-ingredient-product";
 
 import styles from "./rba-ingredient-info.module.scss";
 
@@ -24,25 +19,28 @@ import styles from "./rba-ingredient-info.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    ingredient: RecipeIngredient;
+    ingredientProduct: RecipeIngredientProduct;
+    isMarked?: boolean;
+    onClick: () => void;
+    onClickRemove: () => void;
+    onClickMark?: () => void;
+    onChangeAmount: InputChangeCallback;
+    onChangeUnit: RbaSelectChangeCallback;
 }
 
-const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
+const getCheckbox = (isMarked?: boolean, onClickMark?: Option<() => void>): Option<JSX.Element> => (
+    Utils.isSome(onClickMark)
+        ? (
+            <div className={styles.ingredientCheckbox} onClick={onClickMark}>
+                {( isMarked ? <div className={styles.ingredientCheckboxMark} /> : null )}
+            </div>
+        )
+        : null
+);
 
-    const dispatch = useDispatch();
-
-    const removeIngredient = (id: number): void => { dispatch(actions.removeIngredient(id)); };
-    const toggleIngredientMark = (id: number): void => { dispatch(actions.toggleIngredientMark(id)); };
-
-    const ingredientProduct: RecipeIngredientProduct = Utils.unwrapOr(
-        ingredient.products[ingredient.product_id], DEFAULT_INGREDIENT_PRODUCT,
-    );
-
-    const handleIngredientAmountEdit = (id: number): InputChangeCallback => {
-        return (event) => {
-            dispatch(actions.updateIngredientAmount(id, event.target.value));
-        };
-    };
+const RbaIngredientInfo: React.FC<Props> = ({
+    ingredientProduct, isReadOnly, isMarked, onClick, onClickRemove, onClickMark, onChangeAmount, onChangeUnit,
+}) => {
 
     const amountText = (
         <div className={styles.ingredientInfoAmountText}>
@@ -55,24 +53,15 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
             type={"text"}
             className={styles.ingredientInfoAmountInput}
             value={(ingredientProduct.amountInput || "")}
-            onChange={handleIngredientAmountEdit(ingredient.id)}
+            onChange={onChangeAmount}
         />
-    );
-
-    const checkbox = (
-        <div
-            className={styles.ingredientCheckbox}
-            onClick={() => toggleIngredientMark(ingredient.id)}
-        >
-            {( ingredient.isMarked ? <div className={styles.ingredientCheckboxMark} /> : null )}
-        </div>
     );
 
     const removeButton = (
         <div
             data-cy={constants.CY_INGREDIENT_REMOVE_BUTTON}
             className={styles.ingredientButton}
-            onClick={() => removeIngredient(ingredient.id)}
+            onClick={onClickRemove}
         >
             <RbaIconWrapper width={44} height={24} color={COLOR_DEFAULT}>
                 <RemoveIcon />
@@ -88,7 +77,7 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
     return (
         <div className={styles.ingredient}>
 
-            {( isReadOnly ? checkbox : removeButton )}
+            {( isReadOnly ? getCheckbox(isMarked, onClickMark) : removeButton )}
 
             <div
                 data-cy={constants.CY_INGREDIENT_INFO_LINE}
@@ -99,8 +88,8 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
                 <div
                     data-cy={constants.CY_INGREDIENT_INFO_LINE_NAME}
                     className={styles.ingredientInfoName}
-                    style={( ingredient.isMarked ? { opacity: 0.25 } : undefined )}
-                    onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
+                    style={( isMarked ? { opacity: 0.25 } : undefined )}
+                    onClick={onClick}
                 >
                     {ingredientProduct.name.toUpperCase()}
                 </div>
@@ -116,9 +105,7 @@ const RbaIngredientInfo: React.FC<Props> = ({ ingredient, isReadOnly }) => {
                         height={SelectHeightSize.Medium}
                         options={Object.values(Units).map((unit) => ({ value: unit }))}
                         value={ingredientProduct.unit}
-                        onChange={(option: SelectOption) => {
-                            dispatch(actions.updateIngredientUnit(ingredient.id, option.value as WeightUnit | VolumeUnit));
-                        }}
+                        onChange={onChangeUnit}
                     />
                 </div>
             </div>

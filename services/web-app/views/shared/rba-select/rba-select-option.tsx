@@ -1,6 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import type { RbaSelectChangeCallback } from ".";
 import { getOptionLabel } from ".";
 
 import styles from "./rba-select.module.scss";
@@ -13,7 +14,7 @@ export interface SelectOption {
 
 interface Props {
     option: SelectOption;
-    onSelect: (option: SelectOption) => void;
+    onSelect: RbaSelectChangeCallback;
 }
 
 
