@@ -2,13 +2,12 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
+import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { addIngredientRequest } from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { searchClear, searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
-
-import RbaIngredient from "../rba-ingredient";
 
 
 interface Props {

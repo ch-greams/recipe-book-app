@@ -5,13 +5,14 @@ import * as constants from "@cypress/constants";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
+import RbaIngredientProduct, {
+    IngredientProductSize, IngredientProductTheme,
+} from "@views/recipe/components/rba-ingredient-product";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
 import { searchClear, searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
-
-import RbaIngredientProduct, { IngredientProductSize, IngredientProductTheme } from "../rba-ingredient-product";
 
 import styles from "./rba-ingredient.module.scss";
 
@@ -20,20 +21,11 @@ import styles from "./rba-ingredient.module.scss";
 interface Props {
     search: SearchPageStore;
     isReadOnly: boolean;
-    ingredient?: RecipeIngredient;
+    ingredient: RecipeIngredient;
 }
 
-const DEFAULT_INGREDIENT: RecipeIngredient = {
-    isOpen: false,
-    isMarked: false,
-    id: -1,
-    product_id: -1,
-    alternativeNutritionFacts: {},
-    products: {},
-};
 
-
-const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient = DEFAULT_INGREDIENT }) => {
+const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
 
     const dispatch = useDispatch();
 

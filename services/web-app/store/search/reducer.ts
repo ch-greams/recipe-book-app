@@ -1,3 +1,5 @@
+import type { AppState } from "..";
+
 import type { SearchPageActionTypes, SearchPageStore } from "./types";
 import { SEARCH_CLEAR } from "./types";
 import {
@@ -16,6 +18,9 @@ const initialState: SearchPageStore = {
     products: [],
 };
 
+export function extractState(globalState: AppState): SearchPageStore {
+    return (globalState?.searchPage || initialState);
+}
 
 export default function searchPageReducer(state = initialState, action: SearchPageActionTypes): SearchPageStore {
 

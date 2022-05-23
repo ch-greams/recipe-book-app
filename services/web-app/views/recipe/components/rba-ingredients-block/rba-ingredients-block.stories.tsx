@@ -11,6 +11,7 @@ import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
 import type { RecipeIngredient } from "@store/recipe/types";
+import { extractState } from "@store/search/reducer";
 
 import RbaIngredientsBlock from ".";
 
@@ -34,6 +35,9 @@ export default {
         ),
     ],
 } as ComponentMeta<typeof RbaIngredientsBlock>;
+
+const search = extractState({} as AppState);
+
 
 const Template: ComponentStory<typeof RbaIngredientsBlock> = (args) => <RbaIngredientsBlock {...args} />;
 
@@ -112,54 +116,63 @@ const INGREDIENT_1: RecipeIngredient = {
 
 export const DefaultClosed = Template.bind({});
 DefaultClosed.args = {
+    search,
     isReadOnly: false,
     ingredients: [ INGREDIENT_0, INGREDIENT_1 ],
 };
 
 export const ReadOnlyClosed = Template.bind({});
 ReadOnlyClosed.args = {
+    search,
     isReadOnly: true,
     ingredients: [ INGREDIENT_0, INGREDIENT_1 ],
 };
 
 export const ReadOnlyClosedMarked = Template.bind({});
 ReadOnlyClosedMarked.args = {
+    search,
     isReadOnly: true,
     ingredients: [ { ...INGREDIENT_0, isMarked: true }, INGREDIENT_1 ],
 };
 
 export const DefaultOpen = Template.bind({});
 DefaultOpen.args = {
+    search,
     isReadOnly: false,
     ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpen = Template.bind({});
 ReadOnlyOpen.args = {
+    search,
     isReadOnly: true,
     ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpenMarked = Template.bind({});
 ReadOnlyOpenMarked.args = {
+    search,
     isReadOnly: true,
     ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {}, isMarked: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedDefaultOpen = Template.bind({});
 AltHighlightedDefaultOpen.args = {
+    search,
     isReadOnly: false,
     ingredients: [ { ...INGREDIENT_0, isOpen: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedReadOnlyOpen = Template.bind({});
 AltHighlightedReadOnlyOpen.args = {
+    search,
     isReadOnly: true,
     ingredients: [ { ...INGREDIENT_0, isOpen: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedReadOnlyOpenMarked = Template.bind({});
 AltHighlightedReadOnlyOpenMarked.args = {
+    search,
     isReadOnly: true,
     ingredients: [ { ...INGREDIENT_0, isOpen: true, isMarked: true }, INGREDIENT_1 ],
 };
