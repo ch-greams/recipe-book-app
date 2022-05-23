@@ -1,8 +1,10 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
+import { NutritionFactType } from "@common/nutritionFacts";
 import Utils from "@common/utils";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
+import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
@@ -11,8 +13,6 @@ import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
-
-import RbaGeneralInfoBlock from "./rba-general-info-block";
 
 import styles from "./rba-recipe-page.module.scss";
 
@@ -79,6 +79,18 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
 
                 <RbaGeneralInfoBlock
                     recipeItem={recipeItem}
+                    featuredNutritionFacts={[
+                        NutritionFactType.Energy,
+                        NutritionFactType.Carbohydrate,
+                        NutritionFactType.DietaryFiber,
+                        NutritionFactType.Sugars,
+                        NutritionFactType.Fat,
+                        NutritionFactType.Monounsaturated,
+                        NutritionFactType.Protein,
+                        NutritionFactType.Sodium,
+                        NutritionFactType.VitaminA,
+                        NutritionFactType.VitaminC,
+                    ]}
                     nutritionFacts={nutritionFacts}
                     nutritionFactInputs={nutritionFactInputs}
                 />

@@ -1,41 +1,29 @@
 import React from "react";
 
-import { NutritionFactType } from "@common/nutritionFacts";
+import type { NutritionFactType } from "@common/nutritionFacts";
 import Utils from "@common/utils";
+import RbaParametersBlock from "@views/recipe/components/rba-parameters-block";
 import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
 import type { RecipePageStore } from "@store/recipe/types";
 
-import ParametersBlock from "./rba-parameters-block";
-
-import styles from "./rba-recipe-page.module.scss";
+import styles from "./rba-general-info-block.module.scss";
 
 
 
 interface GeneralInfoBlockProps {
     recipeItem: RecipePageStore;
+    featuredNutritionFacts: NutritionFactType[];
     nutritionFacts: Dictionary<NutritionFactType, number>;
     nutritionFactInputs: Dictionary<NutritionFactType, string>;
 }
 
-const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({ recipeItem, nutritionFacts, nutritionFactInputs }) => {
-
-    const featuredNutritionFacts = [
-        NutritionFactType.Energy,
-        NutritionFactType.Carbohydrate,
-        NutritionFactType.DietaryFiber,
-        NutritionFactType.Sugars,
-        NutritionFactType.Fat,
-        NutritionFactType.Monounsaturated,
-        NutritionFactType.Protein,
-        NutritionFactType.Sodium,
-        NutritionFactType.VitaminA,
-        NutritionFactType.VitaminC,
-    ];
-
+const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
+    recipeItem, featuredNutritionFacts, nutritionFacts, nutritionFactInputs,
+}) => {
     return (
         <div className={styles.mainBlock}>
 
-            <ParametersBlock recipeItem={recipeItem} />
+            <RbaParametersBlock recipeItem={recipeItem} />
 
             <div className={styles.featuredNutritionFacts}>
 
