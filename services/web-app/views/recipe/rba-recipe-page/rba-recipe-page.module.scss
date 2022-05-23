@@ -16,22 +16,5 @@
 
         margin-top: 40px;
         margin-bottom: 80px;
-
-        .mainBlock {
-
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-
-            .featuredNutritionFacts {
-
-                width: 49%;
-            }
-
-            .separator {
-                height: 1px;
-                background-color: $color-white;
-            }
-        }
     }
 }
