@@ -15,14 +15,29 @@
 
         .name {
 
+            width: calc(50% - 14px);
+
+            padding-left: 8px;
+            margin-right: 4px;
+
             font-family: $font-default;
             font-size: $font-size-32;
             font-weight: $font-weight-700;
 
             color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
         }
 
         .brand {
+
+            width: calc(50% - 14px);
+
+            padding-right: 8px;
 
             font-family: $font-default;
             font-size: $font-size-32;
@@ -31,6 +46,12 @@
             color: $color-white;
 
             text-align: right;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
         }
     }
 
@@ -51,11 +72,21 @@
 
         .subtitle {
 
+            width: 100%;
+
+            padding-left: 8px;
+
             font-family: $font-default;
             font-size: $font-size-18;
             font-weight: $font-weight-700;
 
             color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
         }
     }
 
@@ -68,11 +99,23 @@
 
         .description {
 
+            width: calc(100% - 18px);
+
+            padding: 8px;
+
             font-family: $font-default;
             font-size: $font-size-16;
             font-weight: $font-weight-500;
 
             color: $color-white;
+
+            resize: none;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
         }
     }
 }

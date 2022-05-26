@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
+import type { ParsedUrlQuery } from "querystring";
 
 import Utils, { RoutePath } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
@@ -12,12 +13,17 @@ import { searchClear } from "@store/search/actions";
 import RbaFoodPage from "./rba-food-page";
 
 
+interface FoodPageQuery extends ParsedUrlQuery {
+    edit: string;
+    rid: string;
+}
+
 const RbaFoodPageConnected: React.FC = () => {
 
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { query: { fid } } = router;
+    const { fid, edit: isEdit } = router.query as FoodPageQuery;
     const isNewFoodPage = !Utils.isSome(fid);
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
@@ -45,7 +51,13 @@ const RbaFoodPageConnected: React.FC = () => {
             ? (
                 foodItem.errorMessage
                     ? <RbaSingleMessagePage text={foodItem.errorMessage} />
-                    : <RbaFoodPage foodItem={foodItem} isNew={isNewFoodPage} />
+                    : (
+                        <RbaFoodPage
+                            isReadOnly={!( isEdit === "true" )}
+                            foodItem={foodItem}
+                            isNew={isNewFoodPage}
+                        />
+                    )
             )
             : <RbaSingleMessagePage text={"LOADING"} />
     );

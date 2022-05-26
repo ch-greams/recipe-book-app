@@ -10,6 +10,7 @@ import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
+import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
@@ -34,6 +35,13 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
             ? () => dispatch(actions.createRecipeItemRequest())
             : () => dispatch(actions.updateRecipeItemRequest())
     );
+    const saveButton = (
+        <RbaButton
+            label={"SAVE"}
+            width={ButtonWidthSize.Full}
+            onClick={saveButtonAction}
+        />
+    );
 
     const {
         name,
@@ -54,26 +62,34 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
 
             <div className={styles.recipePageElements}>
 
-                {(isReadOnly || (
-                    <RbaButton
-                        label={"SAVE"}
-                        width={ButtonWidthSize.Full}
-                        onClick={saveButtonAction}
-                    />
-                ))}
+                {( !isReadOnly && saveButton )}
 
                 {/* Title Block */}
 
-                <RbaPageTitleBlock
-                    name={name}
-                    brand={brand}
-                    subtitle={subtitle}
-                    description={description}
-                    updateName={actions.updateName}
-                    updateBrand={actions.updateBrand}
-                    updateSubtitle={actions.updateSubtitle}
-                    updateDescription={actions.updateDescription}
-                />
+                {(
+                    isReadOnly
+                        ? (
+                            <RbaPageTitleBlock
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                            />
+
+                        )
+                        : (
+                            <RbaPageTitleBlockInput
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                                updateName={actions.updateName}
+                                updateBrand={actions.updateBrand}
+                                updateSubtitle={actions.updateSubtitle}
+                                updateDescription={actions.updateDescription}
+                            />
+                        )
+                )}
 
                 {/* Main Block */}
 

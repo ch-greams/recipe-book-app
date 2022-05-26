@@ -259,6 +259,11 @@ export default class Utils {
         return -Date.now();
     }
 
+    public static getNumberOfLines(str: string): number {
+        const SINGLE_LINE = 1;
+        return (str.match(/\n/g) || "").length + SINGLE_LINE;
+    }
+
     public static sortBy<T>(field: keyof T): Comparer<T> {
         return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
     }

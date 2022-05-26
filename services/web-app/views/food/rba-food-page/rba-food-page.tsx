@@ -6,6 +6,7 @@ import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
+import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
 
@@ -13,11 +14,12 @@ import styles from "./rba-food-page.module.scss";
 
 
 interface Props {
+    isReadOnly: boolean;
     foodItem: FoodPageStore;
     isNew: boolean;
 }
 
-const RbaFoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
+const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
 
     const dispatch = useDispatch();
 
@@ -25,6 +27,13 @@ const RbaFoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
         isNew
             ? () => dispatch(actions.createFoodItemRequest())
             : () => dispatch(actions.updateFoodItemRequest())
+    );
+    const saveButton = (
+        <RbaButton
+            label={"SAVE"}
+            width={ButtonWidthSize.Full}
+            onClick={saveButtonAction}
+        />
     );
 
     const {
@@ -42,24 +51,35 @@ const RbaFoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
 
             <div className={styles.foodPageElements}>
 
-                <RbaButton
-                    label={"SAVE"}
-                    width={ButtonWidthSize.Full}
-                    onClick={saveButtonAction}
-                />
+                {( !isReadOnly && saveButton )}
 
                 {/* Title Block */}
 
-                <RbaPageTitleBlock
-                    name={name}
-                    brand={brand}
-                    subtitle={subtitle}
-                    description={description}
-                    updateName={actions.updateName}
-                    updateBrand={actions.updateBrand}
-                    updateSubtitle={actions.updateSubtitle}
-                    updateDescription={actions.updateDescription}
-                />
+                {(
+                    isReadOnly
+                        ? (
+                            <RbaPageTitleBlock
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                            />
+
+                        )
+                        : (
+                            <RbaPageTitleBlockInput
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                                updateName={actions.updateName}
+                                updateBrand={actions.updateBrand}
+                                updateSubtitle={actions.updateSubtitle}
+                                updateDescription={actions.updateDescription}
+                            />
+                        )
+                )}
+
 
                 {/* Main Block */}
 
@@ -75,6 +95,7 @@ const RbaFoodPage: React.FC<Props> = ({ foodItem, isNew }) => {
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <RbaPageDetailedNutritionFactsBlock
+                    isReadOnly={isReadOnly}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
                 />
