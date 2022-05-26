@@ -194,7 +194,7 @@ describe("recipe_page", () => {
             );
             cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29?edit=true`);
+            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
         });
 
         it("can add ingredient", () => {

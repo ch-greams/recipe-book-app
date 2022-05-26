@@ -159,7 +159,7 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29?edit=true`);
+            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
         });
 
         it("can add direction", () => {

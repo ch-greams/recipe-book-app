@@ -28,11 +28,29 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
             ? () => dispatch(actions.createFoodItemRequest())
             : () => dispatch(actions.updateFoodItemRequest())
     );
-    const saveButton = (
+
+    const pageControls = (
+        <>
+            <RbaButton
+                label={"REVERT"}
+                disabled={isNew}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(actions.fetchFoodItemRequest(foodItem.id))}
+            />
+
+            <RbaButton
+                label={"SAVE"}
+                width={ButtonWidthSize.Full}
+                onClick={saveButtonAction}
+            />
+        </>
+    );
+
+    const editButton = (
         <RbaButton
-            label={"SAVE"}
+            label={"EDIT"}
             width={ButtonWidthSize.Full}
-            onClick={saveButtonAction}
+            onClick={() => dispatch(actions.setEditMode(true))}
         />
     );
 
@@ -51,7 +69,11 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
 
             <div className={styles.foodPageElements}>
 
-                {( !isReadOnly && saveButton )}
+                {/* Page Controls Block */}
+
+                <div className={styles.pageControls}>
+                    {( isReadOnly ? editButton : pageControls )}
+                </div>
 
                 {/* Title Block */}
 

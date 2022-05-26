@@ -281,7 +281,7 @@ export default class Utils {
     }
 
     public static getNewItemPath(route: RoutePath | ProductType): string {
-        return `/${route}/new?edit=true`;
+        return `/${route}/new`;
     }
 
     public static getUrlParams(obj: object): string {

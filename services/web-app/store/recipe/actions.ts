@@ -7,6 +7,13 @@ import * as types from "./types";
 // Recipe
 // -----------------------------------------------------------------------------
 
+export function setEditMode(name: boolean): types.SetEditModeAction {
+    return {
+        type: types.RECIPE_ITEM_SET_EDIT_MODE,
+        payload: name,
+    };
+}
+
 export function updateServingSizeAmount(inputValue: string): types.UpdateServingSizeAmountAction {
     return {
         type: types.RECIPE_ITEM_UPDATE_SERVING_SIZE_AMOUNT,

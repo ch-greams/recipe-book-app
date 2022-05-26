@@ -14,8 +14,7 @@ import RbaFoodPage from "./rba-food-page";
 
 
 interface FoodPageQuery extends ParsedUrlQuery {
-    edit: string;
-    rid: string;
+    fid: string;
 }
 
 const RbaFoodPageConnected: React.FC = () => {
@@ -23,7 +22,7 @@ const RbaFoodPageConnected: React.FC = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { fid, edit: isEdit } = router.query as FoodPageQuery;
+    const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = !Utils.isSome(fid);
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
@@ -53,7 +52,7 @@ const RbaFoodPageConnected: React.FC = () => {
                     ? <RbaSingleMessagePage text={foodItem.errorMessage} />
                     : (
                         <RbaFoodPage
-                            isReadOnly={!( isEdit === "true" )}
+                            isReadOnly={!foodItem.editMode}
                             foodItem={foodItem}
                             isNew={isNewFoodPage}
                         />

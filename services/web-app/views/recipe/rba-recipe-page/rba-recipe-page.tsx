@@ -35,11 +35,29 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
             ? () => dispatch(actions.createRecipeItemRequest())
             : () => dispatch(actions.updateRecipeItemRequest())
     );
-    const saveButton = (
+
+    const pageControls = (
+        <>
+            <RbaButton
+                label={"REVERT"}
+                disabled={isNew}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(actions.fetchRecipeItemRequest(recipeItem.id))}
+            />
+
+            <RbaButton
+                label={"SAVE"}
+                width={ButtonWidthSize.Full}
+                onClick={saveButtonAction}
+            />
+        </>
+    );
+
+    const editButton = (
         <RbaButton
-            label={"SAVE"}
+            label={"EDIT"}
             width={ButtonWidthSize.Full}
-            onClick={saveButtonAction}
+            onClick={() => dispatch(actions.setEditMode(true))}
         />
     );
 
@@ -62,7 +80,11 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
 
             <div className={styles.recipePageElements}>
 
-                {( !isReadOnly && saveButton )}
+                {/* Page Controls Block */}
+
+                <div className={styles.pageControls}>
+                    {( isReadOnly ? editButton : pageControls )}
+                </div>
 
                 {/* Title Block */}
 

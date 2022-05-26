@@ -10,7 +10,8 @@ const initialState: types.RecipePageStore = {
 
     isLoaded: false,
     errorMessage: null,
-    isReadOnly: false,
+
+    editMode: true,
 
     id: -1,
     name: "Name",
@@ -157,6 +158,13 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
 export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
 
     switch (action.type) {
+
+        case types.RECIPE_ITEM_SET_EDIT_MODE: {
+            return {
+                ...state,
+                editMode: action.payload,
+            };
+        }
 
         case types.RECIPE_ITEM_UPDATE_NAME: {
             return {
@@ -1001,6 +1009,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
+                editMode: true,
                 isCreated: false,
             };
         }
@@ -1010,6 +1019,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 isLoaded: false,
                 errorMessage: null,
+                editMode: false,
 
                 id: action.payload,
             };
@@ -1065,6 +1075,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: recipeItem.id,
                 isCreated: true,
             };
@@ -1092,6 +1103,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: recipeItem.id,
             };
         }

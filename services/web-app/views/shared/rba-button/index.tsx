@@ -13,14 +13,16 @@ export enum ButtonWidthSize {
 
 interface Props {
     label: string;
+    disabled?: boolean;
     width: ButtonWidthSize;
     onClick: () => void;
 }
 
-const RbaButton: React.FC<Props> = ({ label, width, onClick }) => {
+const RbaButton: React.FC<Props> = ({ label, disabled = false, width, onClick }) => {
 
     const classNames = Utils.classNames({
         [styles.rbaButton]: true,
+        [styles.disabled]: disabled,
         [styles[width]]: true,
     });
 
@@ -28,6 +30,7 @@ const RbaButton: React.FC<Props> = ({ label, width, onClick }) => {
         <button
             data-cy={CY_PAGE_SAVE_BUTTON}
             type={"button"}
+            disabled={disabled}
             className={classNames}
             onClick={onClick}
         >

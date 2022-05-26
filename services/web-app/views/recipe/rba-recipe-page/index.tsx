@@ -15,7 +15,6 @@ import RecipePage from "./rba-recipe-page";
 
 
 interface RecipePageQuery extends ParsedUrlQuery {
-    edit: string;
     rid: string;
 }
 
@@ -24,7 +23,7 @@ const RecipePageConnected: React.FC = () => {
     const dispatch = useDispatch();
     const router = useRouter();
 
-    const { rid, edit: isEdit } = router.query as RecipePageQuery;
+    const { rid } = router.query as RecipePageQuery;
     const isNewRecipePage = !Utils.isSome(rid);
 
     const recipeItem = useSelector<AppState>((state) => state.recipePage) as RecipePageStore;
@@ -55,7 +54,7 @@ const RecipePageConnected: React.FC = () => {
                     ? <RbaSingleMessagePage text={recipeItem.errorMessage} />
                     : (
                         <RecipePage
-                            isReadOnly={!( isEdit === "true" )}
+                            isReadOnly={!recipeItem.editMode}
                             recipeItem={recipeItem}
                             search={search}
                             isNew={isNewRecipePage}

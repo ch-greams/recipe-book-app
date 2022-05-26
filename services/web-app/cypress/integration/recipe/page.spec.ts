@@ -15,7 +15,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/create`, { fixture: "recipe_create_response.json" })
                 .as("updateRecipe");
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/new?edit=true`);
+            cy.visit(`${constants.CY_RECIPE_PATH}/new`);
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).click();
 
@@ -52,7 +52,7 @@ describe("recipe_page", () => {
                 .as("updateRecipe");
 
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29?edit=true`);
+            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).click();
 
