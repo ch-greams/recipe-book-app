@@ -1,6 +1,6 @@
 import * as constants from "@cypress/constants";
 
-import Utils, { RoutePath } from "@common/utils";
+import Utils, { ProductType } from "@common/utils";
 
 
 describe("food_page", () => {
@@ -29,7 +29,7 @@ describe("food_page", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getNewItemPath(RoutePath.Food));
+            cy.url().should("include", Utils.getNewItemPath(ProductType.Food));
 
             cy.get(`[data-cy=${constants.CY_PAGE_SAVE_BUTTON}]`)
                 .should("be.visible")
@@ -40,7 +40,7 @@ describe("food_page", () => {
                 cy.wrap(interceptedRequest?.response?.body?.name).should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
             });
 
-            cy.url().should("include", Utils.getItemPath(RoutePath.Food, NEW_FOOD_ID));
+            cy.url().should("include", Utils.getItemPath(ProductType.Food, NEW_FOOD_ID));
         });
 
         it("can save an updated page", () => {

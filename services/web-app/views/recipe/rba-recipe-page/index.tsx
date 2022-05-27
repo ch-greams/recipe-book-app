@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
-import Utils, { RoutePath } from "@common/utils";
+import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
 import * as actions from "@store/recipe/actions";
@@ -36,10 +36,10 @@ const RecipePageConnected: React.FC = () => {
             const recipeId = Number(rid);
             dispatch(actions.fetchRecipeItemRequest(recipeId));
         }
-        else if (router.asPath.includes(Utils.getNewItemPath(RoutePath.Recipe))) {
+        else if (router.asPath.includes(Utils.getNewItemPath(ProductType.Recipe))) {
 
             if (recipeItem.isCreated) {
-                router.push(Utils.getItemPath(RoutePath.Recipe, recipeItem.id));
+                router.push(Utils.getItemPath(ProductType.Recipe, recipeItem.id));
             }
             else {
                 dispatch(actions.fetchRecipeItemNew());

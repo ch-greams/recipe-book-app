@@ -18,12 +18,6 @@ export enum UserMenuItem {
     Foods = "Foods",
 }
 
-export enum RoutePath {
-    Home = "",
-    Food = "food",
-    Recipe = "recipe",
-}
-
 export enum ProductType {
     Food = "food",
     Recipe = "recipe",
@@ -276,11 +270,11 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath | ProductType, id: number): string {
+    public static getItemPath(route: ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: RoutePath | ProductType): string {
+    public static getNewItemPath(route: ProductType): string {
         return `/${route}/new`;
     }
 

@@ -308,7 +308,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 servingSizeUnit: action.payload,
 
-                // TODO: Update nutritionFacts values on change
+                // TODO: Update nutritionFacts values on change (part of the RBA-28)
                 // nutritionFactsByServing: nutritionFactsByServing,
                 // nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
