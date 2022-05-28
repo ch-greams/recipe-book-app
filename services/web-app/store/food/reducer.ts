@@ -11,6 +11,8 @@ const initialState: types.FoodPageStore = {
     isLoaded: false,
     errorMessage: null,
 
+    editMode: true,
+
     id: -1,
     name: "Name",
     brand: "Brand",
@@ -69,6 +71,13 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
     switch (action.type) {
 
+        case types.FOOD_ITEM_SET_EDIT_MODE: {
+            return {
+                ...state,
+                editMode: action.payload,
+            };
+        }
+
         case types.FOOD_ITEM_UPDATE_NAME: {
             return {
                 ...state,
@@ -109,6 +118,9 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
+
+                editMode: true,
+
                 isCreated: false,
             };
         }
@@ -118,6 +130,8 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 ...state,
                 isLoaded: false,
                 errorMessage: null,
+
+                editMode: false,
 
                 id: action.payload,
             };
@@ -294,7 +308,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 servingSizeUnit: action.payload,
 
-                // TODO: Update nutritionFacts values on change
+                // TODO: Update nutritionFacts values on change (part of the RBA-28)
                 // nutritionFactsByServing: nutritionFactsByServing,
                 // nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
@@ -314,6 +328,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: foodItem.id,
                 isCreated: true,
             };
@@ -341,6 +356,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: foodItem.id,
             };
         }

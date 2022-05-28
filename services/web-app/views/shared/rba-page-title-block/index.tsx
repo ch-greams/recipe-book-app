@@ -1,9 +1,7 @@
-import React, { useState } from "react";
-import type { AnyAction } from "redux";
+import React from "react";
+import * as constants from "@cypress/constants";
 
-import RbaPageTitleBlockInput from "./rba-page-title-block-input";
-import RbaPageTitleBlockStatic from "./rba-page-title-block-static";
-
+import styles from "./rba-page-title-block.module.scss";
 
 
 interface Props {
@@ -11,44 +9,57 @@ interface Props {
     brand: string;
     subtitle: string;
     description?: string;
-    updateName: (value: string) => AnyAction;
-    updateBrand: (value: string) => AnyAction;
-    updateSubtitle: (value: string) => AnyAction;
-    updateDescription: (value: string) => AnyAction;
 }
 
 
-const RbaPageTitleBlock: React.FC<Props> = ({
-    name, brand, subtitle, description,
-    updateName, updateBrand, updateSubtitle, updateDescription,
-}) => {
+const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, subtitle, description }) => {
 
-    const [ isTitleInputsOpen, setIsTitleInputsOpen ] = useState(false);
+    const descriptionBlock = (
+        <div className={styles.descriptionBlock}>
+            <div
+                data-cy={constants.CY_PAGE_TITLE_DESCRIPTION_TEXT}
+                className={styles.description}
+            >
+                {description}
+            </div>
+        </div>
+    );
 
     return (
-        isTitleInputsOpen
-            ? (
-                <RbaPageTitleBlockInput
-                    name={name}
-                    brand={brand}
-                    subtitle={subtitle}
-                    description={description}
-                    confirmTitle={() => setIsTitleInputsOpen(false)}
-                    updateName={updateName}
-                    updateBrand={updateBrand}
-                    updateSubtitle={updateSubtitle}
-                    updateDescription={updateDescription}
-                />
-            )
-            : (
-                <RbaPageTitleBlockStatic
-                    name={name}
-                    brand={brand}
-                    subtitle={subtitle}
-                    description={description}
-                    editTitle={() => setIsTitleInputsOpen(true)}
-                />
-            )
+
+        <div data-cy={constants.CY_PAGE_TITLE_BLOCK} className={styles.titleBlock}>
+
+            <div className={styles.nameBlock}>
+
+                <div
+                    data-cy={constants.CY_PAGE_TITLE_NAME_TEXT}
+                    className={styles.name}
+                >
+                    {name.toUpperCase()}
+                </div>
+
+                <div
+                    data-cy={constants.CY_PAGE_TITLE_BRAND_TEXT}
+                    className={styles.brand}
+                >
+                    {brand.toUpperCase()}
+                </div>
+
+            </div>
+
+            <div className={styles.subtitleBlock}>
+
+                <div
+                    data-cy={constants.CY_PAGE_TITLE_SUBTITLE_TEXT}
+                    className={styles.subtitle}
+                >
+                    {subtitle.toUpperCase()}
+                </div>
+            </div>
+
+            {description && descriptionBlock}
+
+        </div>
     );
 };
 

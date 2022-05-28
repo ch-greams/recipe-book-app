@@ -9,6 +9,8 @@ export interface FoodPageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
 
+    editMode: boolean;
+
     id: number;
     name: string;
     brand: string;
@@ -43,6 +45,7 @@ export interface FoodPageStore {
     isCreated: boolean;
 }
 
+export const FOOD_ITEM_SET_EDIT_MODE = "FOOD_ITEM_SET_EDIT_MODE";
 
 export const FOOD_ITEM_UPDATE_NAME = "FOOD_ITEM_UPDATE_NAME";
 export const FOOD_ITEM_UPDATE_BRAND = "FOOD_ITEM_UPDATE_BRAND";
@@ -75,6 +78,11 @@ export const FOOD_ITEM_UPDATE_REQUEST = "FOOD_ITEM_UPDATE_REQUEST";
 export const FOOD_ITEM_UPDATE_SUCCESS = "FOOD_ITEM_UPDATE_SUCCESS";
 export const FOOD_ITEM_UPDATE_ERROR = "FOOD_ITEM_UPDATE_ERROR";
 
+
+export interface SetEditModeAction {
+    type: typeof FOOD_ITEM_SET_EDIT_MODE;
+    payload: boolean;
+}
 
 export interface UpdateNameAction {
     type: typeof FOOD_ITEM_UPDATE_NAME;
@@ -198,7 +206,7 @@ export interface FoodItemUpdateErrorAction {
 
 export type FoodItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction |
-    UpdateTypeAction | UpdateNutritionFactAction |
+    UpdateTypeAction | UpdateNutritionFactAction | SetEditModeAction |
     UpdateDensityAmountAction | UpdateDensityVolumeUnitAction | UpdateDensityWeightUnitAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | FoodItemFetchNewAction |
     FoodItemFetchRequestAction | FoodItemFetchErrorAction | FoodItemFetchSuccessAction |

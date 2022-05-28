@@ -14,7 +14,13 @@
 
         flex-basis: 60%;
 
-        margin-top: 40px;
+        margin-top: 20px;
         margin-bottom: 80px;
+
+        .pageControls {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
     }
 }

@@ -6,7 +6,6 @@
     min-height: 34px;
 
     padding: 4px;
-    margin-bottom: 40px;
 
     font-family: $font-default;
     font-size: $font-size-18;
@@ -19,6 +18,16 @@
     background-color: $color-white;
 
     border: none;
+
+    &.disabled {
+        opacity: 0.5;
+
+        &:hover {
+            color: $color-default;
+            cursor: not-allowed;
+            background-color: $color-white;
+        }
+    }
 
     &:hover {
         color: $color-default-dark;

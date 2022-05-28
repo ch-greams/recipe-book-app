@@ -8,8 +8,10 @@ import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
+import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
+import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
@@ -35,6 +37,31 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
             : () => dispatch(actions.updateRecipeItemRequest())
     );
 
+    const pageControls = (
+        <>
+            <RbaButton
+                label={RBA_BUTTON_LABEL_REVERT}
+                disabled={isNew}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(actions.fetchRecipeItemRequest(recipeItem.id))}
+            />
+
+            <RbaButton
+                label={RBA_BUTTON_LABEL_SAVE}
+                width={ButtonWidthSize.Full}
+                onClick={saveButtonAction}
+            />
+        </>
+    );
+
+    const editButton = (
+        <RbaButton
+            label={RBA_BUTTON_LABEL_EDIT}
+            width={ButtonWidthSize.Full}
+            onClick={() => dispatch(actions.setEditMode(true))}
+        />
+    );
+
     const {
         name,
         brand,
@@ -54,26 +81,38 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
 
             <div className={styles.recipePageElements}>
 
-                {(isReadOnly || (
-                    <RbaButton
-                        label={"SAVE"}
-                        width={ButtonWidthSize.Full}
-                        onClick={saveButtonAction}
-                    />
-                ))}
+                {/* Page Controls Block */}
+
+                <div className={styles.pageControls}>
+                    {( isReadOnly ? editButton : pageControls )}
+                </div>
 
                 {/* Title Block */}
 
-                <RbaPageTitleBlock
-                    name={name}
-                    brand={brand}
-                    subtitle={subtitle}
-                    description={description}
-                    updateName={actions.updateName}
-                    updateBrand={actions.updateBrand}
-                    updateSubtitle={actions.updateSubtitle}
-                    updateDescription={actions.updateDescription}
-                />
+                {(
+                    isReadOnly
+                        ? (
+                            <RbaPageTitleBlock
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                            />
+
+                        )
+                        : (
+                            <RbaPageTitleBlockInput
+                                name={name}
+                                brand={brand}
+                                subtitle={subtitle}
+                                description={description}
+                                updateName={actions.updateName}
+                                updateBrand={actions.updateBrand}
+                                updateSubtitle={actions.updateSubtitle}
+                                updateDescription={actions.updateDescription}
+                            />
+                        )
+                )}
 
                 {/* Main Block */}
 

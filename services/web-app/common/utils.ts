@@ -18,12 +18,6 @@ export enum UserMenuItem {
     Foods = "Foods",
 }
 
-export enum RoutePath {
-    Home = "",
-    Food = "food",
-    Recipe = "recipe",
-}
-
 export enum ProductType {
     Food = "food",
     Recipe = "recipe",
@@ -259,6 +253,11 @@ export default class Utils {
         return -Date.now();
     }
 
+    public static getNumberOfLines(str: string): number {
+        const SINGLE_LINE = 1;
+        return (str.match(/\n/g) || "").length + SINGLE_LINE;
+    }
+
     public static sortBy<T>(field: keyof T): Comparer<T> {
         return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
     }
@@ -271,12 +270,12 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: RoutePath | ProductType, id: number): string {
+    public static getItemPath(route: ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: RoutePath | ProductType): string {
-        return `/${route}/new?edit=true`;
+    public static getNewItemPath(route: ProductType): string {
+        return `/${route}/new`;
     }
 
     public static getUrlParams(obj: object): string {
@@ -369,6 +368,7 @@ export default class Utils {
 
     private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection): Direction {
         return {
+            id: recipeDirection.id,
             step_number: recipeDirection.stepNumber,
             name: recipeDirection.name,
             duration_value: recipeDirection.durationValue,

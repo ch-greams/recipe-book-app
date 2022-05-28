@@ -30,3 +30,10 @@ Default.args = {
     label: "Button",
     width: ButtonWidthSize.Medium,
 };
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+    label: "Button",
+    disabled: true,
+    width: ButtonWidthSize.Medium,
+};

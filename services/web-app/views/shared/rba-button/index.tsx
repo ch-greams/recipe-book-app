@@ -1,5 +1,5 @@
 import React from "react";
-import { CY_PAGE_SAVE_BUTTON } from "@cypress/constants";
+import { CY_BUTTON } from "@cypress/constants";
 
 import Utils from "@common/utils";
 
@@ -13,21 +13,24 @@ export enum ButtonWidthSize {
 
 interface Props {
     label: string;
+    disabled?: boolean;
     width: ButtonWidthSize;
     onClick: () => void;
 }
 
-const RbaButton: React.FC<Props> = ({ label, width, onClick }) => {
+const RbaButton: React.FC<Props> = ({ label, disabled = false, width, onClick }) => {
 
     const classNames = Utils.classNames({
         [styles.rbaButton]: true,
+        [styles.disabled]: disabled,
         [styles[width]]: true,
     });
 
     return (
         <button
-            data-cy={CY_PAGE_SAVE_BUTTON}
+            data-cy={CY_BUTTON}
             type={"button"}
+            disabled={disabled}
             className={classNames}
             onClick={onClick}
         >

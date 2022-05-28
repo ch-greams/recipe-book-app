@@ -5,8 +5,8 @@ export const CY_RECIPE_PATH = "/recipe";
 export const CY_FOOD_PATH = "/food";
 export const CY_USER_PATH = "/user";
 
-export const CY_NEW_RECIPE_PATH = "/recipe/new?edit=true";
-export const CY_NEW_FOOD_PATH = "/food/new?edit=true";
+export const CY_NEW_RECIPE_PATH = "/recipe/new";
+export const CY_NEW_FOOD_PATH = "/food/new";
 
 export const CY_RECIPE_API_PATH = "/api/v1/recipe";
 export const CY_FOOD_API_PATH = "/api/v1/food";
@@ -24,7 +24,6 @@ export const CY_PAGE_TITLE_NAME_INPUT = "CY_PAGE_TITLE_NAME_INPUT";
 export const CY_PAGE_TITLE_BRAND_INPUT = "CY_PAGE_TITLE_BRAND_INPUT";
 export const CY_PAGE_TITLE_SUBTITLE_INPUT = "CY_PAGE_TITLE_SUBTITLE_INPUT";
 export const CY_PAGE_TITLE_DESCRIPTION_INPUT = "CY_PAGE_TITLE_DESCRIPTION_INPUT";
-export const CY_PAGE_TITLE_CONFIRM_BUTTON = "CY_PAGE_TITLE_CONFIRM_BUTTON";
 
 // CUSTOM_UNIT
 
@@ -91,7 +90,7 @@ export const CY_NAVBAR_LOGO_ITEM = "CY_NAVBAR_LOGO_ITEM";
 
 // CREATE & UPDATE
 
-export const CY_PAGE_SAVE_BUTTON = "CY_PAGE_SAVE_BUTTON";
+export const CY_BUTTON = "CY_BUTTON";
 
 // SEARCH
 

@@ -60,6 +60,7 @@ export interface SubDirection {
 }
 
 export interface Direction {
+    id: number;
     step_number: number;
     name: string;
     duration_value?: Option<number>;

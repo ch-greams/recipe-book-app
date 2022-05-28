@@ -6,6 +6,13 @@ import * as types from "./types";
 
 
 
+export function setEditMode(name: boolean): types.SetEditModeAction {
+    return {
+        type: types.FOOD_ITEM_SET_EDIT_MODE,
+        payload: name,
+    };
+}
+
 export function updateName(name: string): types.UpdateNameAction {
     return {
         type: types.FOOD_ITEM_UPDATE_NAME,

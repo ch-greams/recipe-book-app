@@ -10,7 +10,8 @@ const initialState: types.RecipePageStore = {
 
     isLoaded: false,
     errorMessage: null,
-    isReadOnly: false,
+
+    editMode: true,
 
     id: -1,
     name: "Name",
@@ -32,6 +33,8 @@ const initialState: types.RecipePageStore = {
     ingredients: [],
 
     newDirection: {
+        id: -1,
+
         isOpen: false,
         isMarked: false,
 
@@ -135,6 +138,7 @@ function convertDirectionPart(
 function convertDirections(directions: typings.Direction[], ingredients: typings.Ingredient[]): types.RecipeDirection[] {
 
     return directions.map((direction) => ({
+        id: direction.id,
 
         stepNumber: direction.step_number,
         name: direction.name,
@@ -157,6 +161,13 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
 export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
 
     switch (action.type) {
+
+        case types.RECIPE_ITEM_SET_EDIT_MODE: {
+            return {
+                ...state,
+                editMode: action.payload,
+            };
+        }
 
         case types.RECIPE_ITEM_UPDATE_NAME: {
             return {
@@ -679,6 +690,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 directions: [
                     ...state.directions,
                     {
+                        id: direction.id,
+
                         isOpen: false,
                         isMarked: false,
 
@@ -698,6 +711,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     },
                 ],
                 newDirection: {
+                    id: -1,
+
                     isOpen: false,
                     isMarked: false,
 
@@ -1001,6 +1016,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
+                editMode: true,
                 isCreated: false,
             };
         }
@@ -1010,6 +1026,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 isLoaded: false,
                 errorMessage: null,
+                editMode: false,
 
                 id: action.payload,
             };
@@ -1065,6 +1082,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: recipeItem.id,
                 isCreated: true,
             };
@@ -1092,6 +1110,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             return {
                 ...state,
                 isLoaded: true,
+                editMode: false,
                 id: recipeItem.id,
             };
         }

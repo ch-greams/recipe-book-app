@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 
-import Utils, { RoutePath } from "@common/utils";
+import Utils, { ProductType } from "@common/utils";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import type { AppState } from "@store";
 import { searchProducts } from "@store/search/actions";
@@ -32,13 +32,13 @@ const RbaHomePage: React.FC = () => {
 
             <div className={styles.homePageButtons}>
 
-                <Link href={Utils.getNewItemPath(RoutePath.Recipe)}>
+                <Link href={Utils.getNewItemPath(ProductType.Recipe)}>
                     <a className={styles.homePageButton}>
                         {CREATE_RECIPE_BUTTON_LABEL}
                     </a>
                 </Link>
 
-                <Link href={Utils.getNewItemPath(RoutePath.Food)}>
+                <Link href={Utils.getNewItemPath(ProductType.Food)}>
                     <a className={styles.homePageButton}>
                         {CREATE_FOOD_BUTTON_LABEL}
                     </a>

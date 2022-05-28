@@ -42,6 +42,8 @@ export interface RecipeSubDirectionIngredient {
 }
 
 export interface RecipeDirection {
+    id: number;
+
     stepNumber: number;
     name: string;
 
@@ -63,7 +65,8 @@ export interface RecipeDirection {
 export interface RecipePageStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
-    isReadOnly: boolean;
+
+    editMode: boolean;
 
     id: number;
     name: string;
@@ -97,6 +100,8 @@ export interface RecipePageStore {
 // -----------------------------------------------------------------------------
 // Recipe
 // -----------------------------------------------------------------------------
+
+export const RECIPE_ITEM_SET_EDIT_MODE = "RECIPE_ITEM_SET_EDIT_MODE";
 
 export const RECIPE_ITEM_FETCH_NEW = "RECIPE_ITEM_FETCH_NEW";
 export const RECIPE_ITEM_FETCH_REQUEST = "RECIPE_ITEM_FETCH_REQUEST";
@@ -179,6 +184,11 @@ export const RECIPE_ITEM_ADD_INGREDIENT_PRODUCT_ERROR = "RECIPE_ITEM_ADD_INGREDI
 // -----------------------------------------------------------------------------
 // Recipe
 // -----------------------------------------------------------------------------
+
+export interface SetEditModeAction {
+    type: typeof RECIPE_ITEM_SET_EDIT_MODE;
+    payload: boolean;
+}
 
 export interface RecipeItemFetchNewAction {
     type: typeof RECIPE_ITEM_FETCH_NEW;
@@ -477,7 +487,7 @@ export interface AddIngredientProductErrorAction {
 
 export type RecipeItemActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
-    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction |
+    UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | SetEditModeAction |
 
     RemoveDirectionAction | RemoveSubDirectionAction | ToggleDirectionOpenAction | ToggleDirectionMarkAction |
     ToggleSubDirectionMarkAction | UpdateSubDirectionNoteAction |
