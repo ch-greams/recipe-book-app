@@ -1,5 +1,5 @@
 import React from "react";
-import { CY_PAGE_SAVE_BUTTON } from "@cypress/constants";
+import { CY_BUTTON } from "@cypress/constants";
 
 import Utils from "@common/utils";
 
@@ -28,7 +28,7 @@ const RbaButton: React.FC<Props> = ({ label, disabled = false, width, onClick })
 
     return (
         <button
-            data-cy={CY_PAGE_SAVE_BUTTON}
+            data-cy={CY_BUTTON}
             type={"button"}
             disabled={disabled}
             className={classNames}

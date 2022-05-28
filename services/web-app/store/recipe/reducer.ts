@@ -33,6 +33,8 @@ const initialState: types.RecipePageStore = {
     ingredients: [],
 
     newDirection: {
+        id: -1,
+
         isOpen: false,
         isMarked: false,
 
@@ -136,6 +138,7 @@ function convertDirectionPart(
 function convertDirections(directions: typings.Direction[], ingredients: typings.Ingredient[]): types.RecipeDirection[] {
 
     return directions.map((direction) => ({
+        id: direction.id,
 
         stepNumber: direction.step_number,
         name: direction.name,
@@ -687,6 +690,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 directions: [
                     ...state.directions,
                     {
+                        id: direction.id,
+
                         isOpen: false,
                         isMarked: false,
 
@@ -706,6 +711,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     },
                 ],
                 newDirection: {
+                    id: -1,
+
                     isOpen: false,
                     isMarked: false,
 

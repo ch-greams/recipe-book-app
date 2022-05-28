@@ -1,5 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { RBA_BUTTON_LABEL_EDIT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
+
 
 describe("recipe_page", () => {
 
@@ -7,111 +9,119 @@ describe("recipe_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_create_response.json" })
+                .as("updateRecipe");
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
         });
 
         it("can update name", () => {
 
-            const newPageTitleName = "new name";
+            const NEW_PAGE_TITLE_NAME = "new name";
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`)
                 .should("be.visible")
                 .clear()
-                .type(newPageTitleName);
+                .type(NEW_PAGE_TITLE_NAME);
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_CONFIRM_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(newPageTitleName.toUpperCase())
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`).should("not.exist");
+            cy.wait("@updateRecipe").then(interceptedRequest => {
+                cy.wrap(interceptedRequest?.request?.body)
+                    .its("name")
+                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+            });
         });
 
         it("can update brand", () => {
 
-            const newPageTitleBrand = "new brand";
+            const NEW_PAGE_TITLE_BRAND = "new brand";
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_TEXT}]`).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_INPUT}]`)
                 .should("be.visible")
                 .clear()
-                .type(newPageTitleBrand);
+                .type(NEW_PAGE_TITLE_BRAND);
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_CONFIRM_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_TEXT}]`)
-                .contains(newPageTitleBrand.toUpperCase())
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_INPUT}]`).should("not.exist");
+            cy.wait("@updateRecipe").then(interceptedRequest => {
+                cy.wrap(interceptedRequest?.request?.body)
+                    .its("brand")
+                    .should("eq", NEW_PAGE_TITLE_BRAND.toUpperCase());
+            });
         });
 
         it("can update subtitle", () => {
 
-            const newPageTitleSubtitle = "new subtitle";
+            const NEW_PAGE_TITLE_SUBTITLE = "new subtitle";
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`)
                 .should("be.visible")
                 .clear()
-                .type(newPageTitleSubtitle);
+                .type(NEW_PAGE_TITLE_SUBTITLE);
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_CONFIRM_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`)
-                .contains(newPageTitleSubtitle.toUpperCase())
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
+            cy.wait("@updateRecipe").then(interceptedRequest => {
+                cy.wrap(interceptedRequest?.request?.body)
+                    .its("subtitle")
+                    .should("eq", NEW_PAGE_TITLE_SUBTITLE.toUpperCase());
+            });
         });
 
         it("can update description", () => {
 
-            const newPageTitleDescription = "new description";
+            const NEW_PAGE_TITLE_DESCRIPTION = "new description";
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}]`)
                 .should("be.visible")
                 .clear()
-                .type(newPageTitleDescription);
+                .type(NEW_PAGE_TITLE_DESCRIPTION);
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_CONFIRM_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_TEXT}]`)
-                .contains(newPageTitleDescription)
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}]`).should("not.exist");
+            cy.wait("@updateRecipe").then(interceptedRequest => {
+                cy.wrap(interceptedRequest?.request?.body)
+                    .its("description")
+                    .should("eq", NEW_PAGE_TITLE_DESCRIPTION);
+            });
         });
     });
 });

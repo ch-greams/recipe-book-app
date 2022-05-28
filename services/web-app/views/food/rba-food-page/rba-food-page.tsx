@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
+import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
@@ -32,14 +33,14 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
     const pageControls = (
         <>
             <RbaButton
-                label={"REVERT"}
+                label={RBA_BUTTON_LABEL_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(actions.fetchFoodItemRequest(foodItem.id))}
             />
 
             <RbaButton
-                label={"SAVE"}
+                label={RBA_BUTTON_LABEL_SAVE}
                 width={ButtonWidthSize.Full}
                 onClick={saveButtonAction}
             />
@@ -48,7 +49,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
 
     const editButton = (
         <RbaButton
-            label={"EDIT"}
+            label={RBA_BUTTON_LABEL_EDIT}
             width={ButtonWidthSize.Full}
             onClick={() => dispatch(actions.setEditMode(true))}
         />

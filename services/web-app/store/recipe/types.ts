@@ -42,6 +42,8 @@ export interface RecipeSubDirectionIngredient {
 }
 
 export interface RecipeDirection {
+    id: number;
+
     stepNumber: number;
     name: string;
 

@@ -368,6 +368,7 @@ export default class Utils {
 
     private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection): Direction {
         return {
+            id: recipeDirection.id,
             step_number: recipeDirection.stepNumber,
             name: recipeDirection.name,
             duration_value: recipeDirection.durationValue,
