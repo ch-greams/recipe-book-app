@@ -44,6 +44,8 @@ const Template: ComponentStory<typeof RbaDirectionsBlock> = (args) => <RbaDirect
 
 
 const NEW_DIRECTION: RecipeDirection = {
+    id: -1,
+
     isOpen: false,
     isMarked: false,
 
@@ -63,6 +65,8 @@ const NEW_DIRECTION: RecipeDirection = {
 };
 
 const DIRECTION_1: RecipeDirection = {
+    id: 1,
+
     isOpen: false,
     isMarked: false,
 
@@ -111,6 +115,8 @@ const SUB_DIRECTION_2: RecipeSubDirectionIngredient = {
 };
 
 const DIRECTION_2: RecipeDirection = {
+    id: 2,
+
     isOpen: true,
     isMarked: false,
 
