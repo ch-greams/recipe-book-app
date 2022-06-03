@@ -12,7 +12,7 @@ import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-part-line.module.scss";
 
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
 }
 
 
-const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, stepNumber }) => {
+const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
@@ -78,10 +78,7 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
 
             <div className={styles.subDirectionInfoLine}>
 
-                <div
-                    className={styles.directionInfoLineTitle}
-                    style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}
-                >
+                <div style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}>
 
                     <div
                         data-cy={constants.CY_SUB_DIRECTION_LINE_NAME}
@@ -92,7 +89,7 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
 
                 </div>
 
-                <div className={styles.directionInfoLineMeasures}>
+                <div>
 
                     <div className={styles.directionInfoLineMeasure}>
 
@@ -118,6 +115,6 @@ const RbaSubDirectionLine: React.FC<Props> = ({ isReadOnly, subDirection, direct
     );
 };
 
-RbaSubDirectionLine.displayName = "RbaSubDirectionLine";
+RbaDirectionPartLine.displayName = "RbaDirectionPartLine";
 
-export default RbaSubDirectionLine;
+export default RbaDirectionPartLine;

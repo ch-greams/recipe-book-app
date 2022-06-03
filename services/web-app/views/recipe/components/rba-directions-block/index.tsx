@@ -1,14 +1,11 @@
 import React from "react";
 
+import RbaDirectionLine from "@views/recipe/components/rba-direction-line";
+import RbaDirectionLineNew from "@views/recipe/components/rba-direction-line-new";
 import type {
     RecipeDirection,
     RecipeIngredient,
 } from "@store/recipe/types";
-
-import RbaDirectionLine from "./rba-direction-line";
-import RbaNewDirectionLine from "./rba-new-direction-line";
-
-import styles from "./rba-directions-block.module.scss";
 
 
 interface Props {
@@ -24,8 +21,7 @@ const RbaDirectionsBlock: React.FC<Props> = ({
 }) => {
 
     return (
-        <div className={styles.directionsBlock}>
-
+        <div>
             {directions.map( (direction, index) => (
                 <RbaDirectionLine
                     key={`direction_${index}`}
@@ -36,7 +32,7 @@ const RbaDirectionsBlock: React.FC<Props> = ({
                 />
             ) )}
 
-            {( !isReadOnly && ( <RbaNewDirectionLine key={"direction_new"} direction={newDirection} /> ) )}
+            {( !isReadOnly && ( <RbaDirectionLineNew key={"direction_new"} direction={newDirection} /> ) )}
 
         </div>
     );

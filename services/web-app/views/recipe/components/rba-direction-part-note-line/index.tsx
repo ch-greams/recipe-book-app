@@ -12,7 +12,7 @@ import BulbIcon from "@icons/bulb-sharp.svg";
 import RemoveIcon from "@icons/close-sharp.svg";
 import WarningIcon from "@icons/warning-sharp.svg";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-part-note-line.module.scss";
 
 
 const getSubDirectionNoteLineIcon = (type: SubDirectionType): JSX.Element => {
@@ -38,7 +38,7 @@ interface Props {
 }
 
 
-const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionIndex, stepNumber }) => {
+const RbaDirectionPartNoteLine: React.FC<Props> = ({ isReadOnly, step, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
@@ -94,6 +94,6 @@ const RbaSubDirectionNoteLine: React.FC<Props> = ({ isReadOnly, step, directionI
     );
 };
 
-RbaSubDirectionNoteLine.displayName = "RbaSubDirectionNoteLine";
+RbaDirectionPartNoteLine.displayName = "RbaDirectionPartNoteLine";
 
-export default RbaSubDirectionNoteLine;
+export default RbaDirectionPartNoteLine;

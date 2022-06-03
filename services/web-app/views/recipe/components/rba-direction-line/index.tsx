@@ -3,6 +3,10 @@ import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
+import RbaDirectionInfoLine from "@views/recipe/components/rba-direction-info-line";
+import RbaDirectionPartLine from "@views/recipe/components/rba-direction-part-line";
+import RbaDirectionPartLineNew from "@views/recipe/components/rba-direction-part-line-new";
+import RbaDirectionPartNoteLine from "@views/recipe/components/rba-direction-part-note-line";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import * as actions from "@store/recipe/actions";
 import type {
@@ -16,12 +20,7 @@ import {
 } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import RbaDirectionInfoLine from "./rba-direction-info-line";
-import RbaNewSubDirectionLine from "./rba-new-sub-direction-line";
-import RbaSubDirectionLine from "./rba-sub-direction-line";
-import RbaSubDirectionNoteLine from "./rba-sub-direction-note-line";
-
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-line.module.scss";
 
 
 
@@ -87,7 +86,7 @@ const RbaDirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction,
                     direction.steps.map((step) => (
                         step.type === SubDirectionType.Ingredient
                             ? (
-                                <RbaSubDirectionLine
+                                <RbaDirectionPartLine
                                     key={`subDirectionLine_${step.stepNumber}`}
                                     isReadOnly={isReadOnly}
                                     subDirection={step as RecipeSubDirectionIngredient}
@@ -96,7 +95,7 @@ const RbaDirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction,
                                 />
                             )
                             : (
-                                <RbaSubDirectionNoteLine
+                                <RbaDirectionPartNoteLine
                                     key={`subDirectionNoteLine_${step.stepNumber}`}
                                     isReadOnly={isReadOnly}
                                     step={step as RecipeSubDirectionComment}
@@ -108,7 +107,7 @@ const RbaDirectionLine: React.FC<Props> = ({ isReadOnly, ingredients, direction,
                 )}
 
                 {( !isReadOnly && (
-                    <RbaNewSubDirectionLine
+                    <RbaDirectionPartLineNew
                         key={"subDirectionLine_new"}
                         directionIndex={index}
                         ingredients={ingredients}

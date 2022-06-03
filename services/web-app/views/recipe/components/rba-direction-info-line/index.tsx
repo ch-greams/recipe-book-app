@@ -8,7 +8,7 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-info-line.module.scss";
 
 
 

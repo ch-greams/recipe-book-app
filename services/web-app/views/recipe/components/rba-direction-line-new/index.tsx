@@ -12,7 +12,7 @@ import * as actions from "@store/recipe/actions";
 import type { RecipeDirection } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-line-new.module.scss";
 
 
 
@@ -21,7 +21,7 @@ interface Props {
 }
 
 
-const RbaNewDirectionLine: React.FC<Props> = ({ direction }) => {
+const RbaDirectionLineNew: React.FC<Props> = ({ direction }) => {
 
     const dispatch = useDispatch();
 
@@ -151,6 +151,6 @@ const RbaNewDirectionLine: React.FC<Props> = ({ direction }) => {
     );
 };
 
-RbaNewDirectionLine.displayName = "RbaNewDirectionLine";
+RbaDirectionLineNew.displayName = "RbaDirectionLineNew";
 
-export default RbaNewDirectionLine;
+export default RbaDirectionLineNew;

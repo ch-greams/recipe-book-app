@@ -13,7 +13,7 @@ import type { RecipeIngredient } from "@store/recipe/types";
 import { SubDirectionType } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-part-line-new.module.scss";
 
 
 
@@ -22,7 +22,7 @@ interface Props {
     ingredients: RecipeIngredient[];
 }
 
-const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }) => {
+const RbaDirectionPartLineNew: React.FC<Props> = ({ directionIndex, ingredients }) => {
 
     const dispatch = useDispatch();
 
@@ -94,6 +94,6 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
     );
 };
 
-RbaNewSubDirectionLine.displayName = "RbaNewSubDirectionLine";
+RbaDirectionPartLineNew.displayName = "RbaDirectionPartLineNew";
 
-export default RbaNewSubDirectionLine;
+export default RbaDirectionPartLineNew;
