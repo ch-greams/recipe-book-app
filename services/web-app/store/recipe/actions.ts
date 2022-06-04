@@ -223,7 +223,7 @@ export function createSubDirectionIngredient(directionIndex: number, ingredientI
     };
 }
 
-export function createSubDirectionComment(directionIndex: number, type: types.SubDirectionType): types.CreateSubDirectionAction {
+export function createSubDirectionComment(directionIndex: number, type: types.DirectionPartType): types.CreateSubDirectionAction {
     return {
         type: types.RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT,
         payload: { directionIndex, type },

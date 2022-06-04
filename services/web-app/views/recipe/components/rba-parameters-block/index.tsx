@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 
+import type { InputChangeCallback } from "@common/typings";
 import type { VolumeUnit, WeightUnit } from "@common/units";
 import { Units } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
@@ -21,11 +22,11 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
     const dispatch = useDispatch();
 
-    const handleTypeEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleTypeEdit: InputChangeCallback = (event) => {
         dispatch(actions.updateType(event.target.value));
     };
 
-    const handleServingSizeAmountEdit = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
         dispatch(actions.updateServingSizeAmount(event.target.value));
     };
 

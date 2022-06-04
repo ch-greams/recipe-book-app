@@ -17,7 +17,7 @@ export interface RecipeIngredient extends typings.Ingredient {
 }
 
 
-export enum SubDirectionType {
+export enum DirectionPartType {
     Tip = "tip",
     Note = "note",
     Warning = "warning",
@@ -26,13 +26,13 @@ export enum SubDirectionType {
 
 export interface RecipeSubDirectionComment {
     stepNumber: number;
-    type: SubDirectionType;
+    type: DirectionPartType;
     commentText: string;
 }
 
 export interface RecipeSubDirectionIngredient {
     stepNumber: number;
-    type: SubDirectionType;
+    type: DirectionPartType;
     isMarked: boolean;
     ingredientId: number;
     ingredientAmount: number;
@@ -341,7 +341,7 @@ export interface CreateSubDirectionIngredientAction {
 }
 export interface CreateSubDirectionAction {
     type: typeof RECIPE_ITEM_CREATE_SUBDIRECTION_COMMENT;
-    payload: { directionIndex: number, type: SubDirectionType };
+    payload: { directionIndex: number, type: DirectionPartType };
 }
 
 export interface UpdateDirectionStepNumberAction {

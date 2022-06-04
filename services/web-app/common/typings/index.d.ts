@@ -1,7 +1,7 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { CustomUnit, TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import type { ProductType } from "@common/utils";
-import type { SubDirectionType } from "@store/recipe/types";
+import type { DirectionPartType } from "@store/recipe/types";
 
 export * from "./common";
 
@@ -53,7 +53,7 @@ export interface Ingredient {
 
 export interface SubDirection {
     step_number: number;
-    direction_part_type: SubDirectionType;
+    direction_part_type: DirectionPartType;
     comment_text?: Option<string>;
     ingredient_id?: Option<number>;
     ingredient_amount?: Option<number>;

@@ -12,35 +12,35 @@ import * as actions from "@store/recipe/actions";
 import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import styles from "./rba-direction-part-line.module.scss";
+import styles from "./rba-direction-part.module.scss";
 
 
 interface Props {
     isReadOnly: boolean;
-    subDirection: RecipeSubDirectionIngredient;
+    directionPart: RecipeSubDirectionIngredient;
     directionIndex: number;
     stepNumber: number;
 }
 
 
-const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, directionIndex, stepNumber }) => {
+const RbaDirectionPart: React.FC<Props> = ({ isReadOnly, directionPart, directionIndex, stepNumber }) => {
 
     const dispatch = useDispatch();
 
     const checkbox = (
         <div
-            data-cy={constants.CY_SUB_DIRECTION_LINE_CHECKBOX}
-            className={styles.lineCheckbox}
+            data-cy={constants.CY_DIRECTION_PART_CHECKBOX}
+            className={styles.directionPartCheckbox}
             onClick={() => dispatch(actions.toggleSubDirectionMark(directionIndex, stepNumber))}
         >
-            {( subDirection.isMarked ? <div className={styles.lineCheckboxMark} /> : null )}
+            {( directionPart.isMarked ? <div className={styles.directionPartCheckboxMark} /> : null )}
         </div>
     );
 
     const removeButton = (
         <div
-            data-cy={constants.CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}
-            className={styles.subDirectionLineButton}
+            data-cy={constants.CY_DIRECTION_PART_REMOVE_BUTTON}
+            className={styles.directionPartButton}
             onClick={() => dispatch(actions.removeSubDirection(directionIndex, stepNumber))}
         >
             <RbaIconWrapper isFullWidth={true} width={24} height={24} color={Color.White}>
@@ -50,17 +50,17 @@ const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, direc
     );
 
     const ingredientAmountText = (
-        <div className={styles.directionInfoLineAmount}>
-            {subDirection.ingredientAmount}
+        <div className={styles.directionPartAmountText}>
+            {directionPart.ingredientAmount}
         </div>
     );
 
     const ingredientAmountInput = (
         <input
             type={"text"}
-            className={styles.directionInfoLineAmountInput}
+            className={styles.directionPartAmountInput}
             placeholder={"#"}
-            value={subDirection.ingredientAmountInput}
+            value={directionPart.ingredientAmountInput}
             onChange={(event) => {
                 dispatch(actions.updateSubDirectionIngredientAmount(directionIndex, stepNumber, event.target.value));
             }}
@@ -70,28 +70,28 @@ const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, direc
     return (
 
         <div
-            data-cy={constants.CY_SUB_DIRECTION_LINE}
-            className={styles.subDirectionLine}
+            data-cy={constants.CY_DIRECTION_PART}
+            className={styles.directionPart}
         >
 
             {( isReadOnly ? checkbox : removeButton )}
 
-            <div className={styles.subDirectionInfoLine}>
+            <div className={styles.directionPartInfo}>
 
-                <div style={( subDirection.isMarked ? { opacity: 0.25 } : undefined )}>
+                <div style={( directionPart.isMarked ? { opacity: 0.25 } : undefined )}>
 
                     <div
-                        data-cy={constants.CY_SUB_DIRECTION_LINE_NAME}
-                        className={styles.directionInfoLineName}
+                        data-cy={constants.CY_DIRECTION_PART_NAME}
+                        className={styles.directionPartName}
                     >
-                        {subDirection.ingredientName.toUpperCase()}
+                        {directionPart.ingredientName.toUpperCase()}
                     </div>
 
                 </div>
 
                 <div>
 
-                    <div className={styles.directionInfoLineMeasure}>
+                    <div className={styles.directionPartMeasure}>
 
                         {( isReadOnly ? ingredientAmountText : ingredientAmountInput )}
 
@@ -101,7 +101,7 @@ const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, direc
                             width={SelectWidthSize.Medium}
                             height={SelectHeightSize.Medium}
                             options={Object.values(Units).map((unit) => ({ value: unit }))}
-                            value={subDirection.ingredientUnit}
+                            value={directionPart.ingredientUnit}
                             onChange={(option: SelectOption) => {
                                 dispatch(actions.updateSubDirectionIngredientUnit(
                                     directionIndex, stepNumber, option.value as WeightUnit | VolumeUnit,
@@ -115,6 +115,6 @@ const RbaDirectionPartLine: React.FC<Props> = ({ isReadOnly, subDirection, direc
     );
 };
 
-RbaDirectionPartLine.displayName = "RbaDirectionPartLine";
+RbaDirectionPart.displayName = "RbaDirectionPart";
 
-export default RbaDirectionPartLine;
+export default RbaDirectionPart;

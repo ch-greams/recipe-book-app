@@ -9,7 +9,7 @@ import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
 import type { RecipeDirection, RecipeIngredient, RecipeSubDirectionComment, RecipeSubDirectionIngredient } from "@store/recipe/types";
-import { SubDirectionType } from "@store/recipe/types";
+import { DirectionPartType } from "@store/recipe/types";
 
 import RbaDirectionsBlock from ".";
 
@@ -87,13 +87,13 @@ const DIRECTION_1: RecipeDirection = {
 
 const SUB_DIRECTION_0: RecipeSubDirectionComment = {
     stepNumber: 0,
-    type: SubDirectionType.Note,
+    type: DirectionPartType.Note,
     commentText: "Add Cottage Cheese first",
 };
 
 const SUB_DIRECTION_1: RecipeSubDirectionIngredient = {
     stepNumber: 1,
-    type: SubDirectionType.Ingredient,
+    type: DirectionPartType.Ingredient,
     isMarked: false,
     ingredientId: 10,
     ingredientAmount: 5,
@@ -104,7 +104,7 @@ const SUB_DIRECTION_1: RecipeSubDirectionIngredient = {
 
 const SUB_DIRECTION_2: RecipeSubDirectionIngredient = {
     stepNumber: 2,
-    type: SubDirectionType.Ingredient,
+    type: DirectionPartType.Ingredient,
     isMarked: false,
     ingredientId: 11,
     ingredientAmount: 100,

@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
-import { SubDirectionType } from "@store/recipe/types";
+import { DirectionPartType } from "@store/recipe/types";
 
 
 
@@ -271,7 +271,7 @@ describe("recipe_page", () => {
 
             cy.get("@directionLine")
                 .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
-                .contains(SubDirectionType.Warning)
+                .contains(DirectionPartType.Warning)
                 .click();
 
             cy.get("@directionLine")

@@ -1,7 +1,7 @@
 @import "@styles/variables.scss";
 
 
-.subDirectionLine {
+.directionPart {
 
     display: flex;
     flex-direction: row;
@@ -9,21 +9,33 @@
     gap: 4px;
     margin: 8px 2px 0;
 
-    .lineCheckbox {
+    .directionPartCheckbox {
 
         width: 20px;
         height: 20px;
 
         margin: 6px;
 
-        .lineCheckboxMark {
+        cursor: pointer;
+
+        background-color: $color-default-dark;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 2px;
+
+        .directionPartCheckboxMark {
 
             width: 14px;
             height: 14px;
+
+            margin: 3px;
+
+            background-color: $color-white;
         }
     }
 
-    .subDirectionLineButton {
+    .directionPartButton {
 
         width: 36px;
         height: 24px;
@@ -45,7 +57,7 @@
         border-width: 1px;
     }
 
-    .subDirectionInfoLine {
+    .directionPartInfo {
 
         display: flex;
         flex-grow: 2;
@@ -65,18 +77,18 @@
         border-style: solid;
         border-width: 1px;
 
-        .directionInfoLineName {
+        .directionPartName {
 
             line-height: 24px;
         }
 
-        .directionInfoLineMeasure {
+        .directionPartMeasure {
 
             display: flex;
             flex-direction: row;
             gap: 4px;
 
-            .directionInfoLineAmount {
+            .directionPartAmountText {
 
                 width: 80px;
 
@@ -91,7 +103,7 @@
                 border-width: 1px;
             }
 
-            .directionInfoLineAmountInput {
+            .directionPartAmountInput {
 
                 width: 80px;
 
@@ -114,29 +126,5 @@
                 border-width: 1px;
             }
         }
-    }
-}
-
-.lineCheckbox {
-
-    width: 22px;
-    height: 22px;
-
-    cursor: pointer;
-
-    background-color: $color-default-dark;
-
-    border-color: $color-white;
-    border-style: solid;
-    border-width: 2px;
-
-    .lineCheckboxMark {
-
-        width: 16px;
-        height: 16px;
-
-        margin: 3px;
-
-        background-color: $color-white;
     }
 }
