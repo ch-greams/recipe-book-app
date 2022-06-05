@@ -40,10 +40,13 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
 
     return (
 
-        <div className={styles.directionLine}>
+        <div
+            data-cy={constants.CY_DIRECTION_LINE}
+            className={styles.directionLine}
+        >
 
             <div
-                data-cy={constants.CY_DIRECTION_LINE_REMOVE_BUTTON}
+                data-cy={constants.CY_DIRECTION_BUTTON}
                 className={styles.directionLineButton}
                 onClick={onButtonClick}
             >
@@ -63,6 +66,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
                 >
                     <input
+                        data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
                         type={"text"}
                         className={styles.directionInfoIndexInput}
                         value={direction.stepNumber}
@@ -71,7 +75,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         onChange={updateDirectionStepNumber}
                     />
                     <input
-                        data-cy={constants.CY_DIRECTION_INFO_LINE_NAME_INPUT}
+                        data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
                         type={"text"}
                         className={styles.directionInfoNameInput}
                         value={direction.name.toUpperCase()}
@@ -83,11 +87,12 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                 <div className={styles.directionInfoMeasures}>
 
                     <div
-                        data-cy={constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                        data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}
                         className={styles.directionInfoMeasure}
                     >
 
                         <input
+                            data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
                             type={"text"}
                             className={styles.directionInfoAmountInput}
                             placeholder={"#"}
@@ -108,11 +113,12 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     </div>
 
                     <div
-                        data-cy={constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                        data-cy={constants.CY_DIRECTION_LINE_DURATION_MEASURE}
                         className={styles.directionInfoMeasure}
                     >
 
                         <input
+                            data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
                             type={"text"}
                             className={styles.directionInfoAmountInput}
                             placeholder={"#"}

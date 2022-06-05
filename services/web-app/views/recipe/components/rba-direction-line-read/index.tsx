@@ -31,7 +31,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
         <div className={styles.directionLine}>
 
             <div
-                data-cy={constants.CY_DIRECTION_LINE_CHECKBOX}
+                data-cy={constants.CY_DIRECTION_CHECKBOX}
                 className={styles.directionCheckbox}
                 onClick={onClickMark}
             >
@@ -50,7 +50,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                     </div>
 
                     <div
-                        data-cy={constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}
+                        data-cy={constants.CY_DIRECTION_LINE_NAME_TEXT}
                         className={styles.directionInfoName}
                     >
                         {direction.name.toUpperCase()}
@@ -61,7 +61,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
 
                     {( direction.temperatureValue && (
                         <div
-                            data-cy={constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}
+                            data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}
                             className={styles.directionInfoMeasure}
                         >
                             <div className={styles.directionInfoAmount}>
@@ -81,7 +81,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
 
                     {( direction.durationValue && (
                         <div
-                            data-cy={constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}
+                            data-cy={constants.CY_DIRECTION_LINE_DURATION_MEASURE}
                             className={styles.directionInfoMeasure}
                         >
                             <div className={styles.directionInfoAmount}>

@@ -121,7 +121,7 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
 
     return (
         <div
-            data-cy={constants.CY_DIRECTION_LINE}
+            data-cy={constants.CY_DIRECTION}
             className={styles.direction}
         >
             {getDirectionLine()}
