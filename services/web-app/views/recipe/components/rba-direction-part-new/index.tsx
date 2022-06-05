@@ -5,7 +5,6 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
-import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -32,13 +31,12 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
         value: DirectionPartType.Note,
     });
 
-    const createDirectionPart: RbaSelectChangeCallback = (option) => {
-
-        if (option.group === "Comment") {
-            dispatch(actions.createSubDirectionComment(directionIndex, option.value as DirectionPartType));
+    const createDirectionPart = (): void => {
+        if (currentDirectionPart.group === "Comment") {
+            dispatch(actions.createDirectionPartComment(directionIndex, currentDirectionPart.value as DirectionPartType));
         }
         else {
-            dispatch(actions.createSubDirectionIngredient(directionIndex, Number(option.value)));
+            dispatch(actions.createDirectionPartIngredient(directionIndex, Number(currentDirectionPart.value)));
         }
     };
 
@@ -58,7 +56,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
             <div
                 data-cy={constants.CY_DIRECTION_PART_NEW_CREATE_BUTTON}
                 className={styles.directionPartButton}
-                onClick={() => createDirectionPart(currentDirectionPart)}
+                onClick={createDirectionPart}
             >
                 <RbaIconWrapper
                     isFullWidth={true}

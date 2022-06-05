@@ -51,7 +51,7 @@ export interface Ingredient {
     products: Dictionary<number, IngredientProduct>;
 }
 
-export interface SubDirection {
+export interface DirectionPart {
     step_number: number;
     direction_part_type: DirectionPartType;
     comment_text?: Option<string>;
@@ -67,7 +67,7 @@ export interface Direction {
     duration_unit: TimeUnit;
     temperature_value?: Option<number>;
     temperature_unit: TemperatureUnit;
-    steps: SubDirection[];
+    steps: DirectionPart[];
 }
 
 export interface Recipe {
@@ -87,7 +87,7 @@ export interface Recipe {
     is_private: boolean;
 }
 
-export interface RecipeShort{
+export interface RecipeShort {
     id: number;
     name: string;
     brand: string;

@@ -6,15 +6,15 @@ import type { InputChangeCallback } from "@common/typings";
 import type { TemperatureUnit, TimeUnit } from "@common/units";
 import RbaDirectionLineEdit from "@views/recipe/components/rba-direction-line-edit";
 import RbaDirectionLineRead from "@views/recipe/components/rba-direction-line-read";
-import RbaDirectionPart from "@views/recipe/components/rba-direction-part";
+import RbaDirectionPartComment from "@views/recipe/components/rba-direction-part-comment";
+import RbaDirectionPartIngredient from "@views/recipe/components/rba-direction-part-ingredient";
 import RbaDirectionPartNew from "@views/recipe/components/rba-direction-part-new";
-import RbaDirectionPartNote from "@views/recipe/components/rba-direction-part-note";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
+    RecipeDirectionPartComment,
     RecipeIngredient,
-    RecipeSubDirectionComment,
     RecipeSubDirectionIngredient,
 } from "@store/recipe/types";
 import {
@@ -37,25 +37,23 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
     const dispatch = useDispatch();
 
     const getDirectionPartElement = (
-        directionPart: RecipeSubDirectionComment | RecipeSubDirectionIngredient,
+        directionPart: RecipeDirectionPartComment | RecipeSubDirectionIngredient,
     ): JSX.Element => (
         directionPart.type === DirectionPartType.Ingredient
             ? (
-                <RbaDirectionPart
-                    key={`subDirectionLine_${directionPart.stepNumber}`}
+                <RbaDirectionPartIngredient
+                    key={`directionPart_${directionPart.stepNumber}`}
                     isReadOnly={isReadOnly}
                     directionPart={directionPart as RecipeSubDirectionIngredient}
                     directionIndex={index}
-                    stepNumber={directionPart.stepNumber}
                 />
             )
             : (
-                <RbaDirectionPartNote
-                    key={`subDirectionNoteLine_${directionPart.stepNumber}`}
+                <RbaDirectionPartComment
+                    key={`directionPart_${directionPart.stepNumber}`}
                     isReadOnly={isReadOnly}
-                    step={directionPart as RecipeSubDirectionComment}
+                    directionPart={directionPart as RecipeDirectionPartComment}
                     directionIndex={index}
-                    stepNumber={directionPart.stepNumber}
                 />
             )
     );
@@ -132,7 +130,7 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
 
                 {( !isReadOnly && (
                     <RbaDirectionPartNew
-                        key={"subDirectionLine_new"}
+                        key={"directionPart_new"}
                         directionIndex={index}
                         ingredients={ingredients}
                     />

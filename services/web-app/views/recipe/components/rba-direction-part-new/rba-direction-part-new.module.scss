@@ -50,5 +50,28 @@
         border-color: $color-white;
         border-style: solid;
         border-width: 1px;
+
+        .directionInfoIndexInput {
+
+            width: 24px;
+
+            margin-right: 10px;
+
+            font-family: $font-default;
+            font-size: $font-size-14;
+            font-weight: $font-weight-500;
+
+            line-height: 20px;
+
+            color: $color-white;
+
+            text-align: center;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
     }
 }

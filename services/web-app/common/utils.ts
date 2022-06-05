@@ -1,13 +1,13 @@
 import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/food/types";
 import type {
-    RecipeDirection, RecipePageStore, RecipeSubDirectionComment, RecipeSubDirectionIngredient,
+    RecipeDirection, RecipeDirectionPartComment, RecipePageStore, RecipeSubDirectionIngredient,
 } from "@store/recipe/types";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer, Direction, Food, Ingredient, IngredientProduct, Recipe, SubDirection } from "./typings";
+import type { Comparer, Direction, Food, Ingredient, IngredientProduct, Recipe, DirectionPart } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
@@ -355,12 +355,12 @@ export default class Utils {
     }
 
     private static convertRecipeDirectionStepIntoSubDirection(
-        recipeDirectionStep: RecipeSubDirectionComment | RecipeSubDirectionIngredient,
-    ): SubDirection {
+        recipeDirectionStep: RecipeDirectionPartComment | RecipeSubDirectionIngredient,
+    ): DirectionPart {
         return {
             step_number: recipeDirectionStep.stepNumber,
             direction_part_type: recipeDirectionStep.type,
-            comment_text: (recipeDirectionStep as RecipeSubDirectionComment).commentText,
+            comment_text: (recipeDirectionStep as RecipeDirectionPartComment).commentText,
             ingredient_id: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientId,
             ingredient_amount: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientAmount,
         };

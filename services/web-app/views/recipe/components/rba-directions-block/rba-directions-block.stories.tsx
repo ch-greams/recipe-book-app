@@ -8,7 +8,7 @@ import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, 
 import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
-import type { RecipeDirection, RecipeIngredient, RecipeSubDirectionComment, RecipeSubDirectionIngredient } from "@store/recipe/types";
+import type { RecipeDirection, RecipeDirectionPartComment, RecipeIngredient, RecipeSubDirectionIngredient } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
 
 import RbaDirectionsBlock from ".";
@@ -85,7 +85,7 @@ const DIRECTION_1: RecipeDirection = {
     steps: [],
 };
 
-const SUB_DIRECTION_0: RecipeSubDirectionComment = {
+const SUB_DIRECTION_0: RecipeDirectionPartComment = {
     stepNumber: 0,
     type: DirectionPartType.Note,
     commentText: "Add Cottage Cheese first",

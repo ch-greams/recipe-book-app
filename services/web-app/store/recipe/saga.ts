@@ -108,23 +108,23 @@ function* addIngredientProduct(action: types.AddIngredientProductRequestAction):
 }
 
 function* watchFetchRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_ITEM_FETCH_REQUEST, fetchRecipeItem);
+    yield takeLatest(types.RECIPE_FETCH_REQUEST, fetchRecipeItem);
 }
 
 function* watchCreateRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_ITEM_CREATE_REQUEST, createRecipeItem);
+    yield takeLatest(types.RECIPE_CREATE_REQUEST, createRecipeItem);
 }
 
 function* watchUpdateRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_ITEM_UPDATE_REQUEST, updateRecipeItem);
+    yield takeLatest(types.RECIPE_UPDATE_REQUEST, updateRecipeItem);
 }
 
 function* watchAddIngredient(): SagaIterator {
-    yield takeLatest(types.RECIPE_ITEM_ADD_INGREDIENT_REQUEST, addIngredient);
+    yield takeLatest(types.RECIPE_ADD_INGREDIENT_REQUEST, addIngredient);
 }
 
 function* watchAddIngredientProduct(): SagaIterator {
-    yield takeLatest(types.RECIPE_ITEM_ADD_INGREDIENT_PRODUCT_REQUEST, addIngredientProduct);
+    yield takeLatest(types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST, addIngredientProduct);
 }
 
 
