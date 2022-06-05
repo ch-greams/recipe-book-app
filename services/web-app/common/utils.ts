@@ -7,7 +7,7 @@ import type {
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
-import type { Comparer, Direction, Food, Ingredient, IngredientProduct, Recipe, DirectionPart } from "./typings";
+import type { Comparer, Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { VolumeUnit, WeightUnit } from "./units";
 
