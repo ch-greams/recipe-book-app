@@ -3,12 +3,16 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { CarbohydrateNutritionFactType, EnergyNutritionFactType,LipidNutritionFactType, ProteinNutritionFactType } from "@common/nutritionFacts";
+import {
+    CarbohydrateNutritionFactType, EnergyNutritionFactType, LipidNutritionFactType, ProteinNutritionFactType,
+} from "@common/nutritionFacts";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
-import type { RecipeDirection, RecipeDirectionPartComment, RecipeIngredient, RecipeDirectionPartIngredient } from "@store/recipe/types";
+import type {
+    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
+} from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
 
 import RbaDirectionsBlock from ".";

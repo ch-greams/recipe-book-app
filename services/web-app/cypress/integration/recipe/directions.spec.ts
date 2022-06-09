@@ -128,7 +128,7 @@ describe("recipe_page", () => {
             cy.get("@directionLineCheckbox").children().should("have.length", CHECKBOX_ON);
         });
 
-        it("can switch sub_direction ingredient unit", () => {
+        it("can switch direction_part ingredient unit", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 
@@ -262,7 +262,7 @@ describe("recipe_page", () => {
                 .should("have.length", DIRECTION_COUNT_AFTER);
         });
 
-        it("can add sub_direction - note - warning", () => {
+        it("can add direction_part - note - warning", () => {
 
             const STEP_NAME = "test step";
 
@@ -294,7 +294,7 @@ describe("recipe_page", () => {
                 .should("have.length", SUB_DIRECTION_COUNT_AFTER);
         });
 
-        it("can add sub_direction - ingredient", () => {
+        it("can add direction_part - ingredient", () => {
 
             const STEP_NAME = "test step";
             const INGREDIENT_NAME = "Sour Cream";
@@ -327,7 +327,48 @@ describe("recipe_page", () => {
                 .should("have.length", SUB_DIRECTION_COUNT_AFTER);
         });
 
-        it("can remove sub_direction", () => {
+        it("can change order of direction_part", () => {
+
+            const STEP_NAME = "stir";
+
+            const FIRST_PART_COMMENT_TEXT = "Add Cottage Cheese first";
+            const FIRST_PART_NEW_POSITION = "99";
+
+            const SECOND_PART_INGREDIENT_NAME = "Sour Cream";
+
+            const SUB_DIRECTION_COUNT_BEFORE = 3;
+            const SUB_DIRECTION_COUNT_AFTER = 3;
+
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+                .should("be.visible")
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
+                .as("directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .should("have.length", SUB_DIRECTION_COUNT_BEFORE);
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .first()
+                .as("directionPartComment")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_COMMENT_INPUT}]`)
+                .should("contain.value", FIRST_PART_COMMENT_TEXT);
+
+            cy.get("@directionPartComment")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_STEP_INPUT}]`)
+                .type(FIRST_PART_NEW_POSITION);
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .first()
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NAME}]`)
+                .should("contain.text", SECOND_PART_INGREDIENT_NAME.toUpperCase());
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .should("have.length", SUB_DIRECTION_COUNT_AFTER);
+        });
+
+        it("can remove direction_part", () => {
 
             const STEP_NAME = "stir";
 

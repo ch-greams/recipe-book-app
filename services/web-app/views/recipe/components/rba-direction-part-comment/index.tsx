@@ -72,6 +72,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
 
     const commentInput = (
         <input
+            data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
             type={"text"}
             className={styles.directionPartCommentInput}
             placeholder={directionPart.type.toUpperCase()}

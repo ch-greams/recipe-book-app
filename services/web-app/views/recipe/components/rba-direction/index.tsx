@@ -14,8 +14,8 @@ import * as actions from "@store/recipe/actions";
 import type {
     RecipeDirection,
     RecipeDirectionPartComment,
-    RecipeIngredient,
     RecipeDirectionPartIngredient,
+    RecipeIngredient,
 } from "@store/recipe/types";
 import {
     DirectionPartType,
