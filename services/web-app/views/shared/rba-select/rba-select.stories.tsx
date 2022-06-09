@@ -110,10 +110,10 @@ SubDirectionType.args = {
     width: SelectWidthSize.Full,
     height: SelectHeightSize.Medium,
     options: [
-        types.SubDirectionType.Tip,
-        types.SubDirectionType.Note,
-        types.SubDirectionType.Warning,
+        types.DirectionPartType.Tip,
+        types.DirectionPartType.Note,
+        types.DirectionPartType.Warning,
     ].map((type) => ({ group: "Comment", value: type })),
     onChange: (option) => console.log(option.value),
-    value: types.SubDirectionType.Note,
+    value: types.DirectionPartType.Note,
 };

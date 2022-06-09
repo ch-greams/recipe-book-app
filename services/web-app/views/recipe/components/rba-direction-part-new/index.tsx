@@ -10,10 +10,10 @@ import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
-import { SubDirectionType } from "@store/recipe/types";
+import { DirectionPartType } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
-import styles from "./rba-directions-block.module.scss";
+import styles from "./rba-direction-part-new.module.scss";
 
 
 
@@ -22,42 +22,41 @@ interface Props {
     ingredients: RecipeIngredient[];
 }
 
-const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }) => {
+const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) => {
 
     const dispatch = useDispatch();
 
     const [ currentDirectionPart, setDirectionPart ] = useState<SelectOption>({
         group: "Comment",
-        value: SubDirectionType.Note,
+        value: DirectionPartType.Note,
     });
 
-    const createSubDirection = (option: SelectOption): void => {
-
-        if (option.group === "Comment") {
-            dispatch(actions.createSubDirectionComment(directionIndex, option.value as SubDirectionType));
+    const createDirectionPart = (): void => {
+        if (currentDirectionPart.group === "Comment") {
+            dispatch(actions.createDirectionPartComment(directionIndex, currentDirectionPart.value as DirectionPartType));
         }
         else {
-            dispatch(actions.createSubDirectionIngredient(directionIndex, Number(option.value)));
+            dispatch(actions.createDirectionPartIngredient(directionIndex, Number(currentDirectionPart.value)));
         }
     };
 
-    const otherSubDirectionTypes = [
-        SubDirectionType.Tip,
-        SubDirectionType.Note,
-        SubDirectionType.Warning,
+    const otherDirectionPartTypes = [
+        DirectionPartType.Tip,
+        DirectionPartType.Note,
+        DirectionPartType.Warning,
     ];
 
     return (
 
         <div
-            data-cy={constants.CY_NEW_SUB_DIRECTION_LINE}
-            className={styles.subDirectionLine}
+            data-cy={constants.CY_DIRECTION_PART_NEW}
+            className={styles.directionPart}
         >
 
             <div
-                data-cy={constants.CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON}
-                className={styles.subDirectionLineButton}
-                onClick={() => createSubDirection(currentDirectionPart)}
+                data-cy={constants.CY_DIRECTION_PART_NEW_CREATE_BUTTON}
+                className={styles.directionPartButton}
+                onClick={createDirectionPart}
             >
                 <RbaIconWrapper
                     isFullWidth={true}
@@ -68,7 +67,7 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
                 </RbaIconWrapper>
             </div>
 
-            <div className={styles.subDirectionInfoLine}>
+            <div className={styles.directionPartInfo}>
 
                 <RbaSelect
                     theme={SelectTheme.Alternative}
@@ -77,13 +76,10 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: Utils.unwrap(
-                                ingredient.products[ingredient.product_id],
-                                `ingredient.products["${ingredient.product_id}"]`,
-                            ).name.toUpperCase(),
+                            label: Utils.getRecipeIngredientProduct(ingredient).name.toUpperCase(),
                             value: String(ingredient.id),
                         })),
-                        ...otherSubDirectionTypes.map((type) => ({ group: "Comment", value: type })),
+                        ...otherDirectionPartTypes.map((type) => ({ group: "Comment", value: type })),
                     ]}
                     value={getOptionLabel(currentDirectionPart)}
                     onChange={setDirectionPart}
@@ -94,6 +90,6 @@ const RbaNewSubDirectionLine: React.FC<Props> = ({ directionIndex, ingredients }
     );
 };
 
-RbaNewSubDirectionLine.displayName = "RbaNewSubDirectionLine";
+RbaDirectionPartNew.displayName = "RbaDirectionPartNew";
 
-export default RbaNewSubDirectionLine;
+export default RbaDirectionPartNew;

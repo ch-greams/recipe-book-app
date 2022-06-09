@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
-import { SubDirectionType } from "@store/recipe/types";
+import { DirectionPartType } from "@store/recipe/types";
 
 
 
@@ -20,11 +20,11 @@ describe("recipe_page", () => {
 
             const STEP_NAME = "test step";
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}] [data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
-                .find(`[data-cy=${constants.CY_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
                 .as("temperatureSelect")
                 .contains(TemperatureUnit.C)
                 .should("be.visible");
@@ -50,11 +50,11 @@ describe("recipe_page", () => {
 
             const STEP_NAME = "stir";
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}] [data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
-                .find(`[data-cy=${constants.CY_DIRECTION_INFO_LINE_DURATION_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_DURATION_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
                 .as("temperatureSelect")
                 .contains(TimeUnit.min)
                 .should("be.visible");
@@ -83,11 +83,11 @@ describe("recipe_page", () => {
             const CHECKBOX_OFF = 0;
             const CHECKBOX_ON = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}] [data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
-                .find(`[data-cy=${constants.CY_DIRECTION_LINE_CHECKBOX}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_CHECKBOX}]`)
                 .as("directionLineCheckbox")
                 .should("be.visible")
                 .children()
@@ -108,19 +108,19 @@ describe("recipe_page", () => {
 
             const SUB_DIRECTION_INGREDIENT_COUNT = 2;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}] [data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_TEXT}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
                 .contains(STEP_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
-                .find(`[data-cy=${constants.CY_DIRECTION_LINE_CHECKBOX}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_CHECKBOX}]`)
                 .as("directionLineCheckbox")
                 .should("be.visible")
                 .children()
                 .should("have.length", CHECKBOX_OFF);
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE_CHECKBOX}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_CHECKBOX}]`)
                 .should("be.visible")
                 .should("have.length", SUB_DIRECTION_INGREDIENT_COUNT)
                 .each((checkbox) => cy.wrap(checkbox).click());
@@ -128,14 +128,14 @@ describe("recipe_page", () => {
             cy.get("@directionLineCheckbox").children().should("have.length", CHECKBOX_ON);
         });
 
-        it("can switch sub_direction ingredient unit", () => {
+        it("can switch direction_part ingredient unit", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 
-            cy.get(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SUB_DIRECTION_LINE_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_PART}] [data-cy=${constants.CY_DIRECTION_PART_NAME}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .as("subDirectionLine")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
                 .contains(VolumeUnit.ml)
@@ -171,27 +171,35 @@ describe("recipe_page", () => {
             const DIRECTION_COUNT_BEFORE = 2;
             const DIRECTION_COUNT_AFTER = 3;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}]`)
                 .should("have.length", DIRECTION_COUNT_BEFORE);
 
             // STEP NUMBET & NAME
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_STEP_INPUT}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`).last()
+                .should("be.visible")
+                .as("newDirectionLine");
+
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_STEP_INPUT}]`)
                 .should("be.visible")
                 .clear()
                 .type("3");
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_NAME_INPUT}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}]`)
                 .should("be.visible")
                 .type(NEW_DIRECTION_NAME);
 
             // TEMPERATURE
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_INPUT}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}]`)
                 .should("be.visible")
                 .type("400");
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_TEMPERATURE_MEASURE}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}]`)
                 .as("temperatureMeasure")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
                 .contains(TemperatureUnit.C)
@@ -207,11 +215,13 @@ describe("recipe_page", () => {
 
             // DURATION
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_DURATION_INPUT}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_DURATION_INPUT}]`)
                 .should("be.visible")
                 .type("25");
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE}] [data-cy=${constants.CY_NEW_DIRECTION_INFO_LINE_DURATION_MEASURE}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_DURATION_MEASURE}]`)
                 .as("durationMeasure")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
                 .contains(TimeUnit.min)
@@ -226,11 +236,12 @@ describe("recipe_page", () => {
 
             // Create new direction
 
-            cy.get(`[data-cy=${constants.CY_NEW_DIRECTION_LINE_CREATE_BUTTON}]`)
+            cy.get("@newDirectionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_BUTTON}]`)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}]`)
                 .should("have.length", DIRECTION_COUNT_AFTER);
         });
 
@@ -239,51 +250,51 @@ describe("recipe_page", () => {
             const DIRECTION_COUNT_BEFORE = 2;
             const DIRECTION_COUNT_AFTER = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}]`)
                 .should("have.length", DIRECTION_COUNT_BEFORE);
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}] [data-cy=${constants.CY_DIRECTION_LINE_REMOVE_BUTTON}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_BUTTON}]`)
                 .should("be.visible")
                 .first()
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION}]`)
                 .should("have.length", DIRECTION_COUNT_AFTER);
         });
 
-        it("can add sub_direction - note - warning", () => {
+        it("can add direction_part - note - warning", () => {
 
             const STEP_NAME = "test step";
 
             const SUB_DIRECTION_COUNT_BEFORE = 0;
             const SUB_DIRECTION_COUNT_AFTER = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_BEFORE);
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW}] [data-cy=${constants.CY_SELECT_INPUT}]`)
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
-                .contains(SubDirectionType.Warning)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
+                .contains(DirectionPartType.Warning)
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW_CREATE_BUTTON}]`)
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_AFTER);
         });
 
-        it("can add sub_direction - ingredient", () => {
+        it("can add direction_part - ingredient", () => {
 
             const STEP_NAME = "test step";
             const INGREDIENT_NAME = "Sour Cream";
@@ -291,52 +302,93 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_COUNT_BEFORE = 0;
             const SUB_DIRECTION_COUNT_AFTER = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_BEFORE);
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW}] [data-cy=${constants.CY_SELECT_INPUT}]`)
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_NEW_SUB_DIRECTION_LINE_CREATE_BUTTON}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW_CREATE_BUTTON}]`)
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_AFTER);
         });
 
-        it("can remove sub_direction", () => {
+        it("can change order of direction_part", () => {
+
+            const STEP_NAME = "stir";
+
+            const FIRST_PART_COMMENT_TEXT = "Add Cottage Cheese first";
+            const FIRST_PART_NEW_POSITION = "99";
+
+            const SECOND_PART_INGREDIENT_NAME = "Sour Cream";
+
+            const SUB_DIRECTION_COUNT_BEFORE = 3;
+            const SUB_DIRECTION_COUNT_AFTER = 3;
+
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+                .should("be.visible")
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
+                .as("directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .should("have.length", SUB_DIRECTION_COUNT_BEFORE);
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .first()
+                .as("directionPartComment")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_COMMENT_INPUT}]`)
+                .should("contain.value", FIRST_PART_COMMENT_TEXT);
+
+            cy.get("@directionPartComment")
+                .find(`[data-cy=${constants.CY_DIRECTION_LINE_STEP_INPUT}]`)
+                .type(FIRST_PART_NEW_POSITION);
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .first()
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_NAME}]`)
+                .should("contain.text", SECOND_PART_INGREDIENT_NAME.toUpperCase());
+
+            cy.get("@directionLine")
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
+                .should("have.length", SUB_DIRECTION_COUNT_AFTER);
+        });
+
+        it("can remove direction_part", () => {
 
             const STEP_NAME = "stir";
 
             const SUB_DIRECTION_COUNT_BEFORE = 3;
             const SUB_DIRECTION_COUNT_AFTER = 2;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_INFO_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_DIRECTION_LINE}]`)
+                .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_BEFORE);
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE_REMOVE_BUTTON}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART_REMOVE_BUTTON}]`)
                 .first()
                 .click();
 
             cy.get("@directionLine")
-                .find(`[data-cy=${constants.CY_SUB_DIRECTION_LINE}]`)
+                .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .should("have.length", SUB_DIRECTION_COUNT_AFTER);
         });
     });

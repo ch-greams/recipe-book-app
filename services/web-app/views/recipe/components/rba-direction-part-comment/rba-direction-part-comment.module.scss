@@ -1,0 +1,108 @@
+@import "@styles/variables.scss";
+
+
+.directionPart {
+
+    display: flex;
+    flex-direction: row;
+
+    gap: 4px;
+    margin: 8px 2px 0;
+
+    .directionPartButton {
+
+        width: 36px;
+        height: 24px;
+
+        padding: 6px 0;
+
+        line-height: 24px;
+
+        color: $color-white;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        background-color: $color-default;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .directionPartComment {
+
+        display: flex;
+        flex-grow: 2;
+        justify-content: flex-start;
+
+        padding: 6px 12px;
+
+        font-family: $font-default;
+        font-size: $font-size-16;
+        font-weight: $font-weight-500;
+
+        color: $color-white;
+
+        background-color: $color-default;
+
+        border-color: $color-white;
+        border-style: solid;
+        border-width: 1px;
+
+        .directionInfoIndexInput {
+
+            width: 24px;
+
+            margin-right: 10px;
+
+            font-family: $font-default;
+            font-size: $font-size-14;
+            font-weight: $font-weight-500;
+
+            line-height: 20px;
+
+            color: $color-white;
+
+            text-align: center;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .directionPartCommentText {
+
+            margin-left: 10px;
+
+            font-size: $font-size-14;
+
+            line-height: 24px;
+        }
+
+        .directionPartCommentInput {
+
+            flex-grow: 2;
+
+            padding-left: 8px;
+            margin-left: 10px;
+
+            font-family: $font-default;
+            font-size: $font-size-14;
+            font-weight: $font-weight-500;
+
+            line-height: 20px;
+
+            color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: solid;
+            border-width: 1px;
+        }
+    }
+}
