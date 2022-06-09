@@ -30,7 +30,7 @@ export interface RecipeDirectionPartComment {
     commentText: string;
 }
 
-export interface RecipeSubDirectionIngredient {
+export interface RecipeDirectionPartIngredient {
     stepNumber: number;
     type: DirectionPartType;
     isMarked: boolean;
@@ -58,7 +58,7 @@ export interface RecipeDirection {
     isOpen: boolean;
     isMarked: boolean;
 
-    steps: (RecipeDirectionPartComment | RecipeSubDirectionIngredient)[];
+    steps: (RecipeDirectionPartComment | RecipeDirectionPartIngredient)[];
 }
 
 

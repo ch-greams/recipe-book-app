@@ -92,16 +92,13 @@ function getIngredientProduct(ingredient_id: number, ingredients: typings.Ingred
         "ingredients.find((i) => i.id === ingredient_id)",
     );
 
-    return Utils.unwrap(
-        ingredient.products[ingredient.product_id],
-        "ingredient.products[ingredient.product_id]",
-    );
+    return Utils.getIngredientProduct(ingredient);
 }
 
 function convertDirectionPart(
     directionPart: typings.DirectionPart,
     ingredients: typings.Ingredient[],
-): types.RecipeDirectionPartComment | types.RecipeSubDirectionIngredient {
+): types.RecipeDirectionPartComment | types.RecipeDirectionPartIngredient {
 
     if (directionPart.direction_part_type === types.DirectionPartType.Ingredient) {
 
@@ -331,12 +328,12 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                         const steps = direction.steps.map((subDirection) => (
                             (subDirection.type === types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
-                                ? { ...subDirection, isMarked: !(subDirection as types.RecipeSubDirectionIngredient).isMarked }
+                                ? { ...subDirection, isMarked: !(subDirection as types.RecipeDirectionPartIngredient).isMarked }
                                 : subDirection
                         ));
 
                         const areAllStepsMarked = steps.every((step) => (
-                            (step.type !== types.DirectionPartType.Ingredient) || (step as types.RecipeSubDirectionIngredient).isMarked
+                            (step.type !== types.DirectionPartType.Ingredient) || (step as types.RecipeDirectionPartIngredient).isMarked
                         ));
 
                         return {
@@ -414,24 +411,27 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((subDirection) => {
+                            steps: direction.steps.map((directionPart) => {
 
-                                if (
-                                    (subDirection.type === types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
-                                ) {
+                                const isSelectedDirectionPart = (
+                                    (directionPart.type === types.DirectionPartType.Ingredient) &&
+                                    (directionPart.stepNumber === stepNumber)
+                                );
+
+                                if (isSelectedDirectionPart) {
                                     const amount = Utils.decimalNormalizer(
                                         inputValue,
-                                        (subDirection as types.RecipeSubDirectionIngredient).ingredientAmountInput,
+                                        (directionPart as types.RecipeDirectionPartIngredient).ingredientAmountInput,
                                     );
 
                                     return {
-                                        ...subDirection,
+                                        ...directionPart,
                                         ingredientAmountInput: amount,
-                                        amount: Number(amount),
+                                        ingredientAmount: Number(amount),
                                     };
                                 }
                                 else {
-                                    return subDirection;
+                                    return directionPart;
                                 }
                             }),
                         }
@@ -470,10 +470,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 `Ingredient with id = ${ingredientId} is not found`,
             );
 
-            const ingredientProduct = Utils.unwrap(
-                ingredient.products[ingredient.product_id],
-                `IngredientProduct with id = ${ingredient.product_id} is not found`,
-            );
+            const ingredientProduct = Utils.getRecipeIngredientProduct(ingredient);
 
             return {
                 ...state,
@@ -492,7 +489,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                     ingredientAmount: ingredientProduct.amount,
                                     ingredientAmountInput: ingredientProduct.amountInput,
                                     ingredientUnit: ingredientProduct.unit,
-                                } as types.RecipeSubDirectionIngredient,
+                                } as types.RecipeDirectionPartIngredient,
                             ],
                         }
                         : direction

@@ -15,7 +15,7 @@ import type {
     RecipeDirection,
     RecipeDirectionPartComment,
     RecipeIngredient,
-    RecipeSubDirectionIngredient,
+    RecipeDirectionPartIngredient,
 } from "@store/recipe/types";
 import {
     DirectionPartType,
@@ -37,14 +37,14 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
     const dispatch = useDispatch();
 
     const getDirectionPartElement = (
-        directionPart: RecipeDirectionPartComment | RecipeSubDirectionIngredient,
+        directionPart: RecipeDirectionPartComment | RecipeDirectionPartIngredient,
     ): JSX.Element => (
         directionPart.type === DirectionPartType.Ingredient
             ? (
                 <RbaDirectionPartIngredient
                     key={`directionPart_${directionPart.stepNumber}`}
                     isReadOnly={isReadOnly}
-                    directionPart={directionPart as RecipeSubDirectionIngredient}
+                    directionPart={directionPart as RecipeDirectionPartIngredient}
                     directionIndex={index}
                 />
             )

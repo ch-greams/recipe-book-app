@@ -8,7 +8,7 @@ import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, 
 import { ProductType } from "@common/utils";
 import type { AppState } from "@store";
 import { useStore } from "@store";
-import type { RecipeDirection, RecipeDirectionPartComment, RecipeIngredient, RecipeSubDirectionIngredient } from "@store/recipe/types";
+import type { RecipeDirection, RecipeDirectionPartComment, RecipeIngredient, RecipeDirectionPartIngredient } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
 
 import RbaDirectionsBlock from ".";
@@ -91,7 +91,7 @@ const SUB_DIRECTION_0: RecipeDirectionPartComment = {
     commentText: "Add Cottage Cheese first",
 };
 
-const SUB_DIRECTION_1: RecipeSubDirectionIngredient = {
+const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
     stepNumber: 1,
     type: DirectionPartType.Ingredient,
     isMarked: false,
@@ -102,7 +102,7 @@ const SUB_DIRECTION_1: RecipeSubDirectionIngredient = {
     ingredientUnit: WeightUnit.oz,
 };
 
-const SUB_DIRECTION_2: RecipeSubDirectionIngredient = {
+const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
     stepNumber: 2,
     type: DirectionPartType.Ingredient,
     isMarked: false,

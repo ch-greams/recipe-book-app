@@ -12,7 +12,7 @@ import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
-import type { RecipeSubDirectionIngredient } from "@store/recipe/types";
+import type { RecipeDirectionPartIngredient } from "@store/recipe/types";
 import RemoveIcon from "@icons/close-sharp.svg";
 
 import styles from "./rba-direction-part-ingredient.module.scss";
@@ -20,7 +20,7 @@ import styles from "./rba-direction-part-ingredient.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    directionPart: RecipeSubDirectionIngredient;
+    directionPart: RecipeDirectionPartIngredient;
     directionIndex: number;
 }
 

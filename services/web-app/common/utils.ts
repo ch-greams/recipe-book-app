@@ -1,7 +1,7 @@
 import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/food/types";
 import type {
-    RecipeDirection, RecipeDirectionPartComment, RecipePageStore, RecipeSubDirectionIngredient,
+    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
 } from "@store/recipe/types";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
@@ -354,19 +354,41 @@ export default class Utils {
         };
     }
 
-    private static convertRecipeDirectionStepIntoSubDirection(
-        recipeDirectionStep: RecipeDirectionPartComment | RecipeSubDirectionIngredient,
+    private static convertRecipeDirectionPartIntoDirectionPart(
+        recipeDirectionPart: RecipeDirectionPartComment | RecipeDirectionPartIngredient,
+        ingredients: RecipeIngredient[],
     ): DirectionPart {
+
+        const directionPartIngredient = recipeDirectionPart as RecipeDirectionPartIngredient;
+        const ingredientId = directionPartIngredient.ingredientId;
+
+        let ingredientAmount;
+
+        if (ingredientId) {
+            const ingredient = Utils.unwrap(
+                ingredients.find((_ingredient) => _ingredient.id === ingredientId),
+                "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
+            );
+
+            const ingredientProduct = Utils.getRecipeIngredientProduct(ingredient);
+
+            ingredientAmount = directionPartIngredient.ingredientAmount / ingredientProduct.amount;
+        }
+
         return {
-            step_number: recipeDirectionStep.stepNumber,
-            direction_part_type: recipeDirectionStep.type,
-            comment_text: (recipeDirectionStep as RecipeDirectionPartComment).commentText,
-            ingredient_id: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientId,
-            ingredient_amount: (recipeDirectionStep as RecipeSubDirectionIngredient).ingredientAmount,
+            step_number: recipeDirectionPart.stepNumber,
+            direction_part_type: recipeDirectionPart.type,
+            comment_text: (recipeDirectionPart as RecipeDirectionPartComment).commentText,
+            ingredient_id: ingredientId,
+            ingredient_amount: ingredientAmount,
         };
     }
 
-    private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection): Direction {
+    private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection, ingredients: RecipeIngredient[]): Direction {
+
+        const directionParts = recipeDirection.steps
+            .map((directionPart) => Utils.convertRecipeDirectionPartIntoDirectionPart(directionPart, ingredients));
+
         return {
             id: recipeDirection.id,
             step_number: recipeDirection.stepNumber,
@@ -375,11 +397,15 @@ export default class Utils {
             duration_unit: recipeDirection.durationUnit,
             temperature_value: recipeDirection.temperatureValue,
             temperature_unit: recipeDirection.temperatureUnit,
-            steps: recipeDirection.steps.map(Utils.convertRecipeDirectionStepIntoSubDirection),
+            steps: directionParts,
         };
     }
 
     public static convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe {
+
+        const directions = recipePage.directions
+            .map((direction) => Utils.convertRecipeDirectionIntoDirection(direction, recipePage.ingredients));
+
         return {
             id: recipePage.id,
             name: recipePage.name,
@@ -390,7 +416,7 @@ export default class Utils {
             type: recipePage.type,
             density: recipePage.density,
             ingredients: recipePage.ingredients,
-            directions: recipePage.directions.map(Utils.convertRecipeDirectionIntoDirection),
+            directions: directions,
             is_private: recipePage.isPrivate,
         };
     }
@@ -425,10 +451,7 @@ export default class Utils {
         const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
             .map((ingredient) => {
 
-                const ingredientProduct = Utils.unwrap(
-                    ingredient.products[ingredient.product_id],
-                    `ingredient.products["${ingredient.product_id}"]`,
-                );
+                const ingredientProduct = Utils.getIngredientProduct(ingredient);
 
                 const nutritionFacts = ingredientProduct.nutrition_facts;
                 const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
@@ -450,5 +473,12 @@ export default class Utils {
             });
 
         return Utils.dictionarySum(nutritionFactsById);
+    }
+
+    public static getIngredientProduct(ingredient: Ingredient): IngredientProduct {
+        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+    }
+    public static getRecipeIngredientProduct(ingredient: RecipeIngredient): RecipeIngredientProduct {
+        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
     }
 }

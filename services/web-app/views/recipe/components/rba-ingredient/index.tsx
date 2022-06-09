@@ -34,9 +34,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
 
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
-    const ingredientProduct: RecipeIngredientProduct = Utils.unwrap(
-        ingredient.products[ingredient.product_id], `ingredient.products[${ingredient.product_id}]`,
-    );
+    const ingredientProduct: RecipeIngredientProduct = Utils.getRecipeIngredientProduct(ingredient);
 
     return (
 
