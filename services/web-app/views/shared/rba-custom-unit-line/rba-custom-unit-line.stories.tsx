@@ -50,11 +50,11 @@ const Template: ComponentStory<typeof RbaCustomUnitLine> = (args) => (<RbaCustom
 export const Default = Template.bind({});
 Default.args = {
     isNew: false,
-    customUnit: { name: "package", amount: "120", unit: WeightUnit.g },
+    customUnit: { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
 };
 
 export const NewCustomUnit = Template.bind({});
 NewCustomUnit.args = {
     isNew: true,
-    customUnit: { name: "", amount: "100", unit: WeightUnit.g },
+    customUnit: { product_id: -1, name: "", amount: 100, amountInput: "100", unit: WeightUnit.g },
 };

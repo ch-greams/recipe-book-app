@@ -24,7 +24,6 @@ const initialState: types.RecipePageStore = {
     nutritionFacts: {},
 
     customUnits: [],
-    customUnitInputs: [],
 
     servingSize: 100,
     servingSizeInput: "100",
@@ -215,11 +214,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                 customUnits: [
                     ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(state.id, customUnitInput),
-                ],
-                customUnitInputs: [
-                    ...state.customUnitInputs,
-                    customUnitInput,
+                    { ...customUnitInput, product_id: state.id },
                 ],
             };
         }
@@ -232,14 +227,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
 
                 customUnits: state.customUnits.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? Utils.convertCustomUnitIntoValue(state.id, updatedCustomUnitInput)
-                        : customUnit
-                )),
-                customUnitInputs: state.customUnitInputs.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? updatedCustomUnitInput
-                        : customUnit
+                    index === customUnitIndex ? updatedCustomUnitInput : customUnit
                 )),
             };
         }
@@ -250,9 +238,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-
                 customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-                customUnitInputs: state.customUnitInputs.filter((_customUnitInput, index) => index !== customUnitIndex),
             };
         }
 
@@ -1079,9 +1065,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 type: recipeItem.type,
 
                 nutritionFacts: Utils.getRecipeNutritionFacts(recipeItem.ingredients),
-
-                customUnits: recipeItem.custom_units,
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(recipeItem.custom_units),
+                customUnits: Utils.convertCustomUnitsIntoInputs(recipeItem.custom_units),
 
                 ingredients: recipeIngredients,
                 directions: recipeDirections,

@@ -17,7 +17,7 @@ export default {
     title: "Shared/RbaCustomUnitsBlock",
     component: RbaCustomUnitsBlock,
     argTypes: {
-        customUnitInputs: {
+        customUnits: {
             table: { type: { summary: "CustomUnitInput[]" } },
         },
         addCustomUnit: {
@@ -42,14 +42,14 @@ export default {
 const Template: ComponentStory<typeof RbaCustomUnitsBlock> = (args) => (<RbaCustomUnitsBlock {...args} />);
 
 
-const customUnitInputs: CustomUnitInput[] = [
-    { name: "package", amount: "120", unit: WeightUnit.g },
-    { name: "glass", amount: "240", unit: VolumeUnit.ml },
+const customUnits: CustomUnitInput[] = [
+    { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
+    { product_id: -1, name: "glass", amount: 240, amountInput: "240", unit: VolumeUnit.ml },
 ];
 
 export const Default = Template.bind({});
 Default.args = {
-    customUnitInputs,
+    customUnits,
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,
     updateCustomUnit: actions.updateCustomUnit,
@@ -58,7 +58,7 @@ Default.args = {
 
 export const Empty = Template.bind({});
 Empty.args = {
-    customUnitInputs: [],
+    customUnits: [],
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,
     updateCustomUnit: actions.updateCustomUnit,

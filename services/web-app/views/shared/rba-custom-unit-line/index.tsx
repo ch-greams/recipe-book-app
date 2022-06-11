@@ -69,7 +69,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
                     type={"text"}
                     placeholder={"#"}
                     className={styles.customUnitLineAmount}
-                    value={customUnit.amount}
+                    value={customUnit.amountInput}
                     onChange={updateItemAmount}
                 />
 

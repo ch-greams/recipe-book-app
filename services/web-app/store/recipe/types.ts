@@ -77,12 +77,10 @@ export interface RecipePageStore {
     // TODO: Expand to include density inputs just like in Food
     density: number;
     nutritionFacts: Dictionary<NutritionFactType, number>;
-    customUnits: units.CustomUnit[];
+    customUnits: units.CustomUnitInput[];
     isPrivate: boolean;
 
     // NOTE: INPUTS
-    customUnitInputs: units.CustomUnitInput[];
-
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: units.WeightUnit | units.VolumeUnit;

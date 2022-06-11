@@ -81,7 +81,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
-                customUnitInputs={recipeItem.customUnitInputs}
+                customUnits={recipeItem.customUnits}
                 addCustomUnit={actions.addCustomUnitRequest}
                 removeCustomUnit={actions.removeCustomUnitRequest}
                 updateCustomUnit={actions.updateCustomUnitRequest}

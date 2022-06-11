@@ -1,5 +1,5 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import { DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
+import { convertDensityFromMetric, convertDensityToMetric, convertFromMetric, convertToMetric, DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
 
@@ -7,11 +7,6 @@ import * as types from "./types";
 
 
 const initialState: types.FoodPageStore = {
-
-    isLoaded: false,
-    errorMessage: null,
-
-    editMode: true,
 
     id: -1,
     name: "Name",
@@ -22,17 +17,8 @@ const initialState: types.FoodPageStore = {
     customUnits: [],
     isPrivate: false,
 
-    // NOTE: INPUTS
-
-    nutritionFactsByServing: {},
-    nutritionFactsByServingInputs: {},
-    customUnitInputs: [],
-
-    // NOTE: STATIC
-
     type: "Nuts",
 
-    densityMetric: 1,
     density: 1,
     densityInput: "1",
     densityVolumeUnit: DEFAULT_VOLUME_UNIT,
@@ -41,6 +27,11 @@ const initialState: types.FoodPageStore = {
     servingSize: 100,
     servingSizeInput: "100",
     servingSizeUnit: DEFAULT_WEIGHT_UNIT,
+
+    // NOTE: INPUTS
+
+    nutritionFactsByServing: {},
+    nutritionFactsByServingInputs: {},
 
     // TODO: Move it from this store into the User's one
     featuredNutritionFacts: [
@@ -56,7 +47,12 @@ const initialState: types.FoodPageStore = {
         NutritionFactType.VitaminC,
     ],
 
-    // NOTE: NEW FOOD
+    // NOTE: PAGE STATE
+
+    isLoaded: false,
+    errorMessage: null,
+
+    editMode: true,
 
     isCreated: false,
 };
@@ -150,16 +146,14 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 brand: foodItem.brand,
                 subtitle: foodItem.subtitle,
 
-                densityMetric: foodItem.density,
                 density: foodItem.density,
                 densityInput: String(foodItem.density),
 
                 nutritionFacts: foodItem.nutrition_facts,
-                customUnits: foodItem.custom_units,
+                customUnits: Utils.convertCustomUnitsIntoInputs(foodItem.custom_units),
 
                 nutritionFactsByServing: foodItem.nutrition_facts,
                 nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(foodItem.nutrition_facts),
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(foodItem.custom_units),
             };
         }
 
@@ -203,11 +197,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 customUnits: [
                     ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(state.id, customUnitInput),
-                ],
-                customUnitInputs: [
-                    ...state.customUnitInputs,
-                    customUnitInput,
+                    { ...customUnitInput, product_id: state.id },
                 ],
             };
         }
@@ -220,14 +210,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 ...state,
 
                 customUnits: state.customUnits.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? Utils.convertCustomUnitIntoValue(state.id, updatedCustomUnitInput)
-                        : customUnit
-                )),
-                customUnitInputs: state.customUnitInputs.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? updatedCustomUnitInput
-                        : customUnit
+                    index === customUnitIndex ? updatedCustomUnitInput : customUnit
                 )),
             };
         }
@@ -238,63 +221,70 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
             return {
                 ...state,
-
                 customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-                customUnitInputs: state.customUnitInputs.filter((_customUnitInput, index) => index !== customUnitIndex),
             };
         }
 
         case types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT: {
 
-            const densityInput = Utils.decimalNormalizer(action.payload, state.densityInput);
-            const density = Number(densityInput);
-            const densityMetric = Utils.convertDensity(density, state.densityWeightUnit, state.densityVolumeUnit, true);
+            const densityInput = action.payload;
+
+            const densityInputNormalized = Utils.decimalNormalizer(densityInput, state.densityInput);
+            const density = convertDensityToMetric(
+                Number(densityInputNormalized), state.densityWeightUnit, state.densityVolumeUnit,
+            );
 
             return {
                 ...state,
-                densityMetric: densityMetric,
                 density: density,
-                densityInput: densityInput,
+                densityInput: densityInputNormalized,
             };
         }
 
         case types.FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT: {
 
-            const density = Utils.convertDensity(state.densityMetric, state.densityWeightUnit, action.payload);
+            const densityVolumeUnit = action.payload;
+
+            const density = convertDensityFromMetric(state.density, state.densityWeightUnit, densityVolumeUnit);
             const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
 
             return {
                 ...state,
-                density: densityRounded,
                 densityInput: String(densityRounded),
-                densityVolumeUnit: action.payload,
+                densityVolumeUnit: densityVolumeUnit,
             };
         }
 
         case types.FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT: {
 
-            const density = Utils.convertDensity(state.densityMetric, action.payload, state.densityVolumeUnit);
+            const densityWeightUnit = action.payload;
+
+            const density = convertDensityFromMetric(state.density, densityWeightUnit, state.densityVolumeUnit);
             const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
 
             return {
                 ...state,
-                density: densityRounded,
                 densityInput: String(densityRounded),
-                densityWeightUnit: action.payload,
+                densityWeightUnit: densityWeightUnit,
             };
         }
 
         case types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
 
-            const servingSizeInput = Utils.decimalNormalizer(action.payload, state.servingSizeInput);
-            const servingSize = Number(servingSizeInput);
+            const servingSizeInput = action.payload;
+            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
+
+            const servingSize = convertToMetric(
+                Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
+            );
+
             const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
             return {
                 ...state,
 
                 servingSize: servingSize,
-                servingSizeInput: servingSizeInput,
+                servingSizeInput: servingSizeInputNormalized,
 
                 nutritionFactsByServing: nutritionFactsByServing,
                 nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
@@ -303,14 +293,16 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
         case types.FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT: {
 
+            const servingSizeUnit = action.payload;
+
+            const servingSize = convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
+            const servingSizeRounded = Utils.roundToDecimal(servingSize, DecimalPlaces.Four);
+
             return {
                 ...state,
 
-                servingSizeUnit: action.payload,
-
-                // TODO: Update nutritionFacts values on change (part of the RBA-28)
-                // nutritionFactsByServing: nutritionFactsByServing,
-                // nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+                servingSizeInput: String(servingSizeRounded),
+                servingSizeUnit: servingSizeUnit,
             };
         }
 

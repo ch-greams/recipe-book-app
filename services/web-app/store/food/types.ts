@@ -1,6 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
-import type { CustomUnit, CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
 
 
 
@@ -17,20 +17,18 @@ export interface FoodPageStore {
     subtitle: string;
     description: string;
     nutritionFacts: Dictionary<NutritionFactType, number>;
-    customUnits: CustomUnit[];
+    customUnits: CustomUnitInput[];
     isPrivate: boolean;
 
     // NOTE: INPUTS
 
     nutritionFactsByServing: Dictionary<NutritionFactType, number>;
     nutritionFactsByServingInputs: Dictionary<NutritionFactType, string>;
-    customUnitInputs: CustomUnitInput[];
 
     // NOTE: STATIC
 
     type: string;
 
-    densityMetric: number;
     density: number;
     densityInput: string;
     densityVolumeUnit: VolumeUnit;

@@ -13,32 +13,33 @@ import styles from "./rba-custom-units-block.module.scss";
 
 
 interface Props {
-    customUnitInputs: CustomUnitInput[];
+    customUnits: CustomUnitInput[];
     addCustomUnit: (customUnit: CustomUnitInput) => AnyAction;
     removeCustomUnit: (index: number) => AnyAction;
     updateCustomUnit: (index: number, customUnit: CustomUnitInput) => AnyAction;
 }
 
-const RbaCustomUnitsBlock: React.FC<Props> = ({
-    customUnitInputs,
-    addCustomUnit: _addCustomUnit,
-    removeCustomUnit: _removeCustomUnit,
-    updateCustomUnit: _updateCustomUnit,
-}) => {
+const NEW_CUSTOM_UNIT: CustomUnitInput = {
+    product_id: -1,
+    name: "",
+    amount: 100,
+    amountInput: "100",
+    unit: WeightUnit.g,
+};
 
-    const addCustomUnit = Utils.unwrap(_addCustomUnit, "addCustomUnit");
-    const removeCustomUnit = Utils.unwrap(_removeCustomUnit, "removeCustomUnit");
-    const updateCustomUnit = Utils.unwrap(_updateCustomUnit, "updateCustomUnit");
+const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, removeCustomUnit, updateCustomUnit }) => {
 
     const dispatch = useDispatch();
-    const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>({ name: "", amount: "100", unit: WeightUnit.g });
+    const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>(NEW_CUSTOM_UNIT);
 
     const updateNewItemName: InputChangeCallback = (event) => setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
 
     const updateNewItemAmount: InputChangeCallback = (event) => {
+        const amountInputNormilized = Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput);
         setNewCustomUnit({
             ...newCustomUnit,
-            amount: Utils.decimalNormalizer(event.target.value, newCustomUnit.amount),
+            amount: Number(amountInputNormilized),
+            amountInput: amountInputNormilized,
         });
     };
 
@@ -46,7 +47,7 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({
 
     const createCustomUnit = (): void => {
         dispatch(addCustomUnit(newCustomUnit));
-        setNewCustomUnit({ name: "", amount: "100", unit: WeightUnit.g });
+        setNewCustomUnit(NEW_CUSTOM_UNIT);
     };
 
     return (
@@ -56,7 +57,7 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({
                 {"CUSTOM UNITS"}
             </div>
 
-            {customUnitInputs.map((customUnit, index) => {
+            {customUnits.map((customUnit, index) => {
 
                 const updateItemName: InputChangeCallback = (event) => {
                     const name = event.target.value;
@@ -64,8 +65,13 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({
                 };
 
                 const updateItemAmount: InputChangeCallback = (event) => {
-                    const amount = Utils.decimalNormalizer(event.target.value, customUnit.amount);
-                    dispatch(updateCustomUnit(index, { ...customUnit, amount }));
+                    const amountInputNormilized = Utils.decimalNormalizer(event.target.value, customUnit.amountInput);
+                    const customUnitUpdated = {
+                        ...customUnit,
+                        amount: Number(amountInputNormilized),
+                        amountInput: amountInputNormilized,
+                    };
+                    dispatch(updateCustomUnit(index, customUnitUpdated));
                 };
 
                 const updateItemUnit = (unit: Units): void => {

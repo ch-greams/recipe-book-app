@@ -9,7 +9,7 @@ import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
 import type { Comparer, Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
-import { VolumeUnit, WeightUnit } from "./units";
+import { WeightUnit } from "./units";
 
 
 export enum UserMenuItem {
@@ -42,57 +42,9 @@ export default class Utils {
 
     public static readonly MAX_DAILY_VALUE: number = 999;
 
+    public static readonly ONE: number = 1;
     public static readonly ZERO: number = 0;
     private static readonly CENTUM: number = 100;
-
-    public static readonly CUP_TO_ML: number = 240;
-    public static readonly TBSP_TO_ML: number = 14.7868;
-    public static readonly TSP_TO_ML: number = 4.92892;
-    public static readonly OZ_TO_G: number = 28.3495;
-
-
-    public static convertDensity(
-        value: number,
-        weightUnit: WeightUnit,
-        volumeUnit: VolumeUnit,
-        toMetric: boolean = false,
-    ): number {
-
-        const convertedWeight = Utils.convertDensityWeight(value, weightUnit, toMetric);
-        const convertedVolume = Utils.convertDensityVolume(convertedWeight, volumeUnit, toMetric);
-
-        return convertedVolume;
-    }
-
-    public static convertDensityVolume(value: number, volumeUnit: VolumeUnit, toMetric: boolean = false): number {
-
-        switch (volumeUnit) {
-
-            case VolumeUnit.cup:
-                return toMetric ? ( value / Utils.CUP_TO_ML )  : ( value * Utils.CUP_TO_ML );
-            case VolumeUnit.tbsp:
-                return toMetric ? ( value / Utils.TBSP_TO_ML ) : ( value * Utils.TBSP_TO_ML );
-            case VolumeUnit.tsp:
-                return toMetric ? ( value / Utils.TSP_TO_ML )  : ( value * Utils.TSP_TO_ML );
-
-            case VolumeUnit.ml:
-            default:
-                return value;
-        }
-    }
-
-    public static convertDensityWeight(value: number, weightUnit: WeightUnit, toMetric: boolean = false): number {
-
-        switch (weightUnit) {
-
-            case WeightUnit.oz:
-                return toMetric ? ( value * Utils.OZ_TO_G ) : ( value / Utils.OZ_TO_G );
-
-            case WeightUnit.g:
-            default:
-                return value;
-        }
-    }
 
     // NOTE: CALCULATIONS
 
@@ -186,14 +138,6 @@ export default class Utils {
         );
     }
 
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
-        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
-    }
-
-    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
-        return Object.values(obj) as T[];
-    }
-
     public static dictionarySum(
         ingredients: Dictionary<NutritionFactType, number>[],
     ): Dictionary<NutritionFactType, number> {
@@ -244,6 +188,21 @@ export default class Utils {
     }
 
     // NOTE: OTHER GENERIC THINGS
+
+    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
+        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
+    }
+
+    /**
+     * Confirms is the value belongs to the provided enum
+     */
+    public static isEnum<EValue, EObject>(enumObject: EObject, value: unknown): value is EValue {
+        return Object.values(enumObject).includes(value);
+    }
+
+    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
+        return Object.values(obj) as T[];
+    }
 
     /**
      * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
@@ -308,15 +267,10 @@ export default class Utils {
      * @returns converted `number` or `None` if `value` was an empty `string` or `None` in the first place
      */
     public static stringToNumber(value: Option<string>): Option<number> {
-        return (
-            Utils.isSome(value)
-                ? ( Utils.isEmptyString(value) ? null : Number(value) )
-                : null
-        );
+        return ( ( Utils.isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
     }
 
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
-
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
             (acc, nfType) => ({ ...acc, [nfType]: Utils.numberToString(values[nfType]) }), {},
         );
@@ -329,16 +283,10 @@ export default class Utils {
     }
 
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-        return customUnits.map(this.convertCustomUnitIntoInput);
+        return customUnits.map((customUnit) => ({ ...customUnit, amountInput: String(customUnit.amount) }));
     }
 
-    public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {
-        return { ...customUnit, amount: String(customUnit.amount) };
-    }
-
-    public static convertCustomUnitIntoValue(product_id: number, customUnit: CustomUnitInput): CustomUnit {
-        return { ...customUnit, product_id, amount: Number(customUnit.amount) };
-    }
+    // NOTE: Page conversion
 
     public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
         return {
