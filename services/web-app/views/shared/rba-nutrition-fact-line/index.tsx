@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 
 import type { NutritionFactType } from "@common/nutritionFacts";
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
+import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import type { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
@@ -41,7 +42,7 @@ const handleOnChange = (dispatch: Dispatch<UpdateNutritionFactAction>, nutrition
 
 const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
     return (
-        Utils.isSome(dailyValue)
+        isSome(dailyValue)
             ? (
                 <>
                     <div className={styles.nutritionFactDailyValue}>

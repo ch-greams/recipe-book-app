@@ -1,3 +1,4 @@
+import { isSome, unwrap, unwrapOr } from "@common/types";
 import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/food/types";
 import type {
@@ -42,7 +43,6 @@ export default class Utils {
 
     public static readonly MAX_DAILY_VALUE: number = 999;
 
-    public static readonly ONE: number = 1;
     public static readonly ZERO: number = 0;
     private static readonly CENTUM: number = 100;
 
@@ -75,22 +75,6 @@ export default class Utils {
 
     public static isEmptyString(value: string): boolean {
         return value.trim().length === Utils.ZERO;
-    }
-
-    public static unwrapOr<T>(value: Option<T>, defaultValue: T): T {
-        return this.isSome(value) ? value : defaultValue;
-    }
-
-    public static unwrap<T>(value: Option<T>, name: string): T {
-        if (!this.isSome(value)) {
-            throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
-        }
-
-        return value;
-    }
-
-    public static isSome<T>(value: Option<T>): value is T {
-        return (value !== null) && (value !== undefined);
     }
 
     // NOTE: APP-SPECIFIC CALCULATIONS
@@ -132,7 +116,7 @@ export default class Utils {
     public static getDailyValuePercent(currentValue: Option<number>, dailyValue: Option<number>): Option<number> {
 
         return (
-            ( Utils.isSome(currentValue) && Utils.isSome(dailyValue) )
+            ( isSome(currentValue) && isSome(dailyValue) )
                 ? Utils.roundToDecimal(( currentValue / dailyValue ) * Utils.CENTUM, DecimalPlaces.One)
                 : null
         );
@@ -147,7 +131,7 @@ export default class Utils {
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
-                    return ( Utils.isSome(value) ? Utils.unwrapOr(sum, Utils.ZERO) + value : sum );
+                    return ( isSome(value) ? unwrapOr(sum, Utils.ZERO) + value : sum );
                 },
                 null,
             );
@@ -155,7 +139,7 @@ export default class Utils {
             return {
                 ...acc,
                 [nutrientType]: (
-                    Utils.isSome(nutritionFactValue)
+                    isSome(nutritionFactValue)
                         ? Utils.roundToDecimal(nutritionFactValue, DecimalPlaces.Two)
                         : null
                 ),
@@ -177,7 +161,7 @@ export default class Utils {
                 return {
                     ...acc,
                     [cur]: (
-                        Utils.isSome(nutritionFact)
+                        isSome(nutritionFact)
                             ? Utils.roundToDecimal(nutritionFact * multiplier, DecimalPlaces.Two)
                             : null
                     ),
@@ -191,13 +175,6 @@ export default class Utils {
 
     public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
         return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
-    }
-
-    /**
-     * Confirms is the value belongs to the provided enum
-     */
-    public static isEnum<EValue, EObject>(enumObject: EObject, value: unknown): value is EValue {
-        return Object.values(enumObject).includes(value);
     }
 
     public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
@@ -260,14 +237,14 @@ export default class Utils {
      * @returns converted `string` or `None` if `value` was `None` in the first place
      */
     public static numberToString(value: Option<number>): Option<string> {
-        return Utils.isSome(value) ? String(value) : null;
+        return isSome(value) ? String(value) : null;
     }
 
     /**
      * @returns converted `number` or `None` if `value` was an empty `string` or `None` in the first place
      */
     public static stringToNumber(value: Option<string>): Option<number> {
-        return ( ( Utils.isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
+        return ( ( isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
     }
 
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
@@ -313,7 +290,7 @@ export default class Utils {
         let ingredientAmount;
 
         if (ingredientId) {
-            const ingredient = Utils.unwrap(
+            const ingredient = unwrap(
                 ingredients.find((_ingredient) => _ingredient.id === ingredientId),
                 "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
             );
@@ -412,7 +389,7 @@ export default class Utils {
                         return {
                             ...acc,
                             [nutritionFactType]: (
-                                Utils.isSome(nutritionFactValue)
+                                isSome(nutritionFactValue)
                                     ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
                                     : null
                             ),
@@ -424,9 +401,9 @@ export default class Utils {
     }
 
     public static getIngredientProduct(ingredient: Ingredient): IngredientProduct {
-        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+        return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
     }
     public static getRecipeIngredientProduct(ingredient: RecipeIngredient): RecipeIngredientProduct {
-        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+        return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
     }
 }

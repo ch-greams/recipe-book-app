@@ -1,5 +1,5 @@
 import { NutritionFactType } from "@common/nutritionFacts";
-import { convertDensityFromMetric, convertDensityToMetric, convertFromMetric, convertToMetric, DEFAULT_VOLUME_UNIT, DEFAULT_WEIGHT_UNIT } from "@common/units";
+import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
 
@@ -19,14 +19,14 @@ const initialState: types.FoodPageStore = {
 
     type: "Nuts",
 
-    density: 1,
+    density: units.DEFAULT_DENSITY,
     densityInput: "1",
-    densityVolumeUnit: DEFAULT_VOLUME_UNIT,
-    densityWeightUnit: DEFAULT_WEIGHT_UNIT,
+    densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
+    densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
     servingSize: 100,
     servingSizeInput: "100",
-    servingSizeUnit: DEFAULT_WEIGHT_UNIT,
+    servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 
     // NOTE: INPUTS
 
@@ -230,7 +230,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             const densityInput = action.payload;
 
             const densityInputNormalized = Utils.decimalNormalizer(densityInput, state.densityInput);
-            const density = convertDensityToMetric(
+            const density = units.convertDensityToMetric(
                 Number(densityInputNormalized), state.densityWeightUnit, state.densityVolumeUnit,
             );
 
@@ -245,7 +245,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
             const densityVolumeUnit = action.payload;
 
-            const density = convertDensityFromMetric(state.density, state.densityWeightUnit, densityVolumeUnit);
+            const density = units.convertDensityFromMetric(state.density, state.densityWeightUnit, densityVolumeUnit);
             const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
 
             return {
@@ -259,7 +259,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
             const densityWeightUnit = action.payload;
 
-            const density = convertDensityFromMetric(state.density, densityWeightUnit, state.densityVolumeUnit);
+            const density = units.convertDensityFromMetric(state.density, densityWeightUnit, state.densityVolumeUnit);
             const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
 
             return {
@@ -274,7 +274,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             const servingSizeInput = action.payload;
             const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
 
-            const servingSize = convertToMetric(
+            const servingSize = units.convertToMetric(
                 Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
             );
 
@@ -295,7 +295,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
             const servingSizeUnit = action.payload;
 
-            const servingSize = convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
+            const servingSize = units.convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
             const servingSizeRounded = Utils.roundToDecimal(servingSize, DecimalPlaces.Four);
 
             return {

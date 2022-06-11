@@ -3,6 +3,7 @@ import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
+import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import { Units } from "@common/units";
 import Utils from "@common/utils";
@@ -45,7 +46,7 @@ interface Props {
 
 
 const getCheckbox = (isMarked?: boolean, onClickMark?: Option<() => void>): Option<JSX.Element> => (
-    Utils.isSome(onClickMark)
+    isSome(onClickMark)
         ? (
             <div className={styles.ingredientCheckbox} onClick={onClickMark}>
                 {( isMarked ? <div className={styles.ingredientCheckboxMark} /> : null )}

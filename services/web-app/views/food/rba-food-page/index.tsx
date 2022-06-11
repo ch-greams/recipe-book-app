@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
@@ -23,7 +24,7 @@ const RbaFoodPageConnected: React.FC = () => {
     const router = useRouter();
 
     const { fid } = router.query as FoodPageQuery;
-    const isNewFoodPage = !Utils.isSome(fid);
+    const isNewFoodPage = isNone(fid);
 
     const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
 

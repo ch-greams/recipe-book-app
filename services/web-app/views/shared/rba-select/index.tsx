@@ -1,6 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { unwrapOr } from "@common/types";
 import Utils from "@common/utils";
 
 import { useToggleList } from "./hooks";
@@ -40,7 +41,7 @@ interface Props {
 export type RbaSelectChangeCallback = (option: SelectOption) => void;
 
 export const getOptionLabel = (option: SelectOption): string => {
-    return Utils.unwrapOr(option.label, String(option.value));
+    return unwrapOr(option.label, String(option.value));
 };
 
 

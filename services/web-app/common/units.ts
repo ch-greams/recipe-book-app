@@ -1,4 +1,4 @@
-import Utils from "./utils";
+import { isEnum, isSome } from "@common/types";
 
 
 export enum NutritionFactUnit {
@@ -52,6 +52,8 @@ export const DEFAULT_WEIGHT_UNIT: WeightUnit = WeightUnit.g;
 export const DEFAULT_VOLUME_UNIT: VolumeUnit = VolumeUnit.ml;
 export const DEFAULT_TIME_UNIT: TimeUnit = TimeUnit.min;
 export const DEFAULT_TEMPERATURE_UNIT: TemperatureUnit = TemperatureUnit.C;
+
+export const DEFAULT_DENSITY: number = 1;
 
 //------------------------------------------------------------------------------
 // Conversion
@@ -144,18 +146,18 @@ export function convertFromMetric(
     value: number,
     unit: WeightUnit | VolumeUnit | string,
     customUnits: CustomUnit[],
-    density: number = Utils.ONE,
+    density: number = DEFAULT_DENSITY,
 ): number {
 
-    if (Utils.isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
+    if (isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
         return convertVolumeFromMetric(value, unit) / density;
     }
-    else if (Utils.isEnum<WeightUnit, typeof WeightUnit>(WeightUnit, unit)) {
+    else if (isEnum<WeightUnit, typeof WeightUnit>(WeightUnit, unit)) {
         return convertWeightFromMetric(value, unit);
     }
     else {
         const customUnit = customUnits.find((cu) => cu.name === unit);
-        return Utils.isSome(customUnit) ? customUnit.amount / value : value;
+        return isSome(customUnit) ? customUnit.amount / value : value;
     }
 }
 
@@ -163,17 +165,17 @@ export function convertToMetric(
     value: number,
     unit: WeightUnit | VolumeUnit | string,
     customUnits: CustomUnit[],
-    density: number = Utils.ONE,
+    density: number = DEFAULT_DENSITY,
 ): number {
 
-    if (Utils.isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
+    if (isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
         return convertVolumeToMetric(value, unit) * density;
     }
-    else if (Utils.isEnum<WeightUnit, typeof WeightUnit>(WeightUnit, unit)) {
+    else if (isEnum<WeightUnit, typeof WeightUnit>(WeightUnit, unit)) {
         return convertWeightToMetric(value, unit);
     }
     else {
         const customUnit = customUnits.find((cu) => cu.name === unit);
-        return Utils.isSome(customUnit) ? customUnit.amount * value : value;
+        return isSome(customUnit) ? customUnit.amount * value : value;
     }
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
+import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
 
@@ -44,7 +45,7 @@ const getButton = (product: ProductShort, onSelect: OnSelectFunc): JSX.Element =
 );
 
 const RbaSearchInputOption: React.FC<Props> = ({ product, onSelect }) => (
-    Utils.isSome(onSelect) ? getButton(product, onSelect) : getLink(product)
+    isSome(onSelect) ? getButton(product, onSelect) : getLink(product)
 );
 
 RbaSearchInputOption.displayName = "RbaSearchInputOption";

@@ -2,6 +2,7 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { NutritionFactType } from "@common/nutritionFacts";
+import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
 import styles from "./rba-ingredient-nutrition-facts.module.scss";
@@ -19,7 +20,7 @@ const getNutritionValueClass = (
     currentNutritionValue: Option<number>,
     alternativeNutritionValue: Option<number>,
 ): string => {
-    if (Utils.isSome(currentNutritionValue) && Utils.isSome(alternativeNutritionValue)) {
+    if (isSome(currentNutritionValue) && isSome(alternativeNutritionValue)) {
         return (
             currentNutritionValue === alternativeNutritionValue
                 ? styles.equalValue
@@ -44,8 +45,8 @@ const getNutritionValue = (
 
     return (
         isAlternative
-            ? ( Utils.isSome(alternativeNutritionValue) ? alternativeNutritionValue : DEFAULT_VALUE )
-            : ( Utils.isSome(currentNutritionValue) ? currentNutritionValue : DEFAULT_VALUE )
+            ? ( isSome(alternativeNutritionValue) ? alternativeNutritionValue : DEFAULT_VALUE )
+            : ( isSome(currentNutritionValue) ? currentNutritionValue : DEFAULT_VALUE )
     );
 };
 
