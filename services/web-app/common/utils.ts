@@ -206,11 +206,11 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: ProductType, id: number): string {
+    public static getProductPath(route: ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: ProductType): string {
+    public static getNewProductPath(route: ProductType): string {
         return `/${route}/new`;
     }
 

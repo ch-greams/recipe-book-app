@@ -13,7 +13,7 @@ export default {
     title: "Food/RbaFoodPage",
     component: RbaFoodPage,
     argTypes: {
-        foodItem: {
+        food: {
             table: { type: { summary: "FoodPageStore" } },
         },
         isNew: {
@@ -33,16 +33,16 @@ export default {
 const Template: ComponentStory<typeof RbaFoodPage> = (args) => <RbaFoodPage {...args} />;
 
 
-const foodItem = extractState({} as AppState);
+const food = extractState({} as AppState);
 
 export const Default = Template.bind({});
 Default.args = {
-    foodItem,
+    food: food,
     isNew: false,
 };
 
 export const New = Template.bind({});
 New.args = {
-    foodItem,
+    food: food,
     isNew: true,
 };

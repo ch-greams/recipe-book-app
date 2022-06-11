@@ -151,7 +151,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                 </div>
             </div>
 
-            <Link href={Utils.getItemPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
+            <Link href={Utils.getProductPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButton}>
                     <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
                         <LinkIcon />

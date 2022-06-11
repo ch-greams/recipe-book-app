@@ -36,27 +36,27 @@ export function updateType(type: string): types.UpdateTypeAction {
 }
 
 
-export function fetchRecipeItemNew(): types.RecipeItemFetchNewAction {
+export function fetchRecipeNew(): types.RecipeFetchNewAction {
     return {
         type: types.RECIPE_FETCH_NEW,
     };
 }
 
-export function fetchRecipeItemRequest(recipeId: number): types.RecipeItemFetchRequestAction {
+export function fetchRecipeRequest(recipeId: number): types.RecipeFetchRequestAction {
     return {
         type: types.RECIPE_FETCH_REQUEST,
         payload: recipeId,
     };
 }
 
-export function fetchRecipeItemSuccess(recipe: Recipe): types.RecipeItemFetchSuccessAction {
+export function fetchRecipeSuccess(recipe: Recipe): types.RecipeFetchSuccessAction {
     return {
         type: types.RECIPE_FETCH_SUCCESS,
         payload: recipe,
     };
 }
 
-export function fetchRecipeItemError(error: string): types.RecipeItemFetchErrorAction {
+export function fetchRecipeError(error: string): types.RecipeFetchErrorAction {
     return {
         type: types.RECIPE_FETCH_ERROR,
         payload: error,
@@ -84,40 +84,40 @@ export function updateCustomUnitRequest(index: number, customUnit: units.CustomU
     };
 }
 
-export function createRecipeItemRequest(): types.RecipeItemCreateRequestAction {
+export function createRecipeRequest(): types.RecipeCreateRequestAction {
     return {
         type: types.RECIPE_CREATE_REQUEST,
     };
 }
 
-export function createRecipeItemSuccess(food: Recipe): types.RecipeItemCreateSuccessAction {
+export function createRecipeSuccess(food: Recipe): types.RecipeCreateSuccessAction {
     return {
         type: types.RECIPE_CREATE_SUCCESS,
         payload: food,
     };
 }
 
-export function createRecipeItemError(error: string): types.RecipeItemCreateErrorAction {
+export function createRecipeError(error: string): types.RecipeCreateErrorAction {
     return {
         type: types.RECIPE_CREATE_ERROR,
         payload: error,
     };
 }
 
-export function updateRecipeItemRequest(): types.RecipeItemUpdateRequestAction {
+export function updateRecipeRequest(): types.RecipeUpdateRequestAction {
     return {
         type: types.RECIPE_UPDATE_REQUEST,
     };
 }
 
-export function updateRecipeItemSuccess(food: Recipe): types.RecipeItemUpdateSuccessAction {
+export function updateRecipeSuccess(food: Recipe): types.RecipeUpdateSuccessAction {
     return {
         type: types.RECIPE_UPDATE_SUCCESS,
         payload: food,
     };
 }
 
-export function updateRecipeItemError(error: string): types.RecipeItemUpdateErrorAction {
+export function updateRecipeError(error: string): types.RecipeUpdateErrorAction {
     return {
         type: types.RECIPE_UPDATE_ERROR,
         payload: error,

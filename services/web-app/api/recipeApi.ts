@@ -8,26 +8,26 @@ export default class RecipeApi {
     private static readonly API_PATH: string = "/api/v1/recipe";
 
 
-    public static async getRecipeItem(id: number): Promise<Recipe> {
+    public static async getRecipe(id: number): Promise<Recipe> {
 
-        const { body: recipeItem } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
+        const { body: recipe } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
 
-        return recipeItem;
+        return recipe;
     }
 
-    public static async createRecipeItem(recipeItem: Recipe): Promise<Recipe> {
+    public static async createRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: createdRecipeItem } = await superagent.post(`${RecipeApi.API_PATH}/create`)
-            .send(recipeItem);
+        const { body: createdRecipe } = await superagent.post(`${RecipeApi.API_PATH}/create`)
+            .send(recipe);
 
-        return createdRecipeItem;
+        return createdRecipe;
     }
 
-    public static async updateRecipeItem(recipeItem: Recipe): Promise<Recipe> {
+    public static async updateRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: updatedRecipeItem } = await superagent.post(`${RecipeApi.API_PATH}/update`)
-            .send(recipeItem);
+        const { body: updatedRecipe } = await superagent.post(`${RecipeApi.API_PATH}/update`)
+            .send(recipe);
 
-        return updatedRecipeItem;
+        return updatedRecipe;
     }
 }

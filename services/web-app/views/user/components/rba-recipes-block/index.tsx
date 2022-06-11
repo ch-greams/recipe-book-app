@@ -29,7 +29,7 @@ const RbaRecipesBlock: React.FC<Props> = ({ favoriteRecipes, customRecipes }) =>
 
             <div className={styles.itemList}>
                 {favoriteRecipes.map((recipe) => (
-                    <Link key={recipe.id} href={Utils.getItemPath(ProductType.Recipe, recipe.id)}>
+                    <Link key={recipe.id} href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
                         <div data-cy={constants.CY_USER_RECIPE_FAVORITE_ITEM} className={styles.infoLine}>
                             {recipe.name}
                         </div>
@@ -41,7 +41,7 @@ const RbaRecipesBlock: React.FC<Props> = ({ favoriteRecipes, customRecipes }) =>
 
             <div className={styles.itemList}>
                 {customRecipes.map((recipe) => (
-                    <Link key={recipe.id} href={Utils.getItemPath(ProductType.Recipe, recipe.id)}>
+                    <Link key={recipe.id} href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
                         <div data-cy={constants.CY_USER_RECIPE_CUSTOM_ITEM} className={styles.infoLine}>
                             {recipe.name}
                         </div>

@@ -26,35 +26,35 @@ const RbaFoodPageConnected: React.FC = () => {
     const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = isNone(fid);
 
-    const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
+    const food = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
 
     useEffect(() => {
         dispatch(searchClear());
 
         if (!isNewFoodPage) {
             const foodId = Number(fid);
-            dispatch(actions.fetchFoodItemRequest(foodId));
+            dispatch(actions.fetchFoodRequest(foodId));
         }
-        else if (router.asPath.includes(Utils.getNewItemPath(ProductType.Food))) {
+        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
 
-            if (foodItem.isCreated) {
-                router.push(Utils.getItemPath(ProductType.Food, foodItem.id));
+            if (food.isCreated) {
+                router.push(Utils.getProductPath(ProductType.Food, food.id));
             }
             else {
-                dispatch(actions.fetchFoodItemNew());
+                dispatch(actions.fetchFoodNew());
             }
         }
-    }, [ dispatch, fid, foodItem.id ]);
+    }, [ dispatch, fid, food.id ]);
 
     return (
-        foodItem.isLoaded
+        food.isLoaded
             ? (
-                foodItem.errorMessage
-                    ? <RbaSingleMessagePage text={foodItem.errorMessage} />
+                food.errorMessage
+                    ? <RbaSingleMessagePage text={food.errorMessage} />
                     : (
                         <RbaFoodPage
-                            isReadOnly={!foodItem.editMode}
-                            foodItem={foodItem}
+                            isReadOnly={!food.editMode}
+                            food={food}
                             isNew={isNewFoodPage}
                         />
                     )

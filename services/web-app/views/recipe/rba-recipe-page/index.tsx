@@ -27,7 +27,7 @@ const RecipePageConnected: React.FC = () => {
     const { rid } = router.query as RecipePageQuery;
     const isNewRecipePage = isNone(rid);
 
-    const recipeItem = useSelector<AppState>((state) => state.recipePage) as RecipePageStore;
+    const recipe = useSelector<AppState>((state) => state.recipePage) as RecipePageStore;
     const search = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
 
     useEffect(() => {
@@ -35,28 +35,28 @@ const RecipePageConnected: React.FC = () => {
 
         if (!isNewRecipePage) {
             const recipeId = Number(rid);
-            dispatch(actions.fetchRecipeItemRequest(recipeId));
+            dispatch(actions.fetchRecipeRequest(recipeId));
         }
-        else if (router.asPath.includes(Utils.getNewItemPath(ProductType.Recipe))) {
+        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
 
-            if (recipeItem.isCreated) {
-                router.push(Utils.getItemPath(ProductType.Recipe, recipeItem.id));
+            if (recipe.isCreated) {
+                router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
             }
             else {
-                dispatch(actions.fetchRecipeItemNew());
+                dispatch(actions.fetchRecipeNew());
             }
         }
-    }, [ dispatch, rid, recipeItem.id ]);
+    }, [ dispatch, rid, recipe.id ]);
 
     return (
-        recipeItem.isLoaded
+        recipe.isLoaded
             ? (
-                recipeItem.errorMessage
-                    ? <RbaSingleMessagePage text={recipeItem.errorMessage} />
+                recipe.errorMessage
+                    ? <RbaSingleMessagePage text={recipe.errorMessage} />
                     : (
                         <RecipePage
-                            isReadOnly={!recipeItem.editMode}
-                            recipeItem={recipeItem}
+                            isReadOnly={!recipe.editMode}
+                            recipe={recipe}
                             search={search}
                             isNew={isNewRecipePage}
                         />

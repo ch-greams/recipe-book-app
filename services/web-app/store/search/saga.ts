@@ -19,7 +19,7 @@ function* fetchProducts(action: SearchProductsFetchRequestedAction): Generator<S
     try {
         const { payload: filter } = action;
 
-        const productItems = yield call(ProductApi.getProductItems, filter);
+        const productItems = yield call(ProductApi.getProducts, filter);
 
         yield put({ type: SEARCH_PRODUCTS_FETCH_SUCCESS, payload: productItems });
     }

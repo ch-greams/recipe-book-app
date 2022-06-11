@@ -13,70 +13,70 @@ import * as types from "./types";
 
 
 
-function* fetchFoodItem(action: types.FoodItemFetchRequestAction): Generator<StrictEffect, void, unknown> {
+function* fetchFood(action: types.FoodFetchRequestAction): Generator<StrictEffect, void, unknown> {
 
     try {
 
         const { payload: foodId } = action;
 
-        const foodItem = (yield call(FoodApi.getFoodItem, foodId)) as Food;
+        const food = (yield call(FoodApi.getFood, foodId)) as Food;
 
-        yield put(actions.fetchFoodItemSuccess(foodItem));
+        yield put(actions.fetchFoodSuccess(food));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.fetchFoodItemError(message));
+        yield put(actions.fetchFoodError(message));
     }
 }
 
-function* createFoodItem(): Generator<StrictEffect, void, unknown> {
+function* createFood(): Generator<StrictEffect, void, unknown> {
 
     try {
         const foodPage = (yield select(extractState)) as FoodPageStore;
-        const foodItem = Utils.convertFoodPageIntoFood(foodPage);
+        const food = Utils.convertFoodPageIntoFood(foodPage);
 
-        const createdFoodItem = (yield call(FoodApi.createFoodItem, foodItem)) as Food;
+        const createdFood = (yield call(FoodApi.createFood, food)) as Food;
 
-        yield put(actions.createFoodItemSuccess(createdFoodItem));
+        yield put(actions.createFoodSuccess(createdFood));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.createFoodItemError(message));
+        yield put(actions.createFoodError(message));
     }
 }
 
-function* updateFoodItem(): Generator<StrictEffect, void, unknown> {
+function* updateFood(): Generator<StrictEffect, void, unknown> {
 
     try {
         const foodPage = (yield select(extractState)) as FoodPageStore;
-        const foodItem = Utils.convertFoodPageIntoFood(foodPage);
+        const food = Utils.convertFoodPageIntoFood(foodPage);
 
-        const updatedFoodItem = (yield call(FoodApi.updateFoodItem, foodItem)) as Food;
+        const updatedFood = (yield call(FoodApi.updateFood, food)) as Food;
 
-        yield put(actions.updateFoodItemSuccess(updatedFoodItem));
+        yield put(actions.updateFoodSuccess(updatedFood));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.updateFoodItemError(message));
+        yield put(actions.updateFoodError(message));
     }
 }
 
-function* watchFetchFoodItem(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_FETCH_REQUEST, fetchFoodItem);
+function* watchFetchFood(): SagaIterator {
+    yield takeLatest(types.FOOD_FETCH_REQUEST, fetchFood);
 }
 
-function* watchCreateFoodItem(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_CREATE_REQUEST, createFoodItem);
+function* watchCreateFood(): SagaIterator {
+    yield takeLatest(types.FOOD_CREATE_REQUEST, createFood);
 }
 
-function* watchUpdateFoodItem(): SagaIterator {
-    yield takeLatest(types.FOOD_ITEM_UPDATE_REQUEST, updateFoodItem);
+function* watchUpdateFood(): SagaIterator {
+    yield takeLatest(types.FOOD_UPDATE_REQUEST, updateFood);
 }
 
 export default function* foodSaga(): Generator<AllEffect<SagaIterator>, void, unknown> {
     yield all([
-        watchFetchFoodItem(),
-        watchCreateFoodItem(),
-        watchUpdateFoodItem(),
+        watchFetchFood(),
+        watchCreateFood(),
+        watchUpdateFood(),
     ]);
 }

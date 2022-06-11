@@ -21,14 +21,14 @@ import {
 function* fetchRecipes(): Generator<StrictEffect, void, RecipeShort[]> {
 
     try {
-        const favoriteRecipeItems = yield call(ProductApi.getFavoriteProductItems, ProductType.Recipe);
-        const customRecipeItems = yield call(ProductApi.getCustomProductItems, ProductType.Recipe);
+        const favoriteRecipes = yield call(ProductApi.getFavoriteProducts, ProductType.Recipe);
+        const customRecipes = yield call(ProductApi.getCustomProducts, ProductType.Recipe);
 
         const payload: UserRecipesFetchSuccessAction = {
             type: USER_RECIPES_FETCH_SUCCESS,
             payload: {
-                favoriteRecipes: favoriteRecipeItems,
-                customRecipes: customRecipeItems,
+                favoriteRecipes: favoriteRecipes,
+                customRecipes: customRecipes,
             },
         };
 
@@ -43,14 +43,14 @@ function* fetchRecipes(): Generator<StrictEffect, void, RecipeShort[]> {
 function* fetchFoods(): Generator<StrictEffect, void, FoodShort[]> {
 
     try {
-        const favoriteFoodItems = yield call(ProductApi.getFavoriteProductItems, ProductType.Food);
-        const customFoodItems = yield call(ProductApi.getCustomProductItems, ProductType.Food);
+        const favoriteFoods = yield call(ProductApi.getFavoriteProducts, ProductType.Food);
+        const customFoods = yield call(ProductApi.getCustomProducts, ProductType.Food);
 
         const payload: UserFoodsFetchSuccessAction = {
             type: USER_FOODS_FETCH_SUCCESS,
             payload: {
-                favoriteFoods: favoriteFoodItems,
-                customFoods: customFoodItems,
+                favoriteFoods: favoriteFoods,
+                customFoods: customFoods,
             },
         };
 

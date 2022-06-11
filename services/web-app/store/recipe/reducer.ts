@@ -1,11 +1,32 @@
 import { unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
-import Utils from "@common/utils";
+import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
 
 import * as types from "./types";
 
+
+const DEFAULT_DIRECTION: types.RecipeDirection = {
+    id: -1,
+
+    isOpen: false,
+    isMarked: false,
+
+    stepNumber: 0,
+    name: "",
+
+    durationValue: 0,
+    durationUnit: units.DEFAULT_TIME_UNIT,
+
+    temperatureValue: 0,
+    temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
+
+    durationValueInput: "",
+    temperatureValueInput: "",
+
+    steps: [],
+};
 
 const initialState: types.RecipePageStore = {
 
@@ -32,26 +53,7 @@ const initialState: types.RecipePageStore = {
 
     ingredients: [],
 
-    newDirection: {
-        id: -1,
-
-        isOpen: false,
-        isMarked: false,
-
-        stepNumber: 0,
-        name: "",
-
-        durationValue: 0,
-        durationUnit: units.DEFAULT_TIME_UNIT,
-
-        temperatureValue: 0,
-        temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
-
-        durationValueInput: "",
-        temperatureValueInput: "",
-
-        steps: [],
-    },
+    newDirection: DEFAULT_DIRECTION,
     directions: [],
 
     isPrivate: false,
@@ -155,7 +157,7 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
     }));
 }
 
-export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
+export default function recipePageReducer(state = initialState, action: types.RecipeActionTypes): types.RecipePageStore {
 
     switch (action.type) {
 
@@ -1018,11 +1020,16 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_SERVING_SIZE_UNIT: {
 
-            const unit = action.payload;
+            const servingSizeUnit = action.payload;
+
+            const servingSize = units.convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
+            const servingSizeRounded = Utils.roundToDecimal(servingSize, DecimalPlaces.Four);
 
             return {
                 ...state,
-                servingSizeUnit: unit,
+
+                servingSizeInput: String(servingSizeRounded),
+                servingSizeUnit: servingSizeUnit,
             };
         }
 
@@ -1048,25 +1055,25 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_FETCH_SUCCESS: {
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
-            const recipeIngredients = convertIngredients(recipeItem.ingredients);
-            const recipeDirections = convertDirections(recipeItem.directions, recipeItem.ingredients);
+            const recipeIngredients = convertIngredients(recipe.ingredients);
+            const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
             return {
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
 
-                id: recipeItem.id,
-                name: recipeItem.name,
-                brand: recipeItem.brand,
-                subtitle: recipeItem.subtitle,
-                description: recipeItem.description,
-                type: recipeItem.type,
+                id: recipe.id,
+                name: recipe.name,
+                brand: recipe.brand,
+                subtitle: recipe.subtitle,
+                description: recipe.description,
+                type: recipe.type,
 
-                nutritionFacts: Utils.getRecipeNutritionFacts(recipeItem.ingredients),
-                customUnits: Utils.convertCustomUnitsIntoInputs(recipeItem.custom_units),
+                nutritionFacts: Utils.getRecipeNutritionFacts(recipe.ingredients),
+                customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
 
                 ingredients: recipeIngredients,
                 directions: recipeDirections,
@@ -1090,13 +1097,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_CREATE_SUCCESS: {
 
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: recipeItem.id,
+                id: recipe.id,
                 isCreated: true,
             };
         }
@@ -1118,13 +1125,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_SUCCESS: {
 
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: recipeItem.id,
+                id: recipe.id,
             };
         }
 

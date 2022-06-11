@@ -19,7 +19,7 @@ interface Props {
 const getLink = (product: ProductShort): JSX.Element => (
     <Link
         key={product.id}
-        href={Utils.getItemPath(product.product_type, product.id)}
+        href={Utils.getProductPath(product.product_type, product.id)}
     >
         <a className={styles.searchOption}>
 

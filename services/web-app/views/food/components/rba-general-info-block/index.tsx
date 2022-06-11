@@ -11,20 +11,20 @@ import styles from "./rba-general-info-block.module.scss";
 
 
 interface GeneralInfoBlockProps {
-    foodItem: FoodPageStore;
+    food: FoodPageStore;
     featuredNutritionFacts: NutritionFactType[];
     nutritionFacts: Dictionary<NutritionFactType, number>;
     nutritionFactInputs: Dictionary<NutritionFactType, string>;
 }
 
 const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
-    foodItem, featuredNutritionFacts, nutritionFacts, nutritionFactInputs,
+    food, featuredNutritionFacts, nutritionFacts, nutritionFactInputs,
 }) => {
 
     return (
         <div className={styles.mainBlock}>
 
-            <RbaParametersBlock foodItem={foodItem} />
+            <RbaParametersBlock food={food} />
 
             <div className={styles.featuredNutritionFacts}>
 

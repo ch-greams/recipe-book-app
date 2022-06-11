@@ -15,10 +15,10 @@ import styles from "./rba-parameters-block.module.scss";
 
 
 interface ParametersBlockProps {
-    recipeItem: RecipePageStore;
+    recipe: RecipePageStore;
 }
 
-const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
+const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
 
     const dispatch = useDispatch();
 
@@ -42,7 +42,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
                 <input
                     type={"text"}
-                    value={recipeItem.type}
+                    value={recipe.type}
                     className={styles.typeSelectInput}
                     onChange={handleTypeEdit}
                 />
@@ -59,7 +59,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
                 <input
                     type={"text"}
-                    value={recipeItem.servingSizeInput}
+                    value={recipe.servingSizeInput}
                     className={styles.servingSizeLineInput}
                     onChange={handleServingSizeAmountEdit}
                 />
@@ -70,7 +70,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Large}
                     options={Object.values(Units).map((unit) => ({ value: unit }))}
-                    value={recipeItem.servingSizeUnit}
+                    value={recipe.servingSizeUnit}
                     onChange={(option: SelectOption): void => {
                         dispatch(actions.updateServingSizeUnit(option.value as WeightUnit | VolumeUnit));
                     }}
@@ -81,7 +81,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
-                customUnits={recipeItem.customUnits}
+                customUnits={recipe.customUnits}
                 addCustomUnit={actions.addCustomUnitRequest}
                 removeCustomUnit={actions.removeCustomUnitRequest}
                 updateCustomUnit={actions.updateCustomUnitRequest}

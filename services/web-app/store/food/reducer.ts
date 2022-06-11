@@ -20,7 +20,7 @@ const initialState: types.FoodPageStore = {
     type: "Nuts",
 
     density: units.DEFAULT_DENSITY,
-    densityInput: "1",
+    densityInput: String(units.DEFAULT_DENSITY),
     densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
     densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
@@ -63,53 +63,53 @@ export function extractState(globalState: AppState): types.FoodPageStore {
 }
 
 
-export default function foodPageReducer(state = initialState, action: types.FoodItemActionTypes): types.FoodPageStore {
+export default function foodPageReducer(state = initialState, action: types.FoodActionTypes): types.FoodPageStore {
 
     switch (action.type) {
 
-        case types.FOOD_ITEM_SET_EDIT_MODE: {
+        case types.FOOD_SET_EDIT_MODE: {
             return {
                 ...state,
                 editMode: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_NAME: {
+        case types.FOOD_UPDATE_NAME: {
             return {
                 ...state,
                 name: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_BRAND: {
+        case types.FOOD_UPDATE_BRAND: {
             return {
                 ...state,
                 brand: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_SUBTITLE: {
+        case types.FOOD_UPDATE_SUBTITLE: {
             return {
                 ...state,
                 subtitle: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_DESCRIPTION: {
+        case types.FOOD_UPDATE_DESCRIPTION: {
             return {
                 ...state,
                 description: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_TYPE: {
+        case types.FOOD_UPDATE_TYPE: {
             return {
                 ...state,
                 type: action.payload,
             };
         }
 
-        case types.FOOD_ITEM_FETCH_NEW: {
+        case types.FOOD_FETCH_NEW: {
             return {
                 ...state,
                 isLoaded: true,
@@ -121,7 +121,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_FETCH_REQUEST: {
+        case types.FOOD_FETCH_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,
@@ -133,31 +133,31 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_FETCH_SUCCESS: {
-            const foodItem = action.payload;
+        case types.FOOD_FETCH_SUCCESS: {
+            const food = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
 
-                id: foodItem.id,
-                name: foodItem.name,
-                brand: foodItem.brand,
-                subtitle: foodItem.subtitle,
+                id: food.id,
+                name: food.name,
+                brand: food.brand,
+                subtitle: food.subtitle,
 
-                density: foodItem.density,
-                densityInput: String(foodItem.density),
+                density: food.density,
+                densityInput: String(food.density),
 
-                nutritionFacts: foodItem.nutrition_facts,
-                customUnits: Utils.convertCustomUnitsIntoInputs(foodItem.custom_units),
+                nutritionFacts: food.nutrition_facts,
+                customUnits: Utils.convertCustomUnitsIntoInputs(food.custom_units),
 
-                nutritionFactsByServing: foodItem.nutrition_facts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(foodItem.nutrition_facts),
+                nutritionFactsByServing: food.nutrition_facts,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(food.nutrition_facts),
             };
         }
 
-        case types.FOOD_ITEM_FETCH_ERROR: {
+        case types.FOOD_FETCH_ERROR: {
             return {
                 ...state,
                 isLoaded: true,
@@ -165,7 +165,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_NUTRITION_FACT: {
+        case types.FOOD_UPDATE_NUTRITION_FACT: {
             const nutritionFactsByServing = {
                 ...state.nutritionFactsByServing,
                 ...Utils.convertNutritionFactInputsIntoValues(action.payload),
@@ -183,7 +183,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_ADD_CUSTOM_UNIT: {
+        case types.FOOD_ADD_CUSTOM_UNIT: {
 
             const { payload: customUnitInput } = action;
 
@@ -202,7 +202,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_CUSTOM_UNIT: {
+        case types.FOOD_UPDATE_CUSTOM_UNIT: {
 
             const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
 
@@ -215,7 +215,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_REMOVE_CUSTOM_UNIT: {
+        case types.FOOD_REMOVE_CUSTOM_UNIT: {
 
             const { payload: customUnitIndex } = action;
 
@@ -225,7 +225,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_DENSITY_AMOUNT: {
+        case types.FOOD_UPDATE_DENSITY_AMOUNT: {
 
             const densityInput = action.payload;
 
@@ -241,7 +241,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_DENSITY_VOLUME_UNIT: {
+        case types.FOOD_UPDATE_DENSITY_VOLUME_UNIT: {
 
             const densityVolumeUnit = action.payload;
 
@@ -255,7 +255,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_DENSITY_WEIGHT_UNIT: {
+        case types.FOOD_UPDATE_DENSITY_WEIGHT_UNIT: {
 
             const densityWeightUnit = action.payload;
 
@@ -269,7 +269,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_SERVING_SIZE_AMOUNT: {
+        case types.FOOD_UPDATE_SERVING_SIZE_AMOUNT: {
 
             const servingSizeInput = action.payload;
             const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
@@ -291,7 +291,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_SERVING_SIZE_UNIT: {
+        case types.FOOD_UPDATE_SERVING_SIZE_UNIT: {
 
             const servingSizeUnit = action.payload;
 
@@ -306,27 +306,27 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_CREATE_REQUEST: {
+        case types.FOOD_CREATE_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,
             };
         }
 
-        case types.FOOD_ITEM_CREATE_SUCCESS: {
+        case types.FOOD_CREATE_SUCCESS: {
 
-            const foodItem = action.payload;
+            const food = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: foodItem.id,
+                id: food.id,
                 isCreated: true,
             };
         }
 
-        case types.FOOD_ITEM_CREATE_ERROR: {
+        case types.FOOD_CREATE_ERROR: {
             return {
                 ...state,
                 isLoaded: true,
@@ -334,26 +334,26 @@ export default function foodPageReducer(state = initialState, action: types.Food
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_REQUEST: {
+        case types.FOOD_UPDATE_REQUEST: {
             return {
                 ...state,
                 isLoaded: false,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_SUCCESS: {
+        case types.FOOD_UPDATE_SUCCESS: {
 
-            const foodItem = action.payload;
+            const food = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: foodItem.id,
+                id: food.id,
             };
         }
 
-        case types.FOOD_ITEM_UPDATE_ERROR: {
+        case types.FOOD_UPDATE_ERROR: {
             return {
                 ...state,
                 isLoaded: true,

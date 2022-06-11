@@ -16,18 +16,18 @@ import styles from "./rba-food-page.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    foodItem: FoodPageStore;
+    food: FoodPageStore;
     isNew: boolean;
 }
 
-const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
+const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
 
     const dispatch = useDispatch();
 
     const saveButtonAction = (
         isNew
-            ? () => dispatch(actions.createFoodItemRequest())
-            : () => dispatch(actions.updateFoodItemRequest())
+            ? () => dispatch(actions.createFoodRequest())
+            : () => dispatch(actions.updateFoodRequest())
     );
 
     const pageControls = (
@@ -36,7 +36,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
                 label={RBA_BUTTON_LABEL_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
-                onClick={() => dispatch(actions.fetchFoodItemRequest(foodItem.id))}
+                onClick={() => dispatch(actions.fetchFoodRequest(food.id))}
             />
 
             <RbaButton
@@ -63,7 +63,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
         nutritionFactsByServing,
         nutritionFactsByServingInputs,
         featuredNutritionFacts,
-    } = foodItem;
+    } = food;
 
     return (
         <div className={styles.foodPage}>
@@ -107,7 +107,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, foodItem, isNew }) => {
                 {/* Main Block */}
 
                 <RbaGeneralInfoBlock
-                    foodItem={foodItem}
+                    food={food}
                     featuredNutritionFacts={featuredNutritionFacts}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}

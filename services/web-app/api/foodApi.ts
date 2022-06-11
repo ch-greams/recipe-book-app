@@ -8,26 +8,26 @@ export default class FoodApi {
     private static readonly API_PATH: string = "/api/v1/food";
 
 
-    public static async getFoodItem(id: number): Promise<Food> {
+    public static async getFood(id: number): Promise<Food> {
 
-        const { body: foodItem } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
+        const { body: food } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
 
-        return foodItem;
+        return food;
     }
 
-    public static async createFoodItem(foodItem: Food): Promise<Food> {
+    public static async createFood(food: Food): Promise<Food> {
 
-        const { body: createdFoodItem } = await superagent.post(`${FoodApi.API_PATH}/create`)
-            .send(foodItem);
+        const { body: createdFood } = await superagent.post(`${FoodApi.API_PATH}/create`)
+            .send(food);
 
-        return createdFoodItem;
+        return createdFood;
     }
 
-    public static async updateFoodItem(foodItem: Food): Promise<Food> {
+    public static async updateFood(food: Food): Promise<Food> {
 
-        const { body: updatedFoodItem } = await superagent.post(`${FoodApi.API_PATH}/update`)
-            .send(foodItem);
+        const { body: updatedFood } = await superagent.post(`${FoodApi.API_PATH}/update`)
+            .send(food);
 
-        return updatedFoodItem;
+        return updatedFood;
     }
 }

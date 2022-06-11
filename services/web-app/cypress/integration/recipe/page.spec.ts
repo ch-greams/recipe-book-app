@@ -28,7 +28,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.url().should("include", Utils.getNewItemPath(ProductType.Recipe));
+            cy.url().should("include", Utils.getNewProductPath(ProductType.Recipe));
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
@@ -43,7 +43,7 @@ describe("recipe_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
             });
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Recipe, NEW_RECIPE_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, NEW_RECIPE_ID));
         });
 
         it("can save an updated page", () => {

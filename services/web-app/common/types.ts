@@ -1,6 +1,4 @@
 
-
-
 export function unwrapOr<T>(value: Option<T>, defaultValue: T): T {
     return isSome(value) ? value : defaultValue;
 }
