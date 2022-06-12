@@ -14,6 +14,7 @@ export enum NutritionFactUnit {
 export enum WeightUnit {
     g = "g",
     oz = "oz",
+    lb = "lb",
 }
 
 export enum VolumeUnit {
@@ -62,7 +63,10 @@ export const DEFAULT_DENSITY: number = 1;
 export const CUP_TO_ML: number = 240;
 export const TBSP_TO_ML: number = 14.7868;
 export const TSP_TO_ML: number = 4.92892;
-export const OZ_TO_G: number = 28.3495;
+
+export const OZ_TO_G: number = 28.34952;
+export const LB_TO_G: number = 453.59237;
+
 
 export function convertDensityFromMetric(value: number, weightUnit: WeightUnit, volumeUnit: VolumeUnit): number {
 
@@ -123,6 +127,9 @@ export function convertWeightFromMetric(value: number, weightUnit: WeightUnit): 
         case WeightUnit.oz:
             return ( value / OZ_TO_G );
 
+        case WeightUnit.lb:
+            return ( value / LB_TO_G );
+
         case WeightUnit.g:
         default:
             return value;
@@ -135,6 +142,9 @@ export function convertWeightToMetric(value: number, weightUnit: WeightUnit): nu
 
         case WeightUnit.oz:
             return ( value * OZ_TO_G );
+
+        case WeightUnit.lb:
+            return ( value * LB_TO_G );
 
         case WeightUnit.g:
         default:

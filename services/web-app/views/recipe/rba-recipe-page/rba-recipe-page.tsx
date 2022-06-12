@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { NutritionFactType } from "@common/nutritionFacts";
-import Utils from "@common/utils";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
@@ -70,11 +69,9 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
         ingredients,
         newDirection,
         directions,
-        nutritionFacts,
+        nutritionFactsByServing,
+        nutritionFactsByServingInputs,
     } = recipe;
-
-
-    const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
 
     return (
         <div className={styles.recipePage}>
@@ -130,8 +127,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
                         NutritionFactType.VitaminA,
                         NutritionFactType.VitaminC,
                     ]}
-                    nutritionFacts={nutritionFacts}
-                    nutritionFactInputs={nutritionFactInputs}
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
                 />
 
                 <RbaBlockTitle text={"INGREDIENTS"} />
@@ -155,8 +152,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
 
                 <RbaPageDetailedNutritionFactsBlock
                     isReadOnly={true}
-                    nutritionFacts={nutritionFacts}
-                    nutritionFactInputs={nutritionFactInputs}
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
                 />
 
             </div>

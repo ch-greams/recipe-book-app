@@ -364,14 +364,14 @@ export default class Utils {
             name: recipe.name,
             amount: 100,
             unit: WeightUnit.g,
-            nutrition_facts: Utils.getRecipeNutritionFacts(recipe.ingredients),
+            nutrition_facts: Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients),
         };
     }
 
     /**
      * Calculate nutrition fact for a recipe based on currently selected ingredients
      */
-    public static getRecipeNutritionFacts(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
+    public static getRecipeNutritionFactsFromIngredients(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
 
         const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
             .map((ingredient) => {
@@ -398,6 +398,10 @@ export default class Utils {
             });
 
         return Utils.dictionarySum(nutritionFactsById);
+    }
+
+    public static getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {
+        return ingredients.reduce((sum, ingredient) => (sum + Utils.getIngredientProduct(ingredient).amount), Utils.ZERO);
     }
 
     public static getIngredientProduct(ingredient: Ingredient): IngredientProduct {

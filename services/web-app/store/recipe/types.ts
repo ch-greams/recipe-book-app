@@ -85,6 +85,9 @@ export interface RecipePageStore {
     servingSizeInput: string;
     servingSizeUnit: units.WeightUnit | units.VolumeUnit;
 
+    nutritionFactsByServing: Dictionary<NutritionFactType, number>;
+    nutritionFactsByServingInputs: Dictionary<NutritionFactType, string>;
+
     ingredients: RecipeIngredient[];
 
     newDirection: RecipeDirection;
