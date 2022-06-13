@@ -5,6 +5,7 @@
     "description": "",
     "is_private": false,
     "density": 1.04,
+    "serving_size": 100,
     "nutrition_facts": {
         "energy": 191.6,
         "carbohydrate": 157.3,

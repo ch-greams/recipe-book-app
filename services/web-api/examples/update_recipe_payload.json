@@ -5,6 +5,7 @@
     "subtitle": "",
     "description": "",
     "density": 1.14,
+    "serving_size": 125,
     "custom_units": [
         {
             "name": "package - Updated",

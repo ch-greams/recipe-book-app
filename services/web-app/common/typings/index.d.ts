@@ -12,6 +12,7 @@ export interface Food {
     subtitle: string;
     description: string;
     density: number;
+    serving_size: number;
     nutrition_facts: Dictionary<NutritionFactType, number>;
     custom_units: CustomUnit[];
     is_private: boolean;
@@ -78,6 +79,7 @@ export interface Recipe {
     description: string;
     type: string;
     density: number;
+    serving_size: number;
 
     custom_units: CustomUnit[];
 

@@ -6,6 +6,7 @@
     "description": "",
     "is_private": false,
     "density": 1.04,
+    "serving_size": 100,
     "nutrition_facts": {
         "product_id": 1,
         "energy": 1901.6,
