@@ -1,6 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
-import type { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
 
 import * as types from "./types";
 
@@ -110,7 +110,7 @@ export function updateServingSizeAmount(servingSizeAmountInput: string): types.U
     };
 }
 
-export function updateServingSizeUnit(servingSizeUnit: WeightUnit | VolumeUnit | string): types.UpdateServingSizeUnitAction {
+export function updateServingSizeUnit(servingSizeUnit: Unit | string): types.UpdateServingSizeUnitAction {
     return {
         type: types.FOOD_UPDATE_SERVING_SIZE_UNIT,
         payload: servingSizeUnit,

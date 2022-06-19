@@ -28,6 +28,8 @@ const DEFAULT_DIRECTION: types.RecipeDirection = {
     steps: [],
 };
 
+const DEFAULT_SERVING_SIZE: number = 100;
+
 const initialState: types.RecipePageStore = {
 
     isLoaded: false,
@@ -49,8 +51,8 @@ const initialState: types.RecipePageStore = {
 
     customUnits: [],
 
-    servingSize: 100,
-    servingSizeInput: "100",
+    servingSize: DEFAULT_SERVING_SIZE,
+    servingSizeInput: String(DEFAULT_SERVING_SIZE),
     servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 
     ingredients: [],
@@ -207,10 +209,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_ADD_CUSTOM_UNIT: {
 
-            const { payload: customUnitInput } = action;
+            const { payload: customUnit } = action;
 
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
-            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+            if (state.customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
                 return state;
             }
 
@@ -219,20 +221,39 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                 customUnits: [
                     ...state.customUnits,
-                    { ...customUnitInput, product_id: state.id },
+                    {
+                        ...customUnit,
+                        amount: units.convertToMetric(
+                            Number(customUnit.amountInput),
+                            customUnit.unit,
+                            state.customUnits,
+                            state.density,
+                        ),
+                        product_id: state.id,
+                    },
                 ],
             };
         }
 
         case types.RECIPE_UPDATE_CUSTOM_UNIT: {
 
-            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
+            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
 
             return {
                 ...state,
 
                 customUnits: state.customUnits.map((customUnit, index) => (
-                    index === customUnitIndex ? updatedCustomUnitInput : customUnit
+                    (index === customUnitIndex)
+                        ? {
+                            ...updatedCustomUnit,
+                            amount: units.convertToMetric(
+                                Number(updatedCustomUnit.amountInput),
+                                updatedCustomUnit.unit,
+                                state.customUnits,
+                                state.density,
+                            ),
+                        }
+                        : customUnit
                 )),
             };
         }
@@ -871,19 +892,21 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const { parentId, id, inputValue } = action.payload;
 
             const ingredients = state.ingredients.map((ingredient) => {
+
                 if (ingredient.id === parentId) {
+
                     const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
-                    const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
+
+                    const amountInput = Utils.decimalNormalizer(inputValue, product.amountInput);
+                    const amount = units.convertToMetric(
+                        Number(amountInput), product.unit, state.customUnits, state.density,
+                    );
 
                     return {
                         ...ingredient,
                         products: {
                             ...ingredient.products,
-                            [id]: {
-                                ...product,
-                                amountInput: amount,
-                                amount: Number(amount),
-                            },
+                            [id]: { ...product, amountInput, amount },
                         },
                     };
                 }
@@ -892,7 +915,11 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 }
             });
 
+            // NOTE: Recalculate nutrition facts based on updated ingredient amounts
+
             const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
+            // NOTE: Update serving size based on updated ingredient amounts
 
             const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
@@ -925,11 +952,15 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                         const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
 
+                        const amount = units.convertToMetric(
+                            Number(product.amountInput), unit, state.customUnits, state.density,
+                        );
+
                         return {
                             ...ingredient,
                             products: {
                                 ...ingredient.products,
-                                [id]: { ...product, unit },
+                                [id]: { ...product, amount, unit },
                             },
                         };
                     }
@@ -1073,8 +1104,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_UPDATE_SERVING_SIZE_AMOUNT: {
 
             const servingSizeInput = action.payload;
-            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
 
+            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
             const servingSize = units.convertToMetric(
                 Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
             );
@@ -1105,13 +1136,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const servingSizeUnit = action.payload;
 
-            const servingSize = units.convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
-            const servingSizeRounded = Utils.roundToDecimal(servingSize, DecimalPlaces.Four);
+            const servingSize = units.convertToMetric(
+                Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
+            );
 
             return {
                 ...state,
-
-                servingSizeInput: String(servingSizeRounded),
+                servingSize: servingSize,
                 servingSizeUnit: servingSizeUnit,
             };
         }

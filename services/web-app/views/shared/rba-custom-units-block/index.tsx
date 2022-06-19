@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import type { AnyAction } from "redux";
 
 import type { InputChangeCallback } from "@common/typings";
-import type { CustomUnitInput, Units } from "@common/units";
+import type { CustomUnitInput, Unit } from "@common/units";
 import { WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaCustomUnitLine from "@views/shared/rba-custom-unit-line";
@@ -43,7 +43,9 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, remo
         });
     };
 
-    const updateNewItemUnit = (unit: Units): void => setNewCustomUnit({ ...newCustomUnit, unit });
+    const updateNewItemUnit = (unit: Unit): void => {
+        setNewCustomUnit({ ...newCustomUnit, unit });
+    };
 
     const createCustomUnit = (): void => {
         dispatch(addCustomUnit(newCustomUnit));
@@ -65,16 +67,13 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, remo
                 };
 
                 const updateItemAmount: InputChangeCallback = (event) => {
-                    const amountInputNormilized = Utils.decimalNormalizer(event.target.value, customUnit.amountInput);
-                    const customUnitUpdated = {
+                    dispatch(updateCustomUnit(index, {
                         ...customUnit,
-                        amount: Number(amountInputNormilized),
-                        amountInput: amountInputNormilized,
-                    };
-                    dispatch(updateCustomUnit(index, customUnitUpdated));
+                        amountInput: Utils.decimalNormalizer(event.target.value, customUnit.amountInput),
+                    }));
                 };
 
-                const updateItemUnit = (unit: Units): void => {
+                const updateItemUnit = (unit: Unit): void => {
                     dispatch(updateCustomUnit(index, { ...customUnit, unit }));
                 };
 

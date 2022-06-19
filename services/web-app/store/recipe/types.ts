@@ -38,7 +38,7 @@ export interface RecipeDirectionPartIngredient {
     ingredientAmount: number;
     ingredientAmountInput: string;
     ingredientName: string;
-    ingredientUnit: units.Units;
+    ingredientUnit: units.Unit;
 }
 
 export interface RecipeDirection {

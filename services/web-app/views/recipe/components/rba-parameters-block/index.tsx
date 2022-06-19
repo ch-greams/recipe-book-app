@@ -2,8 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
-import type { VolumeUnit, WeightUnit } from "@common/units";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -69,10 +68,10 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
                     center={true}
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Large}
-                    options={Object.values(Units).map((unit) => ({ value: unit }))}
+                    options={Object.values(Unit).map((unit) => ({ value: unit }))}
                     value={recipe.servingSizeUnit}
                     onChange={(option: SelectOption): void => {
-                        dispatch(actions.updateServingSizeUnit(option.value as WeightUnit | VolumeUnit));
+                        dispatch(actions.updateServingSizeUnit(option.value as Unit));
                     }}
                 />
 

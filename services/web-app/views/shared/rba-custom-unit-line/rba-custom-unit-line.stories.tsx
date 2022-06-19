@@ -2,7 +2,7 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Units, WeightUnit } from "@common/units";
+import { Unit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 
 import RbaCustomUnitLine from ".";
@@ -23,7 +23,7 @@ export default {
                 value: {
                     name: { name: "string", required: true },
                     amount: { name: "string", required: true },
-                    unit: { name: "enum", value: Utils.getObjectValues(Units), required: true },
+                    unit: { name: "enum", value: Utils.getObjectValues(Unit), required: true },
                 },
                 required: true,
             },

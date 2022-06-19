@@ -1,6 +1,6 @@
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
-import type { CustomUnitInput, VolumeUnit, WeightUnit } from "@common/units";
+import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
 
 
 
@@ -36,7 +36,7 @@ export interface FoodPageStore {
 
     servingSize: number;
     servingSizeInput: string;
-    servingSizeUnit: WeightUnit | VolumeUnit | string;
+    servingSizeUnit: Unit | string;
     featuredNutritionFacts: NutritionFactType[];
 
     // NOTE: NEW FOOD
@@ -152,7 +152,7 @@ export interface UpdateServingSizeAmountAction {
 
 export interface UpdateServingSizeUnitAction {
     type: typeof FOOD_UPDATE_SERVING_SIZE_UNIT;
-    payload: WeightUnit | VolumeUnit | string;
+    payload: Unit | string;
 }
 
 export interface FoodFetchNewAction {

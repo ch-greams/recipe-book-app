@@ -6,6 +6,8 @@ import type { AppState } from "@store";
 import * as types from "./types";
 
 
+const DEFAULT_SERVING_SIZE: number = 100;
+
 const initialState: types.FoodPageStore = {
 
     id: -1,
@@ -24,8 +26,8 @@ const initialState: types.FoodPageStore = {
     densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
     densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
-    servingSize: 100,
-    servingSizeInput: "100",
+    servingSize: DEFAULT_SERVING_SIZE,
+    servingSizeInput: String(DEFAULT_SERVING_SIZE),
     servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 
     // NOTE: INPUTS
@@ -185,10 +187,10 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
         case types.FOOD_ADD_CUSTOM_UNIT: {
 
-            const { payload: customUnitInput } = action;
+            const { payload: customUnit } = action;
 
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
-            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+            if (state.customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
                 return state;
             }
 
@@ -197,20 +199,39 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
                 customUnits: [
                     ...state.customUnits,
-                    { ...customUnitInput, product_id: state.id },
+                    {
+                        ...customUnit,
+                        amount: units.convertToMetric(
+                            Number(customUnit.amountInput),
+                            customUnit.unit,
+                            state.customUnits,
+                            state.density,
+                        ),
+                        product_id: state.id,
+                    },
                 ],
             };
         }
 
         case types.FOOD_UPDATE_CUSTOM_UNIT: {
 
-            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
+            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
 
             return {
                 ...state,
 
                 customUnits: state.customUnits.map((customUnit, index) => (
-                    index === customUnitIndex ? updatedCustomUnitInput : customUnit
+                    (index === customUnitIndex)
+                        ? {
+                            ...updatedCustomUnit,
+                            amount: units.convertToMetric(
+                                Number(updatedCustomUnit.amountInput),
+                                updatedCustomUnit.unit,
+                                state.customUnits,
+                                state.density,
+                            ),
+                        }
+                        : customUnit
                 )),
             };
         }
@@ -233,6 +254,8 @@ export default function foodPageReducer(state = initialState, action: types.Food
             const density = units.convertDensityToMetric(
                 Number(densityInputNormalized), state.densityWeightUnit, state.densityVolumeUnit,
             );
+
+            // FIXME: Recalculate all volume related amounts?
 
             return {
                 ...state,
@@ -272,6 +295,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
         case types.FOOD_UPDATE_SERVING_SIZE_AMOUNT: {
 
             const servingSizeInput = action.payload;
+
             const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
             const servingSize = units.convertToMetric(
                 Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
@@ -303,12 +327,13 @@ export default function foodPageReducer(state = initialState, action: types.Food
 
             const servingSizeUnit = action.payload;
 
-            const servingSize = units.convertFromMetric(state.servingSize, servingSizeUnit, state.customUnits, state.density);
-            const servingSizeRounded = Utils.roundToDecimal(servingSize, DecimalPlaces.Four);
+            const servingSize = units.convertToMetric(
+                Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
+            );
 
             return {
                 ...state,
-                servingSizeInput: String(servingSizeRounded),
+                servingSize: servingSize,
                 servingSizeUnit: servingSizeUnit,
             };
         }

@@ -4,8 +4,7 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
-import type { VolumeUnit, WeightUnit } from "@common/units";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
@@ -44,7 +43,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
     };
     const updateDirectionPartIngredientUnit: RbaSelectChangeCallback = (option: SelectOption) => {
         dispatch(actions.updateDirectionPartIngredientUnit(
-            directionIndex, directionPart.stepNumber, option.value as WeightUnit | VolumeUnit,
+            directionIndex, directionPart.stepNumber, option.value as Unit,
         ));
     };
 
@@ -148,7 +147,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                             center={true}
                             width={SelectWidthSize.Medium}
                             height={SelectHeightSize.Medium}
-                            options={Object.values(Units).map((unit) => ({ value: unit }))}
+                            options={Object.values(Unit).map((unit) => ({ value: unit }))}
                             value={directionPart.ingredientUnit}
                             onChange={updateDirectionPartIngredientUnit}
                         />

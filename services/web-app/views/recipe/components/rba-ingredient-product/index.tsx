@@ -5,7 +5,7 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
@@ -102,7 +102,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
     const amountText = (
         <div className={styles.ingredientInfoLineAmountText}>
-            {ingredientProduct.amount}
+            {ingredientProduct.amountInput}
         </div>
     );
 
@@ -110,7 +110,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
         <input
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
-            value={(ingredientProduct.amountInput|| "")}
+            value={(ingredientProduct.amountInput || "")}
             onChange={onChangeAmount}
         />
     );
@@ -144,7 +144,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                         center={true}
                         width={SelectWidthSize.Medium}
                         height={SelectHeightSize.Medium}
-                        options={Object.values(Units).map((unit) => ({ value: unit }))}
+                        options={Object.values(Unit).map((unit) => ({ value: unit }))}
                         value={ingredientProduct.unit}
                         onChange={onChangeUnit}
                     />

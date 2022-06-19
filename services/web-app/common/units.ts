@@ -24,8 +24,8 @@ export enum VolumeUnit {
     tsp = "tsp",
 }
 
-export const Units = { ...WeightUnit, ...VolumeUnit };
-export type Units = WeightUnit | VolumeUnit;
+export const Unit = { ...WeightUnit, ...VolumeUnit };
+export type Unit = WeightUnit | VolumeUnit;
 
 
 export enum TemperatureUnit {
@@ -41,7 +41,7 @@ export enum TimeUnit {
 export interface CustomUnit {
     name: string;
     amount: number;
-    unit: Units;
+    unit: Unit;
     product_id: number;
 }
 
@@ -154,9 +154,9 @@ export function convertWeightToMetric(value: number, weightUnit: WeightUnit): nu
 
 export function convertFromMetric(
     value: number,
-    unit: WeightUnit | VolumeUnit | string,
+    unit: Unit | string,
     customUnits: CustomUnit[],
-    density: number = DEFAULT_DENSITY,
+    density: number,
 ): number {
 
     if (isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
@@ -173,9 +173,9 @@ export function convertFromMetric(
 
 export function convertToMetric(
     value: number,
-    unit: WeightUnit | VolumeUnit | string,
+    unit: Unit | string,
     customUnits: CustomUnit[],
-    density: number = DEFAULT_DENSITY,
+    density: number,
 ): number {
 
     if (isEnum<VolumeUnit, typeof VolumeUnit>(VolumeUnit, unit)) {
