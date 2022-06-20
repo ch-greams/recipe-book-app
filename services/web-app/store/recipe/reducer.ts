@@ -161,6 +161,12 @@ function convertDirections(directions: typings.Direction[], ingredients: typings
     }));
 }
 
+function isDirectionPartIngredient(
+    directionPart: types.RecipeDirectionPartComment | types.RecipeDirectionPartIngredient,
+): directionPart is types.RecipeDirectionPartIngredient {
+    return directionPart.type === types.DirectionPartType.Ingredient;
+}
+
 export default function recipePageReducer(state = initialState, action: types.RecipeActionTypes): types.RecipePageStore {
 
     switch (action.type) {
@@ -417,39 +423,40 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { directionIndex, stepNumber, inputValue } = action.payload;
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.map((directionPart) => {
+            const directions = state.directions.map((direction, iDirection) => {
 
-                                const isSelectedDirectionPart = (
-                                    (directionPart.type === types.DirectionPartType.Ingredient) &&
-                                    (directionPart.stepNumber === stepNumber)
-                                );
+                if (directionIndex === iDirection) {
 
-                                if (isSelectedDirectionPart) {
-                                    const amount = Utils.decimalNormalizer(
-                                        inputValue,
-                                        (directionPart as types.RecipeDirectionPartIngredient).ingredientAmountInput,
-                                    );
+                    const steps = direction.steps.map((directionPart) => {
 
-                                    return {
-                                        ...directionPart,
-                                        ingredientAmountInput: amount,
-                                        ingredientAmount: Number(amount),
-                                    };
-                                }
-                                else {
-                                    return directionPart;
-                                }
-                            }),
+                        if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
+
+                            // TODO: Limit to what you have in ingredients, or just add validation message?
+
+                            const amountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
+                            const amount = units.convertToMetric(
+                                Number(amountInput), directionPart.ingredientUnit, state.customUnits, state.density,
+                            );
+
+                            return {
+                                ...directionPart,
+                                ingredientAmountInput: amountInput,
+                                ingredientAmount: amount,
+                            };
                         }
-                        : direction
-                )),
-            };
+                        else {
+                            return directionPart;
+                        }
+                    });
+
+                    return { ...direction, steps };
+                }
+                else {
+                    return direction;
+                }
+            });
+
+            return { ...state, directions };
         }
 
         case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT: {
@@ -458,18 +465,37 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.map((subDirection) => (
-                                (subDirection.type === types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
-                                    ? { ...subDirection, ingredientUnit: unit }
-                                    : subDirection
-                            )),
-                        }
-                        : direction
-                )),
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        const steps = direction.steps.map((directionPart) => {
+
+                            if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
+
+                                // TODO: Limit to what you have in ingredients, or just add validation message?
+
+                                const amount = units.convertToMetric(
+                                    Number(directionPart.ingredientAmountInput), unit, state.customUnits, state.density,
+                                );
+
+                                return {
+                                    ...directionPart,
+                                    ingredientUnit: unit,
+                                    ingredientAmount: amount,
+                                };
+                            }
+                            else {
+                                return directionPart;
+                            }
+                        });
+
+                        return { ...direction, steps };
+                    }
+                    else {
+                        return direction;
+                    }
+                }),
             };
         }
 
@@ -750,26 +776,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         steps: [],
                     },
                 ],
-                newDirection: {
-                    id: -1,
-
-                    isOpen: false,
-                    isMarked: false,
-
-                    stepNumber: 0,
-                    name: "",
-
-                    durationValue: 0,
-                    durationUnit: units.DEFAULT_TIME_UNIT,
-
-                    temperatureValue: 0,
-                    temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
-
-                    durationValueInput: "",
-                    temperatureValueInput: "",
-
-                    steps: [],
-                },
+                newDirection: DEFAULT_DIRECTION,
             };
         }
 
