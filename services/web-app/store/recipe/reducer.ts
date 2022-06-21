@@ -140,25 +140,48 @@ function convertDirectionPart(
 
 function convertDirections(directions: typings.Direction[], ingredients: typings.Ingredient[]): types.RecipeDirection[] {
 
-    return directions.map((direction) => ({
-        id: direction.id,
+    return directions.map((direction) => {
 
-        stepNumber: direction.step_number,
-        name: direction.name,
+        const durationValueInput = (
+            direction.duration_value
+                ? String( Utils.roundToDecimal(
+                    units.convertFromSeconds(direction.duration_value, direction.duration_unit),
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        );
 
-        durationValue: direction.duration_value,
-        durationUnit: direction.duration_unit,
-        durationValueInput: direction.duration_value ? String(direction.duration_value) : "",
+        const temperatureValueInput = (
+            direction.temperature_value
+                ? String( Utils.roundToDecimal(
+                    direction.temperature_unit === units.TemperatureUnit.F
+                        ? units.convertCelsiusToFahrenheit(direction.temperature_value)
+                        : direction.temperature_value,
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        );
 
-        temperatureValue: direction.temperature_value,
-        temperatureUnit: direction.temperature_unit,
-        temperatureValueInput: direction.temperature_value ? String(direction.temperature_value) : "",
+        return {
+            id: direction.id,
 
-        isOpen: true,
-        isMarked: false,
+            stepNumber: direction.step_number,
+            name: direction.name,
 
-        steps: direction.steps.map((step) => convertDirectionPart(step, ingredients)),
-    }));
+            durationValue: direction.duration_value,
+            durationUnit: direction.duration_unit,
+            durationValueInput: durationValueInput,
+
+            temperatureValue: direction.temperature_value,
+            temperatureUnit: direction.temperature_unit,
+            temperatureValueInput: temperatureValueInput,
+
+            isOpen: true,
+            isMarked: false,
+
+            steps: direction.steps.map((step) => convertDirectionPart(step, ingredients)),
+        };
+    });
 }
 
 function isDirectionPartIngredient(
@@ -597,17 +620,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
+                    if (directionIndex === iDirection) {
 
-                    return (
-                        (directionIndex === iDirection)
-                            ? {
-                                ...direction,
-                                temperatureValue: Number(count),
-                                temperatureValueInput: count,
-                            }
-                            : direction
-                    );
+                        const countInput = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
+                        const count = (
+                            direction.temperatureUnit === units.TemperatureUnit.F
+                                ? units.convertFahrenheitToCelsius(Number(countInput))
+                                : Number(countInput)
+                        );
+
+                        return {
+                            ...direction,
+                            temperatureValue: count,
+                            temperatureValueInput: countInput,
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
                 }),
             };
         }
@@ -618,14 +648,26 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        const count = (
+                            unit === units.TemperatureUnit.F
+                                ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
+                                : Number(direction.temperatureValueInput)
+                        );
+
+                        return {
                             ...direction,
+                            temperatureValue: count,
                             temperatureUnit: unit,
-                        }
-                        : direction
-                )),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                }),
             };
         }
 
@@ -637,17 +679,20 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
+                    if (directionIndex === iDirection) {
 
-                    return (
-                        (directionIndex === iDirection)
-                            ? {
-                                ...direction,
-                                durationValue: Number(count),
-                                durationValueInput: count,
-                            }
-                            : direction
-                    );
+                        const countInput = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
+                        const count = units.convertToSeconds(Number(countInput), direction.durationUnit);
+
+                        return {
+                            ...direction,
+                            durationValue: count,
+                            durationValueInput: countInput,
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
                 }),
             };
         }
@@ -658,14 +703,22 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        const count = units.convertToSeconds(Number(direction.durationValueInput), unit);
+
+                        return {
                             ...direction,
+                            durationValue: count,
                             durationUnit: unit,
-                        }
-                        : direction
-                )),
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
+                }),
             };
         }
 
@@ -693,14 +746,19 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
+            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
+            const count = (
+                state.newDirection.temperatureUnit === units.TemperatureUnit.F
+                    ? units.convertFahrenheitToCelsius(Number(countInput))
+                    : Number(countInput)
+            );
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    temperatureValue: Number(count),
-                    temperatureValueInput: count,
+                    temperatureValue: count,
+                    temperatureValueInput: countInput,
                 },
             };
         }
@@ -709,10 +767,17 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const unit = action.payload;
 
+            const count = (
+                unit === units.TemperatureUnit.F
+                    ? units.convertFahrenheitToCelsius(Number(state.newDirection.temperatureValueInput))
+                    : Number(state.newDirection.temperatureValueInput)
+            );
+
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
+                    temperatureValue: count,
                     temperatureUnit: unit,
                 },
             };
@@ -722,14 +787,15 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
+            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
+            const count = units.convertToSeconds(Number(countInput), state.newDirection.durationUnit);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    durationValue: Number(count),
-                    durationValueInput: count,
+                    durationValue: count,
+                    durationValueInput: countInput,
                 },
             };
         }
@@ -738,10 +804,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const unit = action.payload;
 
+            const count = units.convertToSeconds(Number(state.newDirection.durationValueInput), unit);
+
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
+                    durationValue: count,
                     durationUnit: unit,
                 },
             };

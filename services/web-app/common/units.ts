@@ -34,6 +34,7 @@ export enum TemperatureUnit {
 }
 
 export enum TimeUnit {
+    s = "s",
     min = "min",
     h = "h",
 }
@@ -67,6 +68,10 @@ export const TSP_TO_ML: number = 4.92892;
 export const OZ_TO_G: number = 28.34952;
 export const LB_TO_G: number = 453.59237;
 
+export const TIME_MULTIPLIER: number = 60;
+
+
+// NOTE: Weight and volume conversion
 
 export function convertDensityFromMetric(value: number, weightUnit: WeightUnit, volumeUnit: VolumeUnit): number {
 
@@ -188,4 +193,47 @@ export function convertToMetric(
         const customUnit = customUnits.find((cu) => cu.name === unit);
         return isSome(customUnit) ? customUnit.amount * value : value;
     }
+}
+
+// NOTE: Time conversion
+
+export function convertFromSeconds(value: number, timeUnit: TimeUnit): number {
+
+    switch (timeUnit) {
+        case TimeUnit.h:
+            return value / (TIME_MULTIPLIER * TIME_MULTIPLIER);
+
+        case TimeUnit.min:
+            return value / TIME_MULTIPLIER;
+
+        case TimeUnit.s:
+        default:
+            return value;
+    }
+}
+
+export function convertToSeconds(value: number, timeUnit: TimeUnit): number {
+    switch (timeUnit) {
+        case TimeUnit.h:
+            return value * TIME_MULTIPLIER * TIME_MULTIPLIER;
+
+        case TimeUnit.min:
+            return value * TIME_MULTIPLIER;
+
+        case TimeUnit.s:
+        default:
+            return value;
+    }
+}
+
+// NOTE: Temperature conversion
+
+export function convertCelsiusToFahrenheit(value: number): number {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return (value * 1.8) + 32;
+}
+
+export function convertFahrenheitToCelsius(value: number): number {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return (value - 32) / 1.8;
 }

@@ -56,7 +56,9 @@ export default class Utils {
 
         const getRoundedValue: string = ( Math.round(value * accuracyMultiplier) / accuracyMultiplier ).toFixed(accuracy);
 
-        return Number(getRoundedValue);
+        // NOTE: Double conversion String -> Number -> String, allows you to easily drop trailing zeros
+        // IMPROVE: Consider different solution later?
+        return Number( getRoundedValue );
     }
 
     public static decimalNormalizer(value: string, previousValue: string): string {

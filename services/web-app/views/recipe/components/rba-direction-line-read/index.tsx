@@ -65,7 +65,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                             className={styles.directionInfoMeasure}
                         >
                             <div className={styles.directionInfoAmount}>
-                                {direction.temperatureValue}
+                                {direction.temperatureValueInput}
                             </div>
                             <RbaSelect
                                 theme={SelectTheme.Primary}
@@ -85,7 +85,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                             className={styles.directionInfoMeasure}
                         >
                             <div className={styles.directionInfoAmount}>
-                                {direction.durationValue}
+                                {direction.durationValueInput}
                             </div>
                             <RbaSelect
                                 theme={SelectTheme.Primary}
