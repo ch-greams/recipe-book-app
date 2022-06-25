@@ -74,19 +74,13 @@ export const TIME_MULTIPLIER: number = 60;
 // NOTE: Weight and volume conversion
 
 export function convertDensityFromMetric(value: number, weightUnit: WeightUnit, volumeUnit: VolumeUnit): number {
-
-    const convertedWeight = convertWeightFromMetric(value, weightUnit);
-    const convertedVolume = convertVolumeFromMetric(convertedWeight, volumeUnit);
-
-    return convertedVolume;
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return convertWeightFromMetric(value, weightUnit) / convertVolumeFromMetric(1, volumeUnit);
 }
 
 export function convertDensityToMetric(value: number, weightUnit: WeightUnit, volumeUnit: VolumeUnit): number {
-
-    const convertedWeight = convertWeightToMetric(value, weightUnit);
-    const convertedVolume = convertVolumeToMetric(convertedWeight, volumeUnit);
-
-    return convertedVolume;
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return convertWeightToMetric(value, weightUnit) / convertVolumeToMetric(1, volumeUnit);
 }
 
 

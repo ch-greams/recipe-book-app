@@ -357,6 +357,7 @@ export default class Utils {
             name: food.name,
             amount: 100,
             unit: WeightUnit.g,
+            density: food.density,
             nutrition_facts: food.nutrition_facts,
         };
     }
@@ -368,6 +369,7 @@ export default class Utils {
             name: recipe.name,
             amount: 100,
             unit: WeightUnit.g,
+            density: recipe.density,
             nutrition_facts: Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients),
         };
     }

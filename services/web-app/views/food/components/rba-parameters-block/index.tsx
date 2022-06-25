@@ -82,7 +82,9 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     value={food.densityWeightUnit}
                 />
 
-                {"/"}
+                <span className={styles.densityLineUnitSeparator}>
+                    {"in"}
+                </span>
 
                 <RbaSelect
                     theme={SelectTheme.Alternative}

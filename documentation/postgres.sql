@@ -362,6 +362,7 @@ AS SELECT ingredient_product.ingredient_id,
     ingredient_product.unit,
     product.type AS product_type,
     product.name,
+    product.density,
     nutrition_fact.*::private.nutrition_fact AS nutrition_facts
    FROM private.ingredient_product ingredient_product
      LEFT JOIN private.product product ON product.id = ingredient_product.product_id

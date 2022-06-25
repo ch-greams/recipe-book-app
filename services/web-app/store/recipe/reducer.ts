@@ -84,13 +84,21 @@ function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngr
 
         isOpen: false,
         isMarked: false,
-        products: Utils.getObjectValues(ingredient.products).reduce((acc, product) => ({
-            ...acc,
-            [product.product_id]: {
-                ...product,
-                amountInput: String(product.amount),
-            },
-        }), {}),
+        products: Utils.getObjectValues(ingredient.products).reduce((acc, product) => {
+
+            const amountInCurrentUnits = units.convertFromMetric(
+                product.amount, product.unit, [], product.density,
+            );
+            const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+            return {
+                ...acc,
+                [product.product_id]: {
+                    ...product,
+                    amountInput: String(amountInput),
+                },
+            };
+        }, {}),
         alternativeNutritionFacts: {},
     }));
 }
@@ -129,6 +137,8 @@ function convertDirectionPart(
 
             ingredientName: product.name,
             ingredientUnit: product.unit,
+
+            ingredientDensity: product.density,
 
             isMarked: false,
         };
@@ -462,8 +472,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                             const amountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
                             const amount = units.convertToMetric(
-                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                                Number(amountInput), directionPart.ingredientUnit, [], state.density,
+                                Number(amountInput), directionPart.ingredientUnit, [], directionPart.ingredientDensity,
                             );
 
                             return {
@@ -506,8 +515,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                     // TODO: Limit to what you have in ingredients, or just add validation message?
 
                                     const amount = units.convertToMetric(
-                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                                        Number(directionPart.ingredientAmountInput), unit, [], state.density,
+                                        Number(directionPart.ingredientAmountInput), unit, [], directionPart.ingredientDensity,
                                     );
 
                                     return {
@@ -519,8 +527,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                                 else {
 
                                     const amountInCurrentUnits = units.convertFromMetric(
-                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                                        directionPart.ingredientAmount, unit, [], state.density,
+                                        directionPart.ingredientAmount, unit, [], directionPart.ingredientDensity,
                                     );
                                     const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
 
@@ -1025,8 +1032,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                     const amountInput = Utils.decimalNormalizer(inputValue, product.amountInput);
                     const amount = units.convertToMetric(
-                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                        Number(amountInput), product.unit, [], state.density,
+                        Number(amountInput), product.unit, [], product.density,
                     );
 
                     return {
@@ -1075,8 +1081,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     if (state.editMode) {
 
                         const amount = units.convertToMetric(
-                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                            Number(product.amountInput), unit, [], state.density,
+                            Number(product.amountInput), unit, [], product.density,
                         );
 
                         return {
@@ -1089,10 +1094,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     }
                     else {
 
-                        const amountInCurrentUnits = units.convertFromMetric(
-                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                            product.amount, unit, [], state.density,
-                        );
+                        const amountInCurrentUnits = units.convertFromMetric(product.amount, unit, [], product.density);
                         const amountInput = String(Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two));
 
                         return {
