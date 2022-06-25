@@ -20,3 +20,7 @@
 ## Ingredients
 
 - It is virtually impossible to allow ***ingredient replacement*** in the ***recipe*** that is used as an ingredient on another page. And in this case I suggest to copy that recipe into ***your recipe book***, and replace ***ingredient products*** to your liking and then use this ***recipe as an ingredient***.
+
+## Nutrition Facts
+
+- Always stored values per 100g of the product, and saved serving size does not affect it in the database.

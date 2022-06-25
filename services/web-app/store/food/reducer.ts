@@ -151,6 +151,9 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 density: food.density,
                 densityInput: String(food.density),
 
+                servingSize: food.serving_size,
+                servingSizeInput: String(food.serving_size),
+
                 nutritionFacts: food.nutrition_facts,
                 customUnits: Utils.convertCustomUnitsIntoInputs(food.custom_units),
 
@@ -168,9 +171,11 @@ export default function foodPageReducer(state = initialState, action: types.Food
         }
 
         case types.FOOD_UPDATE_NUTRITION_FACT: {
+            const nutritionFactInputs = action.payload;
+
             const nutritionFactsByServing = {
                 ...state.nutritionFactsByServing,
-                ...Utils.convertNutritionFactInputsIntoValues(action.payload),
+                ...Utils.convertNutritionFactInputsIntoValues(nutritionFactInputs),
             };
 
             return {
@@ -180,7 +185,7 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 nutritionFactsByServing: nutritionFactsByServing,
                 nutritionFactsByServingInputs: {
                     ...state.nutritionFactsByServingInputs,
-                    ...action.payload as Dictionary<NutritionFactType, string>,
+                    ...nutritionFactInputs,
                 },
             };
         }

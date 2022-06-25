@@ -43,7 +43,11 @@ const initialState: types.RecipePageStore = {
     subtitle: "Subtitle",
     description: "",
     type: "",
+
     density: units.DEFAULT_DENSITY,
+    densityInput: String(units.DEFAULT_DENSITY),
+    densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
+    densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
     nutritionFacts: {},
     nutritionFactsByServing: {},
@@ -903,25 +907,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
 
-            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
-
             const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
 
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: nutritionFacts,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
                 servingSize: servingSize,
                 servingSizeInput: String(servingSizeInput),
 
-                // TODO: Add serving multiplier (RBA-28)
-                nutritionFactsByServing: nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -963,25 +966,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     : [ ...accIngredients, curIngredient ]
             ), []);
 
-            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
-
             const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
 
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: nutritionFacts,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
                 servingSize: servingSize,
                 servingSizeInput: String(servingSizeInput),
 
-                // TODO: Add serving multiplier (RBA-28)
-                nutritionFactsByServing: nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -1040,29 +1042,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 }
             });
 
-            // NOTE: Recalculate nutrition facts based on updated ingredient amounts
-
-            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
-
-            // NOTE: Update serving size based on updated ingredient amounts
-
             const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
 
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: nutritionFacts,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
                 servingSize: servingSize,
                 servingSizeInput: String(servingSizeInput),
 
-                // TODO: Add serving multiplier (RBA-28)
-                nutritionFactsByServing: nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -1070,49 +1067,66 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { parentId, id, unit } = action.payload;
 
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => {
-                    if (ingredient.id === parentId) {
+            const ingredients = state.ingredients.map((ingredient) => {
+                if (ingredient.id === parentId) {
 
-                        const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
+                    const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
 
-                        if (state.editMode) {
+                    if (state.editMode) {
 
-                            const amount = units.convertToMetric(
-                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                                Number(product.amountInput), unit, [], state.density,
-                            );
+                        const amount = units.convertToMetric(
+                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                            Number(product.amountInput), unit, [], state.density,
+                        );
 
-                            return {
-                                ...ingredient,
-                                products: {
-                                    ...ingredient.products,
-                                    [id]: { ...product, amount, unit },
-                                },
-                            };
-                        }
-                        else {
-
-                            const amountInCurrentUnits = units.convertFromMetric(
-                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
-                                product.amount, unit, [], state.density,
-                            );
-                            const amountInput = String(Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two));
-
-                            return {
-                                ...ingredient,
-                                products: {
-                                    ...ingredient.products,
-                                    [id]: { ...product, amountInput, unit },
-                                },
-                            };
-                        }
+                        return {
+                            ...ingredient,
+                            products: {
+                                ...ingredient.products,
+                                [id]: { ...product, amount, unit },
+                            },
+                        };
                     }
                     else {
-                        return ingredient;
+
+                        const amountInCurrentUnits = units.convertFromMetric(
+                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                            product.amount, unit, [], state.density,
+                        );
+                        const amountInput = String(Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two));
+
+                        return {
+                            ...ingredient,
+                            products: {
+                                ...ingredient.products,
+                                [id]: { ...product, amountInput, unit },
+                            },
+                        };
                     }
-                }),
+                }
+                else {
+                    return ingredient;
+                }
+            });
+
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
+            return {
+                ...state,
+                ingredients: ingredients,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -1175,25 +1189,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 },
             ];
 
-            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
-
             const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
 
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: nutritionFacts,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
                 servingSize: servingSize,
                 servingSizeInput: String(servingSizeInput),
 
-                // TODO: Add serving multiplier (RBA-28)
-                nutritionFactsByServing: nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -1320,6 +1333,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
             const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients);
+            const nutritionFactsByServing = Utils.convertNutritionFacts(recipe.serving_size, true, nutritionFacts);
 
             return {
                 ...state,
@@ -1333,12 +1347,17 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 description: recipe.description,
                 type: recipe.type,
 
+                density: recipe.density,
+                densityInput: String(recipe.density),
+
+                servingSize: recipe.serving_size,
+                servingSizeInput: String(recipe.serving_size),
+
                 nutritionFacts: nutritionFacts,
                 customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
 
-                // TODO: Add serving multiplier (RBA-28)
-                nutritionFactsByServing: nutritionFacts,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFacts),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
 
                 ingredients: recipeIngredients,
                 directions: recipeDirections,
