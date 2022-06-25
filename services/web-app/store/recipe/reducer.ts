@@ -1,4 +1,4 @@
-import { unwrap, unwrapOr } from "@common/types";
+import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
@@ -458,7 +458,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                             const amountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
                             const amount = units.convertToMetric(
-                                Number(amountInput), directionPart.ingredientUnit, state.customUnits, state.density,
+                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                Number(amountInput), directionPart.ingredientUnit, [], state.density,
                             );
 
                             return {
@@ -496,17 +497,35 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                             if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
 
-                                // TODO: Limit to what you have in ingredients, or just add validation message?
+                                if (state.editMode) {
 
-                                const amount = units.convertToMetric(
-                                    Number(directionPart.ingredientAmountInput), unit, state.customUnits, state.density,
-                                );
+                                    // TODO: Limit to what you have in ingredients, or just add validation message?
 
-                                return {
-                                    ...directionPart,
-                                    ingredientUnit: unit,
-                                    ingredientAmount: amount,
-                                };
+                                    const amount = units.convertToMetric(
+                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                        Number(directionPart.ingredientAmountInput), unit, [], state.density,
+                                    );
+
+                                    return {
+                                        ...directionPart,
+                                        ingredientUnit: unit,
+                                        ingredientAmount: amount,
+                                    };
+                                }
+                                else {
+
+                                    const amountInCurrentUnits = units.convertFromMetric(
+                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                        directionPart.ingredientAmount, unit, [], state.density,
+                                    );
+                                    const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+                                    return {
+                                        ...directionPart,
+                                        ingredientUnit: unit,
+                                        ingredientAmountInput: String(amountInput),
+                                    };
+                                }
                             }
                             else {
                                 return directionPart;
@@ -652,21 +671,38 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                     if (directionIndex === iDirection) {
 
-                        const count = (
-                            unit === units.TemperatureUnit.F
-                                ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
-                                : Number(direction.temperatureValueInput)
-                        );
+                        if (state.editMode) {
 
-                        return {
-                            ...direction,
-                            temperatureValue: count,
-                            temperatureUnit: unit,
-                        };
+                            const count = (
+                                unit === units.TemperatureUnit.F
+                                    ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
+                                    : Number(direction.temperatureValueInput)
+                            );
+
+                            return {
+                                ...direction,
+                                temperatureValue: count,
+                                temperatureUnit: unit,
+                            };
+                        }
+                        // NOTE: Shouldn't be possible to trigger this change with `isNone(temperatureValue) === true`
+                        else if (isSome(direction.temperatureValue)) {
+
+                            const countInput = (
+                                unit === units.TemperatureUnit.F
+                                    ? units.convertCelsiusToFahrenheit(direction.temperatureValue)
+                                    : direction.temperatureValue
+                            );
+
+                            return {
+                                ...direction,
+                                temperatureValueInput: String(countInput),
+                                temperatureUnit: unit,
+                            };
+                        }
                     }
-                    else {
-                        return direction;
-                    }
+
+                    return direction;
                 }),
             };
         }
@@ -707,17 +743,29 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                     if (directionIndex === iDirection) {
 
-                        const count = units.convertToSeconds(Number(direction.durationValueInput), unit);
+                        if (state.editMode) {
+                            const count = units.convertToSeconds(Number(direction.durationValueInput), unit);
 
-                        return {
-                            ...direction,
-                            durationValue: count,
-                            durationUnit: unit,
-                        };
+                            return {
+                                ...direction,
+                                durationValue: count,
+                                durationUnit: unit,
+                            };
+                        }
+                        // NOTE: Shouldn't be possible to trigger this change with `isNone(durationValue) === true`
+                        else if (isSome(direction.durationValue)) {
+
+                            const countInput = units.convertFromSeconds(direction.durationValue, unit);
+
+                            return {
+                                ...direction,
+                                durationValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
+                                durationUnit: unit,
+                            };
+                        }
                     }
-                    else {
-                        return direction;
-                    }
+
+                    return direction;
                 }),
             };
         }
@@ -975,7 +1023,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                     const amountInput = Utils.decimalNormalizer(inputValue, product.amountInput);
                     const amount = units.convertToMetric(
-                        Number(amountInput), product.unit, state.customUnits, state.density,
+                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                        Number(amountInput), product.unit, [], state.density,
                     );
 
                     return {
@@ -1028,17 +1077,37 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                         const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
 
-                        const amount = units.convertToMetric(
-                            Number(product.amountInput), unit, state.customUnits, state.density,
-                        );
+                        if (state.editMode) {
 
-                        return {
-                            ...ingredient,
-                            products: {
-                                ...ingredient.products,
-                                [id]: { ...product, amount, unit },
-                            },
-                        };
+                            const amount = units.convertToMetric(
+                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                Number(product.amountInput), unit, [], state.density,
+                            );
+
+                            return {
+                                ...ingredient,
+                                products: {
+                                    ...ingredient.products,
+                                    [id]: { ...product, amount, unit },
+                                },
+                            };
+                        }
+                        else {
+
+                            const amountInCurrentUnits = units.convertFromMetric(
+                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                product.amount, unit, [], state.density,
+                            );
+                            const amountInput = String(Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two));
+
+                            return {
+                                ...ingredient,
+                                products: {
+                                    ...ingredient.products,
+                                    [id]: { ...product, amountInput, unit },
+                                },
+                            };
+                        }
                     }
                     else {
                         return ingredient;

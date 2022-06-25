@@ -83,7 +83,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
         if (isReadOnly) {
             const ingredientAmountText = (
                 <div className={styles.directionPartAmountText}>
-                    {directionPart.ingredientAmount}
+                    {directionPart.ingredientAmountInput}
                 </div>
             );
 

@@ -38,6 +38,7 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                 </div>
 
                 <input
+                    disabled={!food.editMode}
                     type={"text"}
                     value={food.type}
                     className={styles.typeSelectInput}
@@ -62,6 +63,7 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                 </div>
 
                 <input
+                    disabled={!food.editMode}
                     type={"text"}
                     value={food.densityInput}
                     className={styles.densityLineInput}
