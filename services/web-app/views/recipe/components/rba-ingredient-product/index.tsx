@@ -101,7 +101,10 @@ const RbaIngredientProduct: React.FC<Props> = ({
     );
 
     const amountText = (
-        <div className={styles.ingredientInfoLineAmountText}>
+        <div
+            data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}
+            className={styles.ingredientInfoLineAmountText}
+        >
             {ingredientProduct.amountInput}
         </div>
     );

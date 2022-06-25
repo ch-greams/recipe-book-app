@@ -62,7 +62,10 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                 }}
             />
 
-            <div className={styles.ingredientInfoLines}>
+            <div
+                data-cy={constants.CY_INGREDIENT_INFO_LINES}
+                className={styles.ingredientInfoLines}
+            >
 
                 {(
                     ingredient.isOpen && (
