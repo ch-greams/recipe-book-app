@@ -59,6 +59,7 @@ const INGREDIENT_0: RecipeIngredient = {
             product_id: PRODUCT_ID_1,
             product_type: ProductType.Food,
             name: "Sour Cream 10%",
+            density: 1,
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 57,
                 [LipidNutritionFactType.Fat]: 10,
@@ -73,6 +74,7 @@ const INGREDIENT_0: RecipeIngredient = {
             product_id: PRODUCT_ID_2,
             product_type: ProductType.Food,
             name: "Sour Cream 15%",
+            density: 1,
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 56,
                 [LipidNutritionFactType.Fat]: 15,
@@ -102,6 +104,7 @@ const INGREDIENT_1: RecipeIngredient = {
             product_id: PRODUCT_ID_3,
             product_type: ProductType.Food,
             name: "Cottage Cheese",
+            density: 1,
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
                 [LipidNutritionFactType.Fat]: 18.3,
