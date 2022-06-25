@@ -115,7 +115,10 @@ CREATE TABLE private.product (
 	is_private bool NOT NULL DEFAULT true,
 	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	serving_size float8 NOT NULL DEFAULT 100,
+	CONSTRAINT density_check CHECK ((density > (0)::double precision)) NOT VALID,
 	CONSTRAINT product_pk PRIMARY KEY (id),
+	CONSTRAINT serving_size_check CHECK ((serving_size > (0)::double precision)) NOT VALID,
 	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );
 

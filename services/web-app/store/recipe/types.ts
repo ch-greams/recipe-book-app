@@ -38,7 +38,7 @@ export interface RecipeDirectionPartIngredient {
     ingredientAmount: number;
     ingredientAmountInput: string;
     ingredientName: string;
-    ingredientUnit: units.Units;
+    ingredientUnit: units.Unit;
 }
 
 export interface RecipeDirection {
@@ -74,18 +74,23 @@ export interface RecipePageStore {
     subtitle: string;
     description: string;
     type: string;
-    // TODO: Expand to include density inputs just like in Food
+
     density: number;
+    densityInput: string;
+    densityVolumeUnit: units.VolumeUnit;
+    densityWeightUnit: units.WeightUnit;
+
     nutritionFacts: Dictionary<NutritionFactType, number>;
-    customUnits: units.CustomUnit[];
+    customUnits: units.CustomUnitInput[];
     isPrivate: boolean;
 
     // NOTE: INPUTS
-    customUnitInputs: units.CustomUnitInput[];
-
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: units.WeightUnit | units.VolumeUnit;
+
+    nutritionFactsByServing: Dictionary<NutritionFactType, number>;
+    nutritionFactsByServingInputs: Dictionary<NutritionFactType, string>;
 
     ingredients: RecipeIngredient[];
 
@@ -190,21 +195,21 @@ export interface SetEditModeAction {
     payload: boolean;
 }
 
-export interface RecipeItemFetchNewAction {
+export interface RecipeFetchNewAction {
     type: typeof RECIPE_FETCH_NEW;
 }
 
-export interface RecipeItemFetchRequestAction {
+export interface RecipeFetchRequestAction {
     type: typeof RECIPE_FETCH_REQUEST;
     payload: number;
 }
 
-export interface RecipeItemFetchSuccessAction {
+export interface RecipeFetchSuccessAction {
     type: typeof RECIPE_FETCH_SUCCESS;
     payload: typings.Recipe;
 }
 
-export interface RecipeItemFetchErrorAction {
+export interface RecipeFetchErrorAction {
     type: typeof RECIPE_FETCH_ERROR;
     payload: string;
 }
@@ -228,30 +233,30 @@ export interface UpdateCustomUnitAction {
     };
 }
 
-export interface RecipeItemCreateRequestAction {
+export interface RecipeCreateRequestAction {
     type: typeof RECIPE_CREATE_REQUEST;
 }
 
-export interface RecipeItemCreateSuccessAction {
+export interface RecipeCreateSuccessAction {
     type: typeof RECIPE_CREATE_SUCCESS;
     payload: Recipe;
 }
 
-export interface RecipeItemCreateErrorAction {
+export interface RecipeCreateErrorAction {
     type: typeof RECIPE_CREATE_ERROR;
     payload: string;
 }
 
-export interface RecipeItemUpdateRequestAction {
+export interface RecipeUpdateRequestAction {
     type: typeof RECIPE_UPDATE_REQUEST;
 }
 
-export interface RecipeItemUpdateSuccessAction {
+export interface RecipeUpdateSuccessAction {
     type: typeof RECIPE_UPDATE_SUCCESS;
     payload: Recipe;
 }
 
-export interface RecipeItemUpdateErrorAction {
+export interface RecipeUpdateErrorAction {
     type: typeof RECIPE_UPDATE_ERROR;
     payload: string;
 }
@@ -474,7 +479,7 @@ export interface AddIngredientProductErrorAction {
 }
 
 
-export type RecipeItemActionTypes = (
+export type RecipeActionTypes = (
     UpdateNameAction | UpdateBrandAction | UpdateSubtitleAction | UpdateDescriptionAction | UpdateTypeAction |
     UpdateServingSizeAmountAction | UpdateServingSizeUnitAction | SetEditModeAction |
 
@@ -496,9 +501,9 @@ export type RecipeItemActionTypes = (
     AddIngredientRequestAction | AddIngredientSuccessAction | AddIngredientErrorAction |
     AddIngredientProductRequestAction | AddIngredientProductSuccessAction | AddIngredientProductErrorAction |
 
-    RecipeItemFetchRequestAction | RecipeItemFetchSuccessAction | RecipeItemFetchErrorAction | RecipeItemFetchNewAction |
+    RecipeFetchRequestAction | RecipeFetchSuccessAction | RecipeFetchErrorAction | RecipeFetchNewAction |
     AddCustomUnitAction | RemoveCustomUnitAction | UpdateCustomUnitAction |
 
-    RecipeItemCreateRequestAction | RecipeItemCreateSuccessAction | RecipeItemCreateErrorAction |
-    RecipeItemUpdateRequestAction | RecipeItemUpdateSuccessAction | RecipeItemUpdateErrorAction
+    RecipeCreateRequestAction | RecipeCreateSuccessAction | RecipeCreateErrorAction |
+    RecipeUpdateRequestAction | RecipeUpdateSuccessAction | RecipeUpdateErrorAction
 );

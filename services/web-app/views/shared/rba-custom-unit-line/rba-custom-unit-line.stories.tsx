@@ -2,7 +2,7 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Units, WeightUnit } from "@common/units";
+import { Unit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 
 import RbaCustomUnitLine from ".";
@@ -23,7 +23,7 @@ export default {
                 value: {
                     name: { name: "string", required: true },
                     amount: { name: "string", required: true },
-                    unit: { name: "enum", value: Utils.getObjectValues(Units), required: true },
+                    unit: { name: "enum", value: Utils.getObjectValues(Unit), required: true },
                 },
                 required: true,
             },
@@ -50,11 +50,11 @@ const Template: ComponentStory<typeof RbaCustomUnitLine> = (args) => (<RbaCustom
 export const Default = Template.bind({});
 Default.args = {
     isNew: false,
-    customUnit: { name: "package", amount: "120", unit: WeightUnit.g },
+    customUnit: { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
 };
 
 export const NewCustomUnit = Template.bind({});
 NewCustomUnit.args = {
     isNew: true,
-    customUnit: { name: "", amount: "100", unit: WeightUnit.g },
+    customUnit: { product_id: -1, name: "", amount: 100, amountInput: "100", unit: WeightUnit.g },
 };

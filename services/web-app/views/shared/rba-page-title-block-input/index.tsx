@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import type { AnyAction } from "redux";
 import * as constants from "@cypress/constants";
 
+import { unwrapOr } from "@common/types";
 import Utils from "@common/utils";
 
 import styles from "./rba-page-title-block-input.module.scss";
@@ -22,7 +23,7 @@ interface Props {
 
 
 const formatInput = (value: Option<string>, uppercase: boolean = true): string => {
-    return uppercase ? Utils.unwrapOr(value, "").toUpperCase() : Utils.unwrapOr(value, "");
+    return uppercase ? unwrapOr(value, "").toUpperCase() : unwrapOr(value, "");
 };
 
 const MIN_DESCRIPTION_SIZE: number = 3;
@@ -33,7 +34,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
 }) => {
     const dispatch = useDispatch();
 
-    const descriptionText = Utils.unwrapOr(description, "");
+    const descriptionText = unwrapOr(description, "");
     const descriptionSize = Utils.getNumberOfLines(descriptionText);
 
     return (

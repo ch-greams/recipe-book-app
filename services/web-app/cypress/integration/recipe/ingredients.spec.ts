@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { NutritionFactType } from "@common/nutritionFacts";
+import type { Unit } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
 import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 
@@ -133,6 +134,12 @@ describe("recipe_page", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 
+            const INGREDIENT_UNIT_BEFORE: Unit = VolumeUnit.ml;
+            const INGREDIENT_UNIT_AFTER: Unit = WeightUnit.oz;
+
+            const INGREDIENT_AMOUNT_BEFORE: number = 100;
+            const INGREDIENT_AMOUNT_AFTER: number = 3.53;
+
             // Check ingredient and open it
             cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
@@ -141,44 +148,68 @@ describe("recipe_page", () => {
                 .as("ingredientInfoLine")
                 .click();
 
-            // Check current unit in ingredient_product to be VolumeUnit.ml
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            // Check current unit in ingredient_product
+            cy.get("@ingredientInfoLine")
+                .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_INFO_LINES}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
                 .contains(INGREDIENT_NAME.toUpperCase())
                 .should("be.visible")
-                .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
-                .contains(VolumeUnit.ml)
+                .parent()
+                .as("ingredientProduct")
+                .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
+                .contains(INGREDIENT_UNIT_BEFORE)
                 .should("be.visible");
 
-            // Check current unit to be VolumeUnit.ml and open select
+            // Check current unit and open select
             cy.get("@ingredientInfoLine")
-                .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
-                .contains(VolumeUnit.ml)
+                .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
+                .contains(INGREDIENT_UNIT_BEFORE)
                 .should("be.visible")
                 .click();
 
-            // Change unit to WeightUnit.g
+            // Check current amount
             cy.get("@ingredientInfoLine")
-                .get(`[data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
-                .contains(WeightUnit.g)
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
+                .contains(String(INGREDIENT_AMOUNT_BEFORE))
+                .should("be.visible");
+
+            // Check current amount in ingredient_product line
+            cy.get("@ingredientProduct")
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
+                .contains(String(INGREDIENT_AMOUNT_BEFORE))
+                .should("be.visible");
+
+            // Change unit
+            cy.get("@ingredientInfoLine")
+                .find(`[data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
+                .contains(INGREDIENT_UNIT_AFTER)
                 .should("be.visible")
                 .click()
                 .should("not.exist");
 
             // Confirm that unit changes
             cy.get("@ingredientInfoLine")
-                .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
-                .contains(WeightUnit.g)
+                .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
+                .contains(INGREDIENT_UNIT_AFTER)
                 .should("be.visible");
 
-            // Confirm that unit changes in ingredient_product line too
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_NAME.toUpperCase())
-                .should("be.visible")
-                .get(`[data-cy=${constants.CY_SELECT_INPUT}]`)
-                .contains(WeightUnit.g)
+            // Confirm that amount changes
+            cy.get("@ingredientInfoLine")
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
+                .contains(String(INGREDIENT_AMOUNT_AFTER))
                 .should("be.visible");
 
-            // TODO: Check conversion after it is implemented (part of the RBA-28)
+            // Confirm that unit changes in ingredient_product line
+            cy.get("@ingredientProduct")
+                .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
+                .contains(INGREDIENT_UNIT_AFTER)
+                .should("be.visible");
+
+            // Confirm that amount changes in ingredient_product line
+            cy.get("@ingredientProduct")
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
+                .contains(String(INGREDIENT_AMOUNT_AFTER))
+                .should("be.visible");
         });
     });
 

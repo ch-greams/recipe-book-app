@@ -3,7 +3,7 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import Utils from "@common/utils";
 import * as types from "@store/recipe/types";
 
@@ -65,9 +65,9 @@ IngredientUnit.args = {
     center: true,
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Medium,
-    options: Object.values(Units).map((unit) => ({ value: unit })),
+    options: Object.values(Unit).map((unit) => ({ value: unit })),
     onChange: (option) => console.log(option.value),
-    value: Units.g,
+    value: Unit.g,
 };
 
 export const AltIngredientUnit = Template.bind({});
@@ -76,9 +76,9 @@ AltIngredientUnit.args = {
     center: true,
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Medium,
-    options: Object.values(Units).map((unit) => ({ value: unit })),
+    options: Object.values(Unit).map((unit) => ({ value: unit })),
     onChange: (option) => console.log(option.value),
-    value: Units.g,
+    value: Unit.g,
 };
 
 export const ServingSize = Template.bind({});
@@ -87,9 +87,9 @@ ServingSize.args = {
     center: true,
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Large,
-    options: Object.values(Units).map((unit) => ({ value: unit })),
+    options: Object.values(Unit).map((unit) => ({ value: unit })),
     onChange: (option) => console.log(option.value),
-    value: Units.g,
+    value: Unit.g,
 };
 
 export const CustomUnit = Template.bind({});
@@ -98,9 +98,9 @@ CustomUnit.args = {
     center: true,
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Small,
-    options: Object.values(Units).map((unit) => ({ value: unit })),
+    options: Object.values(Unit).map((unit) => ({ value: unit })),
     onChange: (option) => console.log(option.value),
-    value: Units.g,
+    value: Unit.g,
 };
 
 export const SubDirectionType = Template.bind({});

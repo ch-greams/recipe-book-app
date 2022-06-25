@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
-import { Units, VolumeUnit, WeightUnit } from "@common/units";
+import { Unit, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -14,17 +14,17 @@ import styles from "./rba-parameters-block.module.scss";
 
 
 interface Props {
-    foodItem: FoodPageStore;
+    food: FoodPageStore;
 }
 
 
-const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
+const RbaParametersBlock: React.FC<Props> = ({ food }) => {
 
     const dispatch = useDispatch();
 
 
     const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
-        const amount = Utils.decimalNormalizer(event.target.value, foodItem.servingSizeInput);
+        const amount = Utils.decimalNormalizer(event.target.value, food.servingSizeInput);
         dispatch(actions.updateServingSizeAmount(amount));
     };
 
@@ -38,8 +38,9 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 </div>
 
                 <input
+                    disabled={!food.editMode}
                     type={"text"}
-                    value={foodItem.type}
+                    value={food.type}
                     className={styles.typeSelectInput}
                     onChange={(event) => {
                         dispatch(actions.updateType(event.target.value));
@@ -62,8 +63,9 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
                 </div>
 
                 <input
+                    disabled={!food.editMode}
                     type={"text"}
-                    value={foodItem.densityInput}
+                    value={food.densityInput}
                     className={styles.densityLineInput}
                     onChange={(event) => {
                         dispatch(actions.updateDensityAmount(event.target.value));
@@ -77,7 +79,7 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     height={SelectHeightSize.Large}
                     options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
                     onChange={(option: SelectOption) => dispatch(actions.updateDensityWeightUnit(option.value as WeightUnit))}
-                    value={foodItem.densityWeightUnit}
+                    value={food.densityWeightUnit}
                 />
 
                 {"/"}
@@ -89,7 +91,7 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     height={SelectHeightSize.Large}
                     options={Object.values(VolumeUnit).map((unit) => ({ value: unit }))}
                     onChange={(option: SelectOption) => dispatch(actions.updateDensityVolumeUnit(option.value as VolumeUnit))}
-                    value={foodItem.densityVolumeUnit}
+                    value={food.densityVolumeUnit}
                 />
 
             </div>
@@ -102,7 +104,7 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
 
                 <input
                     type={"text"}
-                    value={foodItem.servingSizeInput}
+                    value={food.servingSizeInput}
                     className={styles.servingSizeLineInput}
                     onChange={handleServingSizeAmountEdit}
                 />
@@ -113,10 +115,10 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Large}
                     options={[
-                        ...Object.values(Units).map((unit) => ({ value: unit })),
-                        ...foodItem.customUnits.map((customUnit) => ({ value: customUnit.name })),
+                        ...Object.values(Unit).map((unit) => ({ value: unit })),
+                        ...food.customUnits.map((customUnit) => ({ value: customUnit.name })),
                     ]}
-                    value={foodItem.servingSizeUnit}
+                    value={food.servingSizeUnit}
                     onChange={(option: SelectOption) => dispatch(actions.updateServingSizeUnit(option.value))}
                 />
 
@@ -125,7 +127,7 @@ const RbaParametersBlock: React.FC<Props> = ({ foodItem }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
-                customUnitInputs={foodItem.customUnitInputs}
+                customUnits={food.customUnits}
                 addCustomUnit={actions.addCustomUnit}
                 removeCustomUnit={actions.removeCustomUnit}
                 updateCustomUnit={actions.updateCustomUnit}

@@ -3,8 +3,9 @@ import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
+import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
@@ -45,7 +46,7 @@ interface Props {
 
 
 const getCheckbox = (isMarked?: boolean, onClickMark?: Option<() => void>): Option<JSX.Element> => (
-    Utils.isSome(onClickMark)
+    isSome(onClickMark)
         ? (
             <div className={styles.ingredientCheckbox} onClick={onClickMark}>
                 {( isMarked ? <div className={styles.ingredientCheckboxMark} /> : null )}
@@ -100,8 +101,11 @@ const RbaIngredientProduct: React.FC<Props> = ({
     );
 
     const amountText = (
-        <div className={styles.ingredientInfoLineAmountText}>
-            {ingredientProduct.amount}
+        <div
+            data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}
+            className={styles.ingredientInfoLineAmountText}
+        >
+            {ingredientProduct.amountInput}
         </div>
     );
 
@@ -109,7 +113,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
         <input
             type={"text"}
             className={styles.ingredientInfoLineAmountInput}
-            value={(ingredientProduct.amountInput|| "")}
+            value={(ingredientProduct.amountInput || "")}
             onChange={onChangeAmount}
         />
     );
@@ -143,14 +147,14 @@ const RbaIngredientProduct: React.FC<Props> = ({
                         center={true}
                         width={SelectWidthSize.Medium}
                         height={SelectHeightSize.Medium}
-                        options={Object.values(Units).map((unit) => ({ value: unit }))}
+                        options={Object.values(Unit).map((unit) => ({ value: unit }))}
                         value={ingredientProduct.unit}
                         onChange={onChangeUnit}
                     />
                 </div>
             </div>
 
-            <Link href={Utils.getItemPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
+            <Link href={Utils.getProductPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButton}>
                     <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
                         <LinkIcon />

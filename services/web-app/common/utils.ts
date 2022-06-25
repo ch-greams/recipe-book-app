@@ -1,3 +1,4 @@
+import { isSome, unwrap, unwrapOr } from "@common/types";
 import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/food/types";
 import type {
@@ -9,7 +10,7 @@ import type { NutritionFactDescription } from "./nutritionFacts";
 import { NutritionFactType } from "./nutritionFacts";
 import type { Comparer, Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
-import { VolumeUnit, WeightUnit } from "./units";
+import { WeightUnit } from "./units";
 
 
 export enum UserMenuItem {
@@ -45,55 +46,6 @@ export default class Utils {
     public static readonly ZERO: number = 0;
     private static readonly CENTUM: number = 100;
 
-    public static readonly CUP_TO_ML: number = 240;
-    public static readonly TBSP_TO_ML: number = 14.7868;
-    public static readonly TSP_TO_ML: number = 4.92892;
-    public static readonly OZ_TO_G: number = 28.3495;
-
-
-    public static convertDensity(
-        value: number,
-        weightUnit: WeightUnit,
-        volumeUnit: VolumeUnit,
-        toMetric: boolean = false,
-    ): number {
-
-        const convertedWeight = Utils.convertDensityWeight(value, weightUnit, toMetric);
-        const convertedVolume = Utils.convertDensityVolume(convertedWeight, volumeUnit, toMetric);
-
-        return convertedVolume;
-    }
-
-    public static convertDensityVolume(value: number, volumeUnit: VolumeUnit, toMetric: boolean = false): number {
-
-        switch (volumeUnit) {
-
-            case VolumeUnit.cup:
-                return toMetric ? ( value / Utils.CUP_TO_ML )  : ( value * Utils.CUP_TO_ML );
-            case VolumeUnit.tbsp:
-                return toMetric ? ( value / Utils.TBSP_TO_ML ) : ( value * Utils.TBSP_TO_ML );
-            case VolumeUnit.tsp:
-                return toMetric ? ( value / Utils.TSP_TO_ML )  : ( value * Utils.TSP_TO_ML );
-
-            case VolumeUnit.ml:
-            default:
-                return value;
-        }
-    }
-
-    public static convertDensityWeight(value: number, weightUnit: WeightUnit, toMetric: boolean = false): number {
-
-        switch (weightUnit) {
-
-            case WeightUnit.oz:
-                return toMetric ? ( value * Utils.OZ_TO_G ) : ( value / Utils.OZ_TO_G );
-
-            case WeightUnit.g:
-            default:
-                return value;
-        }
-    }
-
     // NOTE: CALCULATIONS
 
     public static roundToDecimal(value: number, accuracy: DecimalPlaces): number {
@@ -104,7 +56,9 @@ export default class Utils {
 
         const getRoundedValue: string = ( Math.round(value * accuracyMultiplier) / accuracyMultiplier ).toFixed(accuracy);
 
-        return Number(getRoundedValue);
+        // NOTE: Double conversion String -> Number -> String, allows you to easily drop trailing zeros
+        // IMPROVE: Consider different solution later?
+        return Number( getRoundedValue );
     }
 
     public static decimalNormalizer(value: string, previousValue: string): string {
@@ -123,22 +77,6 @@ export default class Utils {
 
     public static isEmptyString(value: string): boolean {
         return value.trim().length === Utils.ZERO;
-    }
-
-    public static unwrapOr<T>(value: Option<T>, defaultValue: T): T {
-        return this.isSome(value) ? value : defaultValue;
-    }
-
-    public static unwrap<T>(value: Option<T>, name: string): T {
-        if (!this.isSome(value)) {
-            throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
-        }
-
-        return value;
-    }
-
-    public static isSome<T>(value: Option<T>): value is T {
-        return (value !== null) && (value !== undefined);
     }
 
     // NOTE: APP-SPECIFIC CALCULATIONS
@@ -180,18 +118,10 @@ export default class Utils {
     public static getDailyValuePercent(currentValue: Option<number>, dailyValue: Option<number>): Option<number> {
 
         return (
-            ( Utils.isSome(currentValue) && Utils.isSome(dailyValue) )
+            ( isSome(currentValue) && isSome(dailyValue) )
                 ? Utils.roundToDecimal(( currentValue / dailyValue ) * Utils.CENTUM, DecimalPlaces.One)
                 : null
         );
-    }
-
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
-        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
-    }
-
-    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
-        return Object.values(obj) as T[];
     }
 
     public static dictionarySum(
@@ -203,7 +133,7 @@ export default class Utils {
             const nutritionFactValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
-                    return ( Utils.isSome(value) ? Utils.unwrapOr(sum, Utils.ZERO) + value : sum );
+                    return ( isSome(value) ? unwrapOr(sum, Utils.ZERO) + value : sum );
                 },
                 null,
             );
@@ -211,7 +141,7 @@ export default class Utils {
             return {
                 ...acc,
                 [nutrientType]: (
-                    Utils.isSome(nutritionFactValue)
+                    isSome(nutritionFactValue)
                         ? Utils.roundToDecimal(nutritionFactValue, DecimalPlaces.Two)
                         : null
                 ),
@@ -233,7 +163,7 @@ export default class Utils {
                 return {
                     ...acc,
                     [cur]: (
-                        Utils.isSome(nutritionFact)
+                        isSome(nutritionFact)
                             ? Utils.roundToDecimal(nutritionFact * multiplier, DecimalPlaces.Two)
                             : null
                     ),
@@ -244,6 +174,14 @@ export default class Utils {
     }
 
     // NOTE: OTHER GENERIC THINGS
+
+    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
+        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
+    }
+
+    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
+        return Object.values(obj) as T[];
+    }
 
     /**
      * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
@@ -270,11 +208,11 @@ export default class Utils {
         return (!!obj && (typeof obj === "object") && Object.keys(obj).length > Utils.ZERO);
     }
 
-    public static getItemPath(route: ProductType, id: number): string {
+    public static getProductPath(route: ProductType, id: number): string {
         return `/${route}/${id}`;
     }
 
-    public static getNewItemPath(route: ProductType): string {
+    public static getNewProductPath(route: ProductType): string {
         return `/${route}/new`;
     }
 
@@ -301,22 +239,17 @@ export default class Utils {
      * @returns converted `string` or `None` if `value` was `None` in the first place
      */
     public static numberToString(value: Option<number>): Option<string> {
-        return Utils.isSome(value) ? String(value) : null;
+        return isSome(value) ? String(value) : null;
     }
 
     /**
      * @returns converted `number` or `None` if `value` was an empty `string` or `None` in the first place
      */
     public static stringToNumber(value: Option<string>): Option<number> {
-        return (
-            Utils.isSome(value)
-                ? ( Utils.isEmptyString(value) ? null : Number(value) )
-                : null
-        );
+        return ( ( isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
     }
 
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
-
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
             (acc, nfType) => ({ ...acc, [nfType]: Utils.numberToString(values[nfType]) }), {},
         );
@@ -329,16 +262,10 @@ export default class Utils {
     }
 
     public static convertCustomUnitsIntoInputs(customUnits: CustomUnit[]): CustomUnitInput[] {
-        return customUnits.map(this.convertCustomUnitIntoInput);
+        return customUnits.map((customUnit) => ({ ...customUnit, amountInput: String(customUnit.amount) }));
     }
 
-    public static convertCustomUnitIntoInput(customUnit: CustomUnit): CustomUnitInput {
-        return { ...customUnit, amount: String(customUnit.amount) };
-    }
-
-    public static convertCustomUnitIntoValue(product_id: number, customUnit: CustomUnitInput): CustomUnit {
-        return { ...customUnit, product_id, amount: Number(customUnit.amount) };
-    }
+    // NOTE: Page conversion
 
     public static convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
         return {
@@ -348,6 +275,7 @@ export default class Utils {
             subtitle: foodPage.subtitle,
             description: foodPage.description,
             density: foodPage.density,
+            serving_size: foodPage.servingSize,
             nutrition_facts: foodPage.nutritionFacts,
             custom_units: foodPage.customUnits,
             is_private: foodPage.isPrivate,
@@ -365,7 +293,7 @@ export default class Utils {
         let ingredientAmount;
 
         if (ingredientId) {
-            const ingredient = Utils.unwrap(
+            const ingredient = unwrap(
                 ingredients.find((_ingredient) => _ingredient.id === ingredientId),
                 "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
             );
@@ -415,6 +343,7 @@ export default class Utils {
             custom_units: recipePage.customUnits,
             type: recipePage.type,
             density: recipePage.density,
+            serving_size: recipePage.servingSize,
             ingredients: recipePage.ingredients,
             directions: directions,
             is_private: recipePage.isPrivate,
@@ -439,14 +368,14 @@ export default class Utils {
             name: recipe.name,
             amount: 100,
             unit: WeightUnit.g,
-            nutrition_facts: Utils.getRecipeNutritionFacts(recipe.ingredients),
+            nutrition_facts: Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients),
         };
     }
 
     /**
      * Calculate nutrition fact for a recipe based on currently selected ingredients
      */
-    public static getRecipeNutritionFacts(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
+    public static getRecipeNutritionFactsFromIngredients(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
 
         const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
             .map((ingredient) => {
@@ -464,7 +393,7 @@ export default class Utils {
                         return {
                             ...acc,
                             [nutritionFactType]: (
-                                Utils.isSome(nutritionFactValue)
+                                isSome(nutritionFactValue)
                                     ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
                                     : null
                             ),
@@ -475,10 +404,14 @@ export default class Utils {
         return Utils.dictionarySum(nutritionFactsById);
     }
 
+    public static getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {
+        return ingredients.reduce((sum, ingredient) => (sum + Utils.getIngredientProduct(ingredient).amount), Utils.ZERO);
+    }
+
     public static getIngredientProduct(ingredient: Ingredient): IngredientProduct {
-        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+        return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
     }
     public static getRecipeIngredientProduct(ingredient: RecipeIngredient): RecipeIngredientProduct {
-        return Utils.unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+        return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
     }
 }

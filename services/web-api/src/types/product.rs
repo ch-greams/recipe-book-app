@@ -30,6 +30,7 @@ pub struct Product {
     pub subtitle: String,
     pub description: String,
     pub density: f64,
+    pub serving_size: f64,
     pub created_by: i64,
     pub is_private: bool,
     pub created_at: DateTime<Utc>,
@@ -67,7 +68,7 @@ impl Product {
     pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE type = 'food' AND id = $1
         "#,
@@ -84,7 +85,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE name ILIKE $5 AND type = ANY($4) AND (is_private = false OR created_by = $3)
             LIMIT $1 OFFSET $2
@@ -106,7 +107,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE name ILIKE $5 AND type = ANY($4) AND created_by = $3
             LIMIT $1 OFFSET $2
@@ -128,7 +129,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE name ILIKE $5 AND type = ANY($4)
                 AND (is_private = false OR created_by = $3)
@@ -146,7 +147,7 @@ impl Product {
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at
+            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM private.product
             WHERE type = 'recipe' AND id = $1
         "#,
@@ -161,9 +162,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at)
-            VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_food_payload.name.to_owned())
@@ -171,6 +172,7 @@ impl Product {
             .bind(create_food_payload.subtitle.to_owned())
             .bind(create_food_payload.description.to_owned())
             .bind(create_food_payload.density)
+            .bind(create_food_payload.serving_size)
             .bind(created_by)
             .bind(create_food_payload.is_private)
             .bind(Utc::now())
@@ -191,9 +193,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at)
-            VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_recipe_payload.name.to_owned())
@@ -201,6 +203,7 @@ impl Product {
             .bind(create_recipe_payload.subtitle.to_owned())
             .bind(create_recipe_payload.description.to_owned())
             .bind(create_recipe_payload.density)
+            .bind(create_recipe_payload.serving_size)
             .bind(created_by)
             .bind(create_recipe_payload.is_private)
             .bind(Utc::now())
@@ -227,10 +230,11 @@ impl Product {
                 subtitle = $3,
                 description = $4,
                 density = $5,
-                is_private = $6,
-                updated_at = $7
-            WHERE id = $8
-            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+                serving_size = $6,
+                is_private = $7,
+                updated_at = $8
+            WHERE id = $9
+            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_food_payload.name.to_owned())
@@ -238,6 +242,7 @@ impl Product {
             .bind(update_food_payload.subtitle.to_owned())
             .bind(update_food_payload.description.to_owned())
             .bind(update_food_payload.density)
+            .bind(update_food_payload.serving_size)
             .bind(update_food_payload.is_private)
             .bind(Utc::now())
             .bind(update_food_payload.id);
@@ -263,10 +268,11 @@ impl Product {
                 subtitle = $3,
                 description = $4,
                 density = $5,
-                is_private = $6,
-                updated_at = $7
-            WHERE id = $8
-            RETURNING id, type, name, brand, subtitle, description, density, created_by, is_private, created_at, updated_at;
+                serving_size = $6,
+                is_private = $7,
+                updated_at = $8
+            WHERE id = $9
+            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_recipe_payload.name.to_owned())
@@ -274,6 +280,7 @@ impl Product {
             .bind(update_recipe_payload.subtitle.to_owned())
             .bind(update_recipe_payload.description.to_owned())
             .bind(update_recipe_payload.density)
+            .bind(update_recipe_payload.serving_size)
             .bind(update_recipe_payload.is_private)
             .bind(Utc::now())
             .bind(update_recipe_payload.id);

@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import { NutritionFactType } from "@common/nutritionFacts";
-import Utils from "@common/utils";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
@@ -22,19 +21,19 @@ import styles from "./rba-recipe-page.module.scss";
 
 interface Props {
     isReadOnly: boolean;
-    recipeItem: RecipePageStore;
+    recipe: RecipePageStore;
     search: SearchPageStore;
     isNew: boolean;
 }
 
-const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) => {
+const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
 
     const dispatch = useDispatch();
 
     const saveButtonAction = (
         isNew
-            ? () => dispatch(actions.createRecipeItemRequest())
-            : () => dispatch(actions.updateRecipeItemRequest())
+            ? () => dispatch(actions.createRecipeRequest())
+            : () => dispatch(actions.updateRecipeRequest())
     );
 
     const pageControls = (
@@ -43,7 +42,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
                 label={RBA_BUTTON_LABEL_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
-                onClick={() => dispatch(actions.fetchRecipeItemRequest(recipeItem.id))}
+                onClick={() => dispatch(actions.fetchRecipeRequest(recipe.id))}
             />
 
             <RbaButton
@@ -70,11 +69,9 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
         ingredients,
         newDirection,
         directions,
-        nutritionFacts,
-    } = recipeItem;
-
-
-    const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
+        nutritionFactsByServing,
+        nutritionFactsByServingInputs,
+    } = recipe;
 
     return (
         <div className={styles.recipePage}>
@@ -117,7 +114,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
                 {/* Main Block */}
 
                 <RbaGeneralInfoBlock
-                    recipeItem={recipeItem}
+                    recipe={recipe}
                     featuredNutritionFacts={[
                         NutritionFactType.Energy,
                         NutritionFactType.Carbohydrate,
@@ -130,8 +127,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
                         NutritionFactType.VitaminA,
                         NutritionFactType.VitaminC,
                     ]}
-                    nutritionFacts={nutritionFacts}
-                    nutritionFactInputs={nutritionFactInputs}
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
                 />
 
                 <RbaBlockTitle text={"INGREDIENTS"} />
@@ -155,8 +152,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipeItem, search, isNew }) 
 
                 <RbaPageDetailedNutritionFactsBlock
                     isReadOnly={true}
-                    nutritionFacts={nutritionFacts}
-                    nutritionFactInputs={nutritionFactInputs}
+                    nutritionFacts={nutritionFactsByServing}
+                    nutritionFactInputs={nutritionFactsByServingInputs}
                 />
 
             </div>

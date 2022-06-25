@@ -4,7 +4,7 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -18,7 +18,7 @@ interface CustomUnitLineProps {
     customUnit: CustomUnitInput;
     updateItemName: InputChangeCallback;
     updateItemAmount: InputChangeCallback;
-    updateItemUnit: (unit: Units) => void;
+    updateItemUnit: (unit: Unit) => void;
     upsertCustomUnit: () => void;
 }
 
@@ -69,7 +69,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
                     type={"text"}
                     placeholder={"#"}
                     className={styles.customUnitLineAmount}
-                    value={customUnit.amount}
+                    value={customUnit.amountInput}
                     onChange={updateItemAmount}
                 />
 
@@ -78,9 +78,9 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
                     center={true}
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Small}
-                    options={Object.values(Units).map((unit) => ({ value: unit }))}
+                    options={Object.values(Unit).map((unit) => ({ value: unit }))}
                     value={customUnit.unit}
-                    onChange={(option: SelectOption) => updateItemUnit(option.value as Units)}
+                    onChange={(option: SelectOption) => updateItemUnit(option.value as Unit)}
                 />
             </div>
         </div>

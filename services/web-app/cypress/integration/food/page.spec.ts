@@ -28,7 +28,7 @@ describe("food_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.url().should("include", Utils.getNewItemPath(ProductType.Food));
+            cy.url().should("include", Utils.getNewProductPath(ProductType.Food));
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
                 .should("be.visible")
@@ -43,7 +43,7 @@ describe("food_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
             });
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Food, NEW_FOOD_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Food, NEW_FOOD_ID));
         });
 
         it("can save an updated page", () => {

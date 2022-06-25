@@ -1,10 +1,34 @@
+import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
-import Utils from "@common/utils";
+import Utils, { DecimalPlaces } from "@common/utils";
 import type { AppState } from "@store";
 
 import * as types from "./types";
 
+
+const DEFAULT_DIRECTION: types.RecipeDirection = {
+    id: -1,
+
+    isOpen: false,
+    isMarked: false,
+
+    stepNumber: 0,
+    name: "",
+
+    durationValue: 0,
+    durationUnit: units.DEFAULT_TIME_UNIT,
+
+    temperatureValue: 0,
+    temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
+
+    durationValueInput: "",
+    temperatureValueInput: "",
+
+    steps: [],
+};
+
+const DEFAULT_SERVING_SIZE: number = 100;
 
 const initialState: types.RecipePageStore = {
 
@@ -19,39 +43,25 @@ const initialState: types.RecipePageStore = {
     subtitle: "Subtitle",
     description: "",
     type: "",
-    density: 1,
+
+    density: units.DEFAULT_DENSITY,
+    densityInput: String(units.DEFAULT_DENSITY),
+    densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
+    densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
     nutritionFacts: {},
+    nutritionFactsByServing: {},
+    nutritionFactsByServingInputs: {},
 
     customUnits: [],
-    customUnitInputs: [],
 
-    servingSize: 100,
-    servingSizeInput: "100",
+    servingSize: DEFAULT_SERVING_SIZE,
+    servingSizeInput: String(DEFAULT_SERVING_SIZE),
     servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 
     ingredients: [],
 
-    newDirection: {
-        id: -1,
-
-        isOpen: false,
-        isMarked: false,
-
-        stepNumber: 0,
-        name: "",
-
-        durationValue: 0,
-        durationUnit: units.DEFAULT_TIME_UNIT,
-
-        temperatureValue: 0,
-        temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
-
-        durationValueInput: "",
-        temperatureValueInput: "",
-
-        steps: [],
-    },
+    newDirection: DEFAULT_DIRECTION,
     directions: [],
 
     isPrivate: false,
@@ -87,7 +97,7 @@ function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngr
 
 function getIngredientProduct(ingredient_id: number, ingredients: typings.Ingredient[]): typings.IngredientProduct {
 
-    const ingredient = Utils.unwrap(
+    const ingredient = unwrap(
         ingredients.find((i) => i.id === ingredient_id),
         "ingredients.find((i) => i.id === ingredient_id)",
     );
@@ -104,10 +114,10 @@ function convertDirectionPart(
 
         const MAX_INGREDIENT_PERCENT = 1;
 
-        const ingredientId = Utils.unwrap(directionPart.ingredient_id, "directionPart.ingredient_id");
+        const ingredientId = unwrap(directionPart.ingredient_id, "directionPart.ingredient_id");
         const product = getIngredientProduct(ingredientId, ingredients);
 
-        const ingredientAmount = product.amount * Utils.unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
+        const ingredientAmount = product.amount * unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
 
         return {
             stepNumber: directionPart.step_number,
@@ -127,35 +137,64 @@ function convertDirectionPart(
         return {
             stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
-            commentText: Utils.unwrapOr(directionPart.comment_text, directionPart.direction_part_type),
+            commentText: unwrapOr(directionPart.comment_text, directionPart.direction_part_type),
         };
     }
 }
 
 function convertDirections(directions: typings.Direction[], ingredients: typings.Ingredient[]): types.RecipeDirection[] {
 
-    return directions.map((direction) => ({
-        id: direction.id,
+    return directions.map((direction) => {
 
-        stepNumber: direction.step_number,
-        name: direction.name,
+        const durationValueInput = (
+            direction.duration_value
+                ? String( Utils.roundToDecimal(
+                    units.convertFromSeconds(direction.duration_value, direction.duration_unit),
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        );
 
-        durationValue: direction.duration_value,
-        durationUnit: direction.duration_unit,
-        durationValueInput: direction.duration_value ? String(direction.duration_value) : "",
+        const temperatureValueInput = (
+            direction.temperature_value
+                ? String( Utils.roundToDecimal(
+                    direction.temperature_unit === units.TemperatureUnit.F
+                        ? units.convertCelsiusToFahrenheit(direction.temperature_value)
+                        : direction.temperature_value,
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        );
 
-        temperatureValue: direction.temperature_value,
-        temperatureUnit: direction.temperature_unit,
-        temperatureValueInput: direction.temperature_value ? String(direction.temperature_value) : "",
+        return {
+            id: direction.id,
 
-        isOpen: true,
-        isMarked: false,
+            stepNumber: direction.step_number,
+            name: direction.name,
 
-        steps: direction.steps.map((step) => convertDirectionPart(step, ingredients)),
-    }));
+            durationValue: direction.duration_value,
+            durationUnit: direction.duration_unit,
+            durationValueInput: durationValueInput,
+
+            temperatureValue: direction.temperature_value,
+            temperatureUnit: direction.temperature_unit,
+            temperatureValueInput: temperatureValueInput,
+
+            isOpen: true,
+            isMarked: false,
+
+            steps: direction.steps.map((step) => convertDirectionPart(step, ingredients)),
+        };
+    });
 }
 
-export default function recipePageReducer(state = initialState, action: types.RecipeItemActionTypes): types.RecipePageStore {
+function isDirectionPartIngredient(
+    directionPart: types.RecipeDirectionPartComment | types.RecipeDirectionPartIngredient,
+): directionPart is types.RecipeDirectionPartIngredient {
+    return directionPart.type === types.DirectionPartType.Ingredient;
+}
+
+export default function recipePageReducer(state = initialState, action: types.RecipeActionTypes): types.RecipePageStore {
 
     switch (action.type) {
 
@@ -203,10 +242,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_ADD_CUSTOM_UNIT: {
 
-            const { payload: customUnitInput } = action;
+            const { payload: customUnit } = action;
 
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
-            if (state.customUnits.some((cu) => cu.name === customUnitInput.name) || Utils.isEmptyString(customUnitInput.name)) {
+            if (state.customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
                 return state;
             }
 
@@ -215,30 +254,38 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                 customUnits: [
                     ...state.customUnits,
-                    Utils.convertCustomUnitIntoValue(state.id, customUnitInput),
-                ],
-                customUnitInputs: [
-                    ...state.customUnitInputs,
-                    customUnitInput,
+                    {
+                        ...customUnit,
+                        amount: units.convertToMetric(
+                            Number(customUnit.amountInput),
+                            customUnit.unit,
+                            state.customUnits,
+                            state.density,
+                        ),
+                        product_id: state.id,
+                    },
                 ],
             };
         }
 
         case types.RECIPE_UPDATE_CUSTOM_UNIT: {
 
-            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnitInput } } = action;
+            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
 
             return {
                 ...state,
 
                 customUnits: state.customUnits.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? Utils.convertCustomUnitIntoValue(state.id, updatedCustomUnitInput)
-                        : customUnit
-                )),
-                customUnitInputs: state.customUnitInputs.map((customUnit, index) => (
-                    index === customUnitIndex
-                        ? updatedCustomUnitInput
+                    (index === customUnitIndex)
+                        ? {
+                            ...updatedCustomUnit,
+                            amount: units.convertToMetric(
+                                Number(updatedCustomUnit.amountInput),
+                                updatedCustomUnit.unit,
+                                state.customUnits,
+                                state.density,
+                            ),
+                        }
                         : customUnit
                 )),
             };
@@ -250,9 +297,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-
                 customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-                customUnitInputs: state.customUnitInputs.filter((_customUnitInput, index) => index !== customUnitIndex),
             };
         }
 
@@ -405,39 +450,41 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { directionIndex, stepNumber, inputValue } = action.payload;
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.map((directionPart) => {
+            const directions = state.directions.map((direction, iDirection) => {
 
-                                const isSelectedDirectionPart = (
-                                    (directionPart.type === types.DirectionPartType.Ingredient) &&
-                                    (directionPart.stepNumber === stepNumber)
-                                );
+                if (directionIndex === iDirection) {
 
-                                if (isSelectedDirectionPart) {
-                                    const amount = Utils.decimalNormalizer(
-                                        inputValue,
-                                        (directionPart as types.RecipeDirectionPartIngredient).ingredientAmountInput,
-                                    );
+                    const steps = direction.steps.map((directionPart) => {
 
-                                    return {
-                                        ...directionPart,
-                                        ingredientAmountInput: amount,
-                                        ingredientAmount: Number(amount),
-                                    };
-                                }
-                                else {
-                                    return directionPart;
-                                }
-                            }),
+                        if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
+
+                            // TODO: Limit to what you have in ingredients, or just add validation message?
+
+                            const amountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
+                            const amount = units.convertToMetric(
+                                // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                Number(amountInput), directionPart.ingredientUnit, [], state.density,
+                            );
+
+                            return {
+                                ...directionPart,
+                                ingredientAmountInput: amountInput,
+                                ingredientAmount: amount,
+                            };
                         }
-                        : direction
-                )),
-            };
+                        else {
+                            return directionPart;
+                        }
+                    });
+
+                    return { ...direction, steps };
+                }
+                else {
+                    return direction;
+                }
+            });
+
+            return { ...state, directions };
         }
 
         case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT: {
@@ -446,18 +493,55 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.map((subDirection) => (
-                                (subDirection.type === types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
-                                    ? { ...subDirection, ingredientUnit: unit }
-                                    : subDirection
-                            )),
-                        }
-                        : direction
-                )),
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        const steps = direction.steps.map((directionPart) => {
+
+                            if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
+
+                                if (state.editMode) {
+
+                                    // TODO: Limit to what you have in ingredients, or just add validation message?
+
+                                    const amount = units.convertToMetric(
+                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                        Number(directionPart.ingredientAmountInput), unit, [], state.density,
+                                    );
+
+                                    return {
+                                        ...directionPart,
+                                        ingredientUnit: unit,
+                                        ingredientAmount: amount,
+                                    };
+                                }
+                                else {
+
+                                    const amountInCurrentUnits = units.convertFromMetric(
+                                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                                        directionPart.ingredientAmount, unit, [], state.density,
+                                    );
+                                    const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+                                    return {
+                                        ...directionPart,
+                                        ingredientUnit: unit,
+                                        ingredientAmountInput: String(amountInput),
+                                    };
+                                }
+                            }
+                            else {
+                                return directionPart;
+                            }
+                        });
+
+                        return { ...direction, steps };
+                    }
+                    else {
+                        return direction;
+                    }
+                }),
             };
         }
 
@@ -465,7 +549,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { directionIndex, ingredientId } = action.payload;
 
-            const ingredient = Utils.unwrap(
+            const ingredient = unwrap(
                 state.ingredients.find(_ingredient => _ingredient.id === ingredientId),
                 `Ingredient with id = ${ingredientId} is not found`,
             );
@@ -559,17 +643,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
+                    if (directionIndex === iDirection) {
 
-                    return (
-                        (directionIndex === iDirection)
-                            ? {
-                                ...direction,
-                                temperatureValue: Number(count),
-                                temperatureValueInput: count,
-                            }
-                            : direction
-                    );
+                        const countInput = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
+                        const count = (
+                            direction.temperatureUnit === units.TemperatureUnit.F
+                                ? units.convertFahrenheitToCelsius(Number(countInput))
+                                : Number(countInput)
+                        );
+
+                        return {
+                            ...direction,
+                            temperatureValue: count,
+                            temperatureValueInput: countInput,
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
                 }),
             };
         }
@@ -580,14 +671,43 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            temperatureUnit: unit,
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        if (state.editMode) {
+
+                            const count = (
+                                unit === units.TemperatureUnit.F
+                                    ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
+                                    : Number(direction.temperatureValueInput)
+                            );
+
+                            return {
+                                ...direction,
+                                temperatureValue: count,
+                                temperatureUnit: unit,
+                            };
                         }
-                        : direction
-                )),
+                        // NOTE: Shouldn't be possible to trigger this change with `isNone(temperatureValue) === true`
+                        else if (isSome(direction.temperatureValue)) {
+
+                            const countInput = (
+                                unit === units.TemperatureUnit.F
+                                    ? units.convertCelsiusToFahrenheit(direction.temperatureValue)
+                                    : direction.temperatureValue
+                            );
+
+                            return {
+                                ...direction,
+                                temperatureValueInput: String(countInput),
+                                temperatureUnit: unit,
+                            };
+                        }
+                    }
+
+                    return direction;
+                }),
             };
         }
 
@@ -599,17 +719,20 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
-                    const count = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
+                    if (directionIndex === iDirection) {
 
-                    return (
-                        (directionIndex === iDirection)
-                            ? {
-                                ...direction,
-                                durationValue: Number(count),
-                                durationValueInput: count,
-                            }
-                            : direction
-                    );
+                        const countInput = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
+                        const count = units.convertToSeconds(Number(countInput), direction.durationUnit);
+
+                        return {
+                            ...direction,
+                            durationValue: count,
+                            durationValueInput: countInput,
+                        };
+                    }
+                    else {
+                        return direction;
+                    }
                 }),
             };
         }
@@ -620,14 +743,34 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            durationUnit: unit,
+                directions: state.directions.map((direction, iDirection) => {
+
+                    if (directionIndex === iDirection) {
+
+                        if (state.editMode) {
+                            const count = units.convertToSeconds(Number(direction.durationValueInput), unit);
+
+                            return {
+                                ...direction,
+                                durationValue: count,
+                                durationUnit: unit,
+                            };
                         }
-                        : direction
-                )),
+                        // NOTE: Shouldn't be possible to trigger this change with `isNone(durationValue) === true`
+                        else if (isSome(direction.durationValue)) {
+
+                            const countInput = units.convertFromSeconds(direction.durationValue, unit);
+
+                            return {
+                                ...direction,
+                                durationValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
+                                durationUnit: unit,
+                            };
+                        }
+                    }
+
+                    return direction;
+                }),
             };
         }
 
@@ -655,14 +798,19 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
+            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
+            const count = (
+                state.newDirection.temperatureUnit === units.TemperatureUnit.F
+                    ? units.convertFahrenheitToCelsius(Number(countInput))
+                    : Number(countInput)
+            );
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    temperatureValue: Number(count),
-                    temperatureValueInput: count,
+                    temperatureValue: count,
+                    temperatureValueInput: countInput,
                 },
             };
         }
@@ -671,10 +819,17 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const unit = action.payload;
 
+            const count = (
+                unit === units.TemperatureUnit.F
+                    ? units.convertFahrenheitToCelsius(Number(state.newDirection.temperatureValueInput))
+                    : Number(state.newDirection.temperatureValueInput)
+            );
+
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
+                    temperatureValue: count,
                     temperatureUnit: unit,
                 },
             };
@@ -684,14 +839,15 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const inputValue = action.payload;
 
-            const count = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
+            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
+            const count = units.convertToSeconds(Number(countInput), state.newDirection.durationUnit);
 
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
-                    durationValue: Number(count),
-                    durationValueInput: count,
+                    durationValue: count,
+                    durationValueInput: countInput,
                 },
             };
         }
@@ -700,10 +856,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const unit = action.payload;
 
+            const count = units.convertToSeconds(Number(state.newDirection.durationValueInput), unit);
+
             return {
                 ...state,
                 newDirection: {
                     ...state.newDirection,
+                    durationValue: count,
                     durationUnit: unit,
                 },
             };
@@ -738,26 +897,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         steps: [],
                     },
                 ],
-                newDirection: {
-                    id: -1,
-
-                    isOpen: false,
-                    isMarked: false,
-
-                    stepNumber: 0,
-                    name: "",
-
-                    durationValue: 0,
-                    durationUnit: units.DEFAULT_TIME_UNIT,
-
-                    temperatureValue: 0,
-                    temperatureUnit: units.DEFAULT_TEMPERATURE_UNIT,
-
-                    durationValueInput: "",
-                    temperatureValueInput: "",
-
-                    steps: [],
-                },
+                newDirection: DEFAULT_DIRECTION,
             };
         }
 
@@ -767,10 +907,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
 
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -795,6 +949,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             };
         }
 
+        // TODO: Check, might have unexpected/broken behaviour in read-mode
         case types.RECIPE_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
 
             const { parentId, id } = action.payload;
@@ -811,10 +966,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     : [ ...accIngredients, curIngredient ]
             ), []);
 
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -848,30 +1017,49 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { parentId, id, inputValue } = action.payload;
 
+            const ingredients = state.ingredients.map((ingredient) => {
+
+                if (ingredient.id === parentId) {
+
+                    const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
+
+                    const amountInput = Utils.decimalNormalizer(inputValue, product.amountInput);
+                    const amount = units.convertToMetric(
+                        // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                        Number(amountInput), product.unit, [], state.density,
+                    );
+
+                    return {
+                        ...ingredient,
+                        products: {
+                            ...ingredient.products,
+                            [id]: { ...product, amountInput, amount },
+                        },
+                    };
+                }
+                else {
+                    return ingredient;
+                }
+            });
+
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
-                ingredients: state.ingredients.map((ingredient) => {
+                ingredients: ingredients,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
-                    if (ingredient.id === parentId) {
-                        const product = Utils.unwrap(ingredient.products[id], `ingredient.products[${id}]`);
-                        const amount = Utils.decimalNormalizer(inputValue, product.amountInput);
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
 
-                        return {
-                            ...ingredient,
-                            products: {
-                                ...ingredient.products,
-                                [id]: {
-                                    ...product,
-                                    amountInput: amount,
-                                    amount: Number(amount),
-                                },
-                            },
-                        };
-                    }
-                    else {
-                        return ingredient;
-                    }
-                }),
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -879,25 +1067,66 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const { parentId, id, unit } = action.payload;
 
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => {
-                    if (ingredient.id === parentId) {
+            const ingredients = state.ingredients.map((ingredient) => {
+                if (ingredient.id === parentId) {
 
-                        const product = Utils.unwrap(ingredient.products[id], `ingredient.products[${id}]`);
+                    const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
+
+                    if (state.editMode) {
+
+                        const amount = units.convertToMetric(
+                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                            Number(product.amountInput), unit, [], state.density,
+                        );
 
                         return {
                             ...ingredient,
                             products: {
                                 ...ingredient.products,
-                                [id]: { ...product, unit },
+                                [id]: { ...product, amount, unit },
                             },
                         };
                     }
                     else {
-                        return ingredient;
+
+                        const amountInCurrentUnits = units.convertFromMetric(
+                            // FIXME: Source of customUnits and density needs to be mentioned product (RBA-95)
+                            product.amount, unit, [], state.density,
+                        );
+                        const amountInput = String(Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two));
+
+                        return {
+                            ...ingredient,
+                            products: {
+                                ...ingredient.products,
+                                [id]: { ...product, amountInput, unit },
+                            },
+                        };
                     }
-                }),
+                }
+                else {
+                    return ingredient;
+                }
+            });
+
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
+            return {
+                ...state,
+                ingredients: ingredients,
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -913,7 +1142,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ...ingredient,
                             alternativeNutritionFacts: (
                                 isSelected
-                                    ? Utils.unwrap(
+                                    ? unwrap(
                                         ingredient.products[id],
                                         `ingredient.products["${id}"]`,
                                     ).nutrition_facts
@@ -960,10 +1189,24 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 },
             ];
 
+            const servingSize = Utils.getRecipeServingSizeFromIngredients(ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
+
             return {
                 ...state,
                 ingredients: ingredients,
-                nutritionFacts: Utils.getRecipeNutritionFacts(ingredients),
+                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+
+                servingSize: servingSize,
+                servingSizeInput: String(servingSizeInput),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
             };
         }
 
@@ -1018,24 +1261,47 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_SERVING_SIZE_AMOUNT: {
 
-            const inputValue = action.payload;
+            const servingSizeInput = action.payload;
 
-            const amount = Utils.decimalNormalizer(inputValue, state.servingSizeInput);
+            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
+            const servingSize = units.convertToMetric(
+                Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
+            );
 
-            return {
-                ...state,
-                servingSize: Number(amount),
-                servingSizeInput: amount,
-            };
+            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
+            if (state.editMode) {
+                return {
+                    ...state,
+                    servingSize: servingSize,
+                    servingSizeInput: servingSizeInputNormalized,
+                };
+            }
+            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
+            else {
+                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
+
+                return {
+                    ...state,
+                    servingSize: servingSize,
+                    servingSizeInput: servingSizeInputNormalized,
+                    nutritionFactsByServing: nutritionFactsByServing,
+                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+                };
+            }
         }
 
         case types.RECIPE_UPDATE_SERVING_SIZE_UNIT: {
 
-            const unit = action.payload;
+            const servingSizeUnit = action.payload;
+
+            const servingSize = units.convertToMetric(
+                Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
+            );
 
             return {
                 ...state,
-                servingSizeUnit: unit,
+                servingSize: servingSize,
+                servingSizeUnit: servingSizeUnit,
             };
         }
 
@@ -1061,27 +1327,37 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_FETCH_SUCCESS: {
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
-            const recipeIngredients = convertIngredients(recipeItem.ingredients);
-            const recipeDirections = convertDirections(recipeItem.directions, recipeItem.ingredients);
+            const recipeIngredients = convertIngredients(recipe.ingredients);
+            const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
+
+            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients);
+            const nutritionFactsByServing = Utils.convertNutritionFacts(recipe.serving_size, true, nutritionFacts);
 
             return {
                 ...state,
                 isLoaded: true,
                 errorMessage: null,
 
-                id: recipeItem.id,
-                name: recipeItem.name,
-                brand: recipeItem.brand,
-                subtitle: recipeItem.subtitle,
-                description: recipeItem.description,
-                type: recipeItem.type,
+                id: recipe.id,
+                name: recipe.name,
+                brand: recipe.brand,
+                subtitle: recipe.subtitle,
+                description: recipe.description,
+                type: recipe.type,
 
-                nutritionFacts: Utils.getRecipeNutritionFacts(recipeItem.ingredients),
+                density: recipe.density,
+                densityInput: String(recipe.density),
 
-                customUnits: recipeItem.custom_units,
-                customUnitInputs: Utils.convertCustomUnitsIntoInputs(recipeItem.custom_units),
+                servingSize: recipe.serving_size,
+                servingSizeInput: String(recipe.serving_size),
+
+                nutritionFacts: nutritionFacts,
+                customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
+
+                nutritionFactsByServing: nutritionFactsByServing,
+                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
 
                 ingredients: recipeIngredients,
                 directions: recipeDirections,
@@ -1105,13 +1381,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_CREATE_SUCCESS: {
 
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: recipeItem.id,
+                id: recipe.id,
                 isCreated: true,
             };
         }
@@ -1133,13 +1409,13 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_SUCCESS: {
 
-            const recipeItem = action.payload;
+            const recipe = action.payload;
 
             return {
                 ...state,
                 isLoaded: true,
                 editMode: false,
-                id: recipeItem.id,
+                id: recipe.id,
             };
         }
 

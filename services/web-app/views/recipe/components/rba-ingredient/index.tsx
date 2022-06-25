@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
-import type { VolumeUnit, WeightUnit } from "@common/units";
+import type { Unit } from "@common/units";
 import Utils from "@common/utils";
 import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
 import RbaIngredientProduct, {
@@ -57,12 +57,15 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                 }}
                 onChangeUnit={(option) => {
                     dispatch(actions.updateIngredientProductUnit(
-                        ingredient.id, ingredient.product_id, option.value as WeightUnit | VolumeUnit,
+                        ingredient.id, ingredient.product_id, option.value as Unit,
                     ));
                 }}
             />
 
-            <div className={styles.ingredientInfoLines}>
+            <div
+                data-cy={constants.CY_INGREDIENT_INFO_LINES}
+                className={styles.ingredientInfoLines}
+            >
 
                 {(
                     ingredient.isOpen && (
@@ -103,7 +106,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                             }}
                             onChangeUnit={(option) => {
                                 dispatch(actions.updateIngredientProductUnit(
-                                    ingredient.id, product.product_id, option.value as WeightUnit | VolumeUnit,
+                                    ingredient.id, product.product_id, option.value as Unit,
                                 ));
                             }}
                         />

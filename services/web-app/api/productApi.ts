@@ -10,25 +10,25 @@ export default class ProductApi {
     private static readonly API_PATH: string = "/api/v1/product";
 
 
-    public static async getFavoriteProductItems<T>(productType: ProductType): Promise<T[]> {
+    public static async getFavoriteProducts<T>(productType: ProductType): Promise<T[]> {
 
         const params = Utils.getUrlParams({ limit: 20, user_id: 1, product_type: productType });
 
-        const { body: ProductItems } = await superagent.get(`${ProductApi.API_PATH}/favorite?${params}`);
+        const { body: products } = await superagent.get(`${ProductApi.API_PATH}/favorite?${params}`);
 
-        return ProductItems;
+        return products;
     }
 
-    public static async getCustomProductItems<T>(productType: ProductType): Promise<T[]> {
+    public static async getCustomProducts<T>(productType: ProductType): Promise<T[]> {
 
         const params = Utils.getUrlParams({ limit: 20, user_id: 1, product_type: productType });
 
-        const { body: ProductItems } = await superagent.get(`${ProductApi.API_PATH}/created?${params}`);
+        const { body: products } = await superagent.get(`${ProductApi.API_PATH}/created?${params}`);
 
-        return ProductItems;
+        return products;
     }
 
-    public static async getProductItems(filter: string): Promise<ProductShort[]> {
+    public static async getProducts(filter: string): Promise<ProductShort[]> {
 
         const params = Utils.getUrlParams({
             limit: 10,
@@ -36,8 +36,8 @@ export default class ProductApi {
             filter: filter,
         });
 
-        const { body: recipeItems } = await superagent.get(`${ProductApi.API_PATH}?${params}`);
+        const { body: products } = await superagent.get(`${ProductApi.API_PATH}?${params}`);
 
-        return recipeItems;
+        return products;
     }
 }

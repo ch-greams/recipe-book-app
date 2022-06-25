@@ -2,6 +2,7 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
+import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
 import SearchIcon from "@icons/search-sharp.svg";
@@ -109,7 +110,7 @@ const RbaSearchInput: React.FC<Props> = ({
                         <RbaSearchInputOption
                             key={product.id}
                             product={product}
-                            onSelect={Utils.isSome(onSelect) ? getOnSelect(onSelect, searchInputClear) : null}
+                            onSelect={isSome(onSelect) ? getOnSelect(onSelect, searchInputClear) : null}
                         />
                     ))}
                 </div>

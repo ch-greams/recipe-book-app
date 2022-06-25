@@ -32,13 +32,13 @@ const RbaHomePage: React.FC = () => {
 
             <div className={styles.homePageButtons}>
 
-                <Link href={Utils.getNewItemPath(ProductType.Recipe)}>
+                <Link href={Utils.getNewProductPath(ProductType.Recipe)}>
                     <a className={styles.homePageButton}>
                         {CREATE_RECIPE_BUTTON_LABEL}
                     </a>
                 </Link>
 
-                <Link href={Utils.getNewItemPath(ProductType.Food)}>
+                <Link href={Utils.getNewProductPath(ProductType.Food)}>
                     <a className={styles.homePageButton}>
                         {CREATE_FOOD_BUTTON_LABEL}
                     </a>

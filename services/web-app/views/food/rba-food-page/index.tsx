@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import type { AppState } from "@store";
@@ -23,37 +24,37 @@ const RbaFoodPageConnected: React.FC = () => {
     const router = useRouter();
 
     const { fid } = router.query as FoodPageQuery;
-    const isNewFoodPage = !Utils.isSome(fid);
+    const isNewFoodPage = isNone(fid);
 
-    const foodItem = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
+    const food = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
 
     useEffect(() => {
         dispatch(searchClear());
 
         if (!isNewFoodPage) {
             const foodId = Number(fid);
-            dispatch(actions.fetchFoodItemRequest(foodId));
+            dispatch(actions.fetchFoodRequest(foodId));
         }
-        else if (router.asPath.includes(Utils.getNewItemPath(ProductType.Food))) {
+        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
 
-            if (foodItem.isCreated) {
-                router.push(Utils.getItemPath(ProductType.Food, foodItem.id));
+            if (food.isCreated) {
+                router.push(Utils.getProductPath(ProductType.Food, food.id));
             }
             else {
-                dispatch(actions.fetchFoodItemNew());
+                dispatch(actions.fetchFoodNew());
             }
         }
-    }, [ dispatch, fid, foodItem.id ]);
+    }, [ dispatch, fid, food.id ]);
 
     return (
-        foodItem.isLoaded
+        food.isLoaded
             ? (
-                foodItem.errorMessage
-                    ? <RbaSingleMessagePage text={foodItem.errorMessage} />
+                food.errorMessage
+                    ? <RbaSingleMessagePage text={food.errorMessage} />
                     : (
                         <RbaFoodPage
-                            isReadOnly={!foodItem.editMode}
-                            foodItem={foodItem}
+                            isReadOnly={!food.editMode}
+                            food={food}
                             isNew={isNewFoodPage}
                         />
                     )

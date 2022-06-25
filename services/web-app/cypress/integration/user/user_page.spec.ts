@@ -47,7 +47,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Recipe, FAVORITE_RECIPE_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, FAVORITE_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_RECIPE_NAME.toUpperCase())
@@ -69,7 +69,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Recipe, CUSTOM_RECIPE_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, CUSTOM_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_RECIPE_NAME.toUpperCase())
@@ -91,7 +91,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Food, FAVORITE_FOOD_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Food, FAVORITE_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_FOOD_NAME.toUpperCase())
@@ -113,7 +113,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getItemPath(ProductType.Food, CUSTOM_FOOD_ID));
+            cy.url().should("include", Utils.getProductPath(ProductType.Food, CUSTOM_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME.toUpperCase())

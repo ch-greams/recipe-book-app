@@ -1,7 +1,7 @@
 import { useState } from "react";
 
+import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
-import Utils from "@common/utils";
 
 
 interface DelayedSearchInputHook {
@@ -25,7 +25,7 @@ export function useDelayedSearchInput(onChange: (value: string) => void, value: 
 
             setSearchInput(_searchInput);
 
-            if (Utils.isSome(timer)) {
+            if (isSome(timer)) {
                 clearTimeout(timer);
             }
 

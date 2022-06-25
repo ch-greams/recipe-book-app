@@ -2,8 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
-import type { VolumeUnit, WeightUnit } from "@common/units";
-import { Units } from "@common/units";
+import { Unit } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -15,10 +14,10 @@ import styles from "./rba-parameters-block.module.scss";
 
 
 interface ParametersBlockProps {
-    recipeItem: RecipePageStore;
+    recipe: RecipePageStore;
 }
 
-const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
+const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
 
     const dispatch = useDispatch();
 
@@ -42,7 +41,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
                 <input
                     type={"text"}
-                    value={recipeItem.type}
+                    value={recipe.type}
                     className={styles.typeSelectInput}
                     onChange={handleTypeEdit}
                 />
@@ -59,7 +58,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
 
                 <input
                     type={"text"}
-                    value={recipeItem.servingSizeInput}
+                    value={recipe.servingSizeInput}
                     className={styles.servingSizeLineInput}
                     onChange={handleServingSizeAmountEdit}
                 />
@@ -69,10 +68,10 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
                     center={true}
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Large}
-                    options={Object.values(Units).map((unit) => ({ value: unit }))}
-                    value={recipeItem.servingSizeUnit}
+                    options={Object.values(Unit).map((unit) => ({ value: unit }))}
+                    value={recipe.servingSizeUnit}
                     onChange={(option: SelectOption): void => {
-                        dispatch(actions.updateServingSizeUnit(option.value as WeightUnit | VolumeUnit));
+                        dispatch(actions.updateServingSizeUnit(option.value as Unit));
                     }}
                 />
 
@@ -81,7 +80,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipeItem }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
-                customUnitInputs={recipeItem.customUnitInputs}
+                customUnits={recipe.customUnits}
                 addCustomUnit={actions.addCustomUnitRequest}
                 removeCustomUnit={actions.removeCustomUnitRequest}
                 updateCustomUnit={actions.updateCustomUnitRequest}

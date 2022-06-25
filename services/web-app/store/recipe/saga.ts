@@ -12,50 +12,50 @@ import { extractState } from "./reducer";
 import * as types from "./types";
 
 
-function* fetchRecipeItem(action: types.RecipeItemFetchRequestAction): Generator<StrictEffect, void, unknown> {
+function* fetchRecipe(action: types.RecipeFetchRequestAction): Generator<StrictEffect, void, unknown> {
 
     try {
         const { payload: recipeId } = action;
 
-        const recipeItem = (yield call(RecipeApi.getRecipeItem, recipeId)) as Recipe;
+        const recipe = (yield call(RecipeApi.getRecipe, recipeId)) as Recipe;
 
-        yield put(actions.fetchRecipeItemSuccess(recipeItem));
+        yield put(actions.fetchRecipeSuccess(recipe));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.fetchRecipeItemError(message));
+        yield put(actions.fetchRecipeError(message));
     }
 }
 
-function* createRecipeItem(): Generator<StrictEffect, void, unknown> {
+function* createRecipe(): Generator<StrictEffect, void, unknown> {
 
     try {
         const recipePage = (yield select(extractState)) as types.RecipePageStore;
-        const recipeItem = Utils.convertRecipePageIntoRecipe(recipePage);
+        const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
 
-        const createdRecipeItem = (yield call(RecipeApi.createRecipeItem, recipeItem)) as Recipe;
+        const createdRecipe = (yield call(RecipeApi.createRecipe, recipe)) as Recipe;
 
-        yield put(actions.createRecipeItemSuccess(createdRecipeItem));
+        yield put(actions.createRecipeSuccess(createdRecipe));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.createRecipeItemError(message));
+        yield put(actions.createRecipeError(message));
     }
 }
 
-function* updateRecipeItem(): Generator<StrictEffect, void, unknown> {
+function* updateRecipe(): Generator<StrictEffect, void, unknown> {
 
     try {
         const recipePage = (yield select(extractState)) as types.RecipePageStore;
-        const recipeItem = Utils.convertRecipePageIntoRecipe(recipePage);
+        const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
 
-        const updatedRecipeItem = (yield call(RecipeApi.updateRecipeItem, recipeItem)) as Recipe;
+        const updatedRecipe = (yield call(RecipeApi.updateRecipe, recipe)) as Recipe;
 
-        yield put(actions.updateRecipeItemSuccess(updatedRecipeItem));
+        yield put(actions.updateRecipeSuccess(updatedRecipe));
     }
     catch (error) {
         const { message } = error as Error;
-        yield put(actions.updateRecipeItemError(message));
+        yield put(actions.updateRecipeError(message));
     }
 }
 
@@ -67,12 +67,12 @@ function* addIngredient(action: types.AddIngredientRequestAction): Generator<Str
         let ingredientProduct: IngredientProduct;
 
         if (product.product_type === ProductType.Food) {
-            const foodItem = (yield call(FoodApi.getFoodItem, product.id)) as Food;
-            ingredientProduct = Utils.convertFoodToIngredientProduct(foodItem);
+            const food = (yield call(FoodApi.getFood, product.id)) as Food;
+            ingredientProduct = Utils.convertFoodToIngredientProduct(food);
         }
         else {
-            const recipeItem = (yield call(RecipeApi.getRecipeItem, product.id)) as Recipe;
-            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipeItem);
+            const recipe = (yield call(RecipeApi.getRecipe, product.id)) as Recipe;
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipe);
         }
 
         yield put(actions.addIngredientSuccess(ingredientProduct));
@@ -91,12 +91,12 @@ function* addIngredientProduct(action: types.AddIngredientProductRequestAction):
         let ingredientProduct: IngredientProduct;
 
         if (product.product_type === ProductType.Food) {
-            const foodItem = (yield call(FoodApi.getFoodItem, product.id)) as Food;
-            ingredientProduct = Utils.convertFoodToIngredientProduct(foodItem);
+            const food = (yield call(FoodApi.getFood, product.id)) as Food;
+            ingredientProduct = Utils.convertFoodToIngredientProduct(food);
         }
         else {
-            const recipeItem = (yield call(RecipeApi.getRecipeItem, product.id)) as Recipe;
-            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipeItem);
+            const recipe = (yield call(RecipeApi.getRecipe, product.id)) as Recipe;
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipe);
         }
 
         yield put(actions.addIngredientProductSuccess(id, ingredientProduct));
@@ -107,16 +107,16 @@ function* addIngredientProduct(action: types.AddIngredientProductRequestAction):
     }
 }
 
-function* watchFetchRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_FETCH_REQUEST, fetchRecipeItem);
+function* watchFetchRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_FETCH_REQUEST, fetchRecipe);
 }
 
-function* watchCreateRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_CREATE_REQUEST, createRecipeItem);
+function* watchCreateRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_CREATE_REQUEST, createRecipe);
 }
 
-function* watchUpdateRecipeItem(): SagaIterator {
-    yield takeLatest(types.RECIPE_UPDATE_REQUEST, updateRecipeItem);
+function* watchUpdateRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_UPDATE_REQUEST, updateRecipe);
 }
 
 function* watchAddIngredient(): SagaIterator {
@@ -130,9 +130,9 @@ function* watchAddIngredientProduct(): SagaIterator {
 
 export default function* recipeSaga(): Generator<AllEffect<SagaIterator>, void, unknown> {
     yield all([
-        watchFetchRecipeItem(),
-        watchCreateRecipeItem(),
-        watchUpdateRecipeItem(),
+        watchFetchRecipe(),
+        watchCreateRecipe(),
+        watchUpdateRecipe(),
         watchAddIngredient(),
         watchAddIngredientProduct(),
     ]);

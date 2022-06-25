@@ -14,7 +14,7 @@ export default {
     title: "Recipe/RbaRecipePage",
     component: RbaRecipePage,
     argTypes: {
-        recipeItem: {
+        recipe: {
             table: { type: { summary: "RecipePageStore" } },
         },
         isNew: {
@@ -38,12 +38,12 @@ export default {
 const Template: ComponentStory<typeof RbaRecipePage> = (args) => <RbaRecipePage {...args} />;
 
 
-const recipeItem = extractRecipeState({} as AppState);
+const recipe = extractRecipeState({} as AppState);
 const search = extractSearchState({} as AppState);
 
 export const Default = Template.bind({});
 Default.args = {
-    recipeItem,
+    recipe: recipe,
     search,
     isNew: false,
     isReadOnly: true,
@@ -51,7 +51,7 @@ Default.args = {
 
 export const Editable = Template.bind({});
 Editable.args = {
-    recipeItem,
+    recipe: recipe,
     search,
     isNew: true,
     isReadOnly: false,

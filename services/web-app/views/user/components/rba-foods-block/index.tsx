@@ -29,7 +29,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods }) => {
 
             <div className={styles.itemList}>
                 {favoriteFoods.map((food) => (
-                    <Link key={food.id} href={Utils.getItemPath(ProductType.Food, food.id)}>
+                    <Link key={food.id} href={Utils.getProductPath(ProductType.Food, food.id)}>
                         <div data-cy={constants.CY_USER_FOOD_FAVORITE_ITEM} className={styles.infoLine}>
                             {food.name}
                         </div>
@@ -41,7 +41,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods }) => {
 
             <div className={styles.itemList}>
                 {customFoods.map((food) => (
-                    <Link key={food.id} href={Utils.getItemPath(ProductType.Food, food.id)}>
+                    <Link key={food.id} href={Utils.getProductPath(ProductType.Food, food.id)}>
                         <div data-cy={constants.CY_USER_FOOD_CUSTOM_ITEM} className={styles.infoLine}>
                             {food.name}
                         </div>
