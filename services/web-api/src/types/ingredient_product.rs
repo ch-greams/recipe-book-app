@@ -72,6 +72,7 @@ pub struct IngredientProductDetails {
 
     pub product_type: ProductType,
     pub name: String,
+    pub density: f64,
 
     pub nutrition_facts: NutritionFacts,
 }
@@ -82,7 +83,7 @@ impl IngredientProductDetails {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT ingredient_id, product_id, amount, unit, product_type, name, nutrition_facts
+            SELECT ingredient_id, product_id, amount, unit, product_type, name, density, nutrition_facts
             FROM private.ingredient_product_details
             WHERE ingredient_id = ANY($1)
         "#,

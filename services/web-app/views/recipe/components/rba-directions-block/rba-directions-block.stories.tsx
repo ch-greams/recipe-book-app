@@ -104,6 +104,7 @@ const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
     ingredientAmountInput: "5",
     ingredientName: "Cottage Cheese",
     ingredientUnit: WeightUnit.oz,
+    ingredientDensity: 1,
 };
 
 const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
@@ -115,6 +116,7 @@ const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
     ingredientAmountInput: "100",
     ingredientName: "Sour Cream",
     ingredientUnit: WeightUnit.g,
+    ingredientDensity: 1,
 
 };
 
@@ -154,6 +156,7 @@ const INGREDIENT_1: RecipeIngredient = {
             product_id: PRODUCT_ID,
             product_type: ProductType.Food,
             name: "Cottage Cheese",
+            density: 1,
             nutrition_facts: {
                 [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
                 [LipidNutritionFactType.Fat]: 18.3,

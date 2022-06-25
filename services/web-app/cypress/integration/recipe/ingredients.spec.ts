@@ -137,7 +137,7 @@ describe("recipe_page", () => {
             const INGREDIENT_UNIT_BEFORE: Unit = VolumeUnit.ml;
             const INGREDIENT_UNIT_AFTER: Unit = WeightUnit.oz;
 
-            const INGREDIENT_AMOUNT_BEFORE: number = 100;
+            const INGREDIENT_AMOUNT_BEFORE: number = 97.96;
             const INGREDIENT_AMOUNT_AFTER: number = 3.53;
 
             // Check ingredient and open it

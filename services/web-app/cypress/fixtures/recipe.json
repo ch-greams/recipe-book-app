@@ -25,6 +25,7 @@
                     "unit": "ml",
                     "product_type": "food",
                     "name": "Sour Cream",
+                    "density": 1.0208,
                     "nutrition_facts": {
                         "product_id": 1,
                         "energy": 157,
@@ -103,6 +104,7 @@
                     "unit": "ml",
                     "product_type": "food",
                     "name": "Yogurt",
+                    "density": 1,
                     "nutrition_facts": {
                         "product_id": 2,
                         "energy": 66.8,
@@ -190,6 +192,7 @@
                     "unit": "g",
                     "product_type": "food",
                     "name": "Cottage Cheese",
+                    "density": 1,
                     "nutrition_facts": {
                         "product_id": 3,
                         "energy": 183.1,

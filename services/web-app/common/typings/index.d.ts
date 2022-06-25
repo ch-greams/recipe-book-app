@@ -43,6 +43,7 @@ export interface IngredientProduct {
     name: string;
     amount: number;
     unit: Unit;
+    density: number;
     nutrition_facts: Dictionary<NutritionFactType, number>;
 }
 
