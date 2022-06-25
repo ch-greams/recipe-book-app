@@ -5,20 +5,29 @@ import type { Recipe } from "@common/typings";
 
 export default class RecipeApi {
 
-    public static readonly API_PATH: string = "/api/v1/recipe";
+    private static readonly API_PATH: string = "/api/v1/recipe";
 
 
-    public static async getRecipeItem(id: number): Promise<Recipe> {
+    public static async getRecipe(id: number): Promise<Recipe> {
 
-        const { body: recipeItem } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
+        const { body: recipe } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
 
-        return recipeItem;
+        return recipe;
     }
 
-    // public static async getRecipeItems(): Promise<Recipe[]> {
+    public static async createRecipe(recipe: Recipe): Promise<Recipe> {
 
-    //     const { body: recipeItems } = await superagent.get(RecipeApi.API_PATH);
+        const { body: createdRecipe } = await superagent.post(`${RecipeApi.API_PATH}/create`)
+            .send(recipe);
 
-    //     return recipeItems;
-    // }
+        return createdRecipe;
+    }
+
+    public static async updateRecipe(recipe: Recipe): Promise<Recipe> {
+
+        const { body: updatedRecipe } = await superagent.post(`${RecipeApi.API_PATH}/update`)
+            .send(recipe);
+
+        return updatedRecipe;
+    }
 }

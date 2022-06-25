@@ -2,43 +2,35 @@ import type { SagaIterator } from "redux-saga";
 import type { AllEffect, StrictEffect } from "redux-saga/effects";
 import { all, call, put, takeLatest } from "redux-saga/effects";
 
-import type { Food, IngredientProduct } from "@common/typings";
-import { WeightUnit } from "@common/units";
-import FoodApi from "@api/foodApi";
+import type { ProductShort } from "@common/typings";
+import ProductApi from "@api/productApi";
 
+import type { SearchProductsFetchRequestedAction } from "./types";
 import {
-    INGREDIENTS_FETCH_ERROR,
-    INGREDIENTS_FETCH_REQUEST,
-    INGREDIENTS_FETCH_SUCCESS,
+    SEARCH_PRODUCTS_FETCH_ERROR,
+    SEARCH_PRODUCTS_FETCH_REQUEST,
+    SEARCH_PRODUCTS_FETCH_SUCCESS,
 } from "./types";
 
 
 
-function* fetchIngredients(): Generator<StrictEffect, void, Food[]> {
+function* fetchProducts(action: SearchProductsFetchRequestedAction): Generator<StrictEffect, void, ProductShort[]> {
 
     try {
+        const { payload: filter } = action;
 
-        const foodItems = yield call(FoodApi.getFoodItems);
+        const productItems = yield call(ProductApi.getProducts, filter);
 
-        const ingredients = foodItems.map<IngredientProduct>((foodItem) => ({
-            product_id: foodItem.id,
-            product_type: "food",
-            name: foodItem.name,
-            amount: 100,
-            unit: WeightUnit.g,
-            nutrition_facts: foodItem.nutrition_facts,
-        }));
-
-        yield put({ type: INGREDIENTS_FETCH_SUCCESS, payload: ingredients });
+        yield put({ type: SEARCH_PRODUCTS_FETCH_SUCCESS, payload: productItems });
     }
     catch (error) {
         const { message } = error as Error;
-        yield put({ type: INGREDIENTS_FETCH_ERROR, payload: message });
+        yield put({ type: SEARCH_PRODUCTS_FETCH_ERROR, payload: message });
     }
 }
 
 function* watchFetchIngredients(): SagaIterator {
-    yield takeLatest(INGREDIENTS_FETCH_REQUEST, fetchIngredients);
+    yield takeLatest(SEARCH_PRODUCTS_FETCH_REQUEST, fetchProducts);
 }
 
 

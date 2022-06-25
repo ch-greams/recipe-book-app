@@ -11,12 +11,14 @@ on:
             - develop
         paths:
             - services/web-app/**
+            - .github/workflows/web-app.yml
     pull_request:
         branches:
             - main
             - develop
         paths:
             - services/web-app/**
+            - .github/workflows/web-app.yml
 
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
@@ -41,6 +43,24 @@ jobs:
             - run: npm install
             - run: npm run build
 
+    build-storybook:
+        runs-on: ubuntu-20.04
+
+        strategy:
+            matrix:
+                node-version: [ 16.x ]
+
+        steps:
+            - uses: actions/checkout@v2
+            
+            - name: use node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                node-version: ${{ matrix.node-version }}
+
+            - run: npm install
+            - run: npm run build-storybook
+
     lint:
         runs-on: ubuntu-20.04
 
@@ -59,7 +79,7 @@ jobs:
             - run: npm install
             - run: npm run lint
 
-    test:
+    lint-style:
         runs-on: ubuntu-20.04
 
         strategy:
@@ -75,4 +95,27 @@ jobs:
                 node-version: ${{ matrix.node-version }}
 
             - run: npm install
-            - run: npm run test
+            - run: npm run lint:style
+
+    test:
+        runs-on: ubuntu-20.04
+
+        strategy:
+            matrix:
+                node-version: [ 16.x ]
+
+        steps:
+            - uses: actions/checkout@v2
+            
+            - name: use node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                node-version: ${{ matrix.node-version }}
+
+            - name: run cypress tests in chrome
+              uses: cypress-io/github-action@v2
+              with:
+                working-directory: services/web-app
+                browser: chrome
+                build: npm run build
+                start: npm start

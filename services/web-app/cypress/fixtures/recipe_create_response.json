@@ -1,0 +1,14 @@
+{
+    "id": 402,
+    "name": "NEW NAME",
+    "brand": "Brand",
+    "subtitle": "Subtitle",
+    "description": "",
+    "density": 1.0,
+    "custom_units": [],
+    "ingredients": [],
+    "directions": [],
+    "created_at": "2022-05-08T19:56:19.723012Z",
+    "updated_at": "2022-05-08T19:56:19.723019Z",
+    "is_private": false
+}

@@ -1,0 +1,78 @@
+@import "@styles/variables.scss";
+
+
+.titleBlock {
+
+    margin-bottom: 8px;
+
+    .nameBlock {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        margin-bottom: 8px;
+
+        .name {
+
+            font-family: $font-default;
+            font-size: $font-size-32;
+            font-weight: $font-weight-700;
+
+            color: $color-white;
+        }
+
+        .brand {
+
+            font-family: $font-default;
+            font-size: $font-size-32;
+            font-weight: $font-weight-700;
+
+            color: $color-white;
+
+            text-align: right;
+        }
+    }
+
+    .subtitleBlock {
+
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        height: 24px;
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        line-height: 24px;
+
+        border-bottom: 2px solid $color-white;
+
+        .subtitle {
+
+            font-family: $font-default;
+            font-size: $font-size-18;
+            font-weight: $font-weight-700;
+
+            color: $color-white;
+        }
+    }
+
+    .descriptionBlock {
+
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+
+        border-bottom: 2px solid $color-white;
+
+        .description {
+
+            font-family: $font-default;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
+
+            color: $color-white;
+        }
+    }
+}

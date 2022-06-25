@@ -3,11 +3,13 @@ parser: "@typescript-eslint/parser"
 plugins:
     - "@typescript-eslint"
     - "simple-import-sort"
+    - "cypress"
 
 extends:
     - "eslint:recommended"
     - "plugin:@typescript-eslint/recommended"
     - "plugin:react/recommended"
+    - "plugin:cypress/recommended"
 
 ignorePatterns:
     # don't ever lint node_modules
@@ -26,6 +28,10 @@ settings:
         version: "detect"
 
 rules:
+    indent:
+        - error
+        - 4
+        - SwitchCase: 1
     max-len:
         - warn
         - code: 160
@@ -33,12 +39,13 @@ rules:
     no-multiple-empty-lines:
         - error
         - max: 3
+    no-trailing-spaces: error
     semi: "off"
     comma-dangle: "off"
     quotes:
         - error
         - "double"
-    no-console: error
+    no-console: warn
     interface-name: "off"
     one-line: "off"
     member-ordering: "off"

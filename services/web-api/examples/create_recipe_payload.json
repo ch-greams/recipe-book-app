@@ -1,0 +1,100 @@
+{
+    "id": 241,
+    "name": "Cottage Cheese Dip",
+    "brand": "Homemade",
+    "subtitle": "",
+    "description": "",
+    "density": 1.14,
+    "serving_size": 120,
+    "custom_units": [
+        {
+            "name": "package",
+            "amount": 12.0,
+            "unit": "tbsp",
+            "product_id": 241
+        }
+    ],
+    "ingredients": [
+        {
+            "id": -44,
+            "product_id": 2,
+            "products": {
+                "1": {
+                    "ingredient_id": -44,
+                    "product_id": 1,
+                    "amount": 100.0,
+                    "unit": "ml",
+                    "product_type": "food",
+                    "name": "English Muffin"
+                },
+                "2": {
+                    "ingredient_id": -44,
+                    "product_id": 2,
+                    "amount": 100.0,
+                    "unit": "ml",
+                    "product_type": "food",
+                    "name": "Wine - Red, Cooking"
+                }
+            }
+        },
+        {
+            "id": -45,
+            "product_id": 3,
+            "products": {
+                "3": {
+                    "ingredient_id": -45,
+                    "product_id": 3,
+                    "amount": 150.0,
+                    "unit": "g",
+                    "product_type": "recipe",
+                    "name": "Wine - White, Pelee Island"
+                }
+            }
+        }
+    ],
+    "directions": [
+        {
+            "id": 34,
+            "step_number": 0,
+            "name": "test step",
+            "temperature_value": 180,
+            "temperature_unit": "C",
+            "duration_value": null,
+            "duration_unit": "min",
+            "steps": []
+        },
+        {
+            "id": 35,
+            "step_number": 1,
+            "name": "stir",
+            "temperature_value": null,
+            "temperature_unit": "C",
+            "duration_value": 1,
+            "duration_unit": "min",
+            "steps": [
+                {
+                    "step_number": 0,
+                    "direction_part_type": "note",
+                    "comment_text": "Add Cottage Cheese first",
+                    "ingredient_id": null,
+                    "ingredient_amount": null
+                },
+                {
+                    "step_number": 1,
+                    "direction_part_type": "ingredient",
+                    "comment_text": null,
+                    "ingredient_id": -45,
+                    "ingredient_amount": 1.0
+                },
+                {
+                    "step_number": 2,
+                    "direction_part_type": "ingredient",
+                    "comment_text": null,
+                    "ingredient_id": -44,
+                    "ingredient_amount": 0.75
+                }
+            ]
+        }
+    ],
+    "is_private": true
+}

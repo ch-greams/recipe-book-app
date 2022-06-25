@@ -1,0 +1,111 @@
+@import "@styles/variables.scss";
+
+
+.select {
+
+    position: relative;
+
+    font-family: $font-default;
+    font-size: $font-size-14;
+    font-weight: $font-weight-500;
+
+    text-align: left;
+    cursor: pointer;
+
+    .selectList {
+        position: absolute;
+        z-index: $z-index-default-1;
+    }
+
+    .selectOption {
+        padding-left: 4px;
+        user-select: none;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 60px;
+
+        .selectOption {
+            width: 60px;
+        }
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+
+        .selectList {
+            width: 100%;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // HEIGHT
+    // -------------------------------------------------------------------------
+
+    &.heightSize_Small {
+        .selectOption {
+            height: 20px;
+            line-height: 20px;
+        }
+    }
+
+    &.heightSize_Medium {
+        .selectOption {
+            height: 22px;
+            line-height: 22px;
+        }
+    }
+
+    &.heightSize_Large {
+        .selectOption {
+            height: 32px;
+            line-height: 32px;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // THEME
+    // -------------------------------------------------------------------------
+
+    &.theme_Alternative {
+        color: $color-white;
+        background-color: $color-default-dark;
+        border-color: $color-white;
+
+        .selectOption {
+            color: $color-white;
+            background-color: $color-default-dark;
+            border-color: $color-white;
+        }
+    }
+
+    &.theme_Primary {
+        color: $color-default;
+        background-color: $color-white;
+        border-color: $color-default;
+
+        .selectOption {
+            color: $color-default;
+            background-color: $color-white;
+            border-color: $color-default;
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // ALIGN
+    // -------------------------------------------------------------------------
+
+    &.alignCenter {
+        text-align: center;
+
+        .selectOption {
+            padding-left: 0;
+        }
+    }
+}

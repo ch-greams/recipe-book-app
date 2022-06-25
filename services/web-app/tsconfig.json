@@ -17,6 +17,7 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
+      "@cypress/*": [ "cypress/*" ],
       "@views/*": [ "views/*" ],
       "@api/*": [ "api/*" ],
       "@store/*": [ "store/*" ],
@@ -25,6 +26,7 @@
       "@common/*": [ "common/*" ],
       "@styles/*": [ "styles/*" ]
     },
+    "types": [ "cypress", "cypress-real-events" ],
     "incremental": true
   },
   "include": [ "next-env.d.ts", "common.d.ts", "**/*.ts", "**/*.tsx" ],

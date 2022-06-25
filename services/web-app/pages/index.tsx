@@ -1,3 +1,3 @@
-import HomePage from "@views/home/HomePage";
+import RbaHomePage from "@views/home/rba-home-page";
 
-export default HomePage;
+export default RbaHomePage;

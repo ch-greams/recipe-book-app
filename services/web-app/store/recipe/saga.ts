@@ -1,126 +1,139 @@
 import type { SagaIterator } from "redux-saga";
-import * as effects from "redux-saga/effects";
+import type { AllEffect, StrictEffect } from "redux-saga/effects";
+import { all, call, put, select, takeLatest } from "redux-saga/effects";
 
-import type { Recipe } from "@common/typings";
-import type { CustomUnit } from "@common/units";
-import Utils from "@common/utils";
+import type { Food, IngredientProduct, Recipe } from "@common/typings";
+import Utils, { ProductType } from "@common/utils";
+import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
 import * as actions from "./actions";
-import { extractCustomUnits } from "./reducers";
+import { extractState } from "./reducer";
 import * as types from "./types";
 
 
-
-function* fetchRecipeItem(action: types.RecipeItemFetchRequestAction): Generator<effects.StrictEffect, void, unknown> {
+function* fetchRecipe(action: types.RecipeFetchRequestAction): Generator<StrictEffect, void, unknown> {
 
     try {
-
         const { payload: recipeId } = action;
 
-        const recipeItem = (yield effects.call(RecipeApi.getRecipeItem, recipeId)) as Recipe;
-        
-        yield effects.put(actions.fetchRecipeItemSuccess(recipeItem));
+        const recipe = (yield call(RecipeApi.getRecipe, recipeId)) as Recipe;
+
+        yield put(actions.fetchRecipeSuccess(recipe));
     }
     catch (error) {
         const { message } = error as Error;
-        yield effects.put(actions.fetchRecipeItemError(message));
+        yield put(actions.fetchRecipeError(message));
     }
 }
 
-
-function* addCustomUnit(action: types.AddCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
+function* createRecipe(): Generator<StrictEffect, void, unknown> {
 
     try {
+        const recipePage = (yield select(extractState)) as types.RecipePageStore;
+        const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
 
-        const { payload: customUnit } = action;
+        const createdRecipe = (yield call(RecipeApi.createRecipe, recipe)) as Recipe;
 
-        const customUnits = (yield effects.select(extractCustomUnits)) as CustomUnit[];
-                
-        if (customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
-            throw new Error("Custom Unit name is empty or already exist");
+        yield put(actions.createRecipeSuccess(createdRecipe));
+    }
+    catch (error) {
+        const { message } = error as Error;
+        yield put(actions.createRecipeError(message));
+    }
+}
+
+function* updateRecipe(): Generator<StrictEffect, void, unknown> {
+
+    try {
+        const recipePage = (yield select(extractState)) as types.RecipePageStore;
+        const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
+
+        const updatedRecipe = (yield call(RecipeApi.updateRecipe, recipe)) as Recipe;
+
+        yield put(actions.updateRecipeSuccess(updatedRecipe));
+    }
+    catch (error) {
+        const { message } = error as Error;
+        yield put(actions.updateRecipeError(message));
+    }
+}
+
+function* addIngredient(action: types.AddIngredientRequestAction): Generator<StrictEffect, void, unknown> {
+
+    try {
+        const { payload: product } = action;
+
+        let ingredientProduct: IngredientProduct;
+
+        if (product.product_type === ProductType.Food) {
+            const food = (yield call(FoodApi.getFood, product.id)) as Food;
+            ingredientProduct = Utils.convertFoodToIngredientProduct(food);
+        }
+        else {
+            const recipe = (yield call(RecipeApi.getRecipe, product.id)) as Recipe;
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipe);
         }
 
-        // TODO: API CALL
-
-        yield effects.put(actions.addCustomUnitSuccess([
-            ...customUnits,
-            Utils.convertCustomUnitIntoValue(customUnit),
-        ]));
+        yield put(actions.addIngredientSuccess(ingredientProduct));
     }
     catch (error) {
         const { message } = error as Error;
-        yield effects.put(actions.addCustomUnitError(message));
+        yield put(actions.addIngredientError(message));
     }
 }
 
-function* removeCustomUnit(action: types.RemoveCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
+function* addIngredientProduct(action: types.AddIngredientProductRequestAction): Generator<StrictEffect, void, unknown> {
 
     try {
+        const { payload: { id, product } } = action;
 
-        const { payload: customUnitIndex } = action;
+        let ingredientProduct: IngredientProduct;
 
-        const customUnits = (yield effects.select(extractCustomUnits)) as CustomUnit[];
+        if (product.product_type === ProductType.Food) {
+            const food = (yield call(FoodApi.getFood, product.id)) as Food;
+            ingredientProduct = Utils.convertFoodToIngredientProduct(food);
+        }
+        else {
+            const recipe = (yield call(RecipeApi.getRecipe, product.id)) as Recipe;
+            ingredientProduct = Utils.convertRecipeToIngredientProduct(recipe);
+        }
 
-        // TODO: API CALL
-
-        yield effects.put(actions.removeCustomUnitSuccess(
-            customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-        ));
+        yield put(actions.addIngredientProductSuccess(id, ingredientProduct));
     }
     catch (error) {
         const { message } = error as Error;
-        yield effects.put(actions.removeCustomUnitError(message));
+        yield put(actions.addIngredientProductError(message));
     }
 }
 
-function* updateCustomUnit(action: types.UpdateCustomUnitRequestAction): Generator<effects.StrictEffect, void, unknown> {
+function* watchFetchRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_FETCH_REQUEST, fetchRecipe);
+}
 
-    try {
+function* watchCreateRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_CREATE_REQUEST, createRecipe);
+}
 
-        const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
+function* watchUpdateRecipe(): SagaIterator {
+    yield takeLatest(types.RECIPE_UPDATE_REQUEST, updateRecipe);
+}
 
-        const customUnits = (yield effects.select(extractCustomUnits)) as CustomUnit[];
+function* watchAddIngredient(): SagaIterator {
+    yield takeLatest(types.RECIPE_ADD_INGREDIENT_REQUEST, addIngredient);
+}
 
-        // TODO: API CALL
-
-        yield effects.put(actions.updateCustomUnitSuccess(
-            customUnits.map((customUnit, index) => (
-                index === customUnitIndex
-                    ? Utils.convertCustomUnitIntoValue(updatedCustomUnit)
-                    : customUnit
-            )),
-        ));
-    }
-    catch (error) {
-        const { message } = error as Error;
-        yield effects.put(actions.updateCustomUnitError(message));
-    }
+function* watchAddIngredientProduct(): SagaIterator {
+    yield takeLatest(types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST, addIngredientProduct);
 }
 
 
-function* watchFetchRecipeItem(): SagaIterator {
-    yield effects.takeLatest(types.RECIPE_ITEM_FETCH_REQUEST, fetchRecipeItem);
-}
-
-function* watchAddCustomUnit(): SagaIterator {
-    yield effects.takeLatest(types.RECIPE_ITEM_ADD_CUSTOM_UNIT_REQUEST, addCustomUnit);
-}
-
-function* watchRemoveCustomUnit(): SagaIterator {
-    yield effects.takeLatest(types.RECIPE_ITEM_REMOVE_CUSTOM_UNIT_REQUEST, removeCustomUnit);
-}
-
-function* watchUpdateCustomUnit(): SagaIterator {
-    yield effects.takeLatest(types.RECIPE_ITEM_UPDATE_CUSTOM_UNIT_REQUEST, updateCustomUnit);
-}
-
-
-export default function* recipeSaga(): Generator<effects.AllEffect<SagaIterator>, void, unknown> {
-    yield effects.all([
-        watchFetchRecipeItem(),
-        watchAddCustomUnit(),
-        watchRemoveCustomUnit(),
-        watchUpdateCustomUnit(),
+export default function* recipeSaga(): Generator<AllEffect<SagaIterator>, void, unknown> {
+    yield all([
+        watchFetchRecipe(),
+        watchCreateRecipe(),
+        watchUpdateRecipe(),
+        watchAddIngredient(),
+        watchAddIngredientProduct(),
     ]);
 }

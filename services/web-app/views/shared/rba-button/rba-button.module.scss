@@ -1,0 +1,49 @@
+@import "@styles/variables.scss";
+
+
+.rbaButton {
+
+    min-height: 34px;
+
+    padding: 4px;
+
+    font-family: $font-default;
+    font-size: $font-size-18;
+    font-weight: $font-weight-800;
+    color: $color-default;
+
+    text-align: center;
+
+    user-select: none;
+    background-color: $color-white;
+
+    border: none;
+
+    &.disabled {
+        opacity: 0.5;
+
+        &:hover {
+            color: $color-default;
+            cursor: not-allowed;
+            background-color: $color-white;
+        }
+    }
+
+    &:hover {
+        color: $color-default-dark;
+        cursor: pointer;
+        background-color: $color-grey-light;
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 160px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+    }
+}

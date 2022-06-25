@@ -1,0 +1,18 @@
+@import "@styles/variables.scss";
+
+
+.nutritionFactsBlock {
+    .nutritionFactsBlockTitle {
+
+        margin-top: 20px;
+        margin-bottom: 12px;
+
+        font-family: $font-default;
+        font-size: $font-size-24;
+        font-weight: $font-weight-700;
+
+        color: $color-white;
+
+        text-align: center;
+    }
+}

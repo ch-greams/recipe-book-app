@@ -10,6 +10,8 @@ COPY . .
 
 EXPOSE 3000
 
-# RUN npm run build
+ARG RB__API_ADDR
+ENV RB__API_ADDR $RB__API_ADDR
+RUN npm run build
 
 CMD npm start

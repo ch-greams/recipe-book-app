@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
 
@@ -15,18 +14,19 @@ services:
       RB__database_url: postgres://postgres:password@recipe-book-db
 
   recipe-book-app:
-    build: ./services/web-app
+    image: web-app
+    build:
+      context: ./services/web-app
+      args:
+        - RB__API_ADDR=recipe-book-api:8080
     depends_on:
       - recipe-book-api
-    command: npm run dev
     ports:
       - 3000:3000
     working_dir: /app
-    volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/services/web-app:/app
     environment:
       RB__API_ADDR: recipe-book-api:8080
-      NODE_ENV: development     # options: production, development
+      NODE_ENV: production     # options: production, development
       PORT: 3000
       LOG_LEVEL: DEBUG
 
@@ -46,7 +46,7 @@ services:
     ports:
       - 5050:5050
     environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.local
+      - PGADMIN_DEFAULT_EMAIL=admin@greams.com
       - PGADMIN_DEFAULT_PASSWORD=password
       - PGADMIN_LISTEN_PORT=5050
     volumes:

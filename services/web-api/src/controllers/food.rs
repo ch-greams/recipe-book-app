@@ -1,21 +1,23 @@
-use std::collections::HashMap;
-
 use actix_web::{
-    get,
+    get, post,
     web::{Data, Json, Path},
     Scope,
 };
 use sqlx::{Pool, Postgres};
 
 use crate::types::{
-    custom_unit::CustomUnit, error::Error, food::Food, nutrition_facts::NutritionFacts,
+    custom_unit::CustomUnit,
+    error::Error,
+    food::{CreateFoodPayload, Food, UpdateFoodPayload},
+    nutrition_facts::NutritionFacts,
     product::Product,
 };
 
 pub fn scope() -> Scope {
     actix_web::web::scope("food")
         .service(find_by_id)
-        .service(find_all)
+        .service(create_food)
+        .service(update_food)
 }
 
 #[get("/{id}")]
@@ -41,43 +43,45 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
     Ok(Json(food))
 }
 
-#[get("")]
-async fn find_all(db_pool: Data<Pool<Postgres>>) -> Result<Json<Vec<Food>>, Error> {
+#[post("/create")]
+async fn create_food(
+    request: Json<CreateFoodPayload>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Food>, Error> {
     let mut txn = db_pool.begin().await?;
 
-    let products = Product::find_food_all(100).fetch_all(&mut txn).await?;
+    let product = Product::insert_food(&request, 1, &mut txn).await?;
 
-    let product_ids: Vec<i64> = products.iter().map(|p| p.id).collect();
+    let custom_units =
+        CustomUnit::insert_mutliple(&request.custom_units, product.id, &mut txn).await?;
 
-    let custom_units = CustomUnit::find_by_product_ids(product_ids.clone())
-        .fetch_all(&mut txn)
-        .await?;
+    let nutrition_facts =
+        NutritionFacts::insert(&request.nutrition_facts, product.id, &mut txn).await?;
 
-    let nutrition_facts = NutritionFacts::find_by_product_ids(product_ids.clone())
-        .fetch_all(&mut txn)
-        .await?;
+    txn.commit().await?;
 
-    let nutrition_facts_map = nutrition_facts
-        .iter()
-        .map(|nf| (nf.product_id, nf))
-        .collect::<HashMap<i64, &NutritionFacts>>();
+    let food = Food::new(&product, &nutrition_facts, custom_units);
 
-    let foods = products
-        .iter()
-        .map(|product| {
-            Food::new(
-                product,
-                nutrition_facts_map
-                    .get(&product.id)
-                    .unwrap_or(&&NutritionFacts::new(product.id)),
-                custom_units
-                    .iter()
-                    .filter(|cu| cu.product_id == product.id)
-                    .cloned()
-                    .collect(),
-            )
-        })
-        .collect();
+    Ok(Json(food))
+}
 
-    Ok(Json(foods))
+#[post("/update")]
+async fn update_food(
+    request: Json<UpdateFoodPayload>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<Json<Food>, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let product = Product::update_food(&request, &mut txn).await?;
+
+    let custom_units =
+        CustomUnit::replace_mutliple(&request.custom_units, product.id, &mut txn).await?;
+
+    let nutrition_facts = NutritionFacts::update(&request.nutrition_facts, &mut txn).await?;
+
+    txn.commit().await?;
+
+    let food = Food::new(&product, &nutrition_facts, custom_units);
+
+    Ok(Json(food))
 }

@@ -60,6 +60,43 @@ CREATE SEQUENCE private.product_id
 
 ALTER SEQUENCE private.product_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.product_id TO postgres;
+
+-- DROP SEQUENCE private.user_id;
+
+CREATE SEQUENCE private.user_id
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+
+-- Permissions
+
+ALTER SEQUENCE private.user_id OWNER TO postgres;
+GRANT ALL ON SEQUENCE private.user_id TO postgres;
+-- private."user" definition
+
+-- Drop table
+
+-- DROP TABLE private."user";
+
+CREATE TABLE private."user" (
+	id int8 NOT NULL DEFAULT nextval('private.user_id'::regclass),
+	email text NOT NULL,
+	"password" text NOT NULL,
+	first_name text NOT NULL,
+	last_name text NOT NULL,
+	CONSTRAINT user_email_unique UNIQUE (email),
+	CONSTRAINT user_pkey PRIMARY KEY (id)
+);
+
+-- Permissions
+
+ALTER TABLE private."user" OWNER TO postgres;
+GRANT ALL ON TABLE private."user" TO postgres;
+
+
 -- private.product definition
 
 -- Drop table
@@ -70,11 +107,19 @@ CREATE TABLE private.product (
 	id int8 NOT NULL DEFAULT nextval('private.product_id'::regclass),
 	"type" private."product_type" NOT NULL,
 	"name" text NOT NULL,
-	brand text NULL,
-	subtitle text NULL,
-	description text NULL,
-	density float8 NULL DEFAULT 1,
-	CONSTRAINT product_pk PRIMARY KEY (id)
+	brand text NOT NULL,
+	subtitle text NOT NULL,
+	description text NOT NULL,
+	density float8 NOT NULL DEFAULT 1,
+	created_by int8 NOT NULL,
+	is_private bool NOT NULL DEFAULT true,
+	created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	serving_size float8 NOT NULL DEFAULT 100,
+	CONSTRAINT density_check CHECK ((density > (0)::double precision)) NOT VALID,
+	CONSTRAINT product_pk PRIMARY KEY (id),
+	CONSTRAINT serving_size_check CHECK ((serving_size > (0)::double precision)) NOT VALID,
+	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );
 
 -- Permissions
@@ -114,9 +159,11 @@ CREATE TABLE private.direction (
 	recipe_id int8 NOT NULL,
 	step_number int2 NOT NULL,
 	"name" text NOT NULL,
-	temperature private.temperature NULL,
-	duration private.duration NULL,
 	id int8 NOT NULL DEFAULT nextval('private.direction_id'::regclass),
+	temperature_value int2 NULL,
+	temperature_unit text NOT NULL DEFAULT 'C'::text,
+	duration_value int4 NULL,
+	duration_unit text NOT NULL DEFAULT 'min'::text,
 	CONSTRAINT direction_pk PRIMARY KEY (id),
 	CONSTRAINT recipe_step_uq UNIQUE (recipe_id, step_number),
 	CONSTRAINT direction_fk FOREIGN KEY (recipe_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -128,27 +175,24 @@ ALTER TABLE private.direction OWNER TO postgres;
 GRANT ALL ON TABLE private.direction TO postgres;
 
 
--- private.direction_part definition
+-- private.favorite_product definition
 
 -- Drop table
 
--- DROP TABLE private.direction_part;
+-- DROP TABLE private.favorite_product;
 
-CREATE TABLE private.direction_part (
-	direction_id int8 NOT NULL,
-	step_number int2 NOT NULL,
-	"label" text NULL,
-	product_id int8 NULL,
-	product_amount float8 NULL,
-	"direction_part_type" private."direction_part_type" NOT NULL,
-	CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
-	CONSTRAINT direction_part_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE private.favorite_product (
+	user_id int8 NOT NULL,
+	product_id int8 NOT NULL,
+	CONSTRAINT favorite_product_pk PRIMARY KEY (user_id, product_id),
+	CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES private."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 -- Permissions
 
-ALTER TABLE private.direction_part OWNER TO postgres;
-GRANT ALL ON TABLE private.direction_part TO postgres;
+ALTER TABLE private.favorite_product OWNER TO postgres;
+GRANT ALL ON TABLE private.favorite_product TO postgres;
 
 
 -- private.ingredient definition
@@ -279,6 +323,36 @@ ALTER TABLE private.nutrition_fact OWNER TO postgres;
 GRANT ALL ON TABLE private.nutrition_fact TO postgres;
 
 
+-- private.direction_part definition
+
+-- Drop table
+
+-- DROP TABLE private.direction_part;
+
+CREATE TABLE private.direction_part (
+	direction_id int8 NOT NULL,
+	step_number int2 NOT NULL,
+	"direction_part_type" private."direction_part_type" NOT NULL,
+	comment_text text NULL,
+	ingredient_id int8 NULL,
+	ingredient_amount float8 NULL,
+	CONSTRAINT direction_part_ingredient_amount_check CHECK (((ingredient_amount > (0)::double precision) AND (ingredient_amount <= (1)::double precision))) NOT VALID,
+	CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
+	CONSTRAINT direction_part_type_check CHECK (
+CASE
+    WHEN (direction_part_type = 'ingredient'::private.direction_part_type) THEN ((comment_text IS NULL) AND (ingredient_id IS NOT NULL) AND (ingredient_amount IS NOT NULL))
+    ELSE ((comment_text IS NOT NULL) AND (ingredient_id IS NULL) AND (ingredient_amount IS NULL))
+END),
+	CONSTRAINT direction_part_direction_fk FOREIGN KEY (direction_id) REFERENCES private.direction(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT direction_part_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES private.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Permissions
+
+ALTER TABLE private.direction_part OWNER TO postgres;
+GRANT ALL ON TABLE private.direction_part TO postgres;
+
+
 -- private.ingredient_product_details source
 
 CREATE OR REPLACE VIEW private.ingredient_product_details
@@ -288,6 +362,7 @@ AS SELECT ingredient_product.ingredient_id,
     ingredient_product.unit,
     product.type AS product_type,
     product.name,
+    product.density,
     nutrition_fact.*::private.nutrition_fact AS nutrition_facts
    FROM private.ingredient_product ingredient_product
      LEFT JOIN private.product product ON product.id = ingredient_product.product_id

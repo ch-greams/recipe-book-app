@@ -1,0 +1,56 @@
+@import "@styles/variables.scss";
+
+.homePage {
+
+    display: flex;
+
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    background-color: $color-default;
+
+    .navigationMenu {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+
+        background-color: $color-default-dark;
+
+        .navigationMenuItem {
+            height: 40px;
+            padding-left: 12px;
+
+            font-family: $font-default;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
+
+            line-height: 40px;
+
+            color: $color-white;
+
+            border-bottom: 1px solid $color-default;
+
+            &.selectedItem {
+                background-color: $color-default;
+                border-bottom: 1px solid $color-white;
+            }
+
+            &:hover {
+                cursor: pointer;
+                background-color: $color-default;
+                border-bottom: 1px solid $color-white;
+            }
+        }
+    }
+
+    .mainBlock {
+        display: flex;
+        flex: 3;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0 100px;
+    }
+}

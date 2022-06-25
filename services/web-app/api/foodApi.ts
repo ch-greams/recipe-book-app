@@ -5,20 +5,29 @@ import type { Food } from "@common/typings";
 
 export default class FoodApi {
 
-    public static readonly API_PATH: string = "/api/v1/food";
+    private static readonly API_PATH: string = "/api/v1/food";
 
 
-    public static async getFoodItem(id: number): Promise<Food> {
+    public static async getFood(id: number): Promise<Food> {
 
-        const { body: foodItem } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
+        const { body: food } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
 
-        return foodItem;
+        return food;
     }
 
-    public static async getFoodItems(): Promise<Food[]> {
+    public static async createFood(food: Food): Promise<Food> {
 
-        const { body: foodItems } = await superagent.get(FoodApi.API_PATH);
+        const { body: createdFood } = await superagent.post(`${FoodApi.API_PATH}/create`)
+            .send(food);
 
-        return foodItems;
+        return createdFood;
+    }
+
+    public static async updateFood(food: Food): Promise<Food> {
+
+        const { body: updatedFood } = await superagent.post(`${FoodApi.API_PATH}/update`)
+            .send(food);
+
+        return updatedFood;
     }
 }

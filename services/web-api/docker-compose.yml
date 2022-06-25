@@ -1,4 +1,3 @@
-version: "3.9"
 
 services:
 
@@ -30,7 +29,7 @@ services:
     ports:
       - 5050:5050
     environment:
-      - PGADMIN_DEFAULT_EMAIL=user@domain.local
+      - PGADMIN_DEFAULT_EMAIL=admin@greams.com
       - PGADMIN_DEFAULT_PASSWORD=password
       - PGADMIN_LISTEN_PORT=5050
     volumes:

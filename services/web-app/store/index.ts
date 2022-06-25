@@ -5,9 +5,10 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { createLogger } from "redux-logger";
 import createSagaMiddleware from "redux-saga";
 
-import foodPageReducer from "./food/reducers";
-import recipePageReducer from "./recipe/reducers";
-import searchPageReducer from "./search/reducers";
+import foodPageReducer from "./food/reducer";
+import recipePageReducer from "./recipe/reducer";
+import searchPageReducer from "./search/reducer";
+import userReducer from "./user/reducer";
 import rootSaga from "./rootSaga";
 
 
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     foodPage: foodPageReducer,
     recipePage: recipePageReducer,
     searchPage: searchPageReducer,
+    user: userReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;

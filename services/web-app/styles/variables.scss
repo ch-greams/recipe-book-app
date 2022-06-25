@@ -1,5 +1,9 @@
 
-// NOTE: Default
+// -----------------------------------------------------------------------------
+// COLORS
+// -----------------------------------------------------------------------------
+
+// TODO: Replace color names with something meaningful
 $color-default: #00bfa5;
 $color-default-dark: #008e76;
 $color-default-light: #5df2d6;
@@ -14,4 +18,35 @@ $color-grey-light: #e8e8e8;
 $color-input-placeholder: #bbb;
 $color-input: #707070;
 
+// -----------------------------------------------------------------------------
+// FONTS
+// -----------------------------------------------------------------------------
+
 $font-default: "Montserrat", sans-serif;
+
+// TODO: Reduce amount of font sizes to 4 max
+$font-size-12: 12px;
+$font-size-14: 14px;
+$font-size-16: 16px;
+$font-size-18: 18px;
+$font-size-20: 20px;
+$font-size-24: 24px;
+$font-size-28: 28px;
+$font-size-32: 32px;
+$font-size-36: 36px;
+
+// TODO: Reduce amount of font weights to 2-3 max
+$font-weight-400: 400;
+$font-weight-500: 500;
+$font-weight-600: 600;
+$font-weight-700: 700;
+$font-weight-800: 800;
+
+// -----------------------------------------------------------------------------
+// Z-INDEX
+// -----------------------------------------------------------------------------
+
+$z-index-default-0: 0;
+$z-index-default-1: 1;
+
+$z-index-navbar-0: 10;

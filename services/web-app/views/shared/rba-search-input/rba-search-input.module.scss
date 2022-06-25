@@ -1,0 +1,160 @@
+@import "@styles/variables.scss";
+
+
+.search {
+
+    position: relative;
+
+    font-family: $font-default;
+    font-size: $font-size-16;
+    font-weight: $font-weight-500;
+
+    .searchInput {
+
+        display: flex;
+        align-items: center;
+
+        background-color: $color-default-dark;
+        border: 1px solid $color-white;
+
+        .icon {
+            width: 28px;
+            height: 28px;
+
+            margin: 0 14px;
+
+            &.rotate {
+                animation: spin 1s linear infinite;
+            }
+        }
+
+        .input {
+            width: 100%;
+
+            padding: 0 14px;
+
+            font-family: $font-default;
+            font-size: $font-size-20;
+            font-weight: $font-weight-500;
+
+            line-height: 26px;
+
+            color: $color-white;
+            background-color: $color-default-dark;
+
+            border: none;
+
+            border-left-color: $color-grey-light;
+            border-left-style: solid;
+            border-left-width: 1px;
+        }
+
+        .input::placeholder {
+            line-height: normal;
+            color: $color-white;
+        }
+    }
+
+    .searchList {
+        position: absolute;
+        z-index: $z-index-default-1;
+
+        width: 100%;
+
+        button.searchOption {
+            width: 100%;
+
+            font-family: $font-default;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
+        }
+
+        .searchOption {
+
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 16px;
+
+            line-height: 26px;
+
+            color: $color-white;
+
+            text-decoration: none;
+
+            user-select: none;
+
+            background-color: $color-default-dark;
+            border: 1px solid $color-default;
+
+            .searchOptionType {
+
+                width: 80px;
+
+                font-size: $font-size-14;
+                font-weight: $font-weight-400;
+
+                line-height: 24px;
+
+                text-align: center;
+                border: 1px solid $color-default;
+            }
+
+            &:hover {
+                cursor: pointer;
+
+                background-color: $color-default;
+                border-color: $color-white;
+
+                .searchOptionType {
+                    border-color: $color-white;
+                }
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // WIDTH
+    // -------------------------------------------------------------------------
+
+    &.widthSize_Medium {
+        width: 640px;
+    }
+
+    &.widthSize_Full {
+        width: 100%;
+    }
+
+    // -------------------------------------------------------------------------
+    // HEIGHT
+    // -------------------------------------------------------------------------
+
+    &.heightSize_Small {
+        .searchInput {
+            padding: 4px 0;
+        }
+
+        .searchList {
+            .searchOption {
+                padding: 4px 16px;
+            }
+        }
+    }
+
+    &.heightSize_Medium {
+        .searchInput {
+            padding: 8px 0;
+        }
+
+        .searchList {
+            .searchOption {
+                padding: 8px 16px;
+            }
+        }
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
+    }
+}
