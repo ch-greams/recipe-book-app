@@ -21,7 +21,7 @@ pub struct IngredientProductPayload {
 }
 
 impl IngredientProduct {
-    pub async fn insert_mutliple(
+    pub async fn insert_multiple(
         ingredient_product_payloads: &HashMap<i64, IngredientProductPayload>,
         ingredient_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
@@ -129,7 +129,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
-    async fn insert_mutliple() {
+    async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -144,7 +144,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -157,7 +157,7 @@ mod tests {
         for (index, ingredient_payload) in create_product_payload.ingredients.iter().enumerate() {
             let ingredient = create_ingredients_result.get(index).unwrap();
 
-            let _ingredient_products = IngredientProduct::insert_mutliple(
+            let _ingredient_products = IngredientProduct::insert_multiple(
                 &ingredient_payload.products,
                 ingredient.id,
                 &mut txn,

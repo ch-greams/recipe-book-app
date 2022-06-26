@@ -53,7 +53,7 @@ async fn create_food(
     let product = Product::insert_food(&request, 1, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::insert_mutliple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::insert_multiple(&request.custom_units, product.id, &mut txn).await?;
 
     let nutrition_facts =
         NutritionFacts::insert(&request.nutrition_facts, product.id, &mut txn).await?;
@@ -75,7 +75,7 @@ async fn update_food(
     let product = Product::update_food(&request, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::replace_mutliple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::replace_multiple(&request.custom_units, product.id, &mut txn).await?;
 
     let nutrition_facts = NutritionFacts::update(&request.nutrition_facts, &mut txn).await?;
 
