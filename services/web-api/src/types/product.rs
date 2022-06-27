@@ -91,8 +91,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))
@@ -113,8 +113,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))
@@ -137,8 +137,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))

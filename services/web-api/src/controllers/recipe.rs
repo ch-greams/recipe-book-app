@@ -95,12 +95,12 @@ async fn create_recipe(
     let product = Product::insert_recipe(&request, 1, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::insert_mutliple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::insert_multiple(&request.custom_units, product.id, &mut txn).await?;
 
     // ingredients
 
     let ingredients =
-        Ingredient::insert_mutliple(&request.ingredients, product.id, &mut txn).await?;
+        Ingredient::insert_multiple(&request.ingredients, product.id, &mut txn).await?;
 
     let mut temporary_to_final_id = HashMap::new();
 
@@ -110,7 +110,7 @@ async fn create_recipe(
             .ok_or_else(|| Error::not_created("ingredient"))?;
         temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
 
-        let _ingredient_products = IngredientProduct::insert_mutliple(
+        let _ingredient_products = IngredientProduct::insert_multiple(
             &ingredient_payload.products,
             ingredient.id,
             &mut txn,
@@ -135,7 +135,7 @@ async fn create_recipe(
 
     // directions
 
-    let directions = Direction::insert_mutliple(&request.directions, product.id, &mut txn).await?;
+    let directions = Direction::insert_multiple(&request.directions, product.id, &mut txn).await?;
 
     let mut direction_parts: Vec<DirectionPart> = Vec::new();
 
@@ -144,7 +144,7 @@ async fn create_recipe(
             .get(index)
             .ok_or_else(|| Error::not_created("direction"))?;
 
-        let mut _direction_parts = DirectionPart::insert_mutliple(
+        let mut _direction_parts = DirectionPart::insert_multiple(
             &direction_payload.steps,
             direction.id,
             &temporary_to_final_id,
@@ -177,12 +177,12 @@ async fn update_recipe(
     let product = Product::update_recipe(&request, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::replace_mutliple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::replace_multiple(&request.custom_units, product.id, &mut txn).await?;
 
     // ingredients
 
     let ingredients =
-        Ingredient::replace_mutliple(&request.ingredients, product.id, &mut txn).await?;
+        Ingredient::replace_multiple(&request.ingredients, product.id, &mut txn).await?;
 
     let mut temporary_to_final_id = HashMap::new();
 
@@ -192,7 +192,7 @@ async fn update_recipe(
             .ok_or_else(|| Error::not_updated("ingredient", ingredient_payload.id))?;
         temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
 
-        let _ingredient_products = IngredientProduct::insert_mutliple(
+        let _ingredient_products = IngredientProduct::insert_multiple(
             &ingredient_payload.products,
             ingredient.id,
             &mut txn,
@@ -217,7 +217,7 @@ async fn update_recipe(
 
     // directions
 
-    let directions = Direction::replace_mutliple(&request.directions, product.id, &mut txn).await?;
+    let directions = Direction::replace_multiple(&request.directions, product.id, &mut txn).await?;
 
     let mut direction_parts: Vec<DirectionPart> = Vec::new();
 
@@ -226,7 +226,7 @@ async fn update_recipe(
             .get(index)
             .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;
 
-        let mut _direction_parts = DirectionPart::insert_mutliple(
+        let mut _direction_parts = DirectionPart::insert_multiple(
             &direction_payload.steps,
             direction.id,
             &temporary_to_final_id,

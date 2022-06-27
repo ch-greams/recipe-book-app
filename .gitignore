@@ -1,9 +1,4 @@
 
-# data
-mongodb
-postgres
-postgres-admin
-
 # node
 node_modules
 .env
@@ -17,9 +12,6 @@ out
 
 # rust
 target
-
-# ide
-# .vscode
 
 # cypress
 **/cypress/videos

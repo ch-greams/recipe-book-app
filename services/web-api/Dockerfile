@@ -11,6 +11,8 @@ COPY ./Cargo.lock ./Cargo.lock
 RUN cargo build --release & rm src/*.rs
 
 # 3 - Copy source code
+COPY ./examples ./examples
+COPY ./database ./database
 COPY ./src ./src
 
 EXPOSE 8080

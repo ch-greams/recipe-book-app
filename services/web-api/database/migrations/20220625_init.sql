@@ -1,22 +1,9 @@
--- DROP SCHEMA private;
 
 CREATE SCHEMA private AUTHORIZATION postgres;
 
--- DROP TYPE private."direction_part_type";
+CREATE TYPE private."direction_part_type" AS ENUM ('ingredient', 'note', 'warning', 'tip');
+CREATE TYPE private."product_type" AS ENUM ('food', 'recipe');
 
-CREATE TYPE private."direction_part_type" AS ENUM (
-	'ingredient',
-	'note',
-	'warning',
-	'tip');
-
--- DROP TYPE private."product_type";
-
-CREATE TYPE private."product_type" AS ENUM (
-	'food',
-	'recipe');
-
--- DROP SEQUENCE private.direction_id;
 
 CREATE SEQUENCE private.direction_id
 	INCREMENT BY 1
@@ -25,13 +12,9 @@ CREATE SEQUENCE private.direction_id
 	START 1
 	CACHE 1
 	NO CYCLE;
-
--- Permissions
-
 ALTER SEQUENCE private.direction_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.direction_id TO postgres;
 
--- DROP SEQUENCE private.ingredient_id;
 
 CREATE SEQUENCE private.ingredient_id
 	INCREMENT BY 1
@@ -40,13 +23,9 @@ CREATE SEQUENCE private.ingredient_id
 	START 1
 	CACHE 1
 	NO CYCLE;
-
--- Permissions
-
 ALTER SEQUENCE private.ingredient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.ingredient_id TO postgres;
 
--- DROP SEQUENCE private.product_id;
 
 CREATE SEQUENCE private.product_id
 	INCREMENT BY 1
@@ -55,13 +34,9 @@ CREATE SEQUENCE private.product_id
 	START 1
 	CACHE 1
 	NO CYCLE;
-
--- Permissions
-
 ALTER SEQUENCE private.product_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.product_id TO postgres;
 
--- DROP SEQUENCE private.user_id;
 
 CREATE SEQUENCE private.user_id
 	INCREMENT BY 1
@@ -70,16 +45,9 @@ CREATE SEQUENCE private.user_id
 	START 1
 	CACHE 1
 	NO CYCLE;
-
--- Permissions
-
 ALTER SEQUENCE private.user_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.user_id TO postgres;
--- private."user" definition
 
--- Drop table
-
--- DROP TABLE private."user";
 
 CREATE TABLE private."user" (
 	id int8 NOT NULL DEFAULT nextval('private.user_id'::regclass),
@@ -90,18 +58,9 @@ CREATE TABLE private."user" (
 	CONSTRAINT user_email_unique UNIQUE (email),
 	CONSTRAINT user_pkey PRIMARY KEY (id)
 );
-
--- Permissions
-
 ALTER TABLE private."user" OWNER TO postgres;
 GRANT ALL ON TABLE private."user" TO postgres;
 
-
--- private.product definition
-
--- Drop table
-
--- DROP TABLE private.product;
 
 CREATE TABLE private.product (
 	id int8 NOT NULL DEFAULT nextval('private.product_id'::regclass),
@@ -121,18 +80,9 @@ CREATE TABLE private.product (
 	CONSTRAINT serving_size_check CHECK ((serving_size > (0)::double precision)) NOT VALID,
 	CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES private."user"(id)
 );
-
--- Permissions
-
 ALTER TABLE private.product OWNER TO postgres;
 GRANT ALL ON TABLE private.product TO postgres;
 
-
--- private.custom_unit definition
-
--- Drop table
-
--- DROP TABLE private.custom_unit;
 
 CREATE TABLE private.custom_unit (
 	"name" text NOT NULL,
@@ -142,18 +92,9 @@ CREATE TABLE private.custom_unit (
 	CONSTRAINT custom_unit_pk PRIMARY KEY (product_id, name),
 	CONSTRAINT custom_unit_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.custom_unit OWNER TO postgres;
 GRANT ALL ON TABLE private.custom_unit TO postgres;
 
-
--- private.direction definition
-
--- Drop table
-
--- DROP TABLE private.direction;
 
 CREATE TABLE private.direction (
 	recipe_id int8 NOT NULL,
@@ -168,18 +109,9 @@ CREATE TABLE private.direction (
 	CONSTRAINT recipe_step_uq UNIQUE (recipe_id, step_number),
 	CONSTRAINT direction_fk FOREIGN KEY (recipe_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.direction OWNER TO postgres;
 GRANT ALL ON TABLE private.direction TO postgres;
 
-
--- private.favorite_product definition
-
--- Drop table
-
--- DROP TABLE private.favorite_product;
 
 CREATE TABLE private.favorite_product (
 	user_id int8 NOT NULL,
@@ -188,38 +120,21 @@ CREATE TABLE private.favorite_product (
 	CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES private."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.favorite_product OWNER TO postgres;
 GRANT ALL ON TABLE private.favorite_product TO postgres;
 
-
--- private.ingredient definition
-
--- Drop table
-
--- DROP TABLE private.ingredient;
 
 CREATE TABLE private.ingredient (
 	id int8 NOT NULL DEFAULT nextval('private.ingredient_id'::regclass),
 	recipe_id int8 NOT NULL,
 	product_id int8 NULL,
 	CONSTRAINT ingredient_pk PRIMARY KEY (id),
-	CONSTRAINT ingredient_fk FOREIGN KEY (product_id) REFERENCES private.product(id)
+	CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES private.product(id),
+	CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.ingredient OWNER TO postgres;
 GRANT ALL ON TABLE private.ingredient TO postgres;
 
-
--- private.ingredient_product definition
-
--- Drop table
-
--- DROP TABLE private.ingredient_product;
 
 CREATE TABLE private.ingredient_product (
 	ingredient_id int8 NOT NULL,
@@ -232,18 +147,9 @@ CREATE TABLE private.ingredient_product (
 );
 CREATE INDEX fki_ingredient_product_ingredient_fk ON private.ingredient_product USING btree (ingredient_id);
 CREATE INDEX fki_ingredient_product_product_fk ON private.ingredient_product USING btree (product_id);
-
--- Permissions
-
 ALTER TABLE private.ingredient_product OWNER TO postgres;
 GRANT ALL ON TABLE private.ingredient_product TO postgres;
 
-
--- private.nutrition_fact definition
-
--- Drop table
-
--- DROP TABLE private.nutrition_fact;
 
 CREATE TABLE private.nutrition_fact (
 	product_id int8 NOT NULL,
@@ -316,18 +222,9 @@ CREATE TABLE private.nutrition_fact (
 	CONSTRAINT nutrition_fact_pk PRIMARY KEY (product_id),
 	CONSTRAINT nutrition_fact_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.nutrition_fact OWNER TO postgres;
 GRANT ALL ON TABLE private.nutrition_fact TO postgres;
 
-
--- private.direction_part definition
-
--- Drop table
-
--- DROP TABLE private.direction_part;
 
 CREATE TABLE private.direction_part (
 	direction_id int8 NOT NULL,
@@ -346,14 +243,9 @@ END),
 	CONSTRAINT direction_part_direction_fk FOREIGN KEY (direction_id) REFERENCES private.direction(id) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT direction_part_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES private.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-
--- Permissions
-
 ALTER TABLE private.direction_part OWNER TO postgres;
 GRANT ALL ON TABLE private.direction_part TO postgres;
 
-
--- private.ingredient_product_details source
 
 CREATE OR REPLACE VIEW private.ingredient_product_details
 AS SELECT ingredient_product.ingredient_id,
@@ -367,15 +259,8 @@ AS SELECT ingredient_product.ingredient_id,
    FROM private.ingredient_product ingredient_product
      LEFT JOIN private.product product ON product.id = ingredient_product.product_id
      LEFT JOIN private.nutrition_fact nutrition_fact ON nutrition_fact.product_id = ingredient_product.product_id;
-
--- Permissions
-
 ALTER TABLE private.ingredient_product_details OWNER TO postgres;
 GRANT ALL ON TABLE private.ingredient_product_details TO postgres;
 
-
-
-
--- Permissions
 
 GRANT ALL ON SCHEMA private TO postgres;

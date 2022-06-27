@@ -38,7 +38,7 @@ impl Ingredient {
         .bind(recipe_id)
     }
 
-    pub async fn insert_mutliple(
+    pub async fn insert_multiple(
         create_ingredient_payloads: &[CreateIngredientPayload],
         recipe_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
@@ -67,7 +67,7 @@ impl Ingredient {
         Ok(result)
     }
 
-    pub async fn replace_mutliple(
+    pub async fn replace_multiple(
         update_ingredient_payloads: &[UpdateIngredientPayload],
         recipe_id: i64,
         txn: &mut Transaction<'_, Postgres>,
@@ -166,7 +166,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
-    async fn insert_mutliple() {
+    async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -181,7 +181,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -196,7 +196,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
-    async fn replace_mutliple() {
+    async fn replace_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -211,7 +211,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -228,7 +228,7 @@ mod tests {
             ingredient.product_id = create_product_result.id;
         }
 
-        let update_ingredients_result = Ingredient::replace_mutliple(
+        let update_ingredients_result = Ingredient::replace_multiple(
             &update_product_payload.ingredients,
             create_product_result.id,
             &mut txn,

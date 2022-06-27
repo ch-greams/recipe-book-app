@@ -53,7 +53,7 @@ impl Direction {
         .bind(recipe_id)
     }
 
-    pub async fn insert_mutliple(
+    pub async fn insert_multiple(
         create_direction_payloads: &[CreateDirectionPayload],
         recipe_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
@@ -106,7 +106,7 @@ impl Direction {
         Ok(result)
     }
 
-    pub async fn replace_mutliple(
+    pub async fn replace_multiple(
         update_direction_payloads: &[UpdateDirectionPayload],
         recipe_id: i64,
         txn: &mut Transaction<'_, Postgres>,
@@ -240,7 +240,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
-    async fn insert_mutliple() {
+    async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -255,7 +255,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -265,7 +265,7 @@ mod tests {
 
         assert_eq!(create_ingredients_result.len(), 2);
 
-        let create_directions_result = Direction::insert_mutliple(
+        let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,
             create_product_result.id,
             &mut txn,
@@ -280,7 +280,7 @@ mod tests {
 
     #[tokio::test]
     #[ignore]
-    async fn replace_mutliple() {
+    async fn replace_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -295,7 +295,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -305,7 +305,7 @@ mod tests {
 
         assert_eq!(create_ingredients_result.len(), 2);
 
-        let create_directions_result = Direction::insert_mutliple(
+        let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,
             create_product_result.id,
             &mut txn,
@@ -318,7 +318,7 @@ mod tests {
         let update_product_payload: UpdateRecipePayload =
             utils::read_type_from_file("examples/update_recipe_payload.json").unwrap();
 
-        let update_directions_result = Direction::replace_mutliple(
+        let update_directions_result = Direction::replace_multiple(
             &update_product_payload.directions,
             create_product_result.id,
             &mut txn,
