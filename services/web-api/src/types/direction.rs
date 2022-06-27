@@ -220,7 +220,7 @@ mod tests {
 
     #[tokio::test]
     async fn find_by_product_id() {
-        let recipe_id = 7;
+        let recipe_id = 6;
 
         let config = Config::new().unwrap();
         let mut txn = PgPool::connect_lazy(&config.database_url)
