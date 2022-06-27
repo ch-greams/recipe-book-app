@@ -108,9 +108,8 @@ mod tests {
     use sqlx::PgPool;
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_ids() {
-        let ingredient_ids = vec![38, 40];
+        let ingredient_ids = vec![6, 7, 8, 9];
 
         let config = Config::new().unwrap();
         let mut txn = PgPool::connect_lazy(&config.database_url)
@@ -128,7 +127,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();

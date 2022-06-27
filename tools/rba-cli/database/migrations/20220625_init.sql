@@ -4,45 +4,45 @@ CREATE SCHEMA private AUTHORIZATION postgres;
 CREATE TYPE private."direction_part_type" AS ENUM ('ingredient', 'note', 'warning', 'tip');
 CREATE TYPE private."product_type" AS ENUM ('food', 'recipe');
 
-
+-- First 100 reserved for testing purposes
 CREATE SEQUENCE private.direction_id
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
-	START 1
+	START 100
 	CACHE 1
 	NO CYCLE;
 ALTER SEQUENCE private.direction_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.direction_id TO postgres;
 
-
+-- First 100 reserved for testing purposes
 CREATE SEQUENCE private.ingredient_id
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
-	START 1
+	START 100
 	CACHE 1
 	NO CYCLE;
 ALTER SEQUENCE private.ingredient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.ingredient_id TO postgres;
 
-
+-- First 100 reserved for testing purposes
 CREATE SEQUENCE private.product_id
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
-	START 1
+	START 100
 	CACHE 1
 	NO CYCLE;
 ALTER SEQUENCE private.product_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.product_id TO postgres;
 
-
+-- First 100 reserved for testing purposes
 CREATE SEQUENCE private.user_id
 	INCREMENT BY 1
 	MINVALUE 1
 	MAXVALUE 9223372036854775807
-	START 1
+	START 100
 	CACHE 1
 	NO CYCLE;
 ALTER SEQUENCE private.user_id OWNER TO postgres;
