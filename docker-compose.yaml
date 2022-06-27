@@ -37,7 +37,7 @@ services:
     environment:
       POSTGRES_PASSWORD: password
     volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
 
   recipe-book-db-admin:
     image: dpage/pgadmin4:latest
@@ -50,6 +50,10 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=password
       - PGADMIN_LISTEN_PORT=5050
     volumes:
-      - $HOME/dev/personal/recipe-book/recipe-book-app/postgres-admin:/var/lib/pgadmin
+      - postgres-admin:/var/lib/pgadmin
     links:
       - recipe-book-db:pgsql-server
+
+volumes:
+  postgres:
+  postgres-admin:
