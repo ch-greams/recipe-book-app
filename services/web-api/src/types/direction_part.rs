@@ -145,7 +145,6 @@ mod tests {
     use sqlx::PgPool;
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_ids() {
         let direction_ids = vec![3, 4, 5];
 
@@ -165,7 +164,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();

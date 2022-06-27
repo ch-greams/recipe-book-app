@@ -69,6 +69,20 @@ jobs:
     test:
         runs-on: ubuntu-20.04
 
+        services:
+            recipe-book-db:
+                image: postgres:14
+                ports:
+                    - 5432:5432
+                env:
+                    POSTGRES_PASSWORD: postgres
+                # Set health checks to wait until postgres has started
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             - uses: actions/checkout@v2
 
@@ -78,6 +92,18 @@ jobs:
                   profile: minimal
                   toolchain: stable
                   override: true
+
+            - name: Migrate database
+              uses: actions-rs/cargo@v1
+              with:
+                  command: run
+                  args: --manifest-path tools/rba-cli/Cargo.toml -- migrate-database 'postgres://postgres:password@localhost'
+
+            - name: Seed database
+              uses: actions-rs/cargo@v1
+              with:
+                  command: run
+                  args: --manifest-path tools/rba-cli/Cargo.toml -- seed-database 'postgres://postgres:password@localhost'
 
             - name: Run cargo test
               uses: actions-rs/cargo@v1

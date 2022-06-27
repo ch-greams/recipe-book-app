@@ -9,7 +9,7 @@ chrono = { version = "0.4", features = ["serde"] }
 sqlx = { version = "0.6", features = [ "runtime-tokio-rustls", "postgres", "chrono", "uuid", "json" ] }
 serde = { version = "1", features = ["derive", "rc"] }
 anyhow = "1.0.53"
-tokio = { version = "1.7.0", features = ["full"] }
+tokio = { version = "1.7", features = ["full"] }
 thiserror = "1.0.30"
 config = "0.12"
 

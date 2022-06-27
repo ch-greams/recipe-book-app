@@ -122,7 +122,6 @@ mod tests {
     };
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_id() {
         let food_id = 1;
 
@@ -137,7 +136,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert_multiple() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
@@ -167,7 +165,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn replace_multiple() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
