@@ -395,7 +395,7 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn find_recipe_by_id() {
-        let recipe_id = 29;
+        let recipe_id = 7;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

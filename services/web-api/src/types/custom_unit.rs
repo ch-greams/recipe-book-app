@@ -133,7 +133,7 @@ mod tests {
             .await
             .unwrap();
 
-        assert_eq!(custom_units.len(), 2);
+        assert_eq!(custom_units.len(), 1);
     }
 
     #[tokio::test]

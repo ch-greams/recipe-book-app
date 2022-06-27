@@ -147,7 +147,7 @@ mod tests {
     #[tokio::test]
     #[ignore]
     async fn find_by_product_ids() {
-        let direction_ids = vec![31, 33];
+        let direction_ids = vec![3, 4, 5];
 
         let config = Config::new().unwrap();
         let mut txn = PgPool::connect_lazy(&config.database_url)
@@ -161,7 +161,7 @@ mod tests {
             .await
             .unwrap();
 
-        assert_eq!(direction_parts.len(), 6);
+        assert_eq!(direction_parts.len(), 10);
     }
 
     #[tokio::test]
