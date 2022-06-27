@@ -1,5 +1,5 @@
 use actix_web::{web::Data, App, HttpServer};
-use sqlx::{PgPool, migrate::Migrator};
+use sqlx::{migrate::Migrator, PgPool};
 
 use crate::{config::Config, utils::seed_db};
 
@@ -8,9 +8,7 @@ mod controllers;
 mod types;
 mod utils;
 
-
 static MIGRATOR: Migrator = sqlx::migrate!("database/migrations");
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -20,9 +18,7 @@ async fn main() -> std::io::Result<()> {
 
     let db_pool = PgPool::connect_lazy(&config.database_url).unwrap();
 
-    MIGRATOR.run(&db_pool.clone())
-        .await
-        .unwrap();
+    MIGRATOR.run(&db_pool.clone()).await.unwrap();
 
     let seed_list = vec![
         "database/seeds/00_user.sql",
