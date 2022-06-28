@@ -32,7 +32,7 @@ impl CustomUnit {
         .bind(product_id)
     }
 
-    pub async fn insert_mutliple(
+    pub async fn insert_multiple(
         custom_unit_payloads: &[CreateCustomUnitPayload],
         product_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
@@ -65,7 +65,7 @@ impl CustomUnit {
         Ok(result)
     }
 
-    pub async fn replace_mutliple(
+    pub async fn replace_multiple(
         custom_unit_payloads: &[UpdateCustomUnitPayload],
         product_id: i64,
         txn: &mut Transaction<'_, Postgres>,
@@ -122,7 +122,6 @@ mod tests {
     };
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_id() {
         let food_id = 1;
 
@@ -133,12 +132,11 @@ mod tests {
             .await
             .unwrap();
 
-        assert_eq!(custom_units.len(), 2);
+        assert_eq!(custom_units.len(), 1);
     }
 
     #[tokio::test]
-    #[ignore]
-    async fn insert_mutliple() {
+    async fn insert_multiple() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
@@ -153,7 +151,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let custom_units_result = CustomUnit::insert_mutliple(
+        let custom_units_result = CustomUnit::insert_multiple(
             &create_product_payload.custom_units,
             create_product_result.id,
             &mut txn,
@@ -167,8 +165,7 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
-    async fn replace_mutliple() {
+    async fn replace_multiple() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
 
@@ -183,7 +180,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_custom_units_result = CustomUnit::insert_mutliple(
+        let create_custom_units_result = CustomUnit::insert_multiple(
             &create_product_payload.custom_units,
             create_product_result.id,
             &mut txn,
@@ -200,7 +197,7 @@ mod tests {
             custom_unit.product_id = create_product_result.id;
         }
 
-        let update_custom_units_result = CustomUnit::replace_mutliple(
+        let update_custom_units_result = CustomUnit::replace_multiple(
             &update_product_payload.custom_units,
             create_product_result.id,
             &mut txn,

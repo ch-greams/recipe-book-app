@@ -21,25 +21,6 @@ on:
 
 jobs:
 
-    check:
-        runs-on: ubuntu-20.04
-
-        steps:
-            - uses: actions/checkout@v2
-
-            - name: Install stable toolchain
-              uses: actions-rs/toolchain@v1
-              with:
-                  profile: minimal
-                  toolchain: stable
-                  override: true
-
-            - name: Run cargo check
-              uses: actions-rs/cargo@v1
-              with:
-                  command: check
-                  args: --manifest-path services/web-api/Cargo.toml
-
     lint:
         runs-on: ubuntu-20.04
 
@@ -53,6 +34,12 @@ jobs:
                   toolchain: stable
                   override: true
                   components: rustfmt, clippy
+
+            - name: Run cargo check
+              uses: actions-rs/cargo@v1
+              with:
+                  command: check
+                  args: --manifest-path services/web-api/Cargo.toml
 
             - name: Run cargo fmt
               uses: actions-rs/cargo@v1
@@ -69,6 +56,19 @@ jobs:
     test:
         runs-on: ubuntu-20.04
 
+        services:
+            recipe-book-db:
+                image: postgres:14
+                ports:
+                    - 5432:5432
+                env:
+                    POSTGRES_PASSWORD: password
+                options: >-
+                    --health-cmd pg_isready
+                    --health-interval 10s
+                    --health-timeout 5s
+                    --health-retries 5
+
         steps:
             - uses: actions/checkout@v2
 
@@ -78,6 +78,18 @@ jobs:
                   profile: minimal
                   toolchain: stable
                   override: true
+
+            - name: Migrate database
+              uses: actions-rs/cargo@v1
+              with:
+                  command: run
+                  args: --manifest-path tools/rba-cli/Cargo.toml -- migrate-database 'postgres://postgres:password@localhost'
+
+            - name: Seed database
+              uses: actions-rs/cargo@v1
+              with:
+                  command: run
+                  args: --manifest-path tools/rba-cli/Cargo.toml -- seed-database 'postgres://postgres:password@localhost'
 
             - name: Run cargo test
               uses: actions-rs/cargo@v1

@@ -29,7 +29,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
             <div className={styles.featuredNutritionFacts}>
 
                 <RbaNutritionFactsBlock
-                    isReadOnly={true}
+                    isReadOnly={!food.editMode}
                     title={"NUTRITION FACTS"}
                     nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}
                 />

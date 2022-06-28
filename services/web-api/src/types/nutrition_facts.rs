@@ -432,7 +432,6 @@ mod tests {
     };
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_id() {
         let food_id = 1;
 
@@ -447,7 +446,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert() {
         let ph_product_id = 0;
 
@@ -482,7 +480,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn update() {
         let ph_product_id = 0;
 

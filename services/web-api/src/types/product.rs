@@ -91,8 +91,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))
@@ -113,8 +113,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))
@@ -137,8 +137,8 @@ impl Product {
             LIMIT $1 OFFSET $2
         "#,
         )
-        .bind(limit)
-        .bind(offset)
+        .bind(limit as i32)
+        .bind(offset as i32)
         .bind(user_id)
         .bind(ProductTypeArray(types))
         .bind(format!("%{}%", filter))
@@ -306,7 +306,6 @@ mod tests {
     };
 
     #[tokio::test]
-    #[ignore]
     async fn find_food_by_id() {
         let food_id = 1;
 
@@ -321,7 +320,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_food_all() {
         let food_limit = 10;
         let food_offset = 0;
@@ -345,7 +343,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_food_all_created_by_user() {
         let food_limit = 10;
         let food_offset = 0;
@@ -369,7 +366,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_food_all_favorite() {
         let food_limit = 10;
         let food_offset = 0;
@@ -393,9 +389,8 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_recipe_by_id() {
-        let recipe_id = 29;
+        let recipe_id = 6;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -408,7 +403,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_recipe_all() {
         let recipe_limit = 10;
         let recipe_offset = 0;
@@ -432,7 +426,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_recipe_all_created_by_user() {
         let recipe_limit = 10;
         let recipe_offset = 0;
@@ -456,7 +449,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn find_recipe_all_favorite() {
         let recipe_limit = 10;
         let recipe_offset = 0;
@@ -480,7 +472,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert_food() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
@@ -500,7 +491,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn update_food() {
         let create_product_payload: CreateFoodPayload =
             utils::read_type_from_file("examples/create_food_payload.json").unwrap();
@@ -534,7 +524,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn insert_recipe() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
@@ -554,7 +543,6 @@ mod tests {
     }
 
     #[tokio::test]
-    #[ignore]
     async fn update_recipe() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();

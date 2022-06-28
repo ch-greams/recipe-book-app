@@ -52,7 +52,7 @@ impl DirectionPart {
         .bind(direction_ids)
     }
 
-    pub async fn insert_mutliple(
+    pub async fn insert_multiple(
         direction_part_payloads: &[DirectionPartPayload],
         direction_id: i64,
         temporary_to_final_id: &HashMap<i64, i64>,
@@ -145,9 +145,8 @@ mod tests {
     use sqlx::PgPool;
 
     #[tokio::test]
-    #[ignore]
     async fn find_by_product_ids() {
-        let direction_ids = vec![31, 33];
+        let direction_ids = vec![3, 4, 5];
 
         let config = Config::new().unwrap();
         let mut txn = PgPool::connect_lazy(&config.database_url)
@@ -161,12 +160,11 @@ mod tests {
             .await
             .unwrap();
 
-        assert_eq!(direction_parts.len(), 6);
+        assert_eq!(direction_parts.len(), 10);
     }
 
     #[tokio::test]
-    #[ignore]
-    async fn insert_mutliple() {
+    async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
             utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
 
@@ -181,7 +179,7 @@ mod tests {
             "create_product_result should not have a placeholder value for id"
         );
 
-        let create_ingredients_result = Ingredient::insert_mutliple(
+        let create_ingredients_result = Ingredient::insert_multiple(
             &create_product_payload.ingredients,
             create_product_result.id,
             &mut txn,
@@ -198,7 +196,7 @@ mod tests {
             temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
         }
 
-        let create_directions_result = Direction::insert_mutliple(
+        let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,
             create_product_result.id,
             &mut txn,
@@ -213,7 +211,7 @@ mod tests {
         for (index, direction_payload) in create_product_payload.directions.iter().enumerate() {
             let direction = create_directions_result.get(index).unwrap();
 
-            let mut _direction_parts = DirectionPart::insert_mutliple(
+            let mut _direction_parts = DirectionPart::insert_multiple(
                 &direction_payload.steps,
                 direction.id,
                 &temporary_to_final_id,

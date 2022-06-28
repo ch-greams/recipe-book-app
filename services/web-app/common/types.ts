@@ -1,3 +1,4 @@
+import Logger from "@common/logger";
 
 export function unwrapOr<T>(value: Option<T>, defaultValue: T): T {
     return isSome(value) ? value : defaultValue;
@@ -5,6 +6,7 @@ export function unwrapOr<T>(value: Option<T>, defaultValue: T): T {
 
 export function unwrap<T>(value: Option<T>, name: string): T {
     if (isNone(value)) {
+        Logger.error(`unwrap [${name}]`);
         throw new Error(`Error: Unexpectedly found None while unwrapping an Option value [${name}]`);
     }
 
