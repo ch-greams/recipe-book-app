@@ -1,8 +1,8 @@
-/* eslint-disable no-console */
 /* eslint-disable react/display-name */
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
+import Logger from "@common/logger";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
 import * as types from "@store/recipe/types";
@@ -66,7 +66,7 @@ IngredientUnit.args = {
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Medium,
     options: Object.values(Unit).map((unit) => ({ value: unit })),
-    onChange: (option) => console.log(option.value),
+    onChange: (option) => Logger.info(option.value),
     value: Unit.g,
 };
 
@@ -77,7 +77,7 @@ AltIngredientUnit.args = {
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Medium,
     options: Object.values(Unit).map((unit) => ({ value: unit })),
-    onChange: (option) => console.log(option.value),
+    onChange: (option) => Logger.info(option.value),
     value: Unit.g,
 };
 
@@ -88,7 +88,7 @@ ServingSize.args = {
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Large,
     options: Object.values(Unit).map((unit) => ({ value: unit })),
-    onChange: (option) => console.log(option.value),
+    onChange: (option) => Logger.info(option.value),
     value: Unit.g,
 };
 
@@ -99,7 +99,7 @@ CustomUnit.args = {
     width: SelectWidthSize.Medium,
     height: SelectHeightSize.Small,
     options: Object.values(Unit).map((unit) => ({ value: unit })),
-    onChange: (option) => console.log(option.value),
+    onChange: (option) => Logger.info(option.value),
     value: Unit.g,
 };
 
@@ -114,6 +114,6 @@ SubDirectionType.args = {
         types.DirectionPartType.Note,
         types.DirectionPartType.Warning,
     ].map((type) => ({ group: "Comment", value: type })),
-    onChange: (option) => console.log(option.value),
+    onChange: (option) => Logger.info(option.value),
     value: types.DirectionPartType.Note,
 };
