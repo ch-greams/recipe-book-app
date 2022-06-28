@@ -1159,7 +1159,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_REQUEST: {
             return {
                 ...state,
-                // FIXME: Add alternative loading status (like overlay spinner)
+                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
                 // isLoaded: true,
             };
         }
@@ -1223,7 +1223,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST: {
             return {
                 ...state,
-                // FIXME: Add alternative loading status (like overlay spinner)
+                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
                 // isLoaded: true,
             };
         }
