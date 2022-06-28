@@ -42,23 +42,6 @@ jobs:
 
             - run: npm install
             - run: npm run build
-
-    build-storybook:
-        runs-on: ubuntu-20.04
-
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
-
-        steps:
-            - uses: actions/checkout@v2
-            
-            - name: use node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
-
-            - run: npm install
             - run: npm run build-storybook
 
     lint:
@@ -78,23 +61,6 @@ jobs:
 
             - run: npm install
             - run: npm run lint
-
-    lint-style:
-        runs-on: ubuntu-20.04
-
-        strategy:
-            matrix:
-                node-version: [ 16.x ]
-
-        steps:
-            - uses: actions/checkout@v2
-            
-            - name: use node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v1
-              with:
-                node-version: ${{ matrix.node-version }}
-
-            - run: npm install
             - run: npm run lint:style
 
     test:
