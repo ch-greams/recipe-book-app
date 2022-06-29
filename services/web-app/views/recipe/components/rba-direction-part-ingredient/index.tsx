@@ -6,13 +6,13 @@ import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
-import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirectionPartIngredient } from "@store/recipe/types";
-import RemoveIcon from "@icons/close-sharp.svg";
+import { IconSize } from "@icons/icon-params";
+import RbaIconRemove from "@icons/rba-icon-remove";
 
 import styles from "./rba-direction-part-ingredient.module.scss";
 
@@ -69,9 +69,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                     className={styles.directionPartButton}
                     onClick={removeDirectionPart}
                 >
-                    <RbaIconWrapper isFullWidth={true} width={24} height={24} color={Color.White}>
-                        <RemoveIcon />
-                    </RbaIconWrapper>
+                    <RbaIconRemove size={IconSize.Medium} color={Color.White} />
                 </div>
             );
 

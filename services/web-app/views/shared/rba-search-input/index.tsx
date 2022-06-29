@@ -5,8 +5,9 @@ import { Color } from "@common/colors";
 import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
-import SearchIcon from "@icons/search-sharp.svg";
-import LoadingIcon from "@icons/sync-sharp.svg";
+import { IconSize } from "@icons/icon-params";
+import RbaIconLoading from "@icons/rba-icon-loading";
+import RbaIconSearch from "@icons/rba-icon-search";
 
 import { useDelayedSearchInput } from "./hooks";
 import RbaSearchInputOption from "./rba-search-input-option";
@@ -47,7 +48,7 @@ const getOnSelect = (onSelect: OnSelectFunc, searchInputClear: () => void): OnSe
 const RbaSearchInput: React.FC<Props> = ({
     width,
     height = SearchInputHeightSize.Medium,
-    placeholder: plaseholder = "Search...",
+    placeholder = "Search...",
     isLoading = false,
     value = "",
     items = [],
@@ -66,24 +67,14 @@ const RbaSearchInput: React.FC<Props> = ({
 
     const searchIcon = (
         <div className={styles.icon}>
-            <SearchIcon
-                width={"28"}
-                height={"28"}
-                fill={Color.White}
-                stroke={Color.White}
-            />
+            <RbaIconSearch size={IconSize.Large} color={Color.White} />
         </div>
 
     );
 
     const loadingIcon = (
         <div className={[ styles.icon, styles.rotate ].join(" ")}>
-            <LoadingIcon
-                width={"28"}
-                height={"28"}
-                fill={Color.White}
-                stroke={Color.White}
-            />
+            <RbaIconLoading size={IconSize.Large} color={Color.White} />
         </div>
     );
 
@@ -98,7 +89,7 @@ const RbaSearchInput: React.FC<Props> = ({
                     data-cy={constants.CY_SEARCH_INPUT}
                     className={styles.input}
                     type={"text"}
-                    placeholder={plaseholder}
+                    placeholder={placeholder}
                     value={searchInput}
                     onChange={searchInputHandler}
                 />
