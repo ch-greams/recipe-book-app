@@ -19,10 +19,10 @@
     "paths": {
       "@cypress/*": [ "cypress/*" ],
       "@views/*": [ "views/*" ],
+      "@icons/*": [ "views/icons/*" ],
       "@api/*": [ "api/*" ],
       "@store/*": [ "store/*" ],
       "@store": [ "store/index.ts" ],
-      "@icons/*": [ "icons/*" ],
       "@common/*": [ "common/*" ],
       "@styles/*": [ "styles/*" ]
     },

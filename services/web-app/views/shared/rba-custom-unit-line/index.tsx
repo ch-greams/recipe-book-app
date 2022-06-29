@@ -5,10 +5,10 @@ import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
-import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import IconAdd from "@icons/add-sharp.svg";
+import RbaIconAdd from "@icons/rba-icon-add";
+import RbaIconRemove from "@icons/rba-icon-remove";
 
 import styles from "./rba-custom-unit-line.module.scss";
 
@@ -36,16 +36,16 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
         className={styles.customUnitLine}
     >
 
-        <div className={styles.customUnitLineButton}>
-
-            <RbaIconWrapper
-                data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
-                isFullWidth={true} width={20} height={20} color={Color.Default}
-                style={(isNew ? undefined : { transform: "rotate(0.125turn)" })}
-                onClick={upsertCustomUnit}
-            >
-                <IconAdd />
-            </RbaIconWrapper>
+        <div
+            data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
+            className={styles.customUnitLineButton}
+            onClick={upsertCustomUnit}
+        >
+            {(
+                isNew
+                    ? <RbaIconAdd width={20} height={20} color={Color.Default} />
+                    : <RbaIconRemove width={20} height={20} color={Color.Default} />
+            )}
 
         </div>
 

@@ -4,11 +4,11 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
-import RemoveIcon from "@icons/close-sharp.svg";
+import RbaIconAdd from "@icons/rba-icon-add";
+import RbaIconRemove from "@icons/rba-icon-remove";
 
 import styles from "./rba-direction-line-edit.module.scss";
 
@@ -38,6 +38,12 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
     updateDirectionTimeUnit,
 }) => {
 
+    const directionButtonIcon = (
+        isNewDirection
+            ? <RbaIconAdd width={24} height={24} color={Color.Default} />
+            : <RbaIconRemove width={24} height={24} color={Color.Default} />
+    );
+
     return (
 
         <div
@@ -50,13 +56,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                 className={styles.directionLineButton}
                 onClick={onButtonClick}
             >
-                <RbaIconWrapper
-                    isFullWidth={true}
-                    width={24} height={24} color={Color.Default}
-                    style={( isNewDirection ? { transform: "rotate(0.125turn)" } : {} )}
-                >
-                    <RemoveIcon />
-                </RbaIconWrapper>
+                {directionButtonIcon}
             </div>
 
             <div className={styles.directionInfo}>
