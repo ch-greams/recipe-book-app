@@ -10,6 +10,7 @@ import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 
 import styles from "./rba-direction-part-new.module.scss";
@@ -57,7 +58,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
                 className={styles.directionPartButton}
                 onClick={createDirectionPart}
             >
-                <RbaIconAdd width={24} height={24} color={Color.White} />
+                <RbaIconAdd size={IconSize.Medium} color={Color.White} />
             </div>
 
             <div className={styles.directionPartInfo}>

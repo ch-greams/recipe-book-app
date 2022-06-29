@@ -7,6 +7,7 @@ import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
+import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
@@ -43,8 +44,8 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
         >
             {(
                 isNew
-                    ? <RbaIconAdd width={20} height={20} color={Color.Default} />
-                    : <RbaIconRemove width={20} height={20} color={Color.Default} />
+                    ? <RbaIconAdd size={IconSize.ExtraSmall} color={Color.Default} />
+                    : <RbaIconRemove size={IconSize.ExtraSmall} color={Color.Default} />
             )}
 
         </div>

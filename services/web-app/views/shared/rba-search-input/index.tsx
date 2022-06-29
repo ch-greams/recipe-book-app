@@ -5,6 +5,7 @@ import { Color } from "@common/colors";
 import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
+import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 import RbaIconSearch from "@icons/rba-icon-search";
 
@@ -66,14 +67,14 @@ const RbaSearchInput: React.FC<Props> = ({
 
     const searchIcon = (
         <div className={styles.icon}>
-            <RbaIconSearch width={28} height={28} color={Color.White} />
+            <RbaIconSearch size={IconSize.Large} color={Color.White} />
         </div>
 
     );
 
     const loadingIcon = (
         <div className={[ styles.icon, styles.rotate ].join(" ")}>
-            <RbaIconLoading width={28} height={28} color={Color.White} />
+            <RbaIconLoading size={IconSize.Large} color={Color.White} />
         </div>
     );
 

@@ -7,6 +7,7 @@ import { TemperatureUnit, TimeUnit } from "@common/units";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
@@ -40,8 +41,8 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
 
     const directionButtonIcon = (
         isNewDirection
-            ? <RbaIconAdd width={24} height={24} color={Color.Default} />
-            : <RbaIconRemove width={24} height={24} color={Color.Default} />
+            ? <RbaIconAdd size={IconSize.Medium} color={Color.Default} />
+            : <RbaIconRemove size={IconSize.Medium} color={Color.Default} />
     );
 
     return (

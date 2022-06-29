@@ -7,6 +7,7 @@ import type { InputChangeCallback } from "@common/typings";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirectionPartComment } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconNote from "@icons/rba-icon-note";
 import RbaIconRemove from "@icons/rba-icon-remove";
 import RbaIconTip from "@icons/rba-icon-tip";
@@ -19,14 +20,14 @@ const getDirectionPartCommentIcon = (type: DirectionPartType): JSX.Element => {
 
     switch (type) {
         case DirectionPartType.Tip:
-            return (<RbaIconTip width={22} height={22} color={Color.White} />);
+            return (<RbaIconTip size={IconSize.Small} color={Color.White} />);
 
         case DirectionPartType.Warning:
-            return (<RbaIconWarning width={22} height={22} color={Color.White} />);
+            return (<RbaIconWarning size={IconSize.Small} color={Color.White} />);
 
         case DirectionPartType.Note:
         default:
-            return (<RbaIconNote width={22} height={22} color={Color.White} />);
+            return (<RbaIconNote size={IconSize.Small} color={Color.White} />);
     }
 };
 
@@ -57,7 +58,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
             className={styles.directionPartButton}
             onClick={removeDirectionPart}
         >
-            <RbaIconRemove width={24} height={24} color={Color.White} />
+            <RbaIconRemove size={IconSize.Medium} color={Color.White} />
         </div>
     );
 

@@ -10,6 +10,7 @@ import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconLink from "@icons/rba-icon-link";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
@@ -93,7 +94,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
             className={styles.ingredientProductButton}
             onClick={onClickRemove}
         >
-            <RbaIconRemove width={24} height={24} color={getIconColor(theme)} />
+            <RbaIconRemove size={IconSize.Medium} color={getIconColor(theme)} />
         </div>
     );
 
@@ -153,7 +154,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
             <Link href={Utils.getProductPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButton}>
-                    <RbaIconLink width={24} height={24} color={getIconColor(theme)} />
+                    <RbaIconLink size={IconSize.Medium} color={getIconColor(theme)} />
                 </a>
             </Link>
         </div>

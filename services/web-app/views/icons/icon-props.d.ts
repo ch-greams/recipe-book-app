@@ -2,7 +2,6 @@
 
 
 interface IconProps {
-    width: number;
-    height: number;
+    size: import("@icons/icon-params").IconSize;
     color: import("@common/colors").Color;
 }

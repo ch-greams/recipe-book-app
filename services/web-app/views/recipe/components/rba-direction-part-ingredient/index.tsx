@@ -11,6 +11,7 @@ import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirectionPartIngredient } from "@store/recipe/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
 import styles from "./rba-direction-part-ingredient.module.scss";
@@ -68,7 +69,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                     className={styles.directionPartButton}
                     onClick={removeDirectionPart}
                 >
-                    <RbaIconRemove width={24} height={24} color={Color.White} />
+                    <RbaIconRemove size={IconSize.Medium} color={Color.White} />
                 </div>
             );
 

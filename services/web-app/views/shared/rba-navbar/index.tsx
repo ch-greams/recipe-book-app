@@ -8,6 +8,7 @@ import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-i
 import type { AppState } from "@store";
 import { searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
+import { IconSize } from "@icons/icon-params";
 import RbaIconPerson from "@icons/rba-icon-person";
 
 import styles from "./rba-navbar.module.scss";
@@ -52,7 +53,7 @@ const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
 
                 <Link href={"/user"}>
                     <div data-cy={constants.CY_NAVBAR_USER_ITEM} className={styles.navbarUser}>
-                        <RbaIconPerson width={32} height={32} color={Color.White} />
+                        <RbaIconPerson size={IconSize.ExtraLarge} color={Color.White} />
                         <span className={styles.navbarUserName}>{username}</span>
                     </div>
                 </Link>

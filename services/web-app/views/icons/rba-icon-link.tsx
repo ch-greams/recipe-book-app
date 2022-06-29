@@ -2,10 +2,10 @@
 import React from "react";
 
 
-const RbaIconLink: React.FC<IconProps> = ({ width, height, color }) => {
+const RbaIconLink: React.FC<IconProps> = ({ size, color }) => {
     return (
         <svg
-            width={width} height={height} fill={color} stroke={color}
+            width={size} height={size} fill={color} stroke={color}
             viewBox={"0 0 512 512"} fillRule={"evenodd"} clipRule={"evenodd"} strokeLinecap={"square"} strokeLinejoin={"round"}
         >
             <path
