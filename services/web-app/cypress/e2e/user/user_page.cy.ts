@@ -50,7 +50,7 @@ describe("user", () => {
             cy.url().should("include", Utils.getProductPath(ProductType.Recipe, FAVORITE_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(FAVORITE_RECIPE_NAME.toUpperCase())
+                .contains(FAVORITE_RECIPE_NAME)
                 .should("be.visible");
         });
 
@@ -72,7 +72,7 @@ describe("user", () => {
             cy.url().should("include", Utils.getProductPath(ProductType.Recipe, CUSTOM_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(CUSTOM_RECIPE_NAME.toUpperCase())
+                .contains(CUSTOM_RECIPE_NAME)
                 .should("be.visible");
         });
 
@@ -94,7 +94,7 @@ describe("user", () => {
             cy.url().should("include", Utils.getProductPath(ProductType.Food, FAVORITE_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(FAVORITE_FOOD_NAME.toUpperCase())
+                .contains(FAVORITE_FOOD_NAME)
                 .should("be.visible");
         });
 
@@ -116,7 +116,7 @@ describe("user", () => {
             cy.url().should("include", Utils.getProductPath(ProductType.Food, CUSTOM_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(CUSTOM_FOOD_NAME.toUpperCase())
+                .contains(CUSTOM_FOOD_NAME)
                 .should("be.visible");
         });
     });

@@ -56,7 +56,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                         data-cy={constants.CY_DIRECTION_LINE_NAME_TEXT}
                         className={styles.directionInfoName}
                     >
-                        {direction.name.toUpperCase()}
+                        {direction.name}
                     </div>
                 </div>
 

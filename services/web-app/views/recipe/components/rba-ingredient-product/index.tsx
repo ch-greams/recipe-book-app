@@ -125,7 +125,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                 >
-                    {ingredientProduct.name.toUpperCase()}
+                    {ingredientProduct.name}
                 </div>
 
                 <div className={styles.ingredientInfoLineMeasure}>

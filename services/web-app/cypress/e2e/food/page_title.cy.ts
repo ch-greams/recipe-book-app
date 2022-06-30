@@ -38,7 +38,7 @@ describe("food_page", () => {
             cy.wait("@updateFood").then(interceptedRequest => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("name")
-                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_NAME);
             });
         });
 
@@ -67,7 +67,7 @@ describe("food_page", () => {
             cy.wait("@updateFood").then(interceptedRequest => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("brand")
-                    .should("eq", NEW_PAGE_TITLE_BRAND.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_BRAND);
             });
         });
 
@@ -94,7 +94,7 @@ describe("food_page", () => {
             cy.wait("@updateFood").then(interceptedRequest => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("subtitle")
-                    .should("eq", NEW_PAGE_TITLE_SUBTITLE.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_SUBTITLE);
             });
         });
 
