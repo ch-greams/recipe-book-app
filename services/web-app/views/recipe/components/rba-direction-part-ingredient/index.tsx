@@ -6,6 +6,7 @@ import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
+import RbaInput, { InputHeightSize,InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -77,39 +78,16 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
         }
     };
 
-    const getIngredientAmount = (): JSX.Element => {
-        if (isReadOnly) {
-            const ingredientAmountText = (
-                <div className={styles.directionPartAmountText}>
-                    {directionPart.ingredientAmountInput}
-                </div>
-            );
-
-            return ingredientAmountText;
-        }
-        else {
-            const ingredientAmountInput = (
-                <input
-                    type={"text"}
-                    className={styles.directionPartAmountInput}
-                    placeholder={"#"}
-                    value={directionPart.ingredientAmountInput}
-                    onChange={updateDirectionPartIngredientAmount}
-                />
-            );
-
-            return ingredientAmountInput;
-        }
-    };
-
     const stepNumberInput = (
-        <input
-            data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-            type={"text"}
-            className={styles.directionInfoIndexInput}
-            value={directionPart.stepNumber}
+        <RbaInput
+            // data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+            disabled={isReadOnly}
+            align={InputTextAlign.Center}
+            theme={InputTheme.Alternative}
+            width={InputWidthSize.Small}
+            height={InputHeightSize.Medium}
             placeholder={"#"}
-            maxLength={2}
+            value={String(directionPart.stepNumber)}
             onChange={updateDirectionPartStepNumber}
         />
     );
@@ -138,7 +116,16 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
 
                     <div className={styles.directionPartMeasure}>
 
-                        {getIngredientAmount()}
+                        <RbaInput
+                            disabled={isReadOnly}
+                            align={InputTextAlign.Right}
+                            theme={InputTheme.Alternative}
+                            width={InputWidthSize.Medium}
+                            height={InputHeightSize.Medium}
+                            placeholder={"#"}
+                            value={directionPart.ingredientAmountInput}
+                            onChange={updateDirectionPartIngredientAmount}
+                        />
 
                         <RbaSelect
                             theme={SelectTheme.Alternative}

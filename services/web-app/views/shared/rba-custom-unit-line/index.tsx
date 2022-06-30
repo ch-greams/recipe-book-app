@@ -5,11 +5,13 @@ import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
-import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";
+
+import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "../rba-input";
 
 import styles from "./rba-custom-unit-line.module.scss";
 
@@ -52,11 +54,12 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
 
         <div className={styles.customUnitLineInfo}>
 
-            <input
-                data-cy={constants.CY_CUSTOM_UNIT_NAME}
-                type={"text"}
+            <RbaInput
+                // data-cy={constants.CY_CUSTOM_UNIT_NAME}
+                theme={InputTheme.Primary}
+                width={InputWidthSize.Large}
+                height={InputHeightSize.Small}
                 placeholder={"NAME"}
-                className={styles.customUnitLineName}
                 value={customUnit.name}
                 onChange={updateItemName}
             />
@@ -65,11 +68,12 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
 
             <div className={styles.customUnitLineMeasure}>
 
-                <input
-                    data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
-                    type={"text"}
+                <RbaInput
+                    // data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
+                    theme={InputTheme.Primary}
+                    width={InputWidthSize.Medium}
+                    height={InputHeightSize.Small}
                     placeholder={"#"}
-                    className={styles.customUnitLineAmount}
                     value={customUnit.amountInput}
                     onChange={updateItemAmount}
                 />
