@@ -4,7 +4,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import Utils from "@common/utils";
 
-import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from ".";
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from ".";
 
 
 export default {
@@ -26,6 +26,11 @@ export default {
             table: { type: { summary: "InputTheme" } },
             control: { type: "select", options: InputTheme },
         },
+        align: {
+            type: { name: "enum", value: Utils.getObjectValues(InputTextAlign), required: true },
+            table: { type: { summary: "InputTextAlign" } },
+            control: { type: "select", options: InputTextAlign },
+        },
         value: {
             type: { name: "string", required: true },
             table: { type: { summary: "string" } },
@@ -41,6 +46,10 @@ const Template: ComponentStory<typeof RbaInput> = (args) => <RbaInput {...args} 
 
 export const Default = Template.bind({});
 Default.args = {
+    theme: InputTheme.Primary,
+    width: InputWidthSize.Large,
+    height: InputHeightSize.Large,
+    align: InputTextAlign.Right,
     value: "1.205",
     disabled: false,
 };
