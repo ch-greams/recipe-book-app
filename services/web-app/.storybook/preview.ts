@@ -16,6 +16,10 @@ export const parameters = {
         name: 'default-light',
         value: '#5df2d6',
       },
+      {
+        name: 'white',
+        value: '#fff',
+      },
     ],
   },
   controls: {

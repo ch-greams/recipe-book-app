@@ -169,14 +169,14 @@ describe("recipe_page", () => {
 
             // Check current amount
             cy.get("@ingredientInfoLine")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
-                .contains(String(INGREDIENT_AMOUNT_BEFORE))
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .should("have.value", String(INGREDIENT_AMOUNT_BEFORE))
                 .should("be.visible");
 
             // Check current amount in ingredient_product line
             cy.get("@ingredientProduct")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
-                .contains(String(INGREDIENT_AMOUNT_BEFORE))
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .should("have.value", String(INGREDIENT_AMOUNT_BEFORE))
                 .should("be.visible");
 
             // Change unit
@@ -195,8 +195,8 @@ describe("recipe_page", () => {
 
             // Confirm that amount changes
             cy.get("@ingredientInfoLine")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
-                .contains(String(INGREDIENT_AMOUNT_AFTER))
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .should("have.value", String(INGREDIENT_AMOUNT_AFTER))
                 .should("be.visible");
 
             // Confirm that unit changes in ingredient_product line
@@ -207,8 +207,8 @@ describe("recipe_page", () => {
 
             // Confirm that amount changes in ingredient_product line
             cy.get("@ingredientProduct")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}]`)
-                .contains(String(INGREDIENT_AMOUNT_AFTER))
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .should("have.value", String(INGREDIENT_AMOUNT_AFTER))
                 .should("be.visible");
         });
     });

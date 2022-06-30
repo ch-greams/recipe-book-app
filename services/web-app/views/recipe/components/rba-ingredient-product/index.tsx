@@ -7,6 +7,7 @@ import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
+import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
@@ -64,6 +65,15 @@ const getSelectTheme = (theme: IngredientProductTheme): SelectTheme => {
     }
 };
 
+const getInputTheme = (theme: IngredientProductTheme): InputTheme => {
+    switch (theme) {
+        case IngredientProductTheme.Primary:
+            return InputTheme.Primary;
+        case IngredientProductTheme.Alternative:
+            return InputTheme.Alternative;
+    }
+};
+
 const getIconColor = (theme: IngredientProductTheme): Color => {
     switch (theme) {
         case IngredientProductTheme.Primary:
@@ -98,24 +108,6 @@ const RbaIngredientProduct: React.FC<Props> = ({
         </div>
     );
 
-    const amountText = (
-        <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}
-            className={styles.ingredientInfoLineAmountText}
-        >
-            {ingredientProduct.amountInput}
-        </div>
-    );
-
-    const amountInput = (
-        <input
-            type={"text"}
-            className={styles.ingredientInfoLineAmountInput}
-            value={(ingredientProduct.amountInput || "")}
-            onChange={onChangeAmount}
-        />
-    );
-
     return (
 
         <div
@@ -138,7 +130,15 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
                 <div className={styles.ingredientInfoLineMeasure}>
 
-                    {( isReadOnly ? amountText : amountInput )}
+                    <RbaInput
+                        data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT}
+                        theme={getInputTheme(theme)}
+                        width={InputWidthSize.Medium}
+                        height={InputHeightSize.Medium}
+                        disabled={isReadOnly}
+                        value={ingredientProduct.amountInput}
+                        onChange={onChangeAmount}
+                    />
 
                     <RbaSelect
                         theme={getSelectTheme(theme)}

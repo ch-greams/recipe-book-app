@@ -60,5 +60,5 @@ const Template: ComponentStory<typeof RbaIcon> = (args) =>(
 export const Default = Template.bind({});
 Default.args = {
     size: IconSize.ExtraLarge,
-    color: Color.Alternative,
+    color: Color.White,
 };

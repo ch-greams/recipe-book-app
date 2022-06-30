@@ -5,6 +5,7 @@ import type { InputChangeCallback } from "@common/typings";
 import { Unit, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/food/actions";
@@ -37,11 +38,13 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     {"TYPE"}
                 </div>
 
-                <input
+                <RbaInput
+                    theme={InputTheme.Alternative}
+                    align={InputTextAlign.Left}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Large}
                     disabled={!food.editMode}
-                    type={"text"}
                     value={food.type}
-                    className={styles.typeSelectInput}
                     onChange={(event) => {
                         dispatch(actions.updateType(event.target.value));
                     }}
@@ -62,11 +65,12 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     {"DENSITY"}
                 </div>
 
-                <input
+                <RbaInput
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Large}
+                    height={InputHeightSize.Large}
                     disabled={!food.editMode}
-                    type={"text"}
                     value={food.densityInput}
-                    className={styles.densityLineInput}
                     onChange={(event) => {
                         dispatch(actions.updateDensityAmount(event.target.value));
                     }}
@@ -104,10 +108,11 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     {"SERVING SIZE"}
                 </div>
 
-                <input
-                    type={"text"}
+                <RbaInput
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Large}
+                    height={InputHeightSize.Large}
                     value={food.servingSizeInput}
-                    className={styles.servingSizeLineInput}
                     onChange={handleServingSizeAmountEdit}
                 />
 

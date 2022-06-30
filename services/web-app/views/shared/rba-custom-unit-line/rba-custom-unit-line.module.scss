@@ -31,29 +31,6 @@
 
         box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
-        .customUnitLineName {
-
-            max-width: 40%;
-
-            padding-right: 4px;
-
-            font-family: $font-default;
-            font-size: $font-size-12;
-            font-weight: $font-weight-500;
-
-            line-height: 18px;
-
-            color: $color-default;
-
-            text-align: right;
-
-            background-color: $color-white;
-
-            border-color: $color-default;
-            border-style: solid;
-            border-width: 1px;
-        }
-
         .customUnitLineEqualSign {
 
             margin: 0 4px;
@@ -64,31 +41,8 @@
             display: flex;
             flex-grow: 1;
 
-            max-width: 30%;
-
-            .customUnitLineAmount {
-
-                width: 60px;
-
-                padding-right: 4px;
-                margin-right: 2px;
-
-                font-family: $font-default;
-                font-size: $font-size-12;
-                font-weight: $font-weight-500;
-
-                line-height: 18px;
-
-                color: $color-default;
-
-                text-align: right;
-
-                background-color: $color-white;
-
-                border-color: $color-default;
-                border-style: solid;
-                border-width: 1px;
-            }
+            gap: 2px;
+            max-width: 40%;
         }
     }
 

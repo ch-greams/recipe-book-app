@@ -6,6 +6,8 @@ import * as constants from "@cypress/constants";
 import { unwrapOr } from "@common/types";
 import Utils from "@common/utils";
 
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "../rba-input";
+
 import styles from "./rba-page-title-block-input.module.scss";
 
 
@@ -43,10 +45,12 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
 
             <div className={styles.nameBlock}>
 
-                <input
+                <RbaInput
                     data-cy={constants.CY_PAGE_TITLE_NAME_INPUT}
-                    type={"text"}
-                    className={styles.name}
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Large}
+                    align={InputTextAlign.Left}
                     placeholder={"NAME"}
                     value={name.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -55,10 +59,12 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     }}
                 />
 
-                <input
+                <RbaInput
                     data-cy={constants.CY_PAGE_TITLE_BRAND_INPUT}
-                    type={"text"}
-                    className={styles.brand}
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Large}
+                    align={InputTextAlign.Right}
                     placeholder={"BRAND"}
                     value={brand.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -70,10 +76,12 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
             </div>
 
             <div className={styles.subtitleBlock}>
-                <input
+                <RbaInput
                     data-cy={constants.CY_PAGE_TITLE_SUBTITLE_INPUT}
-                    type={"text"}
-                    className={styles.subtitle}
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Large}
+                    align={InputTextAlign.Left}
                     placeholder={"SUBTITLE"}
                     value={subtitle.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {

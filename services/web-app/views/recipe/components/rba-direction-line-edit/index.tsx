@@ -4,6 +4,7 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -66,19 +67,23 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     className={styles.directionInfoTitle}
                     style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
                 >
-                    <input
+                    <RbaInput
                         data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-                        type={"text"}
-                        className={styles.directionInfoIndexInput}
-                        value={direction.stepNumber}
+                        align={InputTextAlign.Center}
+                        theme={InputTheme.Primary}
+                        width={InputWidthSize.Small}
+                        height={InputHeightSize.Medium}
                         placeholder={"#"}
-                        maxLength={2}
+                        value={String(direction.stepNumber)}
                         onChange={updateDirectionStepNumber}
                     />
-                    <input
+
+                    <RbaInput
                         data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
-                        type={"text"}
-                        className={styles.directionInfoNameInput}
+                        align={InputTextAlign.Left}
+                        theme={InputTheme.Primary}
+                        width={InputWidthSize.Full}
+                        height={InputHeightSize.Medium}
                         value={direction.name.toUpperCase()}
                         placeholder={"TITLE"}
                         onChange={updateDirectionName}
@@ -92,10 +97,11 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         className={styles.directionInfoMeasure}
                     >
 
-                        <input
+                        <RbaInput
                             data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
-                            type={"text"}
-                            className={styles.directionInfoAmountInput}
+                            theme={InputTheme.Primary}
+                            width={InputWidthSize.Medium}
+                            height={InputHeightSize.Medium}
                             placeholder={"#"}
                             value={direction.temperatureValueInput}
                             onChange={updateDirectionTemperatureCount}
@@ -118,10 +124,11 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         className={styles.directionInfoMeasure}
                     >
 
-                        <input
+                        <RbaInput
                             data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
-                            type={"text"}
-                            className={styles.directionInfoAmountInput}
+                            theme={InputTheme.Primary}
+                            width={InputWidthSize.Medium}
+                            height={InputHeightSize.Medium}
                             placeholder={"#"}
                             value={direction.durationValueInput}
                             onChange={updateDirectionTimeCount}

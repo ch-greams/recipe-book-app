@@ -4,6 +4,7 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirectionPartComment } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
@@ -62,31 +63,16 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
         </div>
     );
 
-    const commentText = (
-        <div className={styles.directionPartCommentText}>
-            {directionPart.commentText}
-        </div>
-    );
-
-    const commentInput = (
-        <input
-            data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
-            type={"text"}
-            className={styles.directionPartCommentInput}
-            placeholder={directionPart.type.toUpperCase()}
-            value={directionPart.commentText}
-            onChange={updateDirectionPartComment}
-        />
-    );
-
     const stepNumberInput = (
-        <input
+        <RbaInput
             data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-            type={"text"}
-            className={styles.directionInfoIndexInput}
-            value={directionPart.stepNumber}
+            disabled={isReadOnly}
+            align={InputTextAlign.Center}
+            theme={InputTheme.Alternative}
+            width={InputWidthSize.Small}
+            height={InputHeightSize.Medium}
             placeholder={"#"}
-            maxLength={2}
+            value={String(directionPart.stepNumber)}
             onChange={updateDirectionPartStepNumber}
         />
     );
@@ -106,7 +92,17 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
 
                 {getDirectionPartCommentIcon(directionPart.type)}
 
-                {( isReadOnly ? commentText : commentInput )}
+                <RbaInput
+                    data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
+                    disabled={isReadOnly}
+                    align={InputTextAlign.Left}
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Medium}
+                    placeholder={directionPart.type.toUpperCase()}
+                    value={directionPart.commentText}
+                    onChange={updateDirectionPartComment}
+                />
 
             </div>
         </div>
