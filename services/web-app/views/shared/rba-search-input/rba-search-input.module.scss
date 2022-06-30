@@ -22,10 +22,6 @@
             height: 28px;
 
             margin: 0 14px;
-
-            &.rotate {
-                animation: spin 1s linear infinite;
-            }
         }
 
         .input {
@@ -150,11 +146,5 @@
                 padding: 8px 16px;
             }
         }
-    }
-}
-
-@keyframes spin {
-    100% {
-        transform: rotate(360deg);
     }
 }

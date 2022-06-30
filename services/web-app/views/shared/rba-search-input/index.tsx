@@ -65,25 +65,18 @@ const RbaSearchInput: React.FC<Props> = ({
         [styles[height]]: true,
     });
 
-    const searchIcon = (
-        <div className={styles.icon}>
-            <RbaIconSearch size={IconSize.Large} color={Color.White} />
-        </div>
-
-    );
-
-    const loadingIcon = (
-        <div className={[ styles.icon, styles.rotate ].join(" ")}>
-            <RbaIconLoading size={IconSize.Large} color={Color.White} />
-        </div>
-    );
-
     return (
         <div data-cy={constants.CY_SEARCH} className={classNames}>
 
             <div className={styles.searchInput}>
 
-                {( ( !Utils.isEmptyString(searchInput) && isLoading ) ? loadingIcon : searchIcon )}
+                <div className={styles.icon}>
+                    {(
+                        ( !Utils.isEmptyString(searchInput) && isLoading )
+                            ? <RbaIconLoading size={IconSize.Large} color={Color.White} />
+                            : <RbaIconSearch size={IconSize.Large} color={Color.White} />
+                    )}
+                </div>
 
                 <input
                     data-cy={constants.CY_SEARCH_INPUT}
