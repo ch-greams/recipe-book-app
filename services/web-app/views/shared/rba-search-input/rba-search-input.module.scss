@@ -7,7 +7,7 @@
 
     font-family: $font-default;
     font-size: $font-size-medium;
-    font-weight: $font-weight-500;
+    font-weight: $font-weight-medium;
 
     .searchInput {
 
@@ -35,7 +35,7 @@
 
             font-family: $font-default;
             font-size: $font-size-large;
-            font-weight: $font-weight-500;
+            font-weight: $font-weight-medium;
 
             line-height: 26px;
 
@@ -66,7 +66,7 @@
 
             font-family: $font-default;
             font-size: $font-size-medium;
-            font-weight: $font-weight-500;
+            font-weight: $font-weight-medium;
         }
 
         .searchOption {
@@ -91,7 +91,7 @@
                 width: 80px;
 
                 font-size: $font-size-medium;
-                font-weight: $font-weight-400;
+                font-weight: $font-weight-regular;
 
                 line-height: 24px;
 
