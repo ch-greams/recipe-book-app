@@ -1,16 +1,18 @@
 import React from "react";
 
+import { isSome } from "@common/types";
+
 import styles from "./rba-single-message-page.module.scss";
 
 
 interface Props {
-    text: string;
+    text?: string;
 }
 
-const RbaSingleMessagePage: React.FC<Props> = ({ text }) => {
+const RbaSingleMessagePage: React.FC<Props> = ({ text, children }) => {
     return (
         <div className={styles.messageBlock}>
-            {text}
+            {isSome(text) ? text : children}
         </div>
     );
 };

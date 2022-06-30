@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { Color } from "@common/colors";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
@@ -11,6 +12,8 @@ import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 import { searchClear } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
+import { IconSize } from "@icons/icon-params";
+import RbaIconLoading from "@icons/rba-icon-loading";
 
 import RecipePage from "./rba-recipe-page";
 
@@ -62,7 +65,11 @@ const RecipePageConnected: React.FC = () => {
                         />
                     )
             )
-            : <RbaSingleMessagePage text={"LOADING"} />
+            : (
+                <RbaSingleMessagePage>
+                    <RbaIconLoading size={IconSize.ExtraLarge} color={Color.White} />
+                </RbaSingleMessagePage>
+            )
     );
 };
 
