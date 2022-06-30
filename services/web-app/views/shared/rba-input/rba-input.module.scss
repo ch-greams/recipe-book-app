@@ -6,7 +6,7 @@
     padding: 0 4px;
 
     font-family: $font-default;
-    font-weight: $font-weight-500;
+    font-weight: $font-weight-regular;
 
     border-style: solid;
     border-width: 1px;
@@ -82,17 +82,17 @@
 
     &.heightSize_Small {
         height: 20px;
-        font-size: $font-size-12;
+        font-size: $font-size-small;
     }
 
     &.heightSize_Medium {
         height: 22px;
-        font-size: $font-size-14;
+        font-size: $font-size-medium;
     }
 
     &.heightSize_Large {
         height: 32px;
         padding: 0 8px;
-        font-size: $font-size-20;
+        font-size: $font-size-large;
     }
 }

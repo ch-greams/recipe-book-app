@@ -9,8 +9,8 @@
     margin: 4px 0;
 
     font-family: $font-default;
-    font-size: $font-size-12;
-    font-weight: $font-weight-500;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
 
     line-height: 22px;
 
@@ -37,16 +37,18 @@
     }
 
     .nutritionFactDailyValue {
-
         width: 8%;
         margin-right: 4px;
+
+        font-weight: $font-weight-regular;
 
         text-align: right;
     }
 
     .nutritionFactPercent {
-
         width: 3%;
+
+        font-weight: $font-weight-regular;
     }
 }
 
@@ -58,8 +60,8 @@
     margin: 4px;
 
     font-family: $font-default;
-    font-size: $font-size-12;
-    font-weight: $font-weight-500;
+    font-size: $font-size-small;
+    font-weight: $font-weight-medium;
 
     line-height: 22px;
 
@@ -87,6 +89,7 @@
 
         width: 8.2%;
         margin-right: 4px;
+        font-weight: $font-weight-regular;
 
         text-align: right;
     }
@@ -94,5 +97,6 @@
     .nutritionFactPercent {
 
         width: 3%;
+        font-weight: $font-weight-regular;
     }
 }
