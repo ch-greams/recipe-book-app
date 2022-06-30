@@ -66,6 +66,10 @@
             gap: 4px;
 
             cursor: pointer;
+
+            &.isMarked {
+                opacity: 0.25;
+            }
         }
 
         .directionInfoMeasures {

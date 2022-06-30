@@ -4,6 +4,7 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
@@ -46,6 +47,11 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
             : <RbaIconRemove size={IconSize.Medium} color={Color.Default} />
     );
 
+    const directionTitleClassName = Utils.classNames({
+        [styles.directionInfoTitle]: true,
+        [styles.isMarked]: direction.isMarked,
+    });
+
     return (
 
         <div
@@ -63,10 +69,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
 
             <div className={styles.directionInfo}>
 
-                <div
-                    className={styles.directionInfoTitle}
-                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
-                >
+                <div className={directionTitleClassName}>
                     <RbaInput
                         data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
                         align={InputTextAlign.Center}
