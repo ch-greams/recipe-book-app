@@ -80,7 +80,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
 
     const stepNumberInput = (
         <RbaInput
-            // data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+            data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
             disabled={isReadOnly}
             align={InputTextAlign.Center}
             theme={InputTheme.Alternative}

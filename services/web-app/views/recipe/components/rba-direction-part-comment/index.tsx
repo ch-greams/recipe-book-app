@@ -65,7 +65,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
 
     const stepNumberInput = (
         <RbaInput
-            // data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+            data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
             disabled={isReadOnly}
             align={InputTextAlign.Center}
             theme={InputTheme.Alternative}
@@ -93,7 +93,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
                 {getDirectionPartCommentIcon(directionPart.type)}
 
                 <RbaInput
-                    // data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
+                    data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
                     disabled={isReadOnly}
                     align={InputTextAlign.Left}
                     theme={InputTheme.Alternative}

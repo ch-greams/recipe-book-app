@@ -68,7 +68,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
                 >
                     <RbaInput
-                        // data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+                        data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
                         align={InputTextAlign.Center}
                         theme={InputTheme.Primary}
                         width={InputWidthSize.Small}
@@ -79,7 +79,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     />
 
                     <RbaInput
-                        // data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
+                        data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
                         align={InputTextAlign.Left}
                         theme={InputTheme.Primary}
                         width={InputWidthSize.Full}
@@ -98,7 +98,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     >
 
                         <RbaInput
-                            // data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
+                            data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
                             theme={InputTheme.Primary}
                             width={InputWidthSize.Medium}
                             height={InputHeightSize.Medium}
@@ -125,7 +125,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                     >
 
                         <RbaInput
-                            // data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
+                            data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
                             theme={InputTheme.Primary}
                             width={InputWidthSize.Medium}
                             height={InputHeightSize.Medium}

@@ -46,7 +46,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
             <div className={styles.nameBlock}>
 
                 <RbaInput
-                    // data-cy={constants.CY_PAGE_TITLE_NAME_INPUT}
+                    data-cy={constants.CY_PAGE_TITLE_NAME_INPUT}
                     theme={InputTheme.Alternative}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Large}
@@ -60,7 +60,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                 />
 
                 <RbaInput
-                    // data-cy={constants.CY_PAGE_TITLE_BRAND_INPUT}
+                    data-cy={constants.CY_PAGE_TITLE_BRAND_INPUT}
                     theme={InputTheme.Alternative}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Large}
@@ -77,7 +77,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
 
             <div className={styles.subtitleBlock}>
                 <RbaInput
-                    // data-cy={constants.CY_PAGE_TITLE_SUBTITLE_INPUT}
+                    data-cy={constants.CY_PAGE_TITLE_SUBTITLE_INPUT}
                     theme={InputTheme.Alternative}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Large}

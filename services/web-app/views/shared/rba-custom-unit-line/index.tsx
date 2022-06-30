@@ -55,7 +55,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
         <div className={styles.customUnitLineInfo}>
 
             <RbaInput
-                // data-cy={constants.CY_CUSTOM_UNIT_NAME}
+                data-cy={constants.CY_CUSTOM_UNIT_NAME}
                 theme={InputTheme.Primary}
                 width={InputWidthSize.Large}
                 height={InputHeightSize.Small}
@@ -69,7 +69,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
             <div className={styles.customUnitLineMeasure}>
 
                 <RbaInput
-                    // data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
+                    data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
                     theme={InputTheme.Primary}
                     width={InputWidthSize.Medium}
                     height={InputHeightSize.Small}

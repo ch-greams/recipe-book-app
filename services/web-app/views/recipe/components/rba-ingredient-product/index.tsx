@@ -131,7 +131,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                 <div className={styles.ingredientInfoLineMeasure}>
 
                     <RbaInput
-                        // data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}
+                        data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT}
                         theme={getInputTheme(theme)}
                         width={InputWidthSize.Medium}
                         height={InputHeightSize.Medium}

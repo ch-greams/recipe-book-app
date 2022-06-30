@@ -32,6 +32,7 @@ export enum InputTextAlign {
 }
 
 interface Props {
+    "data-cy"?: string;
     value: string;
     disabled?: boolean;
     placeholder?: string;
@@ -51,6 +52,7 @@ const RbaInput: React.FC<Props> = ({
     height,
     disabled = false,
     onChange,
+    ...props
 }) => {
 
     const classNames = Utils.classNames({
@@ -64,6 +66,7 @@ const RbaInput: React.FC<Props> = ({
 
     return (
         <input
+            data-cy={props["data-cy"]}
             disabled={disabled}
             placeholder={placeholder}
             type={"text"}
