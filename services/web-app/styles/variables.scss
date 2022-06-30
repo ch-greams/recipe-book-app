@@ -24,16 +24,10 @@ $color-input: #707070;
 
 $font-default: "Montserrat", sans-serif;
 
-// TODO: Reduce amount of font sizes to 4 max (RBA-75)
-$font-size-12: 12px;
-$font-size-14: 14px;
-$font-size-16: 16px;
-$font-size-18: 18px;
-$font-size-20: 20px;
-$font-size-24: 24px;
-$font-size-28: 28px;
-$font-size-32: 32px;
-$font-size-36: 36px;
+$font-size-small: 12px;
+$font-size-medium: 16px;
+$font-size-large: 22px;
+$font-size-extra-large: 32px;
 
 // TODO: Reduce amount of font weights to 2-3 max (RBA-75)
 $font-weight-400: 400;
