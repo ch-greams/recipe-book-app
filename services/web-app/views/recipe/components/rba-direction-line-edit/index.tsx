@@ -87,7 +87,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         theme={InputTheme.Primary}
                         width={InputWidthSize.Full}
                         height={InputHeightSize.Medium}
-                        value={direction.name.toUpperCase()}
+                        value={direction.name}
                         placeholder={"TITLE"}
                         onChange={updateDirectionName}
                     />

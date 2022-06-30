@@ -109,7 +109,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                     data-cy={constants.CY_DIRECTION_PART_NAME}
                     className={Utils.classNames({ [styles.directionPartName]: true, [styles.isMarked]: directionPart.isMarked })}
                 >
-                    {directionPart.ingredientName.toUpperCase()}
+                    {directionPart.ingredientName}
                 </div>
 
                 <div>

@@ -37,10 +37,10 @@ describe("recipe_page", () => {
             cy.wait("@createRecipe").then(interceptedRequest => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("name")
-                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_NAME);
                 cy.wrap(interceptedRequest?.response?.body)
                     .its("name")
-                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_NAME);
             });
 
             cy.url().should("include", Utils.getProductPath(ProductType.Recipe, NEW_RECIPE_ID));
@@ -72,10 +72,10 @@ describe("recipe_page", () => {
             cy.wait("@updateRecipe").then(interceptedRequest => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("name")
-                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_NAME);
                 cy.wrap(interceptedRequest?.response?.body)
                     .its("name")
-                    .should("eq", NEW_PAGE_TITLE_NAME.toUpperCase());
+                    .should("eq", NEW_PAGE_TITLE_NAME);
             });
         });
     });

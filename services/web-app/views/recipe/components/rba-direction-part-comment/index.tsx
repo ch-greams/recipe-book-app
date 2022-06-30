@@ -99,7 +99,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
                     theme={InputTheme.Alternative}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Medium}
-                    placeholder={directionPart.type.toUpperCase()}
+                    placeholder={directionPart.type}
                     value={directionPart.commentText}
                     onChange={updateDirectionPartComment}
                 />

@@ -21,7 +21,7 @@ describe("recipe_page", () => {
             const STEP_NAME = "test step";
 
             cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
-                .contains(STEP_NAME.toUpperCase())
+                .contains(STEP_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .find(`[data-cy=${constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
@@ -51,7 +51,7 @@ describe("recipe_page", () => {
             const STEP_NAME = "stir";
 
             cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
-                .contains(STEP_NAME.toUpperCase())
+                .contains(STEP_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .find(`[data-cy=${constants.CY_DIRECTION_LINE_DURATION_MEASURE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
@@ -84,7 +84,7 @@ describe("recipe_page", () => {
             const CHECKBOX_ON = 1;
 
             cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
-                .contains(STEP_NAME.toUpperCase())
+                .contains(STEP_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .find(`[data-cy=${constants.CY_DIRECTION_CHECKBOX}]`)
@@ -109,7 +109,7 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_INGREDIENT_COUNT = 2;
 
             cy.get(`[data-cy=${constants.CY_DIRECTION}] [data-cy=${constants.CY_DIRECTION_LINE_NAME_TEXT}]`)
-                .contains(STEP_NAME.toUpperCase())
+                .contains(STEP_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
@@ -133,7 +133,7 @@ describe("recipe_page", () => {
             const INGREDIENT_NAME = "Sour Cream";
 
             cy.get(`[data-cy=${constants.CY_DIRECTION_PART}] [data-cy=${constants.CY_DIRECTION_PART_NAME}]`)
-                .contains(INGREDIENT_NAME.toUpperCase())
+                .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .as("subDirectionLine")
@@ -269,7 +269,7 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_COUNT_BEFORE = 0;
             const SUB_DIRECTION_COUNT_AFTER = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME}"]`)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
@@ -302,7 +302,7 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_COUNT_BEFORE = 0;
             const SUB_DIRECTION_COUNT_AFTER = 1;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME}"]`)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
@@ -315,7 +315,7 @@ describe("recipe_page", () => {
 
             cy.get("@directionLine")
                 .find(`[data-cy=${constants.CY_DIRECTION_PART_NEW}] [data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
-                .contains(INGREDIENT_NAME.toUpperCase())
+                .contains(INGREDIENT_NAME)
                 .click();
 
             cy.get("@directionLine")
@@ -339,7 +339,7 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_COUNT_BEFORE = 3;
             const SUB_DIRECTION_COUNT_AFTER = 3;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME}"]`)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")
@@ -361,7 +361,7 @@ describe("recipe_page", () => {
                 .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
                 .first()
                 .find(`[data-cy=${constants.CY_DIRECTION_PART_NAME}]`)
-                .should("contain.text", SECOND_PART_INGREDIENT_NAME.toUpperCase());
+                .should("contain.text", SECOND_PART_INGREDIENT_NAME);
 
             cy.get("@directionLine")
                 .find(`[data-cy=${constants.CY_DIRECTION_PART}]`)
@@ -375,7 +375,7 @@ describe("recipe_page", () => {
             const SUB_DIRECTION_COUNT_BEFORE = 3;
             const SUB_DIRECTION_COUNT_AFTER = 2;
 
-            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME.toUpperCase()}"]`)
+            cy.get(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}][value="${STEP_NAME}"]`)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION}]`)
                 .as("directionLine")

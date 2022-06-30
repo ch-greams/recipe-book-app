@@ -24,10 +24,6 @@ interface Props {
 }
 
 
-const formatInput = (value: Option<string>, uppercase: boolean = true): string => {
-    return uppercase ? unwrapOr(value, "").toUpperCase() : unwrapOr(value, "");
-};
-
 const MIN_DESCRIPTION_SIZE: number = 3;
 
 const RbaPageTitleBlockInput: React.FC<Props> = ({
@@ -52,10 +48,10 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     height={InputHeightSize.Large}
                     align={InputTextAlign.Left}
                     placeholder={"NAME"}
-                    value={name.toUpperCase()}
+                    value={name}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateName(formatInput(event.target.value)));
+                        dispatch(updateName(unwrapOr(event.target.value, "")));
                     }}
                 />
 
@@ -66,10 +62,10 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     height={InputHeightSize.Large}
                     align={InputTextAlign.Right}
                     placeholder={"BRAND"}
-                    value={brand.toUpperCase()}
+                    value={brand}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateBrand(formatInput(event.target.value)));
+                        dispatch(updateBrand(unwrapOr(event.target.value, "")));
                     }}
                 />
 
@@ -83,10 +79,10 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     height={InputHeightSize.Large}
                     align={InputTextAlign.Left}
                     placeholder={"SUBTITLE"}
-                    value={subtitle.toUpperCase()}
+                    value={subtitle}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateSubtitle(formatInput(event.target.value)));
+                        dispatch(updateSubtitle(unwrapOr(event.target.value, "")));
                     }}
                 />
             </div>
@@ -100,7 +96,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     placeholder={"Description"} value={descriptionText}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateDescription(formatInput(event.target.value, false)));
+                        dispatch(updateDescription(unwrapOr(event.target.value, "")));
                     }}
                 />
             </div>
