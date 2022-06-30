@@ -63,6 +63,10 @@
 
             cursor: pointer;
 
+            &.isMarked {
+                opacity: 0.25;
+            }
+
             .directionInfoIndex {
 
                 width: 28px;

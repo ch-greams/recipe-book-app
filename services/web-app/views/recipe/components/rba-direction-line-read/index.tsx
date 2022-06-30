@@ -2,6 +2,7 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -26,6 +27,11 @@ const RbaDirectionLineRead: React.FC<Props> = ({
     updateDirectionTimeUnit,
 }) => {
 
+    const directionTitleClassName = Utils.classNames({
+        [styles.directionInfoTitle]: true,
+        [styles.isMarked]: direction.isMarked,
+    });
+
     return (
 
         <div className={styles.directionLine}>
@@ -40,11 +46,8 @@ const RbaDirectionLineRead: React.FC<Props> = ({
 
             <div className={styles.directionInfo}>
 
-                <div
-                    className={styles.directionInfoTitle}
-                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
-                    onClick={onClick}
-                >
+                <div className={directionTitleClassName} onClick={onClick}>
+
                     <div className={styles.directionInfoIndex}>
                         {`${direction.stepNumber}.`}
                     </div>
