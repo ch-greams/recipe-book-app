@@ -33,6 +33,7 @@ const DEFAULT_SERVING_SIZE: number = 100;
 const initialState: types.RecipePageStore = {
 
     isLoaded: false,
+    isLoadedIngredients: true,
     errorMessage: null,
 
     editMode: true,
@@ -1144,10 +1145,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ...ingredient,
                             alternativeNutritionFacts: (
                                 isSelected
-                                    ? unwrap(
-                                        ingredient.products[id],
-                                        `ingredient.products["${id}"]`,
-                                    ).nutrition_facts
+                                    ? unwrap(ingredient.products[id], `ingredient.products["${id}"]`).nutrition_facts
                                     : {}
                             ),
                         }
@@ -1159,8 +1157,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_REQUEST: {
             return {
                 ...state,
-                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
-                // isLoaded: true,
+                isLoadedIngredients: false,
             };
         }
 
@@ -1201,6 +1198,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
+                isLoadedIngredients: true,
+
                 ingredients: ingredients,
                 nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
@@ -1215,7 +1214,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_ERROR: {
             return {
                 ...state,
-                isLoaded: true,
+                isLoadedIngredients: true,
                 errorMessage: action.payload as string,
             };
         }
@@ -1223,8 +1222,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST: {
             return {
                 ...state,
-                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
-                // isLoaded: true,
+                isLoadedIngredients: false,
             };
         }
 
@@ -1234,6 +1232,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
+                isLoadedIngredients: true,
                 ingredients: state.ingredients.map((ingredient) => (
                     (ingredient.id === id)
                         ? {
@@ -1256,7 +1255,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_PRODUCT_ERROR: {
             return {
                 ...state,
-                isLoaded: true,
+                isLoadedIngredients: true,
                 errorMessage: action.payload as string,
             };
         }

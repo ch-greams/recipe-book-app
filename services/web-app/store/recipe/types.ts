@@ -65,6 +65,7 @@ export interface RecipeDirection {
 
 export interface RecipePageStore {
     isLoaded: boolean;
+    isLoadedIngredients: boolean;
     errorMessage?: Option<string>;
 
     editMode: boolean;
