@@ -8,4 +8,5 @@ INSERT INTO private.direction_part (direction_id,step_number,"direction_part_typ
 	 (5,0,'ingredient',NULL,7,0.5),
 	 (5,1,'ingredient',NULL,9,1.0),
 	 (5,2,'note','Baked patty goes here',NULL,NULL),
-	 (5,3,'ingredient',NULL,7,0.5);
+	 (5,3,'ingredient',NULL,7,0.5)
+ON CONFLICT (direction_id, step_number) DO NOTHING;

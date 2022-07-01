@@ -1,6 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { isSome } from "@common/types";
 import { TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
@@ -62,7 +63,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
 
                 <div className={styles.directionInfoMeasures}>
 
-                    {( direction.temperatureValue && (
+                    {( isSome(direction.temperatureValue) && (
                         <div
                             data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}
                             className={styles.directionInfoMeasure}
@@ -82,7 +83,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                         </div>
                     ))}
 
-                    {( direction.durationValue && (
+                    {( isSome(direction.durationValue) && (
                         <div
                             data-cy={constants.CY_DIRECTION_LINE_DURATION_MEASURE}
                             className={styles.directionInfoMeasure}
