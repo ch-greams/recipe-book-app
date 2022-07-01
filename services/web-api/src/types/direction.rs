@@ -12,7 +12,7 @@ pub struct Direction {
     pub recipe_id: i64,
     pub step_number: i16,
     pub name: String,
-    pub temperature_value: Option<i16>,
+    pub temperature_value: Option<f32>,
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
@@ -22,7 +22,7 @@ pub struct Direction {
 pub struct CreateDirectionPayload {
     pub step_number: i16,
     pub name: String,
-    pub temperature_value: Option<i16>,
+    pub temperature_value: Option<f32>,
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
@@ -34,7 +34,7 @@ pub struct UpdateDirectionPayload {
     pub id: i64,
     pub step_number: i16,
     pub name: String,
-    pub temperature_value: Option<i16>,
+    pub temperature_value: Option<f32>,
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
@@ -61,7 +61,7 @@ impl Direction {
         let mut recipe_ids: Vec<i64> = Vec::new();
         let mut step_numbers: Vec<i16> = Vec::new();
         let mut names: Vec<String> = Vec::new();
-        let mut temperature_values: Vec<Option<i16>> = Vec::new();
+        let mut temperature_values: Vec<Option<f32>> = Vec::new();
         let mut temperature_units: Vec<String> = Vec::new();
         let mut duration_values: Vec<Option<i32>> = Vec::new();
         let mut duration_units: Vec<String> = Vec::new();
@@ -114,7 +114,7 @@ impl Direction {
         let mut recipe_ids: Vec<i64> = Vec::new();
         let mut step_numbers: Vec<i16> = Vec::new();
         let mut names: Vec<String> = Vec::new();
-        let mut temperature_values: Vec<Option<i16>> = Vec::new();
+        let mut temperature_values: Vec<Option<f32>> = Vec::new();
         let mut temperature_units: Vec<String> = Vec::new();
         let mut duration_values: Vec<Option<i32>> = Vec::new();
         let mut duration_units: Vec<String> = Vec::new();
@@ -176,7 +176,7 @@ pub struct DirectionDetails {
     pub id: i64,
     pub step_number: i16,
     pub name: String,
-    pub temperature_value: Option<i16>,
+    pub temperature_value: Option<f32>,
     pub temperature_unit: String,
     pub duration_value: Option<i32>,
     pub duration_unit: String,
