@@ -128,13 +128,16 @@ function convertDirectionPart(
 
         const ingredientAmount = product.amount * unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
 
+        const amountInCurrentUnits = units.convertFromMetric(ingredientAmount, product.unit, [], product.density);
+        const ingredientAmountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
         return {
             stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
             ingredientId: ingredientId,
 
             ingredientAmount: ingredientAmount,
-            ingredientAmountInput: String(ingredientAmount),
+            ingredientAmountInput: String(ingredientAmountInput),
 
             ingredientName: product.name,
             ingredientUnit: product.unit,
