@@ -82,6 +82,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
         <RbaInput
             data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
             disabled={isReadOnly}
+            maxLength={2}
             align={InputTextAlign.Center}
             theme={InputTheme.Alternative}
             width={InputWidthSize.Small}

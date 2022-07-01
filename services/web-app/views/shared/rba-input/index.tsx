@@ -40,6 +40,7 @@ interface Props {
     theme: InputTheme;
     width: InputWidthSize;
     height: InputHeightSize;
+    maxLength?: number;
     onChange: InputChangeCallback;
 }
 
@@ -51,6 +52,7 @@ const RbaInput: React.FC<Props> = ({
     width,
     height,
     disabled = false,
+    maxLength,
     onChange,
     ...props
 }) => {
@@ -72,6 +74,7 @@ const RbaInput: React.FC<Props> = ({
             type={"text"}
             className={classNames}
             value={value}
+            maxLength={maxLength}
             onChange={onChange}
         />
     );
