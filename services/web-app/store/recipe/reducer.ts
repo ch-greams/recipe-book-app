@@ -711,7 +711,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                             return {
                                 ...direction,
-                                temperatureValueInput: String(countInput),
+                                temperatureValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
                                 temperatureUnit: unit,
                             };
                         }
@@ -1336,8 +1336,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const recipeIngredients = convertIngredients(recipe.ingredients);
             const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
-            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients);
-            const nutritionFactsByServing = Utils.convertNutritionFacts(recipe.serving_size, true, nutritionFacts);
+            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(recipeIngredients);
 
             return {
                 ...state,
@@ -1357,7 +1356,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize: recipe.serving_size,
                 servingSizeInput: String(recipe.serving_size),
 
-                nutritionFacts: nutritionFacts,
+                nutritionFacts: Utils.convertNutritionFacts(recipe.serving_size, false, nutritionFactsByServing),
                 customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
 
                 nutritionFactsByServing: nutritionFactsByServing,
