@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { WeightUnit } from "@common/units";
+import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 
 
 describe("food_page", () => {
@@ -9,14 +10,18 @@ describe("food_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+
+            cy.visit(`${constants.CY_FOOD_PATH}/1`);
         });
 
         it("can create custom_unit", () => {
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
-
             const cuName = "test unit";
             const cuAmount = "1234.5";
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             // Name and amount
 
@@ -53,11 +58,13 @@ describe("food_page", () => {
 
         it("can update custom_unit", () => {
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
-
             const cuName = "package";
             const cuNameUpdated = "updated name";
             const cuAmountUpdated = "125.67";
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .parent()
@@ -103,9 +110,11 @@ describe("food_page", () => {
 
         it("can remove custom_unit", () => {
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
-
             const cuName = "package";
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .should("be.visible")
