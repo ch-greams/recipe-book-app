@@ -136,19 +136,19 @@ describe("recipe_page", () => {
                 .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_DIRECTION_PART}]`)
-                .as("subDirectionLine")
+                .as("directionPartLine")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
                 .contains(VolumeUnit.ml)
                 .should("be.visible")
                 .click();
 
-            cy.get("@subDirectionLine")
+            cy.get("@directionPartLine")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT_OPTION}]`)
                 .contains(WeightUnit.g)
                 .should("be.visible")
                 .click();
 
-            cy.get("@subDirectionLine")
+            cy.get("@directionPartLine")
                 .find(`[data-cy=${constants.CY_SELECT_INPUT}]`)
                 .contains(WeightUnit.g)
                 .should("be.visible");

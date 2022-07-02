@@ -30,22 +30,20 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
     const dispatch = useDispatch();
 
     const toggleDirectionPartMark = (): void => {
-        dispatch(actions.toggleDirectionPartMark(directionIndex, directionPart.stepNumber));
+        dispatch(actions.toggleDirectionPartMark(directionIndex, directionPart.id));
     };
     const removeDirectionPart = (): void => {
-        dispatch(actions.removeDirectionPart(directionIndex, directionPart.stepNumber));
+        dispatch(actions.removeDirectionPart(directionIndex, directionPart.id));
     };
 
     const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.stepNumber, Number(event.target.value)));
+        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.id, Number(event.target.value)));
     };
     const updateDirectionPartIngredientAmount: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartIngredientAmount(directionIndex, directionPart.stepNumber, event.target.value));
+        dispatch(actions.updateDirectionPartIngredientAmount(directionIndex, directionPart.id, event.target.value));
     };
     const updateDirectionPartIngredientUnit: RbaSelectChangeCallback = (option: SelectOption) => {
-        dispatch(actions.updateDirectionPartIngredientUnit(
-            directionIndex, directionPart.stepNumber, option.value as Unit,
-        ));
+        dispatch(actions.updateDirectionPartIngredientUnit(directionIndex, directionPart.id, option.value as Unit));
     };
 
 

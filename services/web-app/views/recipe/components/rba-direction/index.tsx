@@ -42,7 +42,7 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
         directionPart.type === DirectionPartType.Ingredient
             ? (
                 <RbaDirectionPartIngredient
-                    key={`directionPart_${directionPart.stepNumber}`}
+                    key={`directionPart_${directionPart.id}`}
                     isReadOnly={isReadOnly}
                     directionPart={directionPart as RecipeDirectionPartIngredient}
                     directionIndex={index}
@@ -50,7 +50,7 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
             )
             : (
                 <RbaDirectionPartComment
-                    key={`directionPart_${directionPart.stepNumber}`}
+                    key={`directionPart_${directionPart.id}`}
                     isReadOnly={isReadOnly}
                     directionPart={directionPart as RecipeDirectionPartComment}
                     directionIndex={index}
