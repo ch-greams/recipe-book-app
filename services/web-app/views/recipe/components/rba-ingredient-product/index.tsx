@@ -7,12 +7,13 @@ import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
-import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
+import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeIngredientProduct } from "@store/recipe/types";
-import RemoveIcon from "@icons/close-sharp.svg";
-import LinkIcon from "@icons/link-sharp.svg";
+import { IconSize } from "@icons/icon-params";
+import RbaIconLink from "@icons/rba-icon-link";
+import RbaIconRemove from "@icons/rba-icon-remove";
 
 import styles from "./rba-ingredient-product.module.scss";
 
@@ -64,6 +65,15 @@ const getSelectTheme = (theme: IngredientProductTheme): SelectTheme => {
     }
 };
 
+const getInputTheme = (theme: IngredientProductTheme): InputTheme => {
+    switch (theme) {
+        case IngredientProductTheme.Primary:
+            return InputTheme.Primary;
+        case IngredientProductTheme.Alternative:
+            return InputTheme.Alternative;
+    }
+};
+
 const getIconColor = (theme: IngredientProductTheme): Color => {
     switch (theme) {
         case IngredientProductTheme.Primary:
@@ -94,28 +104,8 @@ const RbaIngredientProduct: React.FC<Props> = ({
             className={styles.ingredientProductButton}
             onClick={onClickRemove}
         >
-            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
-                <RemoveIcon />
-            </RbaIconWrapper>
+            <RbaIconRemove size={IconSize.Medium} color={getIconColor(theme)} />
         </div>
-    );
-
-    const amountText = (
-        <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT_TEXT}
-            className={styles.ingredientInfoLineAmountText}
-        >
-            {ingredientProduct.amountInput}
-        </div>
-    );
-
-    const amountInput = (
-        <input
-            type={"text"}
-            className={styles.ingredientInfoLineAmountInput}
-            value={(ingredientProduct.amountInput || "")}
-            onChange={onChangeAmount}
-        />
     );
 
     return (
@@ -135,12 +125,20 @@ const RbaIngredientProduct: React.FC<Props> = ({
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                 >
-                    {ingredientProduct.name.toUpperCase()}
+                    {ingredientProduct.name}
                 </div>
 
                 <div className={styles.ingredientInfoLineMeasure}>
 
-                    {( isReadOnly ? amountText : amountInput )}
+                    <RbaInput
+                        data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT}
+                        theme={getInputTheme(theme)}
+                        width={InputWidthSize.Medium}
+                        height={InputHeightSize.Medium}
+                        disabled={isReadOnly}
+                        value={ingredientProduct.amountInput}
+                        onChange={onChangeAmount}
+                    />
 
                     <RbaSelect
                         theme={getSelectTheme(theme)}
@@ -156,9 +154,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
             <Link href={Utils.getProductPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButton}>
-                    <RbaIconWrapper isFullWidth={true} width={24} height={24} color={getIconColor(theme)}>
-                        <LinkIcon />
-                    </RbaIconWrapper>
+                    <RbaIconLink size={IconSize.Medium} color={getIconColor(theme)} />
                 </a>
             </Link>
         </div>

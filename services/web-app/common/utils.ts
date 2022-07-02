@@ -185,7 +185,7 @@ export default class Utils {
 
     /**
      * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
-     * Used for ingridients in a new recipe
+     * Used for ingredients in a new recipe, and direction_parts that are not in the db yet
      */
     public static getTemporaryId(): number {
         return -Date.now();
@@ -285,6 +285,7 @@ export default class Utils {
     private static convertRecipeDirectionPartIntoDirectionPart(
         recipeDirectionPart: RecipeDirectionPartComment | RecipeDirectionPartIngredient,
         ingredients: RecipeIngredient[],
+        directionPartIndex: number,
     ): DirectionPart {
 
         const directionPartIngredient = recipeDirectionPart as RecipeDirectionPartIngredient;
@@ -304,7 +305,7 @@ export default class Utils {
         }
 
         return {
-            step_number: recipeDirectionPart.stepNumber,
+            step_number: directionPartIndex,
             direction_part_type: recipeDirectionPart.type,
             comment_text: (recipeDirectionPart as RecipeDirectionPartComment).commentText,
             ingredient_id: ingredientId,
@@ -312,14 +313,18 @@ export default class Utils {
         };
     }
 
-    private static convertRecipeDirectionIntoDirection(recipeDirection: RecipeDirection, ingredients: RecipeIngredient[]): Direction {
+    private static convertRecipeDirectionIntoDirection(
+        recipeDirection: RecipeDirection,
+        ingredients: RecipeIngredient[],
+        directionIndex: number,
+    ): Direction {
 
         const directionParts = recipeDirection.steps
-            .map((directionPart) => Utils.convertRecipeDirectionPartIntoDirectionPart(directionPart, ingredients));
+            .map((directionPart, index) => Utils.convertRecipeDirectionPartIntoDirectionPart(directionPart, ingredients, index));
 
         return {
             id: recipeDirection.id,
-            step_number: recipeDirection.stepNumber,
+            step_number: directionIndex,
             name: recipeDirection.name,
             duration_value: recipeDirection.durationValue,
             duration_unit: recipeDirection.durationUnit,
@@ -332,7 +337,7 @@ export default class Utils {
     public static convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe {
 
         const directions = recipePage.directions
-            .map((direction) => Utils.convertRecipeDirectionIntoDirection(direction, recipePage.ingredients));
+            .map((direction, index) => Utils.convertRecipeDirectionIntoDirection(direction, recipePage.ingredients, index));
 
         return {
             id: recipePage.id,
