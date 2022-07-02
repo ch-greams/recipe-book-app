@@ -1,3 +1,4 @@
+import type { PropsWithChildren } from "react";
 import React from "react";
 
 import { isSome } from "@common/types";
@@ -9,7 +10,7 @@ interface Props {
     text?: string;
 }
 
-const RbaSingleMessagePage: React.FC<Props> = ({ text, children }) => {
+const RbaSingleMessagePage: React.FC<PropsWithChildren<Props>> = ({ text, children }) => {
     return (
         <div className={styles.messageBlock}>
             {isSome(text) ? text : children}

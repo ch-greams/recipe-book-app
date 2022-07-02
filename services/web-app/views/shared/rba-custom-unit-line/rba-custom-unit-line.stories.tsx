@@ -17,6 +17,10 @@ export default {
             type: { name: "boolean", required: true },
             table: { type: { summary: "boolean" } },
         },
+        isReadOnly: {
+            type: { name: "boolean", required: false },
+            table: { type: { summary: "boolean" } },
+        },
         customUnit: {
             type: {
                 name: "object",
@@ -50,11 +54,13 @@ const Template: ComponentStory<typeof RbaCustomUnitLine> = (args) => (<RbaCustom
 export const Default = Template.bind({});
 Default.args = {
     isNew: false,
+    isReadOnly: false,
     customUnit: { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
 };
 
 export const NewCustomUnit = Template.bind({});
 NewCustomUnit.args = {
     isNew: true,
+    isReadOnly: false,
     customUnit: { product_id: -1, name: "", amount: 100, amountInput: "100", unit: WeightUnit.g },
 };

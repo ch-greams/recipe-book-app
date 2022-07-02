@@ -10,12 +10,15 @@ extends:
     - "plugin:@typescript-eslint/recommended"
     - "plugin:react/recommended"
     - "plugin:cypress/recommended"
+    - "plugin:storybook/recommended"
 
 ignorePatterns:
     # don't ever lint node_modules
     - "node_modules"
     # don't lint next folder
     - ".next"
+    # don't lint storybook build folder
+    - "storybook-static"
 
 env: 
     browser: true
