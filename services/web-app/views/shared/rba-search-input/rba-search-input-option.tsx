@@ -22,12 +22,11 @@ const getLink = (product: ProductShort): JSX.Element => (
         href={Utils.getProductPath(product.product_type, product.id)}
     >
         <a className={styles.searchOption}>
-
             <span>
-                {product.name.toUpperCase()}
+                {product.name}
             </span>
             <span className={styles.searchOptionType}>
-                {product.product_type.toUpperCase()}
+                {product.product_type}
             </span>
         </a>
     </Link>
@@ -36,10 +35,10 @@ const getLink = (product: ProductShort): JSX.Element => (
 const getButton = (product: ProductShort, onSelect: OnSelectFunc): JSX.Element => (
     <button type={"button"} onClick={() => onSelect(product)} className={styles.searchOption}>
         <span>
-            {product.name.toUpperCase()}
+            {product.name}
         </span>
         <span className={styles.searchOptionType}>
-            {product.product_type.toUpperCase()}
+            {product.product_type}
         </span>
     </button>
 );

@@ -1,6 +1,6 @@
 {
     "id": 29,
-    "name": "NEW NAME",
+    "name": "new name",
     "brand": "Homemade",
     "subtitle": "integer ac leo",
     "description": "",
@@ -24,7 +24,7 @@
                     "amount": 100.0,
                     "unit": "ml",
                     "product_type": "food",
-                    "name": "NEW NAME",
+                    "name": "new name",
                     "nutrition_facts": {
                         "product_id": 1,
                         "energy": 191.6,

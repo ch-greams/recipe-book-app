@@ -4,14 +4,14 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import Utils from "@common/utils";
-import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import * as actions from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
-import RemoveIcon from "@icons/close-sharp.svg";
+import { IconSize } from "@icons/icon-params";
+import RbaIconAdd from "@icons/rba-icon-add";
 
 import styles from "./rba-direction-part-new.module.scss";
 
@@ -58,13 +58,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
                 className={styles.directionPartButton}
                 onClick={createDirectionPart}
             >
-                <RbaIconWrapper
-                    isFullWidth={true}
-                    width={24} height={24} color={Color.White}
-                    style={{ transform: "rotate(0.125turn)" }}
-                >
-                    <RemoveIcon />
-                </RbaIconWrapper>
+                <RbaIconAdd size={IconSize.Medium} color={Color.White} />
             </div>
 
             <div className={styles.directionPartInfo}>
@@ -76,7 +70,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: Utils.getRecipeIngredientProduct(ingredient).name.toUpperCase(),
+                            label: Utils.getRecipeIngredientProduct(ingredient).name,
                             value: String(ingredient.id),
                         })),
                         ...otherDirectionPartTypes.map((type) => ({ group: "Comment", value: type })),

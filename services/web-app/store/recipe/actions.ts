@@ -63,21 +63,21 @@ export function fetchRecipeError(error: string): types.RecipeFetchErrorAction {
     };
 }
 
-export function addCustomUnitRequest(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
+export function addCustomUnit(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
     return {
         type: types.RECIPE_ADD_CUSTOM_UNIT,
         payload: customUnit,
     };
 }
 
-export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitAction {
+export function removeCustomUnit(index: number): types.RemoveCustomUnitAction {
     return {
         type: types.RECIPE_REMOVE_CUSTOM_UNIT,
         payload: index,
     };
 }
 
-export function updateCustomUnitRequest(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
+export function updateCustomUnit(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
     return {
         type: types.RECIPE_UPDATE_CUSTOM_UNIT,
         payload: { index, customUnit },
@@ -260,46 +260,46 @@ export function createDirection(direction: types.RecipeDirection): types.CreateD
     };
 }
 
-export function removeDirectionPart(directionIndex: number, stepNumber: number): types.RemoveDirectionPartAction {
+export function removeDirectionPart(directionIndex: number, directionPartId: number): types.RemoveDirectionPartAction {
     return {
         type: types.RECIPE_REMOVE_DIRECTION_PART,
-        payload: { directionIndex, stepNumber },
+        payload: { directionIndex, directionPartId },
     };
 }
-export function toggleDirectionPartMark(directionIndex: number, stepNumber: number): types.ToggleDirectionPartMarkAction {
+export function toggleDirectionPartMark(directionIndex: number, directionPartId: number): types.ToggleDirectionPartMarkAction {
     return {
         type: types.RECIPE_TOGGLE_DIRECTION_PART_MARK,
-        payload: { directionIndex, stepNumber },
+        payload: { directionIndex, directionPartId },
     };
 }
 export function updateDirectionPartStepNumber(
-    directionIndex: number, stepNumber: number, newStepNumber: number,
+    directionIndex: number, directionPartId: number, stepNumber: number,
 ): types.UpdateDirectionPartStepNumberAction {
     return {
         type: types.RECIPE_UPDATE_DIRECTION_PART_STEP_NUMBER,
-        payload: { directionIndex, stepNumber, newStepNumber },
+        payload: { directionIndex, directionPartId, stepNumber },
     };
 }
-export function updateDirectionPartNote(directionIndex: number, stepNumber: number, note: string): types.UpdateDirectionPartNoteAction {
+export function updateDirectionPartNote(directionIndex: number, directionPartId: number, note: string): types.UpdateDirectionPartNoteAction {
     return {
         type: types.RECIPE_UPDATE_DIRECTION_PART_NOTE,
-        payload: { directionIndex, stepNumber, note },
+        payload: { directionIndex, directionPartId, note },
     };
 }
 export function updateDirectionPartIngredientAmount(
-    directionIndex: number, stepNumber: number, inputValue: string,
+    directionIndex: number, directionPartId: number, inputValue: string,
 ): types.UpdateDirectionPartIngredientAmountAction {
     return {
         type: types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_AMOUNT,
-        payload: { directionIndex, stepNumber, inputValue },
+        payload: { directionIndex, directionPartId, inputValue },
     };
 }
 export function updateDirectionPartIngredientUnit(
-    directionIndex: number, stepNumber: number, unit: (units.WeightUnit | units.VolumeUnit),
+    directionIndex: number, directionPartId: number, unit: (units.WeightUnit | units.VolumeUnit),
 ): types.UpdateDirectionPartIngredientUnitAction {
     return {
         type: types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT,
-        payload: { directionIndex, stepNumber, unit },
+        payload: { directionIndex, directionPartId, unit },
     };
 }
 export function createDirectionPartIngredient(directionIndex: number, ingredientId: number): types.CreateDirectionPartIngredientAction {

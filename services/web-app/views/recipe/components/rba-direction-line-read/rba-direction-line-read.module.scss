@@ -42,8 +42,8 @@
         padding: 10px 12px 10px 20px;
 
         font-family: $font-default;
-        font-size: $font-size-16;
-        font-weight: $font-weight-500;
+        font-size: $font-size-medium;
+        font-weight: $font-weight-medium;
 
         color: $color-default;
 
@@ -63,11 +63,15 @@
 
             cursor: pointer;
 
+            &.isMarked {
+                opacity: 0.25;
+            }
+
             .directionInfoIndex {
 
                 width: 28px;
 
-                font-weight: $font-weight-700;
+                font-weight: $font-weight-bold;
 
                 line-height: 24px;
             }
