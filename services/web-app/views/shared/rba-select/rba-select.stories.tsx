@@ -103,8 +103,8 @@ CustomUnit.args = {
     value: Unit.g,
 };
 
-export const SubDirectionType = Template.bind({});
-SubDirectionType.args = {
+export const DirectionPartType = Template.bind({});
+DirectionPartType.args = {
     theme: SelectTheme.Alternative,
     center: false,
     width: SelectWidthSize.Full,

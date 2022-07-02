@@ -70,16 +70,22 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
             <div className={styles.directionInfo}>
 
                 <div className={directionTitleClassName}>
-                    <RbaInput
-                        data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-                        align={InputTextAlign.Center}
-                        theme={InputTheme.Primary}
-                        width={InputWidthSize.Small}
-                        height={InputHeightSize.Medium}
-                        placeholder={"#"}
-                        value={String(direction.stepNumber)}
-                        onChange={updateDirectionStepNumber}
-                    />
+
+                    {(
+                        !isNewDirection && (
+                            <RbaInput
+                                data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+                                maxLength={2}
+                                align={InputTextAlign.Center}
+                                theme={InputTheme.Primary}
+                                width={InputWidthSize.Small}
+                                height={InputHeightSize.Medium}
+                                placeholder={"#"}
+                                value={String(direction.stepNumber)}
+                                onChange={updateDirectionStepNumber}
+                            />
+                        )
+                    )}
 
                     <RbaInput
                         data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}

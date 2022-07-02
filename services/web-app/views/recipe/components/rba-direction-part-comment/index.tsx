@@ -44,13 +44,13 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
     const dispatch = useDispatch();
 
     const removeDirectionPart = (): void => {
-        dispatch(actions.removeDirectionPart(directionIndex, directionPart.stepNumber));
+        dispatch(actions.removeDirectionPart(directionIndex, directionPart.id));
     };
     const updateDirectionPartComment: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartNote(directionIndex, directionPart.stepNumber, event.target.value));
+        dispatch(actions.updateDirectionPartNote(directionIndex, directionPart.id, event.target.value));
     };
     const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.stepNumber, Number(event.target.value)));
+        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.id, Number(event.target.value)));
     };
 
     const removeButton = (
@@ -67,6 +67,7 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
         <RbaInput
             data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
             disabled={isReadOnly}
+            maxLength={2}
             align={InputTextAlign.Center}
             theme={InputTheme.Alternative}
             width={InputWidthSize.Small}

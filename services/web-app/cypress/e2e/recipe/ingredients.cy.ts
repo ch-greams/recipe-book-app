@@ -22,16 +22,23 @@ describe("recipe_page", () => {
             const INGREDIENT_NAME = "Sour Cream";
             const INGREDIENT_PRODUCT_NAME = "Yogurt";
 
+            cy.get(`[data-cy=${constants.CY_INGREDIENT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+                .contains(INGREDIENT_NAME)
+                .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
+                .as("ingredient");
+
             // Confirm that alternatives aren't visible
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .as("altIngredientInfoLineName")
+            cy.get("@ingredient")
+                .find(`[data-cy=${constants.CY_INGREDIENT_INFO_LINES}]`)
                 .should("not.exist");
 
-            // Confirm that ingredient line is visible and open it to see alternatives
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_NAME)
-                .should("be.visible")
+            // Open ingredient line and save altIngredientInfoLineName
+            cy.get("@ingredient")
+                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
                 .click();
+            cy.get("@ingredient")
+                .find(`[data-cy=${constants.CY_INGREDIENT_INFO_LINES}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+                .as("altIngredientInfoLineName");
 
             // - Current product nutrition facts -
 
@@ -67,7 +74,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
                 .contains(INGREDIENT_PRODUCT_NAME)
                 .should("be.visible")
-                .realHover({ scrollBehavior: false });
+                .trigger("mouseover");
 
             // - Alternative product nutrition facts -
 
