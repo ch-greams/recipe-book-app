@@ -38,7 +38,7 @@ export default {
         updateItemUnit: {
             table: { type: { summary: "(unit: Units) => void" } },
         },
-        upsertCustomUnit: {
+        onButtonClick: {
             table: { type: { summary: "() => void" } },
         },
     },

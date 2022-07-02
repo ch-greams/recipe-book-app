@@ -12,6 +12,10 @@
     text-align: left;
     cursor: pointer;
 
+    &.disabled {
+        cursor: default;
+    }
+
     .selectList {
         position: absolute;
         z-index: $z-index-default-1;
@@ -74,26 +78,33 @@
     // -------------------------------------------------------------------------
 
     &.theme_Alternative {
-        color: $color-white;
-        background-color: $color-default-dark;
-        border-color: $color-white;
-
         .selectOption {
             color: $color-white;
             background-color: $color-default-dark;
             border-color: $color-white;
         }
+
+        &.disabled {
+            .selectOption {
+                color: $color-white;
+                background-color: $color-default;
+                border-color: rgba($color: $color-white, $alpha: 0.5);
+            }
+        }
     }
 
     &.theme_Primary {
-        color: $color-default;
-        background-color: $color-white;
-        border-color: $color-default;
-
         .selectOption {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-default;
+        }
+
+        &.disabled {
+            .selectOption {
+                color: $color-grey-dark;
+                border-color: $color-grey-light;
+            }
         }
     }
 

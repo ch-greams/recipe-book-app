@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { WeightUnit } from "@common/units";
+import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 
 
 describe("recipe_page", () => {
@@ -18,6 +19,9 @@ describe("recipe_page", () => {
             const cuName = "test unit";
             const cuAmount = "1234.5";
 
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}]`)
                 .type(cuName);
@@ -54,6 +58,10 @@ describe("recipe_page", () => {
             const cuName = "package";
             const cuNameUpdated = "updated name";
             const cuAmountUpdated = "125.67";
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .parent()
@@ -100,6 +108,10 @@ describe("recipe_page", () => {
         it("can remove custom_unit", () => {
 
             const cuName = "package";
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+                .should("be.visible")
+                .click();
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .should("be.visible")

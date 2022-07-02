@@ -63,21 +63,21 @@ export function fetchRecipeError(error: string): types.RecipeFetchErrorAction {
     };
 }
 
-export function addCustomUnitRequest(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
+export function addCustomUnit(customUnit: units.CustomUnitInput): types.AddCustomUnitAction {
     return {
         type: types.RECIPE_ADD_CUSTOM_UNIT,
         payload: customUnit,
     };
 }
 
-export function removeCustomUnitRequest(index: number): types.RemoveCustomUnitAction {
+export function removeCustomUnit(index: number): types.RemoveCustomUnitAction {
     return {
         type: types.RECIPE_REMOVE_CUSTOM_UNIT,
         payload: index,
     };
 }
 
-export function updateCustomUnitRequest(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
+export function updateCustomUnit(index: number, customUnit: units.CustomUnitInput): types.UpdateCustomUnitAction {
     return {
         type: types.RECIPE_UPDATE_CUSTOM_UNIT,
         payload: { index, customUnit },

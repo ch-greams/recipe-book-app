@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
+import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
@@ -28,6 +29,16 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
 
     const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
         dispatch(actions.updateServingSizeAmount(event.target.value));
+    };
+
+    const addCustomUnit = (customUnit: CustomUnitInput): void => {
+        dispatch(actions.addCustomUnit(customUnit));
+    };
+    const removeCustomUnit = (index: number): void => {
+        dispatch(actions.removeCustomUnit(index));
+    };
+    const updateCustomUnit = (index: number, customUnit: CustomUnitInput): void => {
+        dispatch(actions.updateCustomUnit(index, customUnit));
     };
 
     return (
@@ -85,10 +96,11 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
+                isReadOnly={!recipe.editMode}
                 customUnits={recipe.customUnits}
-                addCustomUnit={actions.addCustomUnitRequest}
-                removeCustomUnit={actions.removeCustomUnitRequest}
-                updateCustomUnit={actions.updateCustomUnitRequest}
+                addCustomUnit={addCustomUnit}
+                removeCustomUnit={removeCustomUnit}
+                updateCustomUnit={updateCustomUnit}
             />
 
         </div>

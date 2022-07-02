@@ -16,60 +16,68 @@ import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "../rba-in
 import styles from "./rba-custom-unit-line.module.scss";
 
 
-interface CustomUnitLineProps {
+interface Props {
+    isReadOnly?: boolean;
     isNew: boolean;
     customUnit: CustomUnitInput;
     updateItemName: InputChangeCallback;
     updateItemAmount: InputChangeCallback;
     updateItemUnit: (unit: Unit) => void;
-    upsertCustomUnit: () => void;
+    onButtonClick: () => void;
 }
 
 
-const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
+const RbaCustomUnitLine: React.FC<Props> = ({
+    isReadOnly = false,
     isNew,
     customUnit,
     updateItemName,
     updateItemAmount,
     updateItemUnit,
-    upsertCustomUnit,
+    onButtonClick,
 }) => (
     <div
         data-cy={(isNew ? constants.CY_NEW_CUSTOM_UNIT_LINE : constants.CY_CUSTOM_UNIT_LINE)}
         className={styles.customUnitLine}
     >
 
-        <div
-            data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
-            className={styles.customUnitLineButton}
-            onClick={upsertCustomUnit}
-        >
-            {(
-                isNew
-                    ? <RbaIconAdd size={IconSize.ExtraSmall} color={Color.Default} />
-                    : <RbaIconRemove size={IconSize.ExtraSmall} color={Color.Default} />
-            )}
+        {(
+            !isReadOnly && (
+                <div
+                    data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
+                    className={styles.customUnitLineButton}
+                    onClick={onButtonClick}
+                >
+                    {(
+                        isNew
+                            ? <RbaIconAdd size={IconSize.ExtraSmall} color={Color.Default} />
+                            : <RbaIconRemove size={IconSize.ExtraSmall} color={Color.Default} />
+                    )}
 
-        </div>
+                </div>
+            )
+        )}
 
         <div className={styles.customUnitLineInfo}>
 
             <RbaInput
                 data-cy={constants.CY_CUSTOM_UNIT_NAME}
+                disabled={isReadOnly}
                 theme={InputTheme.Primary}
-                width={InputWidthSize.Large}
+                width={InputWidthSize.Full}
                 height={InputHeightSize.Small}
                 placeholder={"NAME"}
                 value={customUnit.name}
                 onChange={updateItemName}
             />
 
-            <div className={styles.customUnitLineEqualSign}>{"="}</div>
+            <div className={styles.customUnitLineSeparator}>{"is"}</div>
 
             <div className={styles.customUnitLineMeasure}>
 
                 <RbaInput
                     data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
+                    disabled={isReadOnly}
                     theme={InputTheme.Primary}
                     width={InputWidthSize.Medium}
                     height={InputHeightSize.Small}
@@ -79,6 +87,7 @@ const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
                 />
 
                 <RbaSelect
+                    disabled={isReadOnly}
                     theme={SelectTheme.Primary}
                     center={true}
                     width={SelectWidthSize.Medium}
