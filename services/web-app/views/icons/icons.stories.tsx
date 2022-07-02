@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import type { PropsWithChildren } from "react";
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
@@ -18,7 +19,7 @@ import RbaIconWarning from "./rba-icon-warning";
 
 
 
-const RbaIcon: React.FC<IconProps> = ({ children }) => (
+const RbaIcon: React.FC<PropsWithChildren<IconProps>> = ({ children }) => (
     <div style={{ gap: "40px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr" }}>
         {children}
     </div>
