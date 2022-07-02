@@ -174,17 +174,11 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_DIRECTION}]`)
                 .should("have.length", DIRECTION_COUNT_BEFORE);
 
-            // STEP NUMBET & NAME
+            // STEP NUMBER & NAME
 
             cy.get(`[data-cy=${constants.CY_DIRECTION_LINE}]`).last()
                 .should("be.visible")
                 .as("newDirectionLine");
-
-            cy.get("@newDirectionLine")
-                .find(`[data-cy=${constants.CY_DIRECTION_LINE_STEP_INPUT}]`)
-                .should("be.visible")
-                .clear()
-                .type("3");
 
             cy.get("@newDirectionLine")
                 .find(`[data-cy=${constants.CY_DIRECTION_LINE_NAME_INPUT}]`)
