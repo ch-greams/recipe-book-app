@@ -90,14 +90,12 @@ const DIRECTION_1: RecipeDirection = {
 };
 
 const SUB_DIRECTION_0: RecipeDirectionPartComment = {
-    id: 0,
     stepNumber: 0,
     type: DirectionPartType.Note,
     commentText: "Add Cottage Cheese first",
 };
 
 const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
-    id: 1,
     stepNumber: 1,
     type: DirectionPartType.Ingredient,
     isMarked: false,
@@ -110,7 +108,6 @@ const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
 };
 
 const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
-    id: 2,
     stepNumber: 2,
     type: DirectionPartType.Ingredient,
     isMarked: false,

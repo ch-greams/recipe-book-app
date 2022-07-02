@@ -101,7 +101,7 @@ CREATE TABLE private.direction (
 	step_number int2 NOT NULL,
 	"name" text NOT NULL,
 	id int8 NOT NULL DEFAULT nextval('private.direction_id'::regclass),
-	temperature_value float4 NULL,
+	temperature_value int2 NULL,
 	temperature_unit text NOT NULL DEFAULT 'C'::text,
 	duration_value int4 NULL,
 	duration_unit text NOT NULL DEFAULT 'min'::text,

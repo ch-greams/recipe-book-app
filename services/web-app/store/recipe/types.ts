@@ -25,16 +25,12 @@ export enum DirectionPartType {
 }
 
 export interface RecipeDirectionPartComment {
-    // NOTE: Used only for component identification, not saved in db
-    id: number;
     stepNumber: number;
     type: DirectionPartType;
     commentText: string;
 }
 
 export interface RecipeDirectionPartIngredient {
-    // NOTE: Used only for component identification, not saved in db
-    id: number;
     stepNumber: number;
     type: DirectionPartType;
     isMarked: boolean;
@@ -69,7 +65,6 @@ export interface RecipeDirection {
 
 export interface RecipePageStore {
     isLoaded: boolean;
-    isLoadedIngredients: boolean;
     errorMessage?: Option<string>;
 
     editMode: boolean;
@@ -378,27 +373,27 @@ export interface CreateDirectionAction {
 
 export interface RemoveDirectionPartAction {
     type: typeof RECIPE_REMOVE_DIRECTION_PART;
-    payload: { directionIndex: number, directionPartId: number };
+    payload: { directionIndex: number, stepNumber: number };
 }
 export interface ToggleDirectionPartMarkAction {
     type: typeof RECIPE_TOGGLE_DIRECTION_PART_MARK;
-    payload: { directionIndex: number, directionPartId: number };
+    payload: { directionIndex: number, stepNumber: number };
 }
 export interface UpdateDirectionPartStepNumberAction {
     type: typeof RECIPE_UPDATE_DIRECTION_PART_STEP_NUMBER;
-    payload: { directionIndex: number, directionPartId: number, stepNumber: number };
+    payload: { directionIndex: number, stepNumber: number, newStepNumber: number };
 }
 export interface UpdateDirectionPartNoteAction {
     type: typeof RECIPE_UPDATE_DIRECTION_PART_NOTE;
-    payload: { directionIndex: number, directionPartId: number, note: string };
+    payload: { directionIndex: number, stepNumber: number, note: string };
 }
 export interface UpdateDirectionPartIngredientAmountAction {
     type: typeof RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_AMOUNT;
-    payload: { directionIndex: number, directionPartId: number, inputValue: string };
+    payload: { directionIndex: number, stepNumber: number, inputValue: string };
 }
 export interface UpdateDirectionPartIngredientUnitAction {
     type: typeof RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT;
-    payload: { directionIndex: number, directionPartId: number, unit: units.WeightUnit | units.VolumeUnit };
+    payload: { directionIndex: number, stepNumber: number, unit: units.WeightUnit | units.VolumeUnit };
 }
 export interface CreateDirectionPartIngredientAction {
     type: typeof RECIPE_CREATE_DIRECTION_PART_INGREDIENT;

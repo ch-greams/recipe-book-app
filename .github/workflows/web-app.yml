@@ -79,7 +79,7 @@ jobs:
                 node-version: ${{ matrix.node-version }}
 
             - name: run cypress tests in chrome
-              uses: cypress-io/github-action@v4
+              uses: cypress-io/github-action@v2
               with:
                 working-directory: services/web-app
                 browser: chrome

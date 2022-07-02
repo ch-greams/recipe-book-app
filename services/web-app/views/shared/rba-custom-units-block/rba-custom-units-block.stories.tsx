@@ -17,10 +17,6 @@ export default {
     title: "Shared/RbaCustomUnitsBlock",
     component: RbaCustomUnitsBlock,
     argTypes: {
-        isReadOnly: {
-            type: { name: "boolean", required: false },
-            table: { type: { summary: "boolean" } },
-        },
         customUnits: {
             table: { type: { summary: "CustomUnitInput[]" } },
         },
@@ -53,7 +49,6 @@ const customUnits: CustomUnitInput[] = [
 
 export const Default = Template.bind({});
 Default.args = {
-    isReadOnly: false,
     customUnits,
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,
@@ -63,7 +58,6 @@ Default.args = {
 
 export const Empty = Template.bind({});
 Empty.args = {
-    isReadOnly: false,
     customUnits: [],
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,

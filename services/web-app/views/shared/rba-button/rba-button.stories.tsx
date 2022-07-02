@@ -20,10 +20,6 @@ export default {
             table: { type: { summary: "ButtonWidthSize" } },
             control: { type: "select", options: ButtonWidthSize },
         },
-        disabled: {
-            type: { name: "boolean", required: false },
-            table: { type: { summary: "boolean" } },
-        },
     },
 } as ComponentMeta<typeof RbaButton>;
 

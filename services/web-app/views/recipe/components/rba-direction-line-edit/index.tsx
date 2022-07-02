@@ -4,14 +4,11 @@ import * as constants from "@cypress/constants";
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import Utils from "@common/utils";
-import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
-import { IconSize } from "@icons/icon-params";
-import RbaIconAdd from "@icons/rba-icon-add";
-import RbaIconRemove from "@icons/rba-icon-remove";
+import RemoveIcon from "@icons/close-sharp.svg";
 
 import styles from "./rba-direction-line-edit.module.scss";
 
@@ -41,17 +38,6 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
     updateDirectionTimeUnit,
 }) => {
 
-    const directionButtonIcon = (
-        isNewDirection
-            ? <RbaIconAdd size={IconSize.Medium} color={Color.Default} />
-            : <RbaIconRemove size={IconSize.Medium} color={Color.Default} />
-    );
-
-    const directionTitleClassName = Utils.classNames({
-        [styles.directionInfoTitle]: true,
-        [styles.isMarked]: direction.isMarked,
-    });
-
     return (
 
         <div
@@ -64,36 +50,35 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                 className={styles.directionLineButton}
                 onClick={onButtonClick}
             >
-                {directionButtonIcon}
+                <RbaIconWrapper
+                    isFullWidth={true}
+                    width={24} height={24} color={Color.Default}
+                    style={( isNewDirection ? { transform: "rotate(0.125turn)" } : {} )}
+                >
+                    <RemoveIcon />
+                </RbaIconWrapper>
             </div>
 
             <div className={styles.directionInfo}>
 
-                <div className={directionTitleClassName}>
-
-                    {(
-                        !isNewDirection && (
-                            <RbaInput
-                                data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-                                maxLength={2}
-                                align={InputTextAlign.Center}
-                                theme={InputTheme.Primary}
-                                width={InputWidthSize.Small}
-                                height={InputHeightSize.Medium}
-                                placeholder={"#"}
-                                value={String(direction.stepNumber)}
-                                onChange={updateDirectionStepNumber}
-                            />
-                        )
-                    )}
-
-                    <RbaInput
+                <div
+                    className={styles.directionInfoTitle}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                >
+                    <input
+                        data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
+                        type={"text"}
+                        className={styles.directionInfoIndexInput}
+                        value={direction.stepNumber}
+                        placeholder={"#"}
+                        maxLength={2}
+                        onChange={updateDirectionStepNumber}
+                    />
+                    <input
                         data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
-                        align={InputTextAlign.Left}
-                        theme={InputTheme.Primary}
-                        width={InputWidthSize.Full}
-                        height={InputHeightSize.Medium}
-                        value={direction.name}
+                        type={"text"}
+                        className={styles.directionInfoNameInput}
+                        value={direction.name.toUpperCase()}
                         placeholder={"TITLE"}
                         onChange={updateDirectionName}
                     />
@@ -106,11 +91,10 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         className={styles.directionInfoMeasure}
                     >
 
-                        <RbaInput
+                        <input
                             data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
-                            theme={InputTheme.Primary}
-                            width={InputWidthSize.Medium}
-                            height={InputHeightSize.Medium}
+                            type={"text"}
+                            className={styles.directionInfoAmountInput}
                             placeholder={"#"}
                             value={direction.temperatureValueInput}
                             onChange={updateDirectionTemperatureCount}
@@ -133,11 +117,10 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         className={styles.directionInfoMeasure}
                     >
 
-                        <RbaInput
+                        <input
                             data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
-                            theme={InputTheme.Primary}
-                            width={InputWidthSize.Medium}
-                            height={InputHeightSize.Medium}
+                            type={"text"}
+                            className={styles.directionInfoAmountInput}
                             placeholder={"#"}
                             value={direction.durationValueInput}
                             onChange={updateDirectionTimeCount}

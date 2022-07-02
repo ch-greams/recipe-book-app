@@ -35,14 +35,14 @@ const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, subtitle, description
                     data-cy={constants.CY_PAGE_TITLE_NAME_TEXT}
                     className={styles.name}
                 >
-                    {name}
+                    {name.toUpperCase()}
                 </div>
 
                 <div
                     data-cy={constants.CY_PAGE_TITLE_BRAND_TEXT}
                     className={styles.brand}
                 >
-                    {brand}
+                    {brand.toUpperCase()}
                 </div>
 
             </div>
@@ -53,7 +53,7 @@ const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, subtitle, description
                     data-cy={constants.CY_PAGE_TITLE_SUBTITLE_TEXT}
                     className={styles.subtitle}
                 >
-                    {subtitle}
+                    {subtitle.toUpperCase()}
                 </div>
             </div>
 

@@ -14,10 +14,6 @@ const ComponentDescription: ComponentMeta<typeof RbaSelect> = {
     title: "Shared/RbaSelect",
     component: RbaSelect,
     argTypes: {
-        disabled: {
-            type: { name: "boolean" },
-            table: { type: { summary: "boolean" } },
-        },
         theme: {
             type: { name: "enum", value: Utils.getObjectValues(SelectTheme), required: true },
             table: { type: { summary: "SelectTheme" } },
@@ -65,7 +61,6 @@ const Template: ComponentStory<typeof RbaSelect> = (args) => <RbaSelect {...args
 
 export const IngredientUnit = Template.bind({});
 IngredientUnit.args = {
-    disabled: false,
     theme: SelectTheme.Primary,
     center: true,
     width: SelectWidthSize.Medium,
@@ -77,7 +72,6 @@ IngredientUnit.args = {
 
 export const AltIngredientUnit = Template.bind({});
 AltIngredientUnit.args = {
-    disabled: false,
     theme: SelectTheme.Alternative,
     center: true,
     width: SelectWidthSize.Medium,
@@ -89,7 +83,6 @@ AltIngredientUnit.args = {
 
 export const ServingSize = Template.bind({});
 ServingSize.args = {
-    disabled: false,
     theme: SelectTheme.Alternative,
     center: true,
     width: SelectWidthSize.Medium,
@@ -101,7 +94,6 @@ ServingSize.args = {
 
 export const CustomUnit = Template.bind({});
 CustomUnit.args = {
-    disabled: false,
     theme: SelectTheme.Primary,
     center: true,
     width: SelectWidthSize.Medium,
@@ -111,9 +103,8 @@ CustomUnit.args = {
     value: Unit.g,
 };
 
-export const DirectionPartType = Template.bind({});
-DirectionPartType.args = {
-    disabled: false,
+export const SubDirectionType = Template.bind({});
+SubDirectionType.args = {
     theme: SelectTheme.Alternative,
     center: false,
     width: SelectWidthSize.Full,

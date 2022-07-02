@@ -6,8 +6,6 @@ import * as constants from "@cypress/constants";
 import { unwrapOr } from "@common/types";
 import Utils from "@common/utils";
 
-import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "../rba-input";
-
 import styles from "./rba-page-title-block-input.module.scss";
 
 
@@ -23,6 +21,10 @@ interface Props {
     updateDescription: (value: string) => AnyAction;
 }
 
+
+const formatInput = (value: Option<string>, uppercase: boolean = true): string => {
+    return uppercase ? unwrapOr(value, "").toUpperCase() : unwrapOr(value, "");
+};
 
 const MIN_DESCRIPTION_SIZE: number = 3;
 
@@ -41,48 +43,42 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
 
             <div className={styles.nameBlock}>
 
-                <RbaInput
+                <input
                     data-cy={constants.CY_PAGE_TITLE_NAME_INPUT}
-                    theme={InputTheme.Alternative}
-                    width={InputWidthSize.Full}
-                    height={InputHeightSize.Large}
-                    align={InputTextAlign.Left}
+                    type={"text"}
+                    className={styles.name}
                     placeholder={"NAME"}
-                    value={name}
+                    value={name.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateName(unwrapOr(event.target.value, "")));
+                        dispatch(updateName(formatInput(event.target.value)));
                     }}
                 />
 
-                <RbaInput
+                <input
                     data-cy={constants.CY_PAGE_TITLE_BRAND_INPUT}
-                    theme={InputTheme.Alternative}
-                    width={InputWidthSize.Full}
-                    height={InputHeightSize.Large}
-                    align={InputTextAlign.Right}
+                    type={"text"}
+                    className={styles.brand}
                     placeholder={"BRAND"}
-                    value={brand}
+                    value={brand.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateBrand(unwrapOr(event.target.value, "")));
+                        dispatch(updateBrand(formatInput(event.target.value)));
                     }}
                 />
 
             </div>
 
             <div className={styles.subtitleBlock}>
-                <RbaInput
+                <input
                     data-cy={constants.CY_PAGE_TITLE_SUBTITLE_INPUT}
-                    theme={InputTheme.Alternative}
-                    width={InputWidthSize.Full}
-                    height={InputHeightSize.Large}
-                    align={InputTextAlign.Left}
+                    type={"text"}
+                    className={styles.subtitle}
                     placeholder={"SUBTITLE"}
-                    value={subtitle}
+                    value={subtitle.toUpperCase()}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateSubtitle(unwrapOr(event.target.value, "")));
+                        dispatch(updateSubtitle(formatInput(event.target.value)));
                     }}
                 />
             </div>
@@ -96,7 +92,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     placeholder={"Description"} value={descriptionText}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
                         Utils.keepCaretInPlace(window, event);
-                        dispatch(updateDescription(unwrapOr(event.target.value, "")));
+                        dispatch(updateDescription(formatInput(event.target.value, false)));
                     }}
                 />
             </div>

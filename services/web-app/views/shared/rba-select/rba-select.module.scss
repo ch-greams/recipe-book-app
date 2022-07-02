@@ -6,15 +6,11 @@
     position: relative;
 
     font-family: $font-default;
-    font-size: $font-size-medium;
-    font-weight: $font-weight-medium;
+    font-size: $font-size-14;
+    font-weight: $font-weight-500;
 
     text-align: left;
     cursor: pointer;
-
-    &.disabled {
-        cursor: default;
-    }
 
     .selectList {
         position: absolute;
@@ -78,33 +74,26 @@
     // -------------------------------------------------------------------------
 
     &.theme_Alternative {
+        color: $color-white;
+        background-color: $color-default-dark;
+        border-color: $color-white;
+
         .selectOption {
             color: $color-white;
             background-color: $color-default-dark;
             border-color: $color-white;
         }
-
-        &.disabled {
-            .selectOption {
-                color: $color-white;
-                background-color: $color-default;
-                border-color: rgba($color: $color-white, $alpha: 0.5);
-            }
-        }
     }
 
     &.theme_Primary {
+        color: $color-default;
+        background-color: $color-white;
+        border-color: $color-default;
+
         .selectOption {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-default;
-        }
-
-        &.disabled {
-            .selectOption {
-                color: $color-grey-dark;
-                border-color: $color-grey-light;
-            }
         }
     }
 

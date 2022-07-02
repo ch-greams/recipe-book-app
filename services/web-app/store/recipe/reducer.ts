@@ -33,7 +33,6 @@ const DEFAULT_SERVING_SIZE: number = 100;
 const initialState: types.RecipePageStore = {
 
     isLoaded: false,
-    isLoadedIngredients: true,
     errorMessage: null,
 
     editMode: true,
@@ -128,17 +127,13 @@ function convertDirectionPart(
 
         const ingredientAmount = product.amount * unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
 
-        const amountInCurrentUnits = units.convertFromMetric(ingredientAmount, product.unit, [], product.density);
-        const ingredientAmountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
-
         return {
-            id: directionPart.step_number,
             stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
             ingredientId: ingredientId,
 
             ingredientAmount: ingredientAmount,
-            ingredientAmountInput: String(ingredientAmountInput),
+            ingredientAmountInput: String(ingredientAmount),
 
             ingredientName: product.name,
             ingredientUnit: product.unit,
@@ -150,7 +145,6 @@ function convertDirectionPart(
     }
     else {
         return {
-            id: directionPart.step_number,
             stepNumber: directionPart.step_number,
             type: directionPart.direction_part_type,
             commentText: unwrapOr(directionPart.comment_text, directionPart.direction_part_type),
@@ -208,11 +202,6 @@ function isDirectionPartIngredient(
     directionPart: types.RecipeDirectionPartComment | types.RecipeDirectionPartIngredient,
 ): directionPart is types.RecipeDirectionPartIngredient {
     return directionPart.type === types.DirectionPartType.Ingredient;
-}
-
-function getNewStepNumber(last: Option<number>): number {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return (last || -1) + 1;
 }
 
 export default function recipePageReducer(state = initialState, action: types.RecipeActionTypes): types.RecipePageStore {
@@ -331,14 +320,16 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_REMOVE_DIRECTION_PART: {
-            const { directionIndex, directionPartId } = action.payload;
+            const { directionIndex, stepNumber } = action.payload;
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => (
                     (iDirection === directionIndex)
                         ? {
                             ...direction,
-                            steps: direction.steps.filter((directionPart) => (directionPart.id !== directionPartId)),
+                            steps: direction.steps.filter(
+                                (subDirection) => (subDirection.stepNumber !== stepNumber),
+                            ),
                         }
                         : direction
                 )),
@@ -370,10 +361,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             steps: (
                                 direction.isMarked
                                     ? direction.steps
-                                    : direction.steps.map((directionPart) => (
-                                        (directionPart.type === types.DirectionPartType.Ingredient)
-                                            ? { ...directionPart, isMarked: true }
-                                            : directionPart
+                                    : direction.steps.map((subDirection) => (
+                                        (subDirection.type === types.DirectionPartType.Ingredient)
+                                            ? { ...subDirection, isMarked: true }
+                                            : subDirection
                                     ))
                             ),
                         }
@@ -383,17 +374,17 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_TOGGLE_DIRECTION_PART_MARK: {
-            const { directionIndex, directionPartId } = action.payload;
+            const { directionIndex, stepNumber } = action.payload;
             return {
                 ...state,
                 directions: state.directions.map((direction, iDirection) => {
 
                     if (directionIndex === iDirection) {
 
-                        const steps = direction.steps.map((directionPart) => (
-                            (directionPart.type === types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
-                                ? { ...directionPart, isMarked: !(directionPart as types.RecipeDirectionPartIngredient).isMarked }
-                                : directionPart
+                        const steps = direction.steps.map((subDirection) => (
+                            (subDirection.type === types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
+                                ? { ...subDirection, isMarked: !(subDirection as types.RecipeDirectionPartIngredient).isMarked }
+                                : subDirection
                         ));
 
                         const areAllStepsMarked = steps.every((step) => (
@@ -415,33 +406,16 @@ export default function recipePageReducer(state = initialState, action: types.Re
         }
 
         case types.RECIPE_UPDATE_DIRECTION_PART_STEP_NUMBER: {
-            const { directionIndex, directionPartId, stepNumber } = action.payload;
+            const { directionIndex, stepNumber, newStepNumber } = action.payload;
 
-            const directions = state.directions.map((direction, iDirection) => {
-                if (directionIndex === iDirection) {
+            // IMPROVE: Should not be necessary with drag and drop functionality
+            const isNewStepNumberTaken = state.directions.some(
+                (direction) => direction.steps.some((directionPart) => directionPart.stepNumber === newStepNumber),
+            );
 
-                    return {
-                        ...direction,
-                        steps: direction.steps
-                            .map((directionPart) => (
-                                (directionPart.id === directionPartId)
-                                    ? { ...directionPart, stepNumber }
-                                    : directionPart
-                            ))
-                            .sort(Utils.sortBy("stepNumber")),
-                    };
-                }
-                else {
-                    return direction;
-                }
-            });
-
-
-            return { ...state, directions };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_PART_NOTE: {
-            const { directionIndex, directionPartId, note } = action.payload;
+            if (isNewStepNumberTaken) {
+                return state;
+            }
 
             return {
                 ...state,
@@ -449,10 +423,32 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     (directionIndex === iDirection)
                         ? {
                             ...direction,
-                            steps: direction.steps.map((directionPart) =>
-                                (directionPart.type !== types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
-                                    ? { ...directionPart, commentText: note }
-                                    : directionPart,
+                            steps: direction.steps
+                                .map((directionPart) => (
+                                    (directionPart.stepNumber === stepNumber)
+                                        ? { ...directionPart, stepNumber: newStepNumber }
+                                        : directionPart
+                                ))
+                                .sort(Utils.sortBy("stepNumber")),
+                        }
+                        : direction
+                )),
+            };
+        }
+
+        case types.RECIPE_UPDATE_DIRECTION_PART_NOTE: {
+            const { directionIndex, stepNumber, note } = action.payload;
+
+            return {
+                ...state,
+                directions: state.directions.map((direction, iDirection) => (
+                    (directionIndex === iDirection)
+                        ? {
+                            ...direction,
+                            steps: direction.steps.map((subDirection) =>
+                                (subDirection.type !== types.DirectionPartType.Ingredient) && (stepNumber === subDirection.stepNumber)
+                                    ? { ...subDirection, commentText: note }
+                                    : subDirection,
                             ),
                         }
                         : direction
@@ -462,7 +458,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_AMOUNT: {
 
-            const { directionIndex, directionPartId, inputValue } = action.payload;
+            const { directionIndex, stepNumber, inputValue } = action.payload;
 
             const directions = state.directions.map((direction, iDirection) => {
 
@@ -470,7 +466,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                     const steps = direction.steps.map((directionPart) => {
 
-                        if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
+                        if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
 
                             // TODO: Limit to what you have in ingredients, or just add validation message?
 
@@ -502,7 +498,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
         case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT: {
 
-            const { directionIndex, directionPartId, unit } = action.payload;
+            const { directionIndex, stepNumber, unit } = action.payload;
 
             return {
                 ...state,
@@ -512,7 +508,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                         const steps = direction.steps.map((directionPart) => {
 
-                            if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
+                            if (isDirectionPartIngredient(directionPart) && (directionPart.stepNumber === stepNumber)) {
 
                                 if (state.editMode) {
 
@@ -576,8 +572,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             steps: [
                                 ...direction.steps,
                                 {
-                                    id: Utils.getTemporaryId(),
-                                    stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
+                                    stepNumber: direction.steps.length,
                                     type: types.DirectionPartType.Ingredient,
                                     ingredientName: ingredientProduct.name,
                                     ingredientId: ingredientId,
@@ -606,8 +601,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             steps: [
                                 ...direction.steps,
                                 {
-                                    id: Utils.getTemporaryId(),
-                                    stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
+                                    stepNumber: direction.steps.length,
                                     type: type,
                                     commentText: type,
                                 } as types.RecipeDirectionPartComment,
@@ -713,7 +707,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
                             return {
                                 ...direction,
-                                temperatureValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
+                                temperatureValueInput: String(countInput),
                                 temperatureUnit: unit,
                             };
                         }
@@ -895,7 +889,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                         isOpen: false,
                         isMarked: false,
 
-                        stepNumber: getNewStepNumber(state.directions.last()?.stepNumber),
+                        stepNumber: direction.stepNumber,
                         name: direction.name,
 
                         durationValue: direction.durationValue,
@@ -1150,7 +1144,10 @@ export default function recipePageReducer(state = initialState, action: types.Re
                             ...ingredient,
                             alternativeNutritionFacts: (
                                 isSelected
-                                    ? unwrap(ingredient.products[id], `ingredient.products["${id}"]`).nutrition_facts
+                                    ? unwrap(
+                                        ingredient.products[id],
+                                        `ingredient.products["${id}"]`,
+                                    ).nutrition_facts
                                     : {}
                             ),
                         }
@@ -1162,7 +1159,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_REQUEST: {
             return {
                 ...state,
-                isLoadedIngredients: false,
+                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
+                // isLoaded: true,
             };
         }
 
@@ -1203,8 +1201,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                isLoadedIngredients: true,
-
                 ingredients: ingredients,
                 nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
@@ -1219,7 +1215,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_ERROR: {
             return {
                 ...state,
-                isLoadedIngredients: true,
+                isLoaded: true,
                 errorMessage: action.payload as string,
             };
         }
@@ -1227,7 +1223,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST: {
             return {
                 ...state,
-                isLoadedIngredients: false,
+                // FIXME: Add alternative loading status like overlay spinner (RBA-102)
+                // isLoaded: true,
             };
         }
 
@@ -1237,7 +1234,6 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             return {
                 ...state,
-                isLoadedIngredients: true,
                 ingredients: state.ingredients.map((ingredient) => (
                     (ingredient.id === id)
                         ? {
@@ -1260,7 +1256,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
         case types.RECIPE_ADD_INGREDIENT_PRODUCT_ERROR: {
             return {
                 ...state,
-                isLoadedIngredients: true,
+                isLoaded: true,
                 errorMessage: action.payload as string,
             };
         }
@@ -1304,26 +1300,11 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
             );
 
-            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
-            if (state.editMode) {
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                };
-            }
-            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
-            else {
-                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
-
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                    nutritionFactsByServing: nutritionFactsByServing,
-                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-                };
-            }
+            return {
+                ...state,
+                servingSize: servingSize,
+                servingSizeUnit: servingSizeUnit,
+            };
         }
 
         case types.RECIPE_FETCH_NEW: {
@@ -1353,7 +1334,8 @@ export default function recipePageReducer(state = initialState, action: types.Re
             const recipeIngredients = convertIngredients(recipe.ingredients);
             const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
-            const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(recipeIngredients);
+            const nutritionFacts = Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients);
+            const nutritionFactsByServing = Utils.convertNutritionFacts(recipe.serving_size, true, nutritionFacts);
 
             return {
                 ...state,
@@ -1373,7 +1355,7 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize: recipe.serving_size,
                 servingSizeInput: String(recipe.serving_size),
 
-                nutritionFacts: Utils.convertNutritionFacts(recipe.serving_size, false, nutritionFactsByServing),
+                nutritionFacts: nutritionFacts,
                 customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
 
                 nutritionFactsByServing: nutritionFactsByServing,

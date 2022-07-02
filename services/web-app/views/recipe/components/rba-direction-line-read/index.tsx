@@ -1,9 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { isSome } from "@common/types";
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/recipe/types";
@@ -28,11 +26,6 @@ const RbaDirectionLineRead: React.FC<Props> = ({
     updateDirectionTimeUnit,
 }) => {
 
-    const directionTitleClassName = Utils.classNames({
-        [styles.directionInfoTitle]: true,
-        [styles.isMarked]: direction.isMarked,
-    });
-
     return (
 
         <div className={styles.directionLine}>
@@ -47,8 +40,11 @@ const RbaDirectionLineRead: React.FC<Props> = ({
 
             <div className={styles.directionInfo}>
 
-                <div className={directionTitleClassName} onClick={onClick}>
-
+                <div
+                    className={styles.directionInfoTitle}
+                    style={( direction.isMarked ? { opacity: 0.25 } : undefined )}
+                    onClick={onClick}
+                >
                     <div className={styles.directionInfoIndex}>
                         {`${direction.stepNumber}.`}
                     </div>
@@ -57,13 +53,13 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                         data-cy={constants.CY_DIRECTION_LINE_NAME_TEXT}
                         className={styles.directionInfoName}
                     >
-                        {direction.name}
+                        {direction.name.toUpperCase()}
                     </div>
                 </div>
 
                 <div className={styles.directionInfoMeasures}>
 
-                    {( isSome(direction.temperatureValue) && (
+                    {( direction.temperatureValue && (
                         <div
                             data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}
                             className={styles.directionInfoMeasure}
@@ -83,7 +79,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                         </div>
                     ))}
 
-                    {( isSome(direction.durationValue) && (
+                    {( direction.durationValue && (
                         <div
                             data-cy={constants.CY_DIRECTION_LINE_DURATION_MEASURE}
                             className={styles.directionInfoMeasure}

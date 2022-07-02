@@ -29,77 +29,12 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
 
     const dispatch = useDispatch();
 
-    const showIngredientProducts: boolean = Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
-    const showNewIngredientProduct: boolean = !isReadOnly;
+    const showIngredientProducts: boolean = ingredient.isOpen && Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
+    const showNewIngredientProduct: boolean = ingredient.isOpen && !isReadOnly;
+
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
     const ingredientProduct: RecipeIngredientProduct = Utils.getRecipeIngredientProduct(ingredient);
-
-    const ingredientInfoLines = (
-        <div
-            data-cy={constants.CY_INGREDIENT_INFO_LINES}
-            className={styles.ingredientInfoLines}
-        >
-
-            <RbaIngredientNutritionFacts
-                nutritionFacts={ingredientProduct.nutrition_facts}
-                alternativeNutritionFacts={ingredient.alternativeNutritionFacts}
-            />
-
-            {( showSeparator && (<div className={styles.separator}></div>) )}
-
-            {(
-                showIngredientProducts && Utils.getObjectValues(ingredient.products).map((product) => (
-                    <RbaIngredientProduct
-                        key={`ingredient_product_${product.product_id}`}
-                        theme={IngredientProductTheme.Alternative}
-                        size={IngredientProductSize.Compact}
-                        isReadOnly={isReadOnly}
-                        ingredientProduct={product}
-                        onClick={() => {
-                            dispatch(actions.replaceIngredientWithAlternative(ingredient.id, product.product_id));
-                        }}
-                        onClickRemove={() => {
-                            dispatch(actions.removeIngredientProduct(ingredient.id, product.product_id));
-                        }}
-                        onMouseEnter={() => {
-                            dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, true));
-                        }}
-                        onMouseLeave={() => {
-                            dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, false));
-                        }}
-                        onChangeAmount={(event) => {
-                            dispatch(actions.updateIngredientProductAmount(
-                                ingredient.id, product.product_id, event.target.value,
-                            ));
-                        }}
-                        onChangeUnit={(option) => {
-                            dispatch(actions.updateIngredientProductUnit(
-                                ingredient.id, product.product_id, option.value as Unit,
-                            ));
-                        }}
-                    />
-                ))
-            )}
-
-            {( showNewIngredientProduct && (
-                <RbaSearchInput
-                    width={SearchInputWidthSize.Full}
-                    height={SearchInputHeightSize.Small}
-                    placeholder={"Add a substitute for this ingredient..."}
-                    isLoading={!search.isLoaded}
-                    value={search.searchInput}
-                    items={search.products}
-                    onChange={(value) => { dispatch(searchProducts(value)); }}
-                    onSelect={(product) => {
-                        dispatch(actions.addIngredientProductRequest(ingredient.id, product));
-                        dispatch(searchClear());
-                    }}
-                />
-            ) )}
-
-        </div>
-    );
 
     return (
 
@@ -127,8 +62,74 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                 }}
             />
 
-            {ingredient.isOpen && ingredientInfoLines}
+            <div
+                data-cy={constants.CY_INGREDIENT_INFO_LINES}
+                className={styles.ingredientInfoLines}
+            >
 
+                {(
+                    ingredient.isOpen && (
+                        <RbaIngredientNutritionFacts
+                            nutritionFacts={ingredientProduct.nutrition_facts}
+                            alternativeNutritionFacts={ingredient.alternativeNutritionFacts}
+                        />
+                    )
+                )}
+
+                {( showSeparator && (<div className={styles.separator}></div>) )}
+
+                {(
+                    showIngredientProducts &&
+                    Utils.getObjectValues(ingredient.products).map((product) => (
+                        <RbaIngredientProduct
+                            key={`ingredient_product_${product.product_id}`}
+                            theme={IngredientProductTheme.Alternative}
+                            size={IngredientProductSize.Compact}
+                            isReadOnly={isReadOnly}
+                            ingredientProduct={product}
+                            onClick={() => {
+                                dispatch(actions.replaceIngredientWithAlternative(ingredient.id, product.product_id));
+                            }}
+                            onClickRemove={() => {
+                                dispatch(actions.removeIngredientProduct(ingredient.id, product.product_id));
+                            }}
+                            onMouseEnter={() => {
+                                dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, true));
+                            }}
+                            onMouseLeave={() => {
+                                dispatch(actions.updateAltNutritionFacts(ingredient.id, product.product_id, false));
+                            }}
+                            onChangeAmount={(event) => {
+                                dispatch(actions.updateIngredientProductAmount(
+                                    ingredient.id, product.product_id, event.target.value,
+                                ));
+                            }}
+                            onChangeUnit={(option) => {
+                                dispatch(actions.updateIngredientProductUnit(
+                                    ingredient.id, product.product_id, option.value as Unit,
+                                ));
+                            }}
+                        />
+                    ))
+                )}
+
+                {( showNewIngredientProduct && (
+                    <RbaSearchInput
+                        width={SearchInputWidthSize.Full}
+                        height={SearchInputHeightSize.Small}
+                        placeholder={"Add a substitute for this ingredient..."}
+                        isLoading={!search.isLoaded}
+                        value={search.searchInput}
+                        items={search.products}
+                        onChange={(value) => { dispatch(searchProducts(value)); }}
+                        onSelect={(product) => {
+                            dispatch(actions.addIngredientProductRequest(ingredient.id, product));
+                            dispatch(searchClear());
+                        }}
+                    />
+                ) )}
+
+            </div>
         </div>
     );
 };

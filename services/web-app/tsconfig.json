@@ -19,14 +19,14 @@
     "paths": {
       "@cypress/*": [ "cypress/*" ],
       "@views/*": [ "views/*" ],
-      "@icons/*": [ "views/icons/*" ],
       "@api/*": [ "api/*" ],
       "@store/*": [ "store/*" ],
       "@store": [ "store/index.ts" ],
+      "@icons/*": [ "icons/*" ],
       "@common/*": [ "common/*" ],
       "@styles/*": [ "styles/*" ]
     },
-    "types": [ "cypress" ],
+    "types": [ "cypress", "cypress-real-events" ],
     "incremental": true
   },
   "include": [ "next-env.d.ts", "common.d.ts", "**/*.ts", "**/*.tsx" ],

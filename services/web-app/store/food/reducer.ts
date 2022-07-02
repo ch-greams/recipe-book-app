@@ -336,26 +336,11 @@ export default function foodPageReducer(state = initialState, action: types.Food
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
             );
 
-            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
-            if (state.editMode) {
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                };
-            }
-            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
-            else {
-                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
-
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                    nutritionFactsByServing: nutritionFactsByServing,
-                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-                };
-            }
+            return {
+                ...state,
+                servingSize: servingSize,
+                servingSizeUnit: servingSizeUnit,
+            };
         }
 
         case types.FOOD_CREATE_REQUEST: {

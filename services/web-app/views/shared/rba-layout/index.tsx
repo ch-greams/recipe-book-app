@@ -1,4 +1,3 @@
-import type { PropsWithChildren } from "react";
 import React from "react";
 import { useSelector } from "react-redux";
 import Head from "next/head";
@@ -11,7 +10,7 @@ import RbaFooter from "../rba-footer";
 import RbaNavbar from "../rba-navbar";
 
 
-const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
+const RbaLayout: React.FC = ({ children }) => {
 
     const user = useSelector<AppState>((state) => state.user) as UserStore;
 

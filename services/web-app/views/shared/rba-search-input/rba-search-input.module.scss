@@ -6,8 +6,8 @@
     position: relative;
 
     font-family: $font-default;
-    font-size: $font-size-medium;
-    font-weight: $font-weight-medium;
+    font-size: $font-size-16;
+    font-weight: $font-weight-500;
 
     .searchInput {
 
@@ -22,6 +22,10 @@
             height: 28px;
 
             margin: 0 14px;
+
+            &.rotate {
+                animation: spin 1s linear infinite;
+            }
         }
 
         .input {
@@ -30,8 +34,8 @@
             padding: 0 14px;
 
             font-family: $font-default;
-            font-size: $font-size-large;
-            font-weight: $font-weight-medium;
+            font-size: $font-size-20;
+            font-weight: $font-weight-500;
 
             line-height: 26px;
 
@@ -61,8 +65,8 @@
             width: 100%;
 
             font-family: $font-default;
-            font-size: $font-size-medium;
-            font-weight: $font-weight-medium;
+            font-size: $font-size-16;
+            font-weight: $font-weight-500;
         }
 
         .searchOption {
@@ -86,8 +90,8 @@
 
                 width: 80px;
 
-                font-size: $font-size-medium;
-                font-weight: $font-weight-regular;
+                font-size: $font-size-14;
+                font-weight: $font-weight-400;
 
                 line-height: 24px;
 
@@ -146,5 +150,11 @@
                 padding: 8px 16px;
             }
         }
+    }
+}
+
+@keyframes spin {
+    100% {
+        transform: rotate(360deg);
     }
 }

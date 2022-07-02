@@ -17,11 +17,12 @@
         justify-content: space-around;
         height: 22px;
 
-        padding: 6px 16px;
+        padding: 6px;
 
         line-height: 22px;
 
         color: $color-grey-dark;
+
         background-color: $color-white;
 
         border-color: $color-grey-light;
@@ -30,12 +31,32 @@
 
         box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
-        .customUnitLineSeparator {
-            margin: 0 12px;
+        .customUnitLineName {
+
+            max-width: 40%;
+
+            padding-right: 4px;
 
             font-family: $font-default;
-            font-size: $font-size-small;
-            font-weight: $font-weight-medium;
+            font-size: $font-size-12;
+            font-weight: $font-weight-500;
+
+            line-height: 18px;
+
+            color: $color-default;
+
+            text-align: right;
+
+            background-color: $color-white;
+
+            border-color: $color-default;
+            border-style: solid;
+            border-width: 1px;
+        }
+
+        .customUnitLineEqualSign {
+
+            margin: 0 4px;
         }
 
         .customUnitLineMeasure {
@@ -43,14 +64,35 @@
             display: flex;
             flex-grow: 1;
 
-            gap: 2px;
-            max-width: 40%;
+            max-width: 30%;
+
+            .customUnitLineAmount {
+
+                width: 60px;
+
+                padding-right: 4px;
+                margin-right: 2px;
+
+                font-family: $font-default;
+                font-size: $font-size-12;
+                font-weight: $font-weight-500;
+
+                line-height: 18px;
+
+                color: $color-default;
+
+                text-align: right;
+
+                background-color: $color-white;
+
+                border-color: $color-default;
+                border-style: solid;
+                border-width: 1px;
+            }
         }
     }
 
     .customUnitLineButton {
-
-        height: 20px;
 
         padding: 7px;
         margin-right: 4px;

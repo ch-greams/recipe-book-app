@@ -13,8 +13,8 @@ import styles from "./rba-home-page.module.scss";
 
 const RbaHomePage: React.FC = () => {
 
-    const CREATE_RECIPE_BUTTON_LABEL = "Create Recipe";
-    const CREATE_FOOD_BUTTON_LABEL = "Create Food";
+    const CREATE_RECIPE_BUTTON_LABEL = "Create Recipe".toUpperCase();
+    const CREATE_FOOD_BUTTON_LABEL = "Create Food".toUpperCase();
 
     const dispatch = useDispatch();
     const searchPage = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;

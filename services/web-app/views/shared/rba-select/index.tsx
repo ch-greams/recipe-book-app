@@ -29,7 +29,6 @@ export enum SelectHeightSize {
 }
 
 interface Props {
-    disabled?: boolean;
     theme: SelectTheme;
     center?: boolean;
     width: SelectWidthSize;
@@ -47,16 +46,7 @@ export const getOptionLabel = (option: SelectOption): string => {
 
 
 // TODO: Use button elements for all clickables related to this component (no need for select/option this way)
-export const RbaSelect: React.FC<Props> = ({
-    disabled = false,
-    theme,
-    center = false,
-    width,
-    height,
-    options,
-    value,
-    onChange,
-}) => {
+export const RbaSelect: React.FC<Props> = ({ theme, center = false, width, height, options, value, onChange }) => {
 
     const { isListVisible, showList, hideList } = useToggleList();
 
@@ -68,7 +58,6 @@ export const RbaSelect: React.FC<Props> = ({
     const classNames = Utils.classNames({
         [styles.select]: true,
         [styles.alignCenter]: center,
-        [styles.disabled]: disabled,
         [styles[theme]]: true,
         [styles[width]]: true,
         [styles[height]]: true,
@@ -79,7 +68,7 @@ export const RbaSelect: React.FC<Props> = ({
             data-cy={constants.CY_SELECT_INPUT}
             className={classNames}
         >
-            <div className={styles.selectOption} onClick={( disabled ? undefined : showList )}>
+            <div className={styles.selectOption} onClick={showList}>
                 {value}
             </div>
             {( isListVisible && (

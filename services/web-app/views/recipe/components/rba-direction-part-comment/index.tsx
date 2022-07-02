@@ -4,15 +4,14 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
-import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
 import * as actions from "@store/recipe/actions";
 import type { RecipeDirectionPartComment } from "@store/recipe/types";
 import { DirectionPartType } from "@store/recipe/types";
-import { IconSize } from "@icons/icon-params";
-import RbaIconNote from "@icons/rba-icon-note";
-import RbaIconRemove from "@icons/rba-icon-remove";
-import RbaIconTip from "@icons/rba-icon-tip";
-import RbaIconWarning from "@icons/rba-icon-warning";
+import InfoBlockIcon from "@icons/alert-circle-sharp.svg";
+import BulbIcon from "@icons/bulb-sharp.svg";
+import RemoveIcon from "@icons/close-sharp.svg";
+import WarningIcon from "@icons/warning-sharp.svg";
 
 import styles from "./rba-direction-part-comment.module.scss";
 
@@ -21,14 +20,14 @@ const getDirectionPartCommentIcon = (type: DirectionPartType): JSX.Element => {
 
     switch (type) {
         case DirectionPartType.Tip:
-            return (<RbaIconTip size={IconSize.Small} color={Color.White} />);
+            return (<BulbIcon />);
 
         case DirectionPartType.Warning:
-            return (<RbaIconWarning size={IconSize.Small} color={Color.White} />);
+            return (<WarningIcon />);
 
         case DirectionPartType.Note:
         default:
-            return (<RbaIconNote size={IconSize.Small} color={Color.White} />);
+            return (<InfoBlockIcon />);
     }
 };
 
@@ -44,13 +43,13 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
     const dispatch = useDispatch();
 
     const removeDirectionPart = (): void => {
-        dispatch(actions.removeDirectionPart(directionIndex, directionPart.id));
+        dispatch(actions.removeDirectionPart(directionIndex, directionPart.stepNumber));
     };
     const updateDirectionPartComment: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartNote(directionIndex, directionPart.id, event.target.value));
+        dispatch(actions.updateDirectionPartNote(directionIndex, directionPart.stepNumber, event.target.value));
     };
     const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.id, Number(event.target.value)));
+        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.stepNumber, Number(event.target.value)));
     };
 
     const removeButton = (
@@ -59,21 +58,37 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
             className={styles.directionPartButton}
             onClick={removeDirectionPart}
         >
-            <RbaIconRemove size={IconSize.Medium} color={Color.White} />
+            <RbaIconWrapper isFullWidth={true} width={24} height={24} color={Color.White}>
+                <RemoveIcon />
+            </RbaIconWrapper>
         </div>
     );
 
+    const commentText = (
+        <div className={styles.directionPartCommentText}>
+            {directionPart.commentText}
+        </div>
+    );
+
+    const commentInput = (
+        <input
+            data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
+            type={"text"}
+            className={styles.directionPartCommentInput}
+            placeholder={directionPart.type.toUpperCase()}
+            value={directionPart.commentText}
+            onChange={updateDirectionPartComment}
+        />
+    );
+
     const stepNumberInput = (
-        <RbaInput
+        <input
             data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
-            disabled={isReadOnly}
-            maxLength={2}
-            align={InputTextAlign.Center}
-            theme={InputTheme.Alternative}
-            width={InputWidthSize.Small}
-            height={InputHeightSize.Medium}
+            type={"text"}
+            className={styles.directionInfoIndexInput}
+            value={directionPart.stepNumber}
             placeholder={"#"}
-            value={String(directionPart.stepNumber)}
+            maxLength={2}
             onChange={updateDirectionPartStepNumber}
         />
     );
@@ -91,19 +106,11 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
 
                 {( !isReadOnly && stepNumberInput )}
 
-                {getDirectionPartCommentIcon(directionPart.type)}
+                <RbaIconWrapper width={22} height={22} color={Color.White}>
+                    {getDirectionPartCommentIcon(directionPart.type)}
+                </RbaIconWrapper>
 
-                <RbaInput
-                    data-cy={constants.CY_DIRECTION_PART_COMMENT_INPUT}
-                    disabled={isReadOnly}
-                    align={InputTextAlign.Left}
-                    theme={InputTheme.Alternative}
-                    width={InputWidthSize.Full}
-                    height={InputHeightSize.Medium}
-                    placeholder={directionPart.type}
-                    value={directionPart.commentText}
-                    onChange={updateDirectionPartComment}
-                />
+                {( isReadOnly ? commentText : commentInput )}
 
             </div>
         </div>

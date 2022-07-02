@@ -5,89 +5,75 @@ import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
-import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import RbaIconWrapper from "@views/shared/rba-icon-wrapper";
+import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import { IconSize } from "@icons/icon-params";
-import RbaIconAdd from "@icons/rba-icon-add";
-import RbaIconRemove from "@icons/rba-icon-remove";
-
-import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "../rba-input";
+import IconAdd from "@icons/add-sharp.svg";
 
 import styles from "./rba-custom-unit-line.module.scss";
 
 
-interface Props {
-    isReadOnly?: boolean;
+interface CustomUnitLineProps {
     isNew: boolean;
     customUnit: CustomUnitInput;
     updateItemName: InputChangeCallback;
     updateItemAmount: InputChangeCallback;
     updateItemUnit: (unit: Unit) => void;
-    onButtonClick: () => void;
+    upsertCustomUnit: () => void;
 }
 
 
-const RbaCustomUnitLine: React.FC<Props> = ({
-    isReadOnly = false,
+const RbaCustomUnitLine: React.FC<CustomUnitLineProps> = ({
     isNew,
     customUnit,
     updateItemName,
     updateItemAmount,
     updateItemUnit,
-    onButtonClick,
+    upsertCustomUnit,
 }) => (
     <div
         data-cy={(isNew ? constants.CY_NEW_CUSTOM_UNIT_LINE : constants.CY_CUSTOM_UNIT_LINE)}
         className={styles.customUnitLine}
     >
 
-        {(
-            !isReadOnly && (
-                <div
-                    data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
-                    className={styles.customUnitLineButton}
-                    onClick={onButtonClick}
-                >
-                    {(
-                        isNew
-                            ? <RbaIconAdd size={IconSize.ExtraSmall} color={Color.Default} />
-                            : <RbaIconRemove size={IconSize.ExtraSmall} color={Color.Default} />
-                    )}
+        <div className={styles.customUnitLineButton}>
 
-                </div>
-            )
-        )}
+            <RbaIconWrapper
+                data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
+                isFullWidth={true} width={20} height={20} color={Color.Default}
+                style={(isNew ? undefined : { transform: "rotate(0.125turn)" })}
+                onClick={upsertCustomUnit}
+            >
+                <IconAdd />
+            </RbaIconWrapper>
+
+        </div>
 
         <div className={styles.customUnitLineInfo}>
 
-            <RbaInput
+            <input
                 data-cy={constants.CY_CUSTOM_UNIT_NAME}
-                disabled={isReadOnly}
-                theme={InputTheme.Primary}
-                width={InputWidthSize.Full}
-                height={InputHeightSize.Small}
+                type={"text"}
                 placeholder={"NAME"}
+                className={styles.customUnitLineName}
                 value={customUnit.name}
                 onChange={updateItemName}
             />
 
-            <div className={styles.customUnitLineSeparator}>{"is"}</div>
+            <div className={styles.customUnitLineEqualSign}>{"="}</div>
 
             <div className={styles.customUnitLineMeasure}>
 
-                <RbaInput
+                <input
                     data-cy={constants.CY_CUSTOM_UNIT_AMOUNT}
-                    disabled={isReadOnly}
-                    theme={InputTheme.Primary}
-                    width={InputWidthSize.Medium}
-                    height={InputHeightSize.Small}
+                    type={"text"}
                     placeholder={"#"}
+                    className={styles.customUnitLineAmount}
                     value={customUnit.amountInput}
                     onChange={updateItemAmount}
                 />
 
                 <RbaSelect
-                    disabled={isReadOnly}
                     theme={SelectTheme.Primary}
                     center={true}
                     width={SelectWidthSize.Medium}

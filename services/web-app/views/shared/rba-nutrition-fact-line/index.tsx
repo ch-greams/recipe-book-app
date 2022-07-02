@@ -9,7 +9,6 @@ import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import type { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
-import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { updateNutritionFact } from "@store/food/actions";
 import type { UpdateNutritionFactAction } from "@store/food/types";
 
@@ -67,6 +66,21 @@ const RbaNutritionFactLine: React.FC<Props> = ({
     // TODO: Move dispatch hook to RbaNutritionFactsBlock component (like custom-unit block & line)
     const dispatch = useDispatch();
 
+    const nutritionFactAmountInput = (
+        <input
+            type={"text"}
+            className={styles.nutritionFactAmountInput}
+            value={(nutritionFact.inputValue || "")}
+            onChange={handleOnChange(dispatch, nutritionFact)}
+        />
+    );
+
+    const nutritionFactAmountText = (
+        <div className={styles.nutritionFactAmountText}>
+            {nutritionFact.inputValue}
+        </div>
+    );
+
     return (
 
         <div className={nutritionFact.isFraction ? styles.subNutrientLine : styles.nutritionFactLine}>
@@ -75,14 +89,7 @@ const RbaNutritionFactLine: React.FC<Props> = ({
                 {nutritionFactTypeLabelMapping[nutritionFact.type]}
             </div>
 
-            <RbaInput
-                disabled={isReadOnly}
-                width={InputWidthSize.Medium}
-                height={InputHeightSize.Small}
-                theme={nutritionFact.isFraction ? InputTheme.Alternative : InputTheme.Primary}
-                value={nutritionFact.inputValue}
-                onChange={handleOnChange(dispatch, nutritionFact)}
-            />
+            {( isReadOnly ? nutritionFactAmountText : nutritionFactAmountInput )}
 
             <div className={styles.nutritionFactUnit}>
                 {nutritionFact.unit}

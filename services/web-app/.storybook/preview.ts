@@ -6,19 +6,15 @@ export const parameters = {
     values: [
       {
         name: 'default',
-        value: '#43a047',
+        value: '#00bfa5',
       },
       {
         name: 'default-dark',
-        value: '#00701a',
+        value: '#008e76',
       },
       {
         name: 'default-light',
-        value: '#76d275',
-      },
-      {
-        name: 'white',
-        value: '#fff',
+        value: '#5df2d6',
       },
     ],
   },

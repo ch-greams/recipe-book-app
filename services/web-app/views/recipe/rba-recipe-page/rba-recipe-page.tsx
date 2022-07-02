@@ -135,7 +135,6 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
 
                 <RbaIngredientsBlock
                     isReadOnly={isReadOnly}
-                    isLoaded={recipe.isLoadedIngredients}
                     ingredients={ingredients}
                     search={search}
                 />

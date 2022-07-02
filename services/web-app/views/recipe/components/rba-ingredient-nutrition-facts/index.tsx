@@ -87,7 +87,7 @@ const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternat
                             data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}
                             className={styles.ingredientNutritionFactType}
                         >
-                            {type}
+                            {type.toUpperCase()}
                         </div>
                     </div>
                 );
