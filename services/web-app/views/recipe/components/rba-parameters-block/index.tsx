@@ -85,10 +85,11 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
+                isReadOnly={!recipe.editMode}
                 customUnits={recipe.customUnits}
-                addCustomUnit={actions.addCustomUnitRequest}
-                removeCustomUnit={actions.removeCustomUnitRequest}
-                updateCustomUnit={actions.updateCustomUnitRequest}
+                addCustomUnit={actions.addCustomUnit}
+                removeCustomUnit={actions.removeCustomUnit}
+                updateCustomUnit={actions.updateCustomUnit}
             />
 
         </div>

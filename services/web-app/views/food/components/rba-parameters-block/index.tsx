@@ -134,6 +134,7 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
             <div className={styles.separator} />
 
             <RbaCustomUnitsBlock
+                isReadOnly={!food.editMode}
                 customUnits={food.customUnits}
                 addCustomUnit={actions.addCustomUnit}
                 removeCustomUnit={actions.removeCustomUnit}

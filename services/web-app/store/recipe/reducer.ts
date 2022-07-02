@@ -1304,11 +1304,26 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
             );
 
-            return {
-                ...state,
-                servingSize: servingSize,
-                servingSizeUnit: servingSizeUnit,
-            };
+            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
+            if (state.editMode) {
+                return {
+                    ...state,
+                    servingSize: servingSize,
+                    servingSizeUnit: servingSizeUnit,
+                };
+            }
+            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
+            else {
+                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
+
+                return {
+                    ...state,
+                    servingSize: servingSize,
+                    servingSizeUnit: servingSizeUnit,
+                    nutritionFactsByServing: nutritionFactsByServing,
+                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+                };
+            }
         }
 
         case types.RECIPE_FETCH_NEW: {

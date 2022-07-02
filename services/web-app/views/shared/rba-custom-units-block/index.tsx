@@ -13,6 +13,7 @@ import styles from "./rba-custom-units-block.module.scss";
 
 
 interface Props {
+    isReadOnly: boolean;
     customUnits: CustomUnitInput[];
     addCustomUnit: (customUnit: CustomUnitInput) => AnyAction;
     removeCustomUnit: (index: number) => AnyAction;
@@ -27,7 +28,7 @@ const NEW_CUSTOM_UNIT: CustomUnitInput = {
     unit: WeightUnit.g,
 };
 
-const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, removeCustomUnit, updateCustomUnit }) => {
+const RbaCustomUnitsBlock: React.FC<Props> = ({ isReadOnly, customUnits, addCustomUnit, removeCustomUnit, updateCustomUnit }) => {
 
     const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>(NEW_CUSTOM_UNIT);
@@ -35,11 +36,11 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, remo
     const updateNewItemName: InputChangeCallback = (event) => setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
 
     const updateNewItemAmount: InputChangeCallback = (event) => {
-        const amountInputNormilized = Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput);
+        const amountInputNormalized = Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput);
         setNewCustomUnit({
             ...newCustomUnit,
-            amount: Number(amountInputNormilized),
-            amountInput: amountInputNormilized,
+            amount: Number(amountInputNormalized),
+            amountInput: amountInputNormalized,
         });
     };
 
@@ -84,6 +85,7 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, remo
                 return (
                     <RbaCustomUnitLine
                         key={`CU_${index}`}
+                        isReadOnly={isReadOnly}
                         isNew={false}
                         customUnit={customUnit}
                         updateItemName={updateItemName}
@@ -94,15 +96,18 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ customUnits, addCustomUnit, remo
                 );
             })}
 
-            <RbaCustomUnitLine
-                key={"NCU"}
-                isNew={true}
-                customUnit={newCustomUnit}
-                updateItemName={updateNewItemName}
-                updateItemAmount={updateNewItemAmount}
-                updateItemUnit={updateNewItemUnit}
-                upsertCustomUnit={createCustomUnit}
-            />
+            {(
+                !isReadOnly && (
+                    <RbaCustomUnitLine
+                        isNew={true}
+                        customUnit={newCustomUnit}
+                        updateItemName={updateNewItemName}
+                        updateItemAmount={updateNewItemAmount}
+                        updateItemUnit={updateNewItemUnit}
+                        upsertCustomUnit={createCustomUnit}
+                    />
+                )
+            )}
 
         </div>
     );
