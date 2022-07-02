@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import type { AnyAction } from "redux";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput, Unit } from "@common/units";
 import { WeightUnit } from "@common/units";
 import Utils from "@common/utils";
@@ -15,9 +12,9 @@ import styles from "./rba-custom-units-block.module.scss";
 interface Props {
     isReadOnly: boolean;
     customUnits: CustomUnitInput[];
-    addCustomUnit: (customUnit: CustomUnitInput) => AnyAction;
-    removeCustomUnit: (index: number) => AnyAction;
-    updateCustomUnit: (index: number, customUnit: CustomUnitInput) => AnyAction;
+    addCustomUnit: (customUnit: CustomUnitInput) => void;
+    removeCustomUnit: (index: number) => void;
+    updateCustomUnit: (index: number, customUnit: CustomUnitInput) => void;
 }
 
 const NEW_CUSTOM_UNIT: CustomUnitInput = {
@@ -30,28 +27,30 @@ const NEW_CUSTOM_UNIT: CustomUnitInput = {
 
 const RbaCustomUnitsBlock: React.FC<Props> = ({ isReadOnly, customUnits, addCustomUnit, removeCustomUnit, updateCustomUnit }) => {
 
-    const dispatch = useDispatch();
     const [ newCustomUnit, setNewCustomUnit ] = useState<CustomUnitInput>(NEW_CUSTOM_UNIT);
 
-    const updateNewItemName: InputChangeCallback = (event) => setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
-
-    const updateNewItemAmount: InputChangeCallback = (event) => {
-        const amountInputNormalized = Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput);
-        setNewCustomUnit({
-            ...newCustomUnit,
-            amount: Number(amountInputNormalized),
-            amountInput: amountInputNormalized,
-        });
-    };
-
-    const updateNewItemUnit = (unit: Unit): void => {
-        setNewCustomUnit({ ...newCustomUnit, unit });
-    };
-
-    const createCustomUnit = (): void => {
-        dispatch(addCustomUnit(newCustomUnit));
-        setNewCustomUnit(NEW_CUSTOM_UNIT);
-    };
+    const newCustomUnitLine = (
+        <RbaCustomUnitLine
+            isNew={true}
+            customUnit={newCustomUnit}
+            updateItemName={(event) => {
+                setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
+            }}
+            updateItemAmount={(event) => {
+                setNewCustomUnit({
+                    ...newCustomUnit,
+                    amountInput: Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput),
+                });
+            }}
+            updateItemUnit={(unit: Unit) => {
+                setNewCustomUnit({ ...newCustomUnit, unit });
+            }}
+            onButtonClick={() => {
+                addCustomUnit(newCustomUnit);
+                setNewCustomUnit(NEW_CUSTOM_UNIT);
+            }}
+        />
+    );
 
     return (
         <div className={styles.customUnitsBlock}>
@@ -60,54 +59,27 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ isReadOnly, customUnits, addCust
                 {"CUSTOM UNITS"}
             </div>
 
-            {customUnits.map((customUnit, index) => {
+            {customUnits.map((customUnit, index) => (
+                <RbaCustomUnitLine
+                    key={`CU_${index}`}
+                    isReadOnly={isReadOnly}
+                    isNew={false}
+                    customUnit={customUnit}
+                    updateItemName={(event) => {
+                        updateCustomUnit(index, { ...customUnit, name: event.target.value });
+                    }}
+                    updateItemAmount={(event) => {
+                        updateCustomUnit(index, {
+                            ...customUnit,
+                            amountInput: Utils.decimalNormalizer(event.target.value, customUnit.amountInput),
+                        });
+                    }}
+                    updateItemUnit={(unit: Unit) => { updateCustomUnit(index, { ...customUnit, unit }); }}
+                    onButtonClick={() => { removeCustomUnit(index); }}
+                />
+            ))}
 
-                const updateItemName: InputChangeCallback = (event) => {
-                    const name = event.target.value;
-                    dispatch(updateCustomUnit(index, { ...customUnit, name }));
-                };
-
-                const updateItemAmount: InputChangeCallback = (event) => {
-                    dispatch(updateCustomUnit(index, {
-                        ...customUnit,
-                        amountInput: Utils.decimalNormalizer(event.target.value, customUnit.amountInput),
-                    }));
-                };
-
-                const updateItemUnit = (unit: Unit): void => {
-                    dispatch(updateCustomUnit(index, { ...customUnit, unit }));
-                };
-
-                const saveCustomUnit = (): void => {
-                    dispatch(removeCustomUnit(index));
-                };
-
-                return (
-                    <RbaCustomUnitLine
-                        key={`CU_${index}`}
-                        isReadOnly={isReadOnly}
-                        isNew={false}
-                        customUnit={customUnit}
-                        updateItemName={updateItemName}
-                        updateItemAmount={updateItemAmount}
-                        updateItemUnit={updateItemUnit}
-                        upsertCustomUnit={saveCustomUnit}
-                    />
-                );
-            })}
-
-            {(
-                !isReadOnly && (
-                    <RbaCustomUnitLine
-                        isNew={true}
-                        customUnit={newCustomUnit}
-                        updateItemName={updateNewItemName}
-                        updateItemAmount={updateNewItemAmount}
-                        updateItemUnit={updateNewItemUnit}
-                        upsertCustomUnit={createCustomUnit}
-                    />
-                )
-            )}
+            {( !isReadOnly && newCustomUnitLine )}
 
         </div>
     );

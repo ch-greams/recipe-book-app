@@ -23,7 +23,7 @@ interface Props {
     updateItemName: InputChangeCallback;
     updateItemAmount: InputChangeCallback;
     updateItemUnit: (unit: Unit) => void;
-    upsertCustomUnit: () => void;
+    onButtonClick: () => void;
 }
 
 
@@ -34,7 +34,7 @@ const RbaCustomUnitLine: React.FC<Props> = ({
     updateItemName,
     updateItemAmount,
     updateItemUnit,
-    upsertCustomUnit,
+    onButtonClick,
 }) => (
     <div
         data-cy={(isNew ? constants.CY_NEW_CUSTOM_UNIT_LINE : constants.CY_CUSTOM_UNIT_LINE)}
@@ -46,7 +46,7 @@ const RbaCustomUnitLine: React.FC<Props> = ({
                 <div
                     data-cy={constants.CY_CUSTOM_UNIT_BUTTON}
                     className={styles.customUnitLineButton}
-                    onClick={upsertCustomUnit}
+                    onClick={onButtonClick}
                 >
                     {(
                         isNew
