@@ -64,14 +64,14 @@ const RbaCustomUnitLine: React.FC<Props> = ({
                 data-cy={constants.CY_CUSTOM_UNIT_NAME}
                 disabled={isReadOnly}
                 theme={InputTheme.Primary}
-                width={InputWidthSize.Large}
+                width={InputWidthSize.Full}
                 height={InputHeightSize.Small}
                 placeholder={"NAME"}
                 value={customUnit.name}
                 onChange={updateItemName}
             />
 
-            <div className={styles.customUnitLineEqualSign}>{"="}</div>
+            <div className={styles.customUnitLineSeparator}>{"is"}</div>
 
             <div className={styles.customUnitLineMeasure}>
 
