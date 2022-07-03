@@ -1,0 +1,19 @@
+{
+  "name": "recipe-scraper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "~16",
+    "npm": "~8"
+  },
+  "scripts": {
+    "get_recipe_pages": "node get_recipe_pages.js",
+    "get_recipes": "node get_recipes.js",
+    "lint": "npx eslint ."
+  },
+  "dependencies": {
+    "jsdom": "^20.0.0",
+    "superagent": "^8.0.0"
+  }
+}
