@@ -1,5 +1,5 @@
 use sqlx::PgPool;
-use std::{env, fs, path::PathBuf};
+use std::{env, fs, path::PathBuf, io};
 
 pub(crate) async fn migrate_db(database_url: &str) {
     println!("migrating database...");
@@ -54,4 +54,15 @@ pub(crate) async fn seed_db(database_url: &str) {
     txn.commit().await.unwrap();
 
     println!("seeding is complete!");
+}
+
+
+pub(crate) fn read_type_from_file<T: serde::de::DeserializeOwned>(path: &str) -> Result<T, anyhow::Error> {
+
+    let file = fs::File::open(path)?;
+    let reader = io::BufReader::new(file);
+
+    let result = serde_json::from_reader(reader)?;
+
+    Ok(result)
 }
