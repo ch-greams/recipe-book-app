@@ -1,5 +1,4 @@
-use serde::{Deserialize};
-
+use serde::Deserialize;
 
 //------------------------------------------------------------------------------
 // Utility types
@@ -216,7 +215,6 @@ pub struct RetentionFactor {
     pub description: String,
 }
 
-
 #[derive(Deserialize, Debug)]
 pub struct WweiaFoodCategory {
     #[serde(rename = "wweiaFoodCategoryCode")]
@@ -257,7 +255,7 @@ pub struct FoodUpdateLog {
     pub branded_food_category: Option<String>,
     pub changes: Option<String>,
     #[serde(rename = "foodAttributes")]
-    pub food_attributes: Vec<FoodAttribute>,  
+    pub food_attributes: Vec<FoodAttribute>,
 }
 
 //------------------------------------------------------------------------------
@@ -350,7 +348,7 @@ pub struct AbridgedFoodItem {
     #[serde(rename = "ndbNumber")]
     pub ndb_number: i32,
     #[serde(rename = "foodCode")]
-    pub food_code: String,  
+    pub food_code: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -394,7 +392,7 @@ pub struct BrandedFoodItem {
     #[serde(rename = "foodUpdateLog")]
     pub food_update_log: Vec<FoodUpdateLog>,
     #[serde(rename = "labelNutrients")]
-    pub label_nutrients: LabelNutrients,  
+    pub label_nutrients: LabelNutrients,
 }
 
 #[derive(Deserialize, Debug)]
@@ -445,7 +443,7 @@ pub struct SurveyFoodItem {
     #[serde(rename = "inputFoods")]
     pub input_foods: Vec<InputFoodSurvey>,
     #[serde(rename = "wweiaFoodCategory")]
-    pub wweia_food_category: WweiaFoodCategory,  
+    pub wweia_food_category: WweiaFoodCategory,
 }
 
 //------------------------------------------------------------------------------

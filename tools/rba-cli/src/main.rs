@@ -1,10 +1,10 @@
 use clap::{Args, Parser, Subcommand};
 use types::usda::FoundationFoodData;
 
-use crate::types::usda::{SurveyFoodData, SRLegacyFoodData, BrandedFoodData};
+use crate::types::usda::{BrandedFoodData, SRLegacyFoodData, SurveyFoodData};
 
-mod utils;
 mod types;
+mod utils;
 
 #[derive(Parser)]
 #[clap(author, version, about)]
@@ -62,8 +62,7 @@ async fn main() {
                 .as_deref()
                 .unwrap_or("usda-data/FoodData_Central_foundation_food_json_2022-04-28.json");
 
-            let food_data: FoundationFoodData =
-                utils::read_type_from_file(food_data_path).unwrap();
+            let food_data: FoundationFoodData = utils::read_type_from_file(food_data_path).unwrap();
 
             println!("{:?}", food_data.foundation_foods.len());
         }
@@ -73,8 +72,7 @@ async fn main() {
                 .as_deref()
                 .unwrap_or("usda-data/FoodData_Central_survey_food_json_2021-10-28.json");
 
-            let food_data: SurveyFoodData =
-                utils::read_type_from_file(food_data_path).unwrap();
+            let food_data: SurveyFoodData = utils::read_type_from_file(food_data_path).unwrap();
 
             println!("{:?}", food_data.survey_foods.len());
         }
@@ -84,8 +82,7 @@ async fn main() {
                 .as_deref()
                 .unwrap_or("usda-data/FoodData_Central_sr_legacy_food_json_2021-10-28.json");
 
-            let food_data: SRLegacyFoodData =
-                utils::read_type_from_file(food_data_path).unwrap();
+            let food_data: SRLegacyFoodData = utils::read_type_from_file(food_data_path).unwrap();
 
             println!("{:?}", food_data.sr_legacy_foods.len());
         }
@@ -95,8 +92,7 @@ async fn main() {
                 .as_deref()
                 .unwrap_or("usda-data/FoodData_Central_branded_food_json_2022-04-28.json");
 
-            let food_data: BrandedFoodData =
-                utils::read_type_from_file(food_data_path).unwrap();
+            let food_data: BrandedFoodData = utils::read_type_from_file(food_data_path).unwrap();
 
             println!("{:?}", food_data.branded_foods.len());
         }
