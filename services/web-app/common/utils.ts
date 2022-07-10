@@ -251,7 +251,15 @@ export default class Utils {
 
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Utils.numberToString(values[nfType]) }), {},
+            (acc, nfType) => {
+                const nfValue = values[nfType];
+                const nfInput = (
+                    isSome(nfValue)
+                        ? Utils.numberToString(Utils.roundToDecimal(nfValue, DecimalPlaces.Two))
+                        : null
+                );
+                return { ...acc, [nfType]: nfInput };
+            }, {},
         );
     }
 
