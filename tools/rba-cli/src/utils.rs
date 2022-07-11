@@ -67,6 +67,7 @@ pub(crate) fn read_type_from_file<T: serde::de::DeserializeOwned>(
     Ok(result)
 }
 
+#[allow(dead_code)]
 pub(crate) fn save_type_into_file<T: serde::ser::Serialize>(
     path: &str,
     value: &T,

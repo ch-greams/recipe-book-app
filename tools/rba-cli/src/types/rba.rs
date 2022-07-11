@@ -62,7 +62,7 @@ impl From<&FoundationFoodItem> for Product {
             subtitle: "".to_string(),
             description: "usda - foundation".to_string(),
 
-            density: density,
+            density,
             serving_size: 100.0,
 
             created_by: 0,
@@ -98,7 +98,7 @@ impl From<&SurveyFoodItem> for Product {
             subtitle: "".to_string(),
             description: "usda - survey".to_string(),
 
-            density: density,
+            density,
             serving_size: 100.0,
 
             created_by: 0,
@@ -169,7 +169,7 @@ impl Eq for CustomUnit {}
 impl CustomUnit {
     pub fn new(food_portion: &FoodPortion, product_id: i64) -> Self {
         Self {
-            product_id: product_id,
+            product_id,
             name: food_portion.measure_unit.name.to_owned(),
             amount: food_portion.gram_weight.into(),
             unit: "g".to_string(),
@@ -250,16 +250,15 @@ pub struct NutritionFacts {
     pub caffeine: Option<f64>,
 }
 
-fn get_amount(food_nutrients: &Vec<FoodNutrient>, nutrient_id: u32) -> Option<f64> {
+fn get_amount(food_nutrients: &[FoodNutrient], nutrient_id: u32) -> Option<f64> {
     food_nutrients
         .iter()
         .find(|food_nutrient| food_nutrient.nutrient.id == nutrient_id)
-        .map(|food_nutrient| food_nutrient.amount)
-        .flatten()
+        .and_then(|food_nutrient| food_nutrient.amount)
         .map(f64::from)
 }
 
-fn get_amount_sum(food_nutrients: &Vec<FoodNutrient>, nutrient_ids: Vec<u32>) -> Option<f64> {
+fn get_amount_sum(food_nutrients: &[FoodNutrient], nutrient_ids: Vec<u32>) -> Option<f64> {
     let mut values = food_nutrients
         .iter()
         .filter(|food_nutrient| nutrient_ids.contains(&food_nutrient.nutrient.id))
@@ -298,8 +297,8 @@ impl From<&FoundationFoodItem> for NutritionFacts {
             fat: get_amount(&foundation_food_item.food_nutrients, 1004),
             monounsaturated: get_amount(&foundation_food_item.food_nutrients, 1292),
             polyunsaturated: get_amount(&foundation_food_item.food_nutrients, 1293),
-            omega_3: omega_3,
-            omega_6: omega_6,
+            omega_3,
+            omega_6,
             saturated: get_amount(&foundation_food_item.food_nutrients, 1258),
             trans_fats: get_amount(&foundation_food_item.food_nutrients, 1257),
             cholesterol: get_amount(&foundation_food_item.food_nutrients, 1253),
@@ -384,8 +383,8 @@ impl From<&SurveyFoodItem> for NutritionFacts {
             fat: get_amount(&survey_food_item.food_nutrients, 1004),
             monounsaturated: get_amount(&survey_food_item.food_nutrients, 1292),
             polyunsaturated: get_amount(&survey_food_item.food_nutrients, 1293),
-            omega_3: omega_3,
-            omega_6: omega_6,
+            omega_3,
+            omega_6,
             saturated: get_amount(&survey_food_item.food_nutrients, 1258),
             trans_fats: get_amount(&survey_food_item.food_nutrients, 1257),
             cholesterol: get_amount(&survey_food_item.food_nutrients, 1253),
@@ -449,21 +448,20 @@ impl From<&SurveyFoodItem> for NutritionFacts {
 }
 
 fn get_amount_from_serving(
-    food_nutrients: &Vec<FoodNutrient>,
+    food_nutrients: &[FoodNutrient],
     nutrient_id: u32,
     serving_size: f32,
 ) -> Option<f64> {
     food_nutrients
         .iter()
         .find(|food_nutrient| food_nutrient.nutrient.id == nutrient_id)
-        .map(|food_nutrient| food_nutrient.amount)
-        .flatten()
+        .and_then(|food_nutrient| food_nutrient.amount)
         .map(|amount| amount * (100.0 / serving_size))
         .map(f64::from)
 }
 
 fn get_amount_sum_from_serving(
-    food_nutrients: &Vec<FoodNutrient>,
+    food_nutrients: &[FoodNutrient],
     nutrient_ids: Vec<u32>,
     serving_size: f32,
 ) -> Option<f64> {
@@ -529,8 +527,8 @@ impl From<&BrandedFoodItem> for NutritionFacts {
                 1293,
                 serving_size,
             ),
-            omega_3: omega_3,
-            omega_6: omega_6,
+            omega_3,
+            omega_6,
             saturated: get_amount_from_serving(
                 &branded_food_item.food_nutrients,
                 1258,
