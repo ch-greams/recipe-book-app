@@ -1,10 +1,10 @@
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 //------------------------------------------------------------------------------
 // Utility types
 //------------------------------------------------------------------------------
 
-#[derive(Deserialize, Debug)]
+#[derive(sqlx::FromRow, Serialize, Deserialize, Debug, Clone)]
 pub struct Nutrient {
     pub id: u32,
     pub number: String,
@@ -14,14 +14,14 @@ pub struct Nutrient {
     pub unit_name: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodNutrientSource {
     pub id: Option<i32>,
     pub code: Option<String>,
     pub description: Option<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodNutrientDerivation {
     pub id: Option<i32>,
     pub code: Option<String>,
@@ -30,7 +30,7 @@ pub struct FoodNutrientDerivation {
     pub food_nutrient_source: FoodNutrientSource,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct NutrientAcquisitionDetails {
     #[serde(rename = "sampleUnitId")]
     pub sample_unit_id: i32,
@@ -42,7 +42,7 @@ pub struct NutrientAcquisitionDetails {
     pub store_state: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct NutrientAnalysisDetails {
     #[serde(rename = "subSampleId")]
     pub sub_sample_id: i32,
@@ -61,7 +61,7 @@ pub struct NutrientAnalysisDetails {
     pub nutrient_acquisition_details: Vec<NutrientAcquisitionDetails>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodNutrient {
     pub id: u32,
     pub amount: Option<f32>,
@@ -74,19 +74,19 @@ pub struct FoodNutrient {
     pub _type: String,
     pub nutrient: Nutrient,
     #[serde(rename = "foodNutrientDerivation")]
-    pub food_nutrient_derivation: FoodNutrientDerivation,
+    pub food_nutrient_derivation: Option<FoodNutrientDerivation>,
     #[serde(rename = "nutrientAnalysisDetails")]
     pub nutrient_analysis_details: Option<NutrientAnalysisDetails>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodCategory {
     pub id: Option<i32>,
     pub code: Option<String>,
     pub description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodComponent {
     pub id: i32,
     pub name: String,
@@ -102,14 +102,14 @@ pub struct FoodComponent {
     pub percent_weight: f32,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MeasureUnit {
     pub id: i32,
     pub abbreviation: String,
     pub name: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct FoodPortion {
     pub id: i32,
     pub amount: Option<f32>,
@@ -128,7 +128,7 @@ pub struct FoodPortion {
     pub measure_unit: MeasureUnit,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SampleFoodItem {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -142,7 +142,7 @@ pub struct SampleFoodItem {
     pub food_attributes: Option<Vec<FoodCategory>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct InputFoodFoundation {
     pub id: i32,
     #[serde(rename = "foodDescription")]
@@ -151,14 +151,14 @@ pub struct InputFoodFoundation {
     pub input_food: SampleFoodItem,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct NutrientConversionFactors {
     #[serde(rename = "type")]
     pub _type: String,
     pub value: Option<f32>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AbridgedFoodNutrient {
     pub number: u32,
     pub name: String,
@@ -171,7 +171,7 @@ pub struct AbridgedFoodNutrient {
     pub derivation_description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodAttribute {
     pub id: i32,
     #[serde(rename = "sequenceNumber")]
@@ -181,7 +181,7 @@ pub struct FoodAttribute {
     pub food_attribute_type: Option<FoodAttributeType>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct InputFoodSurvey {
     pub id: i32,
     pub amount: f32,
@@ -208,14 +208,14 @@ pub struct InputFoodSurvey {
     pub retention_factor: Option<RetentionFactor>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct RetentionFactor {
     pub id: i32,
     pub code: i32,
     pub description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct WweiaFoodCategory {
     #[serde(rename = "wweiaFoodCategoryCode")]
     pub wweia_food_category_code: i32,
@@ -223,7 +223,7 @@ pub struct WweiaFoodCategory {
     pub wweia_food_category_description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodUpdateLog {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -262,19 +262,19 @@ pub struct FoodUpdateLog {
 // Custom types (not directly taken from USDA spec)
 //------------------------------------------------------------------------------
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoodAttributeType {
     pub id: i32,
     pub name: String,
     pub description: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LabelNutrient {
     pub value: f32,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LabelNutrients {
     pub fat: Option<LabelNutrient>,
     #[serde(rename = "saturatedFat")]
@@ -297,7 +297,7 @@ pub struct LabelNutrients {
 // Food types
 //------------------------------------------------------------------------------
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoundationFoodItem {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -330,7 +330,7 @@ pub struct FoundationFoodItem {
     pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct AbridgedFoodItem {
     #[serde(rename = "dataType")]
     pub data_type: String,
@@ -351,7 +351,7 @@ pub struct AbridgedFoodItem {
     pub food_code: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BrandedFoodItem {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -359,6 +359,10 @@ pub struct BrandedFoodItem {
     pub available_date: Option<String>,
     #[serde(rename = "brandOwner")]
     pub brand_owner: String,
+    #[serde(rename = "brandName")]
+    pub brand_name: Option<String>,
+    #[serde(rename = "subbrandName")]
+    pub subbrand_name: Option<String>,
     #[serde(rename = "dataSource")]
     pub data_source: String,
     #[serde(rename = "dataType")]
@@ -395,7 +399,7 @@ pub struct BrandedFoodItem {
     pub label_nutrients: LabelNutrients,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SRLegacyFoodItem {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -420,7 +424,7 @@ pub struct SRLegacyFoodItem {
     pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SurveyFoodItem {
     #[serde(rename = "fdcId")]
     pub fdc_id: i32,
@@ -444,31 +448,33 @@ pub struct SurveyFoodItem {
     pub input_foods: Vec<InputFoodSurvey>,
     #[serde(rename = "wweiaFoodCategory")]
     pub wweia_food_category: WweiaFoodCategory,
+    #[serde(rename = "foodNutrients")]
+    pub food_nutrients: Vec<FoodNutrient>,
 }
 
 //------------------------------------------------------------------------------
 // Custom aggregator types (not directly taken from USDA spec)
 //------------------------------------------------------------------------------
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct FoundationFoodData {
     #[serde(rename = "FoundationFoods")]
     pub foundation_foods: Vec<FoundationFoodItem>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SurveyFoodData {
     #[serde(rename = "SurveyFoods")]
     pub survey_foods: Vec<SurveyFoodItem>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SRLegacyFoodData {
     #[serde(rename = "SRLegacyFoods")]
     pub sr_legacy_foods: Vec<SRLegacyFoodItem>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct BrandedFoodData {
     #[serde(rename = "BrandedFoods")]
     pub branded_foods: Vec<BrandedFoodItem>,

@@ -51,6 +51,7 @@ pub struct NutritionFacts {
     pub vitamin_b3: Option<f64>,
     pub vitamin_b5: Option<f64>,
     pub vitamin_b6: Option<f64>,
+    pub vitamin_b7: Option<f64>,
     pub vitamin_b9: Option<f64>,
     pub vitamin_b12: Option<f64>,
     pub choline: Option<f64>,
@@ -66,6 +67,7 @@ pub struct NutritionFacts {
     pub manganese: Option<f64>,
     pub selenium: Option<f64>,
     pub fluoride: Option<f64>,
+    pub chloride: Option<f64>,
     pub chromium: Option<f64>,
     pub iodine: Option<f64>,
     pub molybdenum: Option<f64>,
@@ -121,6 +123,7 @@ pub struct CreateNutritionFactsPayload {
     pub vitamin_b3: Option<f64>,
     pub vitamin_b5: Option<f64>,
     pub vitamin_b6: Option<f64>,
+    pub vitamin_b7: Option<f64>,
     pub vitamin_b9: Option<f64>,
     pub vitamin_b12: Option<f64>,
     pub choline: Option<f64>,
@@ -136,6 +139,7 @@ pub struct CreateNutritionFactsPayload {
     pub manganese: Option<f64>,
     pub selenium: Option<f64>,
     pub fluoride: Option<f64>,
+    pub chloride: Option<f64>,
     pub chromium: Option<f64>,
     pub iodine: Option<f64>,
     pub molybdenum: Option<f64>,
@@ -193,6 +197,7 @@ const NUTRITION_FACTS_FIELDS: &[&str] = &[
     "vitamin_b3",
     "vitamin_b5",
     "vitamin_b6",
+    "vitamin_b7",
     "vitamin_b9",
     "vitamin_b12",
     "choline",
@@ -208,6 +213,7 @@ const NUTRITION_FACTS_FIELDS: &[&str] = &[
     "manganese",
     "selenium",
     "fluoride",
+    "chloride",
     "chromium",
     "iodine",
     "molybdenum",
@@ -289,6 +295,7 @@ impl NutritionFacts {
             .bind(nutrition_facts_payload.vitamin_b3)
             .bind(nutrition_facts_payload.vitamin_b5)
             .bind(nutrition_facts_payload.vitamin_b6)
+            .bind(nutrition_facts_payload.vitamin_b7)
             .bind(nutrition_facts_payload.vitamin_b9)
             .bind(nutrition_facts_payload.vitamin_b12)
             .bind(nutrition_facts_payload.choline)
@@ -304,6 +311,7 @@ impl NutritionFacts {
             .bind(nutrition_facts_payload.manganese)
             .bind(nutrition_facts_payload.selenium)
             .bind(nutrition_facts_payload.fluoride)
+            .bind(nutrition_facts_payload.chloride)
             .bind(nutrition_facts_payload.chromium)
             .bind(nutrition_facts_payload.iodine)
             .bind(nutrition_facts_payload.molybdenum)
@@ -389,6 +397,7 @@ impl NutritionFacts {
             .bind(nutrition_facts_payload.vitamin_b3)
             .bind(nutrition_facts_payload.vitamin_b5)
             .bind(nutrition_facts_payload.vitamin_b6)
+            .bind(nutrition_facts_payload.vitamin_b7)
             .bind(nutrition_facts_payload.vitamin_b9)
             .bind(nutrition_facts_payload.vitamin_b12)
             .bind(nutrition_facts_payload.choline)
@@ -404,6 +413,7 @@ impl NutritionFacts {
             .bind(nutrition_facts_payload.manganese)
             .bind(nutrition_facts_payload.selenium)
             .bind(nutrition_facts_payload.fluoride)
+            .bind(nutrition_facts_payload.chloride)
             .bind(nutrition_facts_payload.chromium)
             .bind(nutrition_facts_payload.iodine)
             .bind(nutrition_facts_payload.molybdenum)

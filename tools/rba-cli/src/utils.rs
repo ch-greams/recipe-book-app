@@ -66,3 +66,12 @@ pub(crate) fn read_type_from_file<T: serde::de::DeserializeOwned>(
 
     Ok(result)
 }
+
+pub(crate) fn save_type_into_file<T: serde::ser::Serialize>(
+    path: &str,
+    value: &T,
+) -> Result<(), anyhow::Error> {
+    let contents = serde_json::to_string_pretty(value)?;
+    std::fs::write(path, contents)?;
+    Ok(())
+}
