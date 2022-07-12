@@ -1,220 +1,85 @@
-use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use std::hash::{Hash, Hasher};
+use sqlx::{Executor, Postgres, QueryBuilder};
 
-use super::usda::{
-    BrandedFoodItem, FoodNutrient, FoodPortion, FoundationFoodItem, SRLegacyFoodItem,
-    SurveyFoodItem,
+use crate::{
+    types::usda::{
+        food_items::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem},
+        food_parts::FoodNutrient,
+    },
+    utils::BIND_LIMIT,
 };
 
-#[derive(sqlx::Type, Serialize, Deserialize, Debug, Clone)]
-#[sqlx(type_name = "product_type", rename_all = "snake_case")]
-pub enum ProductType {
-    Food,
-    Recipe,
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Product {
-    pub id: i64,
-    #[serde(rename = "type")]
-    pub product_type: ProductType,
-    pub name: String,
-    pub brand: String,
-    pub subtitle: String,
-    pub description: String,
-    pub density: f64,
-    pub serving_size: f64,
-    pub created_by: i64,
-    pub is_private: bool,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
-
-fn get_density(food_portion: &FoodPortion) -> f64 {
-    match food_portion.measure_unit.abbreviation.as_str() {
-        "tsp" => f64::from(food_portion.gram_weight) / 4.92892,
-        "tbsp" => f64::from(food_portion.gram_weight) / 14.7868,
-        "cup" => f64::from(food_portion.gram_weight) / 240.0,
-        _ => 1.0,
-    }
-}
-
-impl From<&FoundationFoodItem> for Product {
-    fn from(foundation_food_item: &FoundationFoodItem) -> Self {
-        let std_units = vec!["ml", "tsp", "tbsp", "cup"];
-        let std_portion = foundation_food_item
-            .food_portions
-            .iter()
-            .find(|portion| std_units.contains(&portion.measure_unit.abbreviation.as_str()));
-
-        let density = if let Some(food_portion) = std_portion {
-            get_density(food_portion)
-        } else {
-            1.0
-        };
-
-        let timestamp = Utc::now();
-
-        Self {
-            id: foundation_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
-
-            name: foundation_food_item.description.to_owned(),
-            brand: "".to_string(),
-            subtitle: "".to_string(),
-            description: "usda - foundation".to_string(),
-
-            density,
-            serving_size: 100.0,
-
-            created_by: 0,
-            is_private: false,
-            created_at: timestamp,
-            updated_at: timestamp,
-        }
-    }
-}
-
-impl From<&SurveyFoodItem> for Product {
-    fn from(survey_food_item: &SurveyFoodItem) -> Self {
-        let std_units = vec!["ml", "tsp", "tbsp", "cup"];
-        let std_portion = survey_food_item
-            .food_portions
-            .iter()
-            .find(|portion| std_units.contains(&portion.measure_unit.abbreviation.as_str()));
-
-        let density = if let Some(food_portion) = std_portion {
-            get_density(food_portion)
-        } else {
-            1.0
-        };
-
-        let timestamp = Utc::now();
-
-        Self {
-            id: survey_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
-
-            name: survey_food_item.description.to_owned(),
-            brand: "".to_string(),
-            subtitle: "".to_string(),
-            description: "usda - survey".to_string(),
-
-            density,
-            serving_size: 100.0,
-
-            created_by: 0,
-            is_private: false,
-            created_at: timestamp,
-            updated_at: timestamp,
-        }
-    }
-}
-
-impl From<&SRLegacyFoodItem> for Product {
-    fn from(sr_legacy_food_item: &SRLegacyFoodItem) -> Self {
-        let std_units = vec!["ml", "tsp", "tbsp", "cup"];
-        let std_portion = sr_legacy_food_item
-            .food_portions
-            .iter()
-            .find(|portion| std_units.contains(&portion.measure_unit.abbreviation.as_str()));
-
-        let density = if let Some(food_portion) = std_portion {
-            get_density(food_portion)
-        } else {
-            1.0
-        };
-
-        let timestamp = Utc::now();
-
-        Self {
-            id: sr_legacy_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
-
-            name: sr_legacy_food_item.description.to_owned(),
-            brand: "".to_string(),
-            subtitle: "".to_string(),
-            description: "usda - sr-legacy".to_string(),
-
-            density,
-            serving_size: 100.0,
-
-            created_by: 0,
-            is_private: false,
-            created_at: timestamp,
-            updated_at: timestamp,
-        }
-    }
-}
-
-impl From<&BrandedFoodItem> for Product {
-    fn from(branded_food_item: &BrandedFoodItem) -> Self {
-        let timestamp = Utc::now();
-
-        let brand = if let Some(brand_name) = &branded_food_item.brand_name {
-            if brand_name.trim().is_empty() {
-                &branded_food_item.brand_owner
-            } else {
-                brand_name
-            }
-        } else {
-            &branded_food_item.brand_owner
-        };
-
-        Self {
-            id: branded_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
-
-            name: branded_food_item.description.to_owned(),
-            brand: brand.to_owned(),
-            subtitle: branded_food_item.branded_food_category.to_owned(),
-            description: branded_food_item.ingredients.to_owned(),
-
-            density: 1.0,
-            serving_size: 100.0,
-
-            created_by: 0,
-            is_private: false,
-            created_at: timestamp,
-            updated_at: timestamp,
-        }
-    }
-}
-
-#[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct CustomUnit {
-    pub product_id: i64,
-    pub name: String,
-    pub amount: f64,
-    pub unit: String,
-}
-
-impl Hash for CustomUnit {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.product_id.hash(state);
-        self.name.hash(state);
-    }
-}
-
-impl PartialEq for CustomUnit {
-    fn eq(&self, other: &Self) -> bool {
-        (self.product_id == other.product_id) && (self.name == other.name)
-    }
-}
-
-impl Eq for CustomUnit {}
-
-impl CustomUnit {
-    pub fn new(food_portion: &FoodPortion, product_id: i64) -> Self {
-        Self {
-            product_id,
-            name: food_portion.measure_unit.name.to_owned(),
-            amount: food_portion.gram_weight.into(),
-            unit: "g".to_string(),
-        }
-    }
-}
+const NUTRITION_FACTS_FIELDS: &[&str] = &[
+    "product_id",
+    "energy",
+    "carbohydrate",
+    "dietary_fiber",
+    "starch",
+    "sugars",
+    "fat",
+    "monounsaturated",
+    "polyunsaturated",
+    "omega_3",
+    "omega_6",
+    "saturated",
+    "trans_fats",
+    "cholesterol",
+    "phytosterol",
+    "protein",
+    "tryptophan",
+    "threonine",
+    "isoleucine",
+    "leucine",
+    "lysine",
+    "methionine",
+    "cystine",
+    "phenylalanine",
+    "tyrosine",
+    "valine",
+    "arginine",
+    "histidine",
+    "alanine",
+    "aspartic_acid",
+    "glutamic_acid",
+    "glycine",
+    "proline",
+    "serine",
+    "hydroxyproline",
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_b1",
+    "vitamin_b2",
+    "vitamin_b3",
+    "vitamin_b5",
+    "vitamin_b6",
+    "vitamin_b7",
+    "vitamin_b9",
+    "vitamin_b12",
+    "choline",
+    "betaine",
+    "calcium",
+    "iron",
+    "magnesium",
+    "phosphorus",
+    "potassium",
+    "sodium",
+    "zinc",
+    "copper",
+    "manganese",
+    "selenium",
+    "fluoride",
+    "chloride",
+    "chromium",
+    "iodine",
+    "molybdenum",
+    "alcohol",
+    "water",
+    "ash",
+    "caffeine",
+];
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct NutritionFacts {
@@ -287,6 +152,105 @@ pub struct NutritionFacts {
     pub water: Option<f64>,
     pub ash: Option<f64>,
     pub caffeine: Option<f64>,
+}
+
+impl NutritionFacts {
+    pub async fn seed_nutrition_facts(
+        nutrition_facts: Vec<NutritionFacts>,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) {
+        let query_text = format!(
+            "INSERT INTO private.nutrition_fact ({field_names}) ",
+            field_names = NUTRITION_FACTS_FIELDS.join(", "),
+        );
+
+        let mut nutrition_facts_query_builder: QueryBuilder<Postgres> =
+            QueryBuilder::new(query_text);
+
+        nutrition_facts_query_builder.push_values(
+            nutrition_facts.iter().take(BIND_LIMIT / 69),
+            |mut b, nutrition_fact| {
+                b.push_bind(nutrition_fact.product_id)
+                    .push_bind(nutrition_fact.energy)
+                    .push_bind(nutrition_fact.carbohydrate)
+                    .push_bind(nutrition_fact.dietary_fiber)
+                    .push_bind(nutrition_fact.starch)
+                    .push_bind(nutrition_fact.sugars)
+                    .push_bind(nutrition_fact.fat)
+                    .push_bind(nutrition_fact.monounsaturated)
+                    .push_bind(nutrition_fact.polyunsaturated)
+                    .push_bind(nutrition_fact.omega_3)
+                    .push_bind(nutrition_fact.omega_6)
+                    .push_bind(nutrition_fact.saturated)
+                    .push_bind(nutrition_fact.trans_fats)
+                    .push_bind(nutrition_fact.cholesterol)
+                    .push_bind(nutrition_fact.phytosterol)
+                    .push_bind(nutrition_fact.protein)
+                    .push_bind(nutrition_fact.tryptophan)
+                    .push_bind(nutrition_fact.threonine)
+                    .push_bind(nutrition_fact.isoleucine)
+                    .push_bind(nutrition_fact.leucine)
+                    .push_bind(nutrition_fact.lysine)
+                    .push_bind(nutrition_fact.methionine)
+                    .push_bind(nutrition_fact.cystine)
+                    .push_bind(nutrition_fact.phenylalanine)
+                    .push_bind(nutrition_fact.tyrosine)
+                    .push_bind(nutrition_fact.valine)
+                    .push_bind(nutrition_fact.arginine)
+                    .push_bind(nutrition_fact.histidine)
+                    .push_bind(nutrition_fact.alanine)
+                    .push_bind(nutrition_fact.aspartic_acid)
+                    .push_bind(nutrition_fact.glutamic_acid)
+                    .push_bind(nutrition_fact.glycine)
+                    .push_bind(nutrition_fact.proline)
+                    .push_bind(nutrition_fact.serine)
+                    .push_bind(nutrition_fact.hydroxyproline)
+                    .push_bind(nutrition_fact.vitamin_a)
+                    .push_bind(nutrition_fact.vitamin_c)
+                    .push_bind(nutrition_fact.vitamin_d)
+                    .push_bind(nutrition_fact.vitamin_e)
+                    .push_bind(nutrition_fact.vitamin_k)
+                    .push_bind(nutrition_fact.vitamin_b1)
+                    .push_bind(nutrition_fact.vitamin_b2)
+                    .push_bind(nutrition_fact.vitamin_b3)
+                    .push_bind(nutrition_fact.vitamin_b5)
+                    .push_bind(nutrition_fact.vitamin_b6)
+                    .push_bind(nutrition_fact.vitamin_b7)
+                    .push_bind(nutrition_fact.vitamin_b9)
+                    .push_bind(nutrition_fact.vitamin_b12)
+                    .push_bind(nutrition_fact.choline)
+                    .push_bind(nutrition_fact.betaine)
+                    .push_bind(nutrition_fact.calcium)
+                    .push_bind(nutrition_fact.iron)
+                    .push_bind(nutrition_fact.magnesium)
+                    .push_bind(nutrition_fact.phosphorus)
+                    .push_bind(nutrition_fact.potassium)
+                    .push_bind(nutrition_fact.sodium)
+                    .push_bind(nutrition_fact.zinc)
+                    .push_bind(nutrition_fact.copper)
+                    .push_bind(nutrition_fact.manganese)
+                    .push_bind(nutrition_fact.selenium)
+                    .push_bind(nutrition_fact.fluoride)
+                    .push_bind(nutrition_fact.chloride)
+                    .push_bind(nutrition_fact.chromium)
+                    .push_bind(nutrition_fact.iodine)
+                    .push_bind(nutrition_fact.molybdenum)
+                    .push_bind(nutrition_fact.alcohol)
+                    .push_bind(nutrition_fact.water)
+                    .push_bind(nutrition_fact.ash)
+                    .push_bind(nutrition_fact.caffeine);
+            },
+        );
+
+        let nutrition_facts_query = nutrition_facts_query_builder.build();
+
+        let nutrition_facts_response = nutrition_facts_query.execute(txn).await.unwrap();
+
+        println!(
+            "{} nutrition_fact records created",
+            nutrition_facts_response.rows_affected()
+        );
+    }
 }
 
 fn get_amount(food_nutrients: &[FoodNutrient], nutrient_id: u32) -> Option<f64> {

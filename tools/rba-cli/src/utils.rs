@@ -1,6 +1,8 @@
 use sqlx::PgPool;
 use std::{env, fs, io, path::PathBuf};
 
+pub const BIND_LIMIT: usize = 65535;
+
 pub(crate) async fn migrate_db(database_url: &str) {
     println!("migrating database...");
 

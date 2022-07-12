@@ -1,4 +1,11 @@
+use std::time::Instant;
+
 use serde::{Deserialize, Serialize};
+use sqlx::{PgPool, Postgres, QueryBuilder};
+
+use crate::utils::BIND_LIMIT;
+
+use super::{food_items::SurveyFoodItem, food_parts_custom::FoodAttributeType};
 
 //------------------------------------------------------------------------------
 // Utility types
@@ -12,6 +19,44 @@ pub struct Nutrient {
     pub name: String,
     pub rank: Option<u32>,
     pub unit_name: Option<String>,
+}
+
+impl Nutrient {
+    pub async fn seed_nutrients(nutrients: Vec<Nutrient>) {
+        let start = Instant::now();
+
+        let database_url = "postgres://postgres:password@localhost:8001";
+        let db_pool = PgPool::connect_lazy(database_url).unwrap();
+        let mut txn = db_pool.begin().await.unwrap();
+
+        let mut nutrients_query_builder: QueryBuilder<Postgres> =
+            QueryBuilder::new("INSERT INTO usda.nutrient (id, number, name, rank, unit_name) ");
+
+        nutrients_query_builder.push_values(
+            nutrients.iter().take(BIND_LIMIT / 5),
+            |mut b, nutrient| {
+                b.push_bind(i64::from(nutrient.id))
+                    .push_bind(&nutrient.number)
+                    .push_bind(&nutrient.name)
+                    .push_bind(nutrient.rank.map(i64::from))
+                    .push_bind(&nutrient.unit_name);
+            },
+        );
+
+        let nutrients_query = nutrients_query_builder.build();
+
+        let nutrients_response = nutrients_query.execute(&mut txn).await.unwrap();
+
+        txn.commit().await.unwrap();
+
+        let duration = start.elapsed();
+
+        println!(
+            "Inserted {:?} nutrients in {:?}",
+            nutrients_response.rows_affected(),
+            duration
+        );
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -206,167 +251,4 @@ pub struct FoodUpdateLog {
     pub branded_food_category: Option<String>,
     pub changes: Option<String>,
     pub food_attributes: Vec<FoodAttribute>,
-}
-
-//------------------------------------------------------------------------------
-// Custom types (not directly taken from USDA spec)
-//------------------------------------------------------------------------------
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct FoodAttributeType {
-    pub id: i32,
-    pub name: String,
-    pub description: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct LabelNutrient {
-    pub value: f32,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct LabelNutrients {
-    pub fat: Option<LabelNutrient>,
-    pub saturated_fat: Option<LabelNutrient>,
-    pub trans_fat: Option<LabelNutrient>,
-    pub cholesterol: Option<LabelNutrient>,
-    pub sodium: Option<LabelNutrient>,
-    pub carbohydrates: Option<LabelNutrient>,
-    pub fiber: Option<LabelNutrient>,
-    pub sugars: Option<LabelNutrient>,
-    pub protein: Option<LabelNutrient>,
-    pub calcium: Option<LabelNutrient>,
-    pub iron: Option<LabelNutrient>,
-    pub potassium: Option<LabelNutrient>,
-    pub calories: Option<LabelNutrient>,
-}
-
-//------------------------------------------------------------------------------
-// Food types
-//------------------------------------------------------------------------------
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct FoundationFoodItem {
-    pub fdc_id: i32,
-    pub data_type: String,
-    pub description: String,
-    pub food_class: String,
-    pub foot_note: Option<String>,
-    pub is_historical_reference: bool,
-    pub ndb_number: i32,
-    pub publication_date: String,
-    pub scientific_name: Option<String>,
-    pub food_category: FoodCategory,
-    pub food_components: Option<Vec<FoodComponent>>,
-    pub food_nutrients: Vec<FoodNutrient>,
-    pub food_portions: Vec<FoodPortion>,
-    pub input_foods: Vec<InputFoodFoundation>,
-    pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct AbridgedFoodItem {
-    pub data_type: String,
-    pub description: String,
-    pub fdc_id: i32,
-    pub food_nutrients: Vec<AbridgedFoodNutrient>,
-    pub publication_date: String,
-    pub brand_owner: String,
-    pub gtin_upc: String,
-    pub ndb_number: i32,
-    pub food_code: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct BrandedFoodItem {
-    pub fdc_id: i32,
-    pub available_date: Option<String>,
-    pub brand_owner: String,
-    pub brand_name: Option<String>,
-    pub subbrand_name: Option<String>,
-    pub data_source: String,
-    pub data_type: String,
-    pub description: String,
-    pub food_class: String,
-    pub gtin_upc: String,
-    pub household_serving_full_text: Option<String>,
-    pub ingredients: String,
-    pub modified_date: Option<String>,
-    pub publication_date: String,
-    pub serving_size: Option<f32>,
-    pub serving_size_unit: Option<String>,
-    pub preparation_state_code: Option<String>,
-    pub branded_food_category: String,
-    pub trade_channel: Option<Vec<String>>,
-    pub gpc_class_code: Option<i32>,
-    pub food_nutrients: Vec<FoodNutrient>,
-    pub food_update_log: Vec<FoodUpdateLog>,
-    pub label_nutrients: LabelNutrients,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct SRLegacyFoodItem {
-    pub fdc_id: i32,
-    pub data_type: String,
-    pub description: String,
-    pub food_class: String,
-    pub is_historical_reference: bool,
-    pub ndb_number: i32,
-    pub publication_date: String,
-    pub scientific_name: Option<String>,
-    pub food_category: FoodCategory,
-    pub food_nutrients: Vec<FoodNutrient>,
-    pub food_portions: Vec<FoodPortion>,
-    pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct SurveyFoodItem {
-    pub fdc_id: i32,
-    pub datatype: Option<String>,
-    pub description: String,
-    pub end_date: String,
-    pub food_class: String,
-    pub food_code: String,
-    pub publication_date: String,
-    pub start_date: String,
-    pub food_attributes: Vec<FoodAttribute>,
-    pub food_portions: Vec<FoodPortion>,
-    pub input_foods: Vec<InputFoodSurvey>,
-    pub wweia_food_category: WweiaFoodCategory,
-    pub food_nutrients: Vec<FoodNutrient>,
-}
-
-//------------------------------------------------------------------------------
-// Custom aggregator types (not directly taken from USDA spec)
-//------------------------------------------------------------------------------
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct FoundationFoodData {
-    #[serde(rename = "FoundationFoods")]
-    pub foundation_foods: Vec<FoundationFoodItem>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SurveyFoodData {
-    #[serde(rename = "SurveyFoods")]
-    pub survey_foods: Vec<SurveyFoodItem>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SRLegacyFoodData {
-    #[serde(rename = "SRLegacyFoods")]
-    pub sr_legacy_foods: Vec<SRLegacyFoodItem>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct BrandedFoodData {
-    #[serde(rename = "BrandedFoods")]
-    pub branded_foods: Vec<BrandedFoodItem>,
 }
