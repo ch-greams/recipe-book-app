@@ -321,6 +321,7 @@ pub struct SRLegacyFoodItem {
     pub scientific_name: Option<String>,
     pub food_category: FoodCategory,
     pub food_nutrients: Vec<FoodNutrient>,
+    pub food_portions: Vec<FoodPortion>,
     pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
 }
 

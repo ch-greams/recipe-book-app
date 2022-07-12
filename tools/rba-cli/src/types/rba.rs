@@ -2,7 +2,10 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use std::hash::{Hash, Hasher};
 
-use super::usda::{BrandedFoodItem, FoodNutrient, FoodPortion, FoundationFoodItem, SurveyFoodItem};
+use super::usda::{
+    BrandedFoodItem, FoodNutrient, FoodPortion, FoundationFoodItem, SRLegacyFoodItem,
+    SurveyFoodItem,
+};
 
 #[derive(sqlx::Type, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "product_type", rename_all = "snake_case")]
@@ -97,6 +100,42 @@ impl From<&SurveyFoodItem> for Product {
             brand: "".to_string(),
             subtitle: "".to_string(),
             description: "usda - survey".to_string(),
+
+            density,
+            serving_size: 100.0,
+
+            created_by: 0,
+            is_private: false,
+            created_at: timestamp,
+            updated_at: timestamp,
+        }
+    }
+}
+
+impl From<&SRLegacyFoodItem> for Product {
+    fn from(sr_legacy_food_item: &SRLegacyFoodItem) -> Self {
+        let std_units = vec!["ml", "tsp", "tbsp", "cup"];
+        let std_portion = sr_legacy_food_item
+            .food_portions
+            .iter()
+            .find(|portion| std_units.contains(&portion.measure_unit.abbreviation.as_str()));
+
+        let density = if let Some(food_portion) = std_portion {
+            get_density(food_portion)
+        } else {
+            1.0
+        };
+
+        let timestamp = Utc::now();
+
+        Self {
+            id: sr_legacy_food_item.fdc_id.into(),
+            product_type: ProductType::Food,
+
+            name: sr_legacy_food_item.description.to_owned(),
+            brand: "".to_string(),
+            subtitle: "".to_string(),
+            description: "usda - sr-legacy".to_string(),
 
             density,
             serving_size: 100.0,
@@ -443,6 +482,92 @@ impl From<&SurveyFoodItem> for NutritionFacts {
             water: get_amount(&survey_food_item.food_nutrients, 1051),
             ash: get_amount(&survey_food_item.food_nutrients, 1007),
             caffeine: get_amount(&survey_food_item.food_nutrients, 1057),
+        }
+    }
+}
+
+impl From<&SRLegacyFoodItem> for NutritionFacts {
+    fn from(sr_legacy_food_item: &SRLegacyFoodItem) -> Self {
+        let omega_3: Option<f64> = get_amount_sum(
+            &sr_legacy_food_item.food_nutrients,
+            vec![1404, 1405, 1280, 1272, 1278],
+        );
+
+        let omega_6: Option<f64> = get_amount_sum(
+            &sr_legacy_food_item.food_nutrients,
+            vec![1316, 1321, 1313, 1406, 1408],
+        );
+
+        Self {
+            product_id: sr_legacy_food_item.fdc_id.into(),
+            energy: get_amount(&sr_legacy_food_item.food_nutrients, 1008),
+            carbohydrate: get_amount(&sr_legacy_food_item.food_nutrients, 1005),
+            dietary_fiber: get_amount(&sr_legacy_food_item.food_nutrients, 1079),
+            starch: get_amount(&sr_legacy_food_item.food_nutrients, 1009),
+            sugars: get_amount(&sr_legacy_food_item.food_nutrients, 1063),
+            fat: get_amount(&sr_legacy_food_item.food_nutrients, 1004),
+            monounsaturated: get_amount(&sr_legacy_food_item.food_nutrients, 1292),
+            polyunsaturated: get_amount(&sr_legacy_food_item.food_nutrients, 1293),
+            omega_3,
+            omega_6,
+            saturated: get_amount(&sr_legacy_food_item.food_nutrients, 1258),
+            trans_fats: get_amount(&sr_legacy_food_item.food_nutrients, 1257),
+            cholesterol: get_amount(&sr_legacy_food_item.food_nutrients, 1253),
+            phytosterol: get_amount(&sr_legacy_food_item.food_nutrients, 1298),
+            protein: get_amount(&sr_legacy_food_item.food_nutrients, 1003),
+            tryptophan: get_amount(&sr_legacy_food_item.food_nutrients, 1210),
+            threonine: get_amount(&sr_legacy_food_item.food_nutrients, 1211),
+            isoleucine: get_amount(&sr_legacy_food_item.food_nutrients, 1212),
+            leucine: get_amount(&sr_legacy_food_item.food_nutrients, 1213),
+            lysine: get_amount(&sr_legacy_food_item.food_nutrients, 1214),
+            methionine: get_amount(&sr_legacy_food_item.food_nutrients, 1215),
+            cystine: get_amount(&sr_legacy_food_item.food_nutrients, 1216),
+            phenylalanine: get_amount(&sr_legacy_food_item.food_nutrients, 1217),
+            tyrosine: get_amount(&sr_legacy_food_item.food_nutrients, 1218),
+            valine: get_amount(&sr_legacy_food_item.food_nutrients, 1219),
+            arginine: get_amount(&sr_legacy_food_item.food_nutrients, 1220),
+            histidine: get_amount(&sr_legacy_food_item.food_nutrients, 1221),
+            alanine: get_amount(&sr_legacy_food_item.food_nutrients, 1222),
+            aspartic_acid: get_amount(&sr_legacy_food_item.food_nutrients, 1223),
+            glutamic_acid: get_amount(&sr_legacy_food_item.food_nutrients, 1224),
+            glycine: get_amount(&sr_legacy_food_item.food_nutrients, 1225),
+            proline: get_amount(&sr_legacy_food_item.food_nutrients, 1226),
+            serine: get_amount(&sr_legacy_food_item.food_nutrients, 1227),
+            hydroxyproline: get_amount(&sr_legacy_food_item.food_nutrients, 1228),
+            vitamin_a: get_amount(&sr_legacy_food_item.food_nutrients, 1106),
+            vitamin_c: get_amount(&sr_legacy_food_item.food_nutrients, 1162),
+            vitamin_d: get_amount(&sr_legacy_food_item.food_nutrients, 1114),
+            vitamin_e: get_amount(&sr_legacy_food_item.food_nutrients, 1109),
+            vitamin_k: get_amount(&sr_legacy_food_item.food_nutrients, 1185),
+            vitamin_b1: get_amount(&sr_legacy_food_item.food_nutrients, 1165),
+            vitamin_b2: get_amount(&sr_legacy_food_item.food_nutrients, 1166),
+            vitamin_b3: get_amount(&sr_legacy_food_item.food_nutrients, 1167),
+            vitamin_b5: get_amount(&sr_legacy_food_item.food_nutrients, 1170),
+            vitamin_b6: get_amount(&sr_legacy_food_item.food_nutrients, 1175),
+            vitamin_b7: get_amount(&sr_legacy_food_item.food_nutrients, 1176),
+            vitamin_b9: get_amount(&sr_legacy_food_item.food_nutrients, 1177),
+            vitamin_b12: get_amount(&sr_legacy_food_item.food_nutrients, 1178),
+            choline: get_amount(&sr_legacy_food_item.food_nutrients, 1180),
+            betaine: get_amount(&sr_legacy_food_item.food_nutrients, 1198),
+            calcium: get_amount(&sr_legacy_food_item.food_nutrients, 1087),
+            iron: get_amount(&sr_legacy_food_item.food_nutrients, 1089),
+            magnesium: get_amount(&sr_legacy_food_item.food_nutrients, 1090),
+            phosphorus: get_amount(&sr_legacy_food_item.food_nutrients, 1091),
+            potassium: get_amount(&sr_legacy_food_item.food_nutrients, 1092),
+            sodium: get_amount(&sr_legacy_food_item.food_nutrients, 1093),
+            zinc: get_amount(&sr_legacy_food_item.food_nutrients, 1095),
+            copper: get_amount(&sr_legacy_food_item.food_nutrients, 1098),
+            manganese: get_amount(&sr_legacy_food_item.food_nutrients, 1101),
+            selenium: get_amount(&sr_legacy_food_item.food_nutrients, 1103),
+            fluoride: get_amount(&sr_legacy_food_item.food_nutrients, 1099),
+            chloride: None,
+            chromium: get_amount(&sr_legacy_food_item.food_nutrients, 1096),
+            iodine: get_amount(&sr_legacy_food_item.food_nutrients, 1100),
+            molybdenum: get_amount(&sr_legacy_food_item.food_nutrients, 1102),
+            alcohol: get_amount(&sr_legacy_food_item.food_nutrients, 1018),
+            water: get_amount(&sr_legacy_food_item.food_nutrients, 1051),
+            ash: get_amount(&sr_legacy_food_item.food_nutrients, 1007),
+            caffeine: get_amount(&sr_legacy_food_item.food_nutrients, 1057),
         }
     }
 }

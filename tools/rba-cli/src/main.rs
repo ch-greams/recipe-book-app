@@ -509,6 +509,95 @@ async fn seed_survey_food(food_data: SurveyFoodData) {
     println!("done!");
 }
 
+async fn seed_sr_legacy_food(food_data: SRLegacyFoodData) {
+    let database_url = "postgres://postgres:password@localhost";
+    let db_pool = PgPool::connect_lazy(database_url).unwrap();
+    let mut txn = db_pool.begin().await.unwrap();
+
+    // products
+
+    let products: Vec<Product> = food_data
+        .sr_legacy_foods
+        .iter()
+        .map(|food| food.into())
+        .collect();
+
+    let products_count = products.len();
+    let products_batch_size = 1000;
+    let products_batch_count = products_count / products_batch_size;
+
+    for n in 0..=products_batch_count {
+        let from = n * products_batch_size;
+        let to = if n == products_batch_count {
+            products_count
+        } else {
+            (n + 1) * products_batch_size
+        };
+        println!("products - from: {} to: {}", from, to);
+
+        seed_products(products[from..to].to_vec(), &mut txn).await;
+    }
+
+    // nutrition_facts
+
+    let nutrition_facts: Vec<NutritionFacts> = food_data
+        .sr_legacy_foods
+        .iter()
+        .map(|food| food.into())
+        .collect();
+
+    let nutrition_facts_count = nutrition_facts.len();
+    let nutrition_facts_batch_size = 800;
+    let nutrition_facts_batch_count = nutrition_facts_count / nutrition_facts_batch_size;
+
+    for n in 0..=nutrition_facts_batch_count {
+        let from = n * nutrition_facts_batch_size;
+        let to = if n == nutrition_facts_batch_count {
+            nutrition_facts_count
+        } else {
+            (n + 1) * nutrition_facts_batch_size
+        };
+        println!("nutrition_facts - from: {} to: {}", from, to);
+
+        seed_nutrition_facts(nutrition_facts[from..to].to_vec(), &mut txn).await;
+    }
+
+    // custom_units
+
+    let custom_units: HashSet<CustomUnit> = food_data
+        .sr_legacy_foods
+        .iter()
+        .flat_map(|food| {
+            food.food_portions
+                .iter()
+                .map(|fp| CustomUnit::new(fp, food.fdc_id.into()))
+                .collect::<Vec<CustomUnit>>()
+        })
+        .collect();
+
+    let custom_units_vec: Vec<CustomUnit> = custom_units.into_iter().collect();
+
+    let custom_units_count = custom_units_vec.len();
+    let custom_units_batch_size = 1000;
+    let custom_units_batch_count = custom_units_count / custom_units_batch_size;
+
+    for n in 0..=custom_units_batch_count {
+        let from = n * custom_units_batch_size;
+        let to = if n == custom_units_batch_count {
+            custom_units_count
+        } else {
+            (n + 1) * custom_units_batch_size
+        };
+        println!("custom_units - from: {} to: {}", from, to);
+
+        seed_custom_units(custom_units_vec[from..to].to_vec(), &mut txn).await;
+    }
+
+    txn.commit().await.unwrap();
+
+    println!("done!");
+}
+
 async fn seed_nutrients(nutrients: Vec<Nutrient>) {
     let start = Instant::now();
 
@@ -594,7 +683,7 @@ async fn main() {
 
             let food_data: SRLegacyFoodData = utils::read_type_from_file(food_data_path).unwrap();
 
-            println!("{:?}", food_data.sr_legacy_foods.len());
+            seed_sr_legacy_food(food_data).await;
         }
         Commands::SeedBrandedFood(opts) => {
             let food_data_path = opts
