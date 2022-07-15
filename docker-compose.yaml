@@ -40,9 +40,10 @@ services:
     ports:
       - 5432:5432
     environment:
+      PGUSER: postgres
       POSTGRES_PASSWORD: password
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres-db:/var/lib/postgresql/data
 
   recipe-book-db-admin:
     image: dpage/pgadmin4:latest
@@ -60,5 +61,5 @@ services:
       - recipe-book-db:pgsql-server
 
 volumes:
-  postgres:
+  postgres-db:
   postgres-admin:

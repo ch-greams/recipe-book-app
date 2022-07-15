@@ -16,3 +16,6 @@ target
 # cypress
 **/cypress/videos
 **/cypress/screenshots
+
+# rba-cli
+**/rba-cli/usda-data
