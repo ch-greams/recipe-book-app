@@ -7,8 +7,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct FoodAttributeType {
     pub id: i32,
-    pub name: String,
-    pub description: String,
+    pub name: Option<String>,
+    pub description: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -18,4 +18,4 @@ target
 **/cypress/screenshots
 
 # rba-cli
-**/usda-data
+**/rba-cli/usda-data

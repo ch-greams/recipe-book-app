@@ -1,11 +1,6 @@
-use std::time::Instant;
-
 use serde::{Deserialize, Serialize};
-use sqlx::{PgPool, Postgres, QueryBuilder};
 
-use crate::utils::BIND_LIMIT;
-
-use super::{food_items::SurveyFoodItem, food_parts_custom::FoodAttributeType};
+use super::{foods::SurveyFoodItem, support_custom::FoodAttributeType};
 
 //------------------------------------------------------------------------------
 // Utility types
@@ -19,44 +14,6 @@ pub struct Nutrient {
     pub name: String,
     pub rank: Option<u32>,
     pub unit_name: Option<String>,
-}
-
-impl Nutrient {
-    pub async fn seed_nutrients(nutrients: Vec<Nutrient>) {
-        let start = Instant::now();
-
-        let database_url = "postgres://postgres:password@localhost:8001";
-        let db_pool = PgPool::connect_lazy(database_url).unwrap();
-        let mut txn = db_pool.begin().await.unwrap();
-
-        let mut nutrients_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO usda.nutrient (id, number, name, rank, unit_name) ");
-
-        nutrients_query_builder.push_values(
-            nutrients.iter().take(BIND_LIMIT / 5),
-            |mut b, nutrient| {
-                b.push_bind(i64::from(nutrient.id))
-                    .push_bind(&nutrient.number)
-                    .push_bind(&nutrient.name)
-                    .push_bind(nutrient.rank.map(i64::from))
-                    .push_bind(&nutrient.unit_name);
-            },
-        );
-
-        let nutrients_query = nutrients_query_builder.build();
-
-        let nutrients_response = nutrients_query.execute(&mut txn).await.unwrap();
-
-        txn.commit().await.unwrap();
-
-        let duration = start.elapsed();
-
-        println!(
-            "Inserted {:?} nutrients in {:?}",
-            nutrients_response.rows_affected(),
-            duration
-        );
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]

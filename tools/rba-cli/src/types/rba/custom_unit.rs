@@ -3,7 +3,7 @@ use std::hash::{Hash, Hasher};
 use serde::{Deserialize, Serialize};
 use sqlx::{Executor, Postgres, QueryBuilder};
 
-use crate::{types::usda::food_parts::FoodPortion, utils::BIND_LIMIT};
+use crate::{types::usda::support::FoodPortion, utils::BIND_LIMIT};
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct CustomUnit {

@@ -5,8 +5,8 @@ use sqlx::{Executor, Postgres, QueryBuilder};
 
 use crate::{
     types::usda::{
-        food_items::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem},
-        food_parts::FoodPortion,
+        foods::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem},
+        support::FoodPortion,
     },
     utils::BIND_LIMIT,
 };

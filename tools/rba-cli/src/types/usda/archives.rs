@@ -7,7 +7,7 @@ use crate::types::rba::{
     custom_unit::CustomUnit, nutrition_fact::NutritionFacts, product::Product,
 };
 
-use super::food_items::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem};
+use super::foods::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem};
 
 //------------------------------------------------------------------------------
 // Custom aggregator types (not directly taken from USDA spec)

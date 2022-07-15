@@ -1,12 +1,12 @@
 use serde::{Deserialize, Serialize};
 
 use super::{
-    food_parts::{
+    support::{
         AbridgedFoodNutrient, FoodAttribute, FoodCategory, FoodComponent, FoodNutrient,
         FoodPortion, FoodUpdateLog, InputFoodFoundation, InputFoodSurvey,
         NutrientConversionFactors, WweiaFoodCategory,
     },
-    food_parts_custom::LabelNutrients,
+    support_custom::LabelNutrients,
 };
 
 #[derive(Serialize, Deserialize, Debug)]
