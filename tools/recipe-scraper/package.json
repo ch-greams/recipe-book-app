@@ -1,8 +1,12 @@
 {
   "name": "recipe-scraper",
+  "description": "A tool for scraping recipes from websites",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
+  "main": "./out/index.js",
+  "bin": {
+    "recipe-scraper": "./out/index.js"
+  },
   "engines": {
     "node": "~16",
     "npm": "~8"
@@ -10,10 +14,24 @@
   "scripts": {
     "get_recipe_pages": "node get_recipe_pages.js",
     "get_recipes": "node get_recipes.js",
-    "lint": "npx eslint ."
+    "build": "tsc -p .",
+    "dev": "npm run build && node out/index.js",
+    "start": "node out/index.js"
   },
   "dependencies": {
+    "chalk": "^4.1.2",
+    "commander": "^9.4.0",
     "jsdom": "^20.0.0",
     "superagent": "^8.0.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^16.2.14",
+    "@types/node": "^18.0.5",
+    "@types/superagent": "^4.1.15",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.15.0",
+    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "typescript": "^4.7.4"
   }
 }

@@ -17,5 +17,6 @@ target
 **/cypress/videos
 **/cypress/screenshots
 
-# rba-cli
-**/rba-cli/usda-data
+# tools
+tools/rba-cli/usda-data
+tools/recipe-scraper/data
