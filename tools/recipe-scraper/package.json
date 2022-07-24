@@ -12,8 +12,7 @@
     "npm": "~8"
   },
   "scripts": {
-    "get_recipe_pages": "node get_recipe_pages.js",
-    "get_recipes": "node get_recipes.js",
+    "lint": "npx eslint .",
     "build": "tsc -p .",
     "dev": "npm run build && node out/index.js",
     "start": "node out/index.js"

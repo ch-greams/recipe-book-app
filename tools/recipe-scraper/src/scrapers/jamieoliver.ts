@@ -3,9 +3,10 @@ import fs from "fs";
 import Logger from "../common/logger";
 import { isSome } from "../common/types";
 import { getDocument, getText } from "../common/utils";
+import type { Recipe } from "../common/website-scraper";
 import { PageScraper, Website, WebsiteScraper } from "../common/website-scraper";
 
-
+// NOTE: Currently limits to 600 requests per uncertain period of time, use VPN to avoid it
 
 export class JamieOliverPage extends PageScraper {
 
@@ -88,18 +89,47 @@ export class JamieOliverWebsite extends WebsiteScraper {
     }
 
 
-    private static getRecipeUrls(path: string, offset: number): string[] {
-        const recipe_urls = JSON.parse(fs.readFileSync(path, { encoding: "utf8" }));
-        return recipe_urls.slice(offset);
+    private static getRecipeUrls(path: string, offset: number, limit?: number): string[] {
+        const recipe_urls: string[] = JSON.parse(fs.readFileSync(path, { encoding: "utf8" }));
+        return recipe_urls.slice(offset, limit && (offset + limit));
     }
 
-    public async scrapePages(path: string, offset: number, outputFolder: string, limit: number): Promise<void> {
+    private static saveRecipes(recipes: Recipe[], outputFolder: string, fileName: string, suffix?: string): void {
 
-        const recipe_urls = JamieOliverWebsite.getRecipeUrls(path, offset);
+        if (isSome(suffix)) {
+            const filePath = `${outputFolder}/${fileName}_${suffix}.json`;
 
-        let recipes = [];
-        let recipe_urls_checked = offset;
-        let last_batch_end = offset;
+            fs.writeFileSync(filePath, JSON.stringify(recipes));
+
+            Logger.info(`Recipes saved in ${filePath}`);
+        }
+        else {
+            const filePath = `${outputFolder}/${fileName}.json`;
+
+            const prev_recipes: Recipe[] = (
+                fs.existsSync(filePath)
+                    ? JSON.parse(fs.readFileSync(filePath, { encoding: "utf8" }))
+                    : []
+            );
+
+            fs.writeFileSync(filePath, JSON.stringify([ ...prev_recipes, ...recipes ]));
+
+            Logger.info(`Recipes saved in ${filePath}`);
+        }
+    }
+
+    public async scrapePages(
+        path: string,
+        offset: number,
+        outputFolder: string,
+        override: boolean,
+        limit?: number,
+    ): Promise<void> {
+
+        const recipe_urls = JamieOliverWebsite.getRecipeUrls(path, offset, limit);
+
+        const recipes: Recipe[] = [];
+        let recipe_urls_checked = 0;
 
         for (const recipe_url of recipe_urls) {
 
@@ -111,17 +141,16 @@ export class JamieOliverWebsite extends WebsiteScraper {
             }
 
             Logger.info(`recipe_urls_checked: ${++recipe_urls_checked}`);
+        }
 
-            if (( recipe_urls_checked - last_batch_end === limit ) || ( (recipe_urls_checked - offset) === recipe_urls.length )) {
-                const recipeRange = `${last_batch_end}-${recipe_urls_checked}`;
-                const fileName = `recipes_${Website.JamieOliver}_${recipeRange}.json`;
-                fs.writeFileSync(`${outputFolder}/${fileName}`, JSON.stringify(recipes));
+        const fileName = `recipes_${Website.JamieOliver}`;
 
-                recipes = [];
-                last_batch_end = recipe_urls_checked;
-
-                break;
-            }
+        if (override) {
+            JamieOliverWebsite.saveRecipes(recipes, outputFolder, fileName);
+        }
+        else {
+            const recipeRange = `${offset}-${offset + recipe_urls_checked}`;
+            JamieOliverWebsite.saveRecipes(recipes, outputFolder, fileName, recipeRange);
         }
     }
 }
