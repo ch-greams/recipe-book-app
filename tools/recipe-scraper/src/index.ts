@@ -110,6 +110,10 @@ cli.command("generate-datasets")
         const instructions = recipes.flatMap((recipe) => recipe.instructions);
         Logger.debug(`recipe instructions: ${instructions.length}`);
         fs.writeFileSync(`${outputFolder}/recipe_instructions.json`, JSON.stringify(instructions));
+
+        const tags = recipes.flatMap((recipe) => recipe.tags);
+        Logger.debug(`recipe tags: ${tags.length}`);
+        fs.writeFileSync(`${outputFolder}/recipe_tags.json`, JSON.stringify(tags));
     });
 
 //------------------------------------------------------------------------------

@@ -9,6 +9,7 @@ export interface Recipe {
     title: string;
     ingredients: string[];
     instructions: string[];
+    tags: string[];
 }
 
 export abstract class PageScraper {
@@ -24,6 +25,7 @@ export abstract class PageScraper {
             title: this.getTitle(),
             ingredients: this.getIngredients(),
             instructions: this.getInstructions(),
+            tags: this.getTags(),
         };
     }
 
@@ -32,6 +34,14 @@ export abstract class PageScraper {
     public abstract getIngredients(): string[];
 
     public abstract getInstructions(): string[];
+
+    public abstract getTags(): string[];
+
+    // TODO: Add source (URL)
+
+    // TODO: Add servings
+
+    // TODO: Add time?
 }
 
 

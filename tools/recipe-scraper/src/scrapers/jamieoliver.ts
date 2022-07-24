@@ -10,15 +10,14 @@ import { PageScraper, Website, WebsiteScraper } from "../common/website-scraper"
 
 export class JamieOliverPage extends PageScraper {
 
-    // TODO: add page url
-
     public getTitle(): string {
         const titleElement = this.document.querySelector("h1");
         return isSome(titleElement) ? getText(titleElement) : "";
     }
 
     public getIngredients(): string[] {
-        return [ ...this.document.querySelectorAll(".ingred-list li") ].map(getText);
+        // `.ingred-heading` separates ingredients into groups, might be useful later
+        return [ ...this.document.querySelectorAll(".ingred-list li:not(.ingred-heading)") ].map(getText);
     }
 
     public getInstructions(): string[] {

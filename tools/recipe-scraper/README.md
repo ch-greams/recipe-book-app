@@ -75,4 +75,8 @@ recipe-scraper --version
 # uninstall CLI
 npm uninstall -g recipe-scraper
 # OUTPUT: removed 1 package, and audited 1 package in 132ms
+
+# alternatively you can run in the dev mode
+npm run dev -- --version
+# OUTPUT: 0.1.0
 ```
