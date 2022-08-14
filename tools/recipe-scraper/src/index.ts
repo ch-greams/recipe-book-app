@@ -8,6 +8,7 @@ import Logger from "./common/logger";
 import { DATA_FOLDER } from "./common/utils";
 import type { Recipe } from "./common/website-scraper";
 import { Website } from "./common/website-scraper";
+import { saveDataset, saveDatasetWithContext } from "./datasets";
 import { getWebsiteScraper } from "./scrapers";
 
 
@@ -92,28 +93,39 @@ cli.command("scrape-recipes")
 
 interface GenerateDatasetsOptions extends OptionValues {
     outputFolder: string;
+    context: boolean;
+    json: boolean;
 }
 
 cli.command("generate-datasets")
     .description("Generate ingredients and instructions datasets from provided recipes.")
     .argument("<input-file>", "path to the file from where you want to get recipes")
     .option("-o, --output-folder <path>", "path to the folder where you want to save recipe URLs", DATA_FOLDER)
-    .action(async (inputFile, { outputFolder }: GenerateDatasetsOptions) => {
-        Logger.info(`inputFile: ${inputFile}, outputFolder: ${outputFolder}`);
+    .option("-c, --context", "attach default context to datasets")
+    .option("-j, --json", "save produced datasets in json format (by default csv will be used)")
+    .action(async (inputFile, { outputFolder, context, json }: GenerateDatasetsOptions) => {
+        const format = json ? "json" : "csv";
+
+        Logger.info(`inputFile: ${inputFile}, outputFolder: ${outputFolder}, format: ${format}`);
 
         const recipes: Recipe[] = JSON.parse(fs.readFileSync(inputFile, { encoding: "utf8" }));
 
-        const ingredients = recipes.flatMap((recipe) => recipe.ingredients);
-        Logger.debug(`recipe ingredients: ${ingredients.length}`);
-        fs.writeFileSync(`${outputFolder}/recipe_ingredients.json`, JSON.stringify(ingredients));
+        if (context) {
 
-        const instructions = recipes.flatMap((recipe) => recipe.instructions);
-        Logger.debug(`recipe instructions: ${instructions.length}`);
-        fs.writeFileSync(`${outputFolder}/recipe_instructions.json`, JSON.stringify(instructions));
+            saveDatasetWithContext("ingredients", recipes, outputFolder, format);
 
-        const tags = recipes.flatMap((recipe) => recipe.tags);
-        Logger.debug(`recipe tags: ${tags.length}`);
-        fs.writeFileSync(`${outputFolder}/recipe_tags.json`, JSON.stringify(tags));
+            saveDatasetWithContext("instructions", recipes, outputFolder, format);
+
+            saveDatasetWithContext("tags", recipes, outputFolder, format);
+        }
+        else {
+
+            saveDataset("ingredients", recipes, outputFolder, format);
+
+            saveDataset("instructions", recipes, outputFolder, format);
+
+            saveDataset("tags", recipes, outputFolder, format);
+        }
     });
 
 //------------------------------------------------------------------------------

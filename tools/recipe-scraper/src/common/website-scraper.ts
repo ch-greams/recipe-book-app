@@ -5,6 +5,8 @@ export enum Website {
     NYTimes = "nytimes",
 }
 
+export type RecipeDatasetType = "ingredients" | "instructions" | "tags";
+
 export interface Recipe {
     title: string;
     ingredients: string[];

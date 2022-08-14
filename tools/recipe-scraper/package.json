@@ -20,6 +20,7 @@
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^9.4.0",
+    "csv": "^6.2.0",
     "jsdom": "^20.0.0",
     "superagent": "^8.0.0"
   },
