@@ -1,31 +1,39 @@
-import fs from "fs";
-
 import Logger from "../common/logger";
 import { isSome } from "../common/types";
-import { getDocument, getText } from "../common/utils";
-import type { Recipe } from "../common/website-scraper";
-import { PageScraper, Website, WebsiteScraper } from "../common/website-scraper";
+import { getDocument, getQueryTemplates, getText } from "../common/utils";
+import { Website } from "../common/website-scraper";
+import { PageScraper, WebsiteScraper } from "../common/website-scraper";
 
 // NOTE: Currently limits to 600 requests per uncertain period of time, use VPN to avoid it
 
 export class JamieOliverPage extends PageScraper {
 
-    public getTitle(): string {
+    public getTitleFromDocument(): string {
         const titleElement = this.document.querySelector("h1");
         return isSome(titleElement) ? getText(titleElement) : "";
     }
 
-    public getIngredients(): string[] {
+    public getIngredientsFromDocument(): string[] {
         // `.ingred-heading` separates ingredients into groups, might be useful later
         return [ ...this.document.querySelectorAll(".ingred-list li:not(.ingred-heading)") ].map(getText);
     }
 
-    public getInstructions(): string[] {
+    public getInstructionsFromDocument(): string[] {
         return [ ...this.document.querySelectorAll(".recipeSteps li") ].map(getText);
     }
 
-    public getTags(): string[] {
+    public getTagsFromDocument(): string[] {
         return [ ...this.document.querySelectorAll(".tags-list a") ].map(getText);
+    }
+
+    public getServingsFromDocument(): string {
+        const servingsNode = this.document.querySelector(".recipe-detail.serves > .detail_desc")?.nextSibling;
+        return isSome(servingsNode) ? getText(servingsNode) : "";
+    }
+
+    public getTimeFromDocument(): string {
+        const timeNode = this.document.querySelector(".recipe-detail.time > .detail_desc")?.nextSibling;
+        return isSome(timeNode) ? getText(timeNode) : "";
     }
 }
 
@@ -41,6 +49,9 @@ export class JamieOliverWebsite extends WebsiteScraper {
             .map((link) => link.href);
     }
 
+    //--------------------------------------------------------------------------
+    // find-recipes
+    //--------------------------------------------------------------------------
 
     private recipe_links: Set<string> = new Set();
     private categories_checked: number = 0;
@@ -77,79 +88,77 @@ export class JamieOliverWebsite extends WebsiteScraper {
     public async findRecipePages(): Promise<string[]> {
         await this.getRecipePages("https://www.jamieoliver.com/recipes/category/ingredient/");
 
-        const recipe_links_full = [ ...this.recipe_links ].map((route) => `https://www.jamieoliver.com${route}`);
-        Logger.info(`# of recipes: ${recipe_links_full.length}`);
+        const recipe_urls = [ ...this.recipe_links ].map((route) => `https://www.jamieoliver.com${route}`);
+        Logger.info(`# of recipes: ${recipe_urls.length}`);
 
-        return recipe_links_full;
-    }
-    public async saveRecipePages(outputFolder: string): Promise<void> {
-        const recipe_links_full = await this.findRecipePages();
-        fs.writeFileSync(`${outputFolder}/recipe_urls.json`, JSON.stringify(recipe_links_full));
+        return recipe_urls;
     }
 
+    public async saveRecipePages(): Promise<void> {
 
-    private static getRecipeUrls(path: string, offset: number, limit?: number): string[] {
-        const recipe_urls: string[] = JSON.parse(fs.readFileSync(path, { encoding: "utf8" }));
-        return recipe_urls.slice(offset, limit && (offset + limit));
+        const pgClient = await this.pgPool.connect();
+
+        //----------------------------------------------------------------------
+        // Get source_id
+        //----------------------------------------------------------------------
+
+        const insertSourceQuery = `
+            INSERT INTO recipe_scraper.source (name, url)
+            VALUES ($1, $2)
+            ON CONFLICT (name) DO UPDATE SET name = $1, url = $2
+            RETURNING id;
+        `;
+        const insertSourceQueryValues = [ "jamieoliver", "https://www.jamieoliver.com" ];
+
+        const insertSourceResponse = await pgClient.query(insertSourceQuery, insertSourceQueryValues);
+        const sourceId = insertSourceResponse.rows[0].id;
+
+        //----------------------------------------------------------------------
+        // Insert recipe urls
+        //----------------------------------------------------------------------
+
+        const recipe_urls = await this.findRecipePages();
+
+        const insertRecipesQuery = `
+            INSERT INTO recipe_scraper.recipe (url, source_id)
+            VALUES ${getQueryTemplates(recipe_urls.length, [ "text", "bigint" ])}
+            ON CONFLICT DO NOTHING
+            RETURNING *;
+        `;
+        const insertRecipesQueryValues = recipe_urls.flatMap((url) => ([ url, sourceId ]));
+
+        const insertRecipesResponse = await pgClient.query(insertRecipesQuery, insertRecipesQueryValues);
+
+        Logger.info(`${insertRecipesResponse.rowCount} out of ${recipe_urls.length} recipe urls are saved.`);
+
+        pgClient.release();
     }
 
-    private static saveRecipes(recipes: Recipe[], outputFolder: string, fileName: string, suffix?: string): void {
+    //--------------------------------------------------------------------------
+    // scrape-recipes
+    //--------------------------------------------------------------------------
 
-        if (isSome(suffix)) {
-            const filePath = `${outputFolder}/${fileName}_${suffix}.json`;
+    public async getPageScrapers(limit: number): Promise<JamieOliverPage[]> {
 
-            fs.writeFileSync(filePath, JSON.stringify(recipes));
+        const recipeLeads = await this.getRecipeLeads(Website.JamieOliver, limit);
 
-            Logger.info(`Recipes saved in ${filePath}`);
+        if (recipeLeads.length === 0) {
+            Logger.warn("No recipes were found");
+            return [];
         }
-        else {
-            const filePath = `${outputFolder}/${fileName}.json`;
 
-            const prev_recipes: Recipe[] = (
-                fs.existsSync(filePath)
-                    ? JSON.parse(fs.readFileSync(filePath, { encoding: "utf8" }))
-                    : []
-            );
+        let pages: JamieOliverPage[] = [];
 
-            fs.writeFileSync(filePath, JSON.stringify([ ...prev_recipes, ...recipes ]));
+        for (const recipe of recipeLeads) {
+            const document = await getDocument(recipe.url);
 
-            Logger.info(`Recipes saved in ${filePath}`);
-        }
-    }
-
-    public async scrapePages(
-        path: string,
-        offset: number,
-        outputFolder: string,
-        override: boolean,
-        limit?: number,
-    ): Promise<void> {
-
-        const recipe_urls = JamieOliverWebsite.getRecipeUrls(path, offset, limit);
-
-        const recipes: Recipe[] = [];
-        let recipe_urls_checked = 0;
-
-        for (const recipe_url of recipe_urls) {
-
-            const recipe_document = await getDocument(recipe_url);
-
-            if (isSome(recipe_document)) {
-                const page = new JamieOliverPage(recipe_document);
-                recipes.push(page.getRecipe());
+            if (isSome(document)) {
+                pages = [ ...pages, new JamieOliverPage(recipe, document) ];
             }
 
-            Logger.info(`recipe_urls_checked: ${++recipe_urls_checked}`);
+            Logger.info(`Recipes checked: ${pages.length} out of ${recipeLeads.length}`);
         }
 
-        const fileName = `recipes_${Website.JamieOliver}`;
-
-        if (override) {
-            JamieOliverWebsite.saveRecipes(recipes, outputFolder, fileName);
-        }
-        else {
-            const recipeRange = `${offset}-${offset + recipe_urls_checked}`;
-            JamieOliverWebsite.saveRecipes(recipes, outputFolder, fileName, recipeRange);
-        }
+        return pages;
     }
 }
