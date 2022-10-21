@@ -35,3 +35,7 @@ export function getQueryTemplates(rowCount: number, columns: string[]): string {
         .map(() => `(${columns.map((type) => `$${index++}::${type}`).join(", ")})`)
         .join(", ");
 }
+
+export function isNotEmptyString(value: string): boolean {
+    return value.trim().length > 0;
+}

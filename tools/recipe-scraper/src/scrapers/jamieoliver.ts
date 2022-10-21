@@ -1,6 +1,6 @@
 import Logger from "../common/logger";
 import { isSome } from "../common/types";
-import { getDocument, getQueryTemplates, getText } from "../common/utils";
+import { getDocument, getQueryTemplates, getText, isNotEmptyString } from "../common/utils";
 import { Website } from "../common/website-scraper";
 import { PageScraper, WebsiteScraper } from "../common/website-scraper";
 
@@ -15,15 +15,24 @@ export class JamieOliverPage extends PageScraper {
 
     public getIngredientsFromDocument(): string[] {
         // `.ingred-heading` separates ingredients into groups, might be useful later
-        return [ ...this.document.querySelectorAll(".ingred-list li:not(.ingred-heading)") ].map(getText);
+        const ingredients = [ ...this.document.querySelectorAll(".ingred-list li:not(.ingred-heading)") ]
+            .map(getText)
+            .filter(isNotEmptyString);
+        return ingredients;
     }
 
     public getInstructionsFromDocument(): string[] {
-        return [ ...this.document.querySelectorAll(".recipeSteps li") ].map(getText);
+        const instructions = [ ...this.document.querySelectorAll(".recipeSteps li") ]
+            .map(getText)
+            .filter(isNotEmptyString);
+        return instructions;
     }
 
     public getTagsFromDocument(): string[] {
-        return [ ...this.document.querySelectorAll(".tags-list a") ].map(getText);
+        const tags = [ ...this.document.querySelectorAll(".tags-list a") ]
+            .map(getText)
+            .filter(isNotEmptyString);
+        return tags;
     }
 
     public getServingsFromDocument(): string {
