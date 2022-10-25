@@ -1,13 +1,10 @@
 from pydantic import BaseModel
 
 
-class Measure(BaseModel):
-    amount: float | None
-    unit: str | None
-
 class Ingredient(BaseModel):
     text: str
-    measure: Measure
+    amount: float | None
+    unit: str | None
     name: str | None
 
 class Recipe(BaseModel):

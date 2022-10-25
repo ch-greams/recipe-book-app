@@ -120,9 +120,7 @@ def process_ingredient_text(nlp: spacy.Language, matcher: Matcher, text: str) ->
 
     return {
         "text": text,
-        "measure": {
-            "amount": None if measure == None else measure.amount,
-            "unit": None if measure == None else measure.unit,
-        },
+        "amount": None if measure == None else measure.amount,
+        "unit": None if measure == None else measure.unit,
         "name": name,
     }
