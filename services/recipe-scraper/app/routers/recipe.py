@@ -1,7 +1,10 @@
 from fastapi import APIRouter
 from urllib.parse import urlparse
+
+import spacy
+from app.common.types import Recipe
+from app.services.parser.ingredient_parser import get_matcher, process_ingredient_text, update_tokenizer
 from app.services.scraper import SCRAPERS
-from pydantic import BaseModel
 
 
 router = APIRouter(
@@ -10,13 +13,9 @@ router = APIRouter(
 )
 
 
-class Recipe(BaseModel):
-    title: str
-    time: str
-    yields: str
-    ingredients: list[str]
-    instructions: list[str]
-
+nlp = spacy.load("en_core_web_sm")
+nlp = update_tokenizer(nlp)
+matcher = get_matcher(nlp)
 
 @router.post("/parse", response_model=Recipe)
 async def scrape_recipe(url: str):
@@ -31,6 +30,6 @@ async def scrape_recipe(url: str):
         "title": page_scraper.title(),
         "time": page_scraper.time(),
         "yields": page_scraper.yields(),
-        "ingredients": page_scraper.ingredients(),
+        "ingredients": list(map(lambda text: process_ingredient_text(nlp, matcher, text), page_scraper.ingredients())),
         "instructions": page_scraper.instructions(),
     }
