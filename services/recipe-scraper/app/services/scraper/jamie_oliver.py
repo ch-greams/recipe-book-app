@@ -1,6 +1,6 @@
 
 from app.common.utils import get_text
-from app.services.page_scraper import PageScraper
+from app.services.scraper.page_scraper import PageScraper
 
 
 class JamieOliver(PageScraper):

@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from urllib.parse import urlparse
-from app.services import SCRAPERS
+from app.services.scraper import SCRAPERS
 from pydantic import BaseModel
 
 
