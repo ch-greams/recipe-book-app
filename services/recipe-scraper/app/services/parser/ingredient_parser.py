@@ -1,19 +1,22 @@
 import re
 import spacy
 
+from functools import reduce
 from spacy.tokens import Span
 from spacy.matcher import Matcher
 from spacy.util import filter_spans, compile_suffix_regex, compile_infix_regex
 from spacy.attrs import ORTH
 from app.common.types import Ingredient
-from app.common.utils import filter_ingredient_doc_by_indices, filter_ingredient_doc_by_pos
+from app.common.utils import POS_TO_FILTER, filter_ingredient_doc_by_indices, filter_ingredient_doc_by_pos, reduce_spans_to_indices
 
 from app.services.parser import ADJ_UNITS, UNITS, VULGAR_FRACTIONS, DASH_SYMBOLS, OTHER_SYMBOLS
 from app.services.parser.matcher import PATTERNS, MatcherPatternType
 from app.services.parser.measure import Measure, MeasureType
 
 
+################################################################################
 # Update tokenizer
+################################################################################
 
 def get_after_number_regex(suffixes: list[str]) -> str:
     return f"(?<=[0-9])(?:{ '|'.join(map(re.escape, suffixes)) })"
@@ -33,7 +36,9 @@ def update_tokenizer(nlp: spacy.Language) -> spacy.Language:
 
     return nlp
 
+################################################################################
 # Matcher setup
+################################################################################
 
 def get_matcher(nlp: spacy.Language) -> Matcher:
 
@@ -44,7 +49,9 @@ def get_matcher(nlp: spacy.Language) -> Matcher:
     
     return matcher
 
-# Measure from match - func
+################################################################################
+# Measure from match
+################################################################################
 
 def get_measure_from_match(measure: Span) -> Measure:
 
@@ -91,25 +98,9 @@ def get_measure_from_match(measure: Span) -> Measure:
         case _:
             return None
 
-# Process ingredient - func
-
-from functools import reduce
-
-def reduce_spans_to_indices(acc: list[int], cur_span: Span) -> list[int]:
-    return acc + list(range(cur_span.start, cur_span.end))
-
-
-
-pos_to_filter: list[str] = [
-    "PUNCT",    # punctuation ( ., (, ), ?, etc.. )
-    "NUM",      # numeral ( 1, 2017, one, seventy-seven, IV, MMXIV, etc.. )
-    "DET",      # determiner ( a, an, the, etc.. )
-    "ADP",      # adposition ( in, to, during, etc.. )
-    "CONJ",     # conjunction ( and, or, but, etc.. )
-    "CCONJ",    # coordinating conjunction ( and, or, but, etc.. )
-    "SYM",      # symbol
-    "PART",     # particle
-]
+################################################################################
+# Process ingredient
+################################################################################
 
 def process_ingredient_text(nlp: spacy.Language, matcher: Matcher, text: str) -> Ingredient:
 
@@ -120,7 +111,7 @@ def process_ingredient_text(nlp: spacy.Language, matcher: Matcher, text: str) ->
 
     indices_to_remove = set( reduce(reduce_spans_to_indices, match_spans, []) )
     ingredient = filter_ingredient_doc_by_indices(doc, indices_to_remove)
-    ingredient = filter_ingredient_doc_by_pos(ingredient, pos_to_filter)
+    ingredient = filter_ingredient_doc_by_pos(ingredient, POS_TO_FILTER)
 
     name = " ".join([ token.text for token in ingredient ])
 
