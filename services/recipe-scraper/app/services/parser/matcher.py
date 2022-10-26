@@ -1,14 +1,16 @@
+import spacy
+
 from enum import Enum
 from typing import Any
-
-from app.services.parser import ADJ_UNITS, DASH_SYMBOLS, MULTIPLICATION_SYMBOLS, UNITS, VULGAR_FRACTIONS
+from spacy.matcher import Matcher
+from app.services.parser import ADJ_UNITS, DASH_SYMBOLS, MULTIPLICATION_SYMBOLS, TEMPERATURE_UNITS, TIME_UNITS, UNITS, VULGAR_FRACTIONS
 
 
 MatcherPattern = list[ list[dict[str, Any]] ]
 
 
 
-RANGE_MEASURE_MATCHER_PATTERN: MatcherPattern = [
+RANGE_MEASURE_PATTERN: MatcherPattern = [
     # 1-2g || 1½-2½g || 1-2½g || 1½-2g
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -36,7 +38,7 @@ RANGE_MEASURE_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-MULTI_MEASURE_MATCHER_PATTERN: MatcherPattern = [
+MULTI_MEASURE_PATTERN: MatcherPattern = [
     # 1x2g || 1½x2½g || 1x2½g || 1½x2g
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -64,7 +66,7 @@ MULTI_MEASURE_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-RANGE_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN: MatcherPattern = [
+RANGE_MEASURE_WITHOUT_UNIT_PATTERN: MatcherPattern = [
     # 1-2 || 1½-2½ || 1-2½ || 1½-2
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -86,7 +88,7 @@ RANGE_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-MULTI_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN: MatcherPattern = [
+MULTI_MEASURE_WITHOUT_UNIT_PATTERN: MatcherPattern = [
     # 1x2 || 1½x2½ || 1x2½ || 1½x2
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -108,7 +110,7 @@ MULTI_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-MEASURE_MATCHER_PATTERN: MatcherPattern = [
+MEASURE_PATTERN: MatcherPattern = [
     # 1g || 1½g
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -126,12 +128,12 @@ MEASURE_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-UNIT_MEASURE_MATCHER_PATTERN: MatcherPattern = [
+UNIT_MEASURE_PATTERN: MatcherPattern = [
     # g || ml || ...
     [ { "LEMMA": { "IN": UNITS } } ],
 ]
 
-AMOUNT_MEASURE_MATCHER_PATTERN: MatcherPattern = [
+AMOUNT_MEASURE_PATTERN: MatcherPattern = [
     # 12 || 12½
     [
         { "TEXT": { "REGEX": "\d*\.?\d+" } },
@@ -143,7 +145,7 @@ AMOUNT_MEASURE_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
-PRODUCT_MATCHER_PATTERN: MatcherPattern = [
+PRODUCT_PATTERN: MatcherPattern = [
     [
         { "LOWER": "extra", "OP": "?" },
         { "LOWER": "virgin", "OP": "?" },
@@ -191,6 +193,39 @@ PRODUCT_MATCHER_PATTERN: MatcherPattern = [
     ],
 ]
 
+# add range? with dashes or `to`
+TEMPERATURE_MEASURE_PATTERN: MatcherPattern = [
+    # 36½C || 400°F
+    [
+        { "TEXT": { "REGEX": "\d*\.?\d+" } },
+        { "LOWER": { "IN": VULGAR_FRACTIONS }, "OP": "?" },
+
+        { "LEMMA": { "IN": TEMPERATURE_UNITS } },
+    ],
+    # ½C
+    [
+        { "LOWER": { "IN": VULGAR_FRACTIONS } },
+
+        { "LEMMA": { "IN": TEMPERATURE_UNITS } },
+    ],
+]
+
+# add range? with dashes or `to`
+TIME_MEASURE_PATTERN: MatcherPattern = [
+    # 3½min || 60sec
+    [
+        { "TEXT": { "REGEX": "\d*\.?\d+" } },
+        { "LOWER": { "IN": VULGAR_FRACTIONS }, "OP": "?" },
+
+        { "LEMMA": { "IN": TIME_UNITS } },
+    ],
+    # ½h
+    [
+        { "LOWER": { "IN": VULGAR_FRACTIONS } },
+
+        { "LEMMA": { "IN": TIME_UNITS } },
+    ],
+]
 
 class MatcherPatternType(Enum):
     RANGE_MEASURE               = "RANGE_MEASURE"
@@ -201,14 +236,30 @@ class MatcherPatternType(Enum):
     UNIT_MEASURE                = "UNIT_MEASURE"
     AMOUNT_MEASURE              = "AMOUNT_MEASURE"
     PRODUCT                     = "PRODUCT"
+    TEMPERATURE_MEASURE         = "TEMPERATURE_MEASURE"
+    TIME_MEASURE                = "TIME_MEASURE"
 
-PATTERNS: dict[MatcherPatternType, MatcherPattern] = {
-    MatcherPatternType.RANGE_MEASURE:               RANGE_MEASURE_MATCHER_PATTERN,
-    MatcherPatternType.MULTI_MEASURE:               MULTI_MEASURE_MATCHER_PATTERN,
-    MatcherPatternType.RANGE_MEASURE_WITHOUT_UNIT:  RANGE_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN,
-    MatcherPatternType.MULTI_MEASURE_WITHOUT_UNIT:  MULTI_MEASURE_WITHOUT_UNIT_MATCHER_PATTERN,
-    MatcherPatternType.MEASURE:                     MEASURE_MATCHER_PATTERN,
-    MatcherPatternType.UNIT_MEASURE:                UNIT_MEASURE_MATCHER_PATTERN,
-    MatcherPatternType.AMOUNT_MEASURE:              AMOUNT_MEASURE_MATCHER_PATTERN,
-    MatcherPatternType.PRODUCT:                     PRODUCT_MATCHER_PATTERN,
+INGREDIENT_PATTERNS: dict[MatcherPatternType, MatcherPattern] = {
+    MatcherPatternType.RANGE_MEASURE:               RANGE_MEASURE_PATTERN,
+    MatcherPatternType.MULTI_MEASURE:               MULTI_MEASURE_PATTERN,
+    MatcherPatternType.RANGE_MEASURE_WITHOUT_UNIT:  RANGE_MEASURE_WITHOUT_UNIT_PATTERN,
+    MatcherPatternType.MULTI_MEASURE_WITHOUT_UNIT:  MULTI_MEASURE_WITHOUT_UNIT_PATTERN,
+    MatcherPatternType.MEASURE:                     MEASURE_PATTERN,
+    MatcherPatternType.UNIT_MEASURE:                UNIT_MEASURE_PATTERN,
+    MatcherPatternType.AMOUNT_MEASURE:              AMOUNT_MEASURE_PATTERN,
+    # MatcherPatternType.PRODUCT:                     PRODUCT_PATTERN,
 }
+
+INSTRUCTION_PATTERNS: dict[MatcherPatternType, MatcherPattern] = {
+    MatcherPatternType.TEMPERATURE_MEASURE:     TEMPERATURE_MEASURE_PATTERN,
+    MatcherPatternType.TIME_MEASURE:            TIME_MEASURE_PATTERN,
+}
+
+def get_matcher(nlp: spacy.Language, patterns: dict[MatcherPatternType, MatcherPattern]) -> Matcher:
+
+    matcher = Matcher(nlp.vocab)
+
+    for (pattern_type, pattern) in patterns.items():
+        matcher.add(pattern_type.name, pattern)
+    
+    return matcher

@@ -1,10 +1,10 @@
 from fastapi import APIRouter
 from urllib.parse import urlparse
 
-import spacy
 from app.common.types import Recipe
-from app.services.parser.ingredient_parser import get_matcher, process_ingredient_text, update_tokenizer
+from app.services.parser.recipe_parser import parse_recipe
 from app.services.scraper import SCRAPERS
+from app.services.scraper.page_scraper import PageScraper
 
 
 router = APIRouter(
@@ -13,10 +13,6 @@ router = APIRouter(
 )
 
 
-nlp = spacy.load("en_core_web_sm")
-nlp = update_tokenizer(nlp)
-matcher = get_matcher(nlp)
-
 @router.post("/parse", response_model=Recipe)
 async def scrape_recipe(url: str):
     """
@@ -24,12 +20,6 @@ async def scrape_recipe(url: str):
     """
     hostname = urlparse(url).hostname.replace("www.", "")
 
-    page_scraper = SCRAPERS[hostname](url)
+    page_scraper: PageScraper = SCRAPERS[hostname](url)
 
-    return {
-        "title": page_scraper.title(),
-        "time": page_scraper.time(),
-        "yields": page_scraper.yields(),
-        "ingredients": list(map(lambda text: process_ingredient_text(nlp, matcher, text), page_scraper.ingredients())),
-        "instructions": page_scraper.instructions(),
-    }
+    return parse_recipe(page_scraper)

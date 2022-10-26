@@ -2,7 +2,10 @@ from __future__ import annotations  # solution to the self-mention inside the cl
 import re
 from enum import Enum
 
-from app.services.parser import DASH_SYMBOLS, MULTIPLICATION_SYMBOLS, TEMPERATURE_UNITS, TIME_UNITS, UNITS, VULGAR_FRACTIONS_DICT
+from spacy.tokens import Span
+
+from app.services.parser import ADJ_UNITS, DASH_SYMBOLS, MULTIPLICATION_SYMBOLS, TEMPERATURE_UNITS, TIME_UNITS, UNITS, VULGAR_FRACTIONS_DICT
+from app.services.parser.matcher import MatcherPatternType
 
 
 # weight / volume / temperature / time
@@ -98,3 +101,63 @@ class Measure:
             amount = amount.replace(fraction, f"+{value}")
 
         return sum(map(float, filter(None, amount.split("+"))))
+
+    @staticmethod
+    def get_measure_from_match(measure: Span) -> Measure:
+
+        match measure.label_:
+
+            # INGREDIENT MEASURE
+
+            case MatcherPatternType.RANGE_MEASURE.name:
+                with_adj = measure[-2].text in ADJ_UNITS
+                range_amount: Span = Span(measure.doc, measure.start, measure.end - (2 if with_adj else 1), "AMOUNT")
+                unit: Span = Span(measure.doc, measure.end - 1, measure.end, "UNIT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from_range(range_amount.text), unit.text)
+
+            case MatcherPatternType.MULTI_MEASURE.name:
+                with_adj = measure[-2].text in ADJ_UNITS
+                multi_amount: Span = Span(measure.doc, measure.start, measure.end - (2 if with_adj else 1), "AMOUNT")
+                unit: Span = Span(measure.doc, measure.end - 1, measure.end, "UNIT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from_multi(multi_amount.text), unit.text)
+
+            case MatcherPatternType.RANGE_MEASURE_WITHOUT_UNIT.name:
+                range_amount: Span = Span(measure.doc, measure.start, measure.end, "AMOUNT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from_range(range_amount.text), None)
+
+            case MatcherPatternType.MULTI_MEASURE_WITHOUT_UNIT.name:
+                multi_amount: Span = Span(measure.doc, measure.start, measure.end, "AMOUNT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from_multi(multi_amount.text), None)
+
+            case MatcherPatternType.MEASURE.name:
+                with_adj = measure[-2].text in ADJ_UNITS
+                amount: Span = Span(measure.doc, measure.start, measure.end - (2 if with_adj else 1), "AMOUNT")
+                unit: Span = Span(measure.doc, measure.end - 1, measure.end, "UNIT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from(amount.text), unit.text)
+
+            case MatcherPatternType.UNIT_MEASURE.name:
+                unit: Span = Span(measure.doc, measure.start, measure.end, "UNIT")
+                return Measure(MeasureType.DEFAULT, None, unit.text)
+
+            case MatcherPatternType.AMOUNT_MEASURE.name:
+                amount: Span = Span(measure.doc, measure.start, measure.end, "AMOUNT")
+                return Measure(MeasureType.DEFAULT, Measure.get_amount_from(amount.text), None)
+
+            # TIME
+
+            case MatcherPatternType.TIME_MEASURE.name:
+                range_amount: Span = Span(measure.doc, measure.start, measure.end - 1, "AMOUNT")
+                unit: Span = Span(measure.doc, measure.end - 1, measure.end, "UNIT")
+                return Measure(MeasureType.TIME, Measure.get_amount_from(range_amount.text), unit.text.lower())
+
+            # TEMPERATURE
+
+            case MatcherPatternType.TEMPERATURE_MEASURE.name:
+                range_amount: Span = Span(measure.doc, measure.start, measure.end - 1, "AMOUNT")
+                unit: Span = Span(measure.doc, measure.end - 1, measure.end, "UNIT")
+                return Measure(MeasureType.TEMPERATURE, Measure.get_amount_from(range_amount.text), unit.text.lower())
+
+            # OTHER
+
+            case _:
+                return None
