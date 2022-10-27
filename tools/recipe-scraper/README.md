@@ -60,3 +60,23 @@ The current solution is very basic and far from production. The following proble
     - Titles need to be saved (currently a solution for this will be very fragile)
 
     - `tags` do not exist in current data model, but will be added in the future
+
+## Installation
+
+```sh
+# install this project as CLI
+npm install --global .
+# OUTPUT: added 1 package, and audited 3 packages in 678ms
+
+# and you can run it right away
+recipe-scraper --version
+# OUTPUT: 0.1.0
+
+# uninstall CLI
+npm uninstall -g recipe-scraper
+# OUTPUT: removed 1 package, and audited 1 package in 132ms
+
+# alternatively you can run in the dev mode
+npm run dev -- --version
+# OUTPUT: 0.1.0
+```
