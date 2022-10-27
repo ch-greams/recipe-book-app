@@ -30,6 +30,16 @@ services:
       PORT: 3000
       LOG_LEVEL: DEBUG
 
+  recipe-book-scraper:
+    image: recipe-scraper
+    build: ./services/recipe-scraper
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - recipe-book-db
+    ports:
+      - 8000:8000
+    working_dir: /app
+
   recipe-book-db:
     image: postgres:14
     healthcheck:
@@ -40,25 +50,26 @@ services:
     ports:
       - 5432:5432
     environment:
+      PGUSER: postgres
       POSTGRES_PASSWORD: password
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - postgres-db:/var/lib/postgresql/data
 
-  recipe-book-db-admin:
-    image: dpage/pgadmin4:latest
-    depends_on:
-      - recipe-book-db
-    ports:
-      - 5050:5050
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@greams.com
-      - PGADMIN_DEFAULT_PASSWORD=password
-      - PGADMIN_LISTEN_PORT=5050
-    volumes:
-      - postgres-admin:/var/lib/pgadmin
-    links:
-      - recipe-book-db:pgsql-server
+  # recipe-book-db-admin:
+  #   image: dpage/pgadmin4:latest
+  #   depends_on:
+  #     - recipe-book-db
+  #   ports:
+  #     - 5050:5050
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=admin@greams.com
+  #     - PGADMIN_DEFAULT_PASSWORD=password
+  #     - PGADMIN_LISTEN_PORT=5050
+  #   volumes:
+  #     - postgres-admin:/var/lib/pgadmin
+  #   links:
+  #     - recipe-book-db:pgsql-server
 
 volumes:
-  postgres:
+  postgres-db:
   postgres-admin:

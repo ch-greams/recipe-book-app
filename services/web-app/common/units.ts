@@ -5,7 +5,6 @@ export enum NutritionFactUnit {
     g = "g",
     mg = "mg",
     mcg = "mcg",
-    IU = "IU",
 
     kcal = "kcal",
     kj = "kj",

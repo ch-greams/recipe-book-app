@@ -13,6 +13,15 @@ out
 # rust
 target
 
+# python
+__pycache__
+.ipynb_checkpoints
+
 # cypress
 **/cypress/videos
 **/cypress/screenshots
+
+# tools
+tools/rba-cli/usda-data
+tools/recipe-scraper/data
+tools/recipe-parser/**/data

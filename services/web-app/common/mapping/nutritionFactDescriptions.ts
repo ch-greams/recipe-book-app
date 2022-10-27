@@ -246,7 +246,7 @@ const VITAMINS: Record<nutritionFacts.VitaminNutritionFactType, nutritionFacts.N
 
     [NutritionFactType.VitaminA]: {
         type: NutritionFactType.VitaminA,
-        unit: NutritionFactUnit.IU,
+        unit: NutritionFactUnit.mcg,
         dailyValue: 5000,
         isFraction: false,
     },
@@ -258,7 +258,7 @@ const VITAMINS: Record<nutritionFacts.VitaminNutritionFactType, nutritionFacts.N
     },
     [NutritionFactType.VitaminD]: {
         type: NutritionFactType.VitaminD,
-        unit: NutritionFactUnit.IU,
+        unit: NutritionFactUnit.mcg,
         dailyValue: 400,
         isFraction: false,
     },
@@ -302,6 +302,12 @@ const VITAMINS: Record<nutritionFacts.VitaminNutritionFactType, nutritionFacts.N
         type: NutritionFactType.VitaminB6,
         unit: NutritionFactUnit.mg,
         dailyValue: 1.7,
+        isFraction: false,
+    },
+    [NutritionFactType.VitaminB7]: {
+        type: NutritionFactType.VitaminB7,
+        unit: NutritionFactUnit.mcg,
+        dailyValue: 30,
         isFraction: false,
     },
     [NutritionFactType.VitaminB9]: {
@@ -396,6 +402,12 @@ const MINERALS: Record<nutritionFacts.MineralNutritionFactType, nutritionFacts.N
         type: NutritionFactType.Fluoride,
         unit: NutritionFactUnit.mcg,
         dailyValue: null,
+        isFraction: false,
+    },
+    [NutritionFactType.Chloride]: {
+        type: NutritionFactType.Chloride,
+        unit: NutritionFactUnit.mg,
+        dailyValue: 2300,
         isFraction: false,
     },
     [NutritionFactType.Chromium]: {

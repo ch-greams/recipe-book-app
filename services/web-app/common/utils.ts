@@ -175,7 +175,10 @@ export default class Utils {
 
     // NOTE: OTHER GENERIC THINGS
 
-    public static getObjectKeys<T>(obj: T | Dictionary<keyof T, unknown>, ensureNumber: boolean = false): (keyof T)[] {
+    public static getObjectKeys<T extends object>(
+        obj: T | Dictionary<keyof T, unknown>,
+        ensureNumber: boolean = false,
+    ): (keyof T)[] {
         return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
     }
 
@@ -251,7 +254,15 @@ export default class Utils {
 
     public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
-            (acc, nfType) => ({ ...acc, [nfType]: Utils.numberToString(values[nfType]) }), {},
+            (acc, nfType) => {
+                const nfValue = values[nfType];
+                const nfInput = (
+                    isSome(nfValue)
+                        ? Utils.numberToString(Utils.roundToDecimal(nfValue, DecimalPlaces.Two))
+                        : null
+                );
+                return { ...acc, [nfType]: nfInput };
+            }, {},
         );
     }
 
