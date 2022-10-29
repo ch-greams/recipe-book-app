@@ -3,6 +3,7 @@ use actix_web::{get, web::ServiceConfig, HttpResponse, Responder};
 mod food;
 mod product;
 mod recipe;
+mod meta;
 
 pub fn configure(config: &mut ServiceConfig) {
     config.service(
@@ -10,6 +11,7 @@ pub fn configure(config: &mut ServiceConfig) {
             .service(product::scope())
             .service(food::scope())
             .service(recipe::scope())
+            .service(meta::scope())
             .service(echo),
     );
 }

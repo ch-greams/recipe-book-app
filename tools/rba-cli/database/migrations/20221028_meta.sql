@@ -24,7 +24,6 @@ ALTER SEQUENCE meta.nutrient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE meta.nutrient_id TO postgres;
 
 
-
 CREATE TABLE meta.nutrient_group (
 	id int8 NOT NULL DEFAULT nextval('meta.nutrient_group_id'::regclass),
 	"name" text NOT NULL,
@@ -48,6 +47,22 @@ CREATE TABLE meta.nutrient (
 );
 ALTER TABLE meta.nutrient OWNER TO postgres;
 GRANT ALL ON TABLE meta.nutrient TO postgres;
+
+
+CREATE MATERIALIZED VIEW meta.nutrient_details
+TABLESPACE pg_default
+AS SELECT nutrient.id,
+    nutrient.name,
+    nutrient.daily_value,
+    nutrient.unit,
+    nutrient_group.name AS nutrient_group,
+    nutrient_parent.name AS parent_name
+   FROM meta.nutrient nutrient
+     JOIN meta.nutrient_group nutrient_group ON nutrient_group.id = nutrient.nutrient_group_id
+     LEFT JOIN meta.nutrient nutrient_parent ON nutrient_parent.id = nutrient.parent_id
+WITH DATA;
+ALTER TABLE meta.nutrient_details OWNER TO postgres;
+GRANT ALL ON TABLE meta.nutrient_details TO postgres;
 
 
 GRANT ALL ON SCHEMA meta TO postgres;

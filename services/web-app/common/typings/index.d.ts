@@ -96,3 +96,12 @@ export interface RecipeShort {
     brand: string;
     subtitle: string;
 }
+
+export interface NutrientMeta {
+    id: number;
+    name: string;
+    daily_value?: Option<number>;
+    unit: string;
+    nutrient_group: string;
+    parent_name?: Option<string>;
+}

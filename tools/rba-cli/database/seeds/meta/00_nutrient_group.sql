@@ -1,8 +1,8 @@
 INSERT INTO meta.nutrient_group (id, "name") VALUES
-    (1, 'Carbohydrates'),
-    (2, 'Lipids'),
-    (3, 'Proteins & Amino Acids'),
-    (4, 'Vitamins'),
-    (5, 'Minerals'),
-    (6, 'Other'),
-    (7, 'Energy');
+    (1, 'carbohydrates'),
+    (2, 'lipids'),
+    (3, 'proteins_and_amino_acids'),
+    (4, 'vitamins'),
+    (5, 'minerals'),
+    (6, 'other'),
+    (7, 'energy');

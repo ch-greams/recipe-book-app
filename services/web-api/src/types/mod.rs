@@ -8,3 +8,4 @@ pub mod ingredient_product;
 pub mod nutrition_facts;
 pub mod product;
 pub mod recipe;
+pub mod meta;
