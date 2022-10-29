@@ -20,19 +20,13 @@ impl Nutrient {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        types::meta::Nutrient,
-        utils,
-    };
+    use crate::{types::meta::Nutrient, utils};
 
     #[tokio::test]
     async fn get_nutrients() {
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let nutrients = Nutrient::get_nutrients()
-            .fetch_all(&mut txn)
-            .await
-            .unwrap();
+        let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await.unwrap();
 
         assert!(!nutrients.is_empty());
     }

@@ -1,9 +1,9 @@
 use actix_web::{get, web::ServiceConfig, HttpResponse, Responder};
 
 mod food;
+mod meta;
 mod product;
 mod recipe;
-mod meta;
 
 pub fn configure(config: &mut ServiceConfig) {
     config.service(
