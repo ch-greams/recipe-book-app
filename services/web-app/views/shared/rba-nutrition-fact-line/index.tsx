@@ -11,7 +11,7 @@ import type { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";
-import { updateNutritionFact } from "@store/food/actions";
+import { updateNutritionFact } from "@store/actions/food";
 
 import styles from "./rba-nutrition-fact-line.module.scss";
 

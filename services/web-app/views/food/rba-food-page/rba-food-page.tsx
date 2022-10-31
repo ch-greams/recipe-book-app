@@ -8,8 +8,8 @@ import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
+import * as actions from "@store/actions/food";
+import type { FoodPageStore } from "@store/types/food";
 
 import styles from "./rba-food-page.module.scss";
 

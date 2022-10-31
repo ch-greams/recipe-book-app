@@ -6,7 +6,7 @@ import { TemperatureUnit, TimeUnit } from "@common/units";
 import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
-import type { RecipeDirection } from "@store/recipe/types";
+import type { RecipeDirection } from "@store/types/recipe";
 
 import styles from "./rba-direction-line-read.module.scss";
 

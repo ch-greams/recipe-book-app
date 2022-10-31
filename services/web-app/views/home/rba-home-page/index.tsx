@@ -4,7 +4,7 @@ import Link from "next/link";
 import Utils, { ProductType } from "@common/utils";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch, useAppSelector } from "@store";
-import { searchProducts } from "@store/search/actions";
+import { searchProducts } from "@store/actions/search";
 
 import styles from "./rba-home-page.module.scss";
 

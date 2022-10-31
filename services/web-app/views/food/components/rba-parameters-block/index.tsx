@@ -9,8 +9,8 @@ import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize }
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
+import * as actions from "@store/actions/food";
+import type { FoodPageStore } from "@store/types/food";
 
 import styles from "./rba-parameters-block.module.scss";
 

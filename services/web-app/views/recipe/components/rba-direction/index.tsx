@@ -10,16 +10,16 @@ import RbaDirectionPartIngredient from "@views/recipe/components/rba-direction-p
 import RbaDirectionPartNew from "@views/recipe/components/rba-direction-part-new";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
+import * as actions from "@store/actions/recipe";
 import type {
     RecipeDirection,
     RecipeDirectionPartComment,
     RecipeDirectionPartIngredient,
     RecipeIngredient,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 import {
     DirectionPartType,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 
 import styles from "./rba-direction.module.scss";
 

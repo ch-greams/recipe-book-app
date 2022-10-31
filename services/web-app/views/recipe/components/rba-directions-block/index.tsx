@@ -5,11 +5,11 @@ import type { TemperatureUnit, TimeUnit } from "@common/units";
 import RbaDirection from "@views/recipe/components/rba-direction";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
+import * as actions from "@store/actions/recipe";
 import type {
     RecipeDirection,
     RecipeIngredient,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 
 import RbaDirectionLineEdit from "../rba-direction-line-edit";
 

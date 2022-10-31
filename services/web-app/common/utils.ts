@@ -1,9 +1,9 @@
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
-import type { FoodPageStore } from "@store/food/types";
+import type { FoodPageStore } from "@store/types/food";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 
 import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
 import type { NutritionFactDescription } from "./nutritionFacts";

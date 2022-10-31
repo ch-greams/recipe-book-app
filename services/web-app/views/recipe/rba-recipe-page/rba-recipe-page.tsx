@@ -11,9 +11,9 @@ import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipePageStore } from "@store/recipe/types";
-import type { SearchPageStore } from "@store/search/types";
+import * as actions from "@store/actions/recipe";
+import type { RecipePageStore } from "@store/types/recipe";
+import type { SearchPageStore } from "@store/types/search";
 
 import styles from "./rba-recipe-page.module.scss";
 

@@ -2,8 +2,8 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import { UserMenuItem } from "@common/utils";
 
-import { changeMenuItem, fetchFoods, fetchRecipes } from "./actions";
-import type { UserStore } from "./types";
+import { changeMenuItem, fetchFoods, fetchRecipes } from "../actions/user";
+import type { UserStore } from "../types/user";
 
 
 

@@ -8,7 +8,7 @@ import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
-import type { RecipeDirection } from "@store/recipe/types";
+import type { RecipeDirection } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";

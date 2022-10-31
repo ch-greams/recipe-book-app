@@ -6,10 +6,10 @@ import Utils from "@common/utils";
 import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
-import { addIngredient } from "@store/recipe/actions";
-import type { RecipeIngredient } from "@store/recipe/types";
-import { searchClear, searchProducts } from "@store/search/actions";
-import type { SearchPageStore } from "@store/search/types";
+import { addIngredient } from "@store/actions/recipe";
+import { searchClear, searchProducts } from "@store/actions/search";
+import type { RecipeIngredient } from "@store/types/recipe";
+import type { SearchPageStore } from "@store/types/search";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 

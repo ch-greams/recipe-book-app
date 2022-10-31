@@ -1,7 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { searchClear, searchProducts } from "./actions";
-import type { SearchPageStore } from "./types";
+import { searchClear, searchProducts } from "../actions/search";
+import type { SearchPageStore } from "../types/search";
 
 
 const initialState: SearchPageStore = {

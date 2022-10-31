@@ -9,10 +9,10 @@ import RbaIngredientProduct, {
 } from "@views/recipe/components/rba-ingredient-product";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredient, RecipeIngredientProduct } from "@store/recipe/types";
-import { searchClear, searchProducts } from "@store/search/actions";
-import type { SearchPageStore } from "@store/search/types";
+import * as actions from "@store/actions/recipe";
+import { searchClear, searchProducts } from "@store/actions/search";
+import type { RecipeIngredient, RecipeIngredientProduct } from "@store/types/recipe";
+import type { SearchPageStore } from "@store/types/search";
 
 import styles from "./rba-ingredient.module.scss";
 

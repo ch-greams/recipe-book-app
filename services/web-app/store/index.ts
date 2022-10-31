@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 import { configureStore } from "@reduxjs/toolkit";
 
-import foodReducer from "./food/reducer";
-import recipeReducer from "./recipe/reducer";
-import searchReducer from "./search/reducer";
-import userReducer from "./user/reducer";
+import foodReducer from "./reducers/food";
+import recipeReducer from "./reducers/recipe";
+import searchReducer from "./reducers/search";
+import userReducer from "./reducers/user";
 
 
 

@@ -4,7 +4,7 @@ import { Color } from "@common/colors";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppSelector } from "@store";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/user/actions";
+import * as actions from "@store/actions/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 

@@ -9,7 +9,7 @@ import {
 import { WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
 import { store } from "@store";
-import type { RecipeIngredient } from "@store/recipe/types";
+import type { RecipeIngredient } from "@store/types/recipe";
 
 import RbaIngredientsBlock from ".";
 

@@ -5,8 +5,8 @@ import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
-import * as actions from "./actions";
-import * as types from "./types";
+import * as actions from "../actions/recipe";
+import * as types from "../types/recipe";
 
 
 const DEFAULT_DIRECTION: types.RecipeDirection = {

@@ -10,8 +10,8 @@ import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipeDirectionPartIngredient } from "@store/recipe/types";
+import * as actions from "@store/actions/recipe";
+import type { RecipeDirectionPartIngredient } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconRemove from "@icons/rba-icon-remove";
 

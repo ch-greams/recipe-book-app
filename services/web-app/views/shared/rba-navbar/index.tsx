@@ -4,8 +4,8 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
+import { searchProducts } from "@store/actions/search";
 import { useAppDispatch, useAppSelector } from "@store/index";
-import { searchProducts } from "@store/search/actions";
 import { IconSize } from "@icons/icon-params";
 import RbaIconPerson from "@icons/rba-icon-person";
 

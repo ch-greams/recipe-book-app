@@ -6,8 +6,8 @@ import RbaDiaryBlock from "@views/user/components/rba-diary-block";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/user/actions";
-import type { UserStore } from "@store/user/types";
+import * as actions from "@store/actions/user";
+import type { UserStore } from "@store/types/user";
 
 import styles from "./rba-user-page.module.scss";
 

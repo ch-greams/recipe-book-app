@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
-import { DirectionPartType } from "@store/recipe/types";
+import { DirectionPartType } from "@store/types/recipe";
 
 
 

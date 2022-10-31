@@ -7,8 +7,8 @@ import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
-import * as actions from "@store/food/actions";
-import { searchClear } from "@store/search/actions";
+import * as actions from "@store/actions/food";
+import { searchClear } from "@store/actions/search";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 

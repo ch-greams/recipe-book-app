@@ -8,8 +8,7 @@ import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
 import type { RootState } from "..";
-
-import type * as types from "./types";
+import type * as types from "../types/recipe";
 
 
 // -----------------------------------------------------------------------------

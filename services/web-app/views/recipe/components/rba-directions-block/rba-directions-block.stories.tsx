@@ -11,8 +11,8 @@ import { ProductType } from "@common/utils";
 import { store } from "@store";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
-} from "@store/recipe/types";
-import { DirectionPartType } from "@store/recipe/types";
+} from "@store/types/recipe";
+import { DirectionPartType } from "@store/types/recipe";
 
 import RbaDirectionsBlock from ".";
 

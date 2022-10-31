@@ -7,9 +7,9 @@ import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredient } from "@store/recipe/types";
-import { DirectionPartType } from "@store/recipe/types";
+import * as actions from "@store/actions/recipe";
+import type { RecipeIngredient } from "@store/types/recipe";
+import { DirectionPartType } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 

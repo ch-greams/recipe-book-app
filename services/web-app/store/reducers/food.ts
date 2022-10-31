@@ -4,8 +4,8 @@ import { NutritionFactType } from "@common/nutritionFacts";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
-import * as actions from "./actions";
-import type { FoodPageStore } from "./types";
+import * as actions from "../actions/food";
+import type { FoodPageStore } from "../types/food";
 
 
 const DEFAULT_SERVING_SIZE: number = 100;

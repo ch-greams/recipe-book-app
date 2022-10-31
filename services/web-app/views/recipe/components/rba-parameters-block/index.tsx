@@ -8,8 +8,8 @@ import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize }
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipePageStore } from "@store/recipe/types";
+import * as actions from "@store/actions/recipe";
+import type { RecipePageStore } from "@store/types/recipe";
 
 import styles from "./rba-parameters-block.module.scss";
 
