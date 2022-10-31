@@ -1,9 +1,11 @@
+import { createReducer } from "@reduxjs/toolkit";
+
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
-import type { AppState } from "@store";
 
+import * as actions from "./actions";
 import * as types from "./types";
 
 
@@ -71,11 +73,6 @@ const initialState: types.RecipePageStore = {
 
     isCreated: false,
 };
-
-
-export function extractState(globalState: AppState): types.RecipePageStore {
-    return (globalState?.recipePage || initialState);
-}
 
 
 function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngredient[] {
@@ -215,350 +212,218 @@ function getNewStepNumber(last: Option<number>): number {
     return (last || -1) + 1;
 }
 
-export default function recipePageReducer(state = initialState, action: types.RecipeActionTypes): types.RecipePageStore {
 
-    switch (action.type) {
-
-        case types.RECIPE_SET_EDIT_MODE: {
-            return {
-                ...state,
-                editMode: action.payload,
-            };
-        }
-
-        case types.RECIPE_UPDATE_NAME: {
-            return {
-                ...state,
-                name: action.payload,
-            };
-        }
-
-        case types.RECIPE_UPDATE_BRAND: {
-            return {
-                ...state,
-                brand: action.payload,
-            };
-        }
-
-        case types.RECIPE_UPDATE_SUBTITLE: {
-            return {
-                ...state,
-                subtitle: action.payload,
-            };
-        }
-
-        case types.RECIPE_UPDATE_DESCRIPTION: {
-            return {
-                ...state,
-                description: action.payload,
-            };
-        }
-
-        case types.RECIPE_UPDATE_TYPE: {
-            return {
-                ...state,
-                type: action.payload,
-            };
-        }
-
-        case types.RECIPE_ADD_CUSTOM_UNIT: {
-
+const reducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(actions.setEditMode, (state, action) => {
+            state.editMode = action.payload;
+        })
+        .addCase(actions.updateName, (state, action) => {
+            state.name = action.payload;
+        })
+        .addCase(actions.updateBrand, (state, action) => {
+            state.brand = action.payload;
+        })
+        .addCase(actions.updateSubtitle, (state, action) => {
+            state.subtitle = action.payload;
+        })
+        .addCase(actions.updateDescription, (state, action) => {
+            state.description = action.payload;
+        })
+        .addCase(actions.updateType, (state, action) => {
+            state.type = action.payload;
+        })
+        .addCase(actions.addCustomUnit, (state, action) => {
             const { payload: customUnit } = action;
 
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
             if (state.customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
-                return state;
+                return;
             }
 
-            return {
-                ...state,
-
-                customUnits: [
-                    ...state.customUnits,
-                    {
-                        ...customUnit,
-                        amount: units.convertToMetric(
-                            Number(customUnit.amountInput),
-                            customUnit.unit,
-                            state.customUnits,
-                            state.density,
-                        ),
-                        product_id: state.id,
-                    },
-                ],
-            };
-        }
-
-        case types.RECIPE_UPDATE_CUSTOM_UNIT: {
-
+            state.customUnits = [
+                ...state.customUnits,
+                {
+                    ...customUnit,
+                    amount: units.convertToMetric(
+                        Number(customUnit.amountInput),
+                        customUnit.unit,
+                        state.customUnits,
+                        state.density,
+                    ),
+                    product_id: state.id,
+                },
+            ];
+        })
+        .addCase(actions.updateCustomUnit, (state, action) => {
             const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
-
-            return {
-                ...state,
-
-                customUnits: state.customUnits.map((customUnit, index) => (
-                    (index === customUnitIndex)
-                        ? {
-                            ...updatedCustomUnit,
-                            amount: units.convertToMetric(
-                                Number(updatedCustomUnit.amountInput),
-                                updatedCustomUnit.unit,
-                                state.customUnits,
-                                state.density,
-                            ),
-                        }
-                        : customUnit
-                )),
+            state.customUnits[customUnitIndex] = {
+                ...updatedCustomUnit,
+                amount: units.convertToMetric(
+                    Number(updatedCustomUnit.amountInput),
+                    updatedCustomUnit.unit,
+                    state.customUnits,
+                    state.density,
+                ),
             };
-        }
-
-        case types.RECIPE_REMOVE_CUSTOM_UNIT: {
-
+        })
+        .addCase(actions.removeCustomUnit, (state, action) => {
             const { payload: customUnitIndex } = action;
-
-            return {
-                ...state,
-                customUnits: state.customUnits.filter((_customUnit, index) => index !== customUnitIndex),
-            };
-        }
-
-        case types.RECIPE_REMOVE_DIRECTION: {
-            const directionIndex = action.payload;
-            return {
-                ...state,
-                directions: state.directions.filter((_direction, index) => (index !== directionIndex)),
-            };
-        }
-
-        case types.RECIPE_REMOVE_DIRECTION_PART: {
+            state.customUnits = state.customUnits.filter((_customUnit, index) => index !== customUnitIndex);
+        })
+    // -----------------------------------------------------------------------------------------------------------------
+    // Directions
+    // -----------------------------------------------------------------------------------------------------------------
+        .addCase(actions.removeDirection, (state, action) => {
+            const { payload: directionIndex } = action;
+            state.directions = state.directions.filter((_direction, index) => (index !== directionIndex));
+        })
+        .addCase(actions.removeDirectionPart, (state, action) => {
             const { directionIndex, directionPartId } = action.payload;
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (iDirection === directionIndex)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.filter((directionPart) => (directionPart.id !== directionPartId)),
-                        }
-                        : direction
-                )),
+            const direction = state.directions[directionIndex];
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: direction.steps.filter((directionPart) => (directionPart.id !== directionPartId)),
             };
-        }
+        })
+        .addCase(actions.toggleDirectionOpen, (state, action) => {
+            const { payload: directionIndex } = action;
+            const direction = state.directions[directionIndex];
+            state.directions[directionIndex] = { ...direction, isOpen: !direction.isOpen };
+        })
+        .addCase(actions.toggleDirectionMark, (state, action) => {
+            const { payload: directionIndex } = action;
+            const direction = state.directions[directionIndex];
 
-        case types.RECIPE_TOGGLE_DIRECTION_OPEN: {
-            const directionIndex = action.payload;
-            return {
-                ...state,
-                directions: state.directions.map((direction, index) =>
-                    (index === directionIndex)
-                        ? { ...direction, isOpen: !direction.isOpen }
-                        : direction,
-                ),
-            };
-        }
-
-        case types.RECIPE_TOGGLE_DIRECTION_MARK: {
-            const directionIndex = action.payload;
-            return {
-                ...state,
-                directions: state.directions.map((direction, index) =>
-                    (index === directionIndex)
-                        ? {
-                            ...direction,
-                            isMarked: !direction.isMarked,
-                            isOpen: ( direction.isMarked ? direction.isOpen : false ),
-                            steps: (
-                                direction.isMarked
-                                    ? direction.steps
-                                    : direction.steps.map((directionPart) => (
-                                        (directionPart.type === types.DirectionPartType.Ingredient)
-                                            ? { ...directionPart, isMarked: true }
-                                            : directionPart
-                                    ))
-                            ),
-                        }
-                        : direction,
-                ),
-            };
-        }
-
-        case types.RECIPE_TOGGLE_DIRECTION_PART_MARK: {
-            const { directionIndex, directionPartId } = action.payload;
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
-
-                    if (directionIndex === iDirection) {
-
-                        const steps = direction.steps.map((directionPart) => (
-                            (directionPart.type === types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
-                                ? { ...directionPart, isMarked: !(directionPart as types.RecipeDirectionPartIngredient).isMarked }
+            state.directions[directionIndex] = {
+                ...direction,
+                isMarked: !direction.isMarked,
+                isOpen: ( direction.isMarked ? direction.isOpen : false ),
+                steps: (
+                    direction.isMarked
+                        ? direction.steps
+                        : direction.steps.map((directionPart) => (
+                            (directionPart.type === types.DirectionPartType.Ingredient)
+                                ? { ...directionPart, isMarked: true }
                                 : directionPart
-                        ));
+                        ))
+                ),
+            };
+        })
+        .addCase(actions.toggleDirectionPartMark, (state, action) => {
+            const { directionIndex, directionPartId } = action.payload;
+            const direction = state.directions[directionIndex];
 
-                        const areAllStepsMarked = steps.every((step) => (
-                            (step.type !== types.DirectionPartType.Ingredient) || (step as types.RecipeDirectionPartIngredient).isMarked
-                        ));
+            const steps = direction.steps.map((directionPart) => (
+                (directionPart.type === types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
+                    ? { ...directionPart, isMarked: !(directionPart as types.RecipeDirectionPartIngredient).isMarked }
+                    : directionPart
+            ));
+
+            const areAllStepsMarked = steps.every((step) => (
+                (step.type !== types.DirectionPartType.Ingredient) || (step as types.RecipeDirectionPartIngredient).isMarked
+            ));
+
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: steps,
+                isMarked: areAllStepsMarked,
+                isOpen: ( areAllStepsMarked ? false : direction.isOpen ),
+            };
+        })
+        .addCase(actions.updateDirectionPartStepNumber, (state, action) => {
+            const { directionIndex, directionPartId, stepNumber } = action.payload;
+            const direction = state.directions[directionIndex];
+
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: direction.steps
+                    .map((directionPart) => (
+                        (directionPart.id === directionPartId)
+                            ? { ...directionPart, stepNumber }
+                            : directionPart
+                    ))
+                    .sort(Utils.sortBy("stepNumber")),
+            };
+        })
+        .addCase(actions.updateDirectionPartNote, (state, action) => {
+            const { directionIndex, directionPartId, note } = action.payload;
+            const direction = state.directions[directionIndex];
+
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: direction.steps.map((directionPart) =>
+                    (directionPart.type !== types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
+                        ? { ...directionPart, commentText: note }
+                        : directionPart,
+                ),
+            };
+        })
+        .addCase(actions.updateDirectionPartIngredientAmount, (state, action) => {
+            const { directionIndex, directionPartId, inputValue } = action.payload;
+            const direction = state.directions[directionIndex];
+
+            state.directions[directionIndex].steps = direction.steps.map((directionPart) => {
+
+                if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
+
+                    // TODO: Limit to what you have in ingredients, or just add validation message?
+                    const ingredientAmountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
+                    const ingredientAmount = units.convertToMetric(
+                        Number(ingredientAmountInput), directionPart.ingredientUnit, [], directionPart.ingredientDensity,
+                    );
+
+                    return { ...directionPart, ingredientAmountInput, ingredientAmount };
+                }
+                else {
+                    return directionPart;
+                }
+            });
+        })
+        .addCase(actions.updateDirectionPartIngredientUnit, (state, action) => {
+            const { directionIndex, directionPartId, unit } = action.payload;
+            const direction = state.directions[directionIndex];
+
+            state.directions[directionIndex].steps = direction.steps.map((directionPart) => {
+
+                if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
+
+                    if (state.editMode) {
+
+                        // TODO: Limit to what you have in ingredients, or just add validation message?
+
+                        const amount = units.convertToMetric(
+                            Number(directionPart.ingredientAmountInput), unit, [], directionPart.ingredientDensity,
+                        );
 
                         return {
-                            ...direction,
-                            steps: steps,
-                            isMarked: areAllStepsMarked,
-                            isOpen: ( areAllStepsMarked ? false : direction.isOpen ),
+                            ...directionPart,
+                            ingredientUnit: unit,
+                            ingredientAmount: amount,
                         };
                     }
                     else {
-                        return direction;
+
+                        const amountInCurrentUnits = units.convertFromMetric(
+                            directionPart.ingredientAmount, unit, [], directionPart.ingredientDensity,
+                        );
+                        const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+                        return {
+                            ...directionPart,
+                            ingredientUnit: unit,
+                            ingredientAmountInput: String(amountInput),
+                        };
                     }
-                }),
-            };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_PART_STEP_NUMBER: {
-            const { directionIndex, directionPartId, stepNumber } = action.payload;
-
-            const directions = state.directions.map((direction, iDirection) => {
-                if (directionIndex === iDirection) {
-
-                    return {
-                        ...direction,
-                        steps: direction.steps
-                            .map((directionPart) => (
-                                (directionPart.id === directionPartId)
-                                    ? { ...directionPart, stepNumber }
-                                    : directionPart
-                            ))
-                            .sort(Utils.sortBy("stepNumber")),
-                    };
                 }
                 else {
-                    return direction;
+                    return directionPart;
                 }
             });
-
-
-            return { ...state, directions };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_PART_NOTE: {
-            const { directionIndex, directionPartId, note } = action.payload;
-
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: direction.steps.map((directionPart) =>
-                                (directionPart.type !== types.DirectionPartType.Ingredient) && (directionPartId === directionPart.id)
-                                    ? { ...directionPart, commentText: note }
-                                    : directionPart,
-                            ),
-                        }
-                        : direction
-                )),
-            };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_AMOUNT: {
-
-            const { directionIndex, directionPartId, inputValue } = action.payload;
-
-            const directions = state.directions.map((direction, iDirection) => {
-
-                if (directionIndex === iDirection) {
-
-                    const steps = direction.steps.map((directionPart) => {
-
-                        if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
-
-                            // TODO: Limit to what you have in ingredients, or just add validation message?
-
-                            const amountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
-                            const amount = units.convertToMetric(
-                                Number(amountInput), directionPart.ingredientUnit, [], directionPart.ingredientDensity,
-                            );
-
-                            return {
-                                ...directionPart,
-                                ingredientAmountInput: amountInput,
-                                ingredientAmount: amount,
-                            };
-                        }
-                        else {
-                            return directionPart;
-                        }
-                    });
-
-                    return { ...direction, steps };
-                }
-                else {
-                    return direction;
-                }
-            });
-
-            return { ...state, directions };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_PART_INGREDIENT_UNIT: {
-
-            const { directionIndex, directionPartId, unit } = action.payload;
-
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
-
-                    if (directionIndex === iDirection) {
-
-                        const steps = direction.steps.map((directionPart) => {
-
-                            if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
-
-                                if (state.editMode) {
-
-                                    // TODO: Limit to what you have in ingredients, or just add validation message?
-
-                                    const amount = units.convertToMetric(
-                                        Number(directionPart.ingredientAmountInput), unit, [], directionPart.ingredientDensity,
-                                    );
-
-                                    return {
-                                        ...directionPart,
-                                        ingredientUnit: unit,
-                                        ingredientAmount: amount,
-                                    };
-                                }
-                                else {
-
-                                    const amountInCurrentUnits = units.convertFromMetric(
-                                        directionPart.ingredientAmount, unit, [], directionPart.ingredientDensity,
-                                    );
-                                    const amountInput = Utils.roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
-
-                                    return {
-                                        ...directionPart,
-                                        ingredientUnit: unit,
-                                        ingredientAmountInput: String(amountInput),
-                                    };
-                                }
-                            }
-                            else {
-                                return directionPart;
-                            }
-                        });
-
-                        return { ...direction, steps };
-                    }
-                    else {
-                        return direction;
-                    }
-                }),
-            };
-        }
-
-        case types.RECIPE_CREATE_DIRECTION_PART_INGREDIENT: {
-
+        })
+        .addCase(actions.createDirectionPartIngredient, (state, action) => {
             const { directionIndex, ingredientId } = action.payload;
+            const direction = state.directions[directionIndex];
 
             const ingredient = unwrap(
                 state.ingredients.find(_ingredient => _ingredient.id === ingredientId),
@@ -567,249 +432,150 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             const ingredientProduct = Utils.getRecipeIngredientProduct(ingredient);
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: [
-                                ...direction.steps,
-                                {
-                                    id: Utils.getTemporaryId(),
-                                    stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
-                                    type: types.DirectionPartType.Ingredient,
-                                    ingredientName: ingredientProduct.name,
-                                    ingredientId: ingredientId,
-                                    isMarked: false,
-                                    ingredientAmount: ingredientProduct.amount,
-                                    ingredientAmountInput: ingredientProduct.amountInput,
-                                    ingredientUnit: ingredientProduct.unit,
-                                } as types.RecipeDirectionPartIngredient,
-                            ],
-                        }
-                        : direction
-                )),
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: [
+                    ...direction.steps,
+                    {
+                        id: Utils.getTemporaryId(),
+                        stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
+                        type: types.DirectionPartType.Ingredient,
+                        ingredientName: ingredientProduct.name,
+                        ingredientId: ingredientId,
+                        isMarked: false,
+                        ingredientAmount: ingredientProduct.amount,
+                        ingredientAmountInput: ingredientProduct.amountInput,
+                        ingredientUnit: ingredientProduct.unit,
+                    } as types.RecipeDirectionPartIngredient,
+                ],
             };
-        }
-
-        case types.RECIPE_CREATE_DIRECTION_PART_COMMENT: {
-
+        })
+        .addCase(actions.createDirectionPartComment, (state, action) => {
             const { directionIndex, type } = action.payload;
+            const direction = state.directions[directionIndex];
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
-                    (directionIndex === iDirection)
-                        ? {
-                            ...direction,
-                            steps: [
-                                ...direction.steps,
-                                {
-                                    id: Utils.getTemporaryId(),
-                                    stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
-                                    type: type,
-                                    commentText: type,
-                                } as types.RecipeDirectionPartComment,
-                            ],
-                        }
-                        : direction
-                )),
+            state.directions[directionIndex] = {
+                ...direction,
+                steps: [
+                    ...direction.steps,
+                    {
+                        id: Utils.getTemporaryId(),
+                        stepNumber: getNewStepNumber(direction.steps.last()?.stepNumber),
+                        type: type,
+                        commentText: type,
+                    } as types.RecipeDirectionPartComment,
+                ],
             };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_STEP_NUMBER: {
-
+        })
+        .addCase(actions.updateDirectionStepNumber, (state, action) => {
             const { directionIndex, stepNumber } = action.payload;
 
-            return {
-                ...state,
-                directions: state.directions
-                    .map((direction, iDirection) => (
-                        (directionIndex === iDirection)
-                            ? { ...direction, stepNumber }
-                            : direction
-                    ))
-                    .sort(Utils.sortBy("stepNumber")),
-            };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_NAME: {
-
-            const { directionIndex, name } = action.payload;
-
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => (
+            state.directions = state.directions
+                .map((direction, iDirection) => (
                     (directionIndex === iDirection)
-                        ? { ...direction, name }
+                        ? { ...direction, stepNumber }
                         : direction
-                )),
-            };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_TEMPERATURE_COUNT: {
-
+                ))
+                .sort(Utils.sortBy("stepNumber"));
+        })
+        .addCase(actions.updateDirectionName, (state, action) => {
+            const { directionIndex, name } = action.payload;
+            state.directions[directionIndex].name = name;
+        })
+        .addCase(actions.updateDirectionTemperatureCount, (state, action) => {
             const { directionIndex, inputValue } = action.payload;
+            const direction = state.directions[directionIndex];
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
+            const countInput = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
+            const count = (
+                direction.temperatureUnit === units.TemperatureUnit.F
+                    ? units.convertFahrenheitToCelsius(Number(countInput))
+                    : Number(countInput)
+            );
 
-                    if (directionIndex === iDirection) {
-
-                        const countInput = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
-                        const count = (
-                            direction.temperatureUnit === units.TemperatureUnit.F
-                                ? units.convertFahrenheitToCelsius(Number(countInput))
-                                : Number(countInput)
-                        );
-
-                        return {
-                            ...direction,
-                            temperatureValue: count,
-                            temperatureValueInput: countInput,
-                        };
-                    }
-                    else {
-                        return direction;
-                    }
-                }),
+            state.directions[directionIndex] = {
+                ...direction,
+                temperatureValue: count,
+                temperatureValueInput: countInput,
             };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_TEMPERATURE_UNIT: {
-
+        })
+        .addCase(actions.updateDirectionTemperatureUnit, (state, action) => {
             const { directionIndex, unit } = action.payload;
+            const direction = state.directions[directionIndex];
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
+            if (state.editMode) {
 
-                    if (directionIndex === iDirection) {
+                state.directions[directionIndex] = {
+                    ...direction,
+                    temperatureValue: (
+                        unit === units.TemperatureUnit.F
+                            ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
+                            : Number(direction.temperatureValueInput)
+                    ),
+                    temperatureUnit: unit,
+                };
+            }
+            // NOTE: Shouldn't be possible to trigger this change with `isNone(temperatureValue) === true`
+            else if (isSome(direction.temperatureValue)) {
 
-                        if (state.editMode) {
+                const countInput = (
+                    unit === units.TemperatureUnit.F
+                        ? units.convertCelsiusToFahrenheit(direction.temperatureValue)
+                        : direction.temperatureValue
+                );
 
-                            const count = (
-                                unit === units.TemperatureUnit.F
-                                    ? units.convertFahrenheitToCelsius(Number(direction.temperatureValueInput))
-                                    : Number(direction.temperatureValueInput)
-                            );
-
-                            return {
-                                ...direction,
-                                temperatureValue: count,
-                                temperatureUnit: unit,
-                            };
-                        }
-                        // NOTE: Shouldn't be possible to trigger this change with `isNone(temperatureValue) === true`
-                        else if (isSome(direction.temperatureValue)) {
-
-                            const countInput = (
-                                unit === units.TemperatureUnit.F
-                                    ? units.convertCelsiusToFahrenheit(direction.temperatureValue)
-                                    : direction.temperatureValue
-                            );
-
-                            return {
-                                ...direction,
-                                temperatureValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
-                                temperatureUnit: unit,
-                            };
-                        }
-                    }
-
-                    return direction;
-                }),
-            };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_TIME_COUNT: {
-
+                state.directions[directionIndex] = {
+                    ...direction,
+                    temperatureValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
+                    temperatureUnit: unit,
+                };
+            }
+        })
+        .addCase(actions.updateDirectionTimeCount, (state, action) => {
             const { directionIndex, inputValue } = action.payload;
+            const direction = state.directions[directionIndex];
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
+            const countInput = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
+            const count = units.convertToSeconds(Number(countInput), direction.durationUnit);
 
-                    if (directionIndex === iDirection) {
-
-                        const countInput = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
-                        const count = units.convertToSeconds(Number(countInput), direction.durationUnit);
-
-                        return {
-                            ...direction,
-                            durationValue: count,
-                            durationValueInput: countInput,
-                        };
-                    }
-                    else {
-                        return direction;
-                    }
-                }),
+            state.directions[directionIndex] = {
+                ...direction,
+                durationValue: count,
+                durationValueInput: countInput,
             };
-        }
-
-        case types.RECIPE_UPDATE_DIRECTION_TIME_UNIT: {
-
+        })
+        .addCase(actions.updateDirectionTimeUnit, (state, action) => {
             const { directionIndex, unit } = action.payload;
+            const direction = state.directions[directionIndex];
 
-            return {
-                ...state,
-                directions: state.directions.map((direction, iDirection) => {
+            if (state.editMode) {
 
-                    if (directionIndex === iDirection) {
+                state.directions[directionIndex] = {
+                    ...direction,
+                    durationValue: units.convertToSeconds(Number(direction.durationValueInput), unit),
+                    durationUnit: unit,
+                };
+            }
+            // NOTE: Shouldn't be possible to trigger this change with `isNone(durationValue) === true`
+            else if (isSome(direction.durationValue)) {
 
-                        if (state.editMode) {
-                            const count = units.convertToSeconds(Number(direction.durationValueInput), unit);
+                const countInput = units.convertFromSeconds(direction.durationValue, unit);
 
-                            return {
-                                ...direction,
-                                durationValue: count,
-                                durationUnit: unit,
-                            };
-                        }
-                        // NOTE: Shouldn't be possible to trigger this change with `isNone(durationValue) === true`
-                        else if (isSome(direction.durationValue)) {
-
-                            const countInput = units.convertFromSeconds(direction.durationValue, unit);
-
-                            return {
-                                ...direction,
-                                durationValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
-                                durationUnit: unit,
-                            };
-                        }
-                    }
-
-                    return direction;
-                }),
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_STEP_NUMBER: {
-
-            const stepNumber = action.payload;
-
-            return {
-                ...state,
-                newDirection: { ...state.newDirection, stepNumber: stepNumber },
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_NAME: {
-
-            const name = action.payload;
-
-            return {
-                ...state,
-                newDirection: { ...state.newDirection, name: name },
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_TEMPERATURE_COUNT: {
-
-            const inputValue = action.payload;
+                state.directions[directionIndex] = {
+                    ...direction,
+                    durationValueInput: String(Utils.roundToDecimal(countInput, DecimalPlaces.Two)),
+                    durationUnit: unit,
+                };
+            }
+        })
+        .addCase(actions.updateNewDirectionStepNumber, (state, action) => {
+            state.newDirection.stepNumber = action.payload;
+        })
+        .addCase(actions.updateNewDirectionName, (state, action) => {
+            state.newDirection.name = action.payload;
+        })
+        .addCase(actions.updateNewDirectionTemperatureCount, (state, action) => {
+            const { payload: inputValue } = action;
 
             const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
             const count = (
@@ -818,19 +584,11 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     : Number(countInput)
             );
 
-            return {
-                ...state,
-                newDirection: {
-                    ...state.newDirection,
-                    temperatureValue: count,
-                    temperatureValueInput: countInput,
-                },
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_TEMPERATURE_UNIT: {
-
-            const unit = action.payload;
+            state.newDirection.temperatureValueInput = countInput;
+            state.newDirection.temperatureValue = count;
+        })
+        .addCase(actions.updateNewDirectionTemperatureUnit, (state, action) => {
+            const { payload: unit } = action;
 
             const count = (
                 unit === units.TemperatureUnit.F
@@ -838,85 +596,56 @@ export default function recipePageReducer(state = initialState, action: types.Re
                     : Number(state.newDirection.temperatureValueInput)
             );
 
-            return {
-                ...state,
-                newDirection: {
-                    ...state.newDirection,
-                    temperatureValue: count,
-                    temperatureUnit: unit,
-                },
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_TIME_COUNT: {
-
-            const inputValue = action.payload;
+            state.newDirection.temperatureValue = count;
+            state.newDirection.temperatureUnit = unit;
+        })
+        .addCase(actions.updateNewDirectionTimeCount, (state, action) => {
+            const { payload: inputValue } = action;
 
             const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
             const count = units.convertToSeconds(Number(countInput), state.newDirection.durationUnit);
 
-            return {
-                ...state,
-                newDirection: {
-                    ...state.newDirection,
-                    durationValue: count,
-                    durationValueInput: countInput,
-                },
-            };
-        }
-
-        case types.RECIPE_UPDATE_NEW_DIRECTION_TIME_UNIT: {
-
-            const unit = action.payload;
+            state.newDirection.durationValueInput = countInput;
+            state.newDirection.durationValue = count;
+        })
+        .addCase(actions.updateNewDirectionTimeUnit, (state, action) => {
+            const { payload: unit } = action;
 
             const count = units.convertToSeconds(Number(state.newDirection.durationValueInput), unit);
 
-            return {
-                ...state,
-                newDirection: {
-                    ...state.newDirection,
-                    durationValue: count,
-                    durationUnit: unit,
-                },
-            };
-        }
+            state.newDirection.durationValue = count;
+            state.newDirection.durationUnit = unit;
+        })
+        .addCase(actions.createDirection, (state, action) => {
+            const { payload: direction } = action;
 
-        case types.RECIPE_CREATE_DIRECTION: {
+            state.directions.push({
+                id: direction.id,
 
-            const direction = action.payload;
+                isOpen: false,
+                isMarked: false,
 
-            return {
-                ...state,
-                directions: [
-                    ...state.directions,
-                    {
-                        id: direction.id,
+                stepNumber: getNewStepNumber(state.directions.last()?.stepNumber),
+                name: direction.name,
 
-                        isOpen: false,
-                        isMarked: false,
+                durationValue: direction.durationValue,
+                durationUnit: direction.durationUnit,
 
-                        stepNumber: getNewStepNumber(state.directions.last()?.stepNumber),
-                        name: direction.name,
+                temperatureValue: direction.temperatureValue,
+                temperatureUnit: direction.temperatureUnit,
 
-                        durationValue: direction.durationValue,
-                        durationUnit: direction.durationUnit,
+                durationValueInput: direction.durationValueInput,
+                temperatureValueInput: direction.temperatureValueInput,
 
-                        temperatureValue: direction.temperatureValue,
-                        temperatureUnit: direction.temperatureUnit,
-
-                        durationValueInput: direction.durationValueInput,
-                        temperatureValueInput: direction.temperatureValueInput,
-
-                        steps: [],
-                    },
-                ],
-                newDirection: DEFAULT_DIRECTION,
-            };
-        }
-
-        case types.RECIPE_REMOVE_INGREDIENT: {
-
-            const id = action.payload;
+                steps: [],
+            });
+            state.newDirection = DEFAULT_DIRECTION;
+        })
+    // -----------------------------------------------------------------------------------------------------------------
+    // Ingredients
+    // -----------------------------------------------------------------------------------------------------------------
+        .addCase(actions.removeIngredient, (state, action) => {
+            const { payload: id } = action;
 
             const ingredients = state.ingredients.filter((ingredient) => ingredient.id !== id);
 
@@ -925,46 +654,32 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
 
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
-
-                servingSize: servingSize,
-                servingSizeInput: String(servingSizeInput),
-
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-            };
-        }
-
-        case types.RECIPE_REMOVE_INGREDIENT_PRODUCT: {
-
+            state.ingredients = ingredients;
+            state.nutritionFacts = Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+        })
+        .addCase(actions.removeIngredientProduct, (state, action) => {
             const { parentId, id } = action.payload;
 
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => (
-                    ( ingredient.id === parentId )
-                        ? {
-                            ...ingredient,
-                            products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
-                                product_id !== id || ingredient.product_id === id
-                                    ? { ...acc, [product_id]: ingredient.products[product_id] }
-                                    : acc
-                            ), {}),
-                        }
-                        : ingredient
-                )),
-            };
-        }
-
-        // TODO: Check, might have unexpected/broken behaviour in read-mode
-        case types.RECIPE_REPLACE_INGREDIENT_WITH_ALTERNATIVE: {
-
+            state.ingredients = state.ingredients.map((ingredient) => (
+                ( ingredient.id === parentId )
+                    ? {
+                        ...ingredient,
+                        products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
+                            product_id !== id || ingredient.product_id === id
+                                ? { ...acc, [product_id]: ingredient.products[product_id] }
+                                : acc
+                        ), {}),
+                    }
+                    : ingredient
+            ));
+        })
+        .addCase(actions.replaceIngredientWithAlternative, (state, action) => {
             const { parentId, id } = action.payload;
 
             const ingredients = state.ingredients.reduce<types.RecipeIngredient[]>((accIngredients, curIngredient) => (
@@ -984,50 +699,33 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
 
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
-                servingSize: servingSize,
-                servingSizeInput: String(servingSizeInput),
+            state.ingredients = ingredients;
+            state.nutritionFacts = Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+        })
+        .addCase(actions.toggleIngredientOpen, (state, action) => {
+            const { payload: id } = action;
 
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-            };
-        }
+            state.ingredients = state.ingredients.map((ingredient) => ({
+                ...ingredient,
+                isOpen: (ingredient.id === id) ? !ingredient.isOpen : ingredient.isOpen,
+            }));
+        })
+        .addCase(actions.toggleIngredientMark, (state, action) => {
+            const { payload: id } = action;
 
-        case types.RECIPE_TOGGLE_INGREDIENT_OPEN: {
-
-            const id = action.payload;
-
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => ({
-                    ...ingredient,
-                    isOpen: (ingredient.id === id) ? !ingredient.isOpen : ingredient.isOpen,
-                })),
-            };
-        }
-
-        case types.RECIPE_TOGGLE_INGREDIENT_MARK: {
-
-            const id = action.payload;
-
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => ({
-                    ...ingredient,
-                    isMarked: (ingredient.id === id) ? !ingredient.isMarked : ingredient.isMarked,
-                })),
-            };
-        }
-
-        case types.RECIPE_UPDATE_INGREDIENT_PRODUCT_AMOUNT: {
-
+            state.ingredients = state.ingredients.map((ingredient) => ({
+                ...ingredient,
+                isMarked: (ingredient.id === id) ? !ingredient.isMarked : ingredient.isMarked,
+            }));
+        })
+        .addCase(actions.updateIngredientProductAmount, (state, action) => {
             const { parentId, id, inputValue } = action.payload;
 
             const ingredients = state.ingredients.map((ingredient) => {
@@ -1059,24 +757,17 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
 
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
-                servingSize: servingSize,
-                servingSizeInput: String(servingSizeInput),
-
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-            };
-        }
-
-        case types.RECIPE_UPDATE_INGREDIENT_PRODUCT_UNIT: {
-
+            state.ingredients = ingredients;
+            state.nutritionFacts = Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+        })
+        .addCase(actions.updateIngredientProductUnit, (state, action) => {
             const { parentId, id, unit } = action.payload;
 
             const ingredients = state.ingredients.map((ingredient) => {
@@ -1122,53 +813,38 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
 
-            return {
-                ...state,
-                ingredients: ingredients,
-                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
 
-                servingSize: servingSize,
-                servingSizeInput: String(servingSizeInput),
-
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-            };
-        }
-
-        case types.RECIPE_UPDATE_ALT_NUTRITION_FACTS: {
-
+            state.ingredients = ingredients;
+            state.nutritionFacts = Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+        })
+        .addCase(actions.updateAltNutritionFacts, (state, action) => {
             const { parentId, id, isSelected } = action.payload;
 
-            return {
-                ...state,
-                ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.id === parentId)
-                        ? {
-                            ...ingredient,
-                            alternativeNutritionFacts: (
-                                isSelected
-                                    ? unwrap(ingredient.products[id], `ingredient.products["${id}"]`).nutrition_facts
-                                    : {}
-                            ),
-                        }
-                        : ingredient
-                )),
-            };
-        }
+            state.ingredients = state.ingredients.map((ingredient) => (
+                (ingredient.id === parentId)
+                    ? {
+                        ...ingredient,
+                        alternativeNutritionFacts: (
+                            isSelected
+                                ? unwrap(ingredient.products[id], `ingredient.products["${id}"]`).nutrition_facts
+                                : {}
+                        ),
+                    }
+                    : ingredient
+            ));
+        })
 
-        case types.RECIPE_ADD_INGREDIENT_REQUEST: {
-            return {
-                ...state,
-                isLoadedIngredients: false,
-            };
-        }
-
-        case types.RECIPE_ADD_INGREDIENT_SUCCESS: {
-
-            const ingredientProduct = action.payload;
+        .addCase(actions.addIngredient.pending, (state) => {
+            state.isLoadedIngredients = false;
+        })
+        .addCase(actions.addIngredient.fulfilled, (state, action) => {
+            const { payload: ingredientProduct } = action;
 
             const ingredients: types.RecipeIngredient[] = [
                 ...state.ingredients,
@@ -1198,76 +874,53 @@ export default function recipePageReducer(state = initialState, action: types.Re
                 servingSize, state.servingSizeUnit, state.customUnits, state.density,
             );
             const servingSizeInput = Utils.roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(ingredients);
 
-            return {
-                ...state,
-                isLoadedIngredients: true,
 
-                ingredients: ingredients,
-                nutritionFacts: Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing),
+            state.isLoadedIngredients = true;
+            state.ingredients = ingredients;
+            state.nutritionFacts = Utils.convertNutritionFacts(servingSize, false, nutritionFactsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
 
-                servingSize: servingSize,
-                servingSizeInput: String(servingSizeInput),
+        })
+        .addCase(actions.addIngredient.rejected, (state, action) => {
+            state.isLoadedIngredients = true;
+            state.errorMessage = action.payload?.message;
+        })
 
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-            };
-        }
-
-        case types.RECIPE_ADD_INGREDIENT_ERROR: {
-            return {
-                ...state,
-                isLoadedIngredients: true,
-                errorMessage: action.payload as string,
-            };
-        }
-
-        case types.RECIPE_ADD_INGREDIENT_PRODUCT_REQUEST: {
-            return {
-                ...state,
-                isLoadedIngredients: false,
-            };
-        }
-
-        case types.RECIPE_ADD_INGREDIENT_PRODUCT_SUCCESS: {
-
+        .addCase(actions.addIngredientProduct.pending, (state) => {
+            state.isLoadedIngredients = false;
+        })
+        .addCase(actions.addIngredientProduct.fulfilled, (state, action) => {
             const { id, product } = action.payload;
 
-            return {
-                ...state,
-                isLoadedIngredients: true,
-                ingredients: state.ingredients.map((ingredient) => (
-                    (ingredient.id === id)
-                        ? {
-                            ...ingredient,
-                            products: {
-                                ...ingredient.products,
-                                [product.product_id]: {
-                                    ...product,
-                                    amount: 100,
-                                    amountInput: "100",
-                                    unit: units.WeightUnit.g,
-                                },
+            state.isLoadedIngredients = true;
+            state.ingredients = state.ingredients.map((ingredient) => (
+                (ingredient.id === id)
+                    ? {
+                        ...ingredient,
+                        products: {
+                            ...ingredient.products,
+                            [product.product_id]: {
+                                ...product,
+                                amount: 100,
+                                amountInput: "100",
+                                unit: units.WeightUnit.g,
                             },
-                        }
-                        : ingredient
-                )),
-            };
-        }
-
-        case types.RECIPE_ADD_INGREDIENT_PRODUCT_ERROR: {
-            return {
-                ...state,
-                isLoadedIngredients: true,
-                errorMessage: action.payload as string,
-            };
-        }
-
-        case types.RECIPE_UPDATE_SERVING_SIZE_AMOUNT: {
-
-            const servingSizeInput = action.payload;
+                        },
+                    }
+                    : ingredient
+            ));
+        })
+        .addCase(actions.addIngredientProduct.rejected, (state, action) => {
+            state.isLoadedIngredients = true;
+            state.errorMessage = action.payload?.message;
+        })
+        .addCase(actions.updateServingSizeAmount, (state, action) => {
+            const { payload: servingSizeInput } = action;
 
             const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
             const servingSize = units.convertToMetric(
@@ -1276,29 +929,21 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
             if (state.editMode) {
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeInput: servingSizeInputNormalized,
-                };
+                state.servingSize = servingSize;
+                state.servingSizeInput = servingSizeInputNormalized;
             }
             // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
             else {
                 const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeInput: servingSizeInputNormalized,
-                    nutritionFactsByServing: nutritionFactsByServing,
-                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-                };
+                state.servingSize = servingSize;
+                state.servingSizeInput = servingSizeInputNormalized;
+                state.nutritionFactsByServing = nutritionFactsByServing;
+                state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
             }
-        }
-
-        case types.RECIPE_UPDATE_SERVING_SIZE_UNIT: {
-
-            const servingSizeUnit = action.payload;
+        })
+        .addCase(actions.updateServingSizeUnit, (state, action) => {
+            const { payload: servingSizeUnit } = action;
 
             const servingSize = units.convertToMetric(
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
@@ -1306,148 +951,102 @@ export default function recipePageReducer(state = initialState, action: types.Re
 
             // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
             if (state.editMode) {
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                };
+                state.servingSize = servingSize;
+                state.servingSizeUnit = servingSizeUnit;
             }
             // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
             else {
                 const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
 
-                return {
-                    ...state,
-                    servingSize: servingSize,
-                    servingSizeUnit: servingSizeUnit,
-                    nutritionFactsByServing: nutritionFactsByServing,
-                    nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
-                };
+                state.servingSize = servingSize;
+                state.servingSizeUnit = servingSizeUnit;
+                state.nutritionFactsByServing = nutritionFactsByServing;
+                state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
             }
-        }
+        })
+        .addCase(actions.fetchRecipeNew, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.editMode = true;
+            state.isCreated = false;
+        })
+        .addCase(actions.fetchRecipe.pending, (state, action) => {
+            const { arg: recipeId } = action.meta;
 
-        case types.RECIPE_FETCH_NEW: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: null,
-                editMode: true,
-                isCreated: false,
-            };
-        }
-
-        case types.RECIPE_FETCH_REQUEST: {
-            return {
-                ...state,
-                isLoaded: false,
-                errorMessage: null,
-                editMode: false,
-
-                id: action.payload,
-            };
-        }
-
-        case types.RECIPE_FETCH_SUCCESS: {
-            const recipe = action.payload;
+            state.id = recipeId;
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.editMode = false;
+        })
+        .addCase(actions.fetchRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
 
             const recipeIngredients = convertIngredients(recipe.ingredients);
             const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
             const nutritionFactsByServing = Utils.getRecipeNutritionFactsFromIngredients(recipeIngredients);
 
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: null,
+            state.isLoaded = true;
+            state.errorMessage = null;
 
-                id: recipe.id,
-                name: recipe.name,
-                brand: recipe.brand,
-                subtitle: recipe.subtitle,
-                description: recipe.description,
-                type: recipe.type,
+            state.id = recipe.id;
+            state.name = recipe.name;
+            state.brand = recipe.brand;
+            state.subtitle = recipe.subtitle;
+            state.description = recipe.description;
+            state.type = recipe.type;
 
-                density: recipe.density,
-                densityInput: String(recipe.density),
+            state.density = recipe.density;
+            state.densityInput = String(recipe.density);
 
-                servingSize: recipe.serving_size,
-                servingSizeInput: String(recipe.serving_size),
+            state.servingSize = recipe.serving_size;
+            state.servingSizeInput = String(recipe.serving_size);
 
-                nutritionFacts: Utils.convertNutritionFacts(recipe.serving_size, false, nutritionFactsByServing),
-                customUnits: Utils.convertCustomUnitsIntoInputs(recipe.custom_units),
+            state.nutritionFacts = Utils.convertNutritionFacts(recipe.serving_size, false, nutritionFactsByServing);
+            state.customUnits = Utils.convertCustomUnitsIntoInputs(recipe.custom_units);
 
-                nutritionFactsByServing: nutritionFactsByServing,
-                nutritionFactsByServingInputs: Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing),
+            state.nutritionFactsByServing = nutritionFactsByServing;
+            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
 
-                ingredients: recipeIngredients,
-                directions: recipeDirections,
-            };
-        }
+            state.ingredients = recipeIngredients;
+            state.directions = recipeDirections;
+        })
+        .addCase(actions.fetchRecipe.rejected, (state, action) => {
+            state.isLoaded = true;
+            state.errorMessage = action.payload?.message;
+        })
 
-        case types.RECIPE_FETCH_ERROR: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: action.payload as string,
-            };
-        }
+        .addCase(actions.createRecipe.pending, (state) => {
+            state.isLoaded = false;
+        })
+        .addCase(actions.createRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
 
-        case types.RECIPE_CREATE_REQUEST: {
-            return {
-                ...state,
-                isLoaded: false,
-            };
-        }
+            state.isLoaded = true;
+            state.editMode = false;
+            state.id = recipe.id;
+            state.isCreated = true;
+        })
+        .addCase(actions.createRecipe.rejected, (state, action) => {
+            state.isLoaded = true;
+            state.errorMessage = action.payload?.message;
+        })
 
-        case types.RECIPE_CREATE_SUCCESS: {
+        .addCase(actions.updateRecipe.pending, (state) => {
+            state.isLoaded = false;
+        })
+        .addCase(actions.updateRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
 
-            const recipe = action.payload;
+            state.isLoaded = true;
+            state.editMode = false;
+            state.id = recipe.id;
+            state.isCreated = true;
+        })
+        .addCase(actions.updateRecipe.rejected, (state, action) => {
+            state.isLoaded = true;
+            state.errorMessage = action.payload?.message;
+        });
+});
 
-            return {
-                ...state,
-                isLoaded: true,
-                editMode: false,
-                id: recipe.id,
-                isCreated: true,
-            };
-        }
-
-        case types.RECIPE_CREATE_ERROR: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: action.payload as string,
-            };
-        }
-
-        case types.RECIPE_UPDATE_REQUEST: {
-            return {
-                ...state,
-                isLoaded: false,
-            };
-        }
-
-        case types.RECIPE_UPDATE_SUCCESS: {
-
-            const recipe = action.payload;
-
-            return {
-                ...state,
-                isLoaded: true,
-                editMode: false,
-                id: recipe.id,
-            };
-        }
-
-        case types.RECIPE_UPDATE_ERROR: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: action.payload as string,
-            };
-        }
-
-        default:
-            return state;
-    }
-}
+export default reducer;

@@ -1,7 +1,7 @@
 
 import type { Dispatch } from "react";
 import React from "react";
-import { useDispatch } from "react-redux";
+import type { AnyAction } from "@reduxjs/toolkit";
 
 import type { NutritionFactType } from "@common/nutritionFacts";
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
@@ -10,8 +10,8 @@ import type { InputChangeCallback } from "@common/typings";
 import type { NutritionFactUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import { useAppDispatch } from "@store";
 import { updateNutritionFact } from "@store/food/actions";
-import type { UpdateNutritionFactAction } from "@store/food/types";
 
 import styles from "./rba-nutrition-fact-line.module.scss";
 
@@ -31,13 +31,13 @@ interface Props {
     nutritionFact: NutritionFact;
 }
 
-const handleOnChange = (dispatch: Dispatch<UpdateNutritionFactAction>, nutritionFact: NutritionFact): InputChangeCallback => {
+const handleOnChange = (dispatch: Dispatch<AnyAction>, nutritionFact: NutritionFact): InputChangeCallback => {
 
     return (event) => {
 
         const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
 
-        dispatch(updateNutritionFact(nutritionFact.type, inputValue));
+        dispatch(updateNutritionFact({ key: nutritionFact.type, value: inputValue }));
     };
 };
 
@@ -65,7 +65,7 @@ const RbaNutritionFactLine: React.FC<Props> = ({
 }) => {
 
     // TODO: Move dispatch hook to RbaNutritionFactsBlock component (like custom-unit block & line)
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     return (
 

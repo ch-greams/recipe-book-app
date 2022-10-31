@@ -1,18 +1,20 @@
-import type { SearchClearAction, SearchProductsFetchRequestedAction } from "./types";
-import { SEARCH_CLEAR } from "./types";
-import { SEARCH_PRODUCTS_FETCH_REQUEST } from "./types";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+
+import type { ProductShort } from "@common/typings";
+import ProductApi from "@api/productApi";
 
 
+export const searchClear = createAction("search/search_clear");
 
-export function searchClear(): SearchClearAction {
-    return {
-        type: SEARCH_CLEAR,
-    };
-}
-
-export function searchProducts(payload: string): SearchProductsFetchRequestedAction {
-    return {
-        type: SEARCH_PRODUCTS_FETCH_REQUEST,
-        payload: payload,
-    };
-}
+export const searchProducts = createAsyncThunk<ProductShort[], string, { rejectValue: Error }>(
+    "search/search_products",
+    async (filter, thunkApi) => {
+        try {
+            const products = await ProductApi.getProducts(filter);
+            return products;
+        }
+        catch (error) {
+            return thunkApi.rejectWithValue(error as Error);
+        }
+    },
+);

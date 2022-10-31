@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
@@ -8,6 +7,7 @@ import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } 
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
+import { useAppDispatch } from "@store";
 import * as actions from "@store/food/actions";
 import type { FoodPageStore } from "@store/food/types";
 
@@ -22,12 +22,12 @@ interface Props {
 
 const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const saveButtonAction = (
         isNew
-            ? () => dispatch(actions.createFoodRequest())
-            : () => dispatch(actions.updateFoodRequest())
+            ? () => dispatch(actions.createFood())
+            : () => dispatch(actions.updateFood())
     );
 
     const pageControls = (
@@ -36,7 +36,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
                 label={RBA_BUTTON_LABEL_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
-                onClick={() => dispatch(actions.fetchFoodRequest(food.id))}
+                onClick={() => dispatch(actions.fetchFood(food.id))}
             />
 
             <RbaButton

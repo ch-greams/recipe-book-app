@@ -1,179 +1,68 @@
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+
 import type { NutritionFactType } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
 import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
+import Utils from "@common/utils";
+import FoodApi from "@api/foodApi";
 
-import * as types from "./types";
+import type { RootState } from "..";
 
 
+export const setEditMode = createAction<boolean>("food/set_edit_mode");
+export const updateName = createAction<string>("food/update_name");
+export const updateBrand = createAction<string>("food/update_brand");
+export const updateSubtitle = createAction<string>("food/update_subtitle");
+export const updateDescription = createAction<string>("food/update_description");
+export const updateType = createAction<string>("food/update_type");
+export const updateDensityAmount = createAction<string>("food/update_density_amount");
+export const updateDensityVolumeUnit = createAction<VolumeUnit>("food/update_density_volume_unit");
+export const updateDensityWeightUnit = createAction<WeightUnit>("food/update_density_weight_unit");
+export const updateServingSizeAmount = createAction<string>("food/update_serving_size_amount");
+export const updateServingSizeUnit = createAction<Unit | string>("food/update_serving_size_unit");
+export const addCustomUnit = createAction<CustomUnitInput>("food/add_custom_unit");
+export const updateCustomUnit = createAction<{ index: number, customUnit: CustomUnitInput }>("food/update_custom_unit");
+export const removeCustomUnit = createAction<number>("food/remove_custom_unit");
+export const updateNutritionFact = createAction<{ key: NutritionFactType, value: string }>("food/update_nutrient");
+export const fetchFoodNew = createAction("food/fetch_food_new");
 
-export function setEditMode(name: boolean): types.SetEditModeAction {
-    return {
-        type: types.FOOD_SET_EDIT_MODE,
-        payload: name,
-    };
-}
-
-export function updateName(name: string): types.UpdateNameAction {
-    return {
-        type: types.FOOD_UPDATE_NAME,
-        payload: name,
-    };
-}
-
-export function updateBrand(brand: string): types.UpdateBrandAction {
-    return {
-        type: types.FOOD_UPDATE_BRAND,
-        payload: brand,
-    };
-}
-
-export function updateSubtitle(subtitle: string): types.UpdateSubtitleAction {
-    return {
-        type: types.FOOD_UPDATE_SUBTITLE,
-        payload: subtitle,
-    };
-}
-
-export function updateDescription(description: string): types.UpdateDescriptionAction {
-    return {
-        type: types.FOOD_UPDATE_DESCRIPTION,
-        payload: description,
-    };
-}
-
-export function updateType(type: string): types.UpdateTypeAction {
-    return {
-        type: types.FOOD_UPDATE_TYPE,
-        payload: type,
-    };
-}
-
-export function updateNutritionFact(key: NutritionFactType, value: string): types.UpdateNutritionFactAction {
-    return {
-        type: types.FOOD_UPDATE_NUTRITION_FACT,
-        payload: { [key]: value },
-    };
-}
-
-export function fetchFoodNew(): types.FoodFetchNewAction {
-    return {
-        type: types.FOOD_FETCH_NEW,
-    };
-}
-
-export function fetchFoodRequest(foodId: number): types.FoodFetchRequestAction {
-    return {
-        type: types.FOOD_FETCH_REQUEST,
-        payload: foodId,
-    };
-}
-
-export function fetchFoodSuccess(food: Food): types.FoodFetchSuccessAction {
-    return {
-        type: types.FOOD_FETCH_SUCCESS,
-        payload: food,
-    };
-}
-
-export function fetchFoodError(error: string): types.FoodFetchErrorAction {
-    return {
-        type: types.FOOD_FETCH_ERROR,
-        payload: error,
-    };
-}
-
-export function updateDensityAmount(densityAmountInput: string): types.UpdateDensityAmountAction {
-    return {
-        type: types.FOOD_UPDATE_DENSITY_AMOUNT,
-        payload: densityAmountInput,
-    };
-}
-
-export function updateDensityVolumeUnit(densityVolumeUnit: VolumeUnit): types.UpdateDensityVolumeUnitAction {
-    return {
-        type: types.FOOD_UPDATE_DENSITY_VOLUME_UNIT,
-        payload: densityVolumeUnit,
-    };
-}
-
-export function updateDensityWeightUnit(densityWeightUnit: WeightUnit): types.UpdateDensityWeightUnitAction {
-    return {
-        type: types.FOOD_UPDATE_DENSITY_WEIGHT_UNIT,
-        payload: densityWeightUnit,
-    };
-}
-
-export function updateServingSizeAmount(servingSizeAmountInput: string): types.UpdateServingSizeAmountAction {
-    return {
-        type: types.FOOD_UPDATE_SERVING_SIZE_AMOUNT,
-        payload: servingSizeAmountInput,
-    };
-}
-
-export function updateServingSizeUnit(servingSizeUnit: Unit | string): types.UpdateServingSizeUnitAction {
-    return {
-        type: types.FOOD_UPDATE_SERVING_SIZE_UNIT,
-        payload: servingSizeUnit,
-    };
-}
-
-export function addCustomUnit(customUnit: CustomUnitInput): types.AddCustomUnitAction {
-    return {
-        type: types.FOOD_ADD_CUSTOM_UNIT,
-        payload: customUnit,
-    };
-}
-
-export function removeCustomUnit(index: number): types.RemoveCustomUnitAction {
-    return {
-        type: types.FOOD_REMOVE_CUSTOM_UNIT,
-        payload: index,
-    };
-}
-
-export function updateCustomUnit(index: number, customUnit: CustomUnitInput): types.UpdateCustomUnitAction {
-    return {
-        type: types.FOOD_UPDATE_CUSTOM_UNIT,
-        payload: { index, customUnit },
-    };
-}
-
-export function createFoodRequest(): types.FoodCreateRequestAction {
-    return {
-        type: types.FOOD_CREATE_REQUEST,
-    };
-}
-
-export function createFoodSuccess(food: Food): types.FoodCreateSuccessAction {
-    return {
-        type: types.FOOD_CREATE_SUCCESS,
-        payload: food,
-    };
-}
-
-export function createFoodError(error: string): types.FoodCreateErrorAction {
-    return {
-        type: types.FOOD_CREATE_ERROR,
-        payload: error,
-    };
-}
-
-export function updateFoodRequest(): types.FoodUpdateRequestAction {
-    return {
-        type: types.FOOD_UPDATE_REQUEST,
-    };
-}
-
-export function updateFoodSuccess(food: Food): types.FoodUpdateSuccessAction {
-    return {
-        type: types.FOOD_UPDATE_SUCCESS,
-        payload: food,
-    };
-}
-
-export function updateFoodError(error: string): types.FoodUpdateErrorAction {
-    return {
-        type: types.FOOD_UPDATE_ERROR,
-        payload: error,
-    };
-}
+export const fetchFood = createAsyncThunk<Food, number, { rejectValue: Error }>(
+    "food/fetch_food",
+    async (foodId, { rejectWithValue }) => {
+        try {
+            const food = await FoodApi.getFood(foodId);
+            return food;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);
+export const createFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
+    "food/create_food",
+    async (_params, { getState, rejectWithValue }) => {
+        try {
+            const foodPage = getState().food;
+            const food = Utils.convertFoodPageIntoFood(foodPage);
+            const createdFood = await FoodApi.createFood(food);
+            return createdFood;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);
+export const updateFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
+    "food/update_food",
+    async (_params, { getState, rejectWithValue }) => {
+        try {
+            const foodPage = getState().food;
+            const food = Utils.convertFoodPageIntoFood(foodPage);
+            const updatedFood = await FoodApi.updateFood(food);
+            return updatedFood;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);

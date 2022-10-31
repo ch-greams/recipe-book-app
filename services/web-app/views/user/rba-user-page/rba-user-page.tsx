@@ -1,11 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import Utils, { UserMenuItem } from "@common/utils";
 import RbaDiaryBlock from "@views/user/components/rba-diary-block";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
+import { useAppDispatch } from "@store";
 import * as actions from "@store/user/actions";
 import type { UserStore } from "@store/user/types";
 
@@ -19,7 +19,7 @@ interface Props {
 
 const RbaUserPage: React.FC<Props> = ({ user }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const menuItems = [
         UserMenuItem.Diary,
@@ -31,7 +31,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
         <div
             data-cy={CY_USER_MENU_ITEM}
             key={menuItem}
-            onClick={() => dispatch(actions.updateMenuItem(menuItem))}
+            onClick={() => dispatch(actions.changeMenuItem(menuItem))}
             className={Utils.classNames({
                 [styles.navigationMenuItem]: true,
                 [styles.selectedItem]: user.selectedMenuItem === menuItem,

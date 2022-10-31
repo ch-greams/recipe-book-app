@@ -1,12 +1,12 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import Utils from "@common/utils";
 import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
-import { addIngredientRequest } from "@store/recipe/actions";
+import { useAppDispatch } from "@store";
+import { addIngredient } from "@store/recipe/actions";
 import type { RecipeIngredient } from "@store/recipe/types";
 import { searchClear, searchProducts } from "@store/search/actions";
 import type { SearchPageStore } from "@store/search/types";
@@ -27,7 +27,7 @@ interface Props {
 
 const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, isReadOnly = false }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     return (
         <div
@@ -60,7 +60,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                         items={search.products}
                         onChange={(value) => { dispatch(searchProducts(value)); }}
                         onSelect={(product) => {
-                            dispatch(addIngredientRequest(product));
+                            dispatch(addIngredient(product));
                             dispatch(searchClear());
                         }}
                     />

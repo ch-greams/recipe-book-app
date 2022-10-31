@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
@@ -7,9 +6,8 @@ import { Color } from "@common/colors";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
-import type { AppState } from "@store";
+import { useAppDispatch, useAppSelector } from "@store";
 import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
 import { searchClear } from "@store/search/actions";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
@@ -23,20 +21,20 @@ interface FoodPageQuery extends ParsedUrlQuery {
 
 const RbaFoodPageConnected: React.FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = isNone(fid);
 
-    const food = useSelector<AppState>((state) => state.foodPage) as FoodPageStore;
+    const food = useAppSelector((state) => state.food);
 
     useEffect(() => {
         dispatch(searchClear());
 
         if (!isNewFoodPage) {
             const foodId = Number(fid);
-            dispatch(actions.fetchFoodRequest(foodId));
+            dispatch(actions.fetchFood(foodId));
         }
         else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
 

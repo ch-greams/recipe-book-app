@@ -1,10 +1,10 @@
 import React from "react";
-import { useDispatch } from "react-redux";
-import type { AnyAction } from "redux";
 import * as constants from "@cypress/constants";
+import type { AnyAction } from "@reduxjs/toolkit";
 
 import { unwrapOr } from "@common/types";
 import Utils from "@common/utils";
+import { useAppDispatch } from "@store";
 
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "../rba-input";
 
@@ -30,7 +30,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
     name, brand, subtitle, description,
     updateName, updateBrand, updateSubtitle, updateDescription,
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const descriptionText = unwrapOr(description, "");
     const descriptionSize = Utils.getNumberOfLines(descriptionText);

@@ -1,12 +1,7 @@
-import type { AppState } from "..";
+import { createReducer } from "@reduxjs/toolkit";
 
-import type { SearchPageActionTypes, SearchPageStore } from "./types";
-import { SEARCH_CLEAR } from "./types";
-import {
-    SEARCH_PRODUCTS_FETCH_ERROR,
-    SEARCH_PRODUCTS_FETCH_REQUEST,
-    SEARCH_PRODUCTS_FETCH_SUCCESS,
-} from "./types";
+import { searchClear, searchProducts } from "./actions";
+import type { SearchPageStore } from "./types";
 
 
 const initialState: SearchPageStore = {
@@ -18,57 +13,34 @@ const initialState: SearchPageStore = {
     products: [],
 };
 
-export function extractState(globalState: AppState): SearchPageStore {
-    return (globalState?.searchPage || initialState);
-}
+const reducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(searchClear, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.searchInput = "";
+            state.products = [];
+        })
+        .addCase(searchProducts.pending, (state, action) => {
+            const { arg: filter } = action.meta;
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.searchInput = filter;
+            state.products = [];
+        })
+        .addCase(searchProducts.fulfilled, (state, action) => {
+            const { payload: products } = action;
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.products = products;
+        })
+        .addCase(searchProducts.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.isLoaded = true;
+            state.errorMessage = message;
+            state.products = [];
+        });
+});
 
-export default function searchPageReducer(state = initialState, action: SearchPageActionTypes): SearchPageStore {
 
-    switch (action.type) {
-
-        case SEARCH_CLEAR: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: null,
-
-                searchInput: "",
-                products: [],
-            };
-        }
-
-        case SEARCH_PRODUCTS_FETCH_REQUEST: {
-            const { payload: filter } = action;
-
-            return {
-                ...state,
-                isLoaded: false,
-                errorMessage: null,
-
-                searchInput: filter,
-                products: [],
-            };
-        }
-
-        case SEARCH_PRODUCTS_FETCH_SUCCESS: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: null,
-                products: action.payload,
-            };
-        }
-
-        case SEARCH_PRODUCTS_FETCH_ERROR: {
-            return {
-                ...state,
-                isLoaded: true,
-                errorMessage: action.payload as string,
-                products: [],
-            };
-        }
-
-        default:
-            return state;
-    }
-}
+export default reducer;

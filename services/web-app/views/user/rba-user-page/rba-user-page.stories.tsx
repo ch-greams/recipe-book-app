@@ -4,9 +4,7 @@ import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { UserMenuItem } from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
-import { extractState } from "@store/user/reducer";
+import { store } from "@store";
 
 import RbaUserPage from "./rba-user-page";
 
@@ -16,7 +14,7 @@ export default {
     component: RbaUserPage,
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -26,7 +24,7 @@ export default {
 const Template: ComponentStory<typeof RbaUserPage> = (args) => <RbaUserPage {...args} />;
 
 
-const user = extractState({} as AppState);
+const user = store.getState().user;
 
 export const Diary = Template.bind({});
 Diary.args = { user };

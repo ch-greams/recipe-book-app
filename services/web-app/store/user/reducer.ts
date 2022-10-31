@@ -1,8 +1,9 @@
-import { UserMenuItem } from "@common/utils";
-import type { AppState } from "@store";
+import { createReducer } from "@reduxjs/toolkit";
 
-import type { UserActionTypes, UserStore } from "./types";
-import * as types from "./types";
+import { UserMenuItem } from "@common/utils";
+
+import { changeMenuItem, fetchFoods, fetchRecipes } from "./actions";
+import type { UserStore } from "./types";
 
 
 
@@ -22,95 +23,51 @@ const initialState: UserStore = {
     errorMessage: null,
 };
 
+const reducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(changeMenuItem, (state, action) => {
+            state.selectedMenuItem = action.payload;
+        })
+        .addCase(fetchRecipes.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.favoriteRecipes = [];
+            state.customRecipes = [];
+        })
+        .addCase(fetchRecipes.fulfilled, (state, action) => {
+            const { favoriteRecipes, customRecipes } = action.payload;
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.favoriteRecipes = favoriteRecipes;
+            state.customRecipes = customRecipes;
+        })
+        .addCase(fetchRecipes.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.isLoaded = true;
+            state.errorMessage = message;
+            state.favoriteRecipes = [];
+            state.customRecipes = [];
+        })
+        .addCase(fetchFoods.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.favoriteFoods = [];
+            state.customFoods = [];
+        })
+        .addCase(fetchFoods.fulfilled, (state, action) => {
+            const { favoriteFoods, customFoods } = action.payload;
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.favoriteFoods = favoriteFoods;
+            state.customFoods = customFoods;
+        })
+        .addCase(fetchFoods.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.isLoaded = true;
+            state.errorMessage = message;
+            state.favoriteFoods = [];
+            state.customFoods = [];
+        });
+});
 
-export function extractState(globalState: AppState): types.UserStore {
-    return (globalState?.user || initialState);
-}
-
-export default function searchPageReducer(state = initialState, action: UserActionTypes): UserStore {
-
-    switch (action.type) {
-
-        case types.USER_UPDATE_MENU_ITEM: {
-            return {
-                ...state,
-                selectedMenuItem: action.payload,
-            };
-        }
-
-        case types.USER_RECIPES_FETCH_REQUEST: {
-            return {
-                ...state,
-
-                isLoaded: false,
-                errorMessage: null,
-
-                favoriteRecipes: [],
-                customRecipes: [],
-            };
-        }
-
-        case types.USER_RECIPES_FETCH_SUCCESS: {
-            return {
-                ...state,
-
-                isLoaded: true,
-                errorMessage: null,
-
-                favoriteRecipes: action.payload.favoriteRecipes,
-                customRecipes: action.payload.customRecipes,
-            };
-        }
-
-        case types.USER_RECIPES_FETCH_ERROR: {
-            return {
-                ...state,
-
-                isLoaded: true,
-                errorMessage: action.payload as string,
-
-                favoriteRecipes: [],
-                customRecipes: [],
-            };
-        }
-
-        case types.USER_FOODS_FETCH_REQUEST: {
-            return {
-                ...state,
-
-                isLoaded: false,
-                errorMessage: null,
-
-                favoriteFoods: [],
-                customFoods: [],
-            };
-        }
-
-        case types.USER_FOODS_FETCH_SUCCESS: {
-            return {
-                ...state,
-
-                isLoaded: true,
-                errorMessage: null,
-
-                favoriteFoods: action.payload.favoriteFoods,
-                customFoods: action.payload.customFoods,
-            };
-        }
-
-        case types.USER_FOODS_FETCH_ERROR: {
-            return {
-                ...state,
-
-                isLoaded: true,
-                errorMessage: action.payload as string,
-
-                favoriteFoods: [],
-                customFoods: [],
-            };
-        }
-
-        default:
-            return state;
-    }
-}
+export default reducer;

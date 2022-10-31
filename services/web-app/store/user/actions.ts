@@ -1,24 +1,51 @@
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
+
+import type { FoodShort, RecipeShort } from "@common/typings";
 import type { UserMenuItem } from "@common/utils";
+import { ProductType } from "@common/utils";
+import ProductApi from "@api/productApi";
 
-import type { UserFoodsFetchRequestedAction, UserRecipesFetchRequestedAction, UserUpdateMenuItem } from "./types";
-import * as types from "./types";
+
+export const changeMenuItem = createAction<UserMenuItem>("user/change_menu_item");
 
 
-export function updateMenuItem(menuItem: UserMenuItem): UserUpdateMenuItem {
-    return {
-        type: types.USER_UPDATE_MENU_ITEM,
-        payload: menuItem,
-    };
-}
 
-export function requestRecipes(): UserRecipesFetchRequestedAction {
-    return {
-        type: types.USER_RECIPES_FETCH_REQUEST,
-    };
-}
+export const fetchRecipes = createAsyncThunk<
+    { favoriteRecipes: RecipeShort[], customRecipes: RecipeShort[] },
+    void,
+    { rejectValue: Error }
+>(
+    "user/fetch_recipes",
+    async (_params, thunkApi) => {
+        try {
+            const [ favoriteRecipes, customRecipes ] = await Promise.all([
+                ProductApi.getFavoriteProducts<RecipeShort>(ProductType.Recipe),
+                ProductApi.getCustomProducts<RecipeShort>(ProductType.Recipe),
+            ]);
+            return { favoriteRecipes, customRecipes };
+        }
+        catch (error) {
+            return thunkApi.rejectWithValue(error as Error);
+        }
+    },
+);
 
-export function requestFoods(): UserFoodsFetchRequestedAction {
-    return {
-        type: types.USER_FOODS_FETCH_REQUEST,
-    };
-}
+export const fetchFoods = createAsyncThunk<
+    { favoriteFoods: FoodShort[], customFoods: FoodShort[] },
+    void,
+    { rejectValue: Error }
+>(
+    "user/fetch_foods",
+    async (_params, thunkApi) => {
+        try {
+            const [ favoriteFoods, customFoods ] = await Promise.all([
+                ProductApi.getFavoriteProducts<FoodShort>(ProductType.Food),
+                ProductApi.getCustomProducts<FoodShort>(ProductType.Food),
+            ]);
+            return { favoriteFoods, customFoods };
+        }
+        catch (error) {
+            return thunkApi.rejectWithValue(error as Error);
+        }
+    },
+);

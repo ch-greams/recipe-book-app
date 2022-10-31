@@ -8,10 +8,8 @@ import {
 } from "@common/nutritionFacts";
 import { WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 import type { RecipeIngredient } from "@store/recipe/types";
-import { extractState } from "@store/search/reducer";
 
 import RbaIngredientsBlock from ".";
 
@@ -29,14 +27,14 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
     ],
 } as ComponentMeta<typeof RbaIngredientsBlock>;
 
-const search = extractState({} as AppState);
+const search = store.getState().search;
 
 
 const Template: ComponentStory<typeof RbaIngredientsBlock> = (args) => <RbaIngredientsBlock {...args} />;

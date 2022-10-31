@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import { NutritionFactType } from "@common/nutritionFacts";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
@@ -11,6 +10,7 @@ import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } 
 import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
+import { useAppDispatch } from "@store";
 import * as actions from "@store/recipe/actions";
 import type { RecipePageStore } from "@store/recipe/types";
 import type { SearchPageStore } from "@store/search/types";
@@ -28,12 +28,12 @@ interface Props {
 
 const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const saveButtonAction = (
         isNew
-            ? () => dispatch(actions.createRecipeRequest())
-            : () => dispatch(actions.updateRecipeRequest())
+            ? () => dispatch(actions.createRecipe())
+            : () => dispatch(actions.updateRecipe())
     );
 
     const pageControls = (
@@ -42,7 +42,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
                 label={RBA_BUTTON_LABEL_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
-                onClick={() => dispatch(actions.fetchRecipeRequest(recipe.id))}
+                onClick={() => dispatch(actions.fetchRecipe(recipe.id))}
             />
 
             <RbaButton

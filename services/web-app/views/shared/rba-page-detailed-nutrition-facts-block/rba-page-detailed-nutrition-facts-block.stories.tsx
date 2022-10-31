@@ -9,8 +9,7 @@ import {
     MineralNutritionFactType, ProteinNutritionFactType,
 } from "@common/nutritionFacts";
 import Utils from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 
 import RbaPageDetailedNutritionFactsBlock from ".";
 
@@ -33,7 +32,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),

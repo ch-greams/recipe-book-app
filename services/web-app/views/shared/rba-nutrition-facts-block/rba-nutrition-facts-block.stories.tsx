@@ -6,8 +6,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import type { NutritionFactType } from "@common/nutritionFacts";
 import { CarbohydrateNutritionFactType, NutrientGroupType } from "@common/nutritionFacts";
 import Utils from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 
 import RbaNutritionFactsBlock from ".";
 
@@ -32,7 +31,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),

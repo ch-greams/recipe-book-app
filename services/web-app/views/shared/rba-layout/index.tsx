@@ -1,11 +1,9 @@
 import type { PropsWithChildren } from "react";
 import React from "react";
-import { useSelector } from "react-redux";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import type { AppState } from "@store";
-import type { UserStore } from "@store/user/types";
+import { useAppSelector } from "@store";
 
 import RbaFooter from "../rba-footer";
 import RbaNavbar from "../rba-navbar";
@@ -13,7 +11,7 @@ import RbaNavbar from "../rba-navbar";
 
 const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
-    const user = useSelector<AppState>((state) => state.user) as UserStore;
+    const user = useAppSelector((state) => state.user);
 
     const router = useRouter();
     const isHomePage = (router.pathname === "/");

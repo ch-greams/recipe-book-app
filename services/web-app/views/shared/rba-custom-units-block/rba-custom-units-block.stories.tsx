@@ -5,8 +5,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import type { CustomUnitInput } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 import * as actions from "@store/food/actions";
 
 import RbaCustomUnitsBlock from ".";
@@ -36,7 +35,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -57,7 +56,7 @@ Default.args = {
     customUnits,
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,
-    updateCustomUnit: actions.updateCustomUnit,
+    updateCustomUnit: (index: number, customUnit: CustomUnitInput) => actions.updateCustomUnit({ index, customUnit }),
 };
 
 
@@ -67,5 +66,5 @@ Empty.args = {
     customUnits: [],
     addCustomUnit: actions.addCustomUnit,
     removeCustomUnit: actions.removeCustomUnit,
-    updateCustomUnit: actions.updateCustomUnit,
+    updateCustomUnit: (index: number, customUnit: CustomUnitInput) => actions.updateCustomUnit({ index, customUnit }),
 };

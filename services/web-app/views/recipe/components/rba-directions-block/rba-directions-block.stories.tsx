@@ -8,8 +8,7 @@ import {
 } from "@common/nutritionFacts";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
 } from "@store/recipe/types";
@@ -37,7 +36,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),

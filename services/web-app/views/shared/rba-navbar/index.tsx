@@ -1,13 +1,11 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
-import type { AppState } from "@store";
+import { useAppDispatch, useAppSelector } from "@store/index";
 import { searchProducts } from "@store/search/actions";
-import type { SearchPageStore } from "@store/search/types";
 import { IconSize } from "@icons/icon-params";
 import RbaIconPerson from "@icons/rba-icon-person";
 
@@ -21,8 +19,8 @@ interface Props {
 
 const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
 
-    const dispatch = useDispatch();
-    const searchPage = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
+    const dispatch = useAppDispatch();
+    const searchPage = useAppSelector((state) => state.search);
 
     const searchInput = (
         <RbaSearchInput
