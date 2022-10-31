@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
@@ -7,11 +6,9 @@ import { Color } from "@common/colors";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
-import type { AppState } from "@store";
-import * as actions from "@store/recipe/actions";
-import type { RecipePageStore } from "@store/recipe/types";
-import { searchClear } from "@store/search/actions";
-import type { SearchPageStore } from "@store/search/types";
+import { useAppDispatch, useAppSelector } from "@store";
+import * as actions from "@store/actions/recipe";
+import { searchClear } from "@store/actions/search";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -24,21 +21,22 @@ interface RecipePageQuery extends ParsedUrlQuery {
 
 const RecipePageConnected: React.FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const router = useRouter();
 
     const { rid } = router.query as RecipePageQuery;
     const isNewRecipePage = isNone(rid);
 
-    const recipe = useSelector<AppState>((state) => state.recipePage) as RecipePageStore;
-    const search = useSelector<AppState>((state) => state.searchPage) as SearchPageStore;
+    const recipe = useAppSelector((state) => state.recipe);
+    const search = useAppSelector((state) => state.search);
+    const meta = useAppSelector((state) => state.meta);
 
     useEffect(() => {
         dispatch(searchClear());
 
         if (!isNewRecipePage) {
             const recipeId = Number(rid);
-            dispatch(actions.fetchRecipeRequest(recipeId));
+            dispatch(actions.fetchRecipe(recipeId));
         }
         else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
 
@@ -61,6 +59,7 @@ const RecipePageConnected: React.FC = () => {
                             isReadOnly={!recipe.editMode}
                             recipe={recipe}
                             search={search}
+                            meta={meta}
                             isNew={isNewRecipePage}
                         />
                     )

@@ -3,9 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import type { AppState } from "@store";
-import { useStore } from "@store";
-import { extractState } from "@store/food/reducer";
+import { store } from "@store";
 
 import RbaFoodPage from "./rba-food-page";
 
@@ -16,6 +14,9 @@ export default {
         food: {
             table: { type: { summary: "FoodPageStore" } },
         },
+        meta: {
+            table: { type: { summary: "MetaStore" } },
+        },
         isNew: {
             type: { name: "boolean", required: true },
             table: { type: { summary: "boolean" } },
@@ -23,7 +24,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -33,16 +34,19 @@ export default {
 const Template: ComponentStory<typeof RbaFoodPage> = (args) => <RbaFoodPage {...args} />;
 
 
-const food = extractState({} as AppState);
+const food = store.getState().food;
+const meta = store.getState().meta;
 
 export const Default = Template.bind({});
 Default.args = {
     food: food,
+    meta: meta,
     isNew: false,
 };
 
 export const New = Template.bind({});
 New.args = {
     food: food,
+    meta: meta,
     isNew: true,
 };

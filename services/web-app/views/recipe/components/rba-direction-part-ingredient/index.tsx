@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
@@ -10,8 +9,9 @@ import RbaInput, { InputHeightSize,InputTextAlign, InputTheme, InputWidthSize } 
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import * as actions from "@store/recipe/actions";
-import type { RecipeDirectionPartIngredient } from "@store/recipe/types";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/recipe";
+import type { RecipeDirectionPartIngredient } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
@@ -27,23 +27,35 @@ interface Props {
 
 const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart, directionIndex }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const toggleDirectionPartMark = (): void => {
-        dispatch(actions.toggleDirectionPartMark(directionIndex, directionPart.id));
+        dispatch(actions.toggleDirectionPartMark({ directionIndex, directionPartId: directionPart.id }));
     };
     const removeDirectionPart = (): void => {
-        dispatch(actions.removeDirectionPart(directionIndex, directionPart.id));
+        dispatch(actions.removeDirectionPart({ directionIndex, directionPartId: directionPart.id }));
     };
 
     const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.id, Number(event.target.value)));
+        dispatch(actions.updateDirectionPartStepNumber({
+            directionIndex,
+            directionPartId: directionPart.id,
+            stepNumber: Number(event.target.value),
+        }));
     };
     const updateDirectionPartIngredientAmount: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartIngredientAmount(directionIndex, directionPart.id, event.target.value));
+        dispatch(actions.updateDirectionPartIngredientAmount({
+            directionIndex,
+            directionPartId: directionPart.id,
+            inputValue: event.target.value,
+        }));
     };
     const updateDirectionPartIngredientUnit: RbaSelectChangeCallback = (option: SelectOption) => {
-        dispatch(actions.updateDirectionPartIngredientUnit(directionIndex, directionPart.id, option.value as Unit));
+        dispatch(actions.updateDirectionPartIngredientUnit({
+            directionIndex,
+            directionPartId: directionPart.id,
+            unit: option.value as Unit,
+        }));
     };
 
 

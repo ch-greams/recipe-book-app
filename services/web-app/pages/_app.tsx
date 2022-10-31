@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import type { AppProps } from "next/app";
 
 import RbaLayout from "@views/shared/rba-layout";
-import { useStore } from "@store";
+import { store } from "@store";
 
 import "@styles/globals.scss";
 
@@ -11,9 +11,6 @@ import "@common/extensions";
 
 
 const App: React.FC<AppProps> = ({ Component, pageProps }) => {
-
-    const store = useStore(pageProps.initialReduxState);
-
     return (
         <Provider store={store}>
             <RbaLayout>

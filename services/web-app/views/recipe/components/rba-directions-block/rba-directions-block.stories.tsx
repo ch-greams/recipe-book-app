@@ -3,17 +3,14 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import {
-    CarbohydrateNutritionFactType, EnergyNutritionFactType, LipidNutritionFactType, ProteinNutritionFactType,
-} from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
-} from "@store/recipe/types";
-import { DirectionPartType } from "@store/recipe/types";
+} from "@store/types/recipe";
+import { DirectionPartType } from "@store/types/recipe";
 
 import RbaDirectionsBlock from ".";
 
@@ -37,7 +34,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -161,10 +158,10 @@ const INGREDIENT_1: RecipeIngredient = {
             name: "Cottage Cheese",
             density: 1,
             nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
-                [LipidNutritionFactType.Fat]: 18.3,
-                [ProteinNutritionFactType.Protein]: 30.4,
-                [EnergyNutritionFactType.Energy]: 183.1,
+                [NutrientName.Carbohydrate]: 75.4,
+                [NutrientName.Fat]: 18.3,
+                [NutrientName.Protein]: 30.4,
+                [NutrientName.Energy]: 183.1,
             },
         },
     },

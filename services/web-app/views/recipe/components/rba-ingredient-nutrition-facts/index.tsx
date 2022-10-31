@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { NutritionFactType } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
@@ -9,8 +9,8 @@ import styles from "./rba-ingredient-nutrition-facts.module.scss";
 
 
 interface Props {
-    nutritionFacts: Dictionary<NutritionFactType, number>;
-    alternativeNutritionFacts?: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutrientName, number>;
+    alternativeNutritionFacts?: Dictionary<NutrientName, number>;
 }
 
 /**
@@ -53,10 +53,10 @@ const getNutritionValue = (
 const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternativeNutritionFacts = {} }) => {
 
     const nutritionFactTypes = [
-        NutritionFactType.Carbohydrate,
-        NutritionFactType.Fat,
-        NutritionFactType.Protein,
-        NutritionFactType.Energy,
+        NutrientName.Carbohydrate,
+        NutrientName.Fat,
+        NutrientName.Protein,
+        NutrientName.Energy,
     ];
 
     return (

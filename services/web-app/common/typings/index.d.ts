@@ -1,7 +1,7 @@
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutritionFacts";
 import type { CustomUnit, TemperatureUnit, TimeUnit, Unit } from "@common/units";
 import type { ProductType } from "@common/utils";
-import type { DirectionPartType } from "@store/recipe/types";
+import type { DirectionPartType } from "@store/types/recipe";
 
 export * from "./common";
 
@@ -13,7 +13,7 @@ export interface Food {
     description: string;
     density: number;
     serving_size: number;
-    nutrition_facts: Dictionary<NutritionFactType, number>;
+    nutrition_facts: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
     is_private: boolean;
 }
@@ -44,7 +44,7 @@ export interface IngredientProduct {
     amount: number;
     unit: Unit;
     density: number;
-    nutrition_facts: Dictionary<NutritionFactType, number>;
+    nutrition_facts: Dictionary<NutrientName, number>;
 }
 
 export interface Ingredient {

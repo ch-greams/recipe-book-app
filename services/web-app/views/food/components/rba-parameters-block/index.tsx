@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
@@ -9,8 +8,9 @@ import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import * as actions from "@store/food/actions";
-import type { FoodPageStore } from "@store/food/types";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/food";
+import type { FoodPageStore } from "@store/types/food";
 
 import styles from "./rba-parameters-block.module.scss";
 
@@ -22,7 +22,7 @@ interface Props {
 
 const RbaParametersBlock: React.FC<Props> = ({ food }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
 
     const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
@@ -37,7 +37,7 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
         dispatch(actions.removeCustomUnit(index));
     };
     const updateCustomUnit = (index: number, customUnit: CustomUnitInput): void => {
-        dispatch(actions.updateCustomUnit(index, customUnit));
+        dispatch(actions.updateCustomUnit({ index, customUnit }));
     };
 
     return (

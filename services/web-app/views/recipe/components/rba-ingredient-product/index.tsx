@@ -10,7 +10,7 @@ import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import type { RecipeIngredientProduct } from "@store/recipe/types";
+import type { RecipeIngredientProduct } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLink from "@icons/rba-icon-link";
 import RbaIconRemove from "@icons/rba-icon-remove";

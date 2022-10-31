@@ -1,6 +1,6 @@
 import * as constants from "@cypress/constants";
 
-import { NutritionFactType } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import type { Unit } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
 import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
@@ -43,28 +43,28 @@ describe("recipe_page", () => {
             // - Current product nutrition facts -
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Carbohydrate)
+                .contains(NutrientName.Carbohydrate)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2.9");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Fat)
+                .contains(NutrientName.Fat)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("15");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Protein)
+                .contains(NutrientName.Protein)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2.7");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Energy)
+                .contains(NutrientName.Energy)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
@@ -79,28 +79,28 @@ describe("recipe_page", () => {
             // - Alternative product nutrition facts -
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Carbohydrate)
+                .contains(NutrientName.Carbohydrate)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("4.2");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Fat)
+                .contains(NutrientName.Fat)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("2");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Protein)
+                .contains(NutrientName.Protein)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")
                 .contains("8");
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}]`)
-                .contains(NutritionFactType.Energy)
+                .contains(NutrientName.Energy)
                 .parent()
                 .get(`[data-cy=${constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}]`)
                 .should("be.visible")

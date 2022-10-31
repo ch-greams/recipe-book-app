@@ -1,11 +1,11 @@
 import type { PropsWithChildren } from "react";
 import React from "react";
-import { useSelector } from "react-redux";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import type { AppState } from "@store";
-import type { UserStore } from "@store/user/types";
+import { isNone } from "@common/types";
+import { useAppDispatch, useAppSelector } from "@store";
+import { fetchNutrients } from "@store/actions/meta";
 
 import RbaFooter from "../rba-footer";
 import RbaNavbar from "../rba-navbar";
@@ -13,7 +13,14 @@ import RbaNavbar from "../rba-navbar";
 
 const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
-    const user = useSelector<AppState>((state) => state.user) as UserStore;
+    const dispatch = useAppDispatch();
+
+    const user = useAppSelector((state) => state.user);
+    const meta = useAppSelector((state) => state.meta);
+
+    if (!meta.isLoading && isNone(meta.nutrientDescriptions)) {
+        dispatch(fetchNutrients());
+    }
 
     const router = useRouter();
     const isHomePage = (router.pathname === "/");

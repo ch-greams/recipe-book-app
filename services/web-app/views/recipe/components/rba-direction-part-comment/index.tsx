@@ -1,13 +1,13 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
 import type { InputChangeCallback } from "@common/typings";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
-import * as actions from "@store/recipe/actions";
-import type { RecipeDirectionPartComment } from "@store/recipe/types";
-import { DirectionPartType } from "@store/recipe/types";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/recipe";
+import type { RecipeDirectionPartComment } from "@store/types/recipe";
+import { DirectionPartType } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconNote from "@icons/rba-icon-note";
 import RbaIconRemove from "@icons/rba-icon-remove";
@@ -41,16 +41,16 @@ interface Props {
 
 const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, directionIndex }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const removeDirectionPart = (): void => {
-        dispatch(actions.removeDirectionPart(directionIndex, directionPart.id));
+        dispatch(actions.removeDirectionPart({ directionIndex, directionPartId: directionPart.id }));
     };
     const updateDirectionPartComment: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartNote(directionIndex, directionPart.id, event.target.value));
+        dispatch(actions.updateDirectionPartNote({ directionIndex, directionPartId: directionPart.id, note: event.target.value }));
     };
     const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber(directionIndex, directionPart.id, Number(event.target.value)));
+        dispatch(actions.updateDirectionPartStepNumber({ directionIndex, directionPartId: directionPart.id, stepNumber: Number(event.target.value) }));
     };
 
     const removeButton = (

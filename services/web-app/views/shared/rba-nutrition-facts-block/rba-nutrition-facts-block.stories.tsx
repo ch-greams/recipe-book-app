@@ -3,11 +3,10 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
-import { CarbohydrateNutritionFactType, NutrientGroupType } from "@common/nutritionFacts";
+import { NutrientGroupType, NutrientName } from "@common/nutritionFacts";
+import { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 
 import RbaNutritionFactsBlock from ".";
 
@@ -32,7 +31,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -41,14 +40,31 @@ export default {
 
 const Template: ComponentStory<typeof RbaNutritionFactsBlock> = (args) => (<RbaNutritionFactsBlock {...args} />);
 
-const nutritionFacts: Dictionary<NutritionFactType, number> = {
-    [CarbohydrateNutritionFactType.Carbohydrate]: 57,
-    [CarbohydrateNutritionFactType.DietaryFiber]: 1.7,
+const nutritionFacts: Dictionary<NutrientName, number> = {
+    [NutrientName.Carbohydrate]: 57,
+    [NutrientName.DietaryFiber]: 1.7,
 };
 const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
-const group = Object.values(CarbohydrateNutritionFactType);
+const group = Object.values(NutrientName);
 
-const nutritionFactsGroup = Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs);
+const defaultNutrientDescriptions = store.getState().meta.nutrientDescriptions;
+const nutrientDescriptions = {
+    ...defaultNutrientDescriptions,
+    [NutrientName.Carbohydrate]: {
+        type: NutrientName.Carbohydrate,
+        unit: NutrientUnit.g,
+        dailyValue: 275,
+        isFraction: false,
+    },
+    [NutrientName.DietaryFiber]: {
+        type: NutrientName.DietaryFiber,
+        unit: NutrientUnit.g,
+        dailyValue: 28,
+        isFraction: true,
+    },
+};
+
+const nutritionFactsGroup = Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs, nutrientDescriptions);
 
 export const Default = Template.bind({});
 Default.args = {

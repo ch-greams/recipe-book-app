@@ -5,7 +5,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import Logger from "@common/logger";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
-import * as types from "@store/recipe/types";
+import * as types from "@store/types/recipe";
 
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from ".";
 
