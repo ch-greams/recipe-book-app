@@ -29,6 +29,7 @@ const RecipePageConnected: React.FC = () => {
 
     const recipe = useAppSelector((state) => state.recipe);
     const search = useAppSelector((state) => state.search);
+    const meta = useAppSelector((state) => state.meta);
 
     useEffect(() => {
         dispatch(searchClear());
@@ -58,6 +59,7 @@ const RecipePageConnected: React.FC = () => {
                             isReadOnly={!recipe.editMode}
                             recipe={recipe}
                             search={search}
+                            meta={meta}
                             isNew={isNewRecipePage}
                         />
                     )

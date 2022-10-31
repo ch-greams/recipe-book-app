@@ -14,6 +14,9 @@ export default {
         food: {
             table: { type: { summary: "FoodPageStore" } },
         },
+        meta: {
+            table: { type: { summary: "MetaStore" } },
+        },
         isNew: {
             type: { name: "boolean", required: true },
             table: { type: { summary: "boolean" } },
@@ -32,15 +35,18 @@ const Template: ComponentStory<typeof RbaFoodPage> = (args) => <RbaFoodPage {...
 
 
 const food = store.getState().food;
+const meta = store.getState().meta;
 
 export const Default = Template.bind({});
 Default.args = {
     food: food,
+    meta: meta,
     isNew: false,
 };
 
 export const New = Template.bind({});
 New.args = {
     food: food,
+    meta: meta,
     isNew: true,
 };

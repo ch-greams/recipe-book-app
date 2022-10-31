@@ -12,14 +12,14 @@ import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
 import { searchClear, searchProducts } from "@store/actions/search";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/types/recipe";
-import type { SearchPageStore } from "@store/types/search";
+import type { SearchStore } from "@store/types/search";
 
 import styles from "./rba-ingredient.module.scss";
 
 
 
 interface Props {
-    search: SearchPageStore;
+    search: SearchStore;
     isReadOnly: boolean;
     ingredient: RecipeIngredient;
 }

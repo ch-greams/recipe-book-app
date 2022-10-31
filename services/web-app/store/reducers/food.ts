@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { NutritionFactType } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
@@ -39,16 +39,16 @@ const initialState: FoodPageStore = {
 
     // TODO: Move it from this store into the User's one
     featuredNutritionFacts: [
-        NutritionFactType.Energy,
-        NutritionFactType.Carbohydrate,
-        NutritionFactType.DietaryFiber,
-        NutritionFactType.Sugars,
-        NutritionFactType.Fat,
-        NutritionFactType.Monounsaturated,
-        NutritionFactType.Protein,
-        NutritionFactType.Sodium,
-        NutritionFactType.VitaminA,
-        NutritionFactType.VitaminC,
+        NutrientName.Energy,
+        NutrientName.Carbohydrate,
+        NutrientName.DietaryFiber,
+        NutrientName.Sugars,
+        NutrientName.Fat,
+        NutrientName.Monounsaturated,
+        NutrientName.Protein,
+        NutrientName.Sodium,
+        NutrientName.VitaminA,
+        NutrientName.VitaminC,
     ],
 
     // NOTE: PAGE STATE

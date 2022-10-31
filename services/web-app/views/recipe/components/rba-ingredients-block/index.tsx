@@ -9,7 +9,7 @@ import { useAppDispatch } from "@store";
 import { addIngredient } from "@store/actions/recipe";
 import { searchClear, searchProducts } from "@store/actions/search";
 import type { RecipeIngredient } from "@store/types/recipe";
-import type { SearchPageStore } from "@store/types/search";
+import type { SearchStore } from "@store/types/search";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -20,7 +20,7 @@ interface Props {
     isReadOnly: boolean;
     isLoaded: boolean;
     ingredients: RecipeIngredient[];
-    search: SearchPageStore;
+    search: SearchStore;
 }
 
 

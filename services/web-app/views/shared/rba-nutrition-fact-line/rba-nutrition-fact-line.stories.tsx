@@ -3,8 +3,8 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutritionFactType } from "@common/nutritionFacts";
-import { NutritionFactUnit } from "@common/units";
+import { NutrientName } from "@common/nutritionFacts";
+import { NutrientUnit } from "@common/units";
 import { store } from "@store";
 
 import type { NutritionFact } from ".";
@@ -41,10 +41,10 @@ const Template: ComponentStory<typeof RbaNutritionFactLine> = (args) => (<RbaNut
 // -----------------------------------------------------------------------------
 
 const nutritionFact: NutritionFact = {
-    type: NutritionFactType.Carbohydrate,
+    type: NutrientName.Carbohydrate,
     amount: 57,
     inputValue: "57",
-    unit: NutritionFactUnit.g,
+    unit: NutrientUnit.g,
     dailyValue: 20.7,
     isFraction: false,
 };
@@ -65,10 +65,10 @@ ReadOnly.args = {
 // -----------------------------------------------------------------------------
 
 const nutritionFactFraction: NutritionFact = {
-    type: NutritionFactType.DietaryFiber,
+    type: NutrientName.DietaryFiber,
     amount: 57,
     inputValue: "57",
-    unit: NutritionFactUnit.g,
+    unit: NutrientUnit.g,
     dailyValue: 20.7,
     isFraction: true,
 };

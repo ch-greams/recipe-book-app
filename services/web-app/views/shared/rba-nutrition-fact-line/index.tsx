@@ -3,11 +3,11 @@ import type { Dispatch } from "react";
 import React from "react";
 import type { AnyAction } from "@reduxjs/toolkit";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutritionFacts";
 import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
 import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
-import type { NutritionFactUnit } from "@common/units";
+import type { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";
@@ -20,8 +20,8 @@ export interface NutritionFact {
 
     amount?: Option<number>;
     inputValue: string;
-    type: NutritionFactType;
-    unit: NutritionFactUnit;
+    type: NutrientName;
+    unit: NutrientUnit;
     dailyValue?: Option<number>;
     isFraction: boolean;
 }

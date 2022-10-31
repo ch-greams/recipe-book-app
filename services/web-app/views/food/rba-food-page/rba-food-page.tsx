@@ -10,6 +10,7 @@ import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/food";
 import type { FoodPageStore } from "@store/types/food";
+import type { MetaStore } from "@store/types/meta";
 
 import styles from "./rba-food-page.module.scss";
 
@@ -17,10 +18,11 @@ import styles from "./rba-food-page.module.scss";
 interface Props {
     isReadOnly: boolean;
     food: FoodPageStore;
+    meta: MetaStore;
     isNew: boolean;
 }
 
-const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
+const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
 
     const dispatch = useAppDispatch();
 
@@ -64,6 +66,10 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
         nutritionFactsByServingInputs,
         featuredNutritionFacts,
     } = food;
+
+    const {
+        nutrientDescriptions,
+    } = meta;
 
     return (
         <div className={styles.foodPage}>
@@ -111,6 +117,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
                     featuredNutritionFacts={featuredNutritionFacts}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrientDescriptions={nutrientDescriptions}
                 />
 
                 {/* Detailed Nutrition Information  */}
@@ -121,6 +128,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, isNew }) => {
                     isReadOnly={isReadOnly}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrientDescriptions={nutrientDescriptions}
                 />
 
             </div>

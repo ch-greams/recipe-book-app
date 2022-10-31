@@ -1,4 +1,4 @@
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutritionFacts";
 import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
 
 
@@ -14,14 +14,14 @@ export interface FoodPageStore {
     brand: string;
     subtitle: string;
     description: string;
-    nutritionFacts: Dictionary<NutritionFactType, number>;
+    nutritionFacts: Dictionary<NutrientName, number>;
     customUnits: CustomUnitInput[];
     isPrivate: boolean;
 
     // NOTE: INPUTS
 
-    nutritionFactsByServing: Dictionary<NutritionFactType, number>;
-    nutritionFactsByServingInputs: Dictionary<NutritionFactType, string>;
+    nutritionFactsByServing: Dictionary<NutrientName, number>;
+    nutritionFactsByServingInputs: Dictionary<NutrientName, string>;
 
     // NOTE: STATIC
 
@@ -35,7 +35,7 @@ export interface FoodPageStore {
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: Unit | string;
-    featuredNutritionFacts: NutritionFactType[];
+    featuredNutritionFacts: NutrientName[];
 
     // NOTE: NEW FOOD
     isCreated: boolean;

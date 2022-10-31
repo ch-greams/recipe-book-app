@@ -4,6 +4,7 @@ import logger from "redux-logger";
 import { configureStore } from "@reduxjs/toolkit";
 
 import foodReducer from "./reducers/food";
+import metaReducer from "./reducers/meta";
 import recipeReducer from "./reducers/recipe";
 import searchReducer from "./reducers/search";
 import userReducer from "./reducers/user";
@@ -13,6 +14,7 @@ import userReducer from "./reducers/user";
 export const store = configureStore({
     reducer: {
         food: foodReducer,
+        meta: metaReducer,
         recipe: recipeReducer,
         search: searchReducer,
         user: userReducer,

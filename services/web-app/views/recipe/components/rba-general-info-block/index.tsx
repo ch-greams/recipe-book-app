@@ -1,6 +1,6 @@
 import React from "react";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientDescription,NutrientName } from "@common/nutritionFacts";
 import Utils from "@common/utils";
 import RbaParametersBlock from "@views/recipe/components/rba-parameters-block";
 import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
@@ -12,14 +12,23 @@ import styles from "./rba-general-info-block.module.scss";
 
 interface GeneralInfoBlockProps {
     recipe: RecipePageStore;
-    featuredNutritionFacts: NutritionFactType[];
-    nutritionFacts: Dictionary<NutritionFactType, number>;
-    nutritionFactInputs: Dictionary<NutritionFactType, string>;
+    featuredNutritionFacts: NutrientName[];
+    nutritionFacts: Dictionary<NutrientName, number>;
+    nutritionFactInputs: Dictionary<NutrientName, string>;
+    nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
-    recipe, featuredNutritionFacts, nutritionFacts, nutritionFactInputs,
+    recipe, featuredNutritionFacts, nutritionFacts, nutritionFactInputs, nutrientDescriptions,
 }) => {
+
+    const nutrients = Utils.getNutritionFacts(
+        featuredNutritionFacts,
+        nutritionFacts,
+        nutritionFactInputs,
+        nutrientDescriptions,
+    );
+
     return (
         <div className={styles.mainBlock}>
 
@@ -30,7 +39,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
                 <RbaNutritionFactsBlock
                     isReadOnly={true}
                     title={"NUTRITION FACTS"}
-                    nutritionFacts={Utils.getNutritionFacts(featuredNutritionFacts, nutritionFacts, nutritionFactInputs)}
+                    nutritionFacts={nutrients}
                 />
             </div>
         </div>

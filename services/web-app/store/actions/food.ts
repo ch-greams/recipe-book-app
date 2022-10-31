@@ -1,6 +1,6 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutritionFacts";
 import type { Food } from "@common/typings";
 import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
 import Utils from "@common/utils";
@@ -23,7 +23,7 @@ export const updateServingSizeUnit = createAction<Unit | string>("food/update_se
 export const addCustomUnit = createAction<CustomUnitInput>("food/add_custom_unit");
 export const updateCustomUnit = createAction<{ index: number, customUnit: CustomUnitInput }>("food/update_custom_unit");
 export const removeCustomUnit = createAction<number>("food/remove_custom_unit");
-export const updateNutritionFact = createAction<{ key: NutritionFactType, value: string }>("food/update_nutrient");
+export const updateNutritionFact = createAction<{ key: NutrientName, value: string }>("food/update_nutrient");
 export const fetchFoodNew = createAction("food/fetch_food_new");
 
 export const fetchFood = createAsyncThunk<Food, number, { rejectValue: Error }>(
@@ -40,7 +40,7 @@ export const fetchFood = createAsyncThunk<Food, number, { rejectValue: Error }>(
 );
 export const createFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
     "food/create_food",
-    async (_params, { getState, rejectWithValue }) => {
+    async (_arg, { getState, rejectWithValue }) => {
         try {
             const foodPage = getState().food;
             const food = Utils.convertFoodPageIntoFood(foodPage);
@@ -54,7 +54,7 @@ export const createFood = createAsyncThunk<Food, void, { state: RootState, rejec
 );
 export const updateFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
     "food/update_food",
-    async (_params, { getState, rejectWithValue }) => {
+    async (_arg, { getState, rejectWithValue }) => {
         try {
             const foodPage = getState().food;
             const food = Utils.convertFoodPageIntoFood(foodPage);

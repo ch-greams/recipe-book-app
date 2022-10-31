@@ -1,7 +1,7 @@
 import { isEnum, isSome } from "@common/types";
 
 
-export enum NutritionFactUnit {
+export enum NutrientUnit {
     g = "g",
     mg = "mg",
     mcg = "mcg",

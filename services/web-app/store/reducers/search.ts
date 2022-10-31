@@ -1,10 +1,10 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { searchClear, searchProducts } from "../actions/search";
-import type { SearchPageStore } from "../types/search";
+import type { SearchStore } from "../types/search";
 
 
-const initialState: SearchPageStore = {
+const initialState: SearchStore = {
 
     isLoaded: true,
     errorMessage: null,

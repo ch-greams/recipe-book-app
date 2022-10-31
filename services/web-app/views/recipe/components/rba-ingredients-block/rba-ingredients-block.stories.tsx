@@ -3,9 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import {
-    CarbohydrateNutritionFactType, EnergyNutritionFactType, LipidNutritionFactType, ProteinNutritionFactType,
-} from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import { WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
 import { store } from "@store";
@@ -59,10 +57,10 @@ const INGREDIENT_0: RecipeIngredient = {
             name: "Sour Cream 10%",
             density: 1,
             nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 57,
-                [LipidNutritionFactType.Fat]: 10,
-                [ProteinNutritionFactType.Protein]: 21.5,
-                [EnergyNutritionFactType.Energy]: 394,
+                [NutrientName.Carbohydrate]: 57,
+                [NutrientName.Fat]: 10,
+                [NutrientName.Protein]: 21.5,
+                [NutrientName.Energy]: 394,
             },
         },
         [PRODUCT_ID_2]: {
@@ -74,18 +72,18 @@ const INGREDIENT_0: RecipeIngredient = {
             name: "Sour Cream 15%",
             density: 1,
             nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 56,
-                [LipidNutritionFactType.Fat]: 15,
-                [ProteinNutritionFactType.Protein]: 20.5,
-                [EnergyNutritionFactType.Energy]: 426,
+                [NutrientName.Carbohydrate]: 56,
+                [NutrientName.Fat]: 15,
+                [NutrientName.Protein]: 20.5,
+                [NutrientName.Energy]: 426,
             },
         },
     },
     alternativeNutritionFacts: {
-        [CarbohydrateNutritionFactType.Carbohydrate]: 56,
-        [LipidNutritionFactType.Fat]: 11,
-        [ProteinNutritionFactType.Protein]: 20.5,
-        [EnergyNutritionFactType.Energy]: 394,
+        [NutrientName.Carbohydrate]: 56,
+        [NutrientName.Fat]: 11,
+        [NutrientName.Protein]: 20.5,
+        [NutrientName.Energy]: 394,
     },
 };
 
@@ -104,10 +102,10 @@ const INGREDIENT_1: RecipeIngredient = {
             name: "Cottage Cheese",
             density: 1,
             nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
-                [LipidNutritionFactType.Fat]: 18.3,
-                [ProteinNutritionFactType.Protein]: 30.4,
-                [EnergyNutritionFactType.Energy]: 183.1,
+                [NutrientName.Carbohydrate]: 75.4,
+                [NutrientName.Fat]: 18.3,
+                [NutrientName.Protein]: 30.4,
+                [NutrientName.Energy]: 183.1,
             },
         },
     },

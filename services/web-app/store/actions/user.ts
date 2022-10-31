@@ -16,7 +16,7 @@ export const fetchRecipes = createAsyncThunk<
     { rejectValue: Error }
 >(
     "user/fetch_recipes",
-    async (_params, thunkApi) => {
+    async (_arg, { rejectWithValue }) => {
         try {
             const [ favoriteRecipes, customRecipes ] = await Promise.all([
                 ProductApi.getFavoriteProducts<RecipeShort>(ProductType.Recipe),
@@ -25,7 +25,7 @@ export const fetchRecipes = createAsyncThunk<
             return { favoriteRecipes, customRecipes };
         }
         catch (error) {
-            return thunkApi.rejectWithValue(error as Error);
+            return rejectWithValue(error as Error);
         }
     },
 );
@@ -36,7 +36,7 @@ export const fetchFoods = createAsyncThunk<
     { rejectValue: Error }
 >(
     "user/fetch_foods",
-    async (_params, thunkApi) => {
+    async (_arg, { rejectWithValue }) => {
         try {
             const [ favoriteFoods, customFoods ] = await Promise.all([
                 ProductApi.getFavoriteProducts<FoodShort>(ProductType.Food),
@@ -45,7 +45,7 @@ export const fetchFoods = createAsyncThunk<
             return { favoriteFoods, customFoods };
         }
         catch (error) {
-            return thunkApi.rejectWithValue(error as Error);
+            return rejectWithValue(error as Error);
         }
     },
 );

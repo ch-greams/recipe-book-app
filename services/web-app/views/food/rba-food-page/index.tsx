@@ -28,6 +28,7 @@ const RbaFoodPageConnected: React.FC = () => {
     const isNewFoodPage = isNone(fid);
 
     const food = useAppSelector((state) => state.food);
+    const meta = useAppSelector((state) => state.meta);
 
     useEffect(() => {
         dispatch(searchClear());
@@ -56,6 +57,7 @@ const RbaFoodPageConnected: React.FC = () => {
                         <RbaFoodPage
                             isReadOnly={!food.editMode}
                             food={food}
+                            meta={meta}
                             isNew={isNewFoodPage}
                         />
                     )

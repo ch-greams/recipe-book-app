@@ -1,6 +1,6 @@
 import React from "react";
 
-import { NutritionFactType } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutritionFacts";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
@@ -12,8 +12,9 @@ import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
+import type { MetaStore } from "@store/types/meta";
 import type { RecipePageStore } from "@store/types/recipe";
-import type { SearchPageStore } from "@store/types/search";
+import type { SearchStore } from "@store/types/search";
 
 import styles from "./rba-recipe-page.module.scss";
 
@@ -22,11 +23,12 @@ import styles from "./rba-recipe-page.module.scss";
 interface Props {
     isReadOnly: boolean;
     recipe: RecipePageStore;
-    search: SearchPageStore;
+    search: SearchStore;
+    meta: MetaStore;
     isNew: boolean;
 }
 
-const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
+const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }) => {
 
     const dispatch = useAppDispatch();
 
@@ -73,6 +75,10 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
         nutritionFactsByServingInputs,
     } = recipe;
 
+    const {
+        nutrientDescriptions,
+    } = meta;
+
     return (
         <div className={styles.recipePage}>
 
@@ -116,19 +122,20 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
                 <RbaGeneralInfoBlock
                     recipe={recipe}
                     featuredNutritionFacts={[
-                        NutritionFactType.Energy,
-                        NutritionFactType.Carbohydrate,
-                        NutritionFactType.DietaryFiber,
-                        NutritionFactType.Sugars,
-                        NutritionFactType.Fat,
-                        NutritionFactType.Monounsaturated,
-                        NutritionFactType.Protein,
-                        NutritionFactType.Sodium,
-                        NutritionFactType.VitaminA,
-                        NutritionFactType.VitaminC,
+                        NutrientName.Energy,
+                        NutrientName.Carbohydrate,
+                        NutrientName.DietaryFiber,
+                        NutrientName.Sugars,
+                        NutrientName.Fat,
+                        NutrientName.Monounsaturated,
+                        NutrientName.Protein,
+                        NutrientName.Sodium,
+                        NutrientName.VitaminA,
+                        NutrientName.VitaminC,
                     ]}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrientDescriptions={nutrientDescriptions}
                 />
 
                 <RbaBlockTitle text={"INGREDIENTS"} />
@@ -155,6 +162,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, isNew }) => {
                     isReadOnly={true}
                     nutritionFacts={nutritionFactsByServing}
                     nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrientDescriptions={nutrientDescriptions}
                 />
 
             </div>

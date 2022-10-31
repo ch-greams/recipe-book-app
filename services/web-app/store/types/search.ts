@@ -1,7 +1,7 @@
 import type { ProductShort } from "@common/typings";
 
 
-export interface SearchPageStore {
+export interface SearchStore {
     isLoaded: boolean;
     errorMessage?: Option<string>;
 

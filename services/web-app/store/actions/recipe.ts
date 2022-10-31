@@ -42,7 +42,7 @@ export const fetchRecipe = createAsyncThunk<Recipe, number, { rejectValue: Error
 );
 export const createRecipe = createAsyncThunk<Recipe, void, { state: RootState, rejectValue: Error }>(
     "recipe/create_recipe",
-    async (_params, { getState, rejectWithValue }) => {
+    async (_arg, { getState, rejectWithValue }) => {
         try {
             const recipePage = getState().recipe;
             const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
@@ -56,7 +56,7 @@ export const createRecipe = createAsyncThunk<Recipe, void, { state: RootState, r
 );
 export const updateRecipe = createAsyncThunk<Recipe, void, { state: RootState, rejectValue: Error }>(
     "recipe/update_recipe",
-    async (_params, { getState, rejectWithValue }) => {
+    async (_arg, { getState, rejectWithValue }) => {
         try {
             const recipePage = getState().recipe;
             const recipe = Utils.convertRecipePageIntoRecipe(recipePage);

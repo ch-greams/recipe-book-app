@@ -37,19 +37,22 @@ const Template: ComponentStory<typeof RbaRecipePage> = (args) => <RbaRecipePage 
 
 const recipe = store.getState().recipe;
 const search = store.getState().search;
+const meta = store.getState().meta;
 
 export const Default = Template.bind({});
 Default.args = {
-    recipe: recipe,
+    recipe,
     search,
+    meta,
     isNew: false,
     isReadOnly: true,
 };
 
 export const Editable = Template.bind({});
 Editable.args = {
-    recipe: recipe,
+    recipe,
     search,
+    meta,
     isNew: true,
     isReadOnly: false,
 };
