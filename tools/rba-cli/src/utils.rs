@@ -25,6 +25,9 @@ pub(crate) async fn seed_db(database_url: &str) {
     let db_pool = PgPool::connect_lazy(database_url).unwrap();
 
     let seed_list = vec![
+        "database/seeds/meta/00_nutrient_group.sql",
+        "database/seeds/meta/01_nutrient.sql",
+        "database/seeds/meta/02_nutrient_details.sql",
         "database/seeds/private/00_user.sql",
         "database/seeds/private/01_product.sql",
         "database/seeds/private/02_custom_unit.sql",
@@ -32,12 +35,10 @@ pub(crate) async fn seed_db(database_url: &str) {
         "database/seeds/private/02_favorite_product.sql",
         "database/seeds/private/02_ingredient.sql",
         "database/seeds/private/02_nutrition_fact.sql",
+        "database/seeds/private/02_product_nutrient.sql",
         "database/seeds/private/03_direction_part.sql",
         "database/seeds/private/03_ingredient_product.sql",
         "database/seeds/usda/00_nutrient.sql",
-        "database/seeds/meta/00_nutrient_group.sql",
-        "database/seeds/meta/01_nutrient.sql",
-        "database/seeds/meta/02_nutrient_details.sql",
     ];
 
     let mut txn = db_pool.begin().await.unwrap();
