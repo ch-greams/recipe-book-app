@@ -48,6 +48,15 @@ CREATE SEQUENCE private.user_id
 ALTER SEQUENCE private.user_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE private.user_id TO postgres;
 
+CREATE SEQUENCE private.product_nutrient_id
+	INCREMENT BY 1
+	MINVALUE 1
+	MAXVALUE 9223372036854775807
+	START 1
+	CACHE 1
+	NO CYCLE;
+ALTER SEQUENCE private.product_nutrient_id OWNER TO postgres;
+GRANT ALL ON SEQUENCE private.product_nutrient_id TO postgres;
 
 CREATE TABLE private."user" (
 	id int8 NOT NULL DEFAULT nextval('private.user_id'::regclass),
@@ -227,6 +236,18 @@ CREATE TABLE private.nutrition_fact (
 ALTER TABLE private.nutrition_fact OWNER TO postgres;
 GRANT ALL ON TABLE private.nutrition_fact TO postgres;
 
+CREATE TABLE private.product_nutrient (
+	id int8 NOT NULL DEFAULT nextval('private.product_nutrient_id'::regclass),
+	nutrient_id int2 NOT NULL,
+	product_id int8 NOT NULL,
+	amount float4 NOT NULL,
+	CONSTRAINT product_nutrient_pk PRIMARY KEY (id),
+	CONSTRAINT product_nutrient_un UNIQUE (nutrient_id, product_id),
+	CONSTRAINT nutrient_id_fk FOREIGN KEY (nutrient_id) REFERENCES meta.nutrient(id) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES private.product(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+ALTER TABLE private.product_nutrient OWNER TO postgres;
+GRANT ALL ON TABLE private.product_nutrient TO postgres;
 
 CREATE TABLE private.direction_part (
 	direction_id int8 NOT NULL,

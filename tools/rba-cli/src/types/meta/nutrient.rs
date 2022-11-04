@@ -33,7 +33,7 @@ impl Nutrient {
                     .push_bind(&nutrient.name)
                     .push_bind(&nutrient.unit_name)
                     .push_bind(&nutrient.nutrient_nbr)
-                    .push_bind(&nutrient.rank);
+                    .push_bind(nutrient.rank);
             },
         );
 

@@ -16,7 +16,7 @@ GRANT ALL ON SEQUENCE meta.nutrient_group_id TO postgres;
 CREATE SEQUENCE meta.nutrient_id
 	INCREMENT BY 1
 	MINVALUE 1
-	MAXVALUE 9223372036854775807
+	MAXVALUE 32767
 	START 1
 	CACHE 1
 	NO CYCLE;
@@ -34,7 +34,7 @@ GRANT ALL ON TABLE meta.nutrient_group TO postgres;
 
 
 CREATE TABLE meta.nutrient (
-	id int8 NOT NULL DEFAULT nextval('meta.nutrient_id'::regclass),
+	id int2 NOT NULL DEFAULT nextval('meta.nutrient_id'::regclass),
 	"name" text NOT NULL,
 	daily_value float4 NULL,
 	unit text NOT NULL,

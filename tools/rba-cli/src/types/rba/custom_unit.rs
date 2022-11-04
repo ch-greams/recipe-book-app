@@ -50,7 +50,7 @@ impl CustomUnit {
             |mut b, custom_unit| {
                 b.push_bind(custom_unit.product_id)
                     .push_bind(&custom_unit.name)
-                    .push_bind(&custom_unit.amount)
+                    .push_bind(custom_unit.amount)
                     .push_bind(&custom_unit.unit);
             },
         );
