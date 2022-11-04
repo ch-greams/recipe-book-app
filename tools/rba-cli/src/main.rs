@@ -62,7 +62,9 @@ async fn main() {
             let food_data_path = opts
                 .file_path
                 .as_deref()
-                .unwrap_or("usda-data/FoodData_Central_foundation_food_json_2022-04-28.json");
+                .unwrap_or("usda-data/FoodData_Central_foundation_food_json_2022-10-28.json");
+
+            println!("reading data from '{}'...", food_data_path);
 
             let food_data: FoundationFoodData = utils::read_json_file(food_data_path).unwrap();
 
@@ -72,7 +74,9 @@ async fn main() {
             let food_data_path = opts
                 .file_path
                 .as_deref()
-                .unwrap_or("usda-data/FoodData_Central_survey_food_json_2021-10-28.json");
+                .unwrap_or("usda-data/FoodData_Central_survey_food_json_2022-10-28.json");
+
+            println!("reading data from '{}'...", food_data_path);
 
             let food_data: SurveyFoodData = utils::read_json_file(food_data_path).unwrap();
 
@@ -82,7 +86,9 @@ async fn main() {
             let food_data_path = opts
                 .file_path
                 .as_deref()
-                .unwrap_or("usda-data/FoodData_Central_branded_food_json_2022-04-28.json");
+                .unwrap_or("usda-data/FoodData_Central_branded_food_json_2022-10-28.json");
+
+            println!("reading data from '{}'...", food_data_path);
 
             let food_data: BrandedFoodData = utils::read_json_file(food_data_path).unwrap();
 
