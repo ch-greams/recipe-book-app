@@ -138,17 +138,6 @@ pub struct NutrientConversionFactors {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct AbridgedFoodNutrient {
-    pub number: u32,
-    pub name: String,
-    pub amount: f32,
-    pub unit_name: String,
-    pub derivation_code: String,
-    pub derivation_description: String,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
 pub struct FoodAttribute {
     pub id: i32,
     pub sequence_number: Option<i32>,

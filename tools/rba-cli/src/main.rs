@@ -1,9 +1,7 @@
 use std::time::Instant;
 
 use clap::{Args, Parser, Subcommand};
-use types::usda::archives::{
-    BrandedFoodData, FoundationFoodData, SRLegacyFoodData, SurveyFoodData,
-};
+use types::usda::archives::{BrandedFoodData, FoundationFoodData, SurveyFoodData};
 
 use crate::types::meta::nutrient::Nutrient;
 
@@ -23,7 +21,6 @@ enum Commands {
     SeedDatabase(DatabaseOpts),
     SeedFoundationFood(UsdaOpts),
     SeedSurveyFood(UsdaOpts),
-    SeedLegacyFood(UsdaOpts),
     SeedBrandedFood(UsdaOpts),
     SeedNutrients(UsdaOpts),
 }
@@ -80,16 +77,6 @@ async fn main() {
             let food_data: SurveyFoodData = utils::read_json_file(food_data_path).unwrap();
 
             food_data.seed_survey_food().await;
-        }
-        Commands::SeedLegacyFood(opts) => {
-            let food_data_path = opts
-                .file_path
-                .as_deref()
-                .unwrap_or("usda-data/FoodData_Central_sr_legacy_food_json_2021-10-28.json");
-
-            let food_data: SRLegacyFoodData = utils::read_json_file(food_data_path).unwrap();
-
-            food_data.seed_sr_legacy_food().await;
         }
         Commands::SeedBrandedFood(opts) => {
             let food_data_path = opts
