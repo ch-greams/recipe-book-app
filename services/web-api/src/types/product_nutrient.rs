@@ -43,7 +43,7 @@ impl ProductNutrient {
 
     pub async fn insert_multiple(
         product_nutrients: &HashMap<String, f32>,
-        nutrients: &Vec<Nutrient>,
+        nutrients: &[Nutrient],
         product_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<(), Error> {
@@ -75,7 +75,7 @@ impl ProductNutrient {
 
     pub async fn replace_multiple(
         product_nutrients: &HashMap<String, f32>,
-        nutrients: &Vec<Nutrient>,
+        nutrients: &[Nutrient],
         product_id: i64,
         txn: &mut Transaction<'_, Postgres>,
     ) -> Result<(), Error> {
@@ -116,12 +116,14 @@ impl ProductNutrient {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::{
         types::{
-            product_nutrient::ProductNutrient, food::{CreateFoodPayload, UpdateFoodPayload}, product::Product, meta::Nutrient,
+            food::{CreateFoodPayload, UpdateFoodPayload},
+            meta::Nutrient,
+            product::Product,
+            product_nutrient::ProductNutrient,
         },
         utils,
     };

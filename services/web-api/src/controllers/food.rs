@@ -62,8 +62,7 @@ async fn create_food(
 
     let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::insert_multiple(&request.nutrients, &nutrients, product.id, &mut txn)
-        .await?;
+    ProductNutrient::insert_multiple(&request.nutrients, &nutrients, product.id, &mut txn).await?;
 
     txn.commit().await?;
 
@@ -86,8 +85,7 @@ async fn update_food(
 
     let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::replace_multiple(&request.nutrients, &nutrients, product.id, &mut txn)
-        .await?;
+    ProductNutrient::replace_multiple(&request.nutrients, &nutrients, product.id, &mut txn).await?;
 
     txn.commit().await?;
 

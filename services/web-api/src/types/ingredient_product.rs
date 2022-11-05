@@ -115,7 +115,7 @@ pub struct IngredientProductDetailsWithNutrients {
 impl IngredientProductDetailsWithNutrients {
     pub fn new(
         ingredient_product: &IngredientProductDetails,
-        nutrients: &Vec<ProductNutrient>,
+        nutrients: &[ProductNutrient],
     ) -> Self {
         let nutrients = nutrients
             .iter()
@@ -132,7 +132,7 @@ impl IngredientProductDetailsWithNutrients {
             name: ingredient_product.name.to_owned(),
             density: ingredient_product.density,
 
-            nutrients: nutrients,
+            nutrients,
         }
     }
 }

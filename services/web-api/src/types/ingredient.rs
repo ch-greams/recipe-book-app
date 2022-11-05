@@ -122,7 +122,7 @@ impl IngredientDetails {
     pub fn new(
         ingredient: &Ingredient,
         ingredient_products: &[IngredientProductDetails],
-        product_nutrients: &Vec<ProductNutrient>,
+        product_nutrients: &[ProductNutrient],
     ) -> Self {
         let products = ingredient_products
             .iter()
@@ -136,7 +136,7 @@ impl IngredientDetails {
                             .iter()
                             .cloned()
                             .filter(|pn| pn.product_id == ip.product_id)
-                            .collect(),
+                            .collect::<Vec<ProductNutrient>>(),
                     ),
                 )
             })
