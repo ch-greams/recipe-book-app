@@ -25,5 +25,5 @@ INSERT INTO private.product_nutrient (nutrient_id, product_id, amount) VALUES
     (1,  5,  402.0),
     (5,  5,  1.3),
     (9,  5,  33.0),
-    (18, 5,  25.0),
+    (18, 5,  25.0)
 ON CONFLICT (nutrient_id, product_id) DO NOTHING;

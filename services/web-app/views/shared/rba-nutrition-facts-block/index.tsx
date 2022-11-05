@@ -1,7 +1,7 @@
 import React from "react";
 
-import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
-import RbaNutritionFactLine from "@views/shared/rba-nutrition-fact-line";
+import type { Nutrient } from "@views/shared/rba-nutrition-fact-line";
+import RbaNutrientLine from "@views/shared/rba-nutrition-fact-line";
 
 import styles from "./rba-nutrition-facts-block.module.scss";
 
@@ -9,38 +9,38 @@ import styles from "./rba-nutrition-facts-block.module.scss";
 interface Props {
     isReadOnly?: boolean;
     title: string;
-    nutritionFacts: NutritionFact[];
+    nutrients: Nutrient[];
 }
 
 
 
-const RbaNutritionFactsBlock: React.FC<Props> = ({
-    isReadOnly = false, title, nutritionFacts,
+const RbaNutrientsBlock: React.FC<Props> = ({
+    isReadOnly = false, title, nutrients,
 }) => {
 
-    const nutritionFactLines = nutritionFacts.map((nutritionFact) => (
-        <RbaNutritionFactLine
-            key={nutritionFact.type}
-            nutritionFact={nutritionFact}
+    const nutrientLines = nutrients.map((nutrient) => (
+        <RbaNutrientLine
+            key={nutrient.type}
+            nutrient={nutrient}
             isReadOnly={isReadOnly}
         />
     ));
 
     return (
 
-        <div className={styles.nutritionFactsBlock}>
+        <div className={styles.nutrientsBlock}>
 
-            <div className={styles.nutritionFactsBlockTitle}>
+            <div className={styles.nutrientsBlockTitle}>
                 {title}
             </div>
 
-            {nutritionFactLines}
+            {nutrientLines}
 
         </div>
     );
 };
 
 
-RbaNutritionFactsBlock.displayName = "RbaNutritionFactsBlock";
+RbaNutrientsBlock.displayName = "RbaNutrientsBlock";
 
-export default RbaNutritionFactsBlock;
+export default RbaNutrientsBlock;

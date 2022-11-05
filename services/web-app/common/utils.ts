@@ -1,13 +1,13 @@
 import { isSome, unwrap, unwrapOr } from "@common/types";
-import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
+import type { Nutrient } from "@views/shared/rba-nutrition-fact-line";
 import type { FoodPageStore } from "@store/types/food";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
     RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
 } from "@store/types/recipe";
 
-import type { NutrientDescription } from "./nutritionFacts";
-import { NutrientName } from "./nutritionFacts";
+import type { NutrientDescription } from "./nutrients";
+import { NutrientName } from "./nutrients";
 import type { Comparer, Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { WeightUnit } from "./units";
@@ -89,31 +89,31 @@ export default class Utils {
         );
     }
 
-    public static getNutritionFacts(
-        nutritionFactTypes: NutrientName[],
-        nutritionFacts: Dictionary<NutrientName, number>,
-        nutritionFactInputs: Dictionary<NutrientName, string>,
-        nutritionFactDescriptions: Record<NutrientName, NutrientDescription>,
-    ): NutritionFact[] {
-        return nutritionFactTypes.reduce<NutritionFact[]>(
-            (previousNutritionFacts: NutritionFact[], currentNutrientType: NutrientName): NutritionFact[] => {
+    public static getNutrients(
+        nutrientTypes: NutrientName[],
+        nutrients: Dictionary<NutrientName, number>,
+        nutrientInputs: Dictionary<NutrientName, string>,
+        nutrientDescriptions: Record<NutrientName, NutrientDescription>,
+    ): Nutrient[] {
+        return nutrientTypes.reduce<Nutrient[]>(
+            (previousNutrients: Nutrient[], currentNutrientType: NutrientName): Nutrient[] => {
 
-                const amount: Option<number> = nutritionFacts[currentNutrientType];
-                const inputValue: Option<string> = nutritionFactInputs[currentNutrientType];
-                const nutritionFactDescription = unwrap(
-                    nutritionFactDescriptions[currentNutrientType],
-                    `nutritionFactDescriptions[${currentNutrientType}]`,
+                const amount: Option<number> = nutrients[currentNutrientType];
+                const inputValue: Option<string> = nutrientInputs[currentNutrientType];
+                const nutrientDescription = unwrap(
+                    nutrientDescriptions[currentNutrientType],
+                    `nutrientDescriptions[${currentNutrientType}]`,
                 );
 
                 return [
-                    ...previousNutritionFacts,
+                    ...previousNutrients,
                     {
                         type: currentNutrientType,
                         amount: amount,
                         inputValue: inputValue || "",
-                        unit: nutritionFactDescription.unit,
-                        dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
-                        isFraction: nutritionFactDescription.isFraction,
+                        unit: nutrientDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
+                        isFraction: nutrientDescription.isFraction,
                     },
                 ];
             },
@@ -132,7 +132,7 @@ export default class Utils {
 
         return Object.values(NutrientName).reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
-            const nutritionFactValue = ingredients.reduce(
+            const nutrientValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
                     return ( isSome(value) ? unwrapOr(sum, Utils.ZERO) + value : sum );
@@ -143,36 +143,36 @@ export default class Utils {
             return {
                 ...acc,
                 [nutrientType]: (
-                    isSome(nutritionFactValue)
-                        ? Utils.roundToDecimal(nutritionFactValue, DecimalPlaces.Two)
+                    isSome(nutrientValue)
+                        ? Utils.roundToDecimal(nutrientValue, DecimalPlaces.Two)
                         : null
                 ),
             };
         }, {});
     }
 
-    public static convertNutritionFacts(
+    public static convertNutrients(
         amount: number,
         isFrom: boolean,
-        nutritionFacts: Dictionary<NutrientName, number>,
+        nutrients: Dictionary<NutrientName, number>,
     ): Dictionary<NutrientName, number> {
 
         const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );
 
-        const updatedNutritionFacts: Dictionary<NutrientName, number> = Utils.getObjectKeys(nutritionFacts)
+        const updatedNutrients: Dictionary<NutrientName, number> = Utils.getObjectKeys(nutrients)
             .reduce((acc, cur) => {
-                const nutritionFact = nutritionFacts[cur];
+                const nutrient = nutrients[cur];
                 return {
                     ...acc,
                     [cur]: (
-                        isSome(nutritionFact)
-                            ? Utils.roundToDecimal(nutritionFact * multiplier, DecimalPlaces.Two)
+                        isSome(nutrient)
+                            ? Utils.roundToDecimal(nutrient * multiplier, DecimalPlaces.Two)
                             : null
                     ),
                 };
             }, {});
 
-        return updatedNutritionFacts;
+        return updatedNutrients;
     }
 
     // NOTE: OTHER GENERIC THINGS
@@ -265,7 +265,7 @@ export default class Utils {
         return ( ( isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
     }
 
-    public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutrientName, number>): Dictionary<NutrientName, string> {
+    public static convertNutrientValuesIntoInputs(values: Dictionary<NutrientName, number>): Dictionary<NutrientName, string> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, string>>(
             (acc, nfType) => {
                 const nfValue = values[nfType];
@@ -279,7 +279,7 @@ export default class Utils {
         );
     }
 
-    public static convertNutritionFactInputsIntoValues(values: Dictionary<NutrientName, string>): Dictionary<NutrientName, number> {
+    public static convertNutrientInputsIntoValues(values: Dictionary<NutrientName, string>): Dictionary<NutrientName, number> {
         return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, number>>(
             (acc, nfType) => ({ ...acc, [nfType]: Utils.stringToNumber(values[nfType]) }), {},
         );
@@ -300,7 +300,7 @@ export default class Utils {
             description: foodPage.description,
             density: foodPage.density,
             serving_size: foodPage.servingSize,
-            nutrition_facts: foodPage.nutritionFacts,
+            nutrients: foodPage.nutrients,
             custom_units: foodPage.customUnits,
             is_private: foodPage.isPrivate,
         };
@@ -387,7 +387,7 @@ export default class Utils {
             amount: 100,
             unit: WeightUnit.g,
             density: food.density,
-            nutrition_facts: food.nutrition_facts,
+            nutrients: food.nutrients,
         };
     }
 
@@ -399,40 +399,40 @@ export default class Utils {
             amount: 100,
             unit: WeightUnit.g,
             density: recipe.density,
-            nutrition_facts: Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients),
+            nutrients: Utils.getRecipeNutrientsFromIngredients(recipe.ingredients),
         };
     }
 
     /**
      * Calculate nutrition fact for a recipe based on currently selected ingredients
      */
-    public static getRecipeNutritionFactsFromIngredients(ingredients: Ingredient[]): Dictionary<NutrientName, number> {
+    public static getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Dictionary<NutrientName, number> {
 
-        const nutritionFactsById: Dictionary<NutrientName, number>[] = ingredients
+        const nutrientsById: Dictionary<NutrientName, number>[] = ingredients
             .map((ingredient) => {
 
                 const ingredientProduct = Utils.getIngredientProduct(ingredient);
 
-                const nutritionFacts = ingredientProduct.nutrition_facts;
+                const nutrients = ingredientProduct.nutrients;
                 const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
 
-                return Utils.getObjectKeys(nutritionFacts)
-                    .reduce((acc: Dictionary<NutrientName, number>, nutritionFactType) => {
+                return Utils.getObjectKeys(nutrients)
+                    .reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
-                        const nutritionFactValue = nutritionFacts[nutritionFactType];
+                        const nutrientValue = nutrients[nutrientType];
 
                         return {
                             ...acc,
-                            [nutritionFactType]: (
-                                isSome(nutritionFactValue)
-                                    ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
+                            [nutrientType]: (
+                                isSome(nutrientValue)
+                                    ? Utils.roundToDecimal(nutrientValue * multiplier, DecimalPlaces.Two)
                                     : null
                             ),
                         };
                     }, {});
             });
 
-        return Utils.dictionarySum(nutritionFactsById);
+        return Utils.dictionarySum(nutrientsById);
     }
 
     public static getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {

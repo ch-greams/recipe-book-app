@@ -3,26 +3,26 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
 import { store } from "@store";
 
-import type { NutritionFact } from ".";
-import RbaNutritionFactLine from ".";
+import type { Nutrient } from ".";
+import RbaNutrientLine from ".";
 
 
 
 export default {
-    title: "Shared/RbaNutritionFactLine",
-    component: RbaNutritionFactLine,
+    title: "Shared/RbaNutrientLine",
+    component: RbaNutrientLine,
     argTypes: {
         isReadOnly: {
             type: { name: "boolean" },
             table: { type: { summary: "boolean" } },
             defaultValue: false,
         },
-        nutritionFact: {
-            table: { type: { summary: "NutritionFact" } },
+        nutrient: {
+            table: { type: { summary: "Nutrient" } },
         },
     },
     decorators : [
@@ -32,15 +32,15 @@ export default {
             </Provider>
         ),
     ],
-} as ComponentMeta<typeof RbaNutritionFactLine>;
+} as ComponentMeta<typeof RbaNutrientLine>;
 
-const Template: ComponentStory<typeof RbaNutritionFactLine> = (args) => (<RbaNutritionFactLine {...args} />);
+const Template: ComponentStory<typeof RbaNutrientLine> = (args) => (<RbaNutrientLine {...args} />);
 
 // -----------------------------------------------------------------------------
-// NutritionFact
+// Nutrient
 // -----------------------------------------------------------------------------
 
-const nutritionFact: NutritionFact = {
+const nutrient: Nutrient = {
     type: NutrientName.Carbohydrate,
     amount: 57,
     inputValue: "57",
@@ -51,20 +51,20 @@ const nutritionFact: NutritionFact = {
 
 export const Default = Template.bind({});
 Default.args = {
-    nutritionFact,
+    nutrient,
 };
 
 export const ReadOnly = Template.bind({});
 ReadOnly.args = {
     isReadOnly: true,
-    nutritionFact,
+    nutrient,
 };
 
 // -----------------------------------------------------------------------------
-// NutritionFactFraction
+// NutrientFraction
 // -----------------------------------------------------------------------------
 
-const nutritionFactFraction: NutritionFact = {
+const nutrientFraction: Nutrient = {
     type: NutrientName.DietaryFiber,
     amount: 57,
     inputValue: "57",
@@ -75,11 +75,11 @@ const nutritionFactFraction: NutritionFact = {
 
 export const DefaultFraction = Template.bind({});
 DefaultFraction.args = {
-    nutritionFact: nutritionFactFraction,
+    nutrient: nutrientFraction,
 };
 
 export const ReadOnlyFraction = Template.bind({});
 ReadOnlyFraction.args = {
     isReadOnly: true,
-    nutritionFact: nutritionFactFraction,
+    nutrient: nutrientFraction,
 };

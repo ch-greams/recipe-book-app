@@ -1,4 +1,4 @@
-import type { NutrientName } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutrients";
 import type * as typings from "@common/typings";
 import type * as units from "@common/units";
 
@@ -11,7 +11,7 @@ export interface RecipeIngredient extends typings.Ingredient {
     isOpen: boolean;
     isMarked: boolean;
     products: Dictionary<number, RecipeIngredientProduct>;
-    alternativeNutritionFacts: Dictionary<NutrientName, number>;
+    alternativeNutrients: Dictionary<NutrientName, number>;
 }
 
 
@@ -84,7 +84,7 @@ export interface RecipePageStore {
     densityVolumeUnit: units.VolumeUnit;
     densityWeightUnit: units.WeightUnit;
 
-    nutritionFacts: Dictionary<NutrientName, number>;
+    nutrients: Dictionary<NutrientName, number>;
     customUnits: units.CustomUnitInput[];
     isPrivate: boolean;
 
@@ -93,8 +93,8 @@ export interface RecipePageStore {
     servingSizeInput: string;
     servingSizeUnit: units.WeightUnit | units.VolumeUnit;
 
-    nutritionFactsByServing: Dictionary<NutrientName, number>;
-    nutritionFactsByServingInputs: Dictionary<NutrientName, string>;
+    nutrientsByServing: Dictionary<NutrientName, number>;
+    nutrientsByServingInputs: Dictionary<NutrientName, string>;
 
     ingredients: RecipeIngredient[];
 

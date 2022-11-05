@@ -1,12 +1,12 @@
 import React from "react";
 
-import type { NutrientDescription, NutrientName } from "@common/nutritionFacts";
+import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import {
     CarbohydrateNutrients, LipidNutrients, MineralNutrients, NutrientGroupType,
     OtherNutrients, ProteinNutrients, VitaminNutrients,
-} from "@common/nutritionFacts";
+} from "@common/nutrients";
 import Utils from "@common/utils";
-import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
 
 import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
 
@@ -14,14 +14,14 @@ import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
 
 interface Props {
     isReadOnly?: boolean;
-    nutritionFacts: Dictionary<NutrientName, number>;
-    nutritionFactInputs: Dictionary<NutrientName, string>;
+    nutrients: Dictionary<NutrientName, number>;
+    nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
-    isReadOnly = false, nutritionFacts, nutritionFactInputs, nutrientDescriptions,
+const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
+    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions,
 }) => {
 
     const leftColumn: [ NutrientGroupType, NutrientName[] ][] = [
@@ -37,32 +37,32 @@ const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
     ];
 
     return (
-        <div className={styles.detailedNutritionFacts}>
+        <div className={styles.detailedNutrients}>
 
-            <div className={styles.detailedNutritionFactsColumn}>
+            <div className={styles.detailedNutrientsColumn}>
 
                 {leftColumn.map(([ type, group ]) => (
-                    <RbaNutritionFactsBlock
+                    <RbaNutrientsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutritionFacts={Utils.getNutritionFacts(
-                            group, nutritionFacts, nutritionFactInputs, nutrientDescriptions,
+                        nutrients={Utils.getNutrients(
+                            group, nutrients, nutrientInputs, nutrientDescriptions,
                         )}
                     />
                 ))}
 
             </div>
 
-            <div className={styles.detailedNutritionFactsColumn}>
+            <div className={styles.detailedNutrientsColumn}>
 
                 {rightColumn.map(([ type, group ]) => (
-                    <RbaNutritionFactsBlock
+                    <RbaNutrientsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutritionFacts={Utils.getNutritionFacts(
-                            group, nutritionFacts, nutritionFactInputs, nutrientDescriptions,
+                        nutrients={Utils.getNutrients(
+                            group, nutrients, nutrientInputs, nutrientDescriptions,
                         )}
                     />
                 ))}
@@ -73,5 +73,5 @@ const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
     );
 };
 
-RbaPageDetailedNutritionFactsBlock.displayName = "RbaPageDetailedNutritionFactsBlock";
-export default RbaPageDetailedNutritionFactsBlock;
+RbaPageDetailedNutrientsBlock.displayName = "RbaPageDetailedNutrientsBlock";
+export default RbaPageDetailedNutrientsBlock;

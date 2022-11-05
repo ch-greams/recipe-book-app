@@ -3,18 +3,18 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutrientGroupType, NutrientName } from "@common/nutritionFacts";
+import { NutrientGroupType, NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
 import { store } from "@store";
 
-import RbaNutritionFactsBlock from ".";
+import RbaNutrientsBlock from ".";
 
 
 
 export default {
-    title: "Shared/RbaNutritionFactsBlock",
-    component: RbaNutritionFactsBlock,
+    title: "Shared/RbaNutrientsBlock",
+    component: RbaNutrientsBlock,
     argTypes: {
         isReadOnly: {
             type: { name: "boolean" },
@@ -25,8 +25,8 @@ export default {
             type: { name: "string" },
             table: { type: { summary: "string" } },
         },
-        nutritionFacts: {
-            table: { type: { summary: "NutritionFact[]" } },
+        nutrients: {
+            table: { type: { summary: "Nutrient[]" } },
         },
     },
     decorators : [
@@ -36,15 +36,15 @@ export default {
             </Provider>
         ),
     ],
-} as ComponentMeta<typeof RbaNutritionFactsBlock>;
+} as ComponentMeta<typeof RbaNutrientsBlock>;
 
-const Template: ComponentStory<typeof RbaNutritionFactsBlock> = (args) => (<RbaNutritionFactsBlock {...args} />);
+const Template: ComponentStory<typeof RbaNutrientsBlock> = (args) => (<RbaNutrientsBlock {...args} />);
 
-const nutritionFacts: Dictionary<NutrientName, number> = {
+const nutrients: Dictionary<NutrientName, number> = {
     [NutrientName.Carbohydrate]: 57,
     [NutrientName.DietaryFiber]: 1.7,
 };
-const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
+const nutrientInputs = Utils.convertNutrientValuesIntoInputs(nutrients);
 const group = Object.values(NutrientName);
 
 const defaultNutrientDescriptions = store.getState().meta.nutrientDescriptions;
@@ -64,17 +64,17 @@ const nutrientDescriptions = {
     },
 };
 
-const nutritionFactsGroup = Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs, nutrientDescriptions);
+const nutrientsGroup = Utils.getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions);
 
 export const Default = Template.bind({});
 Default.args = {
     title: NutrientGroupType.Carbohydrates,
-    nutritionFacts: nutritionFactsGroup,
+    nutrients: nutrientsGroup,
 };
 
 export const ReadOnly = Template.bind({});
 ReadOnly.args = {
     isReadOnly: true,
     title: NutrientGroupType.Carbohydrates,
-    nutritionFacts: nutritionFactsGroup,
+    nutrients: nutrientsGroup,
 };

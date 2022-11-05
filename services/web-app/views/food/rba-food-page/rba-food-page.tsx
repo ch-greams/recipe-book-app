@@ -4,7 +4,7 @@ import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
-import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
@@ -62,9 +62,9 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
         brand,
         subtitle,
         description,
-        nutritionFactsByServing,
-        nutritionFactsByServingInputs,
-        featuredNutritionFacts,
+        nutrientsByServing,
+        nutrientsByServingInputs,
+        featuredNutrients,
     } = food;
 
     const {
@@ -114,9 +114,9 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
 
                 <RbaGeneralInfoBlock
                     food={food}
-                    featuredNutritionFacts={featuredNutritionFacts}
-                    nutritionFacts={nutritionFactsByServing}
-                    nutritionFactInputs={nutritionFactsByServingInputs}
+                    featuredNutrients={featuredNutrients}
+                    nutrients={nutrientsByServing}
+                    nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 
@@ -124,10 +124,10 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
-                <RbaPageDetailedNutritionFactsBlock
+                <RbaPageDetailedNutrientsBlock
                     isReadOnly={isReadOnly}
-                    nutritionFacts={nutritionFactsByServing}
-                    nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrients={nutrientsByServing}
+                    nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 

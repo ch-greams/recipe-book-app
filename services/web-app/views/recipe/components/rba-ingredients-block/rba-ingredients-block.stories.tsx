@@ -3,7 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
 import { store } from "@store";
@@ -56,7 +56,7 @@ const INGREDIENT_0: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Sour Cream 10%",
             density: 1,
-            nutrition_facts: {
+            nutrients: {
                 [NutrientName.Carbohydrate]: 57,
                 [NutrientName.Fat]: 10,
                 [NutrientName.Protein]: 21.5,
@@ -71,7 +71,7 @@ const INGREDIENT_0: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Sour Cream 15%",
             density: 1,
-            nutrition_facts: {
+            nutrients: {
                 [NutrientName.Carbohydrate]: 56,
                 [NutrientName.Fat]: 15,
                 [NutrientName.Protein]: 20.5,
@@ -79,7 +79,7 @@ const INGREDIENT_0: RecipeIngredient = {
             },
         },
     },
-    alternativeNutritionFacts: {
+    alternativeNutrients: {
         [NutrientName.Carbohydrate]: 56,
         [NutrientName.Fat]: 11,
         [NutrientName.Protein]: 20.5,
@@ -101,7 +101,7 @@ const INGREDIENT_1: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Cottage Cheese",
             density: 1,
-            nutrition_facts: {
+            nutrients: {
                 [NutrientName.Carbohydrate]: 75.4,
                 [NutrientName.Fat]: 18.3,
                 [NutrientName.Protein]: 30.4,
@@ -109,7 +109,7 @@ const INGREDIENT_1: RecipeIngredient = {
             },
         },
     },
-    alternativeNutritionFacts: {},
+    alternativeNutrients: {},
 };
 
 
@@ -138,21 +138,21 @@ export const DefaultOpen = Template.bind({});
 DefaultOpen.args = {
     search,
     isReadOnly: false,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpen = Template.bind({});
 ReadOnlyOpen.args = {
     search,
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpenMarked = Template.bind({});
 ReadOnlyOpenMarked.args = {
     search,
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {}, isMarked: true }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {}, isMarked: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedDefaultOpen = Template.bind({});

@@ -1,9 +1,10 @@
+use std::collections::HashMap;
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use super::{
     custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload},
-    nutrition_facts::{CreateNutritionFactsPayload, NutritionFacts, UpdateNutritionFactsPayload},
     product::Product,
 };
 
@@ -16,7 +17,7 @@ pub struct Food {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
-    pub nutrition_facts: NutritionFacts,
+    pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CustomUnit>,
     pub is_private: bool,
     pub created_at: DateTime<Utc>,
@@ -31,7 +32,7 @@ pub struct CreateFoodPayload {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
-    pub nutrition_facts: CreateNutritionFactsPayload,
+    pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CreateCustomUnitPayload>,
     pub is_private: bool,
 }
@@ -45,7 +46,7 @@ pub struct UpdateFoodPayload {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
-    pub nutrition_facts: UpdateNutritionFactsPayload,
+    pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
     pub is_private: bool,
 }
@@ -53,7 +54,7 @@ pub struct UpdateFoodPayload {
 impl Food {
     pub fn new(
         product: &Product,
-        nutrition_facts: &NutritionFacts,
+        nutrients: &HashMap<String, f32>,
         custom_units: Vec<CustomUnit>,
     ) -> Self {
         Self {
@@ -64,7 +65,7 @@ impl Food {
             description: product.description.to_owned(),
             density: product.density,
             serving_size: product.serving_size,
-            nutrition_facts: nutrition_facts.to_owned(),
+            nutrients: nutrients.to_owned(),
             custom_units,
             is_private: product.is_private,
             created_at: product.created_at,
