@@ -1,13 +1,13 @@
 @import "@styles/variables.scss";
 
 
-.detailedNutritionFacts {
+.detailedNutrients {
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 
-    .detailedNutritionFactsColumn {
+    .detailedNutrientsColumn {
 
         display: flex;
         flex-direction: column;

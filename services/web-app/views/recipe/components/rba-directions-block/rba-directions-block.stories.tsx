@@ -3,7 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
 import { store } from "@store";
@@ -157,7 +157,7 @@ const INGREDIENT_1: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Cottage Cheese",
             density: 1,
-            nutrition_facts: {
+            nutrients: {
                 [NutrientName.Carbohydrate]: 75.4,
                 [NutrientName.Fat]: 18.3,
                 [NutrientName.Protein]: 30.4,
@@ -165,7 +165,7 @@ const INGREDIENT_1: RecipeIngredient = {
             },
         },
     },
-    alternativeNutritionFacts: {},
+    alternativeNutrients: {},
 };
 
 

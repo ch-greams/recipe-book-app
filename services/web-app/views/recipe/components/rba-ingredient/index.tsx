@@ -3,7 +3,7 @@ import * as constants from "@cypress/constants";
 
 import type { Unit } from "@common/units";
 import Utils from "@common/utils";
-import RbaIngredientNutritionFacts from "@views/recipe/components/rba-ingredient-nutrition-facts";
+import RbaIngredientNutrients from "@views/recipe/components/rba-ingredient-nutrition-facts";
 import RbaIngredientProduct, {
     IngredientProductSize, IngredientProductTheme,
 } from "@views/recipe/components/rba-ingredient-product";
@@ -41,9 +41,9 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
             className={styles.ingredientInfoLines}
         >
 
-            <RbaIngredientNutritionFacts
-                nutritionFacts={ingredientProduct.nutrition_facts}
-                alternativeNutritionFacts={ingredient.alternativeNutritionFacts}
+            <RbaIngredientNutrients
+                nutrients={ingredientProduct.nutrients}
+                alternativeNutrients={ingredient.alternativeNutrients}
             />
 
             {( showSeparator && (<div className={styles.separator}></div>) )}
@@ -63,10 +63,10 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                             dispatch(actions.removeIngredientProduct({ parentId: ingredient.id, id: product.product_id }));
                         }}
                         onMouseEnter={() => {
-                            dispatch(actions.updateAltNutritionFacts({ parentId: ingredient.id, id: product.product_id, isSelected: true }));
+                            dispatch(actions.updateAltNutrients({ parentId: ingredient.id, id: product.product_id, isSelected: true }));
                         }}
                         onMouseLeave={() => {
-                            dispatch(actions.updateAltNutritionFacts({ parentId: ingredient.id, id: product.product_id, isSelected: false }));
+                            dispatch(actions.updateAltNutrients({ parentId: ingredient.id, id: product.product_id, isSelected: false }));
                         }}
                         onChangeAmount={(event) => {
                             dispatch(actions.updateIngredientProductAmount({

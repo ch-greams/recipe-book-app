@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
@@ -9,8 +9,8 @@ import styles from "./rba-ingredient-nutrition-facts.module.scss";
 
 
 interface Props {
-    nutritionFacts: Dictionary<NutrientName, number>;
-    alternativeNutritionFacts?: Dictionary<NutrientName, number>;
+    nutrients: Dictionary<NutrientName, number>;
+    alternativeNutrients?: Dictionary<NutrientName, number>;
 }
 
 /**
@@ -50,9 +50,9 @@ const getNutritionValue = (
     );
 };
 
-const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternativeNutritionFacts = {} }) => {
+const RbaIngredientNutrients: React.FC<Props> = ({ nutrients, alternativeNutrients = {} }) => {
 
-    const nutritionFactTypes = [
+    const nutrientTypes = [
         NutrientName.Carbohydrate,
         NutrientName.Fat,
         NutrientName.Protein,
@@ -60,32 +60,32 @@ const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternat
     ];
 
     return (
-        <div className={styles.ingredientNutritionFacts}>
+        <div className={styles.ingredientNutrients}>
 
-            {nutritionFactTypes.map( (type) => {
+            {nutrientTypes.map( (type) => {
 
-                const currentNutritionValue = nutritionFacts[type];
-                const alternativeNutritionValue = alternativeNutritionFacts[type];
+                const currentNutritionValue = nutrients[type];
+                const alternativeNutritionValue = alternativeNutrients[type];
 
                 const nutritionValue = getNutritionValue(
                     currentNutritionValue,
                     alternativeNutritionValue,
-                    Utils.objectIsNotEmpty(alternativeNutritionFacts),
+                    Utils.objectIsNotEmpty(alternativeNutrients),
                 );
 
                 const nutritionValueClass = getNutritionValueClass(currentNutritionValue, alternativeNutritionValue);
 
                 return (
-                    <div key={`nutritionFact_${type}`} className={styles.ingredientNutritionFact}>
+                    <div key={`nutrient_${type}`} className={styles.ingredientNutrient}>
                         <div
-                            data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_AMOUNT}
-                            className={[ styles.ingredientNutritionFactAmount, nutritionValueClass ].join(" ")}
+                            data-cy={constants.CY_INGREDIENT_NUTRIENT_AMOUNT}
+                            className={[ styles.ingredientNutrientAmount, nutritionValueClass ].join(" ")}
                         >
                             {nutritionValue}
                         </div>
                         <div
-                            data-cy={constants.CY_INGREDIENT_NUTRITION_FACT_TYPE}
-                            className={styles.ingredientNutritionFactType}
+                            data-cy={constants.CY_INGREDIENT_NUTRIENT_TYPE}
+                            className={styles.ingredientNutrientType}
                         >
                             {type}
                         </div>
@@ -96,7 +96,7 @@ const RbaIngredientNutritionFacts: React.FC<Props> = ({ nutritionFacts, alternat
     );
 };
 
-RbaIngredientNutritionFacts.displayName = "RbaIngredientNutritionFacts";
+RbaIngredientNutrients.displayName = "RbaIngredientNutrients";
 
 
-export default RbaIngredientNutritionFacts;
+export default RbaIngredientNutrients;

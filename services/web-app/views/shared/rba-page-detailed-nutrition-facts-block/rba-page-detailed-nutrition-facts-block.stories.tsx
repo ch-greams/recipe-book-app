@@ -3,31 +3,31 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
 import { store } from "@store";
 
-import RbaPageDetailedNutritionFactsBlock from ".";
+import RbaPageDetailedNutrientsBlock from ".";
 
 
 
 export default {
-    title: "Shared/RbaPageDetailedNutritionFactsBlock",
-    component: RbaPageDetailedNutritionFactsBlock,
+    title: "Shared/RbaPageDetailedNutrientsBlock",
+    component: RbaPageDetailedNutrientsBlock,
     argTypes: {
         isReadOnly: {
             type: { name: "boolean" },
             table: { type: { summary: "boolean" } },
         },
-        nutritionFacts: {
+        nutrients: {
             table: { type: { summary: "Dictionary<NutrientName, number>" } },
         },
-        nutritionFactInputs: {
+        nutrientInputs: {
             table: { type: { summary: "Dictionary<NutrientName, string>" } },
         },
         nutrientDescriptions: {
-            table: { type: { summary: "Record<NutrientName, NutritionFactDescription>" } },
+            table: { type: { summary: "Record<NutrientName, NutrientDescription>" } },
         },
     },
     decorators : [
@@ -37,11 +37,11 @@ export default {
             </Provider>
         ),
     ],
-} as ComponentMeta<typeof RbaPageDetailedNutritionFactsBlock>;
+} as ComponentMeta<typeof RbaPageDetailedNutrientsBlock>;
 
-const Template: ComponentStory<typeof RbaPageDetailedNutritionFactsBlock> = (args) => (<RbaPageDetailedNutritionFactsBlock {...args} />);
+const Template: ComponentStory<typeof RbaPageDetailedNutrientsBlock> = (args) => (<RbaPageDetailedNutrientsBlock {...args} />);
 
-const nutritionFacts: Dictionary<NutrientName, number> = {
+const nutrients: Dictionary<NutrientName, number> = {
     [NutrientName.Carbohydrate]: 57,
     [NutrientName.DietaryFiber]: 1.7,
     [NutrientName.Fat]: 10,
@@ -85,20 +85,20 @@ const nutrientDescriptions = {
     },
 };
 
-const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
+const nutrientInputs = Utils.convertNutrientValuesIntoInputs(nutrients);
 
 export const Default = Template.bind({});
 Default.args = {
-    nutritionFacts,
-    nutritionFactInputs,
+    nutrients,
+    nutrientInputs,
     nutrientDescriptions,
 };
 
 export const ReadOnly = Template.bind({});
 ReadOnly.args = {
     isReadOnly: true,
-    nutritionFacts,
-    nutritionFactInputs,
+    nutrients,
+    nutrientInputs,
     nutrientDescriptions,
 };
 

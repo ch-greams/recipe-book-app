@@ -110,7 +110,7 @@ export const toggleIngredientOpen = createAction<number>("recipe/ingredient/togg
 export const toggleIngredientMark = createAction<number>("recipe/ingredient/toggle_mark");
 export const updateIngredientProductAmount = createAction<{ parentId: number, id: number, inputValue: string }>("recipe/ingredient/update_product_amount");
 export const updateIngredientProductUnit = createAction<{ parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
-export const updateAltNutritionFacts = createAction<{ parentId: number, id: number, isSelected: boolean }>("recipe/ingredient/update_alt_nutrients");
+export const updateAltNutrients = createAction<{ parentId: number, id: number, isSelected: boolean }>("recipe/ingredient/update_alt_nutrients");
 
 export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, { rejectValue: Error }>(
     "recipe/ingredient/add",

@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { NutrientDescription,NutrientName } from "@common/nutritionFacts";
+import type { NutrientDescription,NutrientName } from "@common/nutrients";
 import Utils from "@common/utils";
 import RbaParametersBlock from "@views/food/components/rba-parameters-block";
-import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
 import type { FoodPageStore } from "@store/types/food";
 
 import styles from "./rba-general-info-block.module.scss";
@@ -12,39 +12,34 @@ import styles from "./rba-general-info-block.module.scss";
 
 interface Props {
     food: FoodPageStore;
-    featuredNutritionFacts: NutrientName[];
-    nutritionFacts: Dictionary<NutrientName, number>;
-    nutritionFactInputs: Dictionary<NutrientName, string>;
+    featuredNutrients: NutrientName[];
+    nutrients: Dictionary<NutrientName, number>;
+    nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 const RbaGeneralInfoBlock: React.FC<Props> = ({
-    food, featuredNutritionFacts, nutritionFacts, nutritionFactInputs, nutrientDescriptions,
-}) => {
+    food, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions,
+}) => (
+    <div className={styles.mainBlock}>
 
-    const nutrients = Utils.getNutritionFacts(
-        featuredNutritionFacts,
-        nutritionFacts,
-        nutritionFactInputs,
-        nutrientDescriptions,
-    );
+        <RbaParametersBlock food={food} />
 
-    return (
-        <div className={styles.mainBlock}>
+        <div className={styles.featuredNutrients}>
 
-            <RbaParametersBlock food={food} />
-
-            <div className={styles.featuredNutritionFacts}>
-
-                <RbaNutritionFactsBlock
-                    isReadOnly={!food.editMode}
-                    title={"NUTRITION FACTS"}
-                    nutritionFacts={nutrients}
-                />
-            </div>
+            <RbaNutrientsBlock
+                isReadOnly={!food.editMode}
+                title={"NUTRITION FACTS"}
+                nutrients={Utils.getNutrients(
+                    featuredNutrients,
+                    nutrients,
+                    nutrientInputs,
+                    nutrientDescriptions,
+                )}
+            />
         </div>
-    );
-};
+    </div>
+);
 
 RbaGeneralInfoBlock.displayName = "RbaGeneralInfoBlock";
 

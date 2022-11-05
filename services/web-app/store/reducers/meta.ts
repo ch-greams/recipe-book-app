@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { isSome } from "@common/types";
 import { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";

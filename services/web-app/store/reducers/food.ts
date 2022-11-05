@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
@@ -17,7 +17,7 @@ const initialState: FoodPageStore = {
     brand: "Brand",
     subtitle: "Subtitle",
     description: "",
-    nutritionFacts: {},
+    nutrients: {},
     customUnits: [],
     isPrivate: false,
 
@@ -34,11 +34,11 @@ const initialState: FoodPageStore = {
 
     // NOTE: INPUTS
 
-    nutritionFactsByServing: {},
-    nutritionFactsByServingInputs: {},
+    nutrientsByServing: {},
+    nutrientsByServingInputs: {},
 
     // TODO: Move it from this store into the User's one
-    featuredNutritionFacts: [
+    featuredNutrients: [
         NutrientName.Energy,
         NutrientName.Carbohydrate,
         NutrientName.DietaryFiber,
@@ -112,28 +112,28 @@ const reducer = createReducer(initialState, (builder) => {
             state.servingSize = food.serving_size;
             state.servingSizeInput = String(food.serving_size);
 
-            state.nutritionFacts = food.nutrition_facts;
+            state.nutrients = food.nutrients;
             state.customUnits = Utils.convertCustomUnitsIntoInputs(food.custom_units);
 
-            state.nutritionFactsByServing = food.nutrition_facts;
-            state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(food.nutrition_facts);
+            state.nutrientsByServing = food.nutrients;
+            state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(food.nutrients);
         })
         .addCase(actions.fetchFood.rejected, (state, action) => {
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
-        .addCase(actions.updateNutritionFact, (state, action) => {
+        .addCase(actions.updateNutrient, (state, action) => {
             const { payload: { key, value } } = action;
 
-            const nutritionFactsByServing = {
-                ...state.nutritionFactsByServing,
-                ...Utils.convertNutritionFactInputsIntoValues({ [key]: value }),
+            const nutrientsByServing = {
+                ...state.nutrientsByServing,
+                ...Utils.convertNutrientInputsIntoValues({ [key]: value }),
             };
 
-            state.nutritionFacts = Utils.convertNutritionFacts(state.servingSize, false, nutritionFactsByServing),
-            state.nutritionFactsByServing = nutritionFactsByServing,
-            state.nutritionFactsByServingInputs = {
-                ...state.nutritionFactsByServingInputs,
+            state.nutrients = Utils.convertNutrients(state.servingSize, false, nutrientsByServing),
+            state.nutrientsByServing = nutrientsByServing,
+            state.nutrientsByServingInputs = {
+                ...state.nutrientsByServingInputs,
                 ...{ [key]: value },
             };
         })
@@ -213,19 +213,19 @@ const reducer = createReducer(initialState, (builder) => {
                 Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
             );
 
-            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
+            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
             if (state.editMode) {
                 state.servingSize = servingSize;
                 state.servingSizeInput = servingSizeInputNormalized;
             }
-            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
+            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
-                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
+                const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
                 state.servingSizeInput = servingSizeInputNormalized;
-                state.nutritionFactsByServing = nutritionFactsByServing;
-                state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+                state.nutrientsByServing = nutrientsByServing;
+                state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
         .addCase(actions.updateServingSizeUnit, (state, action) => {
@@ -235,19 +235,19 @@ const reducer = createReducer(initialState, (builder) => {
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
             );
 
-            // NOTE: edit-mode will not update nutritionFacts, so you can adjust how much nutritionFacts is in selected servingSize
+            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
             if (state.editMode) {
                 state.servingSize = servingSize;
                 state.servingSizeUnit = servingSizeUnit;
             }
-            // NOTE: read-mode will update nutritionFacts to demonstrate how much you'll have in a selected servingSize
+            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
-                const nutritionFactsByServing = Utils.convertNutritionFacts(servingSize, true, state.nutritionFacts);
+                const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
                 state.servingSizeUnit = servingSizeUnit;
-                state.nutritionFactsByServing = nutritionFactsByServing;
-                state.nutritionFactsByServingInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFactsByServing);
+                state.nutrientsByServing = nutrientsByServing;
+                state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
         .addCase(actions.createFood.pending, (state) => {

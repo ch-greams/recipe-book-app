@@ -180,7 +180,7 @@ export const OtherNutrients: NutrientName[] = [
 ];
 
 
-export const nutritionFactTypeLabelMapping: Dictionary<NutrientName, string> = {
+export const NUTRIENT_TYPE_LABEL_MAPPING: Dictionary<NutrientName, string> = {
 
     [NutrientName.Energy]: "Energy",
     [NutrientName.CarbohydrateEnergy]: "Carbohydrate Energy",

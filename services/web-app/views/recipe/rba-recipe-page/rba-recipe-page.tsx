@@ -1,13 +1,13 @@
 import React from "react";
 
-import { NutrientName } from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
-import RbaPageDetailedNutritionFactsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
@@ -71,8 +71,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }
         ingredients,
         newDirection,
         directions,
-        nutritionFactsByServing,
-        nutritionFactsByServingInputs,
+        nutrientsByServing,
+        nutrientsByServingInputs,
     } = recipe;
 
     const {
@@ -121,7 +121,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }
 
                 <RbaGeneralInfoBlock
                     recipe={recipe}
-                    featuredNutritionFacts={[
+                    featuredNutrients={[
                         NutrientName.Energy,
                         NutrientName.Carbohydrate,
                         NutrientName.DietaryFiber,
@@ -133,8 +133,8 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }
                         NutrientName.VitaminA,
                         NutrientName.VitaminC,
                     ]}
-                    nutritionFacts={nutritionFactsByServing}
-                    nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrients={nutrientsByServing}
+                    nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 
@@ -158,10 +158,10 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
-                <RbaPageDetailedNutritionFactsBlock
+                <RbaPageDetailedNutrientsBlock
                     isReadOnly={true}
-                    nutritionFacts={nutritionFactsByServing}
-                    nutritionFactInputs={nutritionFactsByServingInputs}
+                    nutrients={nutrientsByServing}
+                    nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 

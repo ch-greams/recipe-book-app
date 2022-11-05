@@ -1,4 +1,4 @@
-import type { NutrientDescription,NutrientName } from "@common/nutritionFacts";
+import type { NutrientDescription,NutrientName } from "@common/nutrients";
 
 
 export interface MetaStore {

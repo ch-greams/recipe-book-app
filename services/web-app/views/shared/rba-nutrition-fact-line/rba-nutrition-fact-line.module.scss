@@ -1,7 +1,7 @@
 @import "@styles/variables.scss";
 
 
-.nutritionFactLine {
+.nutrientLine {
 
     display: flex;
 
@@ -24,17 +24,17 @@
 
     box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
 
-    .nutritionFactName {
+    .nutrientName {
         width: 36%;
         margin-left: 16px;
     }
 
-    .nutritionFactUnit {
+    .nutrientUnit {
         width: 14%;
         margin-left: 4px;
     }
 
-    .nutritionFactDailyValue {
+    .nutrientDailyValue {
         width: 8%;
         margin-right: 4px;
 
@@ -43,7 +43,7 @@
         text-align: right;
     }
 
-    .nutritionFactPercent {
+    .nutrientPercent {
         width: 3%;
 
         font-weight: $font-weight-regular;
@@ -71,19 +71,19 @@
     border-style: solid;
     border-width: 1px;
 
-    .nutritionFactName {
+    .nutrientName {
 
         width: 36.72%;
         margin-left: 12px;
     }
 
-    .nutritionFactUnit {
+    .nutrientUnit {
 
         width: 14.5%;
         margin-left: 4px;
     }
 
-    .nutritionFactDailyValue {
+    .nutrientDailyValue {
 
         width: 8.2%;
         margin-right: 4px;
@@ -92,7 +92,7 @@
         text-align: right;
     }
 
-    .nutritionFactPercent {
+    .nutrientPercent {
 
         width: 3%;
         font-weight: $font-weight-regular;
