@@ -5,7 +5,10 @@ use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres, Transactio
 
 use super::{
     error::Error,
-    ingredient_product::{IngredientProductDetails, IngredientProductPayload},
+    ingredient_product::{
+        IngredientProductDetails, IngredientProductDetailsWithNutrients, IngredientProductPayload,
+    },
+    product_nutrient::ProductNutrient,
 };
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
@@ -112,16 +115,32 @@ impl Ingredient {
 pub struct IngredientDetails {
     pub id: i64,
     pub product_id: i64,
-    pub products: HashMap<i64, IngredientProductDetails>,
+    pub products: HashMap<i64, IngredientProductDetailsWithNutrients>,
 }
 
 impl IngredientDetails {
-    pub fn new(ingredient: &Ingredient, ingredient_products: &[IngredientProductDetails]) -> Self {
+    pub fn new(
+        ingredient: &Ingredient,
+        ingredient_products: &[IngredientProductDetails],
+        product_nutrients: &Vec<ProductNutrient>,
+    ) -> Self {
         let products = ingredient_products
             .iter()
             .filter(|ip| ip.ingredient_id == ingredient.id)
-            .map(|ip| (ip.product_id, ip.to_owned()))
-            .collect::<HashMap<i64, IngredientProductDetails>>();
+            .map(|ip| {
+                (
+                    ip.product_id,
+                    IngredientProductDetailsWithNutrients::new(
+                        ip,
+                        &product_nutrients
+                            .iter()
+                            .cloned()
+                            .filter(|pn| pn.product_id == ip.product_id)
+                            .collect(),
+                    ),
+                )
+            })
+            .collect::<HashMap<i64, IngredientProductDetailsWithNutrients>>();
 
         Self {
             id: ingredient.id.to_owned(),

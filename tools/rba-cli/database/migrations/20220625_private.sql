@@ -195,22 +195,4 @@ ALTER TABLE private.direction_part OWNER TO postgres;
 GRANT ALL ON TABLE private.direction_part TO postgres;
 
 
-CREATE OR REPLACE VIEW private.ingredient_product_details
-AS SELECT ingredient_product.ingredient_id,
-    ingredient_product.product_id,
-    ingredient_product.amount,
-    ingredient_product.unit,
-    product.type AS product_type,
-    product.name,
-    product.density,
-    jsonb_object_agg(nutrient."name", product_nutrient.amount) AS nutrition_facts
-    FROM private.ingredient_product ingredient_product
-    LEFT JOIN private.product product ON product.id = ingredient_product.product_id
-    LEFT JOIN private.product_nutrient product_nutrient ON product_nutrient.product_id = ingredient_product.product_id
-    LEFT JOIN meta.nutrient nutrient ON nutrient.id = product_nutrient.nutrient_id
-    GROUP BY ingredient_product.ingredient_id, ingredient_product.product_id, product.id;
-ALTER TABLE private.ingredient_product_details OWNER TO postgres;
-GRANT ALL ON TABLE private.ingredient_product_details TO postgres;
-
-
 GRANT ALL ON SCHEMA private TO postgres;

@@ -37,7 +37,6 @@ pub(crate) async fn seed_db(database_url: &str) {
         "database/seeds/private/02_product_nutrient.sql",
         "database/seeds/private/03_direction_part.sql",
         "database/seeds/private/03_ingredient_product.sql",
-        "database/seeds/usda/00_nutrient.sql",
     ];
 
     let mut txn = db_pool.begin().await.unwrap();

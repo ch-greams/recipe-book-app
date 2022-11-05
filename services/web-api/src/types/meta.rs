@@ -4,7 +4,7 @@ use sqlx::{postgres::PgArguments, query::QueryAs, Postgres};
 #[derive(sqlx::FromRow, Serialize, Deserialize, Debug, Clone)]
 #[sqlx(type_name = "nutrient_details")]
 pub struct Nutrient {
-    pub id: i64,
+    pub id: i16,
     pub name: String,
     pub daily_value: Option<f32>,
     pub unit: String,
