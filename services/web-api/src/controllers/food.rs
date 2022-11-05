@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use actix_web::{
     get, post,
     web::{Data, Json, Path},
@@ -9,8 +11,9 @@ use crate::types::{
     custom_unit::CustomUnit,
     error::Error,
     food::{CreateFoodPayload, Food, UpdateFoodPayload},
-    nutrition_facts::NutritionFacts,
+    meta::Nutrient,
     product::Product,
+    product_nutrient::ProductNutrient,
 };
 
 pub fn scope() -> Scope {
@@ -33,12 +36,14 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
         .fetch_all(&mut txn)
         .await?;
 
-    let nutrition_facts = NutritionFacts::find_by_product_id(*id)
-        .fetch_optional(&mut txn)
+    let product_nutrients = ProductNutrient::find_by_product_id(*id)
+        .fetch_all(&mut txn)
         .await?
-        .ok_or_else(|| Error::not_found(*id))?;
+        .iter()
+        .map(|pn| (pn.name.clone(), pn.amount))
+        .collect::<HashMap<String, f32>>();
 
-    let food = Food::new(&product, &nutrition_facts, custom_units);
+    let food = Food::new(&product, &product_nutrients, custom_units);
 
     Ok(Json(food))
 }
@@ -55,12 +60,13 @@ async fn create_food(
     let custom_units =
         CustomUnit::insert_multiple(&request.custom_units, product.id, &mut txn).await?;
 
-    let nutrition_facts =
-        NutritionFacts::insert(&request.nutrition_facts, product.id, &mut txn).await?;
+    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+    ProductNutrient::insert_multiple(&request.nutrients, &nutrients, product.id, &mut txn).await?;
 
     txn.commit().await?;
 
-    let food = Food::new(&product, &nutrition_facts, custom_units);
+    let food = Food::new(&product, &request.nutrients, custom_units);
 
     Ok(Json(food))
 }
@@ -77,11 +83,13 @@ async fn update_food(
     let custom_units =
         CustomUnit::replace_multiple(&request.custom_units, product.id, &mut txn).await?;
 
-    let nutrition_facts = NutritionFacts::update(&request.nutrition_facts, &mut txn).await?;
+    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+    ProductNutrient::replace_multiple(&request.nutrients, &nutrients, product.id, &mut txn).await?;
 
     txn.commit().await?;
 
-    let food = Food::new(&product, &nutrition_facts, custom_units);
+    let food = Food::new(&product, &request.nutrients, custom_units);
 
     Ok(Json(food))
 }

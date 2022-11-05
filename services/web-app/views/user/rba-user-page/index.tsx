@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import { Color } from "@common/colors";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
-import type { AppState } from "@store";
-import * as actions from "@store/user/actions";
-import type { UserStore } from "@store/user/types";
+import { useAppSelector } from "@store";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -14,13 +13,13 @@ import RbaUserPage from "./rba-user-page";
 
 const RbaUserPageConnected: React.FC = () => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const user = useSelector<AppState>((state) => state.user) as UserStore;
+    const user = useAppSelector((state) => state.user);
 
     useEffect(() => {
-        dispatch(actions.requestFoods());
-        dispatch(actions.requestRecipes());
+        dispatch(actions.fetchFoods());
+        dispatch(actions.fetchRecipes());
     }, [ dispatch ]);
 
     return (

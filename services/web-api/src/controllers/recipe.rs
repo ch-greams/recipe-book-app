@@ -15,6 +15,7 @@ use crate::types::{
     ingredient::{Ingredient, IngredientDetails},
     ingredient_product::{IngredientProduct, IngredientProductDetails},
     product::Product,
+    product_nutrient::ProductNutrient,
     recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
 };
 
@@ -54,9 +55,18 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
         .fetch_all(&mut txn)
         .await?;
 
+    let product_ids = ingredient_products
+        .iter()
+        .map(|ingredient_product| ingredient_product.product_id)
+        .collect();
+
+    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
+        .fetch_all(&mut txn)
+        .await?;
+
     let ingredient_details: Vec<IngredientDetails> = ingredients
         .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products))
+        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
         .collect();
 
     // directions
@@ -128,9 +138,18 @@ async fn create_recipe(
         .fetch_all(&mut txn)
         .await?;
 
+    let product_ids = ingredient_products
+        .iter()
+        .map(|ingredient_product| ingredient_product.product_id)
+        .collect();
+
+    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
+        .fetch_all(&mut txn)
+        .await?;
+
     let ingredient_details: Vec<IngredientDetails> = ingredients
         .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products))
+        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
         .collect();
 
     // directions
@@ -210,9 +229,18 @@ async fn update_recipe(
         .fetch_all(&mut txn)
         .await?;
 
+    let product_ids = ingredient_products
+        .iter()
+        .map(|ingredient_product| ingredient_product.product_id)
+        .collect();
+
+    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
+        .fetch_all(&mut txn)
+        .await?;
+
     let ingredient_details: Vec<IngredientDetails> = ingredients
         .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products))
+        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
         .collect();
 
     // directions

@@ -2,9 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{
     support::{
-        AbridgedFoodNutrient, FoodAttribute, FoodCategory, FoodComponent, FoodNutrient,
-        FoodPortion, FoodUpdateLog, InputFoodFoundation, InputFoodSurvey,
-        NutrientConversionFactors, WweiaFoodCategory,
+        FoodAttribute, FoodCategory, FoodComponent, FoodNutrient, FoodPortion, FoodUpdateLog,
+        InputFoodFoundation, InputFoodSurvey, NutrientConversionFactors, WweiaFoodCategory,
     },
     support_custom::LabelNutrients,
 };
@@ -27,20 +26,6 @@ pub struct FoundationFoodItem {
     pub food_portions: Vec<FoodPortion>,
     pub input_foods: Vec<InputFoodFoundation>,
     pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct AbridgedFoodItem {
-    pub data_type: String,
-    pub description: String,
-    pub fdc_id: i32,
-    pub food_nutrients: Vec<AbridgedFoodNutrient>,
-    pub publication_date: String,
-    pub brand_owner: String,
-    pub gtin_upc: String,
-    pub ndb_number: i32,
-    pub food_code: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -69,23 +54,6 @@ pub struct BrandedFoodItem {
     pub food_nutrients: Vec<FoodNutrient>,
     pub food_update_log: Vec<FoodUpdateLog>,
     pub label_nutrients: LabelNutrients,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct SRLegacyFoodItem {
-    pub fdc_id: i32,
-    pub data_type: String,
-    pub description: String,
-    pub food_class: String,
-    pub is_historical_reference: bool,
-    pub ndb_number: i32,
-    pub publication_date: String,
-    pub scientific_name: Option<String>,
-    pub food_category: FoodCategory,
-    pub food_nutrients: Vec<FoodNutrient>,
-    pub food_portions: Vec<FoodPortion>,
-    pub nutrient_conversion_factors: Vec<NutrientConversionFactors>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

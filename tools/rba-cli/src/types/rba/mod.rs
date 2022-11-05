@@ -1,3 +1,4 @@
 pub mod custom_unit;
-pub mod nutrition_fact;
+pub mod nutrient;
 pub mod product;
+pub mod product_nutrient;

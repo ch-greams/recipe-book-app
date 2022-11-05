@@ -1,49 +1,31 @@
-import { useMemo } from "react";
-import type { AnyAction, Store } from "redux";
-import { applyMiddleware, combineReducers, createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
-import { createLogger } from "redux-logger";
-import createSagaMiddleware from "redux-saga";
+import type { TypedUseSelectorHook } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import logger from "redux-logger";
+import { configureStore } from "@reduxjs/toolkit";
 
-import foodPageReducer from "./food/reducer";
-import recipePageReducer from "./recipe/reducer";
-import searchPageReducer from "./search/reducer";
-import userReducer from "./user/reducer";
-import rootSaga from "./rootSaga";
+import foodReducer from "./reducers/food";
+import metaReducer from "./reducers/meta";
+import recipeReducer from "./reducers/recipe";
+import searchReducer from "./reducers/search";
+import userReducer from "./reducers/user";
 
 
 
-const rootReducer = combineReducers({
-    foodPage: foodPageReducer,
-    recipePage: recipePageReducer,
-    searchPage: searchPageReducer,
-    user: userReducer,
+export const store = configureStore({
+    reducer: {
+        food: foodReducer,
+        meta: metaReducer,
+        recipe: recipeReducer,
+        search: searchReducer,
+        user: userReducer,
+    },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    devTools: true,
 });
 
-export type AppState = ReturnType<typeof rootReducer>;
 
-function initializeStore(initialState: AppState): Store {
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
-    const sagaMiddleware = createSagaMiddleware();
-
-    const middlewares = [
-        createLogger(),
-        sagaMiddleware,
-    ];
-    const middleWareEnhancer = applyMiddleware(...middlewares);
-
-    const store = createStore(
-        rootReducer,
-        initialState,
-        composeWithDevTools(middleWareEnhancer),
-    );
-
-    sagaMiddleware.run(rootSaga);
-
-    return store;
-}
-
-
-export function useStore(initialState: AppState): Store {
-    return useMemo<Store<AppState, AnyAction>>(() => initializeStore(initialState), [ initialState ]);
-}
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;

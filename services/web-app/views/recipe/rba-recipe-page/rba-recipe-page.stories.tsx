@@ -3,10 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import type { AppState } from "@store";
-import { useStore } from "@store";
-import { extractState as extractRecipeState } from "@store/recipe/reducer";
-import { extractState as extractSearchState } from "@store/search/reducer";
+import { store } from "@store";
 
 import RbaRecipePage from "./rba-recipe-page";
 
@@ -28,7 +25,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
@@ -38,21 +35,24 @@ export default {
 const Template: ComponentStory<typeof RbaRecipePage> = (args) => <RbaRecipePage {...args} />;
 
 
-const recipe = extractRecipeState({} as AppState);
-const search = extractSearchState({} as AppState);
+const recipe = store.getState().recipe;
+const search = store.getState().search;
+const meta = store.getState().meta;
 
 export const Default = Template.bind({});
 Default.args = {
-    recipe: recipe,
+    recipe,
     search,
+    meta,
     isNew: false,
     isReadOnly: true,
 };
 
 export const Editable = Template.bind({});
 Editable.args = {
-    recipe: recipe,
+    recipe,
     search,
+    meta,
     isNew: true,
     isReadOnly: false,
 };

@@ -1,43 +1,43 @@
 
 import type { Dispatch } from "react";
 import React from "react";
-import { useDispatch } from "react-redux";
+import type { AnyAction } from "@reduxjs/toolkit";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
-import { nutritionFactTypeLabelMapping } from "@common/nutritionFacts";
+import type { NutrientName } from "@common/nutrients";
+import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
 import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
-import type { NutritionFactUnit } from "@common/units";
+import type { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
-import { updateNutritionFact } from "@store/food/actions";
-import type { UpdateNutritionFactAction } from "@store/food/types";
+import { useAppDispatch } from "@store";
+import { updateNutrient } from "@store/actions/food";
 
 import styles from "./rba-nutrition-fact-line.module.scss";
 
 
-export interface NutritionFact {
+export interface Nutrient {
 
     amount?: Option<number>;
     inputValue: string;
-    type: NutritionFactType;
-    unit: NutritionFactUnit;
+    type: NutrientName;
+    unit: NutrientUnit;
     dailyValue?: Option<number>;
     isFraction: boolean;
 }
 
 interface Props {
     isReadOnly: boolean;
-    nutritionFact: NutritionFact;
+    nutrient: Nutrient;
 }
 
-const handleOnChange = (dispatch: Dispatch<UpdateNutritionFactAction>, nutritionFact: NutritionFact): InputChangeCallback => {
+const handleOnChange = (dispatch: Dispatch<AnyAction>, nutrient: Nutrient): InputChangeCallback => {
 
     return (event) => {
 
-        const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutritionFact.inputValue);
+        const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutrient.inputValue);
 
-        dispatch(updateNutritionFact(nutritionFact.type, inputValue));
+        dispatch(updateNutrient({ key: nutrient.type, value: inputValue }));
     };
 };
 
@@ -46,11 +46,11 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
         isSome(dailyValue)
             ? (
                 <>
-                    <div className={styles.nutritionFactDailyValue}>
+                    <div className={styles.nutrientDailyValue}>
                         {( dailyValue > Utils.MAX_DAILY_VALUE ? `${Utils.MAX_DAILY_VALUE}+` : dailyValue )}
                     </div>
 
-                    <div className={styles.nutritionFactPercent}>
+                    <div className={styles.nutrientPercent}>
                         {"%"}
                     </div>
                 </>
@@ -60,40 +60,40 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
 };
 
 
-const RbaNutritionFactLine: React.FC<Props> = ({
-    nutritionFact, isReadOnly,
+const RbaNutrientLine: React.FC<Props> = ({
+    nutrient, isReadOnly,
 }) => {
 
-    // TODO: Move dispatch hook to RbaNutritionFactsBlock component (like custom-unit block & line)
-    const dispatch = useDispatch();
+    // TODO: Move dispatch hook to RbaNutrientsBlock component (like custom-unit block & line)
+    const dispatch = useAppDispatch();
 
     return (
 
-        <div className={nutritionFact.isFraction ? styles.subNutrientLine : styles.nutritionFactLine}>
+        <div className={nutrient.isFraction ? styles.subNutrientLine : styles.nutrientLine}>
 
-            <div className={styles.nutritionFactName}>
-                {nutritionFactTypeLabelMapping[nutritionFact.type]}
+            <div className={styles.nutrientName}>
+                {NUTRIENT_TYPE_LABEL_MAPPING[nutrient.type]}
             </div>
 
             <RbaInput
                 disabled={isReadOnly}
                 width={InputWidthSize.Medium}
                 height={InputHeightSize.Small}
-                theme={nutritionFact.isFraction ? InputTheme.Alternative : InputTheme.Primary}
-                value={nutritionFact.inputValue}
-                onChange={handleOnChange(dispatch, nutritionFact)}
+                theme={nutrient.isFraction ? InputTheme.Alternative : InputTheme.Primary}
+                value={nutrient.inputValue}
+                onChange={handleOnChange(dispatch, nutrient)}
             />
 
-            <div className={styles.nutritionFactUnit}>
-                {nutritionFact.unit}
+            <div className={styles.nutrientUnit}>
+                {nutrient.unit}
             </div>
 
-            { dailyValueBlock(nutritionFact.dailyValue) }
+            { dailyValueBlock(nutrient.dailyValue) }
 
         </div>
     );
 };
 
-RbaNutritionFactLine.displayName = "RbaNutritionFactLine";
+RbaNutrientLine.displayName = "RbaNutrientLine";
 
-export default RbaNutritionFactLine;
+export default RbaNutrientLine;

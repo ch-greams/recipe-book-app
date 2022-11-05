@@ -5,6 +5,7 @@ pub mod error;
 pub mod food;
 pub mod ingredient;
 pub mod ingredient_product;
-pub mod nutrition_facts;
+pub mod meta;
 pub mod product;
+pub mod product_nutrient;
 pub mod recipe;

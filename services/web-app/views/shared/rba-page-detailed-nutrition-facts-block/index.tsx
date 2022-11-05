@@ -1,19 +1,12 @@
 import React from "react";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
+import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import {
-    LipidNutritionFactType,
-    MineralNutritionFactType,
-    OtherNutritionFactType,
-    ProteinNutritionFactType,
-    VitaminNutritionFactType,
-} from "@common/nutritionFacts";
-import {
-    CarbohydrateNutritionFactType,
-    NutrientGroupType,
-} from "@common/nutritionFacts";
+    CarbohydrateNutrients, LipidNutrients, MineralNutrients, NutrientGroupType,
+    OtherNutrients, ProteinNutrients, VitaminNutrients,
+} from "@common/nutrients";
 import Utils from "@common/utils";
-import RbaNutritionFactsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
 
 import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
 
@@ -21,51 +14,56 @@ import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
 
 interface Props {
     isReadOnly?: boolean;
-    nutritionFacts: Dictionary<NutritionFactType, number>;
-    nutritionFactInputs: Dictionary<NutritionFactType, string>;
+    nutrients: Dictionary<NutrientName, number>;
+    nutrientInputs: Dictionary<NutrientName, string>;
+    nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
-    isReadOnly = false, nutritionFacts, nutritionFactInputs,
+const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
+    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions,
 }) => {
 
-    const leftColumn: [ NutrientGroupType, NutritionFactType[] ][] = [
-        [ NutrientGroupType.Carbohydrates, Object.values(CarbohydrateNutritionFactType) ],
-        [ NutrientGroupType.Lipids, Object.values(LipidNutritionFactType) ],
-        [ NutrientGroupType.Proteins, Object.values(ProteinNutritionFactType) ],
+    const leftColumn: [ NutrientGroupType, NutrientName[] ][] = [
+        [ NutrientGroupType.Carbohydrates, CarbohydrateNutrients ],
+        [ NutrientGroupType.Lipids, LipidNutrients ],
+        [ NutrientGroupType.Proteins, ProteinNutrients ],
     ];
 
-    const rightColumn: [ NutrientGroupType, NutritionFactType[] ][] = [
-        [ NutrientGroupType.Vitamins, Object.values(VitaminNutritionFactType) ],
-        [ NutrientGroupType.Minerals, Object.values(MineralNutritionFactType) ],
-        [ NutrientGroupType.Other, Object.values(OtherNutritionFactType) ],
+    const rightColumn: [ NutrientGroupType, NutrientName[] ][] = [
+        [ NutrientGroupType.Vitamins, VitaminNutrients ],
+        [ NutrientGroupType.Minerals, MineralNutrients ],
+        [ NutrientGroupType.Other, OtherNutrients ],
     ];
 
     return (
-        <div className={styles.detailedNutritionFacts}>
+        <div className={styles.detailedNutrients}>
 
-            <div className={styles.detailedNutritionFactsColumn}>
+            <div className={styles.detailedNutrientsColumn}>
 
                 {leftColumn.map(([ type, group ]) => (
-                    <RbaNutritionFactsBlock
+                    <RbaNutrientsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutritionFacts={Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs)}
+                        nutrients={Utils.getNutrients(
+                            group, nutrients, nutrientInputs, nutrientDescriptions,
+                        )}
                     />
                 ))}
 
             </div>
 
-            <div className={styles.detailedNutritionFactsColumn}>
+            <div className={styles.detailedNutrientsColumn}>
 
                 {rightColumn.map(([ type, group ]) => (
-                    <RbaNutritionFactsBlock
+                    <RbaNutrientsBlock
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutritionFacts={Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs)}
+                        nutrients={Utils.getNutrients(
+                            group, nutrients, nutrientInputs, nutrientDescriptions,
+                        )}
                     />
                 ))}
 
@@ -75,5 +73,5 @@ const RbaPageDetailedNutritionFactsBlock: React.FC<Props> = ({
     );
 };
 
-RbaPageDetailedNutritionFactsBlock.displayName = "RbaPageDetailedNutritionFactsBlock";
-export default RbaPageDetailedNutritionFactsBlock;
+RbaPageDetailedNutrientsBlock.displayName = "RbaPageDetailedNutrientsBlock";
+export default RbaPageDetailedNutrientsBlock;

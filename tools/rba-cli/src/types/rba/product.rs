@@ -5,7 +5,7 @@ use sqlx::{Executor, Postgres, QueryBuilder};
 
 use crate::{
     types::usda::{
-        foods::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem},
+        foods::{BrandedFoodItem, FoundationFoodItem, SurveyFoodItem},
         support::FoodPortion,
     },
     utils::BIND_LIMIT,
@@ -142,42 +142,6 @@ impl From<&SurveyFoodItem> for Product {
             brand: "".to_string(),
             subtitle: "".to_string(),
             description: "usda - survey".to_string(),
-
-            density,
-            serving_size: 100.0,
-
-            created_by: 0,
-            is_private: false,
-            created_at: timestamp,
-            updated_at: timestamp,
-        }
-    }
-}
-
-impl From<&SRLegacyFoodItem> for Product {
-    fn from(sr_legacy_food_item: &SRLegacyFoodItem) -> Self {
-        let std_units = vec!["ml", "tsp", "tbsp", "cup"];
-        let std_portion = sr_legacy_food_item
-            .food_portions
-            .iter()
-            .find(|portion| std_units.contains(&portion.measure_unit.abbreviation.as_str()));
-
-        let density = if let Some(food_portion) = std_portion {
-            get_density(food_portion)
-        } else {
-            1.0
-        };
-
-        let timestamp = Utc::now();
-
-        Self {
-            id: sr_legacy_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
-
-            name: sr_legacy_food_item.description.to_owned(),
-            brand: "".to_string(),
-            subtitle: "".to_string(),
-            description: "usda - sr-legacy".to_string(),
 
             density,
             serving_size: 100.0,

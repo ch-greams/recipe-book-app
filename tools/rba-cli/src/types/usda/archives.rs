@@ -4,10 +4,11 @@ use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 
 use crate::types::rba::{
-    custom_unit::CustomUnit, nutrition_fact::NutritionFacts, product::Product,
+    custom_unit::CustomUnit, nutrient::Nutrient, product::Product,
+    product_nutrient::ProductNutrient,
 };
 
-use super::foods::{BrandedFoodItem, FoundationFoodItem, SRLegacyFoodItem, SurveyFoodItem};
+use super::foods::{BrandedFoodItem, FoundationFoodItem, SurveyFoodItem};
 
 //------------------------------------------------------------------------------
 // Custom aggregator types (not directly taken from USDA spec)
@@ -49,29 +50,37 @@ impl FoundationFoodData {
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
 
-        // nutrition_facts
+        // product_nutrient
 
-        let nutrition_facts: Vec<NutritionFacts> = self
+        let nutrient_mapping = Nutrient::get_nutrient_mapping(&mut txn).await;
+
+        let product_nutrients: Vec<ProductNutrient> = self
             .foundation_foods
             .iter()
-            .map(|food| food.into())
+            .flat_map(|food| {
+                ProductNutrient::from_food_nutrients(&food.food_nutrients, i64::from(food.fdc_id))
+            })
             .collect();
 
-        let nutrition_facts_count = nutrition_facts.len();
-        let nutrition_facts_batch_size = 800;
-        let nutrition_facts_batch_count = nutrition_facts_count / nutrition_facts_batch_size;
+        let product_nutrients_count = product_nutrients.len();
+        let product_nutrients_batch_size = 20000;
+        let product_nutrients_batch_count = product_nutrients_count / product_nutrients_batch_size;
 
-        for n in 0..=nutrition_facts_batch_count {
-            let from = n * nutrition_facts_batch_size;
-            let to = if n == nutrition_facts_batch_count {
-                nutrition_facts_count
+        for n in 0..=product_nutrients_batch_count {
+            let from = n * product_nutrients_batch_size;
+            let to = if n == product_nutrients_batch_count {
+                product_nutrients_count
             } else {
-                (n + 1) * nutrition_facts_batch_size
+                (n + 1) * product_nutrients_batch_size
             };
-            println!("nutrition_facts - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {} to: {}", from, to);
 
-            NutritionFacts::seed_nutrition_facts(nutrition_facts[from..to].to_vec(), &mut txn)
-                .await;
+            ProductNutrient::seed_product_nutrients(
+                product_nutrients[from..to].to_vec(),
+                &nutrient_mapping,
+                &mut txn,
+            )
+            .await;
         }
 
         // custom_units
@@ -143,130 +152,43 @@ impl SurveyFoodData {
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
 
-        // nutrition_facts
+        // product_nutrient
 
-        let nutrition_facts: Vec<NutritionFacts> =
-            self.survey_foods.iter().map(|food| food.into()).collect();
+        let nutrient_mapping = Nutrient::get_nutrient_mapping(&mut txn).await;
 
-        let nutrition_facts_count = nutrition_facts.len();
-        let nutrition_facts_batch_size = 800;
-        let nutrition_facts_batch_count = nutrition_facts_count / nutrition_facts_batch_size;
+        let product_nutrients: Vec<ProductNutrient> = self
+            .survey_foods
+            .iter()
+            .flat_map(|food| {
+                ProductNutrient::from_food_nutrients(&food.food_nutrients, i64::from(food.fdc_id))
+            })
+            .collect();
 
-        for n in 0..=nutrition_facts_batch_count {
-            let from = n * nutrition_facts_batch_size;
-            let to = if n == nutrition_facts_batch_count {
-                nutrition_facts_count
+        let product_nutrients_count = product_nutrients.len();
+        let product_nutrients_batch_size = 20000;
+        let product_nutrients_batch_count = product_nutrients_count / product_nutrients_batch_size;
+
+        for n in 0..=product_nutrients_batch_count {
+            let from = n * product_nutrients_batch_size;
+            let to = if n == product_nutrients_batch_count {
+                product_nutrients_count
             } else {
-                (n + 1) * nutrition_facts_batch_size
+                (n + 1) * product_nutrients_batch_size
             };
-            println!("nutrition_facts - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {} to: {}", from, to);
 
-            NutritionFacts::seed_nutrition_facts(nutrition_facts[from..to].to_vec(), &mut txn)
-                .await;
+            ProductNutrient::seed_product_nutrients(
+                product_nutrients[from..to].to_vec(),
+                &nutrient_mapping,
+                &mut txn,
+            )
+            .await;
         }
 
         // custom_units
 
         let custom_units: HashSet<CustomUnit> = self
             .survey_foods
-            .iter()
-            .flat_map(|food| {
-                food.food_portions
-                    .iter()
-                    .map(|fp| CustomUnit::new(fp, food.fdc_id.into()))
-                    .collect::<Vec<CustomUnit>>()
-            })
-            .collect();
-
-        let custom_units_vec: Vec<CustomUnit> = custom_units.into_iter().collect();
-
-        let custom_units_count = custom_units_vec.len();
-        let custom_units_batch_size = 1000;
-        let custom_units_batch_count = custom_units_count / custom_units_batch_size;
-
-        for n in 0..=custom_units_batch_count {
-            let from = n * custom_units_batch_size;
-            let to = if n == custom_units_batch_count {
-                custom_units_count
-            } else {
-                (n + 1) * custom_units_batch_size
-            };
-            println!("custom_units - from: {} to: {}", from, to);
-
-            CustomUnit::seed_custom_units(custom_units_vec[from..to].to_vec(), &mut txn).await;
-        }
-
-        txn.commit().await.unwrap();
-
-        println!("done!");
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-pub struct SRLegacyFoodData {
-    #[serde(rename = "SRLegacyFoods")]
-    pub sr_legacy_foods: Vec<SRLegacyFoodItem>,
-}
-
-impl SRLegacyFoodData {
-    pub async fn seed_sr_legacy_food(self) {
-        let database_url = "postgres://postgres:password@localhost";
-        let db_pool = PgPool::connect_lazy(database_url).unwrap();
-        let mut txn = db_pool.begin().await.unwrap();
-
-        // products
-
-        let products: Vec<Product> = self
-            .sr_legacy_foods
-            .iter()
-            .map(|food| food.into())
-            .collect();
-
-        let products_count = products.len();
-        let products_batch_size = 1000;
-        let products_batch_count = products_count / products_batch_size;
-
-        for n in 0..=products_batch_count {
-            let from = n * products_batch_size;
-            let to = if n == products_batch_count {
-                products_count
-            } else {
-                (n + 1) * products_batch_size
-            };
-            println!("products - from: {} to: {}", from, to);
-
-            Product::seed_products(products[from..to].to_vec(), &mut txn).await;
-        }
-
-        // nutrition_facts
-
-        let nutrition_facts: Vec<NutritionFacts> = self
-            .sr_legacy_foods
-            .iter()
-            .map(|food| food.into())
-            .collect();
-
-        let nutrition_facts_count = nutrition_facts.len();
-        let nutrition_facts_batch_size = 800;
-        let nutrition_facts_batch_count = nutrition_facts_count / nutrition_facts_batch_size;
-
-        for n in 0..=nutrition_facts_batch_count {
-            let from = n * nutrition_facts_batch_size;
-            let to = if n == nutrition_facts_batch_count {
-                nutrition_facts_count
-            } else {
-                (n + 1) * nutrition_facts_batch_size
-            };
-            println!("nutrition_facts - from: {} to: {}", from, to);
-
-            NutritionFacts::seed_nutrition_facts(nutrition_facts[from..to].to_vec(), &mut txn)
-                .await;
-        }
-
-        // custom_units
-
-        let custom_units: HashSet<CustomUnit> = self
-            .sr_legacy_foods
             .iter()
             .flat_map(|food| {
                 food.food_portions
@@ -332,26 +254,37 @@ impl BrandedFoodData {
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
 
-        // nutrition_facts
+        // product_nutrient
 
-        let nutrition_facts: Vec<NutritionFacts> =
-            self.branded_foods.iter().map(|food| food.into()).collect();
+        let nutrient_mapping = Nutrient::get_nutrient_mapping(&mut txn).await;
 
-        let nutrition_facts_count = nutrition_facts.len();
-        let nutrition_facts_batch_size = 800;
-        let nutrition_facts_batch_count = nutrition_facts_count / nutrition_facts_batch_size;
+        let product_nutrients: Vec<ProductNutrient> = self
+            .branded_foods
+            .iter()
+            .flat_map(|food| {
+                ProductNutrient::from_food_nutrients(&food.food_nutrients, i64::from(food.fdc_id))
+            })
+            .collect();
 
-        for n in 0..=nutrition_facts_batch_count {
-            let from = n * nutrition_facts_batch_size;
-            let to = if n == nutrition_facts_batch_count {
-                nutrition_facts_count
+        let product_nutrients_count = product_nutrients.len();
+        let product_nutrients_batch_size = 20000;
+        let product_nutrients_batch_count = product_nutrients_count / product_nutrients_batch_size;
+
+        for n in 0..=product_nutrients_batch_count {
+            let from = n * product_nutrients_batch_size;
+            let to = if n == product_nutrients_batch_count {
+                product_nutrients_count
             } else {
-                (n + 1) * nutrition_facts_batch_size
+                (n + 1) * product_nutrients_batch_size
             };
-            println!("nutrition_facts - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {} to: {}", from, to);
 
-            NutritionFacts::seed_nutrition_facts(nutrition_facts[from..to].to_vec(), &mut txn)
-                .await;
+            ProductNutrient::seed_product_nutrients(
+                product_nutrients[from..to].to_vec(),
+                &nutrient_mapping,
+                &mut txn,
+            )
+            .await;
         }
 
         txn.commit().await.unwrap();

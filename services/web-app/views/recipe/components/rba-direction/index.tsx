@@ -1,5 +1,4 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import type { InputChangeCallback } from "@common/typings";
@@ -10,16 +9,17 @@ import RbaDirectionPartComment from "@views/recipe/components/rba-direction-part
 import RbaDirectionPartIngredient from "@views/recipe/components/rba-direction-part-ingredient";
 import RbaDirectionPartNew from "@views/recipe/components/rba-direction-part-new";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
-import * as actions from "@store/recipe/actions";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/recipe";
 import type {
     RecipeDirection,
     RecipeDirectionPartComment,
     RecipeDirectionPartIngredient,
     RecipeIngredient,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 import {
     DirectionPartType,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 
 import styles from "./rba-direction.module.scss";
 
@@ -34,7 +34,7 @@ interface Props {
 
 const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, index }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const getDirectionPartElement = (
         directionPart: RecipeDirectionPartComment | RecipeDirectionPartIngredient,
@@ -65,10 +65,10 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
             const toggleDirectionMark = (): void => { dispatch(actions.toggleDirectionMark(index)); };
 
             const updateDirectionTemperatureUnit: RbaSelectChangeCallback = (option) => {
-                dispatch(actions.updateDirectionTemperatureUnit(index, option.value as TemperatureUnit));
+                dispatch(actions.updateDirectionTemperatureUnit({ directionIndex: index, unit: option.value as TemperatureUnit }));
             };
             const updateDirectionTimeUnit: RbaSelectChangeCallback = (option) => {
-                dispatch(actions.updateDirectionTimeUnit(index, option.value as TimeUnit));
+                dispatch(actions.updateDirectionTimeUnit({ directionIndex: index, unit: option.value as TimeUnit }));
             };
 
             return (
@@ -84,22 +84,22 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
             const removeDirection = (): void => { dispatch(actions.removeDirection(index)); };
 
             const updateDirectionStepNumber: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionStepNumber(index, Number(event.target.value)));
+                dispatch(actions.updateDirectionStepNumber({ directionIndex: index, stepNumber: Number(event.target.value) }));
             };
             const updateDirectionName: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionName(index, event.target.value));
+                dispatch(actions.updateDirectionName({ directionIndex: index, name: event.target.value }));
             };
             const updateDirectionTemperatureCount: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionTemperatureCount(index, event.target.value));
+                dispatch(actions.updateDirectionTemperatureCount({ directionIndex: index, inputValue: event.target.value }));
             };
             const updateDirectionTemperatureUnit: RbaSelectChangeCallback = (option) => {
-                dispatch(actions.updateDirectionTemperatureUnit(index, option.value as TemperatureUnit));
+                dispatch(actions.updateDirectionTemperatureUnit({ directionIndex: index, unit: option.value as TemperatureUnit }));
             };
             const updateDirectionTimeCount: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionTimeCount(index, event.target.value));
+                dispatch(actions.updateDirectionTimeCount({ directionIndex: index, inputValue: event.target.value }));
             };
             const updateDirectionTimeUnit: RbaSelectChangeCallback = (option) => {
-                dispatch(actions.updateDirectionTimeUnit(index, option.value as TimeUnit));
+                dispatch(actions.updateDirectionTimeUnit({ directionIndex: index, unit: option.value as TimeUnit }));
             };
 
             return (

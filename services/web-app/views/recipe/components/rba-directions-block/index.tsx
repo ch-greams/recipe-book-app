@@ -1,15 +1,15 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 
 import type { InputChangeCallback } from "@common/typings";
 import type { TemperatureUnit, TimeUnit } from "@common/units";
 import RbaDirection from "@views/recipe/components/rba-direction";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
-import * as actions from "@store/recipe/actions";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/recipe";
 import type {
     RecipeDirection,
     RecipeIngredient,
-} from "@store/recipe/types";
+} from "@store/types/recipe";
 
 import RbaDirectionLineEdit from "../rba-direction-line-edit";
 
@@ -26,7 +26,7 @@ const RbaDirectionsBlock: React.FC<Props> = ({
     isReadOnly = false, ingredients, directions = [], newDirection,
 }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const createDirection = (): void => { dispatch(actions.createDirection(newDirection)); };
 

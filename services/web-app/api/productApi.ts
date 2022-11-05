@@ -30,11 +30,7 @@ export default class ProductApi {
 
     public static async getProducts(filter: string): Promise<ProductShort[]> {
 
-        const params = Utils.getUrlParams({
-            limit: 10,
-            user_id: 1,
-            filter: filter,
-        });
+        const params = Utils.getUrlParams({ limit: 10, user_id: 1, filter: filter });
 
         const { body: products } = await superagent.get(`${ProductApi.API_PATH}?${params}`);
 

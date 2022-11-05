@@ -3,8 +3,7 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 
 import RbaLayout from ".";
 
@@ -19,7 +18,7 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),

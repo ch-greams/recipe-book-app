@@ -3,15 +3,11 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import {
-    CarbohydrateNutritionFactType, EnergyNutritionFactType, LipidNutritionFactType, ProteinNutritionFactType,
-} from "@common/nutritionFacts";
+import { NutrientName } from "@common/nutrients";
 import { WeightUnit } from "@common/units";
 import { ProductType } from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
-import type { RecipeIngredient } from "@store/recipe/types";
-import { extractState } from "@store/search/reducer";
+import { store } from "@store";
+import type { RecipeIngredient } from "@store/types/recipe";
 
 import RbaIngredientsBlock from ".";
 
@@ -29,14 +25,14 @@ export default {
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
     ],
 } as ComponentMeta<typeof RbaIngredientsBlock>;
 
-const search = extractState({} as AppState);
+const search = store.getState().search;
 
 
 const Template: ComponentStory<typeof RbaIngredientsBlock> = (args) => <RbaIngredientsBlock {...args} />;
@@ -60,11 +56,11 @@ const INGREDIENT_0: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Sour Cream 10%",
             density: 1,
-            nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 57,
-                [LipidNutritionFactType.Fat]: 10,
-                [ProteinNutritionFactType.Protein]: 21.5,
-                [EnergyNutritionFactType.Energy]: 394,
+            nutrients: {
+                [NutrientName.Carbohydrate]: 57,
+                [NutrientName.Fat]: 10,
+                [NutrientName.Protein]: 21.5,
+                [NutrientName.Energy]: 394,
             },
         },
         [PRODUCT_ID_2]: {
@@ -75,19 +71,19 @@ const INGREDIENT_0: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Sour Cream 15%",
             density: 1,
-            nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 56,
-                [LipidNutritionFactType.Fat]: 15,
-                [ProteinNutritionFactType.Protein]: 20.5,
-                [EnergyNutritionFactType.Energy]: 426,
+            nutrients: {
+                [NutrientName.Carbohydrate]: 56,
+                [NutrientName.Fat]: 15,
+                [NutrientName.Protein]: 20.5,
+                [NutrientName.Energy]: 426,
             },
         },
     },
-    alternativeNutritionFacts: {
-        [CarbohydrateNutritionFactType.Carbohydrate]: 56,
-        [LipidNutritionFactType.Fat]: 11,
-        [ProteinNutritionFactType.Protein]: 20.5,
-        [EnergyNutritionFactType.Energy]: 394,
+    alternativeNutrients: {
+        [NutrientName.Carbohydrate]: 56,
+        [NutrientName.Fat]: 11,
+        [NutrientName.Protein]: 20.5,
+        [NutrientName.Energy]: 394,
     },
 };
 
@@ -105,15 +101,15 @@ const INGREDIENT_1: RecipeIngredient = {
             product_type: ProductType.Food,
             name: "Cottage Cheese",
             density: 1,
-            nutrition_facts: {
-                [CarbohydrateNutritionFactType.Carbohydrate]: 75.4,
-                [LipidNutritionFactType.Fat]: 18.3,
-                [ProteinNutritionFactType.Protein]: 30.4,
-                [EnergyNutritionFactType.Energy]: 183.1,
+            nutrients: {
+                [NutrientName.Carbohydrate]: 75.4,
+                [NutrientName.Fat]: 18.3,
+                [NutrientName.Protein]: 30.4,
+                [NutrientName.Energy]: 183.1,
             },
         },
     },
-    alternativeNutritionFacts: {},
+    alternativeNutrients: {},
 };
 
 
@@ -142,21 +138,21 @@ export const DefaultOpen = Template.bind({});
 DefaultOpen.args = {
     search,
     isReadOnly: false,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpen = Template.bind({});
 ReadOnlyOpen.args = {
     search,
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {} }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {} }, INGREDIENT_1 ],
 };
 
 export const ReadOnlyOpenMarked = Template.bind({});
 ReadOnlyOpenMarked.args = {
     search,
     isReadOnly: true,
-    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutritionFacts: {}, isMarked: true }, INGREDIENT_1 ],
+    ingredients: [ { ...INGREDIENT_0, isOpen: true, alternativeNutrients: {}, isMarked: true }, INGREDIENT_1 ],
 };
 
 export const AltHighlightedDefaultOpen = Template.bind({});

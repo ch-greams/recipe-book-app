@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{error::Error, nutrition_facts::NutritionFacts, product::ProductType};
+use super::{error::Error, product::ProductType, product_nutrient::ProductNutrient};
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone, Debug)]
 pub struct IngredientProduct {
@@ -73,8 +73,6 @@ pub struct IngredientProductDetails {
     pub product_type: ProductType,
     pub name: String,
     pub density: f64,
-
-    pub nutrition_facts: NutritionFacts,
 }
 
 impl IngredientProductDetails {
@@ -83,12 +81,59 @@ impl IngredientProductDetails {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT ingredient_id, product_id, amount, unit, product_type, name, density, nutrition_facts
-            FROM private.ingredient_product_details
-            WHERE ingredient_id = ANY($1)
+            SELECT
+                ip.ingredient_id,
+                ip.product_id,
+                ip.amount,
+                ip.unit,
+                p.type AS product_type,
+                p.name,
+                p.density
+            FROM private.ingredient_product ip
+            LEFT JOIN private.product p ON p.id = ip.product_id
+            WHERE ip.ingredient_id = ANY($1)
         "#,
         )
         .bind(ingredient_ids)
+    }
+}
+
+#[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
+pub struct IngredientProductDetailsWithNutrients {
+    pub ingredient_id: i64,
+    pub product_id: i64,
+    pub amount: f64,
+    pub unit: String,
+
+    pub product_type: ProductType,
+    pub name: String,
+    pub density: f64,
+
+    pub nutrients: HashMap<String, f32>,
+}
+
+impl IngredientProductDetailsWithNutrients {
+    pub fn new(
+        ingredient_product: &IngredientProductDetails,
+        nutrients: &[ProductNutrient],
+    ) -> Self {
+        let nutrients = nutrients
+            .iter()
+            .map(|pn| (pn.name.clone(), pn.amount))
+            .collect::<HashMap<String, f32>>();
+
+        IngredientProductDetailsWithNutrients {
+            ingredient_id: ingredient_product.ingredient_id,
+            product_id: ingredient_product.product_id,
+            amount: ingredient_product.amount,
+            unit: ingredient_product.unit.to_owned(),
+
+            product_type: ingredient_product.product_type.to_owned(),
+            name: ingredient_product.name.to_owned(),
+            density: ingredient_product.density,
+
+            nutrients,
+        }
     }
 }
 

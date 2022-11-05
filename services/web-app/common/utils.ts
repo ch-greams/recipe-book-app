@@ -1,13 +1,13 @@
 import { isSome, unwrap, unwrapOr } from "@common/types";
-import type { NutritionFact } from "@views/shared/rba-nutrition-fact-line";
-import type { FoodPageStore } from "@store/food/types";
+import type { Nutrient } from "@views/shared/rba-nutrition-fact-line";
+import type { FoodPageStore } from "@store/types/food";
 import type {
-    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
-} from "@store/recipe/types";
+    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
+    RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
+} from "@store/types/recipe";
 
-import NUTRITION_FACT_DESCRIPTIONS from "./mapping/nutritionFactDescriptions";
-import type { NutritionFactDescription } from "./nutritionFacts";
-import { NutritionFactType } from "./nutritionFacts";
+import type { NutrientDescription } from "./nutrients";
+import { NutrientName } from "./nutrients";
 import type { Comparer, Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "./typings";
 import type { CustomUnit, CustomUnitInput } from "./units";
 import { WeightUnit } from "./units";
@@ -81,28 +81,39 @@ export default class Utils {
 
     // NOTE: APP-SPECIFIC CALCULATIONS
 
-    public static getNutritionFacts(
-        nutritionFactTypes: NutritionFactType[],
-        nutritionFacts: Dictionary<NutritionFactType, number>,
-        nutritionFactInputs: Dictionary<NutritionFactType, string>,
-    ): NutritionFact[] {
+    public static getDailyValuePercent(currentValue: Option<number>, dailyValue: Option<number>): Option<number> {
+        return (
+            ( isSome(currentValue) && isSome(dailyValue) )
+                ? Utils.roundToDecimal(( currentValue / dailyValue ) * Utils.CENTUM, DecimalPlaces.One)
+                : null
+        );
+    }
 
-        return nutritionFactTypes.reduce<NutritionFact[]>(
-            (previousNutritionFacts: NutritionFact[], currentNutrientType: NutritionFactType): NutritionFact[] => {
+    public static getNutrients(
+        nutrientTypes: NutrientName[],
+        nutrients: Dictionary<NutrientName, number>,
+        nutrientInputs: Dictionary<NutrientName, string>,
+        nutrientDescriptions: Record<NutrientName, NutrientDescription>,
+    ): Nutrient[] {
+        return nutrientTypes.reduce<Nutrient[]>(
+            (previousNutrients: Nutrient[], currentNutrientType: NutrientName): Nutrient[] => {
 
-                const amount: Option<number> = nutritionFacts[currentNutrientType];
-                const inputValue: Option<string> = nutritionFactInputs[currentNutrientType];
-                const nutritionFactDescription: NutritionFactDescription = NUTRITION_FACT_DESCRIPTIONS[currentNutrientType];
+                const amount: Option<number> = nutrients[currentNutrientType];
+                const inputValue: Option<string> = nutrientInputs[currentNutrientType];
+                const nutrientDescription = unwrap(
+                    nutrientDescriptions[currentNutrientType],
+                    `nutrientDescriptions[${currentNutrientType}]`,
+                );
 
                 return [
-                    ...previousNutritionFacts,
+                    ...previousNutrients,
                     {
                         type: currentNutrientType,
                         amount: amount,
                         inputValue: inputValue || "",
-                        unit: nutritionFactDescription.unit,
-                        dailyValue: Utils.getDailyValuePercent(amount, nutritionFactDescription.dailyValue),
-                        isFraction: nutritionFactDescription.isFraction,
+                        unit: nutrientDescription.unit,
+                        dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
+                        isFraction: nutrientDescription.isFraction,
                     },
                 ];
             },
@@ -115,22 +126,13 @@ export default class Utils {
         return (value / Utils.CENTUM);
     }
 
-    public static getDailyValuePercent(currentValue: Option<number>, dailyValue: Option<number>): Option<number> {
-
-        return (
-            ( isSome(currentValue) && isSome(dailyValue) )
-                ? Utils.roundToDecimal(( currentValue / dailyValue ) * Utils.CENTUM, DecimalPlaces.One)
-                : null
-        );
-    }
-
     public static dictionarySum(
-        ingredients: Dictionary<NutritionFactType, number>[],
-    ): Dictionary<NutritionFactType, number> {
+        ingredients: Dictionary<NutrientName, number>[],
+    ): Dictionary<NutrientName, number> {
 
-        return Object.values(NutritionFactType).reduce((acc: Dictionary<NutritionFactType, number>, nutrientType) => {
+        return Object.values(NutrientName).reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
-            const nutritionFactValue = ingredients.reduce(
+            const nutrientValue = ingredients.reduce(
                 (sum: Option<number>, ingredient) => {
                     const value = ingredient[nutrientType];
                     return ( isSome(value) ? unwrapOr(sum, Utils.ZERO) + value : sum );
@@ -141,36 +143,36 @@ export default class Utils {
             return {
                 ...acc,
                 [nutrientType]: (
-                    isSome(nutritionFactValue)
-                        ? Utils.roundToDecimal(nutritionFactValue, DecimalPlaces.Two)
+                    isSome(nutrientValue)
+                        ? Utils.roundToDecimal(nutrientValue, DecimalPlaces.Two)
                         : null
                 ),
             };
         }, {});
     }
 
-    public static convertNutritionFacts(
+    public static convertNutrients(
         amount: number,
         isFrom: boolean,
-        nutritionFacts: Dictionary<NutritionFactType, number>,
-    ): Dictionary<NutritionFactType, number> {
+        nutrients: Dictionary<NutrientName, number>,
+    ): Dictionary<NutrientName, number> {
 
         const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );
 
-        const updatedNutritionFacts: Dictionary<NutritionFactType, number> = Utils.getObjectKeys(nutritionFacts)
+        const updatedNutrients: Dictionary<NutrientName, number> = Utils.getObjectKeys(nutrients)
             .reduce((acc, cur) => {
-                const nutritionFact = nutritionFacts[cur];
+                const nutrient = nutrients[cur];
                 return {
                     ...acc,
                     [cur]: (
-                        isSome(nutritionFact)
-                            ? Utils.roundToDecimal(nutritionFact * multiplier, DecimalPlaces.Two)
+                        isSome(nutrient)
+                            ? Utils.roundToDecimal(nutrient * multiplier, DecimalPlaces.Two)
                             : null
                     ),
                 };
             }, {});
 
-        return updatedNutritionFacts;
+        return updatedNutrients;
     }
 
     // NOTE: OTHER GENERIC THINGS
@@ -184,6 +186,17 @@ export default class Utils {
 
     public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
         return Object.values(obj) as T[];
+    }
+
+    /**
+     * Calls a defined callback function on each `key-value` pair of a `Record`, and returns a `Record` that contains the results.
+     * This "wrapper" function allows you to safely keep using same record type without forced assignment or errors.
+     *
+     * @param record - Provided initial `Record` value.
+     * @param callback - A function that accepts up two arguments. The map method calls the callback function one time for each `key-value` pair of a `Record`.
+     */
+    public static mapRecord<K extends string | number, V, RV>(record: Record<K, V>, callback: (key: K, value: V) => RV): Record<K, RV> {
+        return Utils.getObjectKeys(record).reduce((acc, cur) => ({ ...acc, [cur]: callback(cur, record[cur]) }), {}) as Record<K, RV>;
     }
 
     /**
@@ -252,8 +265,8 @@ export default class Utils {
         return ( ( isSome(value) && !Utils.isEmptyString(value) ) ? Number(value) : null );
     }
 
-    public static convertNutritionFactValuesIntoInputs(values: Dictionary<NutritionFactType, number>): Dictionary<NutritionFactType, string> {
-        return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, string>>(
+    public static convertNutrientValuesIntoInputs(values: Dictionary<NutrientName, number>): Dictionary<NutrientName, string> {
+        return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, string>>(
             (acc, nfType) => {
                 const nfValue = values[nfType];
                 const nfInput = (
@@ -266,8 +279,8 @@ export default class Utils {
         );
     }
 
-    public static convertNutritionFactInputsIntoValues(values: Dictionary<NutritionFactType, string>): Dictionary<NutritionFactType, number> {
-        return Utils.getObjectKeys(values).reduce<Dictionary<NutritionFactType, number>>(
+    public static convertNutrientInputsIntoValues(values: Dictionary<NutrientName, string>): Dictionary<NutrientName, number> {
+        return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, number>>(
             (acc, nfType) => ({ ...acc, [nfType]: Utils.stringToNumber(values[nfType]) }), {},
         );
     }
@@ -287,7 +300,7 @@ export default class Utils {
             description: foodPage.description,
             density: foodPage.density,
             serving_size: foodPage.servingSize,
-            nutrition_facts: foodPage.nutritionFacts,
+            nutrients: foodPage.nutrients,
             custom_units: foodPage.customUnits,
             is_private: foodPage.isPrivate,
         };
@@ -374,7 +387,7 @@ export default class Utils {
             amount: 100,
             unit: WeightUnit.g,
             density: food.density,
-            nutrition_facts: food.nutrition_facts,
+            nutrients: food.nutrients,
         };
     }
 
@@ -386,40 +399,40 @@ export default class Utils {
             amount: 100,
             unit: WeightUnit.g,
             density: recipe.density,
-            nutrition_facts: Utils.getRecipeNutritionFactsFromIngredients(recipe.ingredients),
+            nutrients: Utils.getRecipeNutrientsFromIngredients(recipe.ingredients),
         };
     }
 
     /**
      * Calculate nutrition fact for a recipe based on currently selected ingredients
      */
-    public static getRecipeNutritionFactsFromIngredients(ingredients: Ingredient[]): Dictionary<NutritionFactType, number> {
+    public static getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Dictionary<NutrientName, number> {
 
-        const nutritionFactsById: Dictionary<NutritionFactType, number>[] = ingredients
+        const nutrientsById: Dictionary<NutrientName, number>[] = ingredients
             .map((ingredient) => {
 
                 const ingredientProduct = Utils.getIngredientProduct(ingredient);
 
-                const nutritionFacts = ingredientProduct.nutrition_facts;
+                const nutrients = ingredientProduct.nutrients;
                 const multiplier = Utils.getPercentMultiplier(ingredientProduct.amount);
 
-                return Utils.getObjectKeys(nutritionFacts)
-                    .reduce((acc: Dictionary<NutritionFactType, number>, nutritionFactType) => {
+                return Utils.getObjectKeys(nutrients)
+                    .reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
-                        const nutritionFactValue = nutritionFacts[nutritionFactType];
+                        const nutrientValue = nutrients[nutrientType];
 
                         return {
                             ...acc,
-                            [nutritionFactType]: (
-                                isSome(nutritionFactValue)
-                                    ? Utils.roundToDecimal(nutritionFactValue * multiplier, DecimalPlaces.Two)
+                            [nutrientType]: (
+                                isSome(nutrientValue)
+                                    ? Utils.roundToDecimal(nutrientValue * multiplier, DecimalPlaces.Two)
                                     : null
                             ),
                         };
                     }, {});
             });
 
-        return Utils.dictionarySum(nutritionFactsById);
+        return Utils.dictionarySum(nutrientsById);
     }
 
     public static getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {

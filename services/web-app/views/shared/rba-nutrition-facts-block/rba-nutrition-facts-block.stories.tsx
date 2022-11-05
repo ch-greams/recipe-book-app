@@ -3,19 +3,18 @@ import React from "react";
 import { Provider } from "react-redux";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import type { NutritionFactType } from "@common/nutritionFacts";
-import { CarbohydrateNutritionFactType, NutrientGroupType } from "@common/nutritionFacts";
+import { NutrientGroupType, NutrientName } from "@common/nutrients";
+import { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
-import type { AppState } from "@store";
-import { useStore } from "@store";
+import { store } from "@store";
 
-import RbaNutritionFactsBlock from ".";
+import RbaNutrientsBlock from ".";
 
 
 
 export default {
-    title: "Shared/RbaNutritionFactsBlock",
-    component: RbaNutritionFactsBlock,
+    title: "Shared/RbaNutrientsBlock",
+    component: RbaNutrientsBlock,
     argTypes: {
         isReadOnly: {
             type: { name: "boolean" },
@@ -26,39 +25,56 @@ export default {
             type: { name: "string" },
             table: { type: { summary: "string" } },
         },
-        nutritionFacts: {
-            table: { type: { summary: "NutritionFact[]" } },
+        nutrients: {
+            table: { type: { summary: "Nutrient[]" } },
         },
     },
     decorators : [
         (Story) => (
-            <Provider store={useStore({} as AppState)}>
+            <Provider store={store}>
                 {Story()}
             </Provider>
         ),
     ],
-} as ComponentMeta<typeof RbaNutritionFactsBlock>;
+} as ComponentMeta<typeof RbaNutrientsBlock>;
 
-const Template: ComponentStory<typeof RbaNutritionFactsBlock> = (args) => (<RbaNutritionFactsBlock {...args} />);
+const Template: ComponentStory<typeof RbaNutrientsBlock> = (args) => (<RbaNutrientsBlock {...args} />);
 
-const nutritionFacts: Dictionary<NutritionFactType, number> = {
-    [CarbohydrateNutritionFactType.Carbohydrate]: 57,
-    [CarbohydrateNutritionFactType.DietaryFiber]: 1.7,
+const nutrients: Dictionary<NutrientName, number> = {
+    [NutrientName.Carbohydrate]: 57,
+    [NutrientName.DietaryFiber]: 1.7,
 };
-const nutritionFactInputs = Utils.convertNutritionFactValuesIntoInputs(nutritionFacts);
-const group = Object.values(CarbohydrateNutritionFactType);
+const nutrientInputs = Utils.convertNutrientValuesIntoInputs(nutrients);
+const group = Object.values(NutrientName);
 
-const nutritionFactsGroup = Utils.getNutritionFacts(group, nutritionFacts, nutritionFactInputs);
+const defaultNutrientDescriptions = store.getState().meta.nutrientDescriptions;
+const nutrientDescriptions = {
+    ...defaultNutrientDescriptions,
+    [NutrientName.Carbohydrate]: {
+        type: NutrientName.Carbohydrate,
+        unit: NutrientUnit.g,
+        dailyValue: 275,
+        isFraction: false,
+    },
+    [NutrientName.DietaryFiber]: {
+        type: NutrientName.DietaryFiber,
+        unit: NutrientUnit.g,
+        dailyValue: 28,
+        isFraction: true,
+    },
+};
+
+const nutrientsGroup = Utils.getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions);
 
 export const Default = Template.bind({});
 Default.args = {
     title: NutrientGroupType.Carbohydrates,
-    nutritionFacts: nutritionFactsGroup,
+    nutrients: nutrientsGroup,
 };
 
 export const ReadOnly = Template.bind({});
 ReadOnly.args = {
     isReadOnly: true,
     title: NutrientGroupType.Carbohydrates,
-    nutritionFacts: nutritionFactsGroup,
+    nutrients: nutrientsGroup,
 };

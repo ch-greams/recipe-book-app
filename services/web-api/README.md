@@ -12,7 +12,7 @@ cargo clippy -- -D warnings
 # Some default checks
 cargo check
 
-# To run with watch
+# To run with watch, you'll need `cargo install cargo-watch`
 cargo watch -x run
 ```
 

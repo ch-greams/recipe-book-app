@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/colors";
@@ -7,9 +6,10 @@ import Utils from "@common/utils";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
-import * as actions from "@store/recipe/actions";
-import type { RecipeIngredient } from "@store/recipe/types";
-import { DirectionPartType } from "@store/recipe/types";
+import { useAppDispatch } from "@store";
+import * as actions from "@store/actions/recipe";
+import type { RecipeIngredient } from "@store/types/recipe";
+import { DirectionPartType } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 
@@ -24,7 +24,7 @@ interface Props {
 
 const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) => {
 
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const [ currentDirectionPart, setDirectionPart ] = useState<SelectOption>({
         group: "Comment",
@@ -33,10 +33,10 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
 
     const createDirectionPart = (): void => {
         if (currentDirectionPart.group === "Comment") {
-            dispatch(actions.createDirectionPartComment(directionIndex, currentDirectionPart.value as DirectionPartType));
+            dispatch(actions.createDirectionPartComment({ directionIndex, type: currentDirectionPart.value as DirectionPartType }));
         }
         else {
-            dispatch(actions.createDirectionPartIngredient(directionIndex, Number(currentDirectionPart.value)));
+            dispatch(actions.createDirectionPartIngredient({ directionIndex, ingredientId: Number(currentDirectionPart.value) }));
         }
     };
 
