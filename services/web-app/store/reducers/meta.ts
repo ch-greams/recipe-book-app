@@ -72,7 +72,6 @@ const NUTRIENT_DESCRIPTIONS: Record<NutrientName, { unit: NutrientUnit, isFracti
     [NutrientName.Manganese]:           { unit: NutrientUnit.mg,   isFraction: false },
     [NutrientName.Selenium]:            { unit: NutrientUnit.mcg,  isFraction: false },
     [NutrientName.Fluoride]:            { unit: NutrientUnit.mcg,  isFraction: false },
-    [NutrientName.Chloride]:            { unit: NutrientUnit.mg,   isFraction: false },
     [NutrientName.Chromium]:            { unit: NutrientUnit.mcg,  isFraction: false },
     [NutrientName.Iodine]:              { unit: NutrientUnit.mcg,  isFraction: false },
     [NutrientName.Molybdenum]:          { unit: NutrientUnit.mcg,  isFraction: false },
