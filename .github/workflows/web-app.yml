@@ -9,13 +9,8 @@ on:
         branches:
             - main
             - develop
-        paths:
-            - services/web-app/**
-            - .github/workflows/web-app.yml
-    pull_request:
-        branches:
-            - main
-            - develop
+            - feature/*
+            - fix/*
         paths:
             - services/web-app/**
             - .github/workflows/web-app.yml
