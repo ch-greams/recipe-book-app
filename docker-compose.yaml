@@ -30,6 +30,18 @@ services:
       PORT: 3000
       LOG_LEVEL: DEBUG
 
+  recipe-book-docs:
+    image: docs-app
+    build:
+      context: ./services/docs-app
+    ports:
+      - 3001:3000
+    working_dir: /app
+    environment:
+      NODE_ENV: production     # options: production, development
+      PORT: 3000
+      LOG_LEVEL: DEBUG
+
   recipe-book-scraper:
     image: recipe-scraper
     build: ./services/recipe-scraper

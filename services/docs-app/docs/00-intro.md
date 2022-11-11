@@ -1,5 +1,11 @@
 
-## Serving Size
+# About
+
+...
+
+## Features
+
+### Serving Size
 
 - In ***edit mode*** changing value of the ***Serving Size*** should not update nutrition fact values, because it is expected that in this situation user is adjusting ***Serving Size*** amount for current nutrition facts to make sense.
 
@@ -9,7 +15,7 @@
 
 - In **read mode** changing value of the ***Serving Size*** should recalculate nutrition fact values, because in this mode we assume that user wants to select portion size for cooking/consumption.
 
-## Units
+### Units
 
 - All amounts stored in database will use metric values, or more specifically grams (`g`) or grams per milliliter (`g/ml`) for density.
 
@@ -17,10 +23,10 @@
 
 - !!! Behaviour of user-specific unit setting needs to be defined
 
-## Ingredients
+### Ingredients
 
 - It is virtually impossible to allow ***ingredient replacement*** in the ***recipe*** that is used as an ingredient on another page. And in this case I suggest to copy that recipe into ***your recipe book***, and replace ***ingredient products*** to your liking and then use this ***recipe as an ingredient***.
 
-## Nutrition Facts
+### Nutrition Facts
 
 - Always stored values per 100g of the product, and saved serving size does not affect it in the database.
