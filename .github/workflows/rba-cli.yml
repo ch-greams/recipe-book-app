@@ -5,13 +5,8 @@ on:
         branches:
             - main
             - develop
-        paths:
-            - tools/rba-cli/**
-            - .github/workflows/rba-cli.yml
-    pull_request:
-        branches:
-            - main
-            - develop
+            - feature/*
+            - fix/*
         paths:
             - tools/rba-cli/**
             - .github/workflows/rba-cli.yml
