@@ -27,3 +27,15 @@ CREATE TABLE journal."user" (
 ALTER TABLE journal."user" OWNER TO postgres;
 GRANT ALL ON TABLE journal."user" TO postgres;
 
+
+CREATE TABLE journal.user_nutrient (
+	user_id int8 NOT NULL,
+	nutrient_id int2 NOT NULL,
+	is_featured bool NOT NULL DEFAULT false,
+	daily_target_amount float4 NULL,
+	CONSTRAINT user_nutrient_pk PRIMARY KEY (user_id, nutrient_id),
+	CONSTRAINT nutrient_fk FOREIGN KEY (nutrient_id) REFERENCES meta.nutrient(id),
+	CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)
+);
+ALTER TABLE journal.user_nutrient OWNER TO postgres;
+GRANT ALL ON TABLE journal.user_nutrient TO postgres;
