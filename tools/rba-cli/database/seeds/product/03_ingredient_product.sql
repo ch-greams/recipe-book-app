@@ -1,4 +1,4 @@
-INSERT INTO private.ingredient_product (ingredient_id,product_id,amount,unit) VALUES
+INSERT INTO product.ingredient_product (ingredient_id,product_id,amount,unit) VALUES
 	 (6,4,125.0,'g'),
 	 (7,2,100.0,'g'),
 	 (8,5,141.74759999999998,'oz'),

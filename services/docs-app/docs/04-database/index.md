@@ -7,9 +7,9 @@
 
 Contains tables and views that will store metadata which will be readonly for users and won't be changed often.
 
-### `private.*` -> `product.*` ?
+### `product.*`
 
-Default recipe-book schema at the moment, needs to be renamed and replaced with something more specific.
+Default recipe-book schema at the moment. Stores all non-user specific product information.
 
 ### [`journal.*`](./journal)
 

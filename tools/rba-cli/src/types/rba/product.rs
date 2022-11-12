@@ -41,7 +41,7 @@ impl Product {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut products_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO private.product (id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+            "INSERT INTO product.product (id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
         products_query_builder.push_values(

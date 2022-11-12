@@ -1,4 +1,4 @@
-INSERT INTO private.product (id,"type","name",brand,subtitle,description,density,created_by,is_private,created_at,updated_at,serving_size) VALUES
+INSERT INTO product.product (id,"type","name",brand,subtitle,description,density,created_by,is_private,created_at,updated_at,serving_size) VALUES
 	 (1,'food','Egg','','','',1.0,1,false,'2022-06-27 03:38:11.911965+02','2022-06-27 03:38:11.912034+02',100.0),
 	 (2,'food','Burger Bun','','','',1.0,1,false,'2022-06-27 03:40:07.8302+02','2022-06-27 03:40:07.830227+02',100.0),
 	 (3,'food','Tomato','','','',1.0,1,false,'2022-06-27 03:41:41.850918+02','2022-06-27 03:41:41.850934+02',100.0),

@@ -9,6 +9,7 @@ on:
             - fix/*
         paths:
             - services/web-api/**
+            - tools/rba-cli/database/**
             - .github/workflows/web-api.yml
 
     # Allows you to run this workflow manually from the Actions tab

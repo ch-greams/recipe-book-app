@@ -1,4 +1,4 @@
-INSERT INTO private.ingredient (id,recipe_id,product_id) VALUES
+INSERT INTO product.ingredient (id,recipe_id,product_id) VALUES
     (6,6,4),
     (7,6,2),
     (8,6,5),

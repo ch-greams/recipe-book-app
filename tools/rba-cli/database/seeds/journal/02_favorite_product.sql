@@ -1,4 +1,4 @@
-INSERT INTO private.favorite_product (user_id,product_id) VALUES
+INSERT INTO journal.favorite_product (user_id,product_id) VALUES
     (1,1),
     (1,3),
     (1,5),
