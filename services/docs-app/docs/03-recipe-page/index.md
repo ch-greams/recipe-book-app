@@ -1,6 +1,0 @@
-
-# Recipe Page
-
-### [Ingredients](./ingredients)
-
-...
