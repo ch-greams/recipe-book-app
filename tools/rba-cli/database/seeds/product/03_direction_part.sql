@@ -1,4 +1,4 @@
-INSERT INTO private.direction_part (direction_id,step_number,"direction_part_type",comment_text,ingredient_id,ingredient_amount) VALUES
+INSERT INTO product.direction_part (direction_id,step_number,"direction_part_type",comment_text,ingredient_id,ingredient_amount) VALUES
 	 (3,0,'ingredient',NULL,6,1.0),
 	 (3,1,'ingredient',NULL,10,1.0),
 	 (3,2,'note','Mix egg with ground beef and salt it a bit',NULL,NULL),

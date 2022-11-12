@@ -46,7 +46,7 @@ impl Direction {
         sqlx::query_as(
             r#"
             SELECT id, recipe_id, step_number, name, temperature_value, temperature_unit, duration_value, duration_unit
-            FROM private.direction
+            FROM product.direction
             WHERE recipe_id = $1
         "#,
         )
@@ -80,7 +80,7 @@ impl Direction {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.direction (
+            INSERT INTO product.direction (
                 recipe_id,
                 step_number,
                 name,
@@ -133,7 +133,7 @@ impl Direction {
 
         let delete_query = sqlx::query_as(
             r#"
-            DELETE FROM private.direction
+            DELETE FROM product.direction
             WHERE recipe_id = $1
             RETURNING id, recipe_id, step_number, name, temperature_value, temperature_unit, duration_value, duration_unit;
             "#,
@@ -144,7 +144,7 @@ impl Direction {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.direction (
+            INSERT INTO product.direction (
                 recipe_id,
                 step_number,
                 name,

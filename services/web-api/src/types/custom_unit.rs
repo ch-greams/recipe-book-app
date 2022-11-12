@@ -25,7 +25,7 @@ impl CustomUnit {
         sqlx::query_as(
             r#"
             SELECT name, amount, unit, product_id
-            FROM private.custom_unit
+            FROM product.custom_unit
             WHERE product_id = $1
         "#,
         )
@@ -50,7 +50,7 @@ impl CustomUnit {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.custom_unit (name, amount, unit, product_id)
+            INSERT INTO product.custom_unit (name, amount, unit, product_id)
             SELECT * FROM UNNEST($1, $2, $3, $4)
             RETURNING name, amount, unit, product_id;
         "#,
@@ -83,7 +83,7 @@ impl CustomUnit {
 
         let delete_query = sqlx::query_as(
             r#"
-            DELETE FROM private.custom_unit
+            DELETE FROM product.custom_unit
             WHERE product_id = $1
             RETURNING name, amount, unit, product_id;
             "#,
@@ -94,7 +94,7 @@ impl CustomUnit {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.custom_unit (name, amount, unit, product_id)
+            INSERT INTO product.custom_unit (name, amount, unit, product_id)
             SELECT * FROM UNNEST($1, $2, $3, $4)
             RETURNING name, amount, unit, product_id;
         "#,

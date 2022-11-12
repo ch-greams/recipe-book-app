@@ -1,4 +1,4 @@
-INSERT INTO private.product_nutrient (nutrient_id, product_id, amount) VALUES
+INSERT INTO product.product_nutrient (nutrient_id, product_id, amount) VALUES
     (1,  1,  143.0), 
     (5,  1,  1.1), 
     (9,  1,  11.0), 

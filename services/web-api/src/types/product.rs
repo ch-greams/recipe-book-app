@@ -69,7 +69,7 @@ impl Product {
         sqlx::query_as(
             r#"
             SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
+            FROM product.product
             WHERE type = 'food' AND id = $1
         "#,
         )
@@ -86,7 +86,7 @@ impl Product {
         sqlx::query_as(
             r#"
             SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
+            FROM product.product
             WHERE name ILIKE $5 AND type = ANY($4) AND (is_private = false OR created_by = $3)
             LIMIT $1 OFFSET $2
         "#,
@@ -108,7 +108,7 @@ impl Product {
         sqlx::query_as(
             r#"
             SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
+            FROM product.product
             WHERE name ILIKE $5 AND type = ANY($4) AND created_by = $3
             LIMIT $1 OFFSET $2
         "#,
@@ -130,10 +130,10 @@ impl Product {
         sqlx::query_as(
             r#"
             SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
+            FROM product.product
             WHERE name ILIKE $5 AND type = ANY($4)
                 AND (is_private = false OR created_by = $3)
-                AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+                AND product.id IN (SELECT product_id FROM product.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -148,7 +148,7 @@ impl Product {
         sqlx::query_as(
             r#"
             SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
+            FROM product.product
             WHERE type = 'recipe' AND id = $1
         "#,
         )
@@ -162,7 +162,7 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            INSERT INTO product.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
             VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
@@ -193,7 +193,7 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            INSERT INTO product.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
             VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
@@ -223,7 +223,7 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            UPDATE private.product SET
+            UPDATE product.product SET
                 type = 'food',
                 name = $1,
                 brand = $2,
@@ -261,7 +261,7 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            UPDATE private.product SET
+            UPDATE product.product SET
                 type = 'recipe',
                 name = $1,
                 brand = $2,

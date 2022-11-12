@@ -42,7 +42,7 @@ impl IngredientProduct {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.ingredient_product (
+            INSERT INTO product.ingredient_product (
                 ingredient_id,
                 product_id,
                 amount,
@@ -89,8 +89,8 @@ impl IngredientProductDetails {
                 p.type AS product_type,
                 p.name,
                 p.density
-            FROM private.ingredient_product ip
-            LEFT JOIN private.product p ON p.id = ip.product_id
+            FROM product.ingredient_product ip
+            LEFT JOIN product.product p ON p.id = ip.product_id
             WHERE ip.ingredient_id = ANY($1)
         "#,
         )
