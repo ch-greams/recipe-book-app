@@ -133,7 +133,7 @@ impl Product {
             FROM product.product
             WHERE name ILIKE $5 AND type = ANY($4)
                 AND (is_private = false OR created_by = $3)
-                AND product.id IN (SELECT product_id FROM product.favorite_product WHERE user_id = $3)
+                AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
         "#,
         )

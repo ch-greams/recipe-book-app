@@ -1,8 +1,11 @@
 
 CREATE SCHEMA product AUTHORIZATION postgres;
+GRANT ALL ON SCHEMA product TO postgres;
+
 
 CREATE TYPE product."direction_part_type" AS ENUM ('ingredient', 'note', 'warning', 'tip');
 CREATE TYPE product."product_type" AS ENUM ('food', 'recipe');
+
 
 -- First 100 reserved for testing purposes
 CREATE SEQUENCE product.direction_id
@@ -15,6 +18,7 @@ CREATE SEQUENCE product.direction_id
 ALTER SEQUENCE product.direction_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE product.direction_id TO postgres;
 
+
 -- First 100 reserved for testing purposes
 CREATE SEQUENCE product.ingredient_id
     INCREMENT BY 1
@@ -25,6 +29,7 @@ CREATE SEQUENCE product.ingredient_id
     NO CYCLE;
 ALTER SEQUENCE product.ingredient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE product.ingredient_id TO postgres;
+
 
 -- First 100 reserved for testing purposes
 CREATE SEQUENCE product.product_id
@@ -37,16 +42,6 @@ CREATE SEQUENCE product.product_id
 ALTER SEQUENCE product.product_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE product.product_id TO postgres;
 
--- First 100 reserved for testing purposes
-CREATE SEQUENCE product.user_id
-    INCREMENT BY 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    START 100
-    CACHE 1
-    NO CYCLE;
-ALTER SEQUENCE product.user_id OWNER TO postgres;
-GRANT ALL ON SEQUENCE product.user_id TO postgres;
 
 CREATE SEQUENCE product.product_nutrient_id
     INCREMENT BY 1
@@ -57,18 +52,6 @@ CREATE SEQUENCE product.product_nutrient_id
     NO CYCLE;
 ALTER SEQUENCE product.product_nutrient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE product.product_nutrient_id TO postgres;
-
-CREATE TABLE product."user" (
-    id int8 NOT NULL DEFAULT nextval('product.user_id'::regclass),
-    email text NOT NULL,
-    "password" text NOT NULL,
-    first_name text NOT NULL,
-    last_name text NOT NULL,
-    CONSTRAINT user_email_unique UNIQUE (email),
-    CONSTRAINT user_pkey PRIMARY KEY (id)
-);
-ALTER TABLE product."user" OWNER TO postgres;
-GRANT ALL ON TABLE product."user" TO postgres;
 
 
 CREATE TABLE product.product (
@@ -87,7 +70,7 @@ CREATE TABLE product.product (
     CONSTRAINT density_check CHECK ((density > (0)::double precision)) NOT VALID,
     CONSTRAINT product_pk PRIMARY KEY (id),
     CONSTRAINT serving_size_check CHECK ((serving_size > (0)::double precision)) NOT VALID,
-    CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES product."user"(id)
+    CONSTRAINT created_by_fk FOREIGN KEY (created_by) REFERENCES journal."user"(id)
 );
 ALTER TABLE product.product OWNER TO postgres;
 GRANT ALL ON TABLE product.product TO postgres;
@@ -122,17 +105,6 @@ ALTER TABLE product.direction OWNER TO postgres;
 GRANT ALL ON TABLE product.direction TO postgres;
 
 
-CREATE TABLE product.favorite_product (
-    user_id int8 NOT NULL,
-    product_id int8 NOT NULL,
-    CONSTRAINT favorite_product_pk PRIMARY KEY (user_id, product_id),
-    CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES product."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-ALTER TABLE product.favorite_product OWNER TO postgres;
-GRANT ALL ON TABLE product.favorite_product TO postgres;
-
-
 CREATE TABLE product.ingredient (
     id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
     recipe_id int8 NOT NULL,
@@ -160,7 +132,6 @@ ALTER TABLE product.ingredient_product OWNER TO postgres;
 GRANT ALL ON TABLE product.ingredient_product TO postgres;
 
 
-
 CREATE TABLE product.product_nutrient (
     id int8 NOT NULL DEFAULT nextval('product.product_nutrient_id'::regclass),
     nutrient_id int2 NOT NULL,
@@ -173,6 +144,7 @@ CREATE TABLE product.product_nutrient (
 );
 ALTER TABLE product.product_nutrient OWNER TO postgres;
 GRANT ALL ON TABLE product.product_nutrient TO postgres;
+
 
 CREATE TABLE product.direction_part (
     direction_id int8 NOT NULL,
@@ -193,6 +165,3 @@ END),
 );
 ALTER TABLE product.direction_part OWNER TO postgres;
 GRANT ALL ON TABLE product.direction_part TO postgres;
-
-
-GRANT ALL ON SCHEMA product TO postgres;
