@@ -59,7 +59,7 @@ mod tests {
     use super::JournalGroup;
 
     #[tokio::test]
-    async fn find_by_product_id() {
+    async fn find_all_by_user_id() {
         let user_id = 1;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -76,7 +76,7 @@ mod tests {
     async fn replace_multiple() {
         let user_id = 1;
         let update_journal_groups_payload: Vec<JournalGroup> =
-            utils::read_type_from_file("examples/update_journal_groups.json").unwrap();
+            utils::read_type_from_file("examples/update_journal_groups_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

@@ -5,6 +5,7 @@ pub mod error;
 pub mod food;
 pub mod ingredient;
 pub mod ingredient_product;
+pub mod journal_entry;
 pub mod journal_group;
 pub mod meta;
 pub mod product;

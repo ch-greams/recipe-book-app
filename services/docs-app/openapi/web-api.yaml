@@ -551,6 +551,63 @@ components:
         user_id:
           type: integer
           example: 1
+    JournalEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        user_id:
+          type: integer
+          example: 1
+        entry_date:
+          type: string
+          example: "2022-11-04"
+        entry_time:
+          type: string
+          example: "13:29:03"
+        product_id:
+          type: integer
+          example: 6
+        amount:
+          type: number
+          example: 450.5
+        unit:
+          type: string
+          example: g
+        journal_group_num:
+          type: integer
+          example: 2
+    CreateJournalEntryPayload:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        entry_date:
+          type: string
+          example: "2022-11-04"
+        entry_time:
+          type: string
+          example: "13:29:03"
+        product_id:
+          type: integer
+          example: 6
+        amount:
+          type: number
+          example: 450.5
+        unit:
+          type: string
+          example: g
+        journal_group_num:
+          type: integer
+          example: 2
+    DeleteJournalEntryPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
 
 tags:
   - name: meta
@@ -903,7 +960,6 @@ paths:
         "404":
           description: Not Found
 
-
   /journal/groups/update:
     post:
       tags:
@@ -927,5 +983,91 @@ paths:
       responses:
         "201":
           description: Created
+        "404":
+          description: Not Found
+
+  /journal/entry:
+    get:
+      tags:
+        - journal
+      summary: Get all journal entries
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: entry_date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2022-11-04"
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: Not Found
+
+  /journal/entry/create:
+    post:
+      tags:
+        - journal
+      summary: Create a journal entry
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntryPayload"
+      responses:
+        "201":
+          description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: Not Found
+
+  /journal/entry/update:
+    post:
+      tags:
+        - journal
+      summary: Update a journal entry
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/JournalEntry"
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: Not Found
+
+  /journal/entry/delete:
+    post:
+      tags:
+        - journal
+      summary: Delete a journal entry
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteJournalEntryPayload"
+      responses:
+        "204":
+          description: No Content
         "404":
           description: Not Found
