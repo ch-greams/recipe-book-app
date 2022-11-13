@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use sqlx::{Postgres, QueryBuilder, Transaction};
+use sqlx::{postgres::PgArguments, query::QueryAs, Postgres, QueryBuilder, Transaction};
 
 use crate::utils::BIND_LIMIT;
 
@@ -13,6 +13,10 @@ pub struct JournalGroup {
 }
 
 impl JournalGroup {
+    pub fn find_all_by_user_id(user_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as("SELECT * FROM journal.journal_group WHERE user_id = $1").bind(user_id)
+    }
+
     pub async fn replace_multiple(
         journal_groups: &[JournalGroup],
         user_id: i64,
@@ -53,6 +57,20 @@ mod tests {
     use crate::utils;
 
     use super::JournalGroup;
+
+    #[tokio::test]
+    async fn find_by_product_id() {
+        let user_id = 1;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let journal_groups = JournalGroup::find_all_by_user_id(user_id)
+            .fetch_all(&mut txn)
+            .await
+            .unwrap();
+
+        assert_eq!(journal_groups.len(), 3);
+    }
 
     #[tokio::test]
     async fn replace_multiple() {
