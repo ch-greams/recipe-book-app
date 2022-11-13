@@ -9,6 +9,7 @@ pub enum ErrorKind {
     NotFound,
     NotCreated,
     NotUpdated,
+    NotDeleted,
 }
 
 impl std::fmt::Display for ErrorKind {
@@ -70,6 +71,13 @@ impl Error {
         Error {
             kind: ErrorKind::NotUpdated,
             text: format!("Error during update of {} with id {}", table, id),
+        }
+    }
+
+    pub fn not_deleted(table: &str, id: i64) -> Error {
+        Error {
+            kind: ErrorKind::NotDeleted,
+            text: format!("Error during deletion of {} with id {}", table, id),
         }
     }
 }
