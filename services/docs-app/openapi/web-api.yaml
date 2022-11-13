@@ -869,6 +869,41 @@ paths:
         "404":
           description: Not Found
 
+  /journal/groups:
+    get:
+      tags:
+        - journal
+      summary: Get all journal groups
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JournalGroup"
+              example:
+                - order_number: 1
+                  name: breakfast
+                  user_id: 1
+                - order_number: 2
+                  name: lunch
+                  user_id: 1
+                - order_number: 3
+                  name: dinner
+                  user_id: 1
+        "404":
+          description: Not Found
+
+
   /journal/groups/update:
     post:
       tags:
