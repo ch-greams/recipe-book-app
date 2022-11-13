@@ -17,7 +17,7 @@ components:
     Nutrient:
       type: object
       properties:
-        id: 
+        id:
           type: integer
           example: 6
         name:
@@ -34,7 +34,7 @@ components:
           example: carbohydrates
         parent_name:
           type: string
-          example: carbohydrate        
+          example: carbohydrate
     # product
     ProductShort:
       type: object
@@ -314,7 +314,7 @@ components:
             - warning
             - tip
           example: tip
-        comment_text: 
+        comment_text:
           type: string
           example: You can flip it after 8 min, but not necessary
         ingredient_id:
@@ -363,7 +363,7 @@ components:
             - warning
             - tip
           example: tip
-        comment_text: 
+        comment_text:
           type: string
           example: You can flip it after 8 min, but not necessary
         ingredient_id:
@@ -538,7 +538,19 @@ components:
         is_private:
           type: boolean
           example: false
-
+    # journal
+    JournalGroup:
+      type: object
+      properties:
+        order_number:
+          type: integer
+          example: 2
+        name:
+          type: string
+          example: lunch
+        user_id:
+          type: integer
+          example: 1
 
 tags:
   - name: meta
@@ -549,6 +561,8 @@ tags:
     description: All `food` related endpoints
   - name: recipe
     description: All `recipe` related endpoints
+  - name: journal
+    description: All `journal` related endpoints
 
 x-tagGroups:
   - name: General
@@ -557,9 +571,9 @@ x-tagGroups:
       - product
       - food
       - recipe
+      - journal
 
 paths:
-
   /meta/nutrients:
     get:
       tags:
@@ -852,5 +866,31 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Recipe"
+        "404":
+          description: Not Found
+
+  /journal/groups/update:
+    post:
+      tags:
+        - journal
+      summary: Update all journal groups
+      description: This request will replace all existing journal groups for a user with the ones in this payload
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/JournalGroup"
+            example:
+              - order_number: 1
+                name: breakfast
+                user_id: 1
+              - order_number: 2
+                name: lunch
+                user_id: 1
+      responses:
+        "201":
+          description: Created
         "404":
           description: Not Found
