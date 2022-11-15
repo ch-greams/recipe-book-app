@@ -14,7 +14,7 @@ import { WeightUnit } from "./units";
 
 
 export enum UserMenuItem {
-    Diary = "Diary",
+    Journal = "Journal",
     Recipes = "Recipes",
     Foods = "Foods",
 }

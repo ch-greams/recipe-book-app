@@ -11,7 +11,7 @@ const initialState: UserStore = {
     userId: 1,
     userName: "Andrei Khvalko",
 
-    selectedMenuItem: UserMenuItem.Diary,
+    selectedMenuItem: UserMenuItem.Journal,
 
     favoriteRecipes: [],
     customRecipes: [],

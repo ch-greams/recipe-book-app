@@ -2,8 +2,8 @@ import React from "react";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import Utils, { UserMenuItem } from "@common/utils";
-import RbaDiaryBlock from "@views/user/components/rba-diary-block";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
+import RbaJournalBlock from "@views/user/components/rba-journal-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/user";
@@ -22,7 +22,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
     const dispatch = useAppDispatch();
 
     const menuItems = [
-        UserMenuItem.Diary,
+        UserMenuItem.Journal,
         UserMenuItem.Recipes,
         UserMenuItem.Foods,
     ];
@@ -43,8 +43,8 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
 
     const getMainBlock = (menuItem: UserMenuItem): JSX.Element => {
         switch (menuItem) {
-            case UserMenuItem.Diary:
-                return (<RbaDiaryBlock />);
+            case UserMenuItem.Journal:
+                return (<RbaJournalBlock />);
             case UserMenuItem.Recipes:
                 return (
                     <RbaRecipesBlock
