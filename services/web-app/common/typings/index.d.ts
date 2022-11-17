@@ -105,3 +105,20 @@ export interface NutrientMeta {
     nutrient_group: string;
     parent_name?: Option<string>;
 }
+
+export interface JournalGroup {
+    order_number: number;
+    name: string;
+    user_id: number;
+}
+
+export interface JournalEntry {
+    id: number;
+    user_id: number;
+    entry_date: string;
+    entry_time: string;
+    product_id: number;
+    amount: number;
+    unit: string;
+    journal_group_num: number;
+}
