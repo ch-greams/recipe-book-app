@@ -8,12 +8,14 @@ use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
 use crate::types::{
+    custom_unit::CustomUnit,
     error::Error,
     journal_entry::{
-        CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry,
+        CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry, JournalEntryDetailed,
         UpdateJournalEntryPayload,
     },
     journal_group::JournalGroup,
+    product_nutrient::ProductNutrient,
 };
 
 pub fn scope() -> Scope {
@@ -81,9 +83,41 @@ async fn get_entries(
         .fetch_all(&mut txn)
         .await?;
 
+    let product_ids: Vec<i64> = journal_entries
+        .iter()
+        .map(|journal_entry| journal_entry.product_id)
+        .collect();
+
+    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids.clone())
+        .fetch_all(&mut txn)
+        .await?;
+
+    let custom_units = CustomUnit::find_by_product_ids(product_ids)
+        .fetch_all(&mut txn)
+        .await?;
+
+    let journal_entries_detailed: Vec<JournalEntryDetailed> = journal_entries
+        .iter()
+        .map(|je| {
+            JournalEntryDetailed::new(
+                je,
+                &product_nutrients
+                    .iter()
+                    .cloned()
+                    .filter(|pn| pn.product_id == je.product_id)
+                    .collect::<Vec<ProductNutrient>>(),
+                &custom_units
+                    .iter()
+                    .cloned()
+                    .filter(|pn| pn.product_id == je.product_id)
+                    .collect::<Vec<CustomUnit>>(),
+            )
+        })
+        .collect();
+
     txn.commit().await?;
 
-    Ok(HttpResponse::Ok().json(journal_entries))
+    Ok(HttpResponse::Ok().json(journal_entries_detailed))
 }
 
 #[post("/entry/create")]

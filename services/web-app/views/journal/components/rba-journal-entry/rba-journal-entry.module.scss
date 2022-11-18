@@ -3,8 +3,12 @@
 
 .journalEntry {
 
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr 1fr;
+    gap: 16px;
+
     padding: 6px 12px;
-    margin: 4px;
+    margin: 0 4px;
 
     font-family: $font-default;
     font-size: $font-size-small;

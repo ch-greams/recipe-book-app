@@ -19,7 +19,6 @@ export function formatTime(time: string): string {
     return format(parse(time, DEFAULT_TIME_FORMAT, new Date()), DEFAULT_TIME_DISPLAY_FORMAT);
 }
 
-
 /**
  * Parse provided date string and return it in the default format to display
  *
@@ -28,4 +27,22 @@ export function formatTime(time: string): string {
  */
 export function formatDate(date: string): string {
     return format(parse(date, DEFAULT_DATE_FORMAT, new Date()), DEFAULT_DATE_DISPLAY_FORMAT);
+}
+
+/**
+ * Get current time in `DEFAULT_TIME_FORMAT` format
+ *
+ * @returns time in `DEFAULT_TIME_FORMAT`
+ */
+export function getCurrentTime(): string {
+    return format(new Date(), DEFAULT_TIME_FORMAT);
+}
+
+/**
+ * Get current time in `DEFAULT_DATE_FORMAT` format
+ *
+ * @returns time in `DEFAULT_DATE_FORMAT`
+ */
+export function getCurrentDate(): string {
+    return format(new Date(), DEFAULT_DATE_FORMAT);
 }

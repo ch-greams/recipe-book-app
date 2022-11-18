@@ -1,23 +1,27 @@
 @import "@styles/variables.scss";
 
-
 .journalGroup {
 
-    padding: 6px 12px;
-    margin: 4px 0;
+    display: grid;
+    gap: 4px;
 
-    font-family: $font-default;
-    font-size: $font-size-small;
-    font-weight: $font-weight-bold;
+    .journalGroupName {
 
-    line-height: 22px;
+        padding: 6px 12px;
 
-    color: $color-default;
+        font-family: $font-default;
+        font-size: $font-size-small;
+        font-weight: $font-weight-bold;
 
-    background-color: $color-white;
+        line-height: 22px;
 
-    border-color: $color-grey-light;
-    border-style: solid;
-    border-width: 1px;
-    border-radius: 2px;
+        color: $color-default;
+
+        background-color: $color-white;
+
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+    }
 }

@@ -2,25 +2,23 @@
 
 
 .journalDateBlock {
-    .journalDate,
-    .journalDateControl {
 
-        padding: 6px 12px;
-        margin: 4px 0;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
 
-        font-family: $font-default;
-        font-size: $font-size-small;
-        font-weight: $font-weight-bold;
+    margin-bottom: 16px;
 
-        line-height: 22px;
+    .journalDateControlLeft {
+        grid-column: 4;
+    }
 
-        color: $color-default;
+    .journalDate {
+        grid-column-start: 5;
+        grid-column-end: 9;
+    }
 
-        background-color: $color-white;
-
-        border-color: $color-grey-light;
-        border-style: solid;
-        border-width: 1px;
-        border-radius: 2px;
+    .journalDateControlRight {
+        grid-column: 9;
     }
 }

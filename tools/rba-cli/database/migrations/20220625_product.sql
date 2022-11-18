@@ -56,7 +56,7 @@ GRANT ALL ON SEQUENCE product.product_nutrient_id TO postgres;
 
 CREATE TABLE product.product (
     id int8 NOT NULL DEFAULT nextval('product.product_id'::regclass),
-    "type" product."product_type" NOT NULL,
+    product_type product."product_type" NOT NULL,
     "name" text NOT NULL,
     brand text NOT NULL,
     subtitle text NOT NULL,

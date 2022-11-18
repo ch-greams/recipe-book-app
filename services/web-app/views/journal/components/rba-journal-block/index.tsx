@@ -4,6 +4,8 @@ import type { JournalEntry, JournalGroup } from "@store/types/journal";
 
 import RbaJournalGroup from "../rba-journal-group";
 
+import styles from "./rba-journal-block.module.scss";
+
 
 interface Props {
     groups: JournalGroup[];
@@ -12,7 +14,7 @@ interface Props {
 
 const RbaJournalBlock: React.FC<Props> = ({ groups, entries }) => {
     return (
-        <div>
+        <div className={styles.journal}>
 
             {groups.map((group) => (
                 <RbaJournalGroup

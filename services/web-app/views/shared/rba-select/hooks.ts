@@ -15,7 +15,7 @@ export function useToggleList(): ToggleListHook {
         const close = (): void => toggleList(false);
 
         if (isListVisible) {
-            window.addEventListener("click", close);
+            window.addEventListener("click", close, { capture: true });
         }
 
         return () => window.removeEventListener("click", close);

@@ -14,9 +14,9 @@ interface Props {
 
 const RbaJournalGroup: React.FC<Props> = ({ name, entries }) => {
     return (
-        <div>
+        <div className={styles.journalGroup}>
 
-            <div className={styles.journalGroup}>
+            <div className={styles.journalGroupName}>
                 {name.toUpperCase()}
             </div>
 

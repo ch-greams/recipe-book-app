@@ -49,3 +49,21 @@ CREATE TABLE journal.journal_entry (
 );
 ALTER TABLE journal.journal_entry OWNER TO postgres;
 GRANT ALL ON TABLE journal.journal_entry TO postgres;
+
+
+CREATE OR REPLACE VIEW journal.journal_entry_product
+AS SELECT journal_entry.id,
+    journal_entry.user_id,
+    journal_entry.entry_date,
+    journal_entry.entry_time,
+    journal_entry.product_id,
+    journal_entry.amount,
+    journal_entry.unit,
+    journal_entry.journal_group_num,
+    product.*::product.product AS product
+   FROM journal.journal_entry journal_entry
+   JOIN product.product product ON product.id = journal_entry.product_id;
+
+
+ALTER TABLE journal.journal_entry_product OWNER TO postgres;
+GRANT ALL ON TABLE journal.journal_entry_product TO postgres;

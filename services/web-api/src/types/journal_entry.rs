@@ -1,8 +1,12 @@
+use std::collections::HashMap;
+
 use chrono::{NaiveDate, NaiveTime};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::error::Error;
+use super::{
+    custom_unit::CustomUnit, error::Error, product::Product, product_nutrient::ProductNutrient,
+};
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct JournalEntry {
@@ -11,6 +15,19 @@ pub struct JournalEntry {
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
     pub product_id: i64,
+    pub amount: f32,
+    pub unit: String,
+    pub journal_group_num: Option<i16>,
+}
+
+#[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
+pub struct JournalEntryProduct {
+    pub id: i64,
+    pub user_id: i64,
+    pub entry_date: NaiveDate,
+    pub entry_time: NaiveTime,
+    pub product_id: i64,
+    pub product: Product,
     pub amount: f32,
     pub unit: String,
     pub journal_group_num: Option<i16>,
@@ -38,10 +55,12 @@ impl JournalEntry {
     pub fn find_all_by_date(
         entry_date: NaiveDate,
         user_id: i64,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as("SELECT * FROM journal.journal_entry WHERE entry_date = $1 AND user_id = $2")
-            .bind(entry_date)
-            .bind(user_id)
+    ) -> QueryAs<'static, Postgres, JournalEntryProduct, PgArguments> {
+        sqlx::query_as(
+            "SELECT * FROM journal.journal_entry_product WHERE entry_date = $1 AND user_id = $2",
+        )
+        .bind(entry_date)
+        .bind(user_id)
     }
 
     pub async fn insert_journal_entry(
@@ -125,6 +144,48 @@ impl JournalEntry {
             .ok_or_else(|| Error::not_deleted("journal_entry", journal_entry_id))?;
 
         Ok(result)
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct JournalEntryDetailed {
+    pub id: i64,
+    pub user_id: i64,
+    pub entry_date: NaiveDate,
+    pub entry_time: NaiveTime,
+    pub product_id: i64,
+    pub product: Product,
+    pub nutrients: HashMap<String, f32>,
+    pub custom_units: Vec<CustomUnit>,
+    pub amount: f32,
+    pub unit: String,
+    pub journal_group_num: Option<i16>,
+}
+
+impl JournalEntryDetailed {
+    pub fn new(
+        journal_entry: &JournalEntryProduct,
+        nutrients: &[ProductNutrient],
+        custom_units: &[CustomUnit],
+    ) -> Self {
+        let nutrients = nutrients
+            .iter()
+            .map(|pn| (pn.name.clone(), pn.amount))
+            .collect::<HashMap<String, f32>>();
+
+        Self {
+            id: journal_entry.id,
+            user_id: journal_entry.user_id,
+            entry_date: journal_entry.entry_date,
+            entry_time: journal_entry.entry_time,
+            product_id: journal_entry.product_id,
+            product: journal_entry.product.to_owned(),
+            amount: journal_entry.amount,
+            unit: journal_entry.unit.to_owned(),
+            journal_group_num: journal_entry.journal_group_num,
+            nutrients,
+            custom_units: custom_units.to_vec(),
+        }
     }
 }
 

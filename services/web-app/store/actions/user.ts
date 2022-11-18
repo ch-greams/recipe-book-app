@@ -9,7 +9,7 @@ import ProductApi from "@api/productApi";
 export const changeMenuItem = createAction<UserMenuItem>("user/change_menu_item");
 
 
-
+// TODO: Merge those fetch_recipes and fetch_foods actions into one
 export const fetchRecipes = createAsyncThunk<
     { favoriteRecipes: RecipeShort[], customRecipes: RecipeShort[] },
     void,
