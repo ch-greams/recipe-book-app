@@ -1,4 +1,5 @@
 import type { NutrientName } from "@common/nutrients";
+import type { CustomUnit } from "@common/units";
 
 
 
@@ -11,8 +12,16 @@ export interface JournalEntry {
     groupOrderNumber: Option<number>;
 
     foodName: string;
+
     foodAmount: number;
+    foodAmountInput: string;
+
     foodUnit: string;
+
+    foodDensity: number;
+
+    foodNutrients: Dictionary<NutrientName, number>;
+    foodCustomUnits: CustomUnit[];
 }
 
 export interface JournalGroup {
@@ -27,7 +36,6 @@ export interface JournalStore {
     groups: JournalGroup[];
 
     nutrients: Dictionary<NutrientName, number>;
-    nutrientsInputs: Dictionary<NutrientName, string>;
 
     isLoaded: boolean;
     errorMessage?: Option<string>;

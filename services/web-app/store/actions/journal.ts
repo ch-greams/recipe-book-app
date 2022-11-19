@@ -6,8 +6,10 @@ import JournalApi from "@api/journalApi";
 import type { RootState } from "..";
 
 
-export const changeDate = createAction<string>("journal/change_date");
-export const changeEntryGroup = createAction<{ entryId: number, entryGroupNumber: Option<number> }>("journal/change_entry_group");
+export const updateDate = createAction<string>("journal/update_date");
+export const updateEntryGroup = createAction<{ id: number, groupNumber: Option<number> }>("journal/update_entry_group");
+export const updateEntryAmount = createAction<{ id: number, amountInput: string }>("journal/update_entry_amount");
+export const updateEntryUnit = createAction<{ id: number, unit: string }>("journal/update_entry_unit");
 
 export const fetchJournalInfo = createAsyncThunk<
     { entries: JournalEntry[], groups: JournalGroup[] },

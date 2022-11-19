@@ -3,6 +3,7 @@ import * as constants from "@cypress/constants";
 
 import { classNames } from "@common/style";
 import { unwrapOr } from "@common/types";
+import type { OnClickCallback } from "@common/typings";
 
 import { useToggleList } from "./hooks";
 import type { SelectOption } from "./rba-select-option";
@@ -65,6 +66,11 @@ export const RbaSelect: React.FC<Props> = ({
         hideList();
     };
 
+    const onClick: OnClickCallback = (event) => {
+        event.stopPropagation();
+        showList();
+    };
+
     return (
         <div
             data-cy={constants.CY_SELECT_INPUT}
@@ -77,7 +83,7 @@ export const RbaSelect: React.FC<Props> = ({
                 [styles[height]]: true,
             })}
         >
-            <div className={styles.selectOption} onClick={( disabled ? undefined : showList )}>
+            <div className={styles.selectOption} onClick={( disabled ? undefined : onClick )}>
                 {value}
             </div>
             {( isListVisible && (

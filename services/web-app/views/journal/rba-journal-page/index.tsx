@@ -31,8 +31,8 @@ const RbaJournalPageConnected: React.FC = () => {
                         <RbaJournalPage
                             journal={journal}
                             meta={meta}
-                            decrementDate={() => dispatch(actions.changeDate(changeDate(journal.currentDate, -1)))}
-                            incrementDate={() => dispatch(actions.changeDate(changeDate(journal.currentDate, 1)))}
+                            decrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, -1)))}
+                            incrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, 1)))}
                         />
                     )
             )

@@ -1,4 +1,3 @@
-import Utils from "../utils";
 
 
 Array.prototype.unique = function() {
@@ -6,7 +5,7 @@ Array.prototype.unique = function() {
 };
 
 Array.prototype.first = function() {
-    return this[Utils.ZERO];
+    return this[0];
 };
 
 Array.prototype.last = function() {

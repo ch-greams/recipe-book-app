@@ -1,8 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { getCurrentDate } from "@common/date";
-import { changeDate, changeEntryGroup, fetchJournalInfo } from "@store/actions/journal";
-import type { JournalStore } from "@store/types/journal";
+import { convertToMetric } from "@common/units";
+import Utils from "@common/utils";
+
+import * as actions from "../actions/journal";
+import { getNutrientsFromJournalEntries } from "../helpers/journal";
+import type { JournalStore } from "../types/journal";
 
 
 
@@ -13,7 +17,6 @@ const initialState: JournalStore = {
     groups: [],
 
     nutrients: {},
-    nutrientsInputs: {},
 
     isLoaded: false,
     errorMessage: null,
@@ -21,25 +24,65 @@ const initialState: JournalStore = {
 
 const reducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(changeDate, (state, action) => {
+        .addCase(actions.updateDate, (state, action) => {
             state.currentDate = action.payload;
         })
-        .addCase(changeEntryGroup, (state, action) => {
-            const { entryId, entryGroupNumber } = action.payload;
+        .addCase(actions.updateEntryGroup, (state, action) => {
+            const { id, groupNumber } = action.payload;
             state.entries = state.entries.map((entry) => (
-                entry.id === entryId
-                    ? ({ ...entry, groupOrderNumber: entryGroupNumber })
+                entry.id === id
+                    ? ({ ...entry, groupOrderNumber: groupNumber })
                     : entry
             ));
         })
-        .addCase(fetchJournalInfo.pending, (state) => {
+        .addCase(actions.updateEntryAmount, (state, action) => {
+            const { id, amountInput } = action.payload;
+
+            state.entries = state.entries.map((entry) => {
+                if (entry.id === id) {
+
+                    const foodAmountInputNormalized = Utils.decimalNormalizer(amountInput, entry.foodAmountInput);
+                    const foodAmount = convertToMetric(
+                        Number(foodAmountInputNormalized), entry.foodUnit, entry.foodCustomUnits, entry.foodDensity,
+                    );
+
+                    return {
+                        ...entry,
+                        foodAmount: foodAmount,
+                        foodAmountInput: foodAmountInputNormalized,
+                    };
+                }
+                else {
+                    return entry;
+                }
+            });
+
+            state.nutrients = getNutrientsFromJournalEntries(state.entries);
+        })
+        .addCase(actions.updateEntryUnit, (state, action) => {
+            const { id, unit } = action.payload;
+            state.entries = state.entries.map((entry) => (
+                (entry.id === id)
+                    ? {
+                        ...entry,
+                        foodAmount: convertToMetric(
+                            Number(entry.foodAmountInput), unit, entry.foodCustomUnits, entry.foodDensity,
+                        ),
+                        foodUnit: unit,
+                    }
+                    : entry
+            ));
+
+            state.nutrients = getNutrientsFromJournalEntries(state.entries);
+        })
+        .addCase(actions.fetchJournalInfo.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
 
             state.entries = [];
             state.groups = [];
         })
-        .addCase(fetchJournalInfo.fulfilled, (state, action) => {
+        .addCase(actions.fetchJournalInfo.fulfilled, (state, action) => {
             const { entries, groups } = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -51,15 +94,21 @@ const reducer = createReducer(initialState, (builder) => {
                 groupOrderNumber: entry.journal_group_num,
                 foodName: entry.product.name,
                 foodAmount: entry.amount,
+                foodAmountInput: String(entry.amount),
                 foodUnit: entry.unit,
+                foodDensity: entry.product.density,
+                foodNutrients: entry.nutrients,
+                foodCustomUnits: entry.custom_units,
             }));
 
             state.groups = groups.map((group) => ({
                 orderNumber: group.order_number,
                 name: group.name,
             }));
+
+            state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
-        .addCase(fetchJournalInfo.rejected, (state, action) => {
+        .addCase(actions.fetchJournalInfo.rejected, (state, action) => {
             const message = action.payload?.message;
             state.isLoaded = true;
             state.errorMessage = message;

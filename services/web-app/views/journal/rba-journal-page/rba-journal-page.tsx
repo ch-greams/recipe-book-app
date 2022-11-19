@@ -1,5 +1,6 @@
 import React from "react";
 
+import Utils from "@common/utils";
 import RbaJournalBlock from "@views/journal/components/rba-journal-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
@@ -21,7 +22,7 @@ interface Props {
 const RbaJournalPage: React.FC<Props> = ({ journal, meta, decrementDate, incrementDate }) => {
 
     const { nutrientDescriptions } = meta;
-    const { currentDate, entries, groups, nutrients, nutrientsInputs } = journal;
+    const { currentDate, entries, groups, nutrients } = journal;
 
     return (
         <div className={styles.journalPage}>
@@ -45,7 +46,7 @@ const RbaJournalPage: React.FC<Props> = ({ journal, meta, decrementDate, increme
                 <RbaPageDetailedNutrientsBlock
                     isReadOnly={true}
                     nutrients={nutrients}
-                    nutrientInputs={nutrientsInputs}
+                    nutrientInputs={Utils.mapDictionary(nutrients, (_key, value) => String(value))}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 

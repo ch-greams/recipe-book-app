@@ -11,6 +11,7 @@ import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@vi
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
 import { searchClear, searchProducts } from "@store/actions/search";
+import { getRecipeIngredientProduct } from "@store/helpers/recipe";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
 
@@ -33,7 +34,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
     const showNewIngredientProduct: boolean = !isReadOnly;
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
-    const ingredientProduct: RecipeIngredientProduct = Utils.getRecipeIngredientProduct(ingredient);
+    const ingredientProduct: RecipeIngredientProduct = getRecipeIngredientProduct(ingredient);
 
     const ingredientInfoLines = (
         <div

@@ -112,6 +112,9 @@ rules:
         - warn
         - ignoreReadonlyClassProperties: true
           ignoreEnums: true
+          ignore:
+            - 0
+            - 1
     "@typescript-eslint/array-type":
         - error
         - array: true

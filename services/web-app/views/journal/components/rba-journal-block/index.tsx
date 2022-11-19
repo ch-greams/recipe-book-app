@@ -29,7 +29,7 @@ const RbaJournalBlock: React.FC<Props> = ({ groups, entries }) => {
                 const entryGroupNumber = event.over?.data.current?.groupOrderNumber;
 
                 if (isSome(entryId) && isSome(event.over?.id)) {
-                    dispatch(actions.changeEntryGroup({ entryId, entryGroupNumber }));
+                    dispatch(actions.updateEntryGroup({ id: entryId, groupNumber: entryGroupNumber }));
                 }
             }}>
 
