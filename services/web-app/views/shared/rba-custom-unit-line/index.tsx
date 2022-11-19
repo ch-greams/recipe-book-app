@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";

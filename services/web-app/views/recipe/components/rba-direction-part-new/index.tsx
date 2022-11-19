@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import Utils from "@common/utils";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";

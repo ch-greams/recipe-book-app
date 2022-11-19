@@ -1,4 +1,4 @@
-import { format, parse } from "date-fns";
+import { addDays, format, parse } from "date-fns";
 
 
 
@@ -45,4 +45,16 @@ export function getCurrentTime(): string {
  */
 export function getCurrentDate(): string {
     return format(new Date(), DEFAULT_DATE_FORMAT);
+}
+
+/**
+ * Adds provided number of days and returns formatted date string
+ *
+ * @param date should adhere to `DEFAULT_DATE_FORMAT`
+ * @param days can only accept signed integers as a number of days
+ * @returns changed date in `DEFAULT_DATE_FORMAT`
+ */
+export function changeDate(date: string, days: number): string {
+    const parsedDate = parse(date, DEFAULT_DATE_FORMAT, new Date());
+    return format(addDays(parsedDate, days), DEFAULT_DATE_FORMAT);
 }

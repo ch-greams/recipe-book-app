@@ -14,9 +14,11 @@ import styles from "./rba-journal-page.module.scss";
 interface Props {
     journal: JournalStore;
     meta: MetaStore;
+    decrementDate: () => void;
+    incrementDate: () => void;
 }
 
-const RbaJournalPage: React.FC<Props> = ({ journal, meta }) => {
+const RbaJournalPage: React.FC<Props> = ({ journal, meta, decrementDate, incrementDate }) => {
 
     const { nutrientDescriptions } = meta;
     const { currentDate, entries, groups, nutrients, nutrientsInputs } = journal;
@@ -28,7 +30,11 @@ const RbaJournalPage: React.FC<Props> = ({ journal, meta }) => {
 
                 {/* Journal Block */}
 
-                <RbaJournalDateBlock date={currentDate} />
+                <RbaJournalDateBlock
+                    date={currentDate}
+                    decrementDate={decrementDate}
+                    incrementDate={incrementDate}
+                />
 
                 <RbaJournalBlock groups={groups} entries={entries} />
 

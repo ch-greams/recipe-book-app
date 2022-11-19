@@ -1,4 +1,5 @@
 import React from "react";
+import { useDraggable } from "@dnd-kit/core";
 
 import { formatTime } from "@common/date";
 import { Unit } from "@common/units";
@@ -15,14 +16,27 @@ interface Props {
 
 const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
 
-    return (
-        <div className={styles.journalEntry}>
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: `journal_entry-${entry.id}`,
+        data: { entryId: entry.id },
+    });
 
-            <span>
+    return (
+        <div
+            className={styles.journalEntry}
+            style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
+        >
+
+            <span className={styles.journalEntryTime}>
                 {formatTime(entry.entryTime)}
             </span>
 
-            <span>
+            <span
+                className={styles.journalEntryName}
+                ref={setNodeRef}
+                {...listeners}
+                {...attributes}
+            >
                 {entry.foodName}
             </span>
 

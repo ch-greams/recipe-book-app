@@ -1,7 +1,7 @@
 import React from "react";
 import { CY_BUTTON } from "@cypress/constants";
 
-import Utils from "@common/utils";
+import { classNames } from "@common/style";
 
 import styles from "./rba-button.module.scss";
 
@@ -19,19 +19,16 @@ interface Props {
 }
 
 const RbaButton: React.FC<Props> = ({ label, disabled = false, width, onClick }) => {
-
-    const classNames = Utils.classNames({
-        [styles.rbaButton]: true,
-        [styles.disabled]: disabled,
-        [styles[width]]: true,
-    });
-
     return (
         <button
             data-cy={CY_BUTTON}
             type={"button"}
             disabled={disabled}
-            className={classNames}
+            className={classNames({
+                [styles.rbaButton]: true,
+                [styles.disabled]: disabled,
+                [styles[width]]: true,
+            })}
             onClick={onClick}
         >
             {label}

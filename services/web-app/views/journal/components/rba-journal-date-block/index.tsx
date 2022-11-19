@@ -8,9 +8,12 @@ import styles from "./rba-journal-date-block.module.scss";
 
 interface Props {
     date: string;
+    decrementDate: () => void;
+    incrementDate: () => void;
 }
 
-const RbaJournalDateBlock: React.FC<Props> = ({ date }) => {
+const RbaJournalDateBlock: React.FC<Props> = ({ date, decrementDate, incrementDate }) => {
+
     return (
         <div className={styles.journalDateBlock}>
 
@@ -18,7 +21,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date }) => {
                 <RbaButton
                     label={"<"}
                     width={ButtonWidthSize.Full}
-                    onClick={() => console.log(`click ${styles.journalDateControlLeft}`)}
+                    onClick={decrementDate}
                 />
             </span>
 
@@ -34,7 +37,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date }) => {
                 <RbaButton
                     label={">"}
                     width={ButtonWidthSize.Full}
-                    onClick={() => console.log(`click ${styles.journalDateControlRight}`)}
+                    onClick={incrementDate}
                 />
             </span>
 

@@ -4,7 +4,7 @@
 .journalEntry {
 
     display: grid;
-    grid-template-columns: 1fr 4fr 1fr 1fr;
+    grid-template-columns: 1fr 6fr 1fr 1fr;
     gap: 16px;
 
     padding: 6px 12px;
@@ -24,4 +24,17 @@
     border-style: solid;
     border-width: 1px;
     border-radius: 2px;
+
+    .journalEntryTime {
+
+        text-align: center;
+
+        background-color: $color-default-dark;
+
+        border-radius: 8px;
+    }
+
+    .journalEntryName {
+        cursor: move;
+    }
 }

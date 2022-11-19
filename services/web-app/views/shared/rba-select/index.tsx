@@ -1,8 +1,8 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { classNames } from "@common/style";
 import { unwrapOr } from "@common/types";
-import Utils from "@common/utils";
 
 import { useToggleList } from "./hooks";
 import type { SelectOption } from "./rba-select-option";
@@ -65,19 +65,17 @@ export const RbaSelect: React.FC<Props> = ({
         hideList();
     };
 
-    const classNames = Utils.classNames({
-        [styles.select]: true,
-        [styles.alignCenter]: center,
-        [styles.disabled]: disabled,
-        [styles[theme]]: true,
-        [styles[width]]: true,
-        [styles[height]]: true,
-    });
-
     return (
         <div
             data-cy={constants.CY_SELECT_INPUT}
-            className={classNames}
+            className={classNames({
+                [styles.select]: true,
+                [styles.alignCenter]: center,
+                [styles.disabled]: disabled,
+                [styles[theme]]: true,
+                [styles[width]]: true,
+                [styles[height]]: true,
+            })}
         >
             <div className={styles.selectOption} onClick={( disabled ? undefined : showList )}>
                 {value}

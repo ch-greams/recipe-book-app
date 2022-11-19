@@ -2,6 +2,7 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { NutrientName } from "@common/nutrients";
+import { classNames } from "@common/style";
 import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
@@ -79,7 +80,7 @@ const RbaIngredientNutrients: React.FC<Props> = ({ nutrients, alternativeNutrien
                     <div key={`nutrient_${type}`} className={styles.ingredientNutrient}>
                         <div
                             data-cy={constants.CY_INGREDIENT_NUTRIENT_AMOUNT}
-                            className={[ styles.ingredientNutrientAmount, nutritionValueClass ].join(" ")}
+                            className={classNames([ styles.ingredientNutrientAmount, nutritionValueClass ])}
                         >
                             {nutritionValue}
                         </div>

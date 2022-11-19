@@ -2,7 +2,7 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 

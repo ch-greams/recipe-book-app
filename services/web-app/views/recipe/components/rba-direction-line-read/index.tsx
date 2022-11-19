@@ -1,9 +1,9 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { classNames } from "@common/style";
 import { isSome } from "@common/types";
 import { TemperatureUnit, TimeUnit } from "@common/units";
-import Utils from "@common/utils";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
 import type { RecipeDirection } from "@store/types/recipe";
@@ -28,7 +28,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
     updateDirectionTimeUnit,
 }) => {
 
-    const directionTitleClassName = Utils.classNames({
+    const directionTitleClassName = classNames({
         [styles.directionInfoTitle]: true,
         [styles.isMarked]: direction.isMarked,
     });

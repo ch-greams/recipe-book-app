@@ -109,7 +109,7 @@ rules:
         - allowExpressions: true
     "@typescript-eslint/no-inferrable-types": "off"
     "@typescript-eslint/no-magic-numbers":
-        - error
+        - warn
         - ignoreReadonlyClassProperties: true
           ignoreEnums: true
     "@typescript-eslint/array-type":

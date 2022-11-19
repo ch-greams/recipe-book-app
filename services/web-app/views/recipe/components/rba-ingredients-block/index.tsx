@@ -1,8 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
-import Utils from "@common/utils";
+import { classNames, Color } from "@common/style";
 import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
@@ -41,7 +40,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                 </div>
             ) )}
 
-            <div className={Utils.classNames({ [styles.ingredientsLoading]: !isLoaded })}>
+            <div className={classNames({ [styles.ingredientsLoading]: !isLoaded })}>
                 {ingredients.map( (ingredient) => (
                     <RbaIngredient
                         key={`ingredient_${ingredient.id}`}

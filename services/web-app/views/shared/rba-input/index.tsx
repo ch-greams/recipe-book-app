@@ -1,7 +1,7 @@
 import React from "react";
 
+import { classNames } from "@common/style";
 import type { InputChangeCallback } from "@common/typings";
-import Utils from "@common/utils";
 
 import styles from "./rba-input.module.scss";
 
@@ -56,23 +56,20 @@ const RbaInput: React.FC<Props> = ({
     onChange,
     ...props
 }) => {
-
-    const classNames = Utils.classNames({
-        [styles.rbaInput]: true,
-        [styles[align]]: true,
-        [styles[theme]]: true,
-        [styles[width]]: true,
-        [styles[height]]: true,
-        [styles.disabled]: disabled,
-    });
-
     return (
         <input
             data-cy={props["data-cy"]}
             disabled={disabled}
             placeholder={placeholder}
             type={"text"}
-            className={classNames}
+            className={classNames({
+                [styles.rbaInput]: true,
+                [styles[align]]: true,
+                [styles[theme]]: true,
+                [styles[width]]: true,
+                [styles[height]]: true,
+                [styles.disabled]: disabled,
+            })}
             value={value}
             maxLength={maxLength}
             onChange={onChange}

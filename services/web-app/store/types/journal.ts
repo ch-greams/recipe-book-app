@@ -3,10 +3,12 @@ import type { NutrientName } from "@common/nutrients";
 
 
 export interface JournalEntry {
+    id: number;
+
     entryDate: string;
     entryTime: string;
 
-    groupOrderNumber: number;
+    groupOrderNumber: Option<number>;
 
     foodName: string;
     foodAmount: number;

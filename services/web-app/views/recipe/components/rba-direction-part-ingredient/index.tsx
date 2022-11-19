@@ -1,10 +1,9 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { classNames, Color } from "@common/style";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
-import Utils from "@common/utils";
 import RbaInput, { InputHeightSize,InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -118,7 +117,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
 
                 <div
                     data-cy={constants.CY_DIRECTION_PART_NAME}
-                    className={Utils.classNames({ [styles.directionPartName]: true, [styles.isMarked]: directionPart.isMarked })}
+                    className={classNames({ [styles.directionPartName]: true, [styles.isMarked]: directionPart.isMarked })}
                 >
                     {directionPart.ingredientName}
                 </div>

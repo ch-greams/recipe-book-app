@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 
-import { Color } from "@common/colors";
+import { changeDate } from "@common/date";
+import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
-import { useAppSelector } from "@store";
-import { useAppDispatch } from "@store";
+import { useAppDispatch, useAppSelector } from "@store";
 import * as actions from "@store/actions/journal";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
@@ -20,14 +20,21 @@ const RbaJournalPageConnected: React.FC = () => {
 
     useEffect(() => {
         dispatch(actions.fetchJournalInfo());
-    }, [ dispatch ]);
+    }, [ dispatch, journal.currentDate ]);
 
     return (
         journal.isLoaded
             ? (
                 journal.errorMessage
                     ? <RbaSingleMessagePage text={journal.errorMessage} />
-                    : <RbaJournalPage journal={journal} meta={meta} />
+                    : (
+                        <RbaJournalPage
+                            journal={journal}
+                            meta={meta}
+                            decrementDate={() => dispatch(actions.changeDate(changeDate(journal.currentDate, -1)))}
+                            incrementDate={() => dispatch(actions.changeDate(changeDate(journal.currentDate, 1)))}
+                        />
+                    )
             )
             : (
                 <RbaSingleMessagePage>

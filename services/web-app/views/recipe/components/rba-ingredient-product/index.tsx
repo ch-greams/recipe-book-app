@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
@@ -112,7 +112,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
         <div
             data-cy={constants.CY_INGREDIENT_PRODUCT}
-            className={[ styles.ingredientProduct, styles[theme], styles[size] ].join(" ")}
+            className={classNames([ styles.ingredientProduct, styles[theme], styles[size] ])}
         >
             {( isReadOnly ? getCheckbox(isMarked, onClickMark) : removeButton )}
 

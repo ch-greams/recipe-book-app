@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";

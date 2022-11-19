@@ -23,5 +23,15 @@
         border-style: solid;
         border-width: 1px;
         border-radius: 2px;
+
+        &.journalEntryOver {
+
+            color: $color-white;
+
+            background-color: $color-default-dark;
+
+            border-color: $color-white;
+            border-style: dashed;
+        }
     }
 }

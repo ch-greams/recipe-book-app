@@ -1,7 +1,8 @@
 import React from "react";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
-import Utils, { UserMenuItem } from "@common/utils";
+import { classNames } from "@common/style";
+import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaJournalBlock from "@views/user/components/rba-journal-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
@@ -32,7 +33,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
             data-cy={CY_USER_MENU_ITEM}
             key={menuItem}
             onClick={() => dispatch(actions.changeMenuItem(menuItem))}
-            className={Utils.classNames({
+            className={classNames({
                 [styles.navigationMenuItem]: true,
                 [styles.selectedItem]: user.selectedMenuItem === menuItem,
             })}

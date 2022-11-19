@@ -3,7 +3,7 @@ import type { PropsWithChildren } from "react";
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import Utils from "@common/utils";
 import { IconSize } from "@icons/icon-params";
 

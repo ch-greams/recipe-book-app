@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
 import Utils from "@common/utils";
@@ -59,14 +59,11 @@ const RbaSearchInput: React.FC<Props> = ({
     const DEFAULT_DELAY = 700;
     const { searchInput, searchInputHandler, searchInputClear } = useDelayedSearchInput(onChange, value, DEFAULT_DELAY);
 
-    const classNames = Utils.classNames({
-        [styles.search]: true,
-        [styles[width]]: true,
-        [styles[height]]: true,
-    });
-
     return (
-        <div data-cy={constants.CY_SEARCH} className={classNames}>
+        <div
+            data-cy={constants.CY_SEARCH}
+            className={classNames({ [styles.search]: true, [styles[width]]: true, [styles[height]]: true })}
+        >
 
             <div className={styles.searchInput}>
 

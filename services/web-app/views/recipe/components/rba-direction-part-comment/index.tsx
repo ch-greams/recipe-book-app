@@ -1,7 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import type { InputChangeCallback } from "@common/typings";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";

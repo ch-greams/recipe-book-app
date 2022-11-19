@@ -1,12 +1,13 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { fetchJournalInfo } from "@store/actions/journal";
+import { getCurrentDate } from "@common/date";
+import { changeDate, changeEntryGroup, fetchJournalInfo } from "@store/actions/journal";
 import type { JournalStore } from "@store/types/journal";
 
 
 
 const initialState: JournalStore = {
-    currentDate: "2022-11-04",
+    currentDate: getCurrentDate(),
 
     entries: [],
     groups: [],
@@ -20,6 +21,17 @@ const initialState: JournalStore = {
 
 const reducer = createReducer(initialState, (builder) => {
     builder
+        .addCase(changeDate, (state, action) => {
+            state.currentDate = action.payload;
+        })
+        .addCase(changeEntryGroup, (state, action) => {
+            const { entryId, entryGroupNumber } = action.payload;
+            state.entries = state.entries.map((entry) => (
+                entry.id === entryId
+                    ? ({ ...entry, groupOrderNumber: entryGroupNumber })
+                    : entry
+            ));
+        })
         .addCase(fetchJournalInfo.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
@@ -33,11 +45,11 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
 
             state.entries = entries.map((entry) => ({
+                id: entry.id,
                 entryDate: entry.entry_date,
                 entryTime: entry.entry_time,
                 groupOrderNumber: entry.journal_group_num,
-                // FIXME: Should get product name here instead of id
-                foodName: String(entry.product_id),
+                foodName: entry.product.name,
                 foodAmount: entry.amount,
                 foodUnit: entry.unit,
             }));
