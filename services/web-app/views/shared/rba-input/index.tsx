@@ -81,6 +81,10 @@ const RbaInput: React.FC<Props> = ({
 
     const [ inputValue, setInputValue ] = useState(value);
 
+    if (inputValue !== value) {
+        setInputValue(value);
+    }
+
     return (
         <input
             data-cy={props["data-cy"]}
