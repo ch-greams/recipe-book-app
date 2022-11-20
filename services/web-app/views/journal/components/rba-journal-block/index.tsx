@@ -6,7 +6,7 @@ import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/journal";
 import type { JournalEntry, JournalGroup } from "@store/types/journal";
 
-import RbaJournalGroup from "../rba-journal-group";
+import RbaJournalGroupBlock from "../rba-journal-group-block";
 
 import styles from "./rba-journal-block.module.scss";
 
@@ -34,7 +34,7 @@ const RbaJournalBlock: React.FC<Props> = ({ groups, entries }) => {
             }}>
 
                 {groups.map((group) => (
-                    <RbaJournalGroup
+                    <RbaJournalGroupBlock
                         key={group.orderNumber}
                         groupOrderNumber={group.orderNumber}
                         groupName={group.name}
@@ -42,7 +42,7 @@ const RbaJournalBlock: React.FC<Props> = ({ groups, entries }) => {
                     />
                 ))}
 
-                <RbaJournalGroup
+                <RbaJournalGroupBlock
                     groupName={"unknown"}
                     entries={entries.filter((entry) => !entry.groupOrderNumber)}
                 />

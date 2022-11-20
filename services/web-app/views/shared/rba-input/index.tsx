@@ -6,7 +6,6 @@ import type { InputChangeCallback } from "@common/typings";
 import styles from "./rba-input.module.scss";
 
 
-// NOTE: Values correspond to the class names
 export enum InputTheme {
     Primary = "theme_Primary",
     Alternative = "theme_Alternative",

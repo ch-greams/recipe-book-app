@@ -62,7 +62,9 @@ export default class Utils {
             const isDouble = /^\d*\.?\d+$/.test(value);
             const isPartialDecimal = /^\d*\.?$/.test(value);
 
-            return ( (isDouble || isPartialDecimal) ? value : (previousValue || DEFAULT_VALUE) );
+            const isValid = isDouble || isPartialDecimal;
+
+            return ( isValid ? value : (previousValue || DEFAULT_VALUE) );
         }
 
         return DEFAULT_VALUE;
