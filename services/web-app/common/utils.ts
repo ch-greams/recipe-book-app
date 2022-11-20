@@ -203,8 +203,12 @@ export default class Utils {
         return (str.match(/\n/g) || "").length + SINGLE_LINE;
     }
 
-    public static sortBy<T>(field: keyof T): Comparer<T> {
-        return (a: T, b: T) => a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative;
+    public static sortBy<T, V>(field: keyof T, converter?: (value: T[keyof T]) => V): Comparer<T> {
+        return (a: T, b: T) => (
+            isSome(converter)
+                ? converter(a[field]) > converter(b[field]) ? ComparerResult.Positive : ComparerResult.Negative
+                : a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative
+        );
     }
 
     public static arrayIsNotEmpty(array: unknown[]): boolean {

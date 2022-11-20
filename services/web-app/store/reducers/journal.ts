@@ -1,7 +1,8 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { formatTime, getCurrentDate } from "@common/date";
+import { formatTime, getCurrentDate, parseTime } from "@common/date";
 import { convertToMetric } from "@common/units";
+import Utils from "@common/utils";
 
 import * as actions from "../actions/journal";
 import { getNutrientsFromJournalEntries } from "../helpers/journal";
@@ -36,11 +37,13 @@ const reducer = createReducer(initialState, (builder) => {
         })
         .addCase(actions.updateEntryTime, (state, action) => {
             const { id, time } = action.payload;
-            state.entries = state.entries.map((entry) => (
-                entry.id === id
-                    ? ({ ...entry, entryTime: time })
-                    : entry
-            ));
+            state.entries = state.entries
+                .map((entry) => (
+                    entry.id === id
+                        ? ({ ...entry, entryTime: time })
+                        : entry
+                ))
+                .sort(Utils.sortBy("entryTime", (entryTime) => parseTime(entryTime as string)));
         })
         .addCase(actions.updateEntryAmount, (state, action) => {
             const { id, amountInput } = action.payload;
@@ -93,19 +96,21 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = null;
 
-            state.entries = entries.map((entry) => ({
-                id: entry.id,
-                entryDate: entry.entry_date,
-                entryTime: formatTime(entry.entry_time),
-                groupOrderNumber: entry.journal_group_num,
-                foodName: entry.product.name,
-                foodAmount: entry.amount,
-                foodAmountInput: String(entry.amount),
-                foodUnit: entry.unit,
-                foodDensity: entry.product.density,
-                foodNutrients: entry.nutrients,
-                foodCustomUnits: entry.custom_units,
-            }));
+            state.entries = entries
+                .map((entry) => ({
+                    id: entry.id,
+                    entryDate: entry.entry_date,
+                    entryTime: formatTime(entry.entry_time),
+                    groupOrderNumber: entry.journal_group_num,
+                    foodName: entry.product.name,
+                    foodAmount: entry.amount,
+                    foodAmountInput: String(entry.amount),
+                    foodUnit: entry.unit,
+                    foodDensity: entry.product.density,
+                    foodNutrients: entry.nutrients,
+                    foodCustomUnits: entry.custom_units,
+                }))
+                .sort(Utils.sortBy("entryTime", (entryTime) => parseTime(entryTime as string)));
 
             state.groups = groups.map((group) => ({
                 orderNumber: group.order_number,

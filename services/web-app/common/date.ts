@@ -58,3 +58,7 @@ export function changeDate(date: string, days: number): string {
     const parsedDate = parse(date, DEFAULT_DATE_FORMAT, new Date());
     return format(addDays(parsedDate, days), DEFAULT_DATE_FORMAT);
 }
+
+export function parseTime(time: string): Date {
+    return parse(time, DEFAULT_TIME_DISPLAY_FORMAT, new Date());
+}
