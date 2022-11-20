@@ -6,9 +6,9 @@ import {
     OtherNutrients, ProteinNutrients, VitaminNutrients,
 } from "@common/nutrients";
 import Utils from "@common/utils";
-import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 
-import styles from "./rba-page-detailed-nutrition-facts-block.module.scss";
+import styles from "./rba-page-detailed-nutrients-block.module.scss";
 
 
 

@@ -1,19 +1,16 @@
-
-import type { Dispatch } from "react";
 import React from "react";
-import type { AnyAction } from "@reduxjs/toolkit";
 
 import type { NutrientName } from "@common/nutrients";
 import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
 import { isSome } from "@common/types";
-import type { InputChangeCallback } from "@common/typings";
 import type { NutrientUnit } from "@common/units";
 import Utils from "@common/utils";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";
 import { updateNutrient } from "@store/actions/food";
 
-import styles from "./rba-nutrition-fact-line.module.scss";
+import styles from "./rba-nutrient-line.module.scss";
 
 
 export interface Nutrient {
@@ -31,15 +28,6 @@ interface Props {
     nutrient: Nutrient;
 }
 
-const handleOnChange = (dispatch: Dispatch<AnyAction>, nutrient: Nutrient): InputChangeCallback => {
-
-    return (event) => {
-
-        const inputValue = Utils.decimalNormalizer((event.target.value || ""), nutrient.inputValue);
-
-        dispatch(updateNutrient({ key: nutrient.type, value: inputValue }));
-    };
-};
 
 const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
     return (
@@ -81,7 +69,8 @@ const RbaNutrientLine: React.FC<Props> = ({
                 height={InputHeightSize.Small}
                 theme={nutrient.isFraction ? InputTheme.Alternative : InputTheme.Primary}
                 value={nutrient.inputValue}
-                onChange={handleOnChange(dispatch, nutrient)}
+                normalizer={InputNormalizer.Decimal}
+                onChange={(value) => { dispatch(updateNutrient({ key: nutrient.type, value: value })); }}
             />
 
             <div className={styles.nutrientUnit}>

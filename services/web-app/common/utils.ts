@@ -1,5 +1,5 @@
 import { isSome, unwrap, unwrapOr } from "@common/types";
-import type { Nutrient } from "@views/shared/rba-nutrition-fact-line";
+import type { Nutrient } from "@views/shared/rba-nutrient-line";
 
 import type { NutrientDescription } from "./nutrients";
 import { NutrientName } from "./nutrients";
@@ -52,22 +52,6 @@ export default class Utils {
         // NOTE: Double conversion String -> Number -> String, allows you to easily drop trailing zeros
         // IMPROVE: Consider different solution later?
         return Number( getRoundedValue );
-    }
-
-    public static decimalNormalizer(value: string, previousValue: string): string {
-
-        const DEFAULT_VALUE = "";
-
-        if (value) {
-            const isDouble = /^\d*\.?\d+$/.test(value);
-            const isPartialDecimal = /^\d*\.?$/.test(value);
-
-            const isValid = isDouble || isPartialDecimal;
-
-            return ( isValid ? value : (previousValue || DEFAULT_VALUE) );
-        }
-
-        return DEFAULT_VALUE;
     }
 
     public static isEmptyString(value: string): boolean {

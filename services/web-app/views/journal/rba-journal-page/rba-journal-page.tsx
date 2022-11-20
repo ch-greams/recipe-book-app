@@ -3,7 +3,7 @@ import React from "react";
 import Utils from "@common/utils";
 import RbaJournalBlock from "@views/journal/components/rba-journal-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
-import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
 import type { JournalStore } from "@store/types/journal";
 import type { MetaStore } from "@store/types/meta";
 

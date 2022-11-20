@@ -1,9 +1,9 @@
 import React from "react";
 
-import type { Nutrient } from "@views/shared/rba-nutrition-fact-line";
-import RbaNutrientLine from "@views/shared/rba-nutrition-fact-line";
+import type { Nutrient } from "@views/shared/rba-nutrient-line";
+import RbaNutrientLine from "@views/shared/rba-nutrient-line";
 
-import styles from "./rba-nutrition-facts-block.module.scss";
+import styles from "./rba-nutrients-block.module.scss";
 
 
 interface Props {

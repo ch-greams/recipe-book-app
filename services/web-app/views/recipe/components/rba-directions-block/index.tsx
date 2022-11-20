@@ -1,8 +1,8 @@
 import React from "react";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { TemperatureUnit, TimeUnit } from "@common/units";
 import RbaDirection from "@views/recipe/components/rba-direction";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
@@ -30,20 +30,20 @@ const RbaDirectionsBlock: React.FC<Props> = ({
 
     const createDirection = (): void => { dispatch(actions.createDirection(newDirection)); };
 
-    const updateDirectionStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateNewDirectionStepNumber(Number(event.target.value)));
+    const updateDirectionStepNumber: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateNewDirectionStepNumber(Number(value)));
     };
-    const updateDirectionName: InputChangeCallback = (event) => {
-        dispatch(actions.updateNewDirectionName(event.target.value));
+    const updateDirectionName: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateNewDirectionName(value));
     };
-    const updateDirectionTemperatureCount: InputChangeCallback = (event) => {
-        dispatch(actions.updateNewDirectionTemperatureCount(event.target.value));
+    const updateDirectionTemperatureCount: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateNewDirectionTemperatureCount(value));
     };
     const updateDirectionTemperatureUnit: RbaSelectChangeCallback = (option) => {
         dispatch(actions.updateNewDirectionTemperatureUnit(option.value as TemperatureUnit));
     };
-    const updateDirectionTimeCount: InputChangeCallback = (event) => {
-        dispatch(actions.updateNewDirectionTimeCount(event.target.value));
+    const updateDirectionTimeCount: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateNewDirectionTimeCount(value));
     };
     const updateDirectionTimeUnit: RbaSelectChangeCallback = (option) => {
         dispatch(actions.updateNewDirectionTimeUnit(option.value as TimeUnit));

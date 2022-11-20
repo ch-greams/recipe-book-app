@@ -2,8 +2,9 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { classNames, Color } from "@common/style";
-import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize,InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -35,18 +36,18 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
         dispatch(actions.removeDirectionPart({ directionIndex, directionPartId: directionPart.id }));
     };
 
-    const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
+    const updateDirectionPartStepNumber: RbaInputChangeCallback = (value) => {
         dispatch(actions.updateDirectionPartStepNumber({
             directionIndex,
             directionPartId: directionPart.id,
-            stepNumber: Number(event.target.value),
+            stepNumber: Number(value),
         }));
     };
-    const updateDirectionPartIngredientAmount: InputChangeCallback = (event) => {
+    const updateDirectionPartIngredientAmount: RbaInputChangeCallback = (value) => {
         dispatch(actions.updateDirectionPartIngredientAmount({
             directionIndex,
             directionPartId: directionPart.id,
-            inputValue: event.target.value,
+            inputValue: value,
         }));
     };
     const updateDirectionPartIngredientUnit: RbaSelectChangeCallback = (option: SelectOption) => {
@@ -134,6 +135,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                             height={InputHeightSize.Medium}
                             placeholder={"#"}
                             value={directionPart.ingredientAmountInput}
+                            normalizer={InputNormalizer.Decimal}
                             onChange={updateDirectionPartIngredientAmount}
                         />
 

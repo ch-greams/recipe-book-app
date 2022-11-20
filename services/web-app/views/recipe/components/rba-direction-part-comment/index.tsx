@@ -2,7 +2,7 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { Color } from "@common/style";
-import type { InputChangeCallback } from "@common/typings";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
@@ -46,11 +46,11 @@ const RbaDirectionPartComment: React.FC<Props> = ({ isReadOnly, directionPart, d
     const removeDirectionPart = (): void => {
         dispatch(actions.removeDirectionPart({ directionIndex, directionPartId: directionPart.id }));
     };
-    const updateDirectionPartComment: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartNote({ directionIndex, directionPartId: directionPart.id, note: event.target.value }));
+    const updateDirectionPartComment: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateDirectionPartNote({ directionIndex, directionPartId: directionPart.id, note: value }));
     };
-    const updateDirectionPartStepNumber: InputChangeCallback = (event) => {
-        dispatch(actions.updateDirectionPartStepNumber({ directionIndex, directionPartId: directionPart.id, stepNumber: Number(event.target.value) }));
+    const updateDirectionPartStepNumber: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateDirectionPartStepNumber({ directionIndex, directionPartId: directionPart.id, stepNumber: Number(value) }));
     };
 
     const removeButton = (

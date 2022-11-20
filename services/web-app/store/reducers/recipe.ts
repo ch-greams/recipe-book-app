@@ -369,12 +369,11 @@ const reducer = createReducer(initialState, (builder) => {
                 if (isDirectionPartIngredient(directionPart) && (directionPart.id === directionPartId)) {
 
                     // TODO: Limit to what you have in ingredients, or just add validation message?
-                    const ingredientAmountInput = Utils.decimalNormalizer(inputValue, directionPart.ingredientAmountInput);
                     const ingredientAmount = units.convertToMetric(
-                        Number(ingredientAmountInput), directionPart.ingredientUnit, [], directionPart.ingredientDensity,
+                        Number(inputValue), directionPart.ingredientUnit, [], directionPart.ingredientDensity,
                     );
 
-                    return { ...directionPart, ingredientAmountInput, ingredientAmount };
+                    return { ...directionPart, inputValue, ingredientAmount };
                 }
                 else {
                     return directionPart;
@@ -487,17 +486,16 @@ const reducer = createReducer(initialState, (builder) => {
             const { directionIndex, inputValue } = action.payload;
             const direction = state.directions[directionIndex];
 
-            const countInput = Utils.decimalNormalizer(inputValue, direction.temperatureValueInput);
             const count = (
                 direction.temperatureUnit === units.TemperatureUnit.F
-                    ? units.convertFahrenheitToCelsius(Number(countInput))
-                    : Number(countInput)
+                    ? units.convertFahrenheitToCelsius(Number(inputValue))
+                    : Number(inputValue)
             );
 
             state.directions[directionIndex] = {
                 ...direction,
                 temperatureValue: count,
-                temperatureValueInput: countInput,
+                temperatureValueInput: inputValue,
             };
         })
         .addCase(actions.updateDirectionTemperatureUnit, (state, action) => {
@@ -536,13 +534,12 @@ const reducer = createReducer(initialState, (builder) => {
             const { directionIndex, inputValue } = action.payload;
             const direction = state.directions[directionIndex];
 
-            const countInput = Utils.decimalNormalizer(inputValue, direction.durationValueInput);
-            const count = units.convertToSeconds(Number(countInput), direction.durationUnit);
+            const count = units.convertToSeconds(Number(inputValue), direction.durationUnit);
 
             state.directions[directionIndex] = {
                 ...direction,
                 durationValue: count,
-                durationValueInput: countInput,
+                durationValueInput: inputValue,
             };
         })
         .addCase(actions.updateDirectionTimeUnit, (state, action) => {
@@ -578,14 +575,13 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateNewDirectionTemperatureCount, (state, action) => {
             const { payload: inputValue } = action;
 
-            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.temperatureValueInput);
             const count = (
                 state.newDirection.temperatureUnit === units.TemperatureUnit.F
-                    ? units.convertFahrenheitToCelsius(Number(countInput))
-                    : Number(countInput)
+                    ? units.convertFahrenheitToCelsius(Number(inputValue))
+                    : Number(inputValue)
             );
 
-            state.newDirection.temperatureValueInput = countInput;
+            state.newDirection.temperatureValueInput = inputValue;
             state.newDirection.temperatureValue = count;
         })
         .addCase(actions.updateNewDirectionTemperatureUnit, (state, action) => {
@@ -603,10 +599,9 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateNewDirectionTimeCount, (state, action) => {
             const { payload: inputValue } = action;
 
-            const countInput = Utils.decimalNormalizer(inputValue, state.newDirection.durationValueInput);
-            const count = units.convertToSeconds(Number(countInput), state.newDirection.durationUnit);
+            const count = units.convertToSeconds(Number(inputValue), state.newDirection.durationUnit);
 
-            state.newDirection.durationValueInput = countInput;
+            state.newDirection.durationValueInput = inputValue;
             state.newDirection.durationValue = count;
         })
         .addCase(actions.updateNewDirectionTimeUnit, (state, action) => {
@@ -735,16 +730,15 @@ const reducer = createReducer(initialState, (builder) => {
 
                     const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
 
-                    const amountInput = Utils.decimalNormalizer(inputValue, product.amountInput);
                     const amount = units.convertToMetric(
-                        Number(amountInput), product.unit, [], product.density,
+                        Number(inputValue), product.unit, [], product.density,
                     );
 
                     return {
                         ...ingredient,
                         products: {
                             ...ingredient.products,
-                            [id]: { ...product, amountInput, amount },
+                            [id]: { ...product, amountInput: inputValue, amount },
                         },
                     };
                 }
@@ -923,22 +917,21 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateServingSizeAmount, (state, action) => {
             const { payload: servingSizeInput } = action;
 
-            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
             const servingSize = units.convertToMetric(
-                Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
+                Number(servingSizeInput), state.servingSizeUnit, state.customUnits, state.density,
             );
 
             // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
             if (state.editMode) {
                 state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInputNormalized;
+                state.servingSizeInput = servingSizeInput;
             }
             // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
                 const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInputNormalized;
+                state.servingSizeInput = servingSizeInput;
                 state.nutrientsByServing = nutrientsByServing;
                 state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
             }

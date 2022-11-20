@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { classNames } from "@common/style";
-import type { InputChangeCallback } from "@common/typings";
+import Utils from "@common/utils";
+
+import { decimalNormalizer, timeNormalizer } from "./normalizers";
 
 import styles from "./rba-input.module.scss";
 
@@ -30,6 +32,13 @@ export enum InputTextAlign {
     Right = "textAlign_Right",
 }
 
+export enum InputNormalizer {
+    Decimal,
+    Time,
+}
+
+export type RbaInputChangeCallback = (value: string) => void;
+
 interface Props {
     "data-cy"?: string;
     value: string;
@@ -40,7 +49,20 @@ interface Props {
     width: InputWidthSize;
     height: InputHeightSize;
     maxLength?: number;
-    onChange: InputChangeCallback;
+    normalizer?: InputNormalizer;
+    onChange: RbaInputChangeCallback;
+}
+
+
+function withNormalizer(type: Option<InputNormalizer>, value: string, previousValue: string): string {
+    switch (type) {
+        case InputNormalizer.Decimal:
+            return decimalNormalizer(value, previousValue);
+        case InputNormalizer.Time:
+            return timeNormalizer(value, previousValue);
+        default:
+            return value;
+    }
 }
 
 const RbaInput: React.FC<Props> = ({
@@ -53,8 +75,12 @@ const RbaInput: React.FC<Props> = ({
     disabled = false,
     maxLength,
     onChange,
+    normalizer,
     ...props
 }) => {
+
+    const [ inputValue, setInputValue ] = useState(value);
+
     return (
         <input
             data-cy={props["data-cy"]}
@@ -69,9 +95,16 @@ const RbaInput: React.FC<Props> = ({
                 [styles[height]]: true,
                 [styles.disabled]: disabled,
             })}
-            value={value}
+            value={inputValue}
             maxLength={maxLength}
-            onChange={onChange}
+            onChange={(event) => {
+                const newValue = withNormalizer(normalizer, event.target.value, inputValue);
+                setInputValue(newValue);
+
+                Utils.keepCaretInPlace(window, event);
+
+                onChange(newValue);
+            }}
         />
     );
 };

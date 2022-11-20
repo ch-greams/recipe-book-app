@@ -2,7 +2,6 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import { getCurrentDate } from "@common/date";
 import { convertToMetric } from "@common/units";
-import Utils from "@common/utils";
 
 import * as actions from "../actions/journal";
 import { getNutrientsFromJournalEntries } from "../helpers/journal";
@@ -41,15 +40,14 @@ const reducer = createReducer(initialState, (builder) => {
             state.entries = state.entries.map((entry) => {
                 if (entry.id === id) {
 
-                    const foodAmountInputNormalized = Utils.decimalNormalizer(amountInput, entry.foodAmountInput);
                     const foodAmount = convertToMetric(
-                        Number(foodAmountInputNormalized), entry.foodUnit, entry.foodCustomUnits, entry.foodDensity,
+                        Number(amountInput), entry.foodUnit, entry.foodCustomUnits, entry.foodDensity,
                     );
 
                     return {
                         ...entry,
                         foodAmount: foodAmount,
-                        foodAmountInput: foodAmountInputNormalized,
+                        foodAmountInput: amountInput,
                     };
                 }
                 else {

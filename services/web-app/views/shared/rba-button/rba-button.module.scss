@@ -6,11 +6,15 @@
     padding: 4px;
 
     font-family: $font-default;
+    color: $color-default;
 
     text-align: center;
 
     user-select: none;
 
+    background-color: $color-white;
+
+    border-color: $color-grey-light;
     border-style: solid;
     border-width: 1px;
     border-radius: 2px;
@@ -62,18 +66,10 @@
     &.theme_Primary {
         font-size: $font-size-medium;
         font-weight: $font-weight-medium;
-
-        color: $color-default;
-        background-color: $color-white;
-        border-color: $color-grey-light;
     }
 
     &.theme_PrimarySmall {
         font-size: $font-size-small;
         font-weight: $font-weight-medium;
-
-        color: $color-default;
-        background-color: $color-white;
-        border-color: $color-grey-light;
     }
 }

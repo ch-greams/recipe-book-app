@@ -6,7 +6,7 @@ import { classNames } from "@common/style";
 import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
-import styles from "./rba-ingredient-nutrition-facts.module.scss";
+import styles from "./rba-ingredient-nutrients.module.scss";
 
 
 interface Props {

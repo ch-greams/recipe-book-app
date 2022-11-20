@@ -2,9 +2,10 @@ import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 
 import { formatTime } from "@common/date";
-import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
-import RbaInput, { InputHeightSize,InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
+import { InputNormalizer } from "@views/shared/rba-input";
+import RbaInput, { InputHeightSize,InputTextAlign,InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import * as actions from "@store/actions/journal";
@@ -27,8 +28,8 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
         data: { entryId: entry.id },
     });
 
-    const onFoodAmountUpdate: InputChangeCallback = (event) => {
-        dispatch(actions.updateEntryAmount({ id: entry.id, amountInput: event.target.value }));
+    const onFoodAmountUpdate: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateEntryAmount({ id: entry.id, amountInput: value }));
     };
 
     const onFoodUnitUpdate: RbaSelectChangeCallback = (unit) => {
@@ -41,8 +42,16 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
             style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
         >
 
-            <span className={styles.journalEntryTime}>
-                {formatTime(entry.entryTime)}
+            <span>
+                <RbaInput
+                    theme={InputTheme.Alternative}
+                    align={InputTextAlign.Center}
+                    width={InputWidthSize.Full}
+                    height={InputHeightSize.Small}
+                    value={formatTime(entry.entryTime)}
+                    normalizer={InputNormalizer.Time}
+                    onChange={(value) => console.log("event", value)}
+                />
             </span>
 
             <span
@@ -60,6 +69,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Small}
                     value={entry.foodAmountInput}
+                    normalizer={InputNormalizer.Decimal}
                     onChange={onFoodAmountUpdate}
                 />
             </span>

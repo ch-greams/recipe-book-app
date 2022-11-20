@@ -2,8 +2,9 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { classNames, Color } from "@common/style";
-import type { InputChangeCallback } from "@common/typings";
 import { TemperatureUnit, TimeUnit } from "@common/units";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
@@ -20,11 +21,11 @@ interface Props {
     direction: RecipeDirection;
     isNewDirection?: boolean;
     onButtonClick: () => void;
-    updateDirectionStepNumber: InputChangeCallback;
-    updateDirectionName: InputChangeCallback;
-    updateDirectionTemperatureCount: InputChangeCallback;
+    updateDirectionStepNumber: RbaInputChangeCallback;
+    updateDirectionName: RbaInputChangeCallback;
+    updateDirectionTemperatureCount: RbaInputChangeCallback;
     updateDirectionTemperatureUnit: RbaSelectChangeCallback;
-    updateDirectionTimeCount: InputChangeCallback;
+    updateDirectionTimeCount: RbaInputChangeCallback;
     updateDirectionTimeUnit: RbaSelectChangeCallback;
 }
 
@@ -112,6 +113,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                             height={InputHeightSize.Medium}
                             placeholder={"#"}
                             value={direction.temperatureValueInput}
+                            normalizer={InputNormalizer.Decimal}
                             onChange={updateDirectionTemperatureCount}
                         />
 
@@ -139,6 +141,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                             height={InputHeightSize.Medium}
                             placeholder={"#"}
                             value={direction.durationValueInput}
+                            normalizer={InputNormalizer.Decimal}
                             onChange={updateDirectionTimeCount}
                         />
 
