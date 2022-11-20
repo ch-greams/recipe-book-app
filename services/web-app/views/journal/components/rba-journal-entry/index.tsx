@@ -1,7 +1,7 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 
-import { formatTime } from "@common/date";
+import { getCurrentTime } from "@common/date";
 import { Unit } from "@common/units";
 import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import { InputNormalizer } from "@views/shared/rba-input";
@@ -28,6 +28,10 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
         data: { entryId: entry.id },
     });
 
+    const onEntryTimeUpdate: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateEntryTime({ id: entry.id, time: value }));
+    };
+
     const onFoodAmountUpdate: RbaInputChangeCallback = (value) => {
         dispatch(actions.updateEntryAmount({ id: entry.id, amountInput: value }));
     };
@@ -48,9 +52,10 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     align={InputTextAlign.Center}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Small}
-                    value={formatTime(entry.entryTime)}
+                    value={entry.entryTime}
                     normalizer={InputNormalizer.Time}
-                    onChange={(value) => console.log("event", value)}
+                    placeholder={getCurrentTime()}
+                    onChange={onEntryTimeUpdate}
                 />
             </span>
 

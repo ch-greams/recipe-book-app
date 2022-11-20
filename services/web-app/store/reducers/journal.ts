@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { getCurrentDate } from "@common/date";
+import { formatTime, getCurrentDate } from "@common/date";
 import { convertToMetric } from "@common/units";
 
 import * as actions from "../actions/journal";
@@ -31,6 +31,14 @@ const reducer = createReducer(initialState, (builder) => {
             state.entries = state.entries.map((entry) => (
                 entry.id === id
                     ? ({ ...entry, groupOrderNumber: groupNumber })
+                    : entry
+            ));
+        })
+        .addCase(actions.updateEntryTime, (state, action) => {
+            const { id, time } = action.payload;
+            state.entries = state.entries.map((entry) => (
+                entry.id === id
+                    ? ({ ...entry, entryTime: time })
                     : entry
             ));
         })
@@ -88,7 +96,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.entries = entries.map((entry) => ({
                 id: entry.id,
                 entryDate: entry.entry_date,
-                entryTime: entry.entry_time,
+                entryTime: formatTime(entry.entry_time),
                 groupOrderNumber: entry.journal_group_num,
                 foodName: entry.product.name,
                 foodAmount: entry.amount,

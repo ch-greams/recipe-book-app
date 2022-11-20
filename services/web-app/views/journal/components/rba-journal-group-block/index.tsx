@@ -50,12 +50,7 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, en
 
             </div>
 
-            {entries.map((entry) => (
-                <RbaJournalEntry
-                    key={entry.entryTime}
-                    entry={entry}
-                />
-            ))}
+            {entries.map((entry) => (<RbaJournalEntry key={entry.id} entry={entry} />))}
 
         </div>
     );

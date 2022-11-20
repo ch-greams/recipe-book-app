@@ -20,5 +20,14 @@ export function timeNormalizer(value: string, previousValue: string): string {
 
     const DEFAULT_VALUE = "";
 
-    return value || previousValue || DEFAULT_VALUE;
+    if (value) {
+        const isTime = /^\d{1,2}:\d{0,2}$/.test(value);
+        const isPartialTime = /^\d{0,2}:?$/.test(value);
+
+        const isValid = isTime || isPartialTime;
+
+        return ( isValid ? value : (previousValue || DEFAULT_VALUE) );
+    }
+
+    return DEFAULT_VALUE;
 }

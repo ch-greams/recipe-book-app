@@ -2,11 +2,11 @@ import { addDays, format, parse } from "date-fns";
 
 
 
-const DEFAULT_TIME_FORMAT: string = "HH:mm:ss";
-const DEFAULT_TIME_DISPLAY_FORMAT: string = "HH:mm";
+export const DEFAULT_TIME_FORMAT: string = "HH:mm:ss";
+export const DEFAULT_TIME_DISPLAY_FORMAT: string = "HH:mm";
 
-const DEFAULT_DATE_FORMAT: string = "yyyy-MM-dd";
-const DEFAULT_DATE_DISPLAY_FORMAT: string = "PPP";
+export const DEFAULT_DATE_FORMAT: string = "yyyy-MM-dd";
+export const DEFAULT_DATE_DISPLAY_FORMAT: string = "PPP";
 
 
 /**
@@ -30,12 +30,12 @@ export function formatDate(date: string): string {
 }
 
 /**
- * Get current time in `DEFAULT_TIME_FORMAT` format
+ * Get current time in provided format (by default it's `DEFAULT_TIME_DISPLAY_FORMAT`)
  *
- * @returns time in `DEFAULT_TIME_FORMAT`
+ * @returns formatted time
  */
-export function getCurrentTime(): string {
-    return format(new Date(), DEFAULT_TIME_FORMAT);
+export function getCurrentTime(timeFormat: string = DEFAULT_TIME_DISPLAY_FORMAT): string {
+    return format(new Date(), timeFormat);
 }
 
 /**
