@@ -63,7 +63,9 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = null;
             state.customFoods = state.customFoods.filter((food) => food.id !== productId);
-            state.customRecipes = state.customRecipes.filter((Recipe) => Recipe.id !== productId);
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
+            state.customRecipes = state.customRecipes.filter((recipe) => recipe.id !== productId);
+            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
         .addCase(deleteCustomProduct.rejected, (state, action) => {
             const message = action.payload?.message;
