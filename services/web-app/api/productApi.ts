@@ -36,4 +36,9 @@ export default class ProductApi {
 
         return products;
     }
+
+    public static async deleteProduct(productId: number): Promise<void> {
+
+        await superagent.post(`${ProductApi.API_PATH}/delete`).send({ id: productId });
+    }
 }

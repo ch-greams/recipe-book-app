@@ -30,19 +30,33 @@ export const fetchRecipes = createAsyncThunk<
     },
 );
 
-export const fetchFoods = createAsyncThunk<
-    { favoriteFoods: FoodShort[], customFoods: FoodShort[] },
+export const fetchProducts = createAsyncThunk<
+    { favoriteFoods: FoodShort[], customFoods: FoodShort[], favoriteRecipes: RecipeShort[], customRecipes: RecipeShort[] },
     void,
     { rejectValue: Error }
 >(
-    "user/fetch_foods",
+    "user/fetch_products",
     async (_arg, { rejectWithValue }) => {
         try {
-            const [ favoriteFoods, customFoods ] = await Promise.all([
+            const [ favoriteFoods, customFoods, favoriteRecipes, customRecipes ] = await Promise.all([
                 ProductApi.getFavoriteProducts<FoodShort>(ProductType.Food),
                 ProductApi.getCustomProducts<FoodShort>(ProductType.Food),
+                ProductApi.getFavoriteProducts<RecipeShort>(ProductType.Recipe),
+                ProductApi.getCustomProducts<RecipeShort>(ProductType.Recipe),
             ]);
-            return { favoriteFoods, customFoods };
+            return { favoriteFoods, customFoods, favoriteRecipes, customRecipes };
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);
+
+export const deleteCustomProduct = createAsyncThunk<void, number, { rejectValue: Error }>(
+    "user/delete_custom_product",
+    async (productId, { rejectWithValue }) => {
+        try {
+            await ProductApi.deleteProduct(productId);
         }
         catch (error) {
             return rejectWithValue(error as Error);
