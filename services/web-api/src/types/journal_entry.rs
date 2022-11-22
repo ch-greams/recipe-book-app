@@ -4,9 +4,7 @@ use chrono::{NaiveDate, NaiveTime};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{
-    custom_unit::CustomUnit, error::Error, product::Product, product_nutrient::ProductNutrient,
-};
+use super::{custom_unit::CustomUnit, error::Error, product_nutrient::ProductNutrient};
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct JournalEntry {
@@ -27,7 +25,8 @@ pub struct JournalEntryProduct {
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
     pub product_id: i64,
-    pub product: Product,
+    pub product_name: String,
+    pub product_density: f64,
     pub amount: f32,
     pub unit: String,
     pub journal_group_num: Option<i16>,
@@ -57,7 +56,21 @@ impl JournalEntry {
         user_id: i64,
     ) -> QueryAs<'static, Postgres, JournalEntryProduct, PgArguments> {
         sqlx::query_as(
-            "SELECT * FROM journal.journal_entry_product WHERE entry_date = $1 AND user_id = $2",
+            r#"
+            SELECT
+                id,
+                user_id,
+                entry_date,
+                entry_time,
+                product_id,
+                product_name,
+                product_density,
+                amount,
+                unit,
+                journal_group_num
+            FROM journal.journal_entry_product
+            WHERE entry_date = $1 AND user_id = $2
+        "#,
         )
         .bind(entry_date)
         .bind(user_id)
@@ -80,10 +93,11 @@ impl JournalEntry {
                 journal_entry.entry_date,
                 journal_entry.entry_time,
                 journal_entry.product_id,
+                product.name AS product_name,
+                product.density AS product_density,
                 journal_entry.amount,
                 journal_entry.unit,
-                journal_entry.journal_group_num,
-                product.*::product.product AS product
+                journal_entry.journal_group_num
             FROM journal_entry
             JOIN product.product product ON product.id = journal_entry.product_id;
         "#,
@@ -168,7 +182,8 @@ pub struct JournalEntryDetailed {
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
     pub product_id: i64,
-    pub product: Product,
+    pub product_name: String,
+    pub product_density: f64,
     pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CustomUnit>,
     pub amount: f32,
@@ -193,7 +208,8 @@ impl JournalEntryDetailed {
             entry_date: journal_entry.entry_date,
             entry_time: journal_entry.entry_time,
             product_id: journal_entry.product_id,
-            product: journal_entry.product.to_owned(),
+            product_name: journal_entry.product_name.to_owned(),
+            product_density: journal_entry.product_density,
             amount: journal_entry.amount,
             unit: journal_entry.unit.to_owned(),
             journal_group_num: journal_entry.journal_group_num,

@@ -45,7 +45,6 @@ export default class JournalApi {
 
     public static async deleteJournalEntry(journalEntryId: number): Promise<void> {
 
-        await superagent.post(`${JournalApi.API_PATH}/entry/delete`)
-            .send({ id: journalEntryId });
+        await superagent.post(`${JournalApi.API_PATH}/entry/delete`).send({ id: journalEntryId });
     }
 }

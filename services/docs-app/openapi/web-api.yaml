@@ -36,39 +36,6 @@ components:
           type: string
           example: carbohydrate
     # product
-    Product:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 3
-        product_type:
-          type: string
-          example: food
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        subtitle:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        is_private:
-          type: boolean
-          example: false
-        created_at:
-          type: string
-          example: "2022-06-27T01:41:41.850918Z"
-        updated_at:
-          type: string
-          example: "2022-06-27T01:41:41.850934Z"
     ProductShort:
       type: object
       properties:
@@ -96,6 +63,12 @@ components:
         updated_at:
           type: string
           example: "2022-11-04T13:29:03.400873Z"
+    DeleteProductPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
     # custom_unit
     CustomUnit:
       type: object
@@ -659,9 +632,12 @@ components:
         product_id:
           type: integer
           example: 6
-        product:
-          type: object
-          $ref: "#/components/schemas/Product"
+        product_name:
+          type: string
+          example: Hamburger
+        product_density:
+          type: number
+          example: 0.9
         amount:
           type: number
           example: 450.5
@@ -876,6 +852,45 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductShort"
+        "404":
+          description: Not Found
+
+  /product/favorite/delete:
+    post:
+      tags:
+        - product
+      summary: Delete a favorite product by id
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteProductPayload"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /product/delete:
+    post:
+      tags:
+        - product
+      summary: Delete a product by id
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteProductPayload"
+      responses:
+        "204":
+          description: No Content
         "404":
           description: Not Found
 

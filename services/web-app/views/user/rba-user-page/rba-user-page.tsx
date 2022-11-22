@@ -51,6 +51,8 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaRecipesBlock
                         favoriteRecipes={user.favoriteRecipes}
                         customRecipes={user.customRecipes}
+                        deleteFavoriteRecipe={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
+                        deleteCustomRecipe={(productId) => dispatch(actions.deleteCustomProduct(productId))}
                     />
                 );
             case UserMenuItem.Foods:
@@ -58,6 +60,8 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
+                        deleteFavoriteFood={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
+                        deleteCustomFood={(productId) => dispatch(actions.deleteCustomProduct(productId))}
                     />
                 );
         }

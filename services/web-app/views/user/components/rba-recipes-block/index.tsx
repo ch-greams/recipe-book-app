@@ -4,6 +4,8 @@ import * as constants from "@cypress/constants";
 
 import Utils, { ProductType } from "@common/utils";
 import RbaBlockTitle from "@views/shared/rba-block-title";
+import RbaButton, { ButtonHeightSize,ButtonWidthSize } from "@views/shared/rba-button";
+import { RBA_BUTTON_LABEL_DELETE } from "@views/shared/rba-button/labels";
 
 import styles from "./rba-recipes-block.module.scss";
 
@@ -17,35 +19,60 @@ interface RecipeItem {
 interface Props {
     favoriteRecipes: RecipeItem[];
     customRecipes: RecipeItem[];
+    deleteFavoriteRecipe: (productId: number) => void;
+    deleteCustomRecipe: (productId: number) => void;
 }
 
 
-const RbaRecipesBlock: React.FC<Props> = ({ favoriteRecipes, customRecipes }) => {
+const RbaRecipesBlock: React.FC<Props> = ({
+    favoriteRecipes,
+    customRecipes,
+    deleteFavoriteRecipe,
+    deleteCustomRecipe,
+}) => {
 
     return (
         <div className={styles.recipesBlock}>
 
             <RbaBlockTitle text={"Favorites"} />
 
-            <div className={styles.itemList}>
+            <div className={styles.recipeList}>
                 {favoriteRecipes.map((recipe) => (
-                    <Link key={recipe.id} href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
-                        <div data-cy={constants.CY_USER_RECIPE_FAVORITE_ITEM} className={styles.infoLine}>
-                            {recipe.name}
-                        </div>
-                    </Link>
+                    <div key={recipe.id} className={styles.recipeLine}>
+                        <Link href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
+                            <div data-cy={constants.CY_USER_RECIPE_FAVORITE_ITEM} className={styles.recipeName}>
+                                {recipe.name}
+                            </div>
+                        </Link>
+
+                        <RbaButton
+                            label={RBA_BUTTON_LABEL_DELETE}
+                            width={ButtonWidthSize.Full}
+                            height={ButtonHeightSize.Full}
+                            onClick={() => { deleteFavoriteRecipe(recipe.id); }}
+                        />
+                    </div>
                 ))}
             </div>
 
             <RbaBlockTitle text={"My Own"} />
 
-            <div className={styles.itemList}>
+            <div className={styles.recipeList}>
                 {customRecipes.map((recipe) => (
-                    <Link key={recipe.id} href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
-                        <div data-cy={constants.CY_USER_RECIPE_CUSTOM_ITEM} className={styles.infoLine}>
-                            {recipe.name}
-                        </div>
-                    </Link>
+                    <div key={recipe.id} className={styles.recipeLine}>
+                        <Link href={Utils.getProductPath(ProductType.Recipe, recipe.id)}>
+                            <div data-cy={constants.CY_USER_RECIPE_CUSTOM_ITEM} className={styles.recipeName}>
+                                {recipe.name}
+                            </div>
+                        </Link>
+
+                        <RbaButton
+                            label={RBA_BUTTON_LABEL_DELETE}
+                            width={ButtonWidthSize.Full}
+                            height={ButtonHeightSize.Full}
+                            onClick={() => { deleteCustomRecipe(recipe.id); }}
+                        />
+                    </div>
                 ))}
             </div>
 

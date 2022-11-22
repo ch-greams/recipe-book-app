@@ -17,10 +17,7 @@ const RbaUserPageConnected: React.FC = () => {
 
     const user = useAppSelector((state) => state.user);
 
-    useEffect(() => {
-        dispatch(actions.fetchFoods());
-        dispatch(actions.fetchRecipes());
-    }, [ dispatch ]);
+    useEffect(() => { dispatch(actions.fetchProducts()); }, [ dispatch ]);
 
     return (
         user.isLoaded

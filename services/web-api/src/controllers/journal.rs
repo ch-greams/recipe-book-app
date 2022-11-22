@@ -166,7 +166,7 @@ async fn delete_entry(
 ) -> Result<HttpResponse, Error> {
     let mut txn = db_pool.begin().await?;
 
-    let _response = JournalEntry::delete_journal_entry(request.id, &mut txn).await?;
+    JournalEntry::delete_journal_entry(request.id, &mut txn).await?;
 
     txn.commit().await?;
 
