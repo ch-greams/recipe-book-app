@@ -85,19 +85,6 @@ const reducer = createReducer(initialState, (builder) => {
 
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
-        .addCase(actions.updateJournalEntry.pending, (state) => {
-            state.errorMessage = null;
-            state.isSaved = false;
-        })
-        .addCase(actions.updateJournalEntry.fulfilled, (state) => {
-            state.errorMessage = null;
-            state.isSaved = true;
-        })
-        .addCase(actions.updateJournalEntry.rejected, (state, action) => {
-            const message = action.payload?.message;
-            state.errorMessage = message;
-            state.isSaved = true;
-        })
         .addCase(actions.createJournalEntry.pending, (state) => {
             state.errorMessage = null;
             state.isSaved = false;
@@ -129,6 +116,36 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
         .addCase(actions.createJournalEntry.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.errorMessage = message;
+            state.isSaved = true;
+        })
+        .addCase(actions.updateJournalEntry.pending, (state) => {
+            state.errorMessage = null;
+            state.isSaved = false;
+        })
+        .addCase(actions.updateJournalEntry.fulfilled, (state) => {
+            state.errorMessage = null;
+            state.isSaved = true;
+        })
+        .addCase(actions.updateJournalEntry.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.errorMessage = message;
+            state.isSaved = true;
+        })
+        .addCase(actions.deleteJournalEntry.pending, (state) => {
+            state.errorMessage = null;
+            state.isSaved = false;
+        })
+        .addCase(actions.deleteJournalEntry.fulfilled, (state, action) => {
+            const entryId = action.payload;
+            state.errorMessage = null;
+            state.isSaved = true;
+
+            state.entries = state.entries.filter((entry) => entry.id !== entryId);
+            state.nutrients = getNutrientsFromJournalEntries(state.entries);
+        })
+        .addCase(actions.deleteJournalEntry.rejected, (state, action) => {
             const message = action.payload?.message;
             state.errorMessage = message;
             state.isSaved = true;

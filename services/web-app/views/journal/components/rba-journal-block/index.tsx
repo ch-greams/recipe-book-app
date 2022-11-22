@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DndContext } from "@dnd-kit/core";
 
 import { DEFAULT_TIME_FORMAT, getCurrentTime } from "@common/date";
@@ -12,6 +12,8 @@ import type { JournalStoreEntry, JournalStoreGroup } from "@store/types/journal"
 import type { SearchStore } from "@store/types/search";
 
 import RbaJournalGroupBlock from "../rba-journal-group-block";
+
+import RbaJournalTrash from "./rba-journal-trash";
 
 import styles from "./rba-journal-block.module.scss";
 
@@ -27,20 +29,35 @@ interface Props {
 const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search }) => {
 
     const dispatch = useAppDispatch();
+    const [ showTrash, setShowTrash ] = useState(false);
 
     return (
         <div className={styles.journal}>
 
-            <DndContext onDragEnd={(event) => {
+            <DndContext
+                onDragStart={() => { setShowTrash(true); }}
+                onDragEnd={(event) => {
 
-                const entryId = event.active?.data.current?.entryId;
-                const entryGroupNumber = event.over?.data.current?.groupOrderNumber;
+                    setShowTrash(false);
 
-                if (isSome(entryId) && isSome(event.over?.id)) {
-                    dispatch(journalActions.updateEntryGroup({ id: entryId, groupNumber: entryGroupNumber }));
-                    dispatch(journalActions.updateJournalEntry(entryId));
-                }
-            }}>
+                    const draggableEntryId: Option<number> = event.active?.data.current?.entryId;
+                    const droppableEntryGroupNumber: Option<number> = event.over?.data.current?.groupOrderNumber;
+                    const droppableIsTrash: Option<boolean> = event.over?.data.current?.isTrash;
+
+                    if (isSome(draggableEntryId) && isSome(event.over?.id)) {
+                        if (droppableIsTrash) {
+                            dispatch(journalActions.deleteJournalEntry(draggableEntryId));
+                        }
+                        else {
+                            dispatch(journalActions.updateEntryGroup({
+                                id: draggableEntryId,
+                                groupNumber: droppableEntryGroupNumber,
+                            }));
+                            dispatch(journalActions.updateJournalEntry(draggableEntryId));
+                        }
+                    }
+                }}
+            >
 
                 {groups.map((group) => (
                     <RbaJournalGroupBlock
@@ -55,6 +72,8 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                     groupName={"unknown"}
                     entries={entries.filter((entry) => !entry.groupOrderNumber)}
                 />
+
+                {( showTrash && <RbaJournalTrash /> )}
 
             </DndContext>
 

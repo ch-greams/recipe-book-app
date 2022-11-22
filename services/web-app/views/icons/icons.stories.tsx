@@ -16,6 +16,7 @@ import RbaIconPerson from "./rba-icon-person";
 import RbaIconRemove from "./rba-icon-remove";
 import RbaIconSearch from "./rba-icon-search";
 import RbaIconTip from "./rba-icon-tip";
+import RbaIconTrash from "./rba-icon-trash";
 import RbaIconWarning from "./rba-icon-warning";
 
 
@@ -58,6 +59,7 @@ const Template: ComponentStory<typeof RbaIcon> = (args) =>(
         <RbaIconTip {...args} />
         <RbaIconWarning {...args} />
         <RbaIconCheck {...args} />
+        <RbaIconTrash {...args} />
     </RbaIcon>
 );
 export const Default = Template.bind({});

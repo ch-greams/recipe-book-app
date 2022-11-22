@@ -77,3 +77,17 @@ export const updateJournalEntry = createAsyncThunk<JournalEntry, number, { state
         }
     },
 );
+
+export const deleteJournalEntry = createAsyncThunk<number, number, { rejectValue: Error }>(
+    "journal/delete_entry",
+    async (entryId, { rejectWithValue }) => {
+        try {
+            await JournalApi.deleteJournalEntry(entryId);
+
+            return entryId;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);

@@ -4,4 +4,27 @@
 
     display: grid;
     gap: 4px;
+
+    .journalTrash {
+
+        padding: 6px 12px;
+
+        color: $color-white;
+        text-align: center;
+
+        background-color: $color-default-dark;
+
+        border-color: $color-white;
+        border-style: dashed;
+        border-width: 1px;
+        border-radius: 2px;
+
+        &.journalEntryOver {
+            background-color: $color-alternative;
+        }
+
+        svg {
+            margin: 0 auto;
+        }
+    }
 }
