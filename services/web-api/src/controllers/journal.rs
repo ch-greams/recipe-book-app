@@ -127,11 +127,25 @@ async fn create_entry(
 ) -> Result<HttpResponse, Error> {
     let mut txn = db_pool.begin().await?;
 
-    let response = JournalEntry::insert_journal_entry(&request, &mut txn).await?;
+    let journal_entry = JournalEntry::insert_journal_entry(&request, &mut txn).await?;
+
+    let product_nutrients = ProductNutrient::find_by_product_id(journal_entry.product_id)
+        .fetch_all(&mut txn)
+        .await?;
+
+    let custom_units = CustomUnit::find_by_product_id(journal_entry.product_id)
+        .fetch_all(&mut txn)
+        .await?;
+
+    let journal_entry_detailed = JournalEntryDetailed::new(
+        &journal_entry,
+        &product_nutrients,
+        &custom_units,
+    );
 
     txn.commit().await?;
 
-    Ok(HttpResponse::Created().json(response))
+    Ok(HttpResponse::Created().json(journal_entry_detailed))
 }
 
 #[post("/entry/update")]

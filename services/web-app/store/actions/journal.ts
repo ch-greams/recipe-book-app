@@ -1,6 +1,8 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import type { JournalEntry, JournalGroup } from "@common/typings";
+import { DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT, formatTime } from "@common/date";
+import { unwrap } from "@common/types";
+import type { JournalEntry, JournalEntryDetailed, JournalGroup } from "@common/typings";
 import JournalApi from "@api/journalApi";
 
 import type { RootState } from "..";
@@ -13,7 +15,7 @@ export const updateEntryAmount = createAction<{ id: number, amountInput: string 
 export const updateEntryUnit = createAction<{ id: number, unit: string }>("journal/update_entry_unit");
 
 export const fetchJournalInfo = createAsyncThunk<
-    { entries: JournalEntry[], groups: JournalGroup[] },
+    { entries: JournalEntryDetailed[], groups: JournalGroup[] },
     void,
     { state: RootState, rejectValue: Error }
 >(
@@ -28,6 +30,47 @@ export const fetchJournalInfo = createAsyncThunk<
             ]);
 
             return { entries, groups };
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);
+
+export const createJournalEntry = createAsyncThunk<JournalEntryDetailed, JournalEntry, { rejectValue: Error }>(
+    "journal/create_entry",
+    async (entry, { rejectWithValue }) => {
+        try {
+            const entryResponse = await JournalApi.createJournalEntry(entry);
+
+            return entryResponse;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);
+
+export const updateJournalEntry = createAsyncThunk<JournalEntry, number, { state: RootState, rejectValue: Error }>(
+    "journal/update_entry",
+    async (entryId, { rejectWithValue, getState }) => {
+        try {
+            const { journal: { entries }, user: { userId } } = getState();
+
+            const entry = unwrap( entries.find((e) => e.id === entryId), `entries.find((e) => e.id === ${entryId})` );
+
+            const entryResponse = await JournalApi.updateJournalEntry({
+                id: entry.id,
+                user_id: userId,
+                entry_date: entry.entryDate,
+                entry_time: formatTime(entry.entryTime, DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT),
+                product_id: entry.foodId,
+                amount: entry.foodAmount,
+                unit: entry.foodUnit,
+                journal_group_num: entry.groupOrderNumber,
+            });
+
+            return entryResponse;
         }
         catch (error) {
             return rejectWithValue(error as Error);

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { formatDate } from "@common/date";
+import { Color } from "@common/style";
+import { IconSize } from "@views/icons/icon-params";
+import RbaIconCheck from "@views/icons/rba-icon-check";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 
 import styles from "./rba-journal-date-block.module.scss";
@@ -8,11 +11,24 @@ import styles from "./rba-journal-date-block.module.scss";
 
 interface Props {
     date: string;
+    isJournalSaved: boolean;
     decrementDate: () => void;
     incrementDate: () => void;
 }
 
-const RbaJournalDateBlock: React.FC<Props> = ({ date, decrementDate, incrementDate }) => {
+const CHECKMARK_TIMEOUT: number = 1500;
+
+const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementDate, incrementDate }) => {
+
+    const [ showCheckmark, setShowCheckmark ] = useState(false);
+
+    useEffect(() => {
+
+        setShowCheckmark(isJournalSaved);
+        const timer = setTimeout(() => { setShowCheckmark(false); }, CHECKMARK_TIMEOUT);
+
+        return () => { clearTimeout(timer); };
+    }, [ isJournalSaved ]);
 
     return (
         <div className={styles.journalDateBlock}>
@@ -29,7 +45,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date, decrementDate, incrementDa
                 <RbaButton
                     label={formatDate(date)}
                     width={ButtonWidthSize.Full}
-                    onClick={() => console.log(`click ${formatDate(date)}`)}
+                    onClick={() => alert("TODO: add a small calendar")}
                 />
             </span>
 
@@ -39,6 +55,10 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date, decrementDate, incrementDa
                     width={ButtonWidthSize.Full}
                     onClick={incrementDate}
                 />
+            </span>
+
+            <span className={styles.journalStatus}>
+                {showCheckmark && <RbaIconCheck size={IconSize.Small} color={Color.White} />}
             </span>
 
         </div>

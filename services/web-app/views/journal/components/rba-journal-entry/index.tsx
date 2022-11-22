@@ -10,13 +10,13 @@ import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import * as actions from "@store/actions/journal";
 import { useAppDispatch } from "@store/index";
-import type { JournalEntry } from "@store/types/journal";
+import type { JournalStoreEntry } from "@store/types/journal";
 
 import styles from "./rba-journal-entry.module.scss";
 
 
 interface Props {
-    entry: JournalEntry;
+    entry: JournalStoreEntry;
 }
 
 const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
@@ -38,6 +38,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
 
     const onFoodUnitUpdate: RbaSelectChangeCallback = (unit) => {
         dispatch(actions.updateEntryUnit({ id: entry.id, unit: unit.value }));
+        dispatch(actions.updateJournalEntry(entry.id));
     };
 
     return (
@@ -56,6 +57,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     normalizer={InputNormalizer.Time}
                     placeholder={getCurrentTime()}
                     onChange={onEntryTimeUpdate}
+                    onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
                 />
             </span>
 
@@ -76,6 +78,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     value={entry.foodAmountInput}
                     normalizer={InputNormalizer.Decimal}
                     onChange={onFoodAmountUpdate}
+                    onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
                 />
             </span>
 

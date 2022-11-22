@@ -66,12 +66,26 @@ impl JournalEntry {
     pub async fn insert_journal_entry(
         create_journal_entry_payload: &CreateJournalEntryPayload,
         txn: impl Executor<'_, Database = Postgres>,
-    ) -> Result<Self, Error> {
+    ) -> Result<JournalEntryProduct, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num)
-            VALUES ($1, $2, $3, $4, $5, $6, $7)
-            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num;
+            WITH journal_entry AS (
+                INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+                RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num
+            )
+            SELECT
+                journal_entry.id,
+                journal_entry.user_id,
+                journal_entry.entry_date,
+                journal_entry.entry_time,
+                journal_entry.product_id,
+                journal_entry.amount,
+                journal_entry.unit,
+                journal_entry.journal_group_num,
+                product.*::product.product AS product
+            FROM journal_entry
+            JOIN product.product product ON product.id = journal_entry.product_id;
         "#,
         )
             .bind(create_journal_entry_payload.user_id)

@@ -21,4 +21,12 @@
     .journalDateControlRight {
         grid-column: 9;
     }
+
+    .journalStatus {
+        grid-column: 12;
+
+        padding-top: 6px;
+
+        text-align: center;
+    }
 }

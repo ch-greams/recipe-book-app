@@ -18,6 +18,7 @@ const initialState: JournalStore = {
 
     nutrients: {},
 
+    isSaved: false,
     isLoaded: false,
     errorMessage: null,
 };
@@ -84,6 +85,54 @@ const reducer = createReducer(initialState, (builder) => {
 
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
+        .addCase(actions.updateJournalEntry.pending, (state) => {
+            state.errorMessage = null;
+            state.isSaved = false;
+        })
+        .addCase(actions.updateJournalEntry.fulfilled, (state) => {
+            state.errorMessage = null;
+            state.isSaved = true;
+        })
+        .addCase(actions.updateJournalEntry.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.errorMessage = message;
+            state.isSaved = true;
+        })
+        .addCase(actions.createJournalEntry.pending, (state) => {
+            state.errorMessage = null;
+            state.isSaved = false;
+        })
+        .addCase(actions.createJournalEntry.fulfilled, (state, action) => {
+            const entry = action.payload;
+            state.errorMessage = null;
+            state.isSaved = true;
+
+            state.entries = [
+                ...state.entries,
+                {
+                    id: entry.id,
+                    entryDate: entry.entry_date,
+                    entryTime: formatTime(entry.entry_time),
+                    groupOrderNumber: entry.journal_group_num,
+                    foodId: entry.product_id,
+                    foodName: entry.product.name,
+                    foodAmount: entry.amount,
+                    foodAmountInput: String(entry.amount),
+                    foodUnit: entry.unit,
+                    foodDensity: entry.product.density,
+                    foodNutrients: entry.nutrients,
+                    foodCustomUnits: entry.custom_units,
+                },
+            ]
+                .sort(Utils.sortBy("entryTime", (entryTime) => parseTime(entryTime as string)));
+
+            state.nutrients = getNutrientsFromJournalEntries(state.entries);
+        })
+        .addCase(actions.createJournalEntry.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.errorMessage = message;
+            state.isSaved = true;
+        })
         .addCase(actions.fetchJournalInfo.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
@@ -102,6 +151,7 @@ const reducer = createReducer(initialState, (builder) => {
                     entryDate: entry.entry_date,
                     entryTime: formatTime(entry.entry_time),
                     groupOrderNumber: entry.journal_group_num,
+                    foodId: entry.product_id,
                     foodName: entry.product.name,
                     foodAmount: entry.amount,
                     foodAmountInput: String(entry.amount),

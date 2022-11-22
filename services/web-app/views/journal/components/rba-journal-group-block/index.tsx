@@ -3,7 +3,7 @@ import { useDroppable } from "@dnd-kit/core";
 
 import { classNames } from "@common/style";
 import RbaButton, { ButtonHeightSize, ButtonTheme, ButtonWidthSize } from "@views/shared/rba-button";
-import type { JournalEntry } from "@store/types/journal";
+import type { JournalStoreEntry } from "@store/types/journal";
 
 import RbaJournalEntry from "../rba-journal-entry";
 
@@ -13,7 +13,7 @@ import styles from "./rba-journal-group-block.module.scss";
 interface Props {
     groupName: string;
     groupOrderNumber?: Option<number>;
-    entries: JournalEntry[];
+    entries: JournalStoreEntry[];
 }
 
 const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries }) => {
@@ -40,11 +40,11 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, en
 
                 <div className={styles.journalGroupButton}>
                     <RbaButton
-                        label={"Add Food"}
+                        label={"..."}
                         width={ButtonWidthSize.Full}
                         height={ButtonHeightSize.Full}
                         theme={ButtonTheme.PrimarySmall}
-                        onClick={() => console.log("Add Food to", groupName)}
+                        onClick={() => alert(`TODO: Open settings for ${groupName} group`)}
                     />
                 </div>
 

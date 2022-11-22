@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { classNames } from "@common/style";
+import { isSome } from "@common/types";
 import Utils from "@common/utils";
 
 import { decimalNormalizer, timeNormalizer } from "./normalizers";
@@ -51,6 +52,7 @@ interface Props {
     maxLength?: number;
     normalizer?: InputNormalizer;
     onChange: RbaInputChangeCallback;
+    onBlur?: RbaInputChangeCallback;
 }
 
 
@@ -75,6 +77,7 @@ const RbaInput: React.FC<Props> = ({
     disabled = false,
     maxLength,
     onChange,
+    onBlur,
     normalizer,
     ...props
 }) => {
@@ -108,6 +111,11 @@ const RbaInput: React.FC<Props> = ({
                 Utils.keepCaretInPlace(window, event);
 
                 onChange(newValue);
+            }}
+            onBlur={(event) => {
+                if (isSome(onBlur)) {
+                    onBlur(event.target.value);
+                }
             }}
         />
     );

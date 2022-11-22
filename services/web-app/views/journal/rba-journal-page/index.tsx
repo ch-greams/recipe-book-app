@@ -15,8 +15,7 @@ const RbaJournalPageConnected: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const meta = useAppSelector((state) => state.meta);
-    const journal = useAppSelector((state) => state.journal);
+    const { meta, user: { userId }, journal, search } = useAppSelector((state) => state);
 
     useEffect(() => {
         dispatch(actions.fetchJournalInfo());
@@ -29,8 +28,10 @@ const RbaJournalPageConnected: React.FC = () => {
                     ? <RbaSingleMessagePage text={journal.errorMessage} />
                     : (
                         <RbaJournalPage
+                            userId={userId}
                             journal={journal}
                             meta={meta}
+                            search={search}
                             decrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, -1)))}
                             incrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, 1)))}
                         />

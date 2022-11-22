@@ -130,10 +130,13 @@ export interface JournalEntry {
     entry_date: string;
     entry_time: string;
     product_id: number;
-    product: Product;
     amount: number;
     unit: string;
     journal_group_num: Option<number>;
+}
+
+export interface JournalEntryDetailed extends JournalEntry {
+    product: Product;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
 }

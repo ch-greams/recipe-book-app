@@ -3,7 +3,7 @@ import type { CustomUnit } from "@common/units";
 
 
 
-export interface JournalEntry {
+export interface JournalStoreEntry {
     id: number;
 
     entryDate: string;
@@ -11,6 +11,7 @@ export interface JournalEntry {
 
     groupOrderNumber: Option<number>;
 
+    foodId: number;
     foodName: string;
 
     foodAmount: number;
@@ -24,7 +25,7 @@ export interface JournalEntry {
     foodCustomUnits: CustomUnit[];
 }
 
-export interface JournalGroup {
+export interface JournalStoreGroup {
     orderNumber: number;
     name: string;
 }
@@ -32,11 +33,12 @@ export interface JournalGroup {
 export interface JournalStore {
     currentDate: string;
 
-    entries: JournalEntry[];
-    groups: JournalGroup[];
+    entries: JournalStoreEntry[];
+    groups: JournalStoreGroup[];
 
     nutrients: Dictionary<NutrientName, number>;
 
+    isSaved: boolean;
     isLoaded: boolean;
     errorMessage?: Option<string>;
 }

@@ -12,11 +12,15 @@ export const DEFAULT_DATE_DISPLAY_FORMAT: string = "PPP";
 /**
  * Parse provided time string and return it in the default format to display
  *
- * @param time should adhere to `DEFAULT_TIME_FORMAT`
- * @returns time in `DEFAULT_TIME_DISPLAY_FORMAT`
+ * @param time should adhere to provided fromFormat or `DEFAULT_TIME_FORMAT` by default
+ * @returns time in toFormat or `DEFAULT_TIME_DISPLAY_FORMAT` by default
  */
-export function formatTime(time: string): string {
-    return format(parse(time, DEFAULT_TIME_FORMAT, new Date()), DEFAULT_TIME_DISPLAY_FORMAT);
+export function formatTime(
+    time: string,
+    fromFormat: string = DEFAULT_TIME_FORMAT,
+    toFormat: string = DEFAULT_TIME_DISPLAY_FORMAT,
+): string {
+    return format(parse(time, fromFormat, new Date()), toFormat);
 }
 
 /**

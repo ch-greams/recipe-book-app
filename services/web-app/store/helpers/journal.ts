@@ -1,14 +1,14 @@
 import type { NutrientName } from "@common/nutrients";
 import Utils, { DecimalPlaces } from "@common/utils";
 
-import type { JournalEntry } from "../types/journal";
+import type { JournalStoreEntry } from "../types/journal";
 
 
 
 /**
  * Calculate nutrient values for a day based on current journal entries
  */
-export function getNutrientsFromJournalEntries(journalEntries: JournalEntry[]): Dictionary<NutrientName, number> {
+export function getNutrientsFromJournalEntries(journalEntries: JournalStoreEntry[]): Dictionary<NutrientName, number> {
 
     const foodNutrients: Dictionary<NutrientName, number>[] = journalEntries
         .map((journalEntry) => {
