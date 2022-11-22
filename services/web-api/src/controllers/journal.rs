@@ -137,11 +137,8 @@ async fn create_entry(
         .fetch_all(&mut txn)
         .await?;
 
-    let journal_entry_detailed = JournalEntryDetailed::new(
-        &journal_entry,
-        &product_nutrients,
-        &custom_units,
-    );
+    let journal_entry_detailed =
+        JournalEntryDetailed::new(&journal_entry, &product_nutrients, &custom_units);
 
     txn.commit().await?;
 
