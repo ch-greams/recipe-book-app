@@ -57,10 +57,11 @@ AS SELECT journal_entry.id,
     journal_entry.entry_date,
     journal_entry.entry_time,
     journal_entry.product_id,
+    product.name AS product_name,
+    product.density AS product_density,
     journal_entry.amount,
     journal_entry.unit,
-    journal_entry.journal_group_num,
-    product.*::product.product AS product
+    journal_entry.journal_group_num
    FROM journal.journal_entry journal_entry
    JOIN product.product product ON product.id = journal_entry.product_id;
 

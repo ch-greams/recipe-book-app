@@ -96,6 +96,12 @@ components:
         updated_at:
           type: string
           example: "2022-11-04T13:29:03.400873Z"
+    DeleteProductPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
     # custom_unit
     CustomUnit:
       type: object
@@ -876,6 +882,22 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductShort"
+        "404":
+          description: Not Found
+
+  /product/delete:
+    post:
+      tags:
+        - product
+      summary: Delete a product by id
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteProductPayload"
+      responses:
+        "204":
+          description: No Content
         "404":
           description: Not Found
 

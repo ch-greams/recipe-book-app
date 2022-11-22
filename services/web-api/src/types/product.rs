@@ -20,7 +20,7 @@ pub enum ProductType {
 #[sqlx(type_name = "_product_type")]
 struct ProductTypeArray(Vec<ProductType>);
 
-#[derive(sqlx::FromRow, sqlx::Type, Deserialize, Serialize, Debug, Clone)]
+#[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
     pub product_type: ProductType,
@@ -70,7 +70,7 @@ impl Product {
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE product_type = 'food' AND id = $1
+            WHERE is_deleted = false AND product_type = 'food' AND id = $1
         "#,
         )
         .bind(id)
@@ -87,7 +87,7 @@ impl Product {
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE name ILIKE $5 AND product_type = ANY($4) AND (is_private = false OR created_by = $3)
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND (is_private = false OR created_by = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -109,7 +109,7 @@ impl Product {
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE name ILIKE $5 AND product_type = ANY($4) AND created_by = $3
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND created_by = $3
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -131,7 +131,7 @@ impl Product {
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE name ILIKE $5 AND product_type = ANY($4)
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4)
                 AND (is_private = false OR created_by = $3)
                 AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
@@ -149,7 +149,7 @@ impl Product {
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE product_type = 'recipe' AND id = $1
+            WHERE is_deleted = false AND product_type = 'recipe' AND id = $1
         "#,
         )
         .bind(id)
@@ -291,6 +291,24 @@ impl Product {
             .ok_or_else(|| Error::not_updated("product", update_recipe_payload.id))?;
 
         Ok(result)
+    }
+
+    pub async fn delete_by_id(
+        product_id: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<(), Error> {
+        let query = sqlx::query(
+            r#"
+            UPDATE product.product SET is_deleted = true
+            WHERE id = $1
+            RETURNING id;
+        "#,
+        )
+        .bind(product_id);
+
+        query.execute(txn).await?;
+
+        Ok(())
     }
 }
 
@@ -571,6 +589,17 @@ mod tests {
             create_product_result.name, update_product_result.name,
             "update_product_result should not have an old name"
         );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn delete_by_id() {
+        let product_id = 1;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        Product::delete_by_id(product_id, &mut txn).await.unwrap();
 
         txn.rollback().await.unwrap();
     }

@@ -136,7 +136,8 @@ export interface JournalEntry {
 }
 
 export interface JournalEntryDetailed extends JournalEntry {
-    product: Product;
+    product_name: string;
+    product_density: number;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
 }
