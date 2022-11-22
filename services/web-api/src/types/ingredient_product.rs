@@ -86,7 +86,7 @@ impl IngredientProductDetails {
                 ip.product_id,
                 ip.amount,
                 ip.unit,
-                p.type AS product_type,
+                p.product_type,
                 p.name,
                 p.density
             FROM product.ingredient_product ip

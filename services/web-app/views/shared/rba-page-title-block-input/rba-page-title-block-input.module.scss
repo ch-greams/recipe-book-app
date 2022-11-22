@@ -53,11 +53,15 @@
 
             resize: none;
 
-            background-color: $color-default-dark;
+            background-color: $color-default;
 
             border-color: $color-white;
             border-style: solid;
             border-width: 1px;
+
+            &:focus {
+                background-color: $color-default-dark;
+            }
         }
     }
 }

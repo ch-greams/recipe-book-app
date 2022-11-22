@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { searchProducts } from "@store/actions/search";
 import { useAppDispatch, useAppSelector } from "@store/index";

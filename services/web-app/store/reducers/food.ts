@@ -176,15 +176,14 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateDensityAmount, (state, action) => {
             const { payload: densityInput } = action;
 
-            const densityInputNormalized = Utils.decimalNormalizer(densityInput, state.densityInput);
             const density = units.convertDensityToMetric(
-                Number(densityInputNormalized), state.densityWeightUnit, state.densityVolumeUnit,
+                Number(densityInput), state.densityWeightUnit, state.densityVolumeUnit,
             );
 
             // FIXME: Recalculate all volume related amounts?
 
             state.density = density;
-            state.densityInput = densityInputNormalized;
+            state.densityInput = densityInput;
         })
         .addCase(actions.updateDensityVolumeUnit, (state, action) => {
             const { payload: densityVolumeUnit } = action;
@@ -208,22 +207,21 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateServingSizeAmount, (state, action) => {
             const { payload: servingSizeInput } = action;
 
-            const servingSizeInputNormalized = Utils.decimalNormalizer(servingSizeInput, state.servingSizeInput);
             const servingSize = units.convertToMetric(
-                Number(servingSizeInputNormalized), state.servingSizeUnit, state.customUnits, state.density,
+                Number(servingSizeInput), state.servingSizeUnit, state.customUnits, state.density,
             );
 
             // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
             if (state.editMode) {
                 state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInputNormalized;
+                state.servingSizeInput = servingSizeInput;
             }
             // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
                 const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInputNormalized;
+                state.servingSizeInput = servingSizeInput;
                 state.nutrientsByServing = nutrientsByServing;
                 state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
             }

@@ -36,6 +36,39 @@ components:
           type: string
           example: carbohydrate
     # product
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 3
+        product_type:
+          type: string
+          example: food
+        name:
+          type: string
+          example: Tomato
+        brand:
+          type: string
+        subtitle:
+          type: string
+        description:
+          type: string
+        density:
+          type: number
+          example: 1.0
+        serving_size:
+          type: number
+          example: 100.0
+        is_private:
+          type: boolean
+          example: false
+        created_at:
+          type: string
+          example: "2022-06-27T01:41:41.850918Z"
+        updated_at:
+          type: string
+          example: "2022-06-27T01:41:41.850934Z"
     ProductShort:
       type: object
       properties:
@@ -608,7 +641,51 @@ components:
         id:
           type: integer
           example: 2
-
+    JournalEntryDetailed:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
+        user_id:
+          type: integer
+          example: 1
+        entry_date:
+          type: string
+          example: "2022-11-04"
+        entry_time:
+          type: string
+          example: "13:29:03"
+        product_id:
+          type: integer
+          example: 6
+        product:
+          type: object
+          $ref: "#/components/schemas/Product"
+        amount:
+          type: number
+          example: 450.5
+        unit:
+          type: string
+          example: g
+        journal_group_num:
+          type: integer
+          example: 2
+        nutrients:
+          type: object
+          additionalProperties:
+            type: number
+          example:
+            protein: 0.9
+            dietary_fiber: 1.2
+            energy: 18.0
+            carbohydrate: 3.9
+            sugars: 2.6
+            fat: 0.2
+        custom_units:
+          type: array
+          items:
+            $ref: "#/components/schemas/CustomUnit"
 tags:
   - name: meta
     description: All `meta` related endpoints
@@ -1012,7 +1089,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/JournalEntry"
+                  $ref: "#/components/schemas/JournalEntryDetailed"
         "404":
           description: Not Found
 
@@ -1032,7 +1109,7 @@ paths:
           content:
             "application/json":
               schema:
-                $ref: "#/components/schemas/JournalEntry"
+                $ref: "#/components/schemas/JournalEntryDetailed"
         "404":
           description: Not Found
 

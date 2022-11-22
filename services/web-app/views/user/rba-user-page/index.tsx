@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppSelector } from "@store";
 import { useAppDispatch } from "@store";

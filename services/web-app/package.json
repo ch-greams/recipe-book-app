@@ -21,7 +21,9 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.0.5",
     "@reduxjs/toolkit": "^1.8.6",
+    "date-fns": "^2.29.3",
     "next": "^12.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -3,7 +3,7 @@ import * as constants from "@cypress/constants";
 
 import type { Unit } from "@common/units";
 import Utils from "@common/utils";
-import RbaIngredientNutrients from "@views/recipe/components/rba-ingredient-nutrition-facts";
+import RbaIngredientNutrients from "@views/recipe/components/rba-ingredient-nutrients";
 import RbaIngredientProduct, {
     IngredientProductSize, IngredientProductTheme,
 } from "@views/recipe/components/rba-ingredient-product";
@@ -11,6 +11,7 @@ import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@vi
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
 import { searchClear, searchProducts } from "@store/actions/search";
+import { getRecipeIngredientProduct } from "@store/helpers/recipe";
 import type { RecipeIngredient, RecipeIngredientProduct } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
 
@@ -33,7 +34,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
     const showNewIngredientProduct: boolean = !isReadOnly;
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
-    const ingredientProduct: RecipeIngredientProduct = Utils.getRecipeIngredientProduct(ingredient);
+    const ingredientProduct: RecipeIngredientProduct = getRecipeIngredientProduct(ingredient);
 
     const ingredientInfoLines = (
         <div
@@ -68,9 +69,9 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                         onMouseLeave={() => {
                             dispatch(actions.updateAltNutrients({ parentId: ingredient.id, id: product.product_id, isSelected: false }));
                         }}
-                        onChangeAmount={(event) => {
+                        onChangeAmount={(value) => {
                             dispatch(actions.updateIngredientProductAmount({
-                                parentId: ingredient.id, id: product.product_id, inputValue: event.target.value,
+                                parentId: ingredient.id, id: product.product_id, inputValue: value,
                             }));
                         }}
                         onChangeUnit={(option) => {
@@ -117,9 +118,9 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                 onClick={() => dispatch(actions.toggleIngredientOpen(ingredient.id))}
                 onClickRemove={() => dispatch(actions.removeIngredient(ingredient.id))}
                 onClickMark={() => dispatch(actions.toggleIngredientMark(ingredient.id))}
-                onChangeAmount={(event) => {
+                onChangeAmount={(value) => {
                     dispatch(actions.updateIngredientProductAmount({
-                        parentId: ingredient.id, id: ingredient.product_id, inputValue: event.target.value,
+                        parentId: ingredient.id, id: ingredient.product_id, inputValue: value,
                     }));
                 }}
                 onChangeUnit={(option) => {

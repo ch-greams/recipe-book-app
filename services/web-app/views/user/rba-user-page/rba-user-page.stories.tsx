@@ -26,8 +26,8 @@ const Template: ComponentStory<typeof RbaUserPage> = (args) => <RbaUserPage {...
 
 const user = store.getState().user;
 
-export const Diary = Template.bind({});
-Diary.args = { user };
+export const Journal = Template.bind({});
+Journal.args = { user };
 
 export const Foods = Template.bind({});
 Foods.args = {

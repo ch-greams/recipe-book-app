@@ -3,11 +3,12 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import type { IngredientProduct, ProductShort, Recipe } from "@common/typings";
 import type * as units from "@common/units";
-import Utils, { ProductType } from "@common/utils";
+import { ProductType } from "@common/utils";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
 import type { RootState } from "..";
+import { convertFoodToIngredientProduct, convertRecipePageIntoRecipe, convertRecipeToIngredientProduct } from "../helpers/recipe";
 import type * as types from "../types/recipe";
 
 
@@ -45,7 +46,7 @@ export const createRecipe = createAsyncThunk<Recipe, void, { state: RootState, r
     async (_arg, { getState, rejectWithValue }) => {
         try {
             const recipePage = getState().recipe;
-            const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
+            const recipe = convertRecipePageIntoRecipe(recipePage);
             const createdRecipe = await RecipeApi.createRecipe(recipe);
             return createdRecipe;
         }
@@ -59,7 +60,7 @@ export const updateRecipe = createAsyncThunk<Recipe, void, { state: RootState, r
     async (_arg, { getState, rejectWithValue }) => {
         try {
             const recipePage = getState().recipe;
-            const recipe = Utils.convertRecipePageIntoRecipe(recipePage);
+            const recipe = convertRecipePageIntoRecipe(recipePage);
             const updatedRecipe = await RecipeApi.updateRecipe(recipe);
             return updatedRecipe;
         }
@@ -118,11 +119,11 @@ export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, {
         try {
             if (product.product_type === ProductType.Food) {
                 const food = await FoodApi.getFood(product.id);
-                return Utils.convertFoodToIngredientProduct(food);
+                return convertFoodToIngredientProduct(food);
             }
             else {
                 const recipe = await RecipeApi.getRecipe(product.id);
-                return Utils.convertRecipeToIngredientProduct(recipe);
+                return convertRecipeToIngredientProduct(recipe);
             }
         }
         catch (error) {
@@ -136,11 +137,11 @@ export const addIngredientProduct = createAsyncThunk<{ id: number, product: Ingr
         try {
             if (product.product_type === ProductType.Food) {
                 const food = await FoodApi.getFood(product.id);
-                return { id, product: Utils.convertFoodToIngredientProduct(food) };
+                return { id, product: convertFoodToIngredientProduct(food) };
             }
             else {
                 const recipe = await RecipeApi.getRecipe(product.id);
-                return { id, product: Utils.convertRecipeToIngredientProduct(recipe) };
+                return { id, product: convertRecipeToIngredientProduct(recipe) };
             }
         }
         catch (error) {

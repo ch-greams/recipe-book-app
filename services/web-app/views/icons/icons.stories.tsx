@@ -3,11 +3,12 @@ import type { PropsWithChildren } from "react";
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import Utils from "@common/utils";
 import { IconSize } from "@icons/icon-params";
 
 import RbaIconAdd from "./rba-icon-add";
+import RbaIconCheck from "./rba-icon-check";
 import RbaIconLink from "./rba-icon-link";
 import RbaIconLoading from "./rba-icon-loading";
 import RbaIconNote from "./rba-icon-note";
@@ -15,6 +16,7 @@ import RbaIconPerson from "./rba-icon-person";
 import RbaIconRemove from "./rba-icon-remove";
 import RbaIconSearch from "./rba-icon-search";
 import RbaIconTip from "./rba-icon-tip";
+import RbaIconTrash from "./rba-icon-trash";
 import RbaIconWarning from "./rba-icon-warning";
 
 
@@ -56,6 +58,8 @@ const Template: ComponentStory<typeof RbaIcon> = (args) =>(
         <RbaIconSearch {...args} />
         <RbaIconTip {...args} />
         <RbaIconWarning {...args} />
+        <RbaIconCheck {...args} />
+        <RbaIconTrash {...args} />
     </RbaIcon>
 );
 export const Default = Template.bind({});

@@ -27,8 +27,7 @@
         border-color: $color-grey-light;
         border-style: solid;
         border-width: 1px;
-
-        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        border-radius: 2px;
 
         .customUnitLineSeparator {
             margin: 0 12px;
@@ -66,7 +65,6 @@
         border-color: $color-grey-light;
         border-style: solid;
         border-width: 1px;
-
-        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        border-radius: 2px;
     }
 }

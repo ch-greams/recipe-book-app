@@ -1,8 +1,7 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
-import type { InputChangeCallback } from "@common/typings";
+import { Color } from "@common/style";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -11,6 +10,8 @@ import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
+import type { RbaInputChangeCallback } from "../rba-input";
+import { InputNormalizer } from "../rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "../rba-input";
 
 import styles from "./rba-custom-unit-line.module.scss";
@@ -20,8 +21,8 @@ interface Props {
     isReadOnly?: boolean;
     isNew: boolean;
     customUnit: CustomUnitInput;
-    updateItemName: InputChangeCallback;
-    updateItemAmount: InputChangeCallback;
+    updateItemName: RbaInputChangeCallback;
+    updateItemAmount: RbaInputChangeCallback;
     updateItemUnit: (unit: Unit) => void;
     onButtonClick: () => void;
 }
@@ -83,6 +84,7 @@ const RbaCustomUnitLine: React.FC<Props> = ({
                     height={InputHeightSize.Small}
                     placeholder={"#"}
                     value={customUnit.amountInput}
+                    normalizer={InputNormalizer.Decimal}
                     onChange={updateItemAmount}
                 />
 

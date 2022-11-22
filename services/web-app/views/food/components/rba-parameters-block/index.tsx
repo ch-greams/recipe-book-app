@@ -1,10 +1,9 @@
 import React from "react";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit, VolumeUnit, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { SelectHeightSize,SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
@@ -24,11 +23,6 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
 
     const dispatch = useAppDispatch();
 
-
-    const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
-        const amount = Utils.decimalNormalizer(event.target.value, food.servingSizeInput);
-        dispatch(actions.updateServingSizeAmount(amount));
-    };
 
     const addCustomUnit = (customUnit: CustomUnitInput): void => {
         dispatch(actions.addCustomUnit(customUnit));
@@ -56,9 +50,7 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     height={InputHeightSize.Large}
                     disabled={!food.editMode}
                     value={food.type}
-                    onChange={(event) => {
-                        dispatch(actions.updateType(event.target.value));
-                    }}
+                    onChange={(value) => { dispatch(actions.updateType(value)); }}
                 />
 
             </div>
@@ -82,9 +74,8 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     height={InputHeightSize.Large}
                     disabled={!food.editMode}
                     value={food.densityInput}
-                    onChange={(event) => {
-                        dispatch(actions.updateDensityAmount(event.target.value));
-                    }}
+                    normalizer={InputNormalizer.Decimal}
+                    onChange={(value) => { dispatch(actions.updateDensityAmount(value)); }}
                 />
 
                 <RbaSelect
@@ -124,7 +115,8 @@ const RbaParametersBlock: React.FC<Props> = ({ food }) => {
                     width={InputWidthSize.Large}
                     height={InputHeightSize.Large}
                     value={food.servingSizeInput}
-                    onChange={handleServingSizeAmountEdit}
+                    normalizer={InputNormalizer.Decimal}
+                    onChange={(value) => { dispatch(actions.updateServingSizeAmount(value)); }}
                 />
 
                 <RbaSelect

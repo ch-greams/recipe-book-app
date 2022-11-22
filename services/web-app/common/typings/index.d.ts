@@ -18,6 +18,18 @@ export interface Food {
     is_private: boolean;
 }
 
+export interface Product {
+    id: number;
+    product_type: ProductType;
+    name: string;
+    brand: string;
+    subtitle: string;
+    description: string;
+    density: number;
+    serving_size: number;
+    is_private: boolean;
+}
+
 // TODO: Create an app version of this type (camelCase) and have all necessary fields available
 export interface ProductShort {
     id: number;
@@ -104,4 +116,27 @@ export interface NutrientMeta {
     unit: string;
     nutrient_group: string;
     parent_name?: Option<string>;
+}
+
+export interface JournalGroup {
+    order_number: number;
+    name: string;
+    user_id: number;
+}
+
+export interface JournalEntry {
+    id: number;
+    user_id: number;
+    entry_date: string;
+    entry_time: string;
+    product_id: number;
+    amount: number;
+    unit: string;
+    journal_group_num: Option<number>;
+}
+
+export interface JournalEntryDetailed extends JournalEntry {
+    product: Product;
+    nutrients: Dictionary<NutrientName, number>;
+    custom_units: CustomUnit[];
 }

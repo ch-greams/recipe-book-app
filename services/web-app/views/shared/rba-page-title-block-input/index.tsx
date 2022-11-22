@@ -49,10 +49,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     align={InputTextAlign.Left}
                     placeholder={"NAME"}
                     value={name}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        Utils.keepCaretInPlace(window, event);
-                        dispatch(updateName(unwrapOr(event.target.value, "")));
-                    }}
+                    onChange={(value: string): void => { dispatch(updateName(unwrapOr(value, ""))); }}
                 />
 
                 <RbaInput
@@ -63,10 +60,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     align={InputTextAlign.Right}
                     placeholder={"BRAND"}
                     value={brand}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        Utils.keepCaretInPlace(window, event);
-                        dispatch(updateBrand(unwrapOr(event.target.value, "")));
-                    }}
+                    onChange={(value: string): void => { dispatch(updateBrand(unwrapOr(value, ""))); }}
                 />
 
             </div>
@@ -80,10 +74,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     align={InputTextAlign.Left}
                     placeholder={"SUBTITLE"}
                     value={subtitle}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => {
-                        Utils.keepCaretInPlace(window, event);
-                        dispatch(updateSubtitle(unwrapOr(event.target.value, "")));
-                    }}
+                    onChange={(value: string): void => { dispatch(updateSubtitle(unwrapOr(value, ""))); }}
                 />
             </div>
 

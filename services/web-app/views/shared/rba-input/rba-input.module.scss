@@ -10,6 +10,7 @@
 
     border-style: solid;
     border-width: 1px;
+    border-radius: 2px;
 
     // -------------------------------------------------------------------------
     // TEXT ALIGN
@@ -34,13 +35,17 @@
     &.theme_Alternative {
 
         color: $color-white;
-        background-color: $color-default-dark;
+        background-color: $color-default;
         border-color: $color-white;
 
         &.disabled {
             color: $color-white;
             background-color: $color-default;
             border-color: rgba($color: $color-white, $alpha: 0.5);
+        }
+
+        &:focus {
+            background-color: $color-default-dark;
         }
     }
 
@@ -52,6 +57,10 @@
         &.disabled {
             color: $color-grey-dark;
             border-color: $color-grey-light;
+        }
+
+        &:focus {
+            background-color: $color-grey-light;
         }
     }
 

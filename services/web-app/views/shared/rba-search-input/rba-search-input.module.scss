@@ -14,8 +14,13 @@
         display: flex;
         align-items: center;
 
-        background-color: $color-default-dark;
+        background-color: $color-default;
         border: 1px solid $color-white;
+        border-radius: 2px;
+
+        &:focus-within {
+            background-color: $color-default-dark;
+        }
 
         .icon {
             width: 28px;
@@ -30,24 +35,27 @@
             padding: 0 14px;
 
             font-family: $font-default;
-            font-size: $font-size-large;
             font-weight: $font-weight-medium;
 
             line-height: 26px;
 
             color: $color-white;
-            background-color: $color-default-dark;
+            background-color: $color-default;
 
             border: none;
 
             border-left-color: $color-grey-light;
             border-left-style: solid;
             border-left-width: 1px;
-        }
 
-        .input::placeholder {
-            line-height: normal;
-            color: $color-white;
+            &:focus {
+                background-color: $color-default-dark;
+            }
+
+            &::placeholder {
+                line-height: normal;
+                color: $color-white;
+            }
         }
     }
 
@@ -86,7 +94,7 @@
 
                 width: 80px;
 
-                font-size: $font-size-medium;
+                font-size: $font-size-small;
                 font-weight: $font-weight-regular;
 
                 line-height: 24px;
@@ -127,6 +135,10 @@
     &.heightSize_Small {
         .searchInput {
             padding: 4px 0;
+
+            .input {
+                font-size: $font-size-medium;
+            }
         }
 
         .searchList {
@@ -139,6 +151,10 @@
     &.heightSize_Medium {
         .searchInput {
             padding: 8px 0;
+
+            .input {
+                font-size: $font-size-large;
+            }
         }
 
         .searchList {

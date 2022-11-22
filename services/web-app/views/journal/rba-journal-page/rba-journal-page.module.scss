@@ -1,0 +1,26 @@
+@import "@styles/variables.scss";
+
+
+.journalPage {
+
+    display: flex;
+    justify-content: center;
+
+    min-height: 100vh;
+
+    background-color: $color-default;
+
+    .journalPageElements {
+
+        flex-basis: 60%;
+
+        margin-top: 20px;
+        margin-bottom: 80px;
+
+        .pageControls {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 20px;
+        }
+    }
+}

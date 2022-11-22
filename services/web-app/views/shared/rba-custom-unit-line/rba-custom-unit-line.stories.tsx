@@ -34,10 +34,10 @@ export default {
             table: { type: { summary: "CustomUnitInput" } },
         },
         updateItemName: {
-            table: { type: { summary: "InputChangeCallback" } },
+            table: { type: { summary: "RbaInputChangeCallback" } },
         },
         updateItemAmount: {
-            table: { type: { summary: "InputChangeCallback" } },
+            table: { type: { summary: "RbaInputChangeCallback" } },
         },
         updateItemUnit: {
             table: { type: { summary: "(unit: Units) => void" } },

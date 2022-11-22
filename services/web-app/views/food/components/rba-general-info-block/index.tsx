@@ -3,7 +3,7 @@ import React from "react";
 import type { NutrientDescription,NutrientName } from "@common/nutrients";
 import Utils from "@common/utils";
 import RbaParametersBlock from "@views/food/components/rba-parameters-block";
-import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 import type { FoodPageStore } from "@store/types/food";
 
 import styles from "./rba-general-info-block.module.scss";

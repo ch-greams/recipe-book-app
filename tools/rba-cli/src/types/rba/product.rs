@@ -21,7 +21,6 @@ pub enum ProductType {
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
-    #[serde(rename = "type")]
     pub product_type: ProductType,
     pub name: String,
     pub brand: String,
@@ -41,7 +40,7 @@ impl Product {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut products_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.product (id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+            "INSERT INTO product.product (id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
         products_query_builder.push_values(

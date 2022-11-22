@@ -92,15 +92,14 @@
         .ingredientProductButton {
             background-color: $color-white;
             border-color: $color-grey-light;
-
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            border-radius: 2px;
         }
 
         .ingredientProductInfo {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-grey-light;
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            border-radius: 2px;
         }
     }
 
