@@ -855,6 +855,29 @@ paths:
         "404":
           description: Not Found
 
+  /product/favorite/delete:
+    post:
+      tags:
+        - product
+      summary: Delete a favorite product by id
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteProductPayload"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
   /product/delete:
     post:
       tags:

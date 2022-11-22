@@ -1,7 +1,6 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import Utils, { ProductType } from "@common/utils";
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";

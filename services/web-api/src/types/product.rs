@@ -310,6 +310,25 @@ impl Product {
 
         Ok(())
     }
+
+    pub async fn delete_favorite(
+        user_id: i64,
+        product_id: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<(), Error> {
+        let query = sqlx::query(
+            r#"
+            DELETE FROM journal.favorite_product WHERE user_id = $1 AND product_id = $2
+            RETURNING user_id, product_id;
+        "#,
+        )
+        .bind(user_id)
+        .bind(product_id);
+
+        query.execute(txn).await?;
+
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -589,6 +608,18 @@ mod tests {
             create_product_result.name, update_product_result.name,
             "update_product_result should not have an old name"
         );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn delete_favorite() {
+        let user_id = 1;
+        let product_id = 5;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        Product::delete_favorite(user_id, product_id, &mut txn).await.unwrap();
 
         txn.rollback().await.unwrap();
     }
