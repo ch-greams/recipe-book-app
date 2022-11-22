@@ -4,9 +4,7 @@ use chrono::{NaiveDate, NaiveTime};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{
-    custom_unit::CustomUnit, error::Error, product_nutrient::ProductNutrient,
-};
+use super::{custom_unit::CustomUnit, error::Error, product_nutrient::ProductNutrient};
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct JournalEntry {
