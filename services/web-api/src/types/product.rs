@@ -619,7 +619,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        Product::delete_favorite(user_id, product_id, &mut txn).await.unwrap();
+        Product::delete_favorite(user_id, product_id, &mut txn)
+            .await
+            .unwrap();
 
         txn.rollback().await.unwrap();
     }

@@ -51,7 +51,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaRecipesBlock
                         favoriteRecipes={user.favoriteRecipes}
                         customRecipes={user.customRecipes}
-                        deleteFavoriteRecipe={(productId) => alert(`TODO: add action to delete by id ${productId}`)}
+                        deleteFavoriteRecipe={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
                         deleteCustomRecipe={(productId) => dispatch(actions.deleteCustomProduct(productId))}
                     />
                 );
@@ -60,7 +60,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(productId) => alert(`TODO: add action to delete by id ${productId}`)}
+                        deleteFavoriteFood={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
                         deleteCustomFood={(productId) => dispatch(actions.deleteCustomProduct(productId))}
                     />
                 );

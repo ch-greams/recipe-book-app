@@ -63,3 +63,15 @@ export const deleteCustomProduct = createAsyncThunk<void, number, { rejectValue:
         }
     },
 );
+
+export const deleteFavoriteProduct = createAsyncThunk<void, number, { rejectValue: Error }>(
+    "user/delete_favorite_product",
+    async (productId, { rejectWithValue }) => {
+        try {
+            await ProductApi.deleteFavoriteProduct(productId);
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);

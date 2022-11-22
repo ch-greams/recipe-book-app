@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import { UserMenuItem } from "@common/utils";
 
-import { changeMenuItem, deleteCustomProduct, fetchProducts } from "../actions/user";
+import { changeMenuItem, deleteCustomProduct, deleteFavoriteProduct, fetchProducts } from "../actions/user";
 import type { UserStore } from "../types/user";
 
 
@@ -68,6 +68,22 @@ const reducer = createReducer(initialState, (builder) => {
             state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
         .addCase(deleteCustomProduct.rejected, (state, action) => {
+            const message = action.payload?.message;
+            state.isLoaded = true;
+            state.errorMessage = message;
+        })
+        .addCase(deleteFavoriteProduct.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+        })
+        .addCase(deleteFavoriteProduct.fulfilled, (state, action) => {
+            const { arg: productId } = action.meta;
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
+            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
+        })
+        .addCase(deleteFavoriteProduct.rejected, (state, action) => {
             const message = action.payload?.message;
             state.isLoaded = true;
             state.errorMessage = message;
