@@ -43,7 +43,7 @@ describe("user", () => {
             cy.url().should("include", "/user");
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
-                .contains(UserMenuItem.Journal)
+                .contains(UserMenuItem.Foods)
                 .should("be.visible");
         });
 

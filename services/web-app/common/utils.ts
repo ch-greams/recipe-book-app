@@ -8,7 +8,7 @@ import type { CustomUnit, CustomUnitInput } from "./units";
 
 
 export enum UserMenuItem {
-    Journal = "Journal",
+    Settings = "Settings",
     Recipes = "Recipes",
     Foods = "Foods",
 }

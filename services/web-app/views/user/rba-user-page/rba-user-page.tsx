@@ -4,8 +4,8 @@ import { CY_USER_MENU_ITEM } from "@cypress/constants";
 import { classNames } from "@common/style";
 import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
-import RbaJournalBlock from "@views/user/components/rba-journal-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
+import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/user";
 import type { UserStore } from "@store/types/user";
@@ -23,9 +23,9 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
     const dispatch = useAppDispatch();
 
     const menuItems = [
-        UserMenuItem.Journal,
-        UserMenuItem.Recipes,
         UserMenuItem.Foods,
+        UserMenuItem.Recipes,
+        UserMenuItem.Settings,
     ];
 
     const getMenuItemElement = (menuItem: UserMenuItem): JSX.Element => (
@@ -44,8 +44,6 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
 
     const getMainBlock = (menuItem: UserMenuItem): JSX.Element => {
         switch (menuItem) {
-            case UserMenuItem.Journal:
-                return (<RbaJournalBlock />);
             case UserMenuItem.Recipes:
                 return (
                     <RbaRecipesBlock
@@ -64,6 +62,8 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                         deleteCustomFood={(productId) => dispatch(actions.deleteCustomProduct(productId))}
                     />
                 );
+            case UserMenuItem.Settings:
+                return (<RbaSettingsBlock />);
         }
     };
 
