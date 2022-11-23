@@ -662,6 +662,58 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CustomUnit"
+    # user_nutrient
+    UserNutrient:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        nutrient_id:
+          type: integer
+          example: 2
+        is_featured:
+          type: boolean
+          example: true
+        daily_target_amount:
+          type: number
+          example: 12.3
+    UserNutrientDetails:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        nutrient_id:
+          type: integer
+          example: 45
+        is_featured:
+          type: boolean
+          example: true
+        daily_target_amount:
+          type: number
+          example: 12.3
+        nutrient_name:
+          type: string
+          example: vitamin_b3
+        nutrient_daily_value:
+          type: number
+          example: 16
+        nutrient_unit:
+          type: string
+          example: mg
+        nutrient_group:
+          type: string
+          example: vitamins
+        nutrient_parent_name:
+          type: string
+          example: null
+    DeleteUserNutrientPayload:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 2
 tags:
   - name: meta
     description: All `meta` related endpoints
@@ -1158,6 +1210,70 @@ paths:
           "application/json":
             schema:
               $ref: "#/components/schemas/DeleteJournalEntryPayload"
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /journal/nutrients:
+    get:
+      tags:
+        - journal
+      summary: Get all user nutrients
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserNutrientDetails"
+        "404":
+          description: Not Found
+
+
+  /journal/nutrient/upsert:
+    post:
+      tags:
+        - journal
+      summary: Upsert a user nutrient
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/UserNutrient"
+      responses:
+        "201":
+          description: Created
+        "404":
+          description: Not Found
+
+  /journal/nutrient/delete:
+    post:
+      tags:
+        - journal
+      summary: Delete a user nutrient
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        content:
+          "application/json":
+            schema:
+              $ref: "#/components/schemas/DeleteUserNutrientPayload"
       responses:
         "204":
           description: No Content

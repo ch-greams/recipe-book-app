@@ -64,7 +64,21 @@ AS SELECT journal_entry.id,
     journal_entry.journal_group_num
    FROM journal.journal_entry journal_entry
    JOIN product.product product ON product.id = journal_entry.product_id;
-
-
 ALTER TABLE journal.journal_entry_product OWNER TO postgres;
 GRANT ALL ON TABLE journal.journal_entry_product TO postgres;
+
+
+CREATE OR REPLACE VIEW journal.user_nutrient_details
+AS SELECT un.user_id,
+    un.nutrient_id,
+    un.is_featured,
+    un.daily_target_amount,
+    nd.name AS nutrient_name,
+    nd.daily_value AS nutrient_daily_value,
+    nd.unit AS nutrient_unit,
+    nd.nutrient_group,
+    nd.parent_name AS nutrient_parent_name
+   FROM journal.user_nutrient un
+   JOIN meta.nutrient_details nd ON nd.id = un.nutrient_id;
+ALTER TABLE journal.user_nutrient_details OWNER TO postgres;
+GRANT ALL ON TABLE journal.user_nutrient_details TO postgres;

@@ -16,6 +16,7 @@ use crate::types::{
     },
     journal_group::JournalGroup,
     product_nutrient::ProductNutrient,
+    user_nutrient::UserNutrient,
 };
 
 pub fn scope() -> Scope {
@@ -26,6 +27,9 @@ pub fn scope() -> Scope {
         .service(create_entry)
         .service(update_entry)
         .service(delete_entry)
+        .service(get_nutrients)
+        .service(upsert_nutrient)
+        .service(delete_nutrient)
 }
 
 #[derive(Debug, Deserialize)]
@@ -167,6 +171,64 @@ async fn delete_entry(
     let mut txn = db_pool.begin().await?;
 
     JournalEntry::delete_journal_entry(request.id, &mut txn).await?;
+
+    txn.commit().await?;
+
+    Ok(HttpResponse::NoContent().finish())
+}
+
+// NOTE: user_nutrient
+
+#[derive(Debug, Deserialize)]
+pub struct UserNutrientQuery {
+    // TODO: Move into auth cookies
+    user_id: i64,
+}
+
+#[get("/nutrients")]
+async fn get_nutrients(
+    query: Query<UserNutrientQuery>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<HttpResponse, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    let user_nutrients = UserNutrient::find_all(query.user_id)
+        .fetch_all(&mut txn)
+        .await?;
+
+    txn.commit().await?;
+
+    Ok(HttpResponse::Ok().json(user_nutrients))
+}
+
+#[post("/nutrient/upsert")]
+async fn upsert_nutrient(
+    request: Json<UserNutrient>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<HttpResponse, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    UserNutrient::upsert_nutrient(&request, &mut txn).await?;
+
+    txn.commit().await?;
+
+    Ok(HttpResponse::Created().finish())
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeleteUserNutrientPayload {
+    id: i16,
+}
+
+#[post("/nutrient/delete")]
+async fn delete_nutrient(
+    query: Query<UserNutrientQuery>,
+    request: Json<DeleteUserNutrientPayload>,
+    db_pool: Data<Pool<Postgres>>,
+) -> Result<HttpResponse, Error> {
+    let mut txn = db_pool.begin().await?;
+
+    UserNutrient::delete_user_nutrient(query.user_id, request.id, &mut txn).await?;
 
     txn.commit().await?;
 
