@@ -83,6 +83,7 @@ const NUTRIENT_DESCRIPTIONS: Record<NutrientName, { unit: NutrientUnit, isFracti
 
 const initialState: MetaStore = {
     isLoading: false,
+    isLoaded: false,
     errorMessage: null,
 
     nutrientDescriptions: Utils.mapRecord(NUTRIENT_DESCRIPTIONS, (key, value) => ({ ...value, type: key })),
@@ -92,12 +93,14 @@ const reducer = createReducer(initialState, (builder) => {
     builder
         .addCase(fetchNutrients.pending, (state) => {
             state.isLoading = true;
+            state.isLoaded = false;
             state.errorMessage = null;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         })
         .addCase(fetchNutrients.fulfilled, (state, action) => {
             const { payload: nutrients } = action;
             state.isLoading = false;
+            state.isLoaded = true;
             state.errorMessage = null;
 
             const nutrientDescriptions = nutrients.reduce((acc, nutrient) => ({
@@ -115,6 +118,7 @@ const reducer = createReducer(initialState, (builder) => {
         })
         .addCase(fetchNutrients.rejected, (state, action) => {
             state.isLoading = false;
+            state.isLoaded = true;
             state.errorMessage = action.payload?.message;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         });
