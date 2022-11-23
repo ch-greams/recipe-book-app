@@ -4,6 +4,7 @@ import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/unit
 
 export interface FoodPageStore {
 
+    isLoading: boolean;
     isLoaded: boolean;
     errorMessage?: Option<string>;
 

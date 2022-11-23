@@ -53,6 +53,7 @@ const initialState: FoodPageStore = {
 
     // NOTE: PAGE STATE
 
+    isLoading: false,
     isLoaded: false,
     errorMessage: null,
 
@@ -91,6 +92,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { arg: foodId } = action.meta;
 
             state.id = foodId;
+            state.isLoading = true;
             state.isLoaded = false;
             state.errorMessage = null;
             state.editMode = false;
@@ -98,6 +100,7 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.fetchFood.fulfilled, (state, action) => {
             const { payload: food } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = null;
 
@@ -119,6 +122,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(food.nutrients);
         })
         .addCase(actions.fetchFood.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
@@ -249,31 +253,37 @@ const reducer = createReducer(initialState, (builder) => {
             }
         })
         .addCase(actions.createFood.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.createFood.fulfilled, (state, action) => {
             const { payload: food } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = food.id;
             state.isCreated = true;
         })
         .addCase(actions.createFood.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
         .addCase(actions.updateFood.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.updateFood.fulfilled, (state, action) => {
             const { payload: food } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = food.id;
         })
         .addCase(actions.updateFood.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         });

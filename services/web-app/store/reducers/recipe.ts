@@ -35,6 +35,7 @@ const DEFAULT_SERVING_SIZE: number = 100;
 
 const initialState: types.RecipePageStore = {
 
+    isLoading: false,
     isLoaded: false,
     isLoadedIngredients: true,
     errorMessage: null,
@@ -968,6 +969,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { arg: recipeId } = action.meta;
 
             state.id = recipeId;
+            state.isLoading = true;
             state.isLoaded = false;
             state.errorMessage = null;
             state.editMode = false;
@@ -980,6 +982,7 @@ const reducer = createReducer(initialState, (builder) => {
 
             const nutrientsByServing = getRecipeNutrientsFromIngredients(recipeIngredients);
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = null;
 
@@ -1006,38 +1009,45 @@ const reducer = createReducer(initialState, (builder) => {
             state.directions = recipeDirections;
         })
         .addCase(actions.fetchRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
 
         .addCase(actions.createRecipe.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.createRecipe.fulfilled, (state, action) => {
             const { payload: recipe } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = recipe.id;
             state.isCreated = true;
         })
         .addCase(actions.createRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
 
         .addCase(actions.updateRecipe.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.updateRecipe.fulfilled, (state, action) => {
             const { payload: recipe } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = recipe.id;
             state.isCreated = true;
         })
         .addCase(actions.updateRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         });

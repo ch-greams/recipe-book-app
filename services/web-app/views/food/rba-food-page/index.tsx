@@ -31,22 +31,24 @@ const RbaFoodPageConnected: React.FC = () => {
     const meta = useAppSelector((state) => state.meta);
 
     useEffect(() => {
-        dispatch(searchClear());
+        if (!food.isLoading) {
+            dispatch(searchClear());
 
-        if (!isNewFoodPage) {
-            const foodId = Number(fid);
-            dispatch(actions.fetchFood(foodId));
-        }
-        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
+            if (!isNewFoodPage) {
+                const foodId = Number(fid);
+                dispatch(actions.fetchFood(foodId));
+            }
+            else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
 
-            if (food.isCreated) {
-                router.push(Utils.getProductPath(ProductType.Food, food.id));
-            }
-            else {
-                dispatch(actions.fetchFoodNew());
+                if (food.isCreated) {
+                    router.push(Utils.getProductPath(ProductType.Food, food.id));
+                }
+                else {
+                    dispatch(actions.fetchFoodNew());
+                }
             }
         }
-    }, [ dispatch, fid, food.id ]);
+    }, [ fid, food.id ]);
 
     return (
         food.isLoaded

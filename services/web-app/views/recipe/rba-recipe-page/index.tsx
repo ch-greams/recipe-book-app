@@ -32,22 +32,24 @@ const RecipePageConnected: React.FC = () => {
     const meta = useAppSelector((state) => state.meta);
 
     useEffect(() => {
-        dispatch(searchClear());
+        if (!recipe.isLoading) {
+            dispatch(searchClear());
 
-        if (!isNewRecipePage) {
-            const recipeId = Number(rid);
-            dispatch(actions.fetchRecipe(recipeId));
-        }
-        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
+            if (!isNewRecipePage) {
+                const recipeId = Number(rid);
+                dispatch(actions.fetchRecipe(recipeId));
+            }
+            else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
 
-            if (recipe.isCreated) {
-                router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
-            }
-            else {
-                dispatch(actions.fetchRecipeNew());
+                if (recipe.isCreated) {
+                    router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
+                }
+                else {
+                    dispatch(actions.fetchRecipeNew());
+                }
             }
         }
-    }, [ dispatch, rid, recipe.id ]);
+    }, [ rid, recipe.id ]);
 
     return (
         recipe.isLoaded
