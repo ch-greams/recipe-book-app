@@ -117,9 +117,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrientDescriptions = nutrientDescriptions;
         })
         .addCase(fetchNutrients.rejected, (state, action) => {
+            const { payload: errorMessage } = action;
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = errorMessage;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         });
 });

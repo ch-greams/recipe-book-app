@@ -7,7 +7,7 @@
 There're several options to run this project:
 
 ```sh
-# Run full project
+# Run full project (includes everything like docs-app and recipe-scraper)
 docker compose up --build
 
 # Run lean dev deployment with fully functional web-api
