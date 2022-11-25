@@ -14,11 +14,12 @@ interface Props {
     isJournalSaved: boolean;
     decrementDate: () => void;
     incrementDate: () => void;
+    "data-cy"?: string;
 }
 
 const CHECKMARK_TIMEOUT: number = 1500;
 
-const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementDate, incrementDate }) => {
+const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementDate, incrementDate, ...props }) => {
 
     const [ showCheckmark, setShowCheckmark ] = useState(false);
 
@@ -31,7 +32,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementD
     }, [ isJournalSaved ]);
 
     return (
-        <div className={styles.journalDateBlock}>
+        <div className={styles.journalDateBlock} data-cy={props["data-cy"]}>
 
             <span className={styles.journalDateControlLeft}>
                 <RbaButton

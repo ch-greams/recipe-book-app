@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as constants from "@cypress/constants";
 import { DndContext } from "@dnd-kit/core";
 
 import { DEFAULT_TIME_FORMAT, getCurrentTime } from "@common/date";
@@ -24,15 +25,16 @@ interface Props {
     groups: JournalStoreGroup[];
     entries: JournalStoreEntry[];
     search: SearchStore;
+    "data-cy"?: string;
 }
 
-const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search }) => {
+const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search, ...props }) => {
 
     const dispatch = useAppDispatch();
     const [ showTrash, setShowTrash ] = useState(false);
 
     return (
-        <div className={styles.journal}>
+        <div className={styles.journal} data-cy={props["data-cy"]}>
 
             <DndContext
                 onDragStart={() => { setShowTrash(true); }}
@@ -65,12 +67,14 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                         groupOrderNumber={group.orderNumber}
                         groupName={group.name}
                         entries={entries.filter((entry) => entry.groupOrderNumber === group.orderNumber)}
+                        data-cy={constants.CY_JOURNAL_GROUP}
                     />
                 ))}
 
                 <RbaJournalGroupBlock
                     groupName={"unknown"}
                     entries={entries.filter((entry) => !entry.groupOrderNumber)}
+                    data-cy={constants.CY_JOURNAL_GROUP}
                 />
 
                 {( showTrash && <RbaJournalTrash /> )}
@@ -100,6 +104,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
 
                     dispatch(searchActions.searchClear());
                 }}
+                data-cy={constants.CY_JOURNAL_SEARCH_INPUT}
             />
 
         </div>

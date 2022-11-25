@@ -4,6 +4,7 @@
 export const CY_RECIPE_PATH = "/recipe";
 export const CY_FOOD_PATH = "/food";
 export const CY_USER_PATH = "/user";
+export const CY_JOURNAL_PATH = "/journal";
 
 export const CY_NEW_RECIPE_PATH = "/recipe/new";
 export const CY_NEW_FOOD_PATH = "/food/new";
@@ -11,6 +12,8 @@ export const CY_NEW_FOOD_PATH = "/food/new";
 export const CY_RECIPE_API_PATH = "/api/v1/recipe";
 export const CY_FOOD_API_PATH = "/api/v1/food";
 export const CY_PRODUCT_API_PATH = "/api/v1/product";
+
+export const CY_JOURNAL_API_PATH = "/api/v1/journal";
 
 // PAGE_TITLE
 
@@ -94,3 +97,23 @@ export const CY_BUTTON = "CY_BUTTON";
 
 export const CY_SEARCH = "CY_SEARCH";
 export const CY_SEARCH_INPUT = "CY_SEARCH_INPUT";
+
+// JOURNAL
+
+export const CY_JOURNAL_DATE_BLOCK = "CY_JOURNAL_DATE_BLOCK";
+export const CY_JOURNAL_BLOCK = "CY_JOURNAL_BLOCK";
+export const CY_JOURNAL_GROUP = "CY_JOURNAL_GROUP";
+// export const CY_JOURNAL_GROUP_HEADER = "CY_JOURNAL_GROUP_HEADER";
+export const CY_JOURNAL_ENTRY_INFO_LINES = "CY_JOURNAL_ENTRY_INFO_LINES";
+export const CY_JOURNAL_ENTRY_FOOD = "CY_JOURNAL_ENTRY_FOOD";
+export const CY_JOURNAL_ENTRY_TIME = "CY_JOURNAL_ENTRY_TIME";
+export const CY_JOURNAL_ENTRY_FOOD_NAME = "CY_JOURNAL_ENTRY_FOOD_NAME";
+export const CY_JOURNAL_ENTRY_FOOD_AMOUNT = "CY_JOURNAL_ENTRY_FOOD_AMOUNT";
+export const CY_JOURNAL_SEARCH_INPUT = "CY_JOURNAL_SEARCH_INPUT";
+// for dnd:
+export const CY_JOURNAL_ENTRY_FOOD_REMOVE_FIELD = "CY_JOURNAL_ENTRY_FOOD_REMOVE_FIELD";
+
+export const CY_DETAILED_NUTRIENTS_BLOCK = "CY_JOURNAL_DETAILED_NUTRIENTS_BLOCK";
+// export const CY_JOURNAL_ENTRY_NUTRIENT_AMOUNT = "CY_JOURNAL_ENTRY_NUTRIENT_AMOUNT";
+// export const CY_JOURNAL_ENTRY_NUTRIENT_TYPE = "CY_JOURNAL_ENTRY_NUTRIENT_TYPE";
+

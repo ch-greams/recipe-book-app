@@ -14,9 +14,10 @@ interface Props {
     groupName: string;
     groupOrderNumber?: Option<number>;
     entries: JournalStoreEntry[];
+    "data-cy"?: string;
 }
 
-const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries }) => {
+const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries, ...props }) => {
 
     const { isOver, setNodeRef } = useDroppable({
         id: `journal_group-${groupOrderNumber}`,
@@ -24,7 +25,7 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, en
     });
 
     return (
-        <div className={styles.journalGroupBlock}>
+        <div className={styles.journalGroupBlock} data-cy={props["data-cy"]}>
 
             <div className={styles.journalGroup}>
 
