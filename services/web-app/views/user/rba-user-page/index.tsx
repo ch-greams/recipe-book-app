@@ -4,7 +4,8 @@ import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppSelector } from "@store";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/actions/user";
+import * as journalActions from "@store/actions/journal";
+import * as userActions from "@store/actions/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -16,15 +17,19 @@ const RbaUserPageConnected: React.FC = () => {
     const dispatch = useAppDispatch();
 
     const user = useAppSelector((state) => state.user);
+    const journal = useAppSelector((state) => state.journal);
 
-    useEffect(() => { dispatch(actions.fetchProducts()); }, [ dispatch ]);
+    useEffect(() => {
+        dispatch(userActions.fetchProducts());
+        dispatch(journalActions.fetchJournalInfo());
+    }, [ dispatch ]);
 
     return (
         user.isLoaded
             ? (
                 user.errorMessage
                     ? <RbaSingleMessagePage text={user.errorMessage} />
-                    : <RbaUserPage user={user} />
+                    : <RbaUserPage user={user} journalGroups={journal.groups} />
             )
             : (
                 <RbaSingleMessagePage>

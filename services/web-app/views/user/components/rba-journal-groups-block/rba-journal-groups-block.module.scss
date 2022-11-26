@@ -1,0 +1,16 @@
+@import "@styles/variables.scss";
+
+
+.journalGroupsBlock {
+
+    display: grid;
+    grid-template-columns: 1fr 4fr 1fr;
+    gap: 8px;
+
+    .journalGroupsControls {
+        display: grid;
+        grid-template-columns: 2fr 4fr;
+        grid-column: 2;
+        gap: 4px;
+    }
+}

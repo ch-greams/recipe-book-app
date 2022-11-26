@@ -70,7 +70,9 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
 
                 <RbaJournalGroupBlock
                     groupName={"unknown"}
-                    entries={entries.filter((entry) => !entry.groupOrderNumber)}
+                    entries={entries.filter(({ groupOrderNumber }) => (
+                        !groupOrderNumber || groups.every(({ orderNumber }) => orderNumber !== groupOrderNumber)
+                    ))}
                 />
 
                 {( showTrash && <RbaJournalTrash /> )}

@@ -7,7 +7,9 @@ import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/actions/user";
+import * as journalActions from "@store/actions/journal";
+import * as userActions from "@store/actions/user";
+import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStore } from "@store/types/user";
 
 import styles from "./rba-user-page.module.scss";
@@ -15,10 +17,11 @@ import styles from "./rba-user-page.module.scss";
 
 interface Props {
     user: UserStore;
+    journalGroups: JournalStoreGroup[];
 }
 
 
-const RbaUserPage: React.FC<Props> = ({ user }) => {
+const RbaUserPage: React.FC<Props> = ({ user, journalGroups }) => {
 
     const dispatch = useAppDispatch();
 
@@ -32,7 +35,7 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
         <div
             data-cy={CY_USER_MENU_ITEM}
             key={menuItem}
-            onClick={() => dispatch(actions.changeMenuItem(menuItem))}
+            onClick={() => dispatch(userActions.changeMenuItem(menuItem))}
             className={classNames({
                 [styles.navigationMenuItem]: true,
                 [styles.selectedItem]: user.selectedMenuItem === menuItem,
@@ -49,8 +52,8 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaRecipesBlock
                         favoriteRecipes={user.favoriteRecipes}
                         customRecipes={user.customRecipes}
-                        deleteFavoriteRecipe={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
-                        deleteCustomRecipe={(productId) => dispatch(actions.deleteCustomProduct(productId))}
+                        deleteFavoriteRecipe={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
+                        deleteCustomRecipe={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
                     />
                 );
             case UserMenuItem.Foods:
@@ -58,12 +61,17 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
-                        deleteCustomFood={(productId) => dispatch(actions.deleteCustomProduct(productId))}
+                        deleteFavoriteFood={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
+                        deleteCustomFood={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
                     />
                 );
             case UserMenuItem.Settings:
-                return (<RbaSettingsBlock />);
+                return (
+                    <RbaSettingsBlock
+                        journalGroups={journalGroups}
+                        updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
+                    />
+                );
         }
     };
 

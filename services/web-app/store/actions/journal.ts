@@ -91,3 +91,17 @@ export const deleteJournalEntry = createAsyncThunk<number, number, { rejectValue
         }
     },
 );
+
+export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], { rejectValue: Error }>(
+    "journal/update_groups",
+    async (groups, { rejectWithValue }) => {
+        try {
+            await JournalApi.updateJournalGroups(groups);
+
+            return groups;
+        }
+        catch (error) {
+            return rejectWithValue(error as Error);
+        }
+    },
+);

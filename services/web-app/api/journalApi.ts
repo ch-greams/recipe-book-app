@@ -27,6 +27,11 @@ export default class JournalApi {
         return groups;
     }
 
+    public static async updateJournalGroups(journalGroups: JournalGroup[]): Promise<void> {
+
+        await superagent.post(`${JournalApi.API_PATH}/groups/update`).send(journalGroups);
+    }
+
     public static async createJournalEntry(journalEntry: JournalEntry): Promise<JournalEntryDetailed> {
 
         const { body: entry } = await superagent.post(`${JournalApi.API_PATH}/entry/create`)
