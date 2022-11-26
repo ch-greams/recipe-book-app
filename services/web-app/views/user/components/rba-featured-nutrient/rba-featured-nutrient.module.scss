@@ -1,16 +1,20 @@
 @import "@styles/variables.scss";
 
-.journalGroupLine {
+.nutrientLine {
 
     display: grid;
     grid-template-columns: 8fr 1fr;
     grid-column: 2;
     gap: 8px;
 
-    .journalGroup {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-medium;
+
+    .nutrient {
 
         display: grid;
-        grid-template-columns: 1fr 18fr;
+
+        grid-template-columns: 1fr 12fr 4fr 2fr;
         gap: 8px;
         justify-items: center;
 
@@ -25,9 +29,12 @@
         border-width: 1px;
         border-radius: 2px;
 
-        .journalGroupIndex {
-            font-size: $font-size-medium;
-            font-weight: $font-weight-medium;
+        .nutrientIndex {
+            line-height: 24px;
+        }
+
+        .nutrientUnit {
+            font-size: $font-size-small;
             line-height: 24px;
         }
     }

@@ -23,10 +23,10 @@ GRANT ALL ON SEQUENCE journal.journal_entry_id TO postgres;
 
 
 CREATE TABLE journal.journal_group (
-    order_number int2 NOT NULL,
+    ui_index int2 NOT NULL,
     "name" text NOT NULL,
     user_id int8 NOT NULL,
-    CONSTRAINT journal_group_pk PRIMARY KEY (order_number, user_id),
+    CONSTRAINT journal_group_pk PRIMARY KEY (ui_index, user_id),
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)
 );
 ALTER TABLE journal.journal_group OWNER TO postgres;
@@ -41,9 +41,9 @@ CREATE TABLE journal.journal_entry (
     product_id int8 NOT NULL,
     amount float4 NOT NULL,
     unit text NOT NULL,
-    journal_group_num int2 NULL,
+    journal_group_ui_index int2 NULL,
     CONSTRAINT journal_entry_pk PRIMARY KEY (id),
-    -- CONSTRAINT journal_group_fk FOREIGN KEY (journal_group_num,user_id) REFERENCES journal.journal_group(order_number,user_id),
+    -- CONSTRAINT journal_group_fk FOREIGN KEY (journal_group_ui_index,user_id) REFERENCES journal.journal_group(ui_index,user_id),
     CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES product.product(id),
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)
 );
@@ -61,7 +61,7 @@ AS SELECT journal_entry.id,
     product.density AS product_density,
     journal_entry.amount,
     journal_entry.unit,
-    journal_entry.journal_group_num
+    journal_entry.journal_group_ui_index
    FROM journal.journal_entry journal_entry
    JOIN product.product product ON product.id = journal_entry.product_id;
 ALTER TABLE journal.journal_entry_product OWNER TO postgres;
@@ -73,6 +73,7 @@ AS SELECT un.user_id,
     un.nutrient_id,
     un.is_featured,
     un.daily_target_amount,
+    un.ui_index,
     nd.name AS nutrient_name,
     nd.daily_value AS nutrient_daily_value,
     nd.unit AS nutrient_unit,

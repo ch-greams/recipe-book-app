@@ -15,6 +15,9 @@ docker compose up --build recipe-book-api
 
 # Run lean dev deployment with fully functional web-api & web-app
 docker compose up --build recipe-book-app
+
+# Or just run a database
+docker compose up recipe-book-db
 ```
 
 Following commands will help you fill up database from scratch:

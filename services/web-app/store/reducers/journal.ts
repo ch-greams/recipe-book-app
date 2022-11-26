@@ -29,12 +29,8 @@ const reducer = createReducer(initialState, (builder) => {
             state.currentDate = action.payload;
         })
         .addCase(actions.updateEntryGroup, (state, action) => {
-            const { id, groupNumber } = action.payload;
-            state.entries = state.entries.map((entry) => (
-                entry.id === id
-                    ? ({ ...entry, groupOrderNumber: groupNumber })
-                    : entry
-            ));
+            const { id, groupIndex } = action.payload;
+            state.entries = state.entries.map((entry) => ( entry.id === id ? ({ ...entry, groupIndex }) : entry ));
         })
         .addCase(actions.updateEntryTime, (state, action) => {
             const { id, time } = action.payload;
@@ -100,7 +96,7 @@ const reducer = createReducer(initialState, (builder) => {
                     id: entry.id,
                     entryDate: entry.entry_date,
                     entryTime: formatTime(entry.entry_time),
-                    groupOrderNumber: entry.journal_group_num,
+                    groupIndex: entry.journal_group_ui_index,
                     foodId: entry.product_id,
                     foodName: entry.product_name,
                     foodAmount: entry.amount,
@@ -167,7 +163,7 @@ const reducer = createReducer(initialState, (builder) => {
                     id: entry.id,
                     entryDate: entry.entry_date,
                     entryTime: formatTime(entry.entry_time),
-                    groupOrderNumber: entry.journal_group_num,
+                    groupIndex: entry.journal_group_ui_index,
                     foodId: entry.product_id,
                     foodName: entry.product_name,
                     foodAmount: entry.amount,
@@ -180,8 +176,8 @@ const reducer = createReducer(initialState, (builder) => {
                 .sort(Utils.sortBy("entryTime", (entryTime) => parseTime(entryTime as string)));
 
             state.groups = groups
-                .map(({ order_number, name }) => ({ orderNumber: order_number, name }))
-                .sort(Utils.sortBy("orderNumber"));
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(Utils.sortBy("uiIndex"));
 
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
@@ -203,8 +199,8 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
 
             state.groups = groups
-                .map(({ order_number, name }) => ({ orderNumber: order_number, name }))
-                .sort(Utils.sortBy("orderNumber"));
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(Utils.sortBy("uiIndex"));
         })
         .addCase(actions.updateJournalGroups.rejected, (state, action) => {
             const message = action.payload?.message;

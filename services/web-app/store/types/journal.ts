@@ -9,7 +9,7 @@ export interface JournalStoreEntry {
     entryDate: string;
     entryTime: string;
 
-    groupOrderNumber: Option<number>;
+    groupIndex: Option<number>;
 
     foodId: number;
     foodName: string;
@@ -26,7 +26,7 @@ export interface JournalStoreEntry {
 }
 
 export interface JournalStoreGroup {
-    orderNumber: number;
+    uiIndex: number;
     name: string;
 }
 

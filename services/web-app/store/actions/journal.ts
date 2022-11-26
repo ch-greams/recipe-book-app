@@ -9,7 +9,7 @@ import type { RootState } from "..";
 
 
 export const updateDate = createAction<string>("journal/update_date");
-export const updateEntryGroup = createAction<{ id: number, groupNumber: Option<number> }>("journal/update_entry_group");
+export const updateEntryGroup = createAction<{ id: number, groupIndex: Option<number> }>("journal/update_entry_group");
 export const updateEntryTime = createAction<{ id: number, time: string }>("journal/update_entry_time");
 export const updateEntryAmount = createAction<{ id: number, amountInput: string }>("journal/update_entry_amount");
 export const updateEntryUnit = createAction<{ id: number, unit: string }>("journal/update_entry_unit");
@@ -67,7 +67,7 @@ export const updateJournalEntry = createAsyncThunk<JournalEntry, number, { state
                 product_id: entry.foodId,
                 amount: entry.foodAmount,
                 unit: entry.foodUnit,
-                journal_group_num: entry.groupOrderNumber,
+                journal_group_ui_index: entry.groupIndex,
             });
 
             return entryResponse;

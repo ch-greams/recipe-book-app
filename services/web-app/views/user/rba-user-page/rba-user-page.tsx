@@ -1,6 +1,7 @@
 import React from "react";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
+import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import { classNames } from "@common/style";
 import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
@@ -18,10 +19,11 @@ import styles from "./rba-user-page.module.scss";
 interface Props {
     user: UserStore;
     journalGroups: JournalStoreGroup[];
+    nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaUserPage: React.FC<Props> = ({ user, journalGroups }) => {
+const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescriptions }) => {
 
     const dispatch = useAppDispatch();
 
@@ -69,6 +71,8 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups }) => {
                 return (
                     <RbaSettingsBlock
                         journalGroups={journalGroups}
+                        userNutrients={user.nutrients}
+                        nutrientDescriptions={nutrientDescriptions}
                         updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
                     />
                 );

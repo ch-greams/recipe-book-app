@@ -5,5 +5,5 @@
     "product_id": 6,
     "amount": 450.4,
     "unit": "g",
-    "journal_group_num": 1
+    "journal_group_ui_index": 1
 }

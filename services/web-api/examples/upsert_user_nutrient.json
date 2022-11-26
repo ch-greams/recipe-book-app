@@ -2,5 +2,6 @@
     "user_id": 1,
     "nutrient_id": 42,
     "is_featured": true,
-    "daily_target_amount": 30.5
+    "daily_target_amount": 30.5,
+    "ui_index": 11
 }

@@ -15,7 +15,7 @@ pub struct JournalEntry {
     pub product_id: i64,
     pub amount: f32,
     pub unit: String,
-    pub journal_group_num: Option<i16>,
+    pub journal_group_ui_index: Option<i16>,
 }
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
@@ -29,7 +29,7 @@ pub struct JournalEntryProduct {
     pub product_density: f64,
     pub amount: f32,
     pub unit: String,
-    pub journal_group_num: Option<i16>,
+    pub journal_group_ui_index: Option<i16>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -40,7 +40,7 @@ pub struct CreateJournalEntryPayload {
     pub product_id: i64,
     pub amount: f32,
     pub unit: String,
-    pub journal_group_num: Option<i16>,
+    pub journal_group_ui_index: Option<i16>,
 }
 
 pub type UpdateJournalEntryPayload = JournalEntry;
@@ -67,7 +67,7 @@ impl JournalEntry {
                 product_density,
                 amount,
                 unit,
-                journal_group_num
+                journal_group_ui_index
             FROM journal.journal_entry_product
             WHERE entry_date = $1 AND user_id = $2
         "#,
@@ -83,9 +83,9 @@ impl JournalEntry {
         let query = sqlx::query_as(
             r#"
             WITH journal_entry AS (
-                INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num)
+                INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num
+                RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index
             )
             SELECT
                 journal_entry.id,
@@ -97,7 +97,7 @@ impl JournalEntry {
                 product.density AS product_density,
                 journal_entry.amount,
                 journal_entry.unit,
-                journal_entry.journal_group_num
+                journal_entry.journal_group_ui_index
             FROM journal_entry
             JOIN product.product product ON product.id = journal_entry.product_id;
         "#,
@@ -108,7 +108,7 @@ impl JournalEntry {
             .bind(create_journal_entry_payload.product_id)
             .bind(create_journal_entry_payload.amount)
             .bind(create_journal_entry_payload.unit.to_owned())
-            .bind(create_journal_entry_payload.journal_group_num);
+            .bind(create_journal_entry_payload.journal_group_ui_index);
 
         let result = query
             .fetch_optional(txn)
@@ -131,9 +131,9 @@ impl JournalEntry {
                 product_id = $4,
                 amount = $5,
                 unit = $6,
-                journal_group_num = $7
+                journal_group_ui_index = $7
             WHERE id = $8
-            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num;
+            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index;
         "#,
         )
             .bind(update_journal_entry_payload.user_id)
@@ -142,7 +142,7 @@ impl JournalEntry {
             .bind(update_journal_entry_payload.product_id)
             .bind(update_journal_entry_payload.amount)
             .bind(update_journal_entry_payload.unit.to_owned())
-            .bind(update_journal_entry_payload.journal_group_num)
+            .bind(update_journal_entry_payload.journal_group_ui_index)
             .bind(update_journal_entry_payload.id);
 
         let result = query
@@ -161,7 +161,7 @@ impl JournalEntry {
             r#"
             DELETE FROM journal.journal_entry
             WHERE id = $1
-            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_num;
+            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index;
             "#,
         )
             .bind(journal_entry_id);
@@ -188,7 +188,7 @@ pub struct JournalEntryDetailed {
     pub custom_units: Vec<CustomUnit>,
     pub amount: f32,
     pub unit: String,
-    pub journal_group_num: Option<i16>,
+    pub journal_group_ui_index: Option<i16>,
 }
 
 impl JournalEntryDetailed {
@@ -212,7 +212,7 @@ impl JournalEntryDetailed {
             product_density: journal_entry.product_density,
             amount: journal_entry.amount,
             unit: journal_entry.unit.to_owned(),
-            journal_group_num: journal_entry.journal_group_num,
+            journal_group_ui_index: journal_entry.journal_group_ui_index,
             nutrients,
             custom_units: custom_units.to_vec(),
         }

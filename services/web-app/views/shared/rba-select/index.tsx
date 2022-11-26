@@ -67,7 +67,9 @@ export const RbaSelect: React.FC<Props> = ({
     };
 
     const onClick: OnClickCallback = (event) => {
-        event.stopPropagation();
+        if (!isListVisible) {
+            event.stopPropagation();
+        }
         showList();
     };
 

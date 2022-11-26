@@ -16,20 +16,25 @@ const RbaUserPageConnected: React.FC = () => {
 
     const dispatch = useAppDispatch();
 
-    const user = useAppSelector((state) => state.user);
-    const journal = useAppSelector((state) => state.journal);
+    const { meta, user, journal } = useAppSelector((state) => state);
 
     useEffect(() => {
-        dispatch(userActions.fetchProducts());
+        dispatch(userActions.fetchUserData());
         dispatch(journalActions.fetchJournalInfo());
     }, [ dispatch ]);
 
     return (
-        user.isLoaded
+        user.isLoaded && meta.isLoaded && journal.isLoaded
             ? (
                 user.errorMessage
                     ? <RbaSingleMessagePage text={user.errorMessage} />
-                    : <RbaUserPage user={user} journalGroups={journal.groups} />
+                    : (
+                        <RbaUserPage
+                            user={user}
+                            journalGroups={journal.groups}
+                            nutrientDescriptions={meta.nutrientDescriptions}
+                        />
+                    )
             )
             : (
                 <RbaSingleMessagePage>

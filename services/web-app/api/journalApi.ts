@@ -1,6 +1,6 @@
 import superagent from "superagent";
 
-import type { JournalEntry, JournalEntryDetailed, JournalGroup } from "@common/typings";
+import type { JournalEntry, JournalEntryDetailed, JournalGroup, UserNutrient } from "@common/typings";
 import Utils from "@common/utils";
 
 
@@ -51,5 +51,14 @@ export default class JournalApi {
     public static async deleteJournalEntry(journalEntryId: number): Promise<void> {
 
         await superagent.post(`${JournalApi.API_PATH}/entry/delete`).send({ id: journalEntryId });
+    }
+
+    public static async getUserNutrients(): Promise<UserNutrient[]> {
+
+        const params = Utils.getUrlParams({ user_id: 1 });
+
+        const { body: nutrients } = await superagent.get(`${JournalApi.API_PATH}/nutrients?${params}`);
+
+        return nutrients;
     }
 }

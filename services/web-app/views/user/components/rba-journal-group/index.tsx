@@ -1,19 +1,19 @@
 import React from "react";
 
 import Utils from "@common/utils";
-import RbaInput, { InputHeightSize,InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaToggle from "@views/shared/rba-toggle";
 
 import styles from "./rba-journal-group.module.scss";
 
 
 interface Props {
-    orderNumber: number;
+    uiIndex: number;
     name: string;
-    updateGroup: (orderNumber: number, name: string) => void;
+    updateGroup: (uiIndex: number, name: string) => void;
 }
 
-const RbaJournalGroup: React.FC<Props> = ({ orderNumber, name, updateGroup }) => {
+const RbaJournalGroup: React.FC<Props> = ({ uiIndex, name, updateGroup }) => {
 
     return (
 
@@ -21,8 +21,8 @@ const RbaJournalGroup: React.FC<Props> = ({ orderNumber, name, updateGroup }) =>
 
             <div className={styles.journalGroup}>
 
-                <div className={styles.journalGroupNumber}>
-                    {orderNumber}
+                <div className={styles.journalGroupIndex}>
+                    {uiIndex}
                 </div>
 
                 <RbaInput
@@ -31,14 +31,14 @@ const RbaJournalGroup: React.FC<Props> = ({ orderNumber, name, updateGroup }) =>
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Medium}
                     value={name}
-                    onChange={(value) => { updateGroup(orderNumber, value); }}
+                    onChange={(value) => { updateGroup(uiIndex, value); }}
                 />
 
             </div>
 
             <RbaToggle
                 value={!Utils.isEmptyString(name)}
-                onToggle={() => updateGroup(orderNumber, "")}
+                onToggle={() => updateGroup(uiIndex, "")}
             />
 
         </div>

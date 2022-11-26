@@ -5,7 +5,6 @@
 
     position: relative;
 
-    font-family: $font-default;
     font-size: $font-size-medium;
     font-weight: $font-weight-medium;
 
@@ -34,9 +33,7 @@
 
             padding: 0 14px;
 
-            font-family: $font-default;
             font-weight: $font-weight-medium;
-
             line-height: 26px;
 
             color: $color-white;
@@ -68,7 +65,6 @@
         button.searchOption {
             width: 100%;
 
-            font-family: $font-default;
             font-size: $font-size-medium;
             font-weight: $font-weight-medium;
         }

@@ -9,6 +9,7 @@ pub struct UserNutrient {
     pub nutrient_id: i16,
     pub is_featured: bool,
     pub daily_target_amount: Option<f32>,
+    pub ui_index: i16,
 }
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
@@ -17,6 +18,7 @@ pub struct UserNutrientDetails {
     pub nutrient_id: i16,
     pub is_featured: bool,
     pub daily_target_amount: Option<f32>,
+    pub ui_index: i16,
     pub nutrient_name: String,
     pub nutrient_daily_value: Option<f32>,
     pub nutrient_unit: String,
@@ -33,6 +35,7 @@ impl UserNutrient {
                 nutrient_id,
                 is_featured,
                 daily_target_amount,
+                ui_index,
                 nutrient_name,
                 nutrient_daily_value,
                 nutrient_unit,
@@ -51,18 +54,19 @@ impl UserNutrient {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO journal.user_nutrient (user_id, nutrient_id, is_featured, daily_target_amount)
-            VALUES ($1, $2, $3, $4) 
+            INSERT INTO journal.user_nutrient (user_id, nutrient_id, is_featured, daily_target_amount, ui_index)
+            VALUES ($1, $2, $3, $4, $5) 
             ON CONFLICT (user_id, nutrient_id)
             DO 
-               UPDATE SET is_featured = $3, daily_target_amount = $4
-            RETURNING user_id, nutrient_id, is_featured, daily_target_amount;
+               UPDATE SET is_featured = $3, daily_target_amount = $4, ui_index = $5
+            RETURNING user_id, nutrient_id, is_featured, daily_target_amount, ui_index;
         "#,
         )
             .bind(user_nutrient.user_id)
             .bind(user_nutrient.nutrient_id)
             .bind(user_nutrient.is_featured)
-            .bind(user_nutrient.daily_target_amount);
+            .bind(user_nutrient.daily_target_amount)
+            .bind(user_nutrient.ui_index);
 
         let result = query
             .fetch_optional(txn)
@@ -81,7 +85,7 @@ impl UserNutrient {
             r#"
             DELETE FROM journal.user_nutrient
             WHERE user_id = $1 AND nutrient_id = $2
-            RETURNING user_id, nutrient_id, is_featured, daily_target_amount;
+            RETURNING user_id, nutrient_id, is_featured, daily_target_amount, ui_index;
             "#,
         )
         .bind(user_id)

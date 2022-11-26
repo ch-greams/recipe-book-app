@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { isSome } from "@common/types";
+import { unwrapOr } from "@common/types";
 import type { JournalGroup } from "@common/typings";
 import Utils from "@common/utils";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
@@ -21,42 +21,29 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
 
     const [ journalGroups, setJournalGroups ] = useState(groups);
 
-
-    const updateJournalGroup = (slot: number) => {
-        return (orderNumber: number, name: string) => {
-            setJournalGroups(
-                [
-                    ...journalGroups.filter((journalGroup) => journalGroup.orderNumber !== slot),
-                    { orderNumber, name },
-                ]
-                    .sort(Utils.sortBy("orderNumber")),
-            );
-        };
-    };
-
     const journalGroupSlots = Array.from({ length: 9 }).map((_empty, index) => {
 
-        const slotOrderNumber = index + 1;
-        const group = journalGroups.find((g) => g.orderNumber === slotOrderNumber);
+        const slotIndex = index + 1;
+        const group = unwrapOr(
+            journalGroups.find((g) => g.uiIndex === slotIndex),
+            { uiIndex: slotIndex, name: "" },
+        );
 
         return (
-            isSome(group)
-                ? (
-                    <RbaJournalGroup
-                        key={group.orderNumber}
-                        orderNumber={group.orderNumber}
-                        name={group.name}
-                        updateGroup={updateJournalGroup(slotOrderNumber)}
-                    />
-                )
-                : (
-                    <RbaJournalGroup
-                        key={slotOrderNumber}
-                        orderNumber={slotOrderNumber}
-                        name={""}
-                        updateGroup={updateJournalGroup(slotOrderNumber)}
-                    />
-                )
+            <RbaJournalGroup
+                key={group.uiIndex}
+                uiIndex={group.uiIndex}
+                name={group.name}
+                updateGroup={(uiIndex: number, name: string) => {
+                    setJournalGroups(
+                        [
+                            ...journalGroups.filter((journalGroup) => journalGroup.uiIndex !== group.uiIndex),
+                            { uiIndex, name },
+                        ]
+                            .sort(Utils.sortBy("uiIndex")),
+                    );
+                }}
+            />
         );
     });
 
@@ -70,6 +57,7 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
                 <RbaButton
                     label={RBA_BUTTON_LABEL_REVERT}
                     width={ButtonWidthSize.Full}
+                    disabled={journalGroups.equals(groups)}
                     onClick={() => setJournalGroups(groups)}
                 />
 
@@ -79,7 +67,7 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
                     onClick={() => {
                         const groupsToSave = journalGroups
                             .filter((g) => !Utils.isEmptyString(g.name))
-                            .map(({ orderNumber, name }) => ({ user_id: 1, order_number: orderNumber, name }));
+                            .map(({ uiIndex, name }) => ({ user_id: 1, ui_index: uiIndex, name }));
                         updateGroups(groupsToSave);
                     }}
                 />
