@@ -63,7 +63,7 @@ const RbaSearchInput: React.FC<Props> = ({
 
     return (
         <div
-            data-cy={props["data-cy"] ? props["data-cy"] : constants.CY_SEARCH}
+            data-cy={props["data-cy"]}
             className={classNames({ [styles.search]: true, [styles[width]]: true, [styles[height]]: true })}
         >
 
