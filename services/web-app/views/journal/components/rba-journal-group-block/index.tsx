@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 import { useDroppable } from "@dnd-kit/core";
 
 import { classNames } from "@common/style";
@@ -14,10 +15,9 @@ interface Props {
     groupName: string;
     groupOrderNumber?: Option<number>;
     entries: JournalStoreEntry[];
-    "data-cy"?: string;
 }
 
-const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries, ...props }) => {
+const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries }) => {
 
     const { isOver, setNodeRef } = useDroppable({
         id: `journal_group-${groupOrderNumber}`,
@@ -25,7 +25,7 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, en
     });
 
     return (
-        <div className={styles.journalGroupBlock} data-cy={props["data-cy"]}>
+        <div className={styles.journalGroupBlock} data-cy={constants.CY_JOURNAL_GROUP}>
 
             <div className={styles.journalGroup}>
 

@@ -25,16 +25,15 @@ interface Props {
     groups: JournalStoreGroup[];
     entries: JournalStoreEntry[];
     search: SearchStore;
-    "data-cy"?: string;
 }
 
-const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search, ...props }) => {
+const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search }) => {
 
     const dispatch = useAppDispatch();
     const [ showTrash, setShowTrash ] = useState(false);
 
     return (
-        <div className={styles.journal} data-cy={props["data-cy"]}>
+        <div className={styles.journal} data-cy={constants.CY_JOURNAL_BLOCK}>
 
             <DndContext
                 onDragStart={() => { setShowTrash(true); }}
@@ -67,14 +66,12 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                         groupOrderNumber={group.orderNumber}
                         groupName={group.name}
                         entries={entries.filter((entry) => entry.groupOrderNumber === group.orderNumber)}
-                        data-cy={constants.CY_JOURNAL_GROUP}
                     />
                 ))}
 
                 <RbaJournalGroupBlock
                     groupName={"unknown"}
                     entries={entries.filter((entry) => !entry.groupOrderNumber)}
-                    data-cy={constants.CY_JOURNAL_GROUP}
                 />
 
                 {( showTrash && <RbaJournalTrash /> )}

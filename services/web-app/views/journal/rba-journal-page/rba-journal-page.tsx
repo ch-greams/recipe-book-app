@@ -40,7 +40,6 @@ const RbaJournalPage: React.FC<Props> = ({ userId, journal, meta, search, decrem
                     isJournalSaved={journal.isSaved}
                     decrementDate={decrementDate}
                     incrementDate={incrementDate}
-                    data-cy={constants.CY_JOURNAL_DATE_BLOCK}
                 />
 
                 <RbaJournalBlock
@@ -49,7 +48,6 @@ const RbaJournalPage: React.FC<Props> = ({ userId, journal, meta, search, decrem
                     groups={groups}
                     entries={entries}
                     search={search}
-                    data-cy={constants.CY_JOURNAL_BLOCK}
                 />
 
                 {/* Detailed Nutrition Information  */}

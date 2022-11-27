@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as constants from "@cypress/constants";
 
 import { formatDate } from "@common/date";
 import { Color } from "@common/style";
@@ -14,12 +15,11 @@ interface Props {
     isJournalSaved: boolean;
     decrementDate: () => void;
     incrementDate: () => void;
-    "data-cy"?: string;
 }
 
 const CHECKMARK_TIMEOUT: number = 1500;
 
-const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementDate, incrementDate, ...props }) => {
+const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementDate, incrementDate }) => {
 
     const [ showCheckmark, setShowCheckmark ] = useState(false);
 
@@ -32,7 +32,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementD
     }, [ isJournalSaved ]);
 
     return (
-        <div className={styles.journalDateBlock} data-cy={props["data-cy"]}>
+        <div className={styles.journalDateBlock} data-cy={constants.CY_JOURNAL_DATE_BLOCK}>
 
             <span className={styles.journalDateControlLeft}>
                 <RbaButton
