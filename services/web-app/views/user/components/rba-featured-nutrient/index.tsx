@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { NUTRIENT_TYPE_LABEL_MAPPING, NutrientName } from "@common/nutrients";
+import { NutrientName } from "@common/nutrients";
+import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
+import { getValues, mapDictionary } from "@common/object";
+import { isEnum, isSome, unwrapOr } from "@common/types";
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputNormalizer, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { getOptionLabel, SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -10,18 +13,34 @@ import styles from "./rba-featured-nutrient.module.scss";
 
 
 interface Props {
-    uiIndex: number;
-    name: string;
-    updateNutrient: (uiIndex: number, name: string) => void;
+    slotIndex: number;
+    nutrientId?: Option<number>;
+    nutrientName?: Option<string>;
+    userDailyTargetAmount?: Option<string>;
+    nutrientDailyTargetAmount?: Option<string>;
+    nutrientUnit?: Option<string>;
+    updateNutrient: (uiIndex: number, name: NutrientName, amount?: Option<number>) => void;
+    deleteNutrient: (nutrientId: number) => void;
 }
 
-const RbaFeaturedNutrient: React.FC<Props> = ({ uiIndex, name, updateNutrient }) => {
+const RbaFeaturedNutrient: React.FC<Props> = ({
+    slotIndex,
+    nutrientId,
+    nutrientName,
+    userDailyTargetAmount,
+    nutrientDailyTargetAmount,
+    nutrientUnit,
+    updateNutrient,
+    deleteNutrient,
+}) => {
 
-    const nutrientOptions = Utils.getObjectValues(NutrientName)
-        .map((nutrientName) => ({
-            label: NUTRIENT_TYPE_LABEL_MAPPING[nutrientName],
-            value: nutrientName,
-        }));
+    const [ amount, setAmount ] = useState(userDailyTargetAmount || "");
+
+    const nutrientOptions = getValues(
+        mapDictionary(NUTRIENT_TYPE_LABEL_MAPPING, (name, label) => ({ label, value: name })),
+    );
+
+    const hasNutrient = isSome(nutrientName) && isEnum<NutrientName, typeof NutrientName>(NutrientName, nutrientName);
 
     return (
 
@@ -30,19 +49,24 @@ const RbaFeaturedNutrient: React.FC<Props> = ({ uiIndex, name, updateNutrient })
             <div className={styles.nutrient}>
 
                 <span className={styles.nutrientIndex}>
-                    {uiIndex}
+                    {slotIndex}
                 </span>
 
                 <RbaSelect
                     theme={SelectTheme.Primary}
                     width={SelectWidthSize.Full}
                     height={SelectHeightSize.Medium}
-                    value={getOptionLabel({
-                        label: NUTRIENT_TYPE_LABEL_MAPPING[name as NutrientName],
-                        value: name,
-                    })}
+                    value={(
+                        isSome(nutrientName) && isEnum<NutrientName, typeof NutrientName>(NutrientName, nutrientName)
+                            ? getOptionLabel({ label: NUTRIENT_TYPE_LABEL_MAPPING[nutrientName], value: nutrientName })
+                            : undefined
+                    )}
                     options={nutrientOptions}
-                    onChange={(option) => { console.log("option", option); }}
+                    onChange={(option) => {
+                        if (isEnum<NutrientName, typeof NutrientName>(NutrientName, option.value)) {
+                            updateNutrient(slotIndex, option.value, null);
+                        }
+                    }}
                 />
 
                 <RbaInput
@@ -51,19 +75,30 @@ const RbaFeaturedNutrient: React.FC<Props> = ({ uiIndex, name, updateNutrient })
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Medium}
                     normalizer={InputNormalizer.Decimal}
-                    value={"12.34"}
-                    onChange={(value) => { updateNutrient(uiIndex, value); }}
+                    placeholder={nutrientDailyTargetAmount || ""}
+                    disabled={!hasNutrient}
+                    value={amount}
+                    onBlur={(value) => {
+                        if (isSome(nutrientName) && isEnum<NutrientName, typeof NutrientName>(NutrientName, nutrientName)) {
+                            updateNutrient(slotIndex, nutrientName, Utils.stringToNumber(value));
+                        }
+                    }}
+                    onChange={(value) => setAmount(value)}
                 />
 
                 <span className={styles.nutrientUnit}>
-                    {"mcg"}
+                    {unwrapOr(nutrientUnit, "")}
                 </span>
 
             </div>
 
             <RbaToggle
-                value={!Utils.isEmptyString(name)}
-                onToggle={() => updateNutrient(uiIndex, "")}
+                value={hasNutrient}
+                onToggle={() => {
+                    if (isSome(nutrientId)) {
+                        deleteNutrient(nutrientId);
+                    }
+                }}
             />
 
         </div>

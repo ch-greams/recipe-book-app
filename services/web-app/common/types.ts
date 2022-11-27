@@ -32,6 +32,8 @@ export function isNone<T>(value: Option<T>): value is None {
 /**
  * Confirms is the value belongs to the provided enum
  */
-export function isEnum<EValue, EObject extends object>(enumObject: EObject, value: unknown): value is EValue {
+export function isEnum<EValue extends string | number, EObject extends object>(
+    enumObject: EObject, value: string | number,
+): value is EValue {
     return Object.values(enumObject).includes(value);
 }

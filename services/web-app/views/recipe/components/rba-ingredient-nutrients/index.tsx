@@ -2,9 +2,9 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import { NutrientName } from "@common/nutrients";
+import { objectIsNotEmpty } from "@common/object";
 import { classNames } from "@common/style";
 import { isSome } from "@common/types";
-import Utils from "@common/utils";
 
 import styles from "./rba-ingredient-nutrients.module.scss";
 
@@ -71,7 +71,7 @@ const RbaIngredientNutrients: React.FC<Props> = ({ nutrients, alternativeNutrien
                 const nutritionValue = getNutritionValue(
                     currentNutritionValue,
                     alternativeNutritionValue,
-                    Utils.objectIsNotEmpty(alternativeNutrients),
+                    objectIsNotEmpty(alternativeNutrients),
                 );
 
                 const nutritionValueClass = getNutritionValueClass(currentNutritionValue, alternativeNutritionValue);

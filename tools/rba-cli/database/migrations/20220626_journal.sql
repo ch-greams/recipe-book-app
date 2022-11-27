@@ -68,7 +68,7 @@ ALTER TABLE journal.journal_entry_product OWNER TO postgres;
 GRANT ALL ON TABLE journal.journal_entry_product TO postgres;
 
 
-CREATE OR REPLACE VIEW journal.user_nutrient_details
+CREATE OR REPLACE VIEW journal.user_nutrient_detailed
 AS SELECT un.user_id,
     un.nutrient_id,
     un.is_featured,
@@ -81,5 +81,5 @@ AS SELECT un.user_id,
     nd.parent_name AS nutrient_parent_name
    FROM journal.user_nutrient un
    JOIN meta.nutrient_details nd ON nd.id = un.nutrient_id;
-ALTER TABLE journal.user_nutrient_details OWNER TO postgres;
-GRANT ALL ON TABLE journal.user_nutrient_details TO postgres;
+ALTER TABLE journal.user_nutrient_detailed OWNER TO postgres;
+GRANT ALL ON TABLE journal.user_nutrient_detailed TO postgres;

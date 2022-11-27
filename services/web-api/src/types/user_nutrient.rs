@@ -13,7 +13,7 @@ pub struct UserNutrient {
 }
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
-pub struct UserNutrientDetails {
+pub struct UserNutrientDetailed {
     pub user_id: i64,
     pub nutrient_id: i16,
     pub is_featured: bool,
@@ -27,7 +27,7 @@ pub struct UserNutrientDetails {
 }
 
 impl UserNutrient {
-    pub fn find_all(user_id: i64) -> QueryAs<'static, Postgres, UserNutrientDetails, PgArguments> {
+    pub fn find_all(user_id: i64) -> QueryAs<'static, Postgres, UserNutrientDetailed, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT
@@ -41,11 +41,36 @@ impl UserNutrient {
                 nutrient_unit,
                 nutrient_group,
                 nutrient_parent_name
-            FROM journal.user_nutrient_details
+            FROM journal.user_nutrient_detailed
             WHERE user_id = $1
         "#,
         )
         .bind(user_id)
+    }
+
+    pub fn find_by_id(
+        user_id: i64,
+        nutrient_id: i16,
+    ) -> QueryAs<'static, Postgres, UserNutrientDetailed, PgArguments> {
+        sqlx::query_as(
+            r#"
+            SELECT
+                user_id,
+                nutrient_id,
+                is_featured,
+                daily_target_amount,
+                ui_index,
+                nutrient_name,
+                nutrient_daily_value,
+                nutrient_unit,
+                nutrient_group,
+                nutrient_parent_name
+            FROM journal.user_nutrient_detailed
+            WHERE user_id = $1 AND nutrient_id = $2
+        "#,
+        )
+        .bind(user_id)
+        .bind(nutrient_id)
     }
 
     pub async fn upsert_nutrient(
@@ -120,6 +145,23 @@ mod tests {
             user_nutrients.len() > 1,
             "should be more than 1 user_nutrient"
         );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn find_by_id() {
+        let user_id = 1;
+        let nutrient_id = 5;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        let user_nutrient = UserNutrient::find_by_id(user_id, nutrient_id)
+            .fetch_optional(&mut txn)
+            .await
+            .unwrap();
+
+        assert!(user_nutrient.is_some(), "should find a user_nutrient");
 
         txn.rollback().await.unwrap();
     }

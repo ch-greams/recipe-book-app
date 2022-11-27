@@ -210,9 +210,13 @@ async fn upsert_nutrient(
 
     UserNutrient::upsert_nutrient(&request, &mut txn).await?;
 
+    let user_nutrient = UserNutrient::find_by_id(request.user_id, request.nutrient_id)
+        .fetch_optional(&mut txn)
+        .await?;
+
     txn.commit().await?;
 
-    Ok(HttpResponse::Created().finish())
+    Ok(HttpResponse::Created().json(user_nutrient))
 }
 
 #[derive(Debug, Deserialize)]

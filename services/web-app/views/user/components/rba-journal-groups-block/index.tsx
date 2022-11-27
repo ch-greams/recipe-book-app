@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { sortBy } from "@common/array";
 import { unwrapOr } from "@common/types";
 import type { JournalGroup } from "@common/typings";
 import Utils from "@common/utils";
@@ -40,7 +41,7 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
                             ...journalGroups.filter((journalGroup) => journalGroup.uiIndex !== group.uiIndex),
                             { uiIndex, name },
                         ]
-                            .sort(Utils.sortBy("uiIndex")),
+                            .sort(sortBy("uiIndex")),
                     );
                 }}
             />

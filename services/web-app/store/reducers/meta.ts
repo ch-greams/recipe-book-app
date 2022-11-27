@@ -1,9 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { NutrientName } from "@common/nutrients";
+import { mapRecord } from "@common/object";
 import { isSome } from "@common/types";
 import { NutrientUnit } from "@common/units";
-import Utils from "@common/utils";
 import { fetchNutrients } from "@store/actions/meta";
 import type { MetaStore } from "@store/types/meta";
 
@@ -86,7 +86,7 @@ const initialState: MetaStore = {
     isLoaded: false,
     errorMessage: null,
 
-    nutrientDescriptions: Utils.mapRecord(NUTRIENT_DESCRIPTIONS, (key, value) => ({ ...value, type: key })),
+    nutrientDescriptions: mapRecord(NUTRIENT_DESCRIPTIONS, (key, value) => ({ ...value, id: 0, type: key })),
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -106,6 +106,7 @@ const reducer = createReducer(initialState, (builder) => {
             const nutrientDescriptions = nutrients.reduce((acc, nutrient) => ({
                 ...acc,
                 [nutrient.name]: {
+                    id: nutrient.id,
                     type: nutrient.name,
                     unit: nutrient.unit,
                     dailyValue: nutrient.daily_value,

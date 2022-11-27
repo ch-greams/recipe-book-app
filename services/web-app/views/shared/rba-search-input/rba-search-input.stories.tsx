@@ -2,8 +2,9 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
+import { getValues } from "@common/object";
 import type { ProductShort } from "@common/typings";
-import Utils, { ProductType } from "@common/utils";
+import { ProductType } from "@common/utils";
 
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from ".";
 
@@ -25,12 +26,12 @@ export default {
             table: { type: { summary: "string" } },
         },
         width: {
-            type: { name: "enum", value: Utils.getObjectValues(SearchInputWidthSize), required: true },
+            type: { name: "enum", value: getValues(SearchInputWidthSize), required: true },
             table: { type: { summary: "SearchInputWidthSize" } },
             control: { type: "select", options: SearchInputWidthSize },
         },
         height: {
-            type: { name: "enum", value: Utils.getObjectValues(SearchInputHeightSize), required: false },
+            type: { name: "enum", value: getValues(SearchInputHeightSize), required: false },
             table: { type: { summary: "SearchInputHeightSize" } },
             control: { type: "select", options: SearchInputHeightSize },
         },

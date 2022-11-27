@@ -3,8 +3,8 @@ import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import Logger from "@common/logger";
+import { getValues } from "@common/object";
 import { Unit } from "@common/units";
-import Utils from "@common/utils";
 import * as types from "@store/types/recipe";
 
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from ".";
@@ -19,7 +19,7 @@ const ComponentDescription: ComponentMeta<typeof RbaSelect> = {
             table: { type: { summary: "boolean" } },
         },
         theme: {
-            type: { name: "enum", value: Utils.getObjectValues(SelectTheme), required: true },
+            type: { name: "enum", value: getValues(SelectTheme), required: true },
             table: { type: { summary: "SelectTheme" } },
             control: { type: "select", options: SelectTheme },
         },
@@ -28,12 +28,12 @@ const ComponentDescription: ComponentMeta<typeof RbaSelect> = {
             table: { type: { summary: "boolean" } },
         },
         width: {
-            type: { name: "enum", value: Utils.getObjectValues(SelectWidthSize), required: true },
+            type: { name: "enum", value: getValues(SelectWidthSize), required: true },
             table: { type: { summary: "SelectWidthSize" } },
             control: { type: "select", options: SelectWidthSize },
         },
         height: {
-            type: { name: "enum", value: Utils.getObjectValues(SelectHeightSize), required: true },
+            type: { name: "enum", value: getValues(SelectHeightSize), required: true },
             table: { type: { summary: "SelectHeightSize" } },
             control: { type: "select", options: SelectHeightSize },
         },

@@ -1,9 +1,9 @@
-import { isSome, unwrap, unwrapOr } from "@common/types";
+import { isSome, unwrapOr } from "@common/types";
 import type { Nutrient } from "@views/shared/rba-nutrient-line";
 
 import type { NutrientDescription } from "./nutrients";
 import { NutrientName } from "./nutrients";
-import type { Comparer } from "./typings";
+import { getKeys } from "./object";
 import type { CustomUnit, CustomUnitInput } from "./units";
 
 
@@ -24,12 +24,6 @@ export enum DecimalPlaces {
     Two = 2,
     Three = 3,
     Four = 4,
-}
-
-export enum ComparerResult {
-    Negative = -1,
-    Zero = 0,
-    Positive = 1,
 }
 
 
@@ -73,16 +67,14 @@ export default class Utils {
         nutrients: Dictionary<NutrientName, number>,
         nutrientInputs: Dictionary<NutrientName, string>,
         nutrientDescriptions: Record<NutrientName, NutrientDescription>,
+        allFractions: boolean = false,
     ): Nutrient[] {
         return nutrientTypes.reduce<Nutrient[]>(
             (previousNutrients: Nutrient[], currentNutrientType: NutrientName): Nutrient[] => {
 
                 const amount: Option<number> = nutrients[currentNutrientType];
                 const inputValue: Option<string> = nutrientInputs[currentNutrientType];
-                const nutrientDescription = unwrap(
-                    nutrientDescriptions[currentNutrientType],
-                    `nutrientDescriptions[${currentNutrientType}]`,
-                );
+                const nutrientDescription: NutrientDescription = nutrientDescriptions[currentNutrientType];
 
                 return [
                     ...previousNutrients,
@@ -92,7 +84,7 @@ export default class Utils {
                         inputValue: inputValue || "",
                         unit: nutrientDescription.unit,
                         dailyValue: Utils.getDailyValuePercent(amount, nutrientDescription.dailyValue),
-                        isFraction: nutrientDescription.isFraction,
+                        isFraction: allFractions || nutrientDescription.isFraction,
                     },
                 ];
             },
@@ -104,7 +96,7 @@ export default class Utils {
         return (value / Utils.CENTUM);
     }
 
-    public static dictionarySum(productNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
+    public static nutrientSum(productNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
 
         return Object.values(NutrientName).reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
@@ -135,7 +127,7 @@ export default class Utils {
 
         const multiplier = isFrom ? ( amount / Utils.CENTUM ) : ( Utils.CENTUM / amount );
 
-        const updatedNutrients: Dictionary<NutrientName, number> = Utils.getObjectKeys(nutrients)
+        const updatedNutrients: Dictionary<NutrientName, number> = getKeys(nutrients)
             .reduce((acc, cur) => {
                 const nutrient = nutrients[cur];
                 return {
@@ -153,43 +145,6 @@ export default class Utils {
 
     // NOTE: OTHER GENERIC THINGS
 
-    public static getObjectKeys<T extends object>(
-        obj: T | Dictionary<keyof T, unknown>,
-        ensureNumber: boolean = false,
-    ): (keyof T)[] {
-        return ( ensureNumber ? Object.keys(obj).map(Number) : Object.keys(obj) ) as (keyof T)[];
-    }
-
-    public static getObjectValues<T>(obj: Dictionary<ID, T>): T[] {
-        return Object.values(obj) as T[];
-    }
-
-    /**
-     * Calls a defined callback function on each `key-value` pair of a `Record`, and returns a `Record` that contains the results.
-     * This "wrapper" function allows you to safely keep using same record type without forced assignment or errors.
-     *
-     * @param record - Provided initial `Record` value.
-     * @param callback - A function that accepts up two arguments. The map method calls the callback function one time for each `key-value` pair of a `Record`.
-     */
-    public static mapRecord<K extends string | number, V, RV>(record: Record<K, V>, callback: (key: K, value: V) => RV): Record<K, RV> {
-        return Utils.getObjectKeys(record).reduce((acc, cur) => ({ ...acc, [cur]: callback(cur, record[cur]) }), {}) as Record<K, RV>;
-    }
-
-    /**
-     * Calls a defined callback function on each `key-value` pair of a `Record`, and returns a `Record` that contains the results.
-     * This "wrapper" function allows you to safely keep using same record type without forced assignment or errors.
-     *
-     * @param record - Provided initial `Record` value.
-     * @param callback - A function that accepts up two arguments. The map method calls the callback function one time for each `key-value` pair of a `Record`.
-     */
-    public static mapDictionary<K extends string | number, V, RV>(record: Dictionary<K, V>, callback: (key: K, value: V) => RV): Dictionary<K, RV> {
-        return Utils.getObjectKeys(record)
-            .reduce((acc, cur) => {
-                const item: Option<V> = record[cur];
-                return { ...acc, [cur]: isSome(item) ? callback(cur, item) : item };
-            }, {});
-    }
-
     /**
      * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
      * Used for ingredients in a new recipe, and direction_parts that are not in the db yet
@@ -203,22 +158,6 @@ export default class Utils {
         return (str.match(/\n/g) || "").length + SINGLE_LINE;
     }
 
-    public static sortBy<T, V>(field: keyof T, converter?: (value: T[keyof T]) => V): Comparer<T> {
-        return (a: T, b: T) => (
-            isSome(converter)
-                ? converter(a[field]) > converter(b[field]) ? ComparerResult.Positive : ComparerResult.Negative
-                : a[field] > b[field] ? ComparerResult.Positive : ComparerResult.Negative
-        );
-    }
-
-    public static arrayIsNotEmpty(array: unknown[]): boolean {
-        return (Array.isArray(array) && array.length > 0);
-    }
-
-    public static objectIsNotEmpty<T>(obj: T | Dictionary<string | number | symbol, T>): boolean {
-        return (!!obj && (typeof obj === "object") && Object.keys(obj).length > 0);
-    }
-
     public static getProductPath(route: ProductType, id: number): string {
         return `/${route}/${id}`;
     }
@@ -228,7 +167,7 @@ export default class Utils {
     }
 
     public static getUrlParams(obj: object): string {
-        return Utils.getObjectKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
+        return getKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
     }
 
     public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
@@ -257,7 +196,7 @@ export default class Utils {
     }
 
     public static convertNutrientValuesIntoInputs(values: Dictionary<NutrientName, number>): Dictionary<NutrientName, string> {
-        return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, string>>(
+        return getKeys(values).reduce<Dictionary<NutrientName, string>>(
             (acc, nfType) => {
                 const nfValue = values[nfType];
                 const nfInput = (
@@ -271,7 +210,7 @@ export default class Utils {
     }
 
     public static convertNutrientInputsIntoValues(values: Dictionary<NutrientName, string>): Dictionary<NutrientName, number> {
-        return Utils.getObjectKeys(values).reduce<Dictionary<NutrientName, number>>(
+        return getKeys(values).reduce<Dictionary<NutrientName, number>>(
             (acc, nfType) => ({ ...acc, [nfType]: Utils.stringToNumber(values[nfType]) }), {},
         );
     }

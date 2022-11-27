@@ -1,4 +1,5 @@
 import type { NutrientName } from "@common/nutrients";
+import { mapDictionary } from "@common/object";
 import Utils, { DecimalPlaces } from "@common/utils";
 
 import type { JournalStoreEntry } from "../types/journal";
@@ -14,8 +15,8 @@ export function getNutrientsFromJournalEntries(journalEntries: JournalStoreEntry
         .map((journalEntry) => {
             const { foodNutrients: nutrients, foodAmount: amount } = journalEntry;
             const multiplier = Utils.getPercentMultiplier(amount);
-            return Utils.mapDictionary(nutrients, (_key, value) => Utils.roundToDecimal(value * multiplier, DecimalPlaces.Two));
+            return mapDictionary(nutrients, (_key, value) => Utils.roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
-    return Utils.dictionarySum(foodNutrients);
+    return Utils.nutrientSum(foodNutrients);
 }

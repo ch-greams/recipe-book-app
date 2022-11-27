@@ -117,13 +117,15 @@ export interface NutrientMeta {
     nutrient_group: string;
     parent_name?: Option<string>;
 }
-
 export interface UserNutrient {
     user_id: number;
     nutrient_id: number;
     is_featured: boolean;
     daily_target_amount?: Option<number>;
     ui_index: number;
+}
+
+export interface UserNutrientDetailed extends UserNutrient {
     nutrient_name: string;
     nutrient_daily_value?: Option<number>;
     nutrient_unit: string;

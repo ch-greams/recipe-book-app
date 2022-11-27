@@ -1,8 +1,8 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
+import { getValues } from "@common/object";
 import type { Unit } from "@common/units";
-import Utils from "@common/utils";
 import RbaIngredientNutrients from "@views/recipe/components/rba-ingredient-nutrients";
 import RbaIngredientProduct, {
     IngredientProductSize, IngredientProductTheme,
@@ -30,7 +30,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
 
     const dispatch = useAppDispatch();
 
-    const showIngredientProducts: boolean = Utils.arrayIsNotEmpty(Object.keys(ingredient.products));
+    const showIngredientProducts: boolean = Object.keys(ingredient.products).isNotEmpty();
     const showNewIngredientProduct: boolean = !isReadOnly;
     const showSeparator: boolean = showIngredientProducts || showNewIngredientProduct;
 
@@ -50,7 +50,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
             {( showSeparator && (<div className={styles.separator}></div>) )}
 
             {(
-                showIngredientProducts && Utils.getObjectValues(ingredient.products).map((product) => (
+                showIngredientProducts && getValues(ingredient.products).map((product) => (
                     <RbaIngredientProduct
                         key={`ingredient_product_${product.product_id}`}
                         theme={IngredientProductTheme.Alternative}

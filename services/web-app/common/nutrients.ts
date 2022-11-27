@@ -275,6 +275,7 @@ export enum NutrientGroupType {
 }
 
 export interface NutrientDescription {
+    id: number;
     type: NutrientName;
     unit: NutrientUnit;
     dailyValue?: Option<number>;

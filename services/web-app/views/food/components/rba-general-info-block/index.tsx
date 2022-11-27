@@ -35,6 +35,7 @@ const RbaGeneralInfoBlock: React.FC<Props> = ({
                     nutrients,
                     nutrientInputs,
                     nutrientDescriptions,
+                    true,
                 )}
             />
         </div>

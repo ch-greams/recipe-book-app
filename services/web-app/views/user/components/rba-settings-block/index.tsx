@@ -2,7 +2,7 @@ import React from "react";
 
 import * as labels from "@common/labels";
 import type { NutrientDescription, NutrientName } from "@common/nutrients";
-import type { JournalGroup } from "@common/typings";
+import type { JournalGroup, UserNutrient } from "@common/typings";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStoreNutrient } from "@store/types/user";
@@ -18,6 +18,8 @@ interface Props {
     userNutrients: UserStoreNutrient[];
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
     updateJournalGroups: (groups: JournalGroup[]) => void;
+    updateNutrient: (nutrient: UserNutrient) => void;
+    deleteNutrient: (nutrientId: number) => void;
 }
 
 const RbaSettingsBlock: React.FC<Props> = ({
@@ -25,6 +27,8 @@ const RbaSettingsBlock: React.FC<Props> = ({
     userNutrients,
     nutrientDescriptions,
     updateJournalGroups,
+    updateNutrient,
+    deleteNutrient,
 }) => {
     return (
         <div className={styles.journalBlock}>
@@ -41,6 +45,8 @@ const RbaSettingsBlock: React.FC<Props> = ({
             <RbaFeaturedNutrientsBlock
                 userNutrients={userNutrients}
                 nutrientDescriptions={nutrientDescriptions}
+                updateNutrient={updateNutrient}
+                deleteNutrient={deleteNutrient}
             />
 
         </div>

@@ -36,7 +36,6 @@ export interface FoodPageStore {
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: Unit | string;
-    featuredNutrients: NutrientName[];
 
     // NOTE: NEW FOOD
     isCreated: boolean;

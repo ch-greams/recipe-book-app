@@ -7,8 +7,9 @@ import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
-import * as actions from "@store/actions/food";
+import * as foodActions from "@store/actions/food";
 import { searchClear } from "@store/actions/search";
+import * as userActions from "@store/actions/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -27,8 +28,9 @@ const RbaFoodPageConnected: React.FC = () => {
     const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = isNone(fid);
 
-    const food = useAppSelector((state) => state.food);
-    const meta = useAppSelector((state) => state.meta);
+    const { food, meta, user } = useAppSelector((state) => state);
+
+    useEffect(() => { dispatch(userActions.fetchUserData()); }, [ user.userId ]);
 
     useEffect(() => {
         if (!food.isLoading) {
@@ -36,7 +38,7 @@ const RbaFoodPageConnected: React.FC = () => {
 
             if (!isNewFoodPage) {
                 const foodId = Number(fid);
-                dispatch(actions.fetchFood(foodId));
+                dispatch(foodActions.fetchFood(foodId));
             }
             else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
 
@@ -44,7 +46,7 @@ const RbaFoodPageConnected: React.FC = () => {
                     router.push(Utils.getProductPath(ProductType.Food, food.id));
                 }
                 else {
-                    dispatch(actions.fetchFoodNew());
+                    dispatch(foodActions.fetchFoodNew());
                 }
             }
         }
@@ -61,6 +63,7 @@ const RbaFoodPageConnected: React.FC = () => {
                             food={food}
                             meta={meta}
                             isNew={isNewFoodPage}
+                            featuredNutrients={user.nutrients}
                         />
                     )
             )

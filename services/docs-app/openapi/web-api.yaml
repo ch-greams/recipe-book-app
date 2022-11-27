@@ -678,7 +678,10 @@ components:
         daily_target_amount:
           type: number
           example: 12.3
-    UserNutrientDetails:
+        ui_index:
+          type: integer
+          example: 7
+    UserNutrientDetailed:
       type: object
       properties:
         user_id:
@@ -693,6 +696,9 @@ components:
         daily_target_amount:
           type: number
           example: 12.3
+        ui_index:
+          type: integer
+          example: 7
         nutrient_name:
           type: string
           example: vitamin_b3
@@ -1236,7 +1242,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UserNutrientDetails"
+                  $ref: "#/components/schemas/UserNutrientDetailed"
         "404":
           description: Not Found
 
@@ -1254,6 +1260,10 @@ paths:
       responses:
         "201":
           description: Created
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserNutrientDetailed"
         "404":
           description: Not Found
 

@@ -1,12 +1,17 @@
 import { createReducer } from "@reduxjs/toolkit";
 
+import { sortBy } from "@common/array";
+import { getKeys, getValues } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
 import * as actions from "../actions/recipe";
-import { getIngredientProduct, getRecipeIngredientProduct, getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients } from "../helpers/recipe";
+import {
+    getIngredientProduct, getRecipeIngredientProduct,
+    getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients,
+} from "../helpers/recipe";
 import * as types from "../types/recipe";
 
 
@@ -84,7 +89,7 @@ function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngr
 
         isOpen: false,
         isMarked: false,
-        products: Utils.getObjectValues(ingredient.products).reduce((acc, product) => {
+        products: getValues(ingredient.products).reduce((acc, product) => {
 
             const amountInCurrentUnits = units.convertFromMetric(
                 product.amount, product.unit, [], product.density,
@@ -345,7 +350,7 @@ const reducer = createReducer(initialState, (builder) => {
                             ? { ...directionPart, stepNumber }
                             : directionPart
                     ))
-                    .sort(Utils.sortBy("stepNumber")),
+                    .sort(sortBy("stepNumber")),
             };
         })
         .addCase(actions.updateDirectionPartNote, (state, action) => {
@@ -477,7 +482,7 @@ const reducer = createReducer(initialState, (builder) => {
                         ? { ...direction, stepNumber }
                         : direction
                 ))
-                .sort(Utils.sortBy("stepNumber"));
+                .sort(sortBy("stepNumber"));
         })
         .addCase(actions.updateDirectionName, (state, action) => {
             const { directionIndex, name } = action.payload;
@@ -667,7 +672,7 @@ const reducer = createReducer(initialState, (builder) => {
                 ( ingredient.id === parentId )
                     ? {
                         ...ingredient,
-                        products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
+                        products: getKeys(ingredient.products, true).reduce((acc, product_id) => (
                             product_id !== id || ingredient.product_id === id
                                 ? { ...acc, [product_id]: ingredient.products[product_id] }
                                 : acc

@@ -1,4 +1,5 @@
 import type { NutrientName } from "@common/nutrients";
+import { mapDictionary } from "@common/object";
 import { unwrap } from "@common/types";
 import type { Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
@@ -116,10 +117,10 @@ export function getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Di
         .map((ingredient) => {
             const { nutrients, amount } = getIngredientProduct(ingredient);
             const multiplier = Utils.getPercentMultiplier(amount);
-            return Utils.mapDictionary(nutrients, (_key, value) => Utils.roundToDecimal(value * multiplier, DecimalPlaces.Two));
+            return mapDictionary(nutrients, (_key, value) => Utils.roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
-    return Utils.dictionarySum(productNutrients);
+    return Utils.nutrientSum(productNutrients);
 }
 
 export function getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {

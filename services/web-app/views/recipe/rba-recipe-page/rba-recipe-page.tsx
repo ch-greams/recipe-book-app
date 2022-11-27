@@ -1,7 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
-import { NutrientName } from "@common/nutrients";
+import type { NutrientName } from "@common/nutrients";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
@@ -17,6 +17,7 @@ import * as userActions from "@store/actions/user";
 import type { MetaStore } from "@store/types/meta";
 import type { RecipePageStore } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
+import type { UserStoreNutrient } from "@store/types/user";
 
 import styles from "./rba-recipe-page.module.scss";
 
@@ -27,10 +28,11 @@ interface Props {
     recipe: RecipePageStore;
     search: SearchStore;
     meta: MetaStore;
+    featuredNutrients: UserStoreNutrient[];
     isNew: boolean;
 }
 
-const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }) => {
+const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, featuredNutrients, isNew }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -135,18 +137,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, isNew }
 
                 <RbaGeneralInfoBlock
                     recipe={recipe}
-                    featuredNutrients={[
-                        NutrientName.Energy,
-                        NutrientName.Carbohydrate,
-                        NutrientName.DietaryFiber,
-                        NutrientName.Sugars,
-                        NutrientName.Fat,
-                        NutrientName.Monounsaturated,
-                        NutrientName.Protein,
-                        NutrientName.Sodium,
-                        NutrientName.VitaminA,
-                        NutrientName.VitaminC,
-                    ]}
+                    featuredNutrients={featuredNutrients.map((nutrient) => nutrient.nutrientName as NutrientName)}
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}

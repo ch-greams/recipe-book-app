@@ -16,7 +16,7 @@
 
         grid-template-columns: 1fr 12fr 4fr 2fr;
         gap: 8px;
-        justify-items: center;
+        justify-items: stretch;
 
         padding: 6px 12px;
 
@@ -31,11 +31,13 @@
 
         .nutrientIndex {
             line-height: 24px;
+            text-align: center;
         }
 
         .nutrientUnit {
             font-size: $font-size-small;
             line-height: 24px;
+            text-align: left;
         }
     }
 }

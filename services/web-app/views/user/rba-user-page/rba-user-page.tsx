@@ -74,6 +74,8 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescription
                         userNutrients={user.nutrients}
                         nutrientDescriptions={nutrientDescriptions}
                         updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
+                        updateNutrient={(nutrient) => dispatch(userActions.upsertNutrient(nutrient))}
+                        deleteNutrient={(nutrientId) => dispatch(userActions.deleteNutrient(nutrientId))}
                     />
                 );
         }

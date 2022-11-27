@@ -24,6 +24,9 @@ Array.prototype.equals = function(value) {
     return thisClone.length === otherClone.length && thisClone.every((element, index) => otherClone[index] === element);
 };
 
+Array.prototype.isNotEmpty = function() {
+    return this.length > 0;
+};
 
 declare global {
     interface Array<T> {
@@ -32,6 +35,7 @@ declare global {
         last(): Option<T>;
         set(index: number, value: T): T[];
         equals(value: T[]): boolean;
+        isNotEmpty(): boolean;
     }
 }
 
