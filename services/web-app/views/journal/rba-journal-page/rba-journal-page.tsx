@@ -1,5 +1,4 @@
 import React from "react";
-import * as constants from "@cypress/constants";
 
 import Utils from "@common/utils";
 import RbaJournalBlock from "@views/journal/components/rba-journal-block";
@@ -59,7 +58,6 @@ const RbaJournalPage: React.FC<Props> = ({ userId, journal, meta, search, decrem
                     nutrients={nutrients}
                     nutrientInputs={Utils.mapDictionary(nutrients, (_key, value) => String(value))}
                     nutrientDescriptions={nutrientDescriptions}
-                    data-cy={constants.CY_DETAILED_NUTRIENTS_BLOCK}
                 />
 
             </div>
