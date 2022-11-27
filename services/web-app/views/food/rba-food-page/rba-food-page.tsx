@@ -1,6 +1,7 @@
 import React from "react";
 import { useRouter } from "next/router";
 
+import type { NutrientName } from "@common/nutrients";
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
@@ -13,6 +14,7 @@ import * as foodActions from "@store/actions/food";
 import * as userActions from "@store/actions/user";
 import type { FoodPageStore } from "@store/types/food";
 import type { MetaStore } from "@store/types/meta";
+import type { UserStoreNutrient } from "@store/types/user";
 
 import styles from "./rba-food-page.module.scss";
 
@@ -21,10 +23,11 @@ interface Props {
     isReadOnly: boolean;
     food: FoodPageStore;
     meta: MetaStore;
+    featuredNutrients: UserStoreNutrient[];
     isNew: boolean;
 }
 
-const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
+const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrients, isNew }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -78,7 +81,6 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
         description,
         nutrientsByServing,
         nutrientsByServingInputs,
-        featuredNutrients,
     } = food;
 
     const {
@@ -128,7 +130,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
 
                 <RbaGeneralInfoBlock
                     food={food}
-                    featuredNutrients={featuredNutrients}
+                    featuredNutrients={featuredNutrients.map((nutrient) => nutrient.nutrientName as NutrientName)}
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}

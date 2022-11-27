@@ -7,7 +7,7 @@ use super::error::Error;
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct JournalGroup {
-    pub order_number: i16,
+    pub ui_index: i16,
     pub name: String,
     pub user_id: i64,
 }
@@ -32,14 +32,14 @@ impl JournalGroup {
         // insert
 
         let mut insert_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO journal.journal_group (order_number, name, user_id) ");
+            QueryBuilder::new("INSERT INTO journal.journal_group (ui_index, name, user_id) ");
 
         insert_query_builder
             .push_values(
                 journal_groups.iter().take(BIND_LIMIT / 3),
                 |mut builder, journal_group| {
                     builder
-                        .push_bind(journal_group.order_number)
+                        .push_bind(journal_group.ui_index)
                         .push_bind(journal_group.name.to_string())
                         .push_bind(user_id);
                 },

@@ -4,6 +4,7 @@ import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/unit
 
 export interface FoodPageStore {
 
+    isLoading: boolean;
     isLoaded: boolean;
     errorMessage?: Option<string>;
 
@@ -35,7 +36,6 @@ export interface FoodPageStore {
     servingSize: number;
     servingSizeInput: string;
     servingSizeUnit: Unit | string;
-    featuredNutrients: NutrientName[];
 
     // NOTE: NEW FOOD
     isCreated: boolean;

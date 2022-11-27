@@ -1,12 +1,17 @@
 import { createReducer } from "@reduxjs/toolkit";
 
+import { sortBy } from "@common/array";
+import { getKeys, getValues } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
 import * as actions from "../actions/recipe";
-import { getIngredientProduct, getRecipeIngredientProduct, getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients } from "../helpers/recipe";
+import {
+    getIngredientProduct, getRecipeIngredientProduct,
+    getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients,
+} from "../helpers/recipe";
 import * as types from "../types/recipe";
 
 
@@ -35,6 +40,7 @@ const DEFAULT_SERVING_SIZE: number = 100;
 
 const initialState: types.RecipePageStore = {
 
+    isLoading: false,
     isLoaded: false,
     isLoadedIngredients: true,
     errorMessage: null,
@@ -83,7 +89,7 @@ function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngr
 
         isOpen: false,
         isMarked: false,
-        products: Utils.getObjectValues(ingredient.products).reduce((acc, product) => {
+        products: getValues(ingredient.products).reduce((acc, product) => {
 
             const amountInCurrentUnits = units.convertFromMetric(
                 product.amount, product.unit, [], product.density,
@@ -344,7 +350,7 @@ const reducer = createReducer(initialState, (builder) => {
                             ? { ...directionPart, stepNumber }
                             : directionPart
                     ))
-                    .sort(Utils.sortBy("stepNumber")),
+                    .sort(sortBy("stepNumber")),
             };
         })
         .addCase(actions.updateDirectionPartNote, (state, action) => {
@@ -476,7 +482,7 @@ const reducer = createReducer(initialState, (builder) => {
                         ? { ...direction, stepNumber }
                         : direction
                 ))
-                .sort(Utils.sortBy("stepNumber"));
+                .sort(sortBy("stepNumber"));
         })
         .addCase(actions.updateDirectionName, (state, action) => {
             const { directionIndex, name } = action.payload;
@@ -666,7 +672,7 @@ const reducer = createReducer(initialState, (builder) => {
                 ( ingredient.id === parentId )
                     ? {
                         ...ingredient,
-                        products: Utils.getObjectKeys(ingredient.products, true).reduce((acc, product_id) => (
+                        products: getKeys(ingredient.products, true).reduce((acc, product_id) => (
                             product_id !== id || ingredient.product_id === id
                                 ? { ...acc, [product_id]: ingredient.products[product_id] }
                                 : acc
@@ -968,6 +974,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { arg: recipeId } = action.meta;
 
             state.id = recipeId;
+            state.isLoading = true;
             state.isLoaded = false;
             state.errorMessage = null;
             state.editMode = false;
@@ -980,6 +987,7 @@ const reducer = createReducer(initialState, (builder) => {
 
             const nutrientsByServing = getRecipeNutrientsFromIngredients(recipeIngredients);
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = null;
 
@@ -1006,38 +1014,45 @@ const reducer = createReducer(initialState, (builder) => {
             state.directions = recipeDirections;
         })
         .addCase(actions.fetchRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
 
         .addCase(actions.createRecipe.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.createRecipe.fulfilled, (state, action) => {
             const { payload: recipe } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = recipe.id;
             state.isCreated = true;
         })
         .addCase(actions.createRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         })
 
         .addCase(actions.updateRecipe.pending, (state) => {
+            state.isLoading = true;
             state.isLoaded = false;
         })
         .addCase(actions.updateRecipe.fulfilled, (state, action) => {
             const { payload: recipe } = action;
 
+            state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
             state.id = recipe.id;
             state.isCreated = true;
         })
         .addCase(actions.updateRecipe.rejected, (state, action) => {
+            state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = action.payload?.message;
         });

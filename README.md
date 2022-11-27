@@ -4,14 +4,32 @@
 
 ## How to get started
 
+There're several options to run this project:
+
 ```sh
+# Run full project (includes everything like docs-app and recipe-scraper)
 docker compose up --build
 
+# Run lean dev deployment with fully functional web-api
+docker compose up --build recipe-book-api
+
+# Run lean dev deployment with fully functional web-api & web-app
+docker compose up --build recipe-book-app
+
+# Or just run a database
+docker compose up recipe-book-db
+```
+
+Following commands will help you fill up database from scratch:
+
+```sh
+cd tools/rba-cli
+
 # Migrate Database
-rba-cli migrate-database
+cargo run migrate-database
 
 # Seed Database with test data
-rba-cli seed-database
+cargo run seed-database
 ```
 
 ## Other

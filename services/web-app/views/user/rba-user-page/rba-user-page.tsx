@@ -1,13 +1,16 @@
 import React from "react";
 import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
+import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import { classNames } from "@common/style";
 import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
-import RbaJournalBlock from "@views/user/components/rba-journal-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
+import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/actions/user";
+import * as journalActions from "@store/actions/journal";
+import * as userActions from "@store/actions/user";
+import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStore } from "@store/types/user";
 
 import styles from "./rba-user-page.module.scss";
@@ -15,24 +18,26 @@ import styles from "./rba-user-page.module.scss";
 
 interface Props {
     user: UserStore;
+    journalGroups: JournalStoreGroup[];
+    nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaUserPage: React.FC<Props> = ({ user }) => {
+const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescriptions }) => {
 
     const dispatch = useAppDispatch();
 
     const menuItems = [
-        UserMenuItem.Journal,
-        UserMenuItem.Recipes,
         UserMenuItem.Foods,
+        UserMenuItem.Recipes,
+        UserMenuItem.Settings,
     ];
 
     const getMenuItemElement = (menuItem: UserMenuItem): JSX.Element => (
         <div
             data-cy={CY_USER_MENU_ITEM}
             key={menuItem}
-            onClick={() => dispatch(actions.changeMenuItem(menuItem))}
+            onClick={() => dispatch(userActions.changeMenuItem(menuItem))}
             className={classNames({
                 [styles.navigationMenuItem]: true,
                 [styles.selectedItem]: user.selectedMenuItem === menuItem,
@@ -44,15 +49,13 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
 
     const getMainBlock = (menuItem: UserMenuItem): JSX.Element => {
         switch (menuItem) {
-            case UserMenuItem.Journal:
-                return (<RbaJournalBlock />);
             case UserMenuItem.Recipes:
                 return (
                     <RbaRecipesBlock
                         favoriteRecipes={user.favoriteRecipes}
                         customRecipes={user.customRecipes}
-                        deleteFavoriteRecipe={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
-                        deleteCustomRecipe={(productId) => dispatch(actions.deleteCustomProduct(productId))}
+                        deleteFavoriteRecipe={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
+                        deleteCustomRecipe={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
                     />
                 );
             case UserMenuItem.Foods:
@@ -60,8 +63,19 @@ const RbaUserPage: React.FC<Props> = ({ user }) => {
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(productId) => dispatch(actions.deleteFavoriteProduct(productId))}
-                        deleteCustomFood={(productId) => dispatch(actions.deleteCustomProduct(productId))}
+                        deleteFavoriteFood={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
+                        deleteCustomFood={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
+                    />
+                );
+            case UserMenuItem.Settings:
+                return (
+                    <RbaSettingsBlock
+                        journalGroups={journalGroups}
+                        userNutrients={user.nutrients}
+                        nutrientDescriptions={nutrientDescriptions}
+                        updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
+                        updateNutrient={(nutrient) => dispatch(userActions.upsertNutrient(nutrient))}
+                        deleteNutrient={(nutrientId) => dispatch(userActions.deleteNutrient(nutrientId))}
                     />
                 );
         }

@@ -11,3 +11,4 @@ pub mod meta;
 pub mod product;
 pub mod product_nutrient;
 pub mod recipe;
+pub mod user_nutrient;

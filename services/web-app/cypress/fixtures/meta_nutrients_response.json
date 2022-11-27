@@ -1,0 +1,570 @@
+[
+    {
+        "id": 1,
+        "name": "energy",
+        "daily_value": 2000,
+        "unit": "kcal",
+        "nutrient_group": "energy",
+        "parent_name": null
+    },
+    {
+        "id": 2,
+        "name": "carbohydrate_energy",
+        "daily_value": 1098,
+        "unit": "kcal",
+        "nutrient_group": "energy",
+        "parent_name": "energy"
+    },
+    {
+        "id": 3,
+        "name": "fat_energy",
+        "daily_value": 702,
+        "unit": "kcal",
+        "nutrient_group": "energy",
+        "parent_name": "energy"
+    },
+    {
+        "id": 4,
+        "name": "protein_energy",
+        "daily_value": 200,
+        "unit": "kcal",
+        "nutrient_group": "energy",
+        "parent_name": "energy"
+    },
+    {
+        "id": 5,
+        "name": "carbohydrate",
+        "daily_value": 275,
+        "unit": "g",
+        "nutrient_group": "carbohydrates",
+        "parent_name": null
+    },
+    {
+        "id": 6,
+        "name": "dietary_fiber",
+        "daily_value": 28,
+        "unit": "g",
+        "nutrient_group": "carbohydrates",
+        "parent_name": "carbohydrate"
+    },
+    {
+        "id": 7,
+        "name": "starch",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "carbohydrates",
+        "parent_name": "carbohydrate"
+    },
+    {
+        "id": 8,
+        "name": "sugars",
+        "daily_value": 50,
+        "unit": "g",
+        "nutrient_group": "carbohydrates",
+        "parent_name": "carbohydrate"
+    },
+    {
+        "id": 9,
+        "name": "fat",
+        "daily_value": 78,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": null
+    },
+    {
+        "id": 10,
+        "name": "monounsaturated",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "fat"
+    },
+    {
+        "id": 11,
+        "name": "polyunsaturated",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "fat"
+    },
+    {
+        "id": 12,
+        "name": "omega_3",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "polyunsaturated"
+    },
+    {
+        "id": 13,
+        "name": "omega_6",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "polyunsaturated"
+    },
+    {
+        "id": 14,
+        "name": "saturated",
+        "daily_value": 20,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "fat"
+    },
+    {
+        "id": 15,
+        "name": "trans_fats",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "lipids",
+        "parent_name": "fat"
+    },
+    {
+        "id": 16,
+        "name": "cholesterol",
+        "daily_value": 300,
+        "unit": "mg",
+        "nutrient_group": "lipids",
+        "parent_name": null
+    },
+    {
+        "id": 17,
+        "name": "phytosterol",
+        "daily_value": null,
+        "unit": "mg",
+        "nutrient_group": "lipids",
+        "parent_name": null
+    },
+    {
+        "id": 18,
+        "name": "protein",
+        "daily_value": 50,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": null
+    },
+    {
+        "id": 19,
+        "name": "tryptophan",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 20,
+        "name": "threonine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 21,
+        "name": "isoleucine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 22,
+        "name": "leucine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 23,
+        "name": "lysine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 24,
+        "name": "methionine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 25,
+        "name": "cystine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 26,
+        "name": "phenylalanine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 27,
+        "name": "tyrosine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 28,
+        "name": "valine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 29,
+        "name": "arginine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 30,
+        "name": "histidine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 31,
+        "name": "alanine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 32,
+        "name": "aspartic_acid",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 33,
+        "name": "glutamic_acid",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 34,
+        "name": "glycine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 35,
+        "name": "proline",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 36,
+        "name": "serine",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 37,
+        "name": "hydroxyproline",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "proteins_and_amino_acids",
+        "parent_name": "protein"
+    },
+    {
+        "id": 38,
+        "name": "vitamin_a",
+        "daily_value": 5000,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 39,
+        "name": "vitamin_c",
+        "daily_value": 90,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 40,
+        "name": "vitamin_d",
+        "daily_value": 400,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 41,
+        "name": "vitamin_e",
+        "daily_value": 15,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 42,
+        "name": "vitamin_k",
+        "daily_value": 120,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 43,
+        "name": "vitamin_b1",
+        "daily_value": 1.2,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 44,
+        "name": "vitamin_b2",
+        "daily_value": 1.3,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 45,
+        "name": "vitamin_b3",
+        "daily_value": 16,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 46,
+        "name": "vitamin_b5",
+        "daily_value": 5,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 47,
+        "name": "vitamin_b6",
+        "daily_value": 1.7,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 48,
+        "name": "vitamin_b7",
+        "daily_value": 30,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 49,
+        "name": "vitamin_b9",
+        "daily_value": 400,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 50,
+        "name": "vitamin_b12",
+        "daily_value": 2.4,
+        "unit": "mcg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 51,
+        "name": "choline",
+        "daily_value": 550,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 52,
+        "name": "betaine",
+        "daily_value": null,
+        "unit": "mg",
+        "nutrient_group": "vitamins",
+        "parent_name": null
+    },
+    {
+        "id": 53,
+        "name": "calcium",
+        "daily_value": 1300,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 54,
+        "name": "iron",
+        "daily_value": 18,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 55,
+        "name": "magnesium",
+        "daily_value": 420,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 56,
+        "name": "phosphorus",
+        "daily_value": 1250,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 57,
+        "name": "potassium",
+        "daily_value": 4700,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 58,
+        "name": "sodium",
+        "daily_value": 2300,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 59,
+        "name": "zinc",
+        "daily_value": 11,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 60,
+        "name": "copper",
+        "daily_value": 0.9,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 61,
+        "name": "manganese",
+        "daily_value": 2.3,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 62,
+        "name": "selenium",
+        "daily_value": 55,
+        "unit": "mcg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 63,
+        "name": "fluoride",
+        "daily_value": null,
+        "unit": "mcg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 64,
+        "name": "chloride",
+        "daily_value": 2300,
+        "unit": "mg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 65,
+        "name": "chromium",
+        "daily_value": 35,
+        "unit": "mcg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 66,
+        "name": "iodine",
+        "daily_value": 150,
+        "unit": "mcg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 67,
+        "name": "molybdenum",
+        "daily_value": 45,
+        "unit": "mcg",
+        "nutrient_group": "minerals",
+        "parent_name": null
+    },
+    {
+        "id": 68,
+        "name": "alcohol",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "other",
+        "parent_name": null
+    },
+    {
+        "id": 69,
+        "name": "water",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "other",
+        "parent_name": null
+    },
+    {
+        "id": 70,
+        "name": "ash",
+        "daily_value": null,
+        "unit": "g",
+        "nutrient_group": "other",
+        "parent_name": null
+    },
+    {
+        "id": 71,
+        "name": "caffeine",
+        "daily_value": null,
+        "unit": "mg",
+        "nutrient_group": "other",
+        "parent_name": null
+    }
+]

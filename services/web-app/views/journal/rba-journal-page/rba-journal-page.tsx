@@ -1,6 +1,6 @@
 import React from "react";
 
-import Utils from "@common/utils";
+import { mapDictionary } from "@common/object";
 import RbaJournalBlock from "@views/journal/components/rba-journal-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
@@ -56,7 +56,7 @@ const RbaJournalPage: React.FC<Props> = ({ userId, journal, meta, search, decrem
                 <RbaPageDetailedNutrientsBlock
                     isReadOnly={true}
                     nutrients={nutrients}
-                    nutrientInputs={Utils.mapDictionary(nutrients, (_key, value) => String(value))}
+                    nutrientInputs={mapDictionary(nutrients, (_key, value) => String(value))}
                     nutrientDescriptions={nutrientDescriptions}
                 />
 

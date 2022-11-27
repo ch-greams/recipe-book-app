@@ -33,6 +33,7 @@ CREATE TABLE journal.user_nutrient (
 	nutrient_id int2 NOT NULL,
 	is_featured bool NOT NULL DEFAULT false,
 	daily_target_amount float4 NULL,
+    ui_index int2 NOT NULL,
 	CONSTRAINT user_nutrient_pk PRIMARY KEY (user_id, nutrient_id),
 	CONSTRAINT nutrient_fk FOREIGN KEY (nutrient_id) REFERENCES meta.nutrient(id),
 	CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)

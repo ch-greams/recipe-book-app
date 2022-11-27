@@ -66,6 +66,7 @@ export interface RecipeDirection {
 
 
 export interface RecipePageStore {
+    isLoading: boolean;
     isLoaded: boolean;
     isLoadedIngredients: boolean;
     errorMessage?: Option<string>;

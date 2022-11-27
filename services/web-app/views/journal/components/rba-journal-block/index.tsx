@@ -41,7 +41,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                     setShowTrash(false);
 
                     const draggableEntryId: Option<number> = event.active?.data.current?.entryId;
-                    const droppableEntryGroupNumber: Option<number> = event.over?.data.current?.groupOrderNumber;
+                    const droppableEntryGroupIndex: Option<number> = event.over?.data.current?.groupIndex;
                     const droppableIsTrash: Option<boolean> = event.over?.data.current?.isTrash;
 
                     if (isSome(draggableEntryId) && isSome(event.over?.id)) {
@@ -51,7 +51,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                         else {
                             dispatch(journalActions.updateEntryGroup({
                                 id: draggableEntryId,
-                                groupNumber: droppableEntryGroupNumber,
+                                groupIndex: droppableEntryGroupIndex,
                             }));
                             dispatch(journalActions.updateJournalEntry(draggableEntryId));
                         }
@@ -61,16 +61,18 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
 
                 {groups.map((group) => (
                     <RbaJournalGroupBlock
-                        key={group.orderNumber}
-                        groupOrderNumber={group.orderNumber}
+                        key={group.uiIndex}
+                        groupIndex={group.uiIndex}
                         groupName={group.name}
-                        entries={entries.filter((entry) => entry.groupOrderNumber === group.orderNumber)}
+                        entries={entries.filter((entry) => entry.groupIndex === group.uiIndex)}
                     />
                 ))}
 
                 <RbaJournalGroupBlock
                     groupName={"unknown"}
-                    entries={entries.filter((entry) => !entry.groupOrderNumber)}
+                    entries={entries.filter(({ groupIndex }) => (
+                        !groupIndex || groups.every(({ uiIndex }) => uiIndex !== groupIndex)
+                    ))}
                 />
 
                 {( showTrash && <RbaJournalTrash /> )}
@@ -95,7 +97,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                         product_id: product.id,
                         amount: 100,
                         unit: "g",
-                        journal_group_num: null,
+                        journal_group_ui_index: null,
                     }));
 
                     dispatch(searchActions.searchClear());

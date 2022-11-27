@@ -3,9 +3,10 @@
 
 .rbaInput {
 
+    box-sizing: border-box;
+
     padding: 0 4px;
 
-    font-family: $font-default;
     font-weight: $font-weight-regular;
 
     border-style: solid;
@@ -69,16 +70,15 @@
     // -------------------------------------------------------------------------
 
     &.widthSize_Small {
-        width: 24px;
-        min-width: 24px;
+        width: 32px;
     }
 
     &.widthSize_Medium {
-        width: 80px;
+        width: 88px;
     }
 
     &.widthSize_Large {
-        width: 120px;
+        width: 128px;
     }
 
     &.widthSize_Full {
@@ -90,17 +90,17 @@
     // -------------------------------------------------------------------------
 
     &.heightSize_Small {
-        height: 20px;
+        height: 22px;
         font-size: $font-size-small;
     }
 
     &.heightSize_Medium {
-        height: 22px;
+        height: 24px;
         font-size: $font-size-medium;
     }
 
     &.heightSize_Large {
-        height: 32px;
+        height: 34px;
         padding: 0 8px;
         font-size: $font-size-large;
     }

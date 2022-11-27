@@ -3,8 +3,8 @@ import type { PropsWithChildren } from "react";
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
+import { getValues } from "@common/object";
 import { Color } from "@common/style";
-import Utils from "@common/utils";
 import { IconSize } from "@icons/icon-params";
 
 import RbaIconAdd from "./rba-icon-add";
@@ -33,12 +33,12 @@ export default {
     component: RbaIcon,
     argTypes: {
         size: {
-            type: { name: "enum", value: Utils.getObjectValues(IconSize), required: true },
+            type: { name: "enum", value: getValues(IconSize), required: true },
             table: { type: { summary: "IconSize" } },
             control: { type: "select", options: IconSize },
         },
         color: {
-            type: { name: "enum", value: Utils.getObjectValues(Color), required: true },
+            type: { name: "enum", value: getValues(Color), required: true },
             table: { type: { summary: "Color" } },
             control: { type: "select", options: Color },
         },

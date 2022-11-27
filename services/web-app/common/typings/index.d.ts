@@ -117,9 +117,24 @@ export interface NutrientMeta {
     nutrient_group: string;
     parent_name?: Option<string>;
 }
+export interface UserNutrient {
+    user_id: number;
+    nutrient_id: number;
+    is_featured: boolean;
+    daily_target_amount?: Option<number>;
+    ui_index: number;
+}
+
+export interface UserNutrientDetailed extends UserNutrient {
+    nutrient_name: string;
+    nutrient_daily_value?: Option<number>;
+    nutrient_unit: string;
+    nutrient_group: string;
+    nutrient_parent_name?: Option<string>;
+}
 
 export interface JournalGroup {
-    order_number: number;
+    ui_index: number;
     name: string;
     user_id: number;
 }
@@ -132,7 +147,7 @@ export interface JournalEntry {
     product_id: number;
     amount: number;
     unit: string;
-    journal_group_num: Option<number>;
+    journal_group_ui_index: Option<number>;
 }
 
 export interface JournalEntryDetailed extends JournalEntry {

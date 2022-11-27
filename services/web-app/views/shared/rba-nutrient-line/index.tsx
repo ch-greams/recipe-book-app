@@ -48,9 +48,7 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
 };
 
 
-const RbaNutrientLine: React.FC<Props> = ({
-    nutrient, isReadOnly,
-}) => {
+const RbaNutrientLine: React.FC<Props> = ({ nutrient, isReadOnly }) => {
 
     // TODO: Move dispatch hook to RbaNutrientsBlock component (like custom-unit block & line)
     const dispatch = useAppDispatch();

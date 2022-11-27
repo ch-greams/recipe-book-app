@@ -12,15 +12,15 @@ import styles from "./rba-journal-group-block.module.scss";
 
 interface Props {
     groupName: string;
-    groupOrderNumber?: Option<number>;
+    groupIndex?: Option<number>;
     entries: JournalStoreEntry[];
 }
 
-const RbaJournalGroupBlock: React.FC<Props> = ({ groupOrderNumber, groupName, entries }) => {
+const RbaJournalGroupBlock: React.FC<Props> = ({ groupIndex, groupName, entries }) => {
 
     const { isOver, setNodeRef } = useDroppable({
-        id: `journal_group-${groupOrderNumber}`,
-        data: { groupOrderNumber },
+        id: `journal_group-${groupIndex}`,
+        data: { groupIndex },
     });
 
     return (

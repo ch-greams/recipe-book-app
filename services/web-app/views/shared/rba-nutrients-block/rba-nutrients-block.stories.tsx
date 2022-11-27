@@ -51,12 +51,14 @@ const defaultNutrientDescriptions = store.getState().meta.nutrientDescriptions;
 const nutrientDescriptions = {
     ...defaultNutrientDescriptions,
     [NutrientName.Carbohydrate]: {
+        id: 5,
         type: NutrientName.Carbohydrate,
         unit: NutrientUnit.g,
         dailyValue: 275,
         isFraction: false,
     },
     [NutrientName.DietaryFiber]: {
+        id: 6,
         type: NutrientName.DietaryFiber,
         unit: NutrientUnit.g,
         dailyValue: 28,

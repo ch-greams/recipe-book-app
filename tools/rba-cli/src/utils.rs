@@ -31,6 +31,7 @@ pub(crate) async fn seed_db(database_url: &str) {
         "database/seeds/journal/00_user.sql",
         "database/seeds/journal/01_journal_group.sql",
         "database/seeds/product/01_product.sql",
+        "database/seeds/journal/02_user_nutrient.sql",
         "database/seeds/journal/02_journal_entry.sql",
         "database/seeds/journal/02_favorite_product.sql",
         "database/seeds/product/02_custom_unit.sql",
