@@ -4,9 +4,9 @@ import { getCurrentDate } from "@common/date";
 import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
-describe("user", () => {
+describe("user_page", () => {
 
-    describe("user_page", () => {
+    describe("page", () => {
 
         beforeEach(() => {
             cy.intercept(
@@ -134,6 +134,17 @@ describe("user", () => {
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME)
+                .should("be.visible");
+        });
+
+        it("can see journal groups", () => {
+
+            const JOURNAL_GROUP_N3 = "dinner";
+
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N3}"]`)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
+                .should("have.text", "3")
                 .should("be.visible");
         });
     });

@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 
 import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
@@ -17,15 +18,16 @@ const RbaJournalGroup: React.FC<Props> = ({ uiIndex, name, updateGroup }) => {
 
     return (
 
-        <div className={styles.journalGroupLine} >
+        <div className={styles.journalGroupLine} data-cy={constants.CY_USER_JOURNAL_GROUP}>
 
             <div className={styles.journalGroup}>
 
-                <div className={styles.journalGroupIndex}>
+                <div className={styles.journalGroupIndex} data-cy={constants.CY_USER_JOURNAL_GROUP_INDEX}>
                     {uiIndex}
                 </div>
 
                 <RbaInput
+                    data-cy={constants.CY_USER_JOURNAL_GROUP_INPUT}
                     theme={InputTheme.Primary}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
