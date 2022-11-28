@@ -15,8 +15,6 @@ export const CY_PRODUCT_API_PATH = "/api/v1/product";
 export const CY_JOURNAL_API_PATH = "/api/v1/journal";
 export const CY_META_API_PATH = "/api/v1/meta";
 
-export const CY_JOURNAL_API_PATH = "/api/v1/journal";
-
 // PAGE_TITLE
 
 export const CY_PAGE_TITLE_BLOCK = "CY_PAGE_TITLE_BLOCK";
