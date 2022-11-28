@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as constants from "@cypress/constants";
 import { DndContext } from "@dnd-kit/core";
 
 import { DEFAULT_TIME_FORMAT, getCurrentTime } from "@common/date";
@@ -32,7 +33,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
     const [ showTrash, setShowTrash ] = useState(false);
 
     return (
-        <div className={styles.journal}>
+        <div className={styles.journal} data-cy={constants.CY_JOURNAL_BLOCK}>
 
             <DndContext
                 onDragStart={() => { setShowTrash(true); }}
@@ -102,6 +103,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
 
                     dispatch(searchActions.searchClear());
                 }}
+                data-cy={constants.CY_JOURNAL_SEARCH_INPUT}
             />
 
         </div>

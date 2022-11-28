@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 import { useDroppable } from "@dnd-kit/core";
 
 import { classNames } from "@common/style";
@@ -24,7 +25,7 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupIndex, groupName, entries 
     });
 
     return (
-        <div className={styles.journalGroupBlock}>
+        <div className={styles.journalGroupBlock} data-cy={constants.CY_JOURNAL_GROUP}>
 
             <div className={styles.journalGroup}>
 

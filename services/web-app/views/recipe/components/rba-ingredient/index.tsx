@@ -96,6 +96,7 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient }) => {
                         dispatch(actions.addIngredientProduct({ id: ingredient.id, product }));
                         dispatch(searchClear());
                     }}
+                    data-cy={constants.CY_SEARCH}
                 />
             ) )}
 

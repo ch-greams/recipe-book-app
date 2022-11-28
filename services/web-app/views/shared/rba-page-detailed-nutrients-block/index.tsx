@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 
 import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import {
@@ -37,7 +38,7 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
     ];
 
     return (
-        <div className={styles.detailedNutrients}>
+        <div className={styles.detailedNutrients} data-cy={constants.CY_DETAILED_NUTRIENTS_BLOCK}>
 
             <div className={styles.detailedNutrientsColumn}>
 

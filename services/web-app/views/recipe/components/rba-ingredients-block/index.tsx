@@ -62,6 +62,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                             dispatch(addIngredient(product));
                             dispatch(searchClear());
                         }}
+                        data-cy={constants.CY_SEARCH}
                     />
                 ) )}
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as constants from "@cypress/constants";
 
 import { formatDate } from "@common/date";
 import { Color } from "@common/style";
@@ -31,7 +32,7 @@ const RbaJournalDateBlock: React.FC<Props> = ({ date, isJournalSaved, decrementD
     }, [ isJournalSaved ]);
 
     return (
-        <div className={styles.journalDateBlock}>
+        <div className={styles.journalDateBlock} data-cy={constants.CY_JOURNAL_DATE_BLOCK}>
 
             <span className={styles.journalDateControlLeft}>
                 <RbaButton

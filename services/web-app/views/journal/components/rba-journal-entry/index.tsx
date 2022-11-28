@@ -1,4 +1,5 @@
 import React from "react";
+import * as constants from "@cypress/constants";
 import { useDraggable } from "@dnd-kit/core";
 
 import { getCurrentTime } from "@common/date";
@@ -45,6 +46,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
         <div
             className={styles.journalEntry}
             style={transform ? { transform: `translate3d(${transform.x}px, ${transform.y}px, 0)` } : undefined}
+            data-cy={constants.CY_JOURNAL_ENTRY}
         >
 
             <span>
@@ -58,6 +60,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     placeholder={getCurrentTime()}
                     onChange={onEntryTimeUpdate}
                     onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
+                    data-cy={constants.CY_JOURNAL_ENTRY_TIME}
                 />
             </span>
 
@@ -66,6 +69,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                 ref={setNodeRef}
                 {...listeners}
                 {...attributes}
+                data-cy={constants.CY_JOURNAL_ENTRY_FOOD_NAME}
             >
                 {entry.foodName}
             </span>
@@ -79,6 +83,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     normalizer={InputNormalizer.Decimal}
                     onChange={onFoodAmountUpdate}
                     onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
+                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_AMOUNT}
                 />
             </span>
 
@@ -91,6 +96,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     options={Object.values(Unit).map((unit) => ({ value: unit }))}
                     value={entry.foodUnit}
                     onChange={onFoodUnitUpdate}
+                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_AMOUNT_UNIT}
                 />
             </span>
 

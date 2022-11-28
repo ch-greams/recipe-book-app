@@ -28,6 +28,7 @@ export enum SearchInputHeightSize {
 export type OnSelectFunc = (product: ProductShort) => void;
 
 interface Props {
+    "data-cy"?: string;
     width: SearchInputWidthSize;
     height?: SearchInputHeightSize;
     placeholder?: string;
@@ -54,6 +55,7 @@ const RbaSearchInput: React.FC<Props> = ({
     items = [],
     onChange,
     onSelect,
+    ...props
 }) => {
 
     const DEFAULT_DELAY = 700;
@@ -61,7 +63,7 @@ const RbaSearchInput: React.FC<Props> = ({
 
     return (
         <div
-            data-cy={constants.CY_SEARCH}
+            data-cy={props["data-cy"]}
             className={classNames({ [styles.search]: true, [styles[width]]: true, [styles[height]]: true })}
         >
 
