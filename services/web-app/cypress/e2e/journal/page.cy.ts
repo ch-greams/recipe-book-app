@@ -11,29 +11,25 @@ describe("journal_page", () => {
             cy.intercept(`${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`, { fixture: "journal_groups_response.json" });
             cy.visit(`${constants.CY_JOURNAL_PATH}`);
         });
-        it("successfully loads", () => {
+        it("can see all page blocks", () => {
             cy.get(`[data-cy=${constants.CY_JOURNAL_DATE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_JOURNAL_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_DETAILED_NUTRIENTS_BLOCK}]`).should("be.visible");
         });
 
-        it("can see journal page elements", () => {
-            cy.get(`[data-cy=${constants.CY_JOURNAL_DATE_BLOCK}]`)
-                // .contains(`[data-cy=${constants.CY_JOURNAL_GROUP}]`, "")
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .should("be.visible");
-            cy.get(`[data-cy=${constants.CY_JOURNAL_SEARCH_INPUT}]`)
-                .should("have.value", "")
-                .should("be.visible");
-        });
-
-        it("can locate provided journal entry data", () => {
+        it("can see journal entries in groups", () => {
             const FOOD_NAME = "Hamburger";
+            const FOOD_GROUP = "LUNCH";
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
-                .contains(FOOD_NAME);
+            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
+                .contains(FOOD_GROUP)
+                .should("be.visible")
+                .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
+                .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
+                .contains(FOOD_NAME)
+                .should("be.visible");
         });
+
     });
 });
 
