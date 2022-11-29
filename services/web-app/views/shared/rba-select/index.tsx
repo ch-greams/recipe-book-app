@@ -1,5 +1,5 @@
 import React from "react";
-import * as constants from "@cypress/constants";
+import { CY_SELECT_INPUT_CURRENT_OPTION, CY_SELECT_INPUT_OPTION_LIST } from "@cypress/constants";
 
 import { classNames } from "@common/style";
 import { unwrapOr } from "@common/types";
@@ -30,6 +30,7 @@ export enum SelectHeightSize {
 }
 
 interface Props {
+    "data-cy"?: string;
     disabled?: boolean;
     theme: SelectTheme;
     center?: boolean;
@@ -57,6 +58,7 @@ export const RbaSelect: React.FC<Props> = ({
     options,
     value,
     onChange,
+    ...props
 }) => {
 
     const { isListVisible, showList, hideList } = useToggleList();
@@ -75,7 +77,7 @@ export const RbaSelect: React.FC<Props> = ({
 
     return (
         <div
-            data-cy={constants.CY_SELECT_INPUT}
+            data-cy={props["data-cy"]}
             className={classNames({
                 [styles.select]: true,
                 [styles.alignCenter]: center,
@@ -85,11 +87,15 @@ export const RbaSelect: React.FC<Props> = ({
                 [styles[height]]: true,
             })}
         >
-            <div className={styles.selectOption} onClick={( disabled ? undefined : onClick )}>
+            <div
+                data-cy={CY_SELECT_INPUT_CURRENT_OPTION}
+                className={styles.selectOption}
+                onClick={( disabled ? undefined : onClick )}
+            >
                 {value}
             </div>
             {( isListVisible && (
-                <div className={styles.selectList}>
+                <div data-cy={CY_SELECT_INPUT_OPTION_LIST} className={styles.selectList}>
                     {(options.map((option) => (<RbaSelectOption key={option.value} option={option} onSelect={onSelect} />)))}
                 </div>
             ) )}

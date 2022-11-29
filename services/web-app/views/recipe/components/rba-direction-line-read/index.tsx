@@ -72,6 +72,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                                 {direction.temperatureValueInput}
                             </div>
                             <RbaSelect
+                                data-cy={constants.CY_SELECT_INPUT}
                                 theme={SelectTheme.Primary}
                                 center={true}
                                 width={SelectWidthSize.Medium}
@@ -92,6 +93,7 @@ const RbaDirectionLineRead: React.FC<Props> = ({
                                 {direction.durationValueInput}
                             </div>
                             <RbaSelect
+                                data-cy={constants.CY_SELECT_INPUT}
                                 theme={SelectTheme.Primary}
                                 center={true}
                                 width={SelectWidthSize.Medium}

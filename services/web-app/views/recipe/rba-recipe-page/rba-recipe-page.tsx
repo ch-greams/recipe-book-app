@@ -1,13 +1,13 @@
 import React from "react";
 import { useRouter } from "next/router";
 
+import { BUTTON_DELETE, BUTTON_EDIT,BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import type { NutrientName } from "@common/nutrients";
 import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import { RBA_BUTTON_LABEL_DELETE, RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
@@ -46,14 +46,14 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
     const pageControls = (
         <>
             <RbaButton
-                label={RBA_BUTTON_LABEL_REVERT}
+                label={BUTTON_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(recipeActions.fetchRecipe(recipe.id))}
             />
 
             <RbaButton
-                label={RBA_BUTTON_LABEL_SAVE}
+                label={BUTTON_SAVE}
                 width={ButtonWidthSize.Full}
                 onClick={saveButtonAction}
             />
@@ -63,7 +63,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
     const editButtons = (
         <>
             <RbaButton
-                label={RBA_BUTTON_LABEL_DELETE}
+                label={BUTTON_DELETE}
                 width={ButtonWidthSize.Full}
                 onClick={() => {
                     dispatch(userActions.deleteCustomProduct(recipe.id));
@@ -72,7 +72,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
             />
 
             <RbaButton
-                label={RBA_BUTTON_LABEL_EDIT}
+                label={BUTTON_EDIT}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(recipeActions.setEditMode(true))}
             />

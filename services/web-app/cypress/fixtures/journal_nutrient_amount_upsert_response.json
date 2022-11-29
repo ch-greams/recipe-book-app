@@ -1,0 +1,12 @@
+{
+    "user_id": 1,
+    "nutrient_id": 6,
+    "is_featured": true,
+    "daily_target_amount": 40,
+    "ui_index": 3,
+    "nutrient_name": "dietary_fiber",
+    "nutrient_daily_value": 28,
+    "nutrient_unit": "g",
+    "nutrient_group": "carbohydrates",
+    "nutrient_parent_name": "carbohydrate"
+}

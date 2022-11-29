@@ -118,6 +118,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         />
 
                         <RbaSelect
+                            data-cy={constants.CY_SELECT_INPUT}
                             theme={SelectTheme.Primary}
                             center={true}
                             width={SelectWidthSize.Medium}
@@ -146,6 +147,7 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                         />
 
                         <RbaSelect
+                            data-cy={constants.CY_SELECT_INPUT}
                             theme={SelectTheme.Primary}
                             center={true}
                             width={SelectWidthSize.Medium}

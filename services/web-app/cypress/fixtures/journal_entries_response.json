@@ -30,7 +30,7 @@
         ],
         "amount": 212.0,
         "unit": "g",
-        "journal_group_num": 1
+        "journal_group_ui_index": 1
     },
     {
         "id": 2,
@@ -44,7 +44,7 @@
         "custom_units": [],
         "amount": 450.4,
         "unit": "g",
-        "journal_group_num": 2
+        "journal_group_ui_index": 2
     },
     {
         "id": 3,
@@ -63,6 +63,6 @@
         "custom_units": [],
         "amount": 99.5,
         "unit": "g",
-        "journal_group_num": null
+        "journal_group_ui_index": null
     }
 ]

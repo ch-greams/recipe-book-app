@@ -140,6 +140,7 @@ const RbaDirectionPartIngredient: React.FC<Props> = ({ isReadOnly, directionPart
                         />
 
                         <RbaSelect
+                            data-cy={constants.CY_SELECT_INPUT}
                             theme={SelectTheme.Alternative}
                             center={true}
                             width={SelectWidthSize.Medium}

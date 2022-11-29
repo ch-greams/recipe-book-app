@@ -89,6 +89,7 @@ const RbaCustomUnitLine: React.FC<Props> = ({
                 />
 
                 <RbaSelect
+                    data-cy={constants.CY_SELECT_INPUT}
                     disabled={isReadOnly}
                     theme={SelectTheme.Primary}
                     center={true}
