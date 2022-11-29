@@ -1,7 +1,8 @@
 import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
-import { BUTTON_REVERT } from "@common/labels";
+import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
+import type { JournalGroup } from "@common/typings";
 import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
@@ -185,6 +186,32 @@ describe("user_page", () => {
                 .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
                 .should("have.text", "2")
                 .should("be.visible");
+        });
+
+        it("can edit and save journal groups", () => {
+
+            const JOURNAL_GROUP_N1 = "breakfast";
+            const JOURNAL_GROUP_N1_NEW = "something before lunch";
+
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/groups/update`, { statusCode: 201 }).as("updateGroups");
+
+            // Edit group name
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N1}"]`)
+                .should("be.visible")
+                .clear()
+                .type(JOURNAL_GROUP_N1_NEW);
+
+            // Save changes
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_SAVE)
+                .should("be.visible")
+                .click();
+
+            cy.wait("@updateGroups").then(interceptedRequest => {
+                cy.wrap(interceptedRequest?.request?.body.find((group: JournalGroup) => group.ui_index === 1 ))
+                    .its("name")
+                    .should("eq", JOURNAL_GROUP_N1_NEW);
+            });
         });
     });
 });
