@@ -1,11 +1,11 @@
 import React from "react";
 import { useRouter } from "next/router";
 
+import { BUTTON_DELETE, BUTTON_EDIT,BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import type { NutrientName } from "@common/nutrients";
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import { RBA_BUTTON_LABEL_DELETE, RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
@@ -41,14 +41,14 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
     const pageControls = (
         <>
             <RbaButton
-                label={RBA_BUTTON_LABEL_REVERT}
+                label={BUTTON_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(foodActions.fetchFood(food.id))}
             />
 
             <RbaButton
-                label={RBA_BUTTON_LABEL_SAVE}
+                label={BUTTON_SAVE}
                 width={ButtonWidthSize.Full}
                 onClick={saveButtonAction}
             />
@@ -58,7 +58,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
     const editButtons = (
         <>
             <RbaButton
-                label={RBA_BUTTON_LABEL_DELETE}
+                label={BUTTON_DELETE}
                 width={ButtonWidthSize.Full}
                 onClick={() => {
                     dispatch(userActions.deleteCustomProduct(food.id));
@@ -67,7 +67,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
             />
 
             <RbaButton
-                label={RBA_BUTTON_LABEL_EDIT}
+                label={BUTTON_EDIT}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(foodActions.setEditMode(true))}
             />

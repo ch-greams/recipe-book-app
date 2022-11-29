@@ -1,6 +1,6 @@
 import * as constants from "@cypress/constants";
 
-import { RBA_BUTTON_LABEL_EDIT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
+import { BUTTON_EDIT, BUTTON_SAVE } from "@common/labels";
 
 
 describe("recipe_page", () => {
@@ -23,7 +23,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`)
@@ -31,7 +31,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -50,7 +50,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BRAND_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT)
                 .should("be.visible")
                 .click();
 
@@ -60,7 +60,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_BRAND);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -79,7 +79,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`)
@@ -87,7 +87,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_SUBTITLE);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -105,7 +105,7 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}]`).should("not.exist");
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_DESCRIPTION_INPUT}]`)
@@ -113,7 +113,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_DESCRIPTION);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 

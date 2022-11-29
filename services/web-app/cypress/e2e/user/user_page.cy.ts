@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
+import { BUTTON_REVERT } from "@common/labels";
 import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
@@ -145,6 +146,44 @@ describe("user_page", () => {
                 .should("be.visible")
                 .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
                 .should("have.text", "3")
+                .should("be.visible");
+        });
+
+        it("can delete journal group and revert changes", () => {
+
+            const JOURNAL_GROUP_N2 = "lunch";
+
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
+                .should("have.text", "2")
+                .should("be.visible");
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_REVERT)
+                .should("be.visible")
+                .should("be.disabled");
+
+            // Click toggle to disable the group
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
+                .parent()
+                .siblings(`[data-cy=${constants.CY_TOGGLE}]`)
+                .click();
+
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
+                .should("not.exist");
+
+            // Revert changes
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_REVERT)
+                .should("be.visible")
+                .click()
+                .should("be.disabled");
+
+            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
+                .should("have.text", "2")
                 .should("be.visible");
         });
     });

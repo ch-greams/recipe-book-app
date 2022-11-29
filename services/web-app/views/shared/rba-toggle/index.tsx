@@ -1,4 +1,5 @@
 import React from "react";
+import { CY_TOGGLE } from "@cypress/constants";
 
 import styles from "./rba-toggle.module.scss";
 
@@ -11,7 +12,7 @@ interface Props {
 
 const RbaToggle: React.FC<Props> = ({ value, onToggle }) => {
     return (
-        <label className={styles.toggle}>
+        <label data-cy={CY_TOGGLE} className={styles.toggle}>
             <input
                 type={"checkbox"}
                 checked={value}

@@ -94,6 +94,7 @@ export const CY_NAVBAR_LOGO_ITEM = "CY_NAVBAR_LOGO_ITEM";
 // CREATE & UPDATE
 
 export const CY_BUTTON = "CY_BUTTON";
+export const CY_TOGGLE = "CY_TOGGLE";
 
 // SEARCH
 

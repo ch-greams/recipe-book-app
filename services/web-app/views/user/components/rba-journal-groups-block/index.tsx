@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
 import { sortBy } from "@common/array";
+import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import { unwrapOr } from "@common/types";
 import type { JournalGroup } from "@common/typings";
 import Utils from "@common/utils";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import { RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 import type { JournalStoreGroup } from "@store/types/journal";
 
 import RbaJournalGroup from "../rba-journal-group";
@@ -56,14 +56,14 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
             <div className={styles.journalGroupsControls}>
 
                 <RbaButton
-                    label={RBA_BUTTON_LABEL_REVERT}
+                    label={BUTTON_REVERT}
                     width={ButtonWidthSize.Full}
                     disabled={journalGroups.equals(groups)}
                     onClick={() => setJournalGroups(groups)}
                 />
 
                 <RbaButton
-                    label={RBA_BUTTON_LABEL_SAVE}
+                    label={BUTTON_SAVE}
                     width={ButtonWidthSize.Full}
                     onClick={() => {
                         const groupsToSave = journalGroups

@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
+import { BUTTON_DELETE } from "@common/labels";
 import Utils, { ProductType } from "@common/utils";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonHeightSize,ButtonWidthSize } from "@views/shared/rba-button";
-import { RBA_BUTTON_LABEL_DELETE } from "@views/shared/rba-button/labels";
 
 import styles from "./rba-recipes-block.module.scss";
 
@@ -46,7 +46,7 @@ const RbaRecipesBlock: React.FC<Props> = ({
                         </Link>
 
                         <RbaButton
-                            label={RBA_BUTTON_LABEL_DELETE}
+                            label={BUTTON_DELETE}
                             width={ButtonWidthSize.Full}
                             height={ButtonHeightSize.Full}
                             onClick={() => { deleteFavoriteRecipe(recipe.id); }}
@@ -67,7 +67,7 @@ const RbaRecipesBlock: React.FC<Props> = ({
                         </Link>
 
                         <RbaButton
-                            label={RBA_BUTTON_LABEL_DELETE}
+                            label={BUTTON_DELETE}
                             width={ButtonWidthSize.Full}
                             height={ButtonHeightSize.Full}
                             onClick={() => { deleteCustomRecipe(recipe.id); }}
