@@ -139,6 +139,8 @@ describe("user_page", () => {
                 .should("be.visible");
         });
 
+        // JOURNAL GROUPS
+
         it("can see journal groups", () => {
 
             const JOURNAL_GROUP_N3 = "dinner";

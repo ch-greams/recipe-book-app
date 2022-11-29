@@ -64,6 +64,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
             <div className={styles.directionPartInfo}>
 
                 <RbaSelect
+                    data-cy={constants.CY_SELECT_INPUT}
                     theme={SelectTheme.Alternative}
                     width={SelectWidthSize.Full}
                     height={SelectHeightSize.Medium}

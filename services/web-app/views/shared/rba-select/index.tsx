@@ -1,5 +1,4 @@
 import React from "react";
-import * as constants from "@cypress/constants";
 
 import { classNames } from "@common/style";
 import { unwrapOr } from "@common/types";
@@ -30,6 +29,7 @@ export enum SelectHeightSize {
 }
 
 interface Props {
+    "data-cy"?: string;
     disabled?: boolean;
     theme: SelectTheme;
     center?: boolean;
@@ -57,6 +57,7 @@ export const RbaSelect: React.FC<Props> = ({
     options,
     value,
     onChange,
+    ...props
 }) => {
 
     const { isListVisible, showList, hideList } = useToggleList();
@@ -75,7 +76,7 @@ export const RbaSelect: React.FC<Props> = ({
 
     return (
         <div
-            data-cy={constants.CY_SELECT_INPUT}
+            data-cy={props["data-cy"]}
             className={classNames({
                 [styles.select]: true,
                 [styles.alignCenter]: center,

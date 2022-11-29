@@ -143,6 +143,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                     />
 
                     <RbaSelect
+                        data-cy={constants.CY_SELECT_INPUT}
                         theme={getSelectTheme(theme)}
                         center={true}
                         width={SelectWidthSize.Medium}
