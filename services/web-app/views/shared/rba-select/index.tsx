@@ -1,5 +1,5 @@
 import React from "react";
-import { CY_SELECT_INPUT_OPTION_LIST } from "@cypress/constants";
+import { CY_SELECT_INPUT_CURRENT_OPTION, CY_SELECT_INPUT_OPTION_LIST } from "@cypress/constants";
 
 import { classNames } from "@common/style";
 import { unwrapOr } from "@common/types";
@@ -87,7 +87,11 @@ export const RbaSelect: React.FC<Props> = ({
                 [styles[height]]: true,
             })}
         >
-            <div className={styles.selectOption} onClick={( disabled ? undefined : onClick )}>
+            <div
+                data-cy={CY_SELECT_INPUT_CURRENT_OPTION}
+                className={styles.selectOption}
+                onClick={( disabled ? undefined : onClick )}
+            >
                 {value}
             </div>
             {( isListVisible && (

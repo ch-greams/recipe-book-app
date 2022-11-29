@@ -382,5 +382,42 @@ describe("user_page", () => {
                     .should("eq", NUTRIENT_TARGET_AMOUNT_NEW);
             });
         });
+
+        it("can remove a featured nutrient", () => {
+
+            const NUTRIENT_INDEX = 3;
+            const NUTRIENT_LABEL = NUTRIENT_TYPE_LABEL_MAPPING[NutrientName.DietaryFiber];
+
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+                .as("deleteNutrient");
+
+            // Save nutrientLine
+
+            cy.get(`[data-cy=${constants.CY_USER_NUTRIENT_INDEX}]`)
+                .contains(NUTRIENT_INDEX)
+                .should("be.visible")
+                .parents(`[data-cy=${constants.CY_USER_NUTRIENT_LINE}]`)
+                .as("nutrientLine");
+
+            // Check before change
+
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_USER_NUTRIENT_NAME}] [data-cy=${constants.CY_SELECT_INPUT_CURRENT_OPTION}]`)
+                .should("have.text", NUTRIENT_LABEL)
+                .should("be.visible");
+
+            // Remove nutrient from current line
+
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_TOGGLE}]`)
+                .click();
+
+            // Check after change
+
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_USER_NUTRIENT_NAME}] [data-cy=${constants.CY_SELECT_INPUT_CURRENT_OPTION}]`)
+                .should("be.empty")
+                .should("be.visible");
+        });
     });
 });
