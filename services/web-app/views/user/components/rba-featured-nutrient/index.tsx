@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import * as constants from "@cypress/constants";
 
 import { NutrientName } from "@common/nutrients";
 import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
@@ -44,15 +45,16 @@ const RbaFeaturedNutrient: React.FC<Props> = ({
 
     return (
 
-        <div className={styles.nutrientLine}>
+        <div data-cy={constants.CY_USER_NUTRIENT_LINE} className={styles.nutrientLine}>
 
             <div className={styles.nutrient}>
 
-                <span className={styles.nutrientIndex}>
+                <span data-cy={constants.CY_USER_NUTRIENT_INDEX} className={styles.nutrientIndex}>
                     {slotIndex}
                 </span>
 
                 <RbaSelect
+                    data-cy={constants.CY_USER_NUTRIENT_NAME}
                     theme={SelectTheme.Primary}
                     width={SelectWidthSize.Full}
                     height={SelectHeightSize.Medium}
@@ -70,6 +72,7 @@ const RbaFeaturedNutrient: React.FC<Props> = ({
                 />
 
                 <RbaInput
+                    data-cy={constants.CY_USER_NUTRIENT_AMOUNT}
                     theme={InputTheme.Primary}
                     align={InputTextAlign.Right}
                     width={InputWidthSize.Full}
@@ -86,7 +89,7 @@ const RbaFeaturedNutrient: React.FC<Props> = ({
                     onChange={(value) => setAmount(value)}
                 />
 
-                <span className={styles.nutrientUnit}>
+                <span data-cy={constants.CY_USER_NUTRIENT_UNIT} className={styles.nutrientUnit}>
                     {unwrapOr(nutrientUnit, "")}
                 </span>
 

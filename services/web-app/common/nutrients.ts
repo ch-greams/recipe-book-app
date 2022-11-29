@@ -178,7 +178,7 @@ export const OtherNutrients: NutrientName[] = [
 ];
 
 
-export const NUTRIENT_TYPE_LABEL_MAPPING: Dictionary<NutrientName, string> = {
+export const NUTRIENT_TYPE_LABEL_MAPPING: Record<NutrientName, string> = {
 
     [NutrientName.Energy]: "Energy",
     [NutrientName.CarbohydrateEnergy]: "Carbohydrate Energy",

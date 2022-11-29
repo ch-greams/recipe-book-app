@@ -2,7 +2,9 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
+import { NUTRIENT_TYPE_LABEL_MAPPING, NutrientName } from "@common/nutrients";
 import type { JournalGroup } from "@common/typings";
+import { WeightUnit } from "@common/units";
 import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
@@ -214,6 +216,42 @@ describe("user_page", () => {
                     .its("name")
                     .should("eq", JOURNAL_GROUP_N1_NEW);
             });
+        });
+
+        // USER NUTRIENTS
+
+        it("can see featured nutrients", () => {
+
+            const NUTRIENT_DEFAULT_AMOUNT = 28;
+            const NUTRIENT_TARGET_AMOUNT = 31;
+            const NUTRIENT_LABEL = NUTRIENT_TYPE_LABEL_MAPPING[NutrientName.DietaryFiber];
+            const NUTRIENT_UNIT = WeightUnit.g;
+
+            // Slot index
+            cy.get(`[data-cy=${constants.CY_USER_NUTRIENT_INDEX}]`)
+                .contains("3")
+                .should("be.visible")
+                .parents(`[data-cy=${constants.CY_USER_NUTRIENT_LINE}]`)
+                .as("nutrientLine");
+
+            // Nutrient name
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_USER_NUTRIENT_NAME}]`)
+                .contains(NUTRIENT_LABEL)
+                .should("be.visible");
+
+            // Nutrient amount and default amount
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_USER_NUTRIENT_AMOUNT}]`)
+                .should("have.attr", "placeholder", NUTRIENT_DEFAULT_AMOUNT)
+                .should("have.value", NUTRIENT_TARGET_AMOUNT)
+                .should("be.visible");
+
+            // Nutrient unit
+            cy.get("@nutrientLine")
+                .find(`[data-cy=${constants.CY_USER_NUTRIENT_UNIT}]`)
+                .contains(NUTRIENT_UNIT)
+                .should("be.visible");
         });
     });
 });
