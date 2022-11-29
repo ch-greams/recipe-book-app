@@ -1,16 +1,13 @@
 import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
-import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import { NUTRIENT_TYPE_LABEL_MAPPING, NutrientName } from "@common/nutrients";
-import type { JournalGroup } from "@common/typings";
 import { NutrientUnit } from "@common/units";
-import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
-describe("user_page", () => {
+describe("user", () => {
 
-    describe("page", () => {
+    describe("user nutrients", () => {
 
         beforeEach(() => {
             cy.intercept(
@@ -47,178 +44,8 @@ describe("user_page", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
-
             cy.visit(constants.CY_USER_PATH);
         });
-
-        it("can navigate to favorite recipe", () => {
-
-            const FAVORITE_RECIPE_NAME = "Cottage Cheese Dip";
-            const FAVORITE_RECIPE_ID = 29;
-
-            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
-                .contains(UserMenuItem.Recipes)
-                .should("be.visible")
-                .click();
-
-            cy.get(`[data-cy=${constants.CY_USER_RECIPE_FAVORITE_ITEM}]`)
-                .contains(FAVORITE_RECIPE_NAME)
-                .should("be.visible")
-                .click();
-
-            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, FAVORITE_RECIPE_ID));
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(FAVORITE_RECIPE_NAME)
-                .should("be.visible");
-        });
-
-        it("can navigate to custom recipe", () => {
-
-            const CUSTOM_RECIPE_NAME = "Cottage Cheese Dip";
-            const CUSTOM_RECIPE_ID = 29;
-
-            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
-                .contains(UserMenuItem.Recipes)
-                .should("be.visible")
-                .click();
-
-            cy.get(`[data-cy=${constants.CY_USER_RECIPE_CUSTOM_ITEM}]`)
-                .contains(CUSTOM_RECIPE_NAME)
-                .should("be.visible")
-                .click();
-
-            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, CUSTOM_RECIPE_ID));
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(CUSTOM_RECIPE_NAME)
-                .should("be.visible");
-        });
-
-        it("can navigate to favorite food", () => {
-
-            const FAVORITE_FOOD_NAME = "English Muffin";
-            const FAVORITE_FOOD_ID = 1;
-
-            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
-                .contains(UserMenuItem.Foods)
-                .should("be.visible")
-                .click();
-
-            cy.get(`[data-cy=${constants.CY_USER_FOOD_FAVORITE_ITEM}]`)
-                .contains(FAVORITE_FOOD_NAME)
-                .should("be.visible")
-                .click();
-
-            cy.url().should("include", Utils.getProductPath(ProductType.Food, FAVORITE_FOOD_ID));
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(FAVORITE_FOOD_NAME)
-                .should("be.visible");
-        });
-
-        it("can navigate to custom food", () => {
-
-            const CUSTOM_FOOD_NAME = "English Muffin";
-            const CUSTOM_FOOD_ID = 1;
-
-            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
-                .contains(UserMenuItem.Foods)
-                .should("be.visible")
-                .click();
-
-            cy.get(`[data-cy=${constants.CY_USER_FOOD_CUSTOM_ITEM}]`)
-                .contains(CUSTOM_FOOD_NAME)
-                .should("be.visible")
-                .click();
-
-            cy.url().should("include", Utils.getProductPath(ProductType.Food, CUSTOM_FOOD_ID));
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
-                .contains(CUSTOM_FOOD_NAME)
-                .should("be.visible");
-        });
-
-        // JOURNAL GROUPS
-
-        it("can see journal groups", () => {
-
-            const JOURNAL_GROUP_N3 = "dinner";
-
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N3}"]`)
-                .should("be.visible")
-                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
-                .should("have.text", "3")
-                .should("be.visible");
-        });
-
-        it("can delete journal group and revert changes", () => {
-
-            const JOURNAL_GROUP_N2 = "lunch";
-
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
-                .should("be.visible")
-                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
-                .should("have.text", "2")
-                .should("be.visible");
-
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
-                .contains(BUTTON_REVERT)
-                .should("be.visible")
-                .should("be.disabled");
-
-            // Click toggle to disable the group
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
-                .parent()
-                .siblings(`[data-cy=${constants.CY_TOGGLE}]`)
-                .click();
-
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
-                .should("not.exist");
-
-            // Revert changes
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
-                .contains(BUTTON_REVERT)
-                .should("be.visible")
-                .click()
-                .should("be.disabled");
-
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N2}"]`)
-                .should("be.visible")
-                .siblings(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INDEX}]`)
-                .should("have.text", "2")
-                .should("be.visible");
-        });
-
-        it("can edit and save journal groups", () => {
-
-            const JOURNAL_GROUP_N1 = "breakfast";
-            const JOURNAL_GROUP_N1_NEW = "something before lunch";
-
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/groups/update`, { statusCode: 201 }).as("updateGroups");
-
-            // Edit group name
-            cy.get(`[data-cy=${constants.CY_USER_JOURNAL_GROUP_INPUT}][value="${JOURNAL_GROUP_N1}"]`)
-                .should("be.visible")
-                .clear()
-                .type(JOURNAL_GROUP_N1_NEW);
-
-            // Save changes
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
-                .contains(BUTTON_SAVE)
-                .should("be.visible")
-                .click();
-
-            cy.wait("@updateGroups").then(interceptedRequest => {
-                cy.wrap(interceptedRequest?.request?.body.find((group: JournalGroup) => group.ui_index === 1 ))
-                    .its("name")
-                    .should("eq", JOURNAL_GROUP_N1_NEW);
-            });
-        });
-
-        // USER NUTRIENTS
 
         it("can see featured nutrients", () => {
 
