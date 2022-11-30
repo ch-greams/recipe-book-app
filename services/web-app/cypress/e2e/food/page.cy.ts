@@ -1,6 +1,6 @@
 import * as constants from "@cypress/constants";
 
-import { BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
+import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import Utils, { ProductType } from "@common/utils";
 
 
@@ -77,6 +77,20 @@ describe("food_page", () => {
                     .its("name")
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
+        });
+
+        it("can delete a food", () => {
+
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+
+            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .click();
+
+            cy.url().should("eq", Cypress.config().baseUrl + "/");
         });
     });
 });
