@@ -76,8 +76,7 @@ describe("user", () => {
 
             const FAVORITE_RECIPE_NAME = "Cottage Cheese Dip";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
-                .as("deleteFood");
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Recipes)
@@ -120,8 +119,7 @@ describe("user", () => {
 
             const CUSTOM_RECIPE_NAME = "Cottage Cheese Dip";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
-                .as("deleteFood");
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Recipes)
@@ -164,8 +162,7 @@ describe("user", () => {
 
             const FAVORITE_FOOD_NAME = "English Muffin";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
-                .as("deleteFood");
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)
@@ -208,8 +205,7 @@ describe("user", () => {
 
             const CUSTOM_FOOD_NAME = "English Muffin";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
-                .as("deleteFood");
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)
