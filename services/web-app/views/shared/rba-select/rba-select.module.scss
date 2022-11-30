@@ -103,6 +103,10 @@
                 color: $color-white;
                 background-color: $color-default;
                 border-color: rgba($color: $color-white, $alpha: 0.5);
+
+                &:hover {
+                    background-color: $color-default;
+                }
             }
         }
     }
@@ -122,6 +126,10 @@
             .selectOption {
                 color: $color-grey-dark;
                 border-color: $color-grey-light;
+
+                &:hover {
+                    background-color: $color-white;
+                }
             }
         }
     }

@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
+import { BUTTON_DELETE } from "@common/labels";
 import Utils, { ProductType, UserMenuItem } from "@common/utils";
 
 
@@ -71,6 +72,28 @@ describe("user", () => {
                 .should("be.visible");
         });
 
+        it("can remove favorite recipe", () => {
+
+            const FAVORITE_RECIPE_NAME = "Cottage Cheese Dip";
+
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
+                .as("deleteFood");
+
+            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
+                .contains(UserMenuItem.Recipes)
+                .should("be.visible")
+                .click();
+
+            cy.get(`[data-cy=${constants.CY_USER_RECIPE_FAVORITE_ITEM}]`)
+                .contains(FAVORITE_RECIPE_NAME)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .should("be.visible")
+                .click()
+                .should("not.exist");
+        });
+
         it("can navigate to custom recipe", () => {
 
             const CUSTOM_RECIPE_NAME = "Cottage Cheese Dip";
@@ -91,6 +114,28 @@ describe("user", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_RECIPE_NAME)
                 .should("be.visible");
+        });
+
+        it("can remove custom recipe", () => {
+
+            const CUSTOM_RECIPE_NAME = "Cottage Cheese Dip";
+
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
+                .as("deleteFood");
+
+            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
+                .contains(UserMenuItem.Recipes)
+                .should("be.visible")
+                .click();
+
+            cy.get(`[data-cy=${constants.CY_USER_RECIPE_CUSTOM_ITEM}]`)
+                .contains(CUSTOM_RECIPE_NAME)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .should("be.visible")
+                .click()
+                .should("not.exist");
         });
 
         it("can navigate to favorite food", () => {
@@ -115,6 +160,28 @@ describe("user", () => {
                 .should("be.visible");
         });
 
+        it("can remove favorite food", () => {
+
+            const FAVORITE_FOOD_NAME = "English Muffin";
+
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
+                .as("deleteFood");
+
+            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
+                .contains(UserMenuItem.Foods)
+                .should("be.visible")
+                .click();
+
+            cy.get(`[data-cy=${constants.CY_USER_FOOD_FAVORITE_ITEM}]`)
+                .contains(FAVORITE_FOOD_NAME)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .should("be.visible")
+                .click()
+                .should("not.exist");
+        });
+
         it("can navigate to custom food", () => {
 
             const CUSTOM_FOOD_NAME = "English Muffin";
@@ -135,6 +202,28 @@ describe("user", () => {
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME)
                 .should("be.visible");
+        });
+
+        it("can remove custom food", () => {
+
+            const CUSTOM_FOOD_NAME = "English Muffin";
+
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 })
+                .as("deleteFood");
+
+            cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
+                .contains(UserMenuItem.Foods)
+                .should("be.visible")
+                .click();
+
+            cy.get(`[data-cy=${constants.CY_USER_FOOD_CUSTOM_ITEM}]`)
+                .contains(CUSTOM_FOOD_NAME)
+                .should("be.visible")
+                .siblings(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .should("be.visible")
+                .click()
+                .should("not.exist");
         });
     });
 });

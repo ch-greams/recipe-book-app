@@ -106,7 +106,6 @@ describe("user", () => {
             cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
                 .as("deleteNutrient");
 
-
             // Save nutrientLine
 
             cy.get(`[data-cy=${constants.CY_USER_NUTRIENT_INDEX}]`)
