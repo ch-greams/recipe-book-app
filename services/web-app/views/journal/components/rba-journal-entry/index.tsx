@@ -9,8 +9,6 @@ import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize,InputTextAlign,InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import * as actions from "@store/actions/journal";
-import { useAppDispatch } from "@store/index";
 import type { JournalStoreEntry } from "@store/types/journal";
 
 import styles from "./rba-journal-entry.module.scss";
@@ -18,29 +16,26 @@ import styles from "./rba-journal-entry.module.scss";
 
 interface Props {
     entry: JournalStoreEntry;
+    onEntryTimeUpdate: RbaInputChangeCallback;
+    onFoodAmountUpdate: RbaInputChangeCallback;
+    onFoodAmountSave: () => void;
+    onFoodUnitUpdate: RbaSelectChangeCallback;
+    onFoodUnitSave: () => void;
 }
 
-const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
-
-    const dispatch = useAppDispatch();
+const RbaJournalEntry: React.FC<Props> = ({
+    entry,
+    onEntryTimeUpdate,
+    onFoodAmountUpdate,
+    onFoodAmountSave,
+    onFoodUnitUpdate,
+    onFoodUnitSave,
+}) => {
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
         id: `journal_entry-${entry.id}`,
         data: { entryId: entry.id },
     });
-
-    const onEntryTimeUpdate: RbaInputChangeCallback = (value) => {
-        dispatch(actions.updateEntryTime({ id: entry.id, time: value }));
-    };
-
-    const onFoodAmountUpdate: RbaInputChangeCallback = (value) => {
-        dispatch(actions.updateEntryAmount({ id: entry.id, amountInput: value }));
-    };
-
-    const onFoodUnitUpdate: RbaSelectChangeCallback = (unit) => {
-        dispatch(actions.updateEntryUnit({ id: entry.id, unit: unit.value }));
-        dispatch(actions.updateJournalEntry(entry.id));
-    };
 
     return (
         <div
@@ -60,7 +55,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     normalizer={InputNormalizer.Time}
                     placeholder={getCurrentTime()}
                     onChange={onEntryTimeUpdate}
-                    onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
+                    onBlur={onFoodAmountSave}
                 />
             </span>
 
@@ -82,7 +77,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     value={entry.foodAmountInput}
                     normalizer={InputNormalizer.Decimal}
                     onChange={onFoodAmountUpdate}
-                    onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
+                    onBlur={onFoodUnitSave}
                 />
             </span>
 

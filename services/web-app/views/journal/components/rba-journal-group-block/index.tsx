@@ -15,9 +15,23 @@ interface Props {
     groupName: string;
     groupIndex?: Option<number>;
     entries: JournalStoreEntry[];
+    onEntryTimeUpdate: (id: number, value: string) => void;
+    onFoodAmountUpdate: (id: number, value: string) => void;
+    onFoodAmountSave: (id: number) => void;
+    onFoodUnitUpdate: (id: number, value: string) => void;
+    onFoodUnitSave: (id: number) => void;
 }
 
-const RbaJournalGroupBlock: React.FC<Props> = ({ groupIndex, groupName, entries }) => {
+const RbaJournalGroupBlock: React.FC<Props> = ({
+    groupIndex,
+    groupName,
+    entries,
+    onEntryTimeUpdate,
+    onFoodAmountUpdate,
+    onFoodAmountSave,
+    onFoodUnitUpdate,
+    onFoodUnitSave,
+}) => {
 
     const { isOver, setNodeRef } = useDroppable({
         id: `journal_group-${groupIndex}`,
@@ -51,7 +65,17 @@ const RbaJournalGroupBlock: React.FC<Props> = ({ groupIndex, groupName, entries 
 
             </div>
 
-            {entries.map((entry) => (<RbaJournalEntry key={entry.id} entry={entry} />))}
+            {entries.map((entry) => (
+                <RbaJournalEntry
+                    key={entry.id}
+                    entry={entry}
+                    onEntryTimeUpdate={(value) => { onEntryTimeUpdate(entry.id, value); }}
+                    onFoodAmountUpdate={(value) => { onFoodAmountUpdate(entry.id, value); }}
+                    onFoodAmountSave={() => { onFoodAmountSave(entry.id); }}
+                    onFoodUnitUpdate={(unit) => { onFoodUnitUpdate(entry.id, unit.value); }}
+                    onFoodUnitSave={() => { onFoodUnitSave(entry.id); }}
+                />
+            ))}
 
         </div>
     );
