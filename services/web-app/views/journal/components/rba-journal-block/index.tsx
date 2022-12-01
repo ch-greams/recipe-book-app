@@ -32,6 +32,23 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
     const dispatch = useAppDispatch();
     const [ showTrash, setShowTrash ] = useState(false);
 
+    const onEntryTimeUpdate = (id: number, value: string): void => {
+        dispatch(journalActions.updateEntryTime({ id: id, time: value }));
+    };
+    const onFoodAmountUpdate = (id: number, value: string): void => {
+        dispatch(journalActions.updateEntryAmount({ id: id, amountInput: value }));
+    };
+    const onFoodAmountSave = (id: number): void => {
+        dispatch(journalActions.updateJournalEntry(id));
+    };
+    const onFoodUnitUpdate = (id: number, value: string): void => {
+        dispatch(journalActions.updateEntryUnit({ id: id, unit: value }));
+        dispatch(journalActions.updateJournalEntry(id));
+    };
+    const onFoodUnitSave = (id: number): void => {
+        dispatch(journalActions.updateJournalEntry(id));
+    };
+
     return (
         <div className={styles.journal} data-cy={constants.CY_JOURNAL_BLOCK}>
 
@@ -66,6 +83,11 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                         groupIndex={group.uiIndex}
                         groupName={group.name}
                         entries={entries.filter((entry) => entry.groupIndex === group.uiIndex)}
+                        onEntryTimeUpdate={onEntryTimeUpdate}
+                        onFoodAmountUpdate={onFoodAmountUpdate}
+                        onFoodAmountSave={onFoodAmountSave}
+                        onFoodUnitUpdate={onFoodUnitUpdate}
+                        onFoodUnitSave={onFoodUnitSave}
                     />
                 ))}
 
@@ -74,6 +96,11 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                     entries={entries.filter(({ groupIndex }) => (
                         !groupIndex || groups.every(({ uiIndex }) => uiIndex !== groupIndex)
                     ))}
+                    onEntryTimeUpdate={onEntryTimeUpdate}
+                    onFoodAmountUpdate={onFoodAmountUpdate}
+                    onFoodAmountSave={onFoodAmountSave}
+                    onFoodUnitUpdate={onFoodUnitUpdate}
+                    onFoodUnitSave={onFoodUnitSave}
                 />
 
                 {( showTrash && <RbaJournalTrash /> )}
