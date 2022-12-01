@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import Utils, { ProductType } from "@common/utils";
-import { RBA_BUTTON_LABEL_EDIT, RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 
 
 describe("food_page", () => {
@@ -19,7 +19,7 @@ describe("food_page", () => {
             // NOTE: new-food-page automatically loads with editMode === true
             cy.visit(`${constants.CY_FOOD_PATH}/new`);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_REVERT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_REVERT)
                 .should("be.disabled");
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
@@ -30,7 +30,7 @@ describe("food_page", () => {
 
             cy.url().should("include", Utils.getNewProductPath(ProductType.Food));
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -54,10 +54,9 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 
-
             cy.visit(`${constants.CY_FOOD_PATH}/1`);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`)
@@ -65,7 +64,7 @@ describe("food_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -77,6 +76,20 @@ describe("food_page", () => {
                     .its("name")
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
+        });
+
+        it("can delete a food", () => {
+
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+
+            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .click();
+
+            cy.url().should("eq", Cypress.config().baseUrl + "/");
         });
     });
 });

@@ -1,0 +1,43 @@
+@import "@styles/variables.scss";
+
+.journalGroupBlock {
+
+    display: grid;
+    gap: 4px;
+
+    .journalGroup {
+
+        display: grid;
+        grid-template-columns: 12fr 1fr;
+        gap: 4px;
+
+        .journalGroupName {
+
+            padding: 6px 12px;
+
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+
+            line-height: 22px;
+
+            color: $color-default;
+
+            background-color: $color-white;
+
+            border-color: $color-grey-light;
+            border-style: solid;
+            border-width: 1px;
+            border-radius: 2px;
+
+            &.journalEntryOver {
+
+                color: $color-white;
+
+                background-color: $color-default-dark;
+
+                border-color: $color-white;
+                border-style: dashed;
+            }
+        }
+    }
+}

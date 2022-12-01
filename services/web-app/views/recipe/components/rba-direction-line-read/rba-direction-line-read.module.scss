@@ -41,7 +41,6 @@
 
         padding: 10px 12px 10px 20px;
 
-        font-family: $font-default;
         font-size: $font-size-medium;
         font-weight: $font-weight-medium;
 
@@ -52,8 +51,7 @@
         border-color: $color-grey-light;
         border-style: solid;
         border-width: 1px;
-
-        box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+        border-radius: 2px;
 
         .directionInfoTitle {
 

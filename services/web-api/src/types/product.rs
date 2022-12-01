@@ -23,18 +23,18 @@ struct ProductTypeArray(Vec<ProductType>);
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
-    #[sqlx(rename = "type")]
     pub product_type: ProductType,
     pub name: String,
     pub brand: String,
     pub subtitle: String,
     pub description: String,
     pub density: f64,
-    pub serving_size: f64,
     pub created_by: i64,
     pub is_private: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
+    // NOTE: Be careful, order of properties matters for some reason
+    pub serving_size: f64,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -68,9 +68,9 @@ impl Product {
     pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'food' AND id = $1
+            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            FROM product.product
+            WHERE is_deleted = false AND product_type = 'food' AND id = $1
         "#,
         )
         .bind(id)
@@ -85,9 +85,9 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE name ILIKE $5 AND type = ANY($4) AND (is_private = false OR created_by = $3)
+            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            FROM product.product
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND (is_private = false OR created_by = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -107,9 +107,9 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE name ILIKE $5 AND type = ANY($4) AND created_by = $3
+            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            FROM product.product
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND created_by = $3
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -129,11 +129,11 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE name ILIKE $5 AND type = ANY($4)
+            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            FROM product.product
+            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4)
                 AND (is_private = false OR created_by = $3)
-                AND product.id IN (SELECT product_id FROM private.favorite_product WHERE user_id = $3)
+                AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
             LIMIT $1 OFFSET $2
         "#,
         )
@@ -147,9 +147,9 @@ impl Product {
     pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM private.product
-            WHERE type = 'recipe' AND id = $1
+            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            FROM product.product
+            WHERE is_deleted = false AND product_type = 'recipe' AND id = $1
         "#,
         )
         .bind(id)
@@ -162,9 +162,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            INSERT INTO product.product (product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
             VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_food_payload.name.to_owned())
@@ -193,9 +193,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO private.product (type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            INSERT INTO product.product (product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
             VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_recipe_payload.name.to_owned())
@@ -223,8 +223,8 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            UPDATE private.product SET
-                type = 'food',
+            UPDATE product.product SET
+                product_type = 'food',
                 name = $1,
                 brand = $2,
                 subtitle = $3,
@@ -234,7 +234,7 @@ impl Product {
                 is_private = $7,
                 updated_at = $8
             WHERE id = $9
-            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_food_payload.name.to_owned())
@@ -261,8 +261,8 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            UPDATE private.product SET
-                type = 'recipe',
+            UPDATE product.product SET
+                product_type = 'recipe',
                 name = $1,
                 brand = $2,
                 subtitle = $3,
@@ -272,7 +272,7 @@ impl Product {
                 is_private = $7,
                 updated_at = $8
             WHERE id = $9
-            RETURNING id, type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_recipe_payload.name.to_owned())
@@ -291,6 +291,43 @@ impl Product {
             .ok_or_else(|| Error::not_updated("product", update_recipe_payload.id))?;
 
         Ok(result)
+    }
+
+    pub async fn delete_by_id(
+        product_id: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<(), Error> {
+        let query = sqlx::query(
+            r#"
+            UPDATE product.product SET is_deleted = true
+            WHERE id = $1
+            RETURNING id;
+        "#,
+        )
+        .bind(product_id);
+
+        query.execute(txn).await?;
+
+        Ok(())
+    }
+
+    pub async fn delete_favorite(
+        user_id: i64,
+        product_id: i64,
+        txn: impl Executor<'_, Database = Postgres>,
+    ) -> Result<(), Error> {
+        let query = sqlx::query(
+            r#"
+            DELETE FROM journal.favorite_product WHERE user_id = $1 AND product_id = $2
+            RETURNING user_id, product_id;
+        "#,
+        )
+        .bind(user_id)
+        .bind(product_id);
+
+        query.execute(txn).await?;
+
+        Ok(())
     }
 }
 
@@ -571,6 +608,31 @@ mod tests {
             create_product_result.name, update_product_result.name,
             "update_product_result should not have an old name"
         );
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn delete_favorite() {
+        let user_id = 1;
+        let product_id = 5;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        Product::delete_favorite(user_id, product_id, &mut txn)
+            .await
+            .unwrap();
+
+        txn.rollback().await.unwrap();
+    }
+
+    #[tokio::test]
+    async fn delete_by_id() {
+        let product_id = 1;
+
+        let mut txn = utils::get_pg_pool().begin().await.unwrap();
+
+        Product::delete_by_id(product_id, &mut txn).await.unwrap();
 
         txn.rollback().await.unwrap();
     }

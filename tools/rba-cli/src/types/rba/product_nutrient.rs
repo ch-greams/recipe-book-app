@@ -249,7 +249,7 @@ impl ProductNutrient {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut product_nutrients_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO private.product_nutrient (product_id, nutrient_id, amount) ",
+            "INSERT INTO product.product_nutrient (product_id, nutrient_id, amount) ",
         );
 
         product_nutrients_query_builder.push_values(

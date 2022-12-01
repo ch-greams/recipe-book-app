@@ -9,13 +9,8 @@ on:
         branches:
             - main
             - develop
-        paths:
-            - tools/recipe-scraper/**
-            - .github/workflows/recipe-scraper.yml
-    pull_request:
-        branches:
-            - main
-            - develop
+            - feature/*
+            - fix/*
         paths:
             - tools/recipe-scraper/**
             - .github/workflows/recipe-scraper.yml

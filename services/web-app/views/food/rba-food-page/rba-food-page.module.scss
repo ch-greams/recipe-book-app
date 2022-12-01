@@ -18,7 +18,10 @@
         margin-bottom: 80px;
 
         .pageControls {
-            display: flex;
+
+            display: grid;
+            grid-template-columns: 2fr 4fr;
+
             gap: 4px;
             margin-bottom: 20px;
         }

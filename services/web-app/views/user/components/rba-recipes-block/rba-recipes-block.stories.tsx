@@ -15,6 +15,12 @@ export default {
         customRecipes: {
             table: { type: { summary: "RecipeItem[]" } },
         },
+        deleteFavoriteRecipe: {
+            table: { type: { summary: "(productId: number) => void" } },
+        },
+        deleteCustomRecipe: {
+            table: { type: { summary: "(productId: number) => void" } },
+        },
     },
 } as ComponentMeta<typeof RbaRecipesBlock>;
 

@@ -4,7 +4,7 @@ import type { NutrientMeta } from "@common/typings";
 import MetaApi from "@api/metaApi";
 
 
-export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectValue: Error }>(
+export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectValue: string }>(
     "meta/fetch_nutrients",
     async (_arg, { rejectWithValue }) => {
         try {
@@ -12,7 +12,8 @@ export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectVal
             return nutrients;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            const errorMessage = (error as Error).message;
+            return rejectWithValue(errorMessage);
         }
     },
 );

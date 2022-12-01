@@ -1,9 +1,9 @@
 import * as constants from "@cypress/constants";
 
+import { BUTTON_EDIT } from "@common/labels";
 import { NutrientName } from "@common/nutrients";
 import type { Unit } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
-import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 
 
 describe("recipe_page", () => {
@@ -234,7 +234,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
         });
 
         it("can add ingredient", () => {

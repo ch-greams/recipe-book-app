@@ -1,0 +1,17 @@
+@import "@styles/variables.scss";
+
+
+.nutrientsBlock {
+    .nutrientsBlockTitle {
+
+        margin-top: 20px;
+        margin-bottom: 12px;
+
+        font-size: $font-size-large;
+        font-weight: $font-weight-bold;
+
+        color: $color-white;
+
+        text-align: center;
+    }
+}

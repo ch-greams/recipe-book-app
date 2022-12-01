@@ -49,7 +49,6 @@
         flex-grow: 2;
         justify-content: space-between;
 
-        font-family: $font-default;
         font-size: $font-size-medium;
         font-weight: $font-weight-medium;
 
@@ -92,15 +91,14 @@
         .ingredientProductButton {
             background-color: $color-white;
             border-color: $color-grey-light;
-
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            border-radius: 2px;
         }
 
         .ingredientProductInfo {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-grey-light;
-            box-shadow: 2px 2px 2px 1px rgba($color: $color-black, $alpha: 0.16);
+            border-radius: 2px;
         }
     }
 

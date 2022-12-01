@@ -2,13 +2,14 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
-import { Color } from "@common/colors";
+import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
-import * as actions from "@store/actions/recipe";
+import * as recipeActions from "@store/actions/recipe";
 import { searchClear } from "@store/actions/search";
+import * as userActions from "@store/actions/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -27,27 +28,29 @@ const RecipePageConnected: React.FC = () => {
     const { rid } = router.query as RecipePageQuery;
     const isNewRecipePage = isNone(rid);
 
-    const recipe = useAppSelector((state) => state.recipe);
-    const search = useAppSelector((state) => state.search);
-    const meta = useAppSelector((state) => state.meta);
+    const { recipe, search, meta, user } = useAppSelector((state) => state);
+
+    useEffect(() => { dispatch(userActions.fetchUserData()); }, [ user.userId ]);
 
     useEffect(() => {
-        dispatch(searchClear());
+        if (!recipe.isLoading) {
+            dispatch(searchClear());
 
-        if (!isNewRecipePage) {
-            const recipeId = Number(rid);
-            dispatch(actions.fetchRecipe(recipeId));
-        }
-        else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
+            if (!isNewRecipePage) {
+                const recipeId = Number(rid);
+                dispatch(recipeActions.fetchRecipe(recipeId));
+            }
+            else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
 
-            if (recipe.isCreated) {
-                router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
-            }
-            else {
-                dispatch(actions.fetchRecipeNew());
+                if (recipe.isCreated) {
+                    router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
+                }
+                else {
+                    dispatch(recipeActions.fetchRecipeNew());
+                }
             }
         }
-    }, [ dispatch, rid, recipe.id ]);
+    }, [ rid, recipe.id ]);
 
     return (
         recipe.isLoaded
@@ -60,6 +63,7 @@ const RecipePageConnected: React.FC = () => {
                             recipe={recipe}
                             search={search}
                             meta={meta}
+                            featuredNutrients={user.nutrients}
                             isNew={isNewRecipePage}
                         />
                     )

@@ -45,7 +45,7 @@ impl DirectionPart {
         sqlx::query_as(
             r#"
             SELECT direction_id, step_number, direction_part_type, comment_text, ingredient_id, ingredient_amount
-            FROM private.direction_part
+            FROM product.direction_part
             WHERE direction_id = ANY($1)
         "#,
         )
@@ -84,7 +84,7 @@ impl DirectionPart {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.direction_part (
+            INSERT INTO product.direction_part (
                 direction_id,
                 step_number,
                 direction_part_type,

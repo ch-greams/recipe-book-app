@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { BUTTON_EDIT } from "@common/labels";
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
-import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 import { DirectionPartType } from "@store/types/recipe";
 
 
@@ -161,7 +161,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
         });
 
         it("can add direction", () => {

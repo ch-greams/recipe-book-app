@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import type { CustomUnitInput, Unit } from "@common/units";
 import { WeightUnit } from "@common/units";
-import Utils from "@common/utils";
 import RbaCustomUnitLine from "@views/shared/rba-custom-unit-line";
 
 import styles from "./rba-custom-units-block.module.scss";
@@ -33,14 +32,11 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ isReadOnly, customUnits, addCust
         <RbaCustomUnitLine
             isNew={true}
             customUnit={newCustomUnit}
-            updateItemName={(event) => {
-                setNewCustomUnit({ ...newCustomUnit, name: event.target.value });
+            updateItemName={(value) => {
+                setNewCustomUnit({ ...newCustomUnit, name: value });
             }}
-            updateItemAmount={(event) => {
-                setNewCustomUnit({
-                    ...newCustomUnit,
-                    amountInput: Utils.decimalNormalizer(event.target.value, newCustomUnit.amountInput),
-                });
+            updateItemAmount={(value) => {
+                setNewCustomUnit({ ...newCustomUnit, amountInput: value });
             }}
             updateItemUnit={(unit: Unit) => {
                 setNewCustomUnit({ ...newCustomUnit, unit });
@@ -65,14 +61,11 @@ const RbaCustomUnitsBlock: React.FC<Props> = ({ isReadOnly, customUnits, addCust
                     isReadOnly={isReadOnly}
                     isNew={false}
                     customUnit={customUnit}
-                    updateItemName={(event) => {
-                        updateCustomUnit(index, { ...customUnit, name: event.target.value });
+                    updateItemName={(value) => {
+                        updateCustomUnit(index, { ...customUnit, name: value });
                     }}
-                    updateItemAmount={(event) => {
-                        updateCustomUnit(index, {
-                            ...customUnit,
-                            amountInput: Utils.decimalNormalizer(event.target.value, customUnit.amountInput),
-                        });
+                    updateItemAmount={(value) => {
+                        updateCustomUnit(index, { ...customUnit, amountInput: value });
                     }}
                     updateItemUnit={(unit: Unit) => { updateCustomUnit(index, { ...customUnit, unit }); }}
                     onButtonClick={() => { removeCustomUnit(index); }}

@@ -5,15 +5,11 @@ on:
         branches:
             - main
             - develop
+            - feature/*
+            - fix/*
         paths:
             - services/web-api/**
-            - .github/workflows/web-api.yml
-    pull_request:
-        branches:
-            - main
-            - develop
-        paths:
-            - services/web-api/**
+            - tools/rba-cli/database/**
             - .github/workflows/web-api.yml
 
     # Allows you to run this workflow manually from the Actions tab

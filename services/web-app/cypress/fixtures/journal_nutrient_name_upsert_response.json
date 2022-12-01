@@ -1,0 +1,12 @@
+{
+    "user_id": 1,
+    "nutrient_id": 16,
+    "is_featured": true,
+    "daily_target_amount": null,
+    "ui_index": 3,
+    "nutrient_name": "cholesterol",
+    "nutrient_daily_value": 300.0,
+    "nutrient_unit": "mg",
+    "nutrient_group": "lipids",
+    "nutrient_parent_name": null
+}

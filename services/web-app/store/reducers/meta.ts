@@ -1,9 +1,9 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { NutrientName } from "@common/nutrients";
+import { mapRecord } from "@common/object";
 import { isSome } from "@common/types";
 import { NutrientUnit } from "@common/units";
-import Utils from "@common/utils";
 import { fetchNutrients } from "@store/actions/meta";
 import type { MetaStore } from "@store/types/meta";
 
@@ -83,26 +83,30 @@ const NUTRIENT_DESCRIPTIONS: Record<NutrientName, { unit: NutrientUnit, isFracti
 
 const initialState: MetaStore = {
     isLoading: false,
+    isLoaded: false,
     errorMessage: null,
 
-    nutrientDescriptions: Utils.mapRecord(NUTRIENT_DESCRIPTIONS, (key, value) => ({ ...value, type: key })),
+    nutrientDescriptions: mapRecord(NUTRIENT_DESCRIPTIONS, (key, value) => ({ ...value, id: 0, type: key })),
 };
 
 const reducer = createReducer(initialState, (builder) => {
     builder
         .addCase(fetchNutrients.pending, (state) => {
             state.isLoading = true;
+            state.isLoaded = false;
             state.errorMessage = null;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         })
         .addCase(fetchNutrients.fulfilled, (state, action) => {
             const { payload: nutrients } = action;
             state.isLoading = false;
+            state.isLoaded = true;
             state.errorMessage = null;
 
             const nutrientDescriptions = nutrients.reduce((acc, nutrient) => ({
                 ...acc,
                 [nutrient.name]: {
+                    id: nutrient.id,
                     type: nutrient.name,
                     unit: nutrient.unit,
                     dailyValue: nutrient.daily_value,
@@ -114,8 +118,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrientDescriptions = nutrientDescriptions;
         })
         .addCase(fetchNutrients.rejected, (state, action) => {
+            const { payload: errorMessage } = action;
             state.isLoading = false;
-            state.errorMessage = action.payload?.message;
+            state.isLoaded = true;
+            state.errorMessage = errorMessage;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         });
 });

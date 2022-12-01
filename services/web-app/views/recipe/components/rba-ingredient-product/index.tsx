@@ -2,11 +2,12 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
+import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
-import type { InputChangeCallback } from "@common/typings";
 import { Unit } from "@common/units";
 import Utils from "@common/utils";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
@@ -39,7 +40,7 @@ interface Props {
     onClickRemove: () => void;
     onMouseEnter?: () => void;
     onMouseLeave?: () => void;
-    onChangeAmount: InputChangeCallback;
+    onChangeAmount: RbaInputChangeCallback;
     onChangeUnit: RbaSelectChangeCallback;
     isMarked?: boolean;
     onClickMark?: () => void;
@@ -112,7 +113,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
         <div
             data-cy={constants.CY_INGREDIENT_PRODUCT}
-            className={[ styles.ingredientProduct, styles[theme], styles[size] ].join(" ")}
+            className={classNames([ styles.ingredientProduct, styles[theme], styles[size] ])}
         >
             {( isReadOnly ? getCheckbox(isMarked, onClickMark) : removeButton )}
 
@@ -137,10 +138,12 @@ const RbaIngredientProduct: React.FC<Props> = ({
                         height={InputHeightSize.Medium}
                         disabled={isReadOnly}
                         value={ingredientProduct.amountInput}
+                        normalizer={InputNormalizer.Decimal}
                         onChange={onChangeAmount}
                     />
 
                     <RbaSelect
+                        data-cy={constants.CY_SELECT_INPUT}
                         theme={getSelectTheme(theme)}
                         center={true}
                         width={SelectWidthSize.Medium}

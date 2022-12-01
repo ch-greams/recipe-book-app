@@ -36,7 +36,7 @@ pub struct UpdateIngredientPayload {
 impl Ingredient {
     pub fn find_by_recipe_id(recipe_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
-            "SELECT id, recipe_id, product_id FROM private.ingredient WHERE recipe_id = $1",
+            "SELECT id, recipe_id, product_id FROM product.ingredient WHERE recipe_id = $1",
         )
         .bind(recipe_id)
     }
@@ -57,7 +57,7 @@ impl Ingredient {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.ingredient (recipe_id, product_id)
+            INSERT INTO product.ingredient (recipe_id, product_id)
             SELECT * FROM UNNEST($1, $2)
             RETURNING id, recipe_id, product_id;
         "#,
@@ -86,7 +86,7 @@ impl Ingredient {
 
         let delete_query = sqlx::query_as(
             r#"
-            DELETE FROM private.ingredient
+            DELETE FROM product.ingredient
             WHERE recipe_id = $1
             RETURNING id, recipe_id, product_id;
             "#,
@@ -97,7 +97,7 @@ impl Ingredient {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO private.ingredient (recipe_id, product_id)
+            INSERT INTO product.ingredient (recipe_id, product_id)
             SELECT * FROM UNNEST($1, $2)
             RETURNING id, recipe_id, product_id;
         "#,

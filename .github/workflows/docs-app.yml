@@ -1,0 +1,39 @@
+name: docs-app
+
+defaults:
+    run:
+        working-directory: services/docs-app
+
+on:
+    push:
+        branches:
+            - main
+            - develop
+            - feature/*
+            - fix/*
+        paths:
+            - services/docs-app/**
+            - .github/workflows/docs-app.yml
+
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+
+jobs:
+
+    build:
+        runs-on: ubuntu-20.04
+
+        strategy:
+            matrix:
+                node-version: [ 16.x ]
+
+        steps:
+            - uses: actions/checkout@v3
+            
+            - name: use node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                node-version: ${{ matrix.node-version }}
+
+            - run: npm install
+            - run: npm run build

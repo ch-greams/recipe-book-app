@@ -1,0 +1,32 @@
+@import "@styles/variables.scss";
+
+
+.journalDateBlock {
+
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 4px;
+
+    margin-bottom: 16px;
+
+    .journalDateControlLeft {
+        grid-column: 4;
+    }
+
+    .journalDate {
+        grid-column-start: 5;
+        grid-column-end: 9;
+    }
+
+    .journalDateControlRight {
+        grid-column: 9;
+    }
+
+    .journalStatus {
+        grid-column: 12;
+
+        padding-top: 6px;
+
+        text-align: center;
+    }
+}

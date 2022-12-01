@@ -1,9 +1,19 @@
+@import "./variables.scss";
 
 html,
 body {
 
     padding: 0;
     margin: 0;
+
+    font-family: $font-default;
+
+    select,
+    input,
+    textarea,
+    button {
+        font-family: $font-default;
+    }
 
     select:focus,
     input:focus,

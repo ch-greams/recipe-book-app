@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import Utils, { ProductType } from "@common/utils";
-import { RBA_BUTTON_LABEL_EDIT, RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
 
 
 describe("recipe_page", () => {
@@ -19,7 +19,7 @@ describe("recipe_page", () => {
             // NOTE: new-recipe-page automatically loads with editMode === true
             cy.visit(`${constants.CY_RECIPE_PATH}/new`);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_REVERT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_REVERT)
                 .should("be.disabled");
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
@@ -30,7 +30,7 @@ describe("recipe_page", () => {
 
             cy.url().should("include", Utils.getNewProductPath(ProductType.Recipe));
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -57,7 +57,7 @@ describe("recipe_page", () => {
 
             cy.visit(`${constants.CY_RECIPE_PATH}/29`);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT).click();
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`).should("not.exist");
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_INPUT}]`)
@@ -65,7 +65,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_SAVE)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
                 .click();
 
@@ -77,6 +77,20 @@ describe("recipe_page", () => {
                     .its("name")
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
+        });
+
+        it("can delete a recipe", () => {
+
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+
+            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`)
+                .contains(BUTTON_DELETE)
+                .click();
+
+            cy.url().should("eq", Cypress.config().baseUrl + "/");
         });
     });
 });

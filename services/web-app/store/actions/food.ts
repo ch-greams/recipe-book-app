@@ -3,10 +3,10 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import type { NutrientName } from "@common/nutrients";
 import type { Food } from "@common/typings";
 import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
-import Utils from "@common/utils";
 import FoodApi from "@api/foodApi";
 
 import type { RootState } from "..";
+import { convertFoodPageIntoFood } from "../helpers/food";
 
 
 export const setEditMode = createAction<boolean>("food/set_edit_mode");
@@ -43,7 +43,7 @@ export const createFood = createAsyncThunk<Food, void, { state: RootState, rejec
     async (_arg, { getState, rejectWithValue }) => {
         try {
             const foodPage = getState().food;
-            const food = Utils.convertFoodPageIntoFood(foodPage);
+            const food = convertFoodPageIntoFood(foodPage);
             const createdFood = await FoodApi.createFood(food);
             return createdFood;
         }
@@ -57,7 +57,7 @@ export const updateFood = createAsyncThunk<Food, void, { state: RootState, rejec
     async (_arg, { getState, rejectWithValue }) => {
         try {
             const foodPage = getState().food;
-            const food = Utils.convertFoodPageIntoFood(foodPage);
+            const food = convertFoodPageIntoFood(foodPage);
             const updatedFood = await FoodApi.updateFood(food);
             return updatedFood;
         }

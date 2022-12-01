@@ -1,16 +1,20 @@
 import React from "react";
+import { useRouter } from "next/router";
 
+import { BUTTON_DELETE, BUTTON_EDIT,BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
+import type { NutrientName } from "@common/nutrients";
 import RbaGeneralInfoBlock from "@views/food/components/rba-general-info-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
-import { RBA_BUTTON_LABEL_EDIT,RBA_BUTTON_LABEL_REVERT, RBA_BUTTON_LABEL_SAVE } from "@views/shared/rba-button/labels";
-import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrition-facts-block";
+import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
 import RbaPageTitleBlock from "@views/shared/rba-page-title-block";
 import RbaPageTitleBlockInput from "@views/shared/rba-page-title-block-input";
 import { useAppDispatch } from "@store";
-import * as actions from "@store/actions/food";
+import * as foodActions from "@store/actions/food";
+import * as userActions from "@store/actions/user";
 import type { FoodPageStore } from "@store/types/food";
 import type { MetaStore } from "@store/types/meta";
+import type { UserStoreNutrient } from "@store/types/user";
 
 import styles from "./rba-food-page.module.scss";
 
@@ -19,42 +23,55 @@ interface Props {
     isReadOnly: boolean;
     food: FoodPageStore;
     meta: MetaStore;
+    featuredNutrients: UserStoreNutrient[];
     isNew: boolean;
 }
 
-const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
+const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrients, isNew }) => {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const saveButtonAction = (
         isNew
-            ? () => dispatch(actions.createFood())
-            : () => dispatch(actions.updateFood())
+            ? () => dispatch(foodActions.createFood())
+            : () => dispatch(foodActions.updateFood())
     );
 
     const pageControls = (
         <>
             <RbaButton
-                label={RBA_BUTTON_LABEL_REVERT}
+                label={BUTTON_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
-                onClick={() => dispatch(actions.fetchFood(food.id))}
+                onClick={() => dispatch(foodActions.fetchFood(food.id))}
             />
 
             <RbaButton
-                label={RBA_BUTTON_LABEL_SAVE}
+                label={BUTTON_SAVE}
                 width={ButtonWidthSize.Full}
                 onClick={saveButtonAction}
             />
         </>
     );
 
-    const editButton = (
-        <RbaButton
-            label={RBA_BUTTON_LABEL_EDIT}
-            width={ButtonWidthSize.Full}
-            onClick={() => dispatch(actions.setEditMode(true))}
-        />
+    const editButtons = (
+        <>
+            <RbaButton
+                label={BUTTON_DELETE}
+                width={ButtonWidthSize.Full}
+                onClick={() => {
+                    dispatch(userActions.deleteCustomProduct(food.id));
+                    router.push("/");
+                }}
+            />
+
+            <RbaButton
+                label={BUTTON_EDIT}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(foodActions.setEditMode(true))}
+            />
+        </>
     );
 
     const {
@@ -64,7 +81,6 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
         description,
         nutrientsByServing,
         nutrientsByServingInputs,
-        featuredNutrients,
     } = food;
 
     const {
@@ -79,7 +95,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
                 {/* Page Controls Block */}
 
                 <div className={styles.pageControls}>
-                    {( isReadOnly ? editButton : pageControls )}
+                    {( isReadOnly ? editButtons : pageControls )}
                 </div>
 
                 {/* Title Block */}
@@ -101,10 +117,10 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
                                 brand={brand}
                                 subtitle={subtitle}
                                 description={description}
-                                updateName={actions.updateName}
-                                updateBrand={actions.updateBrand}
-                                updateSubtitle={actions.updateSubtitle}
-                                updateDescription={actions.updateDescription}
+                                updateName={foodActions.updateName}
+                                updateBrand={foodActions.updateBrand}
+                                updateSubtitle={foodActions.updateSubtitle}
+                                updateDescription={foodActions.updateDescription}
                             />
                         )
                 )}
@@ -114,7 +130,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, isNew }) => {
 
                 <RbaGeneralInfoBlock
                     food={food}
-                    featuredNutrients={featuredNutrients}
+                    featuredNutrients={featuredNutrients.map((nutrient) => nutrient.nutrientName as NutrientName)}
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}

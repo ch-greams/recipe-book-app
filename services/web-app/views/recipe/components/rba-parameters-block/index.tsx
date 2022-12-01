@@ -1,12 +1,12 @@
 import React from "react";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { CustomUnitInput } from "@common/units";
 import { Unit } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
+import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
 import type { RecipePageStore } from "@store/types/recipe";
@@ -23,12 +23,8 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
 
     const dispatch = useAppDispatch();
 
-    const handleTypeEdit: InputChangeCallback = (event) => {
-        dispatch(actions.updateType(event.target.value));
-    };
-
-    const handleServingSizeAmountEdit: InputChangeCallback = (event) => {
-        dispatch(actions.updateServingSizeAmount(event.target.value));
+    const handleTypeEdit: RbaInputChangeCallback = (value) => {
+        dispatch(actions.updateType(value));
     };
 
     const addCustomUnit = (customUnit: CustomUnitInput): void => {
@@ -76,7 +72,8 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
                     width={InputWidthSize.Large}
                     height={InputHeightSize.Large}
                     value={recipe.servingSizeInput}
-                    onChange={handleServingSizeAmountEdit}
+                    normalizer={InputNormalizer.Decimal}
+                    onChange={(value) => { dispatch(actions.updateServingSizeAmount(value)); }}
                 />
 
                 <RbaSelect
@@ -86,9 +83,7 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
                     height={SelectHeightSize.Large}
                     options={Object.values(Unit).map((unit) => ({ value: unit }))}
                     value={recipe.servingSizeUnit}
-                    onChange={(option: SelectOption): void => {
-                        dispatch(actions.updateServingSizeUnit(option.value as Unit));
-                    }}
+                    onChange={(option) => { dispatch(actions.updateServingSizeUnit(option.value as Unit)); }}
                 />
 
             </div>

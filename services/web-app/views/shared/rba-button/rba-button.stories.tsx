@@ -2,7 +2,7 @@
 import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import Utils from "@common/utils";
+import { getValues } from "@common/object";
 
 import RbaButton, { ButtonWidthSize } from ".";
 
@@ -16,7 +16,7 @@ export default {
             table: { type: { summary: "string" } },
         },
         width: {
-            type: { name: "enum", value: Utils.getObjectValues(ButtonWidthSize), required: true },
+            type: { name: "enum", value: getValues(ButtonWidthSize), required: true },
             table: { type: { summary: "ButtonWidthSize" } },
             control: { type: "select", options: ButtonWidthSize },
         },

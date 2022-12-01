@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import * as constants from "@cypress/constants";
 
-import { Color } from "@common/colors";
-import Utils from "@common/utils";
+import { Color } from "@common/style";
 import { getOptionLabel, SelectHeightSize, SelectWidthSize } from "@views/shared/rba-select";
 import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
+import { getRecipeIngredientProduct } from "@store/helpers/recipe";
 import type { RecipeIngredient } from "@store/types/recipe";
 import { DirectionPartType } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
@@ -64,13 +64,14 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
             <div className={styles.directionPartInfo}>
 
                 <RbaSelect
+                    data-cy={constants.CY_SELECT_INPUT}
                     theme={SelectTheme.Alternative}
                     width={SelectWidthSize.Full}
                     height={SelectHeightSize.Medium}
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: Utils.getRecipeIngredientProduct(ingredient).name,
+                            label: getRecipeIngredientProduct(ingredient).name,
                             value: String(ingredient.id),
                         })),
                         ...otherDirectionPartTypes.map((type) => ({ group: "Comment", value: type })),

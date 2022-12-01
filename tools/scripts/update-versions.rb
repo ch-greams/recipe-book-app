@@ -3,6 +3,7 @@
 
 $node_projects = [
     "services/web-app",
+    "services/docs-app",    
     "tools/recipe-scraper",
 ]
 

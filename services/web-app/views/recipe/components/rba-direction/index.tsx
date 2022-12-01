@@ -1,13 +1,13 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import type { InputChangeCallback } from "@common/typings";
 import type { TemperatureUnit, TimeUnit } from "@common/units";
 import RbaDirectionLineEdit from "@views/recipe/components/rba-direction-line-edit";
 import RbaDirectionLineRead from "@views/recipe/components/rba-direction-line-read";
 import RbaDirectionPartComment from "@views/recipe/components/rba-direction-part-comment";
 import RbaDirectionPartIngredient from "@views/recipe/components/rba-direction-part-ingredient";
 import RbaDirectionPartNew from "@views/recipe/components/rba-direction-part-new";
+import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
@@ -83,20 +83,20 @@ const RbaDirection: React.FC<Props> = ({ isReadOnly, ingredients, direction, ind
         } else {
             const removeDirection = (): void => { dispatch(actions.removeDirection(index)); };
 
-            const updateDirectionStepNumber: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionStepNumber({ directionIndex: index, stepNumber: Number(event.target.value) }));
+            const updateDirectionStepNumber: RbaInputChangeCallback = (value) => {
+                dispatch(actions.updateDirectionStepNumber({ directionIndex: index, stepNumber: Number(value) }));
             };
-            const updateDirectionName: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionName({ directionIndex: index, name: event.target.value }));
+            const updateDirectionName: RbaInputChangeCallback = (value) => {
+                dispatch(actions.updateDirectionName({ directionIndex: index, name: value }));
             };
-            const updateDirectionTemperatureCount: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionTemperatureCount({ directionIndex: index, inputValue: event.target.value }));
+            const updateDirectionTemperatureCount: RbaInputChangeCallback = (value) => {
+                dispatch(actions.updateDirectionTemperatureCount({ directionIndex: index, inputValue: value }));
             };
             const updateDirectionTemperatureUnit: RbaSelectChangeCallback = (option) => {
                 dispatch(actions.updateDirectionTemperatureUnit({ directionIndex: index, unit: option.value as TemperatureUnit }));
             };
-            const updateDirectionTimeCount: InputChangeCallback = (event) => {
-                dispatch(actions.updateDirectionTimeCount({ directionIndex: index, inputValue: event.target.value }));
+            const updateDirectionTimeCount: RbaInputChangeCallback = (value) => {
+                dispatch(actions.updateDirectionTimeCount({ directionIndex: index, inputValue: value }));
             };
             const updateDirectionTimeUnit: RbaSelectChangeCallback = (option) => {
                 dispatch(actions.updateDirectionTimeUnit({ directionIndex: index, unit: option.value as TimeUnit }));

@@ -3,7 +3,7 @@ import React from "react";
 import type { NutrientDescription,NutrientName } from "@common/nutrients";
 import Utils from "@common/utils";
 import RbaParametersBlock from "@views/recipe/components/rba-parameters-block";
-import RbaNutrientsBlock from "@views/shared/rba-nutrition-facts-block";
+import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 import type { RecipePageStore } from "@store/types/recipe";
 
 import styles from "./rba-general-info-block.module.scss";
@@ -35,6 +35,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
                     nutrients,
                     nutrientInputs,
                     nutrientDescriptions,
+                    true,
                 )}
             />
         </div>

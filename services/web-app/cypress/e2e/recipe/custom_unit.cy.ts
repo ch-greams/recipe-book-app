@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { BUTTON_EDIT } from "@common/labels";
 import { WeightUnit } from "@common/units";
-import { RBA_BUTTON_LABEL_EDIT } from "@views/shared/rba-button/labels";
 
 
 describe("recipe_page", () => {
@@ -19,7 +19,7 @@ describe("recipe_page", () => {
             const cuName = "test unit";
             const cuAmount = "1234.5";
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT)
                 .should("be.visible")
                 .click();
 
@@ -59,7 +59,7 @@ describe("recipe_page", () => {
             const cuNameUpdated = "updated name";
             const cuAmountUpdated = "125.67";
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT)
                 .should("be.visible")
                 .click();
 
@@ -109,7 +109,7 @@ describe("recipe_page", () => {
 
             const cuName = "package";
 
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(RBA_BUTTON_LABEL_EDIT)
+            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT)
                 .should("be.visible")
                 .click();
 
