@@ -54,7 +54,6 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 
-
             cy.visit(`${constants.CY_FOOD_PATH}/1`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();

@@ -1,0 +1,25 @@
+{
+    "id": 64,
+    "user_id": 1,
+    "entry_date": "2022-12-01",
+    "entry_time": "00:19:16",
+    "product_id": 15,
+    "product_name": "Chicken Thigh - Bone Out",
+    "product_density": 1.06,
+    "nutrients": {
+        "product_id": 15,
+        "energy": 173.6,
+        "carbohydrate": 52.7,
+        "dietary_fiber": 28.0,
+        "sugars": 24.8,
+        "fat": 16.3,
+        "protein": 26.6,
+        "vitamin_a": 9.5,
+        "vitamin_c": 10.9,
+        "sodium": 21.1
+    },
+    "custom_units": [],
+    "amount": 100.0,
+    "unit": "g",
+    "journal_group_ui_index": null
+}
