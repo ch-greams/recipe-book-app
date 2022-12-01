@@ -51,6 +51,7 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
 
             <span>
                 <RbaInput
+                    data-cy={constants.CY_JOURNAL_ENTRY_TIME}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Center}
                     width={InputWidthSize.Full}
@@ -60,7 +61,6 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     placeholder={getCurrentTime()}
                     onChange={onEntryTimeUpdate}
                     onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
-                    data-cy={constants.CY_JOURNAL_ENTRY_TIME}
                 />
             </span>
 
@@ -69,13 +69,13 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                 ref={setNodeRef}
                 {...listeners}
                 {...attributes}
-                data-cy={constants.CY_JOURNAL_ENTRY_FOOD_NAME}
             >
                 {entry.foodName}
             </span>
 
             <span>
                 <RbaInput
+                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_AMOUNT}
                     theme={InputTheme.Alternative}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Small}
@@ -83,12 +83,12 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     normalizer={InputNormalizer.Decimal}
                     onChange={onFoodAmountUpdate}
                     onBlur={() => { dispatch(actions.updateJournalEntry(entry.id)); }}
-                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_AMOUNT}
                 />
             </span>
 
             <span>
                 <RbaSelect
+                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_UNIT}
                     theme={SelectTheme.Alternative}
                     center={true}
                     width={SelectWidthSize.Full}
@@ -96,7 +96,6 @@ const RbaJournalEntry: React.FC<Props> = ({ entry }) => {
                     options={Object.values(Unit).map((unit) => ({ value: unit }))}
                     value={entry.foodUnit}
                     onChange={onFoodUnitUpdate}
-                    data-cy={constants.CY_JOURNAL_ENTRY_FOOD_AMOUNT_UNIT}
                 />
             </span>
 
