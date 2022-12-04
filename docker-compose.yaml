@@ -52,6 +52,21 @@ services:
       - 8000:8000
     working_dir: /app
 
+  recipe-book-keycloak:
+    image: quay.io/keycloak/keycloak:20.0.1
+    command: start-dev
+    ports:
+      - 3002:8080
+    depends_on:
+      - recipe-book-db
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://recipe-book-db/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: password
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+
   recipe-book-db:
     image: postgres:14
     healthcheck:
@@ -66,6 +81,7 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - postgres-db:/var/lib/postgresql/data
+      - ./keycloak_db_init.sql:/docker-entrypoint-initdb.d/keycloak_db_init.sql
 
   # recipe-book-db-admin:
   #   image: dpage/pgadmin4:latest
