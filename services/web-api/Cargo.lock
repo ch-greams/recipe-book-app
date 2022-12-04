@@ -1937,7 +1937,7 @@ checksum = "6a89911bd99e5f3659ec4acf9c4d93b0a90fe4a2a11f15328472058edc5261be"
 
 [[package]]
 name = "web-api"
-version = "0.6.0"
+version = "0.7.0"
 dependencies = [
  "actix-web",
  "anyhow",
