@@ -1,0 +1,65 @@
+import AuthApiSvg from './images/auth-api.svg';
+
+# auth-api
+
+Service responsible for user authentication and authorization, in a way it's a proxy for `keycloak` that will simplify and automate certain actions.
+
+## Design
+
+<AuthApiSvg />
+
+### Clients
+
+There should be a separate client per service/application (like `web-api` or `recipe-scraper`), for at least 2 reasons:
+
+- Separate client secret and token verification processes, will keep whole system a bit more secure and stable
+
+- Client specific roles will allow for more fine-grained auth
+
+### Roles
+
+At the moment only `admin` and `user` roles will be implemented. 
+
+Where `admin` will cover everything from superuser stuff in `web-app` to some system configuration in `keycloak`.
+
+And `user` is jsut a simple user that can access their account in `web-app`.
+
+In the future there will be a need for `moderator`-like role and maybe others like `user-premium`, but for now roles above should cover everything.
+
+At the moment in `keycloak` all those roles will be attached to `realm` and not the specific `client`.
+
+### Deployment & Updates
+
+`auth-api` will bootstrap `realm`/`clients`/`roles` in `keycloak` before starting `HttpServer`.
+
+`auth-api` will be dependant on `keycloak` being ready, and with that `healthcheck` will be set for `auth-api` too so other services will not use it until bootstrap completed and `HttpServer` is functional.
+
+With bootstrap configuration being persisted in the repo and user info being saved into `postgres` whole cluster can be crashed and restored easily.
+
+## Workflows
+
+### Login
+
+1. User submits a form on login page in `web-app` service containing `username` and `password`
+
+1. Request is sent to `auth-api` like `POST /api/v1/auth/login`
+
+1. From `auth-api` request is sent to a `keycloak` service (like `POST /realms/master/protocol/openid-connect/token`)
+
+1. JWT is returned and set as a cookie for the user (with `Set-Cookie` header)
+
+### Access protected page
+
+1. User opens a page that requires authorization with JWT already stored as a cookie
+
+1. Page checks existence of the session if not redirects to a login page
+
+1. Request is sent to a backend service (like `web-api` or `recipe-scraper`)
+
+1. Before responding service checks validity and permissions of the token
+
+    - If token expired return `401`
+
+    - If token is not valid or permissions are lacking return `403`
+
+1. If `401` is returned `web-app` should redirect to a login page, otherwise standard error/success
