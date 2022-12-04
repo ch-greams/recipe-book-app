@@ -1,7 +1,7 @@
 {
   "name": "recipe-scraper",
   "description": "A tool for scraping recipes from websites",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "main": "./out/index.js",
   "bin": {
