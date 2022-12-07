@@ -1,8 +1,8 @@
 FROM rust:1.65-slim-buster
 
 # 1 - Empty project
-RUN cargo new --bin web-api
-WORKDIR /web-api
+RUN cargo new --bin auth-api
+WORKDIR /auth-api
 
 # 2 - Copy manifests & build dependencies
 COPY ./Cargo.toml ./Cargo.toml

@@ -76,7 +76,7 @@ mod tests {
     async fn replace_multiple() {
         let user_id = 1;
         let update_journal_groups_payload: Vec<JournalGroup> =
-            utils::read_type_from_file("examples/update_journal_groups_payload.json").unwrap();
+            utils::read_json("examples/update_journal_groups_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

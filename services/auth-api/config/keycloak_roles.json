@@ -1,0 +1,15 @@
+[
+    {
+        "name": "rb-user",
+        "composite": false
+    },
+    {
+        "name": "rb-admin",
+        "composite": true,
+        "composites": {
+            "realm": [
+                "rb-user"
+            ]
+        }
+    }
+]

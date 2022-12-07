@@ -240,7 +240,7 @@ mod tests {
     #[tokio::test]
     async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
-            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+            utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -279,7 +279,7 @@ mod tests {
     #[tokio::test]
     async fn replace_multiple() {
         let create_product_payload: CreateRecipePayload =
-            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+            utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -313,7 +313,7 @@ mod tests {
         assert_eq!(create_directions_result.len(), 2);
 
         let update_product_payload: UpdateRecipePayload =
-            utils::read_type_from_file("examples/update_recipe_payload.json").unwrap();
+            utils::read_json("examples/update_recipe_payload.json").unwrap();
 
         let update_directions_result = Direction::replace_multiple(
             &update_product_payload.directions,

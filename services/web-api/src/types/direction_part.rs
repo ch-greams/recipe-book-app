@@ -166,7 +166,7 @@ mod tests {
     #[tokio::test]
     async fn insert_multiple() {
         let create_product_payload: CreateRecipePayload =
-            utils::read_type_from_file("examples/create_recipe_payload.json").unwrap();
+            utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

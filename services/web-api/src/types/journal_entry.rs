@@ -243,7 +243,7 @@ mod tests {
     #[tokio::test]
     async fn insert_journal_entry() {
         let create_journal_entry_payload: CreateJournalEntryPayload =
-            utils::read_type_from_file("examples/create_journal_entry_payload.json").unwrap();
+            utils::read_json("examples/create_journal_entry_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -263,7 +263,7 @@ mod tests {
     #[tokio::test]
     async fn update_journal_entry() {
         let create_journal_entry_payload: CreateJournalEntryPayload =
-            utils::read_type_from_file("examples/create_journal_entry_payload.json").unwrap();
+            utils::read_json("examples/create_journal_entry_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -278,7 +278,7 @@ mod tests {
         );
 
         let mut update_journal_entry_payload: UpdateJournalEntryPayload =
-            utils::read_type_from_file("examples/update_journal_entry_payload.json").unwrap();
+            utils::read_json("examples/update_journal_entry_payload.json").unwrap();
 
         update_journal_entry_payload.id = create_product_result.id;
 
@@ -298,7 +298,7 @@ mod tests {
     #[tokio::test]
     async fn delete_journal_entry() {
         let create_journal_entry_payload: CreateJournalEntryPayload =
-            utils::read_type_from_file("examples/create_journal_entry_payload.json").unwrap();
+            utils::read_json("examples/create_journal_entry_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

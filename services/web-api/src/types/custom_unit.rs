@@ -165,7 +165,7 @@ mod tests {
     #[tokio::test]
     async fn insert_multiple() {
         let create_product_payload: CreateFoodPayload =
-            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+            utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -194,7 +194,7 @@ mod tests {
     #[tokio::test]
     async fn replace_multiple() {
         let create_product_payload: CreateFoodPayload =
-            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+            utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -218,7 +218,7 @@ mod tests {
         assert_eq!(create_custom_units_result.len(), 2);
 
         let mut update_product_payload: UpdateFoodPayload =
-            utils::read_type_from_file("examples/update_food_payload.json").unwrap();
+            utils::read_json("examples/update_food_payload.json").unwrap();
 
         for custom_unit in &mut update_product_payload.custom_units {
             custom_unit.product_id = create_product_result.id;

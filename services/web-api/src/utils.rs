@@ -6,7 +6,7 @@ use sqlx::{PgPool, Pool, Postgres};
 pub const BIND_LIMIT: usize = 65535;
 
 #[cfg(test)]
-pub(crate) fn read_type_from_file<T: serde::de::DeserializeOwned>(
+pub(crate) fn read_json<T: serde::de::DeserializeOwned>(
     path: &str,
 ) -> Result<T, anyhow::Error> {
     let file = std::fs::File::open(path)?;
