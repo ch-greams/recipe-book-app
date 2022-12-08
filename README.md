@@ -11,13 +11,13 @@ There're several options to run this project:
 docker compose up --build
 
 # Run lean dev deployment with fully functional web-api
-docker compose up --build recipe-book-api
+docker compose up --build rb-web-api
 
 # Run lean dev deployment with fully functional web-api & web-app
-docker compose up --build recipe-book-app
+docker compose up --build rb-web-app
 
 # Or just run a database
-docker compose up recipe-book-db
+docker compose up rb-database
 ```
 
 Following commands will help you fill up database from scratch:

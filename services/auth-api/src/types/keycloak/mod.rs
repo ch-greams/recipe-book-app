@@ -21,43 +21,61 @@ impl Keycloak {
     }
 
     pub async fn bootstrap(&self) {
+        println!("Starting bootstrap of keycloak service...");
+
+        let client = Client::new();
+
         // Authorize
 
-        let admin_token = get_admin_token(&self.config).await.unwrap();
+        let admin_token = get_admin_token(&client, &self.config).await.unwrap();
 
         // Update master realm
 
+        print!("Updating realm...");
+
         let master_realm: KeycloakRealm = utils::read_json("config/keycloak_realm.json").unwrap();
 
-        let update_realm_status = master_realm
-            .update(&self.config.url, &admin_token)
+        master_realm
+            .update(&client, &self.config.url, &admin_token)
             .await
             .unwrap();
 
-        println!("update_realm_status {}", update_realm_status);
+        println!(" done!");
 
         // Upsert roles
+
+        print!("Updating roles...");
 
         let keycloak_roles: Vec<KeycloakRole> =
             utils::read_json("config/keycloak_roles.json").unwrap();
 
         for role in keycloak_roles.iter() {
-            let upsert_role_status = role.upsert(&self.config.url, &admin_token).await.unwrap();
+            print!(" {}...", role.name);
 
-            println!("upsert_role_status {} - {}", upsert_role_status, role.name);
+            role.upsert(&client, &self.config.url, &admin_token)
+                .await
+                .unwrap();
         }
 
+        println!(" done!");
+
         // Upsert clients
+
+        print!("Updating clients...");
 
         let client_payload: KeycloakClient =
             utils::read_json("config/keycloak_client.json").unwrap();
 
-        let upsert_client_status = client_payload
-            .upsert(&self.config.url, &admin_token)
+        print!(" {}...", client_payload.client_id);
+
+        client_payload
+            .upsert(&client, &self.config.url, &admin_token)
             .await
             .unwrap();
 
-        println!("upsert_client_status {}", upsert_client_status);
+        println!(" done!");
+
+        println!("Keycloak bootstrap is done.");
     }
 }
 
@@ -84,7 +102,10 @@ pub struct OpenidConnectTokenResponse {
     scope: String,
 }
 
-async fn get_admin_token(keycloak: &KeycloakConfig) -> Result<String, reqwest::Error> {
+async fn get_admin_token(
+    client: &Client,
+    keycloak: &KeycloakConfig,
+) -> Result<String, reqwest::Error> {
     let auth_payload = OpenidConnectTokenRequest {
         grant_type: "password".to_string(),
         client_id: "admin-cli".to_string(),
@@ -92,8 +113,6 @@ async fn get_admin_token(keycloak: &KeycloakConfig) -> Result<String, reqwest::E
         username: keycloak.username.to_string(),
         password: keycloak.password.to_string(),
     };
-
-    let client = Client::default();
 
     let response = client
         .post(format!(

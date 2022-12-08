@@ -1,5 +1,5 @@
 {
-    "clientId": "recipe-book-api",
+    "clientId": "rb-web-api",
     "rootUrl": "https://localhost:3000",
     "adminUrl": "https://localhost:3000",
     "redirectUris": [
@@ -12,9 +12,6 @@
     "attributes": {
         "access.token.lifespan": "1800",
         "backchannel.logout.session.required": "true",
-        "backchannel.logout.revoke.offline.tokens": "false",
-        "oauth2.device.authorization.grant.enabled": "true",
-        "oauth2.device.polling.interval": "5",
-        "oauth2.device.code.lifespan": "60"
+        "backchannel.logout.revoke.offline.tokens": "false"
     }
 }

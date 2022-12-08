@@ -25,9 +25,12 @@ pub struct KeycloakClientQuery {
 }
 
 impl KeycloakClient {
-    pub async fn create(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-        let client = Client::default();
-
+    pub async fn create(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
         let response = client
             .post(format!(
                 "http://{}/admin/realms/master/clients",
@@ -41,9 +44,12 @@ impl KeycloakClient {
         Ok(response.status())
     }
 
-    pub async fn update(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-        let client = Client::default();
-
+    pub async fn update(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
         if let Some(id) = &self.id {
             let response = client
                 .put(format!(
@@ -61,23 +67,28 @@ impl KeycloakClient {
         }
     }
 
-    pub async fn upsert(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-
-        let create_status = self.create(keycloak_url, token).await?;
+    pub async fn upsert(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
+        let create_status = self.create(client, keycloak_url, token).await?;
 
         if create_status == StatusCode::CONFLICT {
             let existing_kc_client =
-                Self::query_by_id(&self.client_id, keycloak_url, token).await?;
+                Self::query_by_id(client, &self.client_id, keycloak_url, token).await?;
 
             if let Some(id) = &existing_kc_client.id {
                 let mut kc_client_with_id = self.clone();
                 kc_client_with_id.id = Some(id.to_owned());
 
-                let update_status = kc_client_with_id.update(keycloak_url, token).await?;
+                let update_status = kc_client_with_id
+                    .update(client, keycloak_url, token)
+                    .await?;
 
                 return Ok(update_status);
-            }
-            else {
+            } else {
                 return Ok(create_status);
             }
         }
@@ -86,12 +97,11 @@ impl KeycloakClient {
     }
 
     pub async fn query(
+        client: &Client,
         query: &KeycloakClientQuery,
         keycloak_url: &str,
         token: &str,
     ) -> Result<Vec<Self>, Error> {
-        let client = Client::default();
-
         let response = client
             .get(format!(
                 "http://{}/admin/realms/master/clients",
@@ -108,6 +118,7 @@ impl KeycloakClient {
     }
 
     pub async fn query_by_id(
+        client: &Client,
         client_id: &str,
         keycloak_url: &str,
         token: &str,
@@ -116,7 +127,7 @@ impl KeycloakClient {
             client_id: client_id.to_owned(),
         };
 
-        Self::query(&query, keycloak_url, token)
+        Self::query(client, &query, keycloak_url, token)
             .await?
             .first()
             .cloned()

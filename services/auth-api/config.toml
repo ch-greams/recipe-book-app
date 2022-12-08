@@ -2,8 +2,6 @@
 listen_addr = "127.0.0.1:8080"
 
 [keycloak]
-# url = "recipe-book-keycloak"
 url = "localhost:3002"
 username = "admin"
 password = "admin"
-

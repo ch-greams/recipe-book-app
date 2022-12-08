@@ -18,9 +18,12 @@ pub struct KeycloakRole {
 }
 
 impl KeycloakRole {
-    pub async fn create(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-        let client = Client::default();
-
+    pub async fn create(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
         let response = client
             .post(format!("http://{}/admin/realms/master/roles", keycloak_url))
             .bearer_auth(token)
@@ -31,9 +34,12 @@ impl KeycloakRole {
         Ok(response.status())
     }
 
-    pub async fn update(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-        let client = Client::default();
-
+    pub async fn update(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
         let response = client
             .put(format!(
                 "http://{}/admin/realms/master/roles/{}",
@@ -47,11 +53,16 @@ impl KeycloakRole {
         Ok(response.status())
     }
 
-    pub async fn upsert(&self, keycloak_url: &str, token: &str) -> Result<StatusCode, Error> {
-        let create_status = self.create(keycloak_url, token).await?;
+    pub async fn upsert(
+        &self,
+        client: &Client,
+        keycloak_url: &str,
+        token: &str,
+    ) -> Result<StatusCode, Error> {
+        let create_status = self.create(client, keycloak_url, token).await?;
 
         if create_status == StatusCode::CONFLICT {
-            let update_status = self.update(keycloak_url, token).await?;
+            let update_status = self.update(client, keycloak_url, token).await?;
 
             Ok(update_status)
         } else {
