@@ -43,7 +43,7 @@ impl ResponseError for Error {
 }
 
 impl From<reqwest::Error> for Error {
-    fn from(reqwest_error: reqwest::Error) -> Error {
+    fn from(reqwest_error: reqwest::Error) -> Self {
         Error {
             kind: ErrorKind::Proxy(
                 reqwest_error
@@ -56,14 +56,14 @@ impl From<reqwest::Error> for Error {
 }
 
 impl Error {
-    pub fn not_found(entity: &str) -> Error {
+    pub fn not_found(entity: &str) -> Self {
         Error {
             kind: ErrorKind::NotFound,
             text: format!("Can't find {} with provided parameters", entity),
         }
     }
 
-    pub fn missing_id(action: &str, entity: &str) -> Error {
+    pub fn missing_id(action: &str, entity: &str) -> Self {
         Error {
             kind: ErrorKind::MissingId,
             text: format!("Can't {} {} without an id", action, entity),

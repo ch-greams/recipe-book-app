@@ -1,8 +1,8 @@
 use reqwest::Client;
-use serde::{Deserialize, Serialize};
 
 use crate::{
     config::KeycloakConfig,
+    services::openid::get_token,
     types::keycloak::{client::KeycloakClient, realm::KeycloakRealm, role::KeycloakRole},
     utils,
 };
@@ -17,7 +17,7 @@ pub struct Keycloak {
 
 impl Keycloak {
     pub fn new(config: KeycloakConfig) -> Self {
-        Keycloak { config: config }
+        Keycloak { config }
     }
 
     pub async fn bootstrap(&self) {
@@ -27,7 +27,10 @@ impl Keycloak {
 
         // Authorize
 
-        let admin_token = get_admin_token(&client, &self.config).await.unwrap();
+        let token_payload = self.config.clone().into();
+        let admin_token = get_token(&client, &token_payload, &self.config.url)
+            .await
+            .unwrap();
 
         // Update master realm
 
@@ -77,53 +80,4 @@ impl Keycloak {
 
         println!("Keycloak bootstrap is done.");
     }
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OpenidConnectTokenRequest {
-    grant_type: String,
-    client_id: String,
-    client_secret: Option<String>,
-    username: String,
-    password: String,
-}
-
-// https://www.oauth.com/oauth2-servers/access-tokens/access-token-response/
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct OpenidConnectTokenResponse {
-    access_token: String,
-    token_type: String,
-    expires_in: u32,
-    refresh_token: String,
-    refresh_expires_in: u32,
-    #[serde(rename = "not-before-policy")]
-    not_before_policy: u32,
-    session_state: String,
-    scope: String,
-}
-
-async fn get_admin_token(
-    client: &Client,
-    keycloak: &KeycloakConfig,
-) -> Result<String, reqwest::Error> {
-    let auth_payload = OpenidConnectTokenRequest {
-        grant_type: "password".to_string(),
-        client_id: "admin-cli".to_string(),
-        client_secret: None,
-        username: keycloak.username.to_string(),
-        password: keycloak.password.to_string(),
-    };
-
-    let response = client
-        .post(format!(
-            "http://{}/realms/master/protocol/openid-connect/token",
-            &keycloak.url
-        ))
-        .form(&auth_payload)
-        .send()
-        .await?
-        .json::<OpenidConnectTokenResponse>()
-        .await?;
-
-    Ok(response.access_token)
 }

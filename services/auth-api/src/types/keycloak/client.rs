@@ -131,6 +131,6 @@ impl KeycloakClient {
             .await?
             .first()
             .cloned()
-            .ok_or(Error::not_found("client"))
+            .ok_or_else(|| Error::not_found("client"))
     }
 }

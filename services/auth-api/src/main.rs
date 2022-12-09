@@ -6,6 +6,7 @@ use crate::config::Config;
 
 mod config;
 mod controllers;
+mod services;
 mod types;
 mod utils;
 
