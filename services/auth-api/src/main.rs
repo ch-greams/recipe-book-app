@@ -12,16 +12,19 @@ mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Starting app...");
+
     let config = Config::new().unwrap();
-    println!("{:?}", config);
+    let req_client = Client::new();
 
-    Keycloak::new(config.keycloak).bootstrap().await;
+    Keycloak::new(&config.keycloak).bootstrap(&req_client).await;
 
-    let client = Client::new();
+    println!("App is listening on {:?}", config.listen_addr);
 
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(client.clone()))
+            .app_data(Data::new(config.keycloak.url.clone()))
+            .app_data(Data::new(req_client.clone()))
             .configure(controllers::configure)
     })
     .bind(&config.listen_addr)?

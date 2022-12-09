@@ -10,25 +10,26 @@ use crate::{
 pub mod client;
 pub mod realm;
 pub mod role;
+pub mod user;
 
 pub struct Keycloak {
     config: KeycloakConfig,
 }
 
 impl Keycloak {
-    pub fn new(config: KeycloakConfig) -> Self {
-        Keycloak { config }
+    pub fn new(config: &KeycloakConfig) -> Self {
+        Keycloak {
+            config: config.to_owned(),
+        }
     }
 
-    pub async fn bootstrap(&self) {
+    pub async fn bootstrap(&self, req_client: &Client) {
         println!("Starting bootstrap of keycloak service...");
-
-        let client = Client::new();
 
         // Authorize
 
         let token_payload = self.config.clone().into();
-        let admin_token = get_token(&client, &token_payload, &self.config.url)
+        let admin_token = get_token(req_client, &token_payload, &self.config.url)
             .await
             .unwrap();
 
@@ -39,7 +40,7 @@ impl Keycloak {
         let master_realm: KeycloakRealm = utils::read_json("config/keycloak_realm.json").unwrap();
 
         master_realm
-            .update(&client, &self.config.url, &admin_token)
+            .update(req_client, &self.config.url, &admin_token)
             .await
             .unwrap();
 
@@ -55,7 +56,7 @@ impl Keycloak {
         for role in keycloak_roles.iter() {
             print!(" {}...", role.name);
 
-            role.upsert(&client, &self.config.url, &admin_token)
+            role.upsert(req_client, &self.config.url, &admin_token)
                 .await
                 .unwrap();
         }
@@ -72,7 +73,7 @@ impl Keycloak {
         print!(" {}...", client_payload.client_id);
 
         client_payload
-            .upsert(&client, &self.config.url, &admin_token)
+            .upsert(req_client, &self.config.url, &admin_token)
             .await
             .unwrap();
 
