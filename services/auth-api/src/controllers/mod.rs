@@ -8,7 +8,11 @@ use actix_web::{
 use reqwest::Client;
 use serde::Deserialize;
 
-use crate::{services::openid::get_token, types::error::Error};
+use crate::{
+    config::KeycloakConfig,
+    services::openid::{get_access_token, get_admin_access_token},
+    types::{error::Error, keycloak::user::KeycloakUser},
+};
 
 pub fn configure(config: &mut ServiceConfig) {
     config.service(
@@ -33,10 +37,10 @@ pub struct LoginForm {
 #[post("/login")]
 async fn login(
     form: Form<LoginForm>,
-    keycloak_url: Data<String>,
+    keycloak_config: Data<KeycloakConfig>,
     req_client: Data<Client>,
 ) -> Result<HttpResponse, Error> {
-    let access_token = get_token(&req_client, &form.clone().into(), &keycloak_url).await?;
+    let access_token = get_access_token(&req_client, &form.clone().into(), &keycloak_config.url).await?;
 
     let response = HttpResponse::Ok()
         .insert_header((header::SET_COOKIE, format!("access_token={}", access_token)))
@@ -45,7 +49,27 @@ async fn login(
     Ok(response)
 }
 
+#[derive(Deserialize, Clone, Debug)]
+pub struct SignupForm {
+    pub email: String,
+    pub password: String,
+
+    pub first_name: String,
+    pub last_name: String,
+}
+
 #[post("/signup")]
-async fn signup() -> impl Responder {
-    HttpResponse::NotImplemented()
+async fn signup(
+    form: Form<SignupForm>,
+    keycloak_config: Data<KeycloakConfig>,
+    req_client: Data<Client>,
+) -> Result<HttpResponse, Error> {
+    let admin_access_token = get_admin_access_token(&req_client, &keycloak_config).await?;
+
+    let user: KeycloakUser = form.clone().into();
+    let response = user
+        .create(&req_client, &keycloak_config.url, &admin_access_token)
+        .await?;
+
+    Ok(HttpResponse::new(response))
 }

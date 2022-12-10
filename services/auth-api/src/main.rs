@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(config.keycloak.url.clone()))
+            .app_data(Data::new(config.keycloak.clone()))
             .app_data(Data::new(req_client.clone()))
             .configure(controllers::configure)
     })

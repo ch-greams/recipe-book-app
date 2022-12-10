@@ -15,13 +15,13 @@ pub struct KeycloakRealm {
 impl KeycloakRealm {
     pub async fn update(
         &self,
-        client: &Client,
+        req_client: &Client,
         keycloak_url: &str,
-        token: &str,
+        access_token: &str,
     ) -> Result<StatusCode, Error> {
-        let response = client
+        let response = req_client
             .put(format!("http://{}/admin/realms/master", keycloak_url))
-            .bearer_auth(token)
+            .bearer_auth(access_token)
             .json(self)
             .send()
             .await?;

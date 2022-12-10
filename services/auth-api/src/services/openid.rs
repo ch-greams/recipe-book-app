@@ -5,11 +5,11 @@ use crate::{config::KeycloakConfig, controllers::LoginForm, types::error::Error}
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TokenRequest {
-    grant_type: String,
-    client_id: String,
-    client_secret: Option<String>,
-    username: String,
-    password: String,
+    pub grant_type: String,
+    pub client_id: String,
+    pub client_secret: Option<String>,
+    pub username: String,
+    pub password: String,
 }
 
 impl From<KeycloakConfig> for TokenRequest {
@@ -18,7 +18,7 @@ impl From<KeycloakConfig> for TokenRequest {
             grant_type: "password".to_string(),
             client_id: "admin-cli".to_string(),
             client_secret: None,
-            username: config.username.to_string(),
+            username: config.username,
             password: config.password,
         }
     }
@@ -49,8 +49,8 @@ pub struct TokenResponse {
     scope: String,
 }
 
-pub async fn get_token(
-    client: &Client,
+pub async fn get_access_token(
+    req_client: &Client,
     token_payload: &TokenRequest,
     keycloak_url: &str,
 ) -> Result<String, Error> {
@@ -59,7 +59,7 @@ pub async fn get_token(
         keycloak_url
     );
 
-    let response = client
+    let response = req_client
         .post(token_endpoint)
         .form(token_payload)
         .send()
@@ -68,4 +68,16 @@ pub async fn get_token(
         .await?;
 
     Ok(response.access_token)
+}
+
+pub async fn get_admin_access_token(
+    req_client: &Client,
+    keycloak_config: &KeycloakConfig,
+) -> Result<String, Error> {
+    let token_payload = keycloak_config.clone().into();
+
+    let admin_access_token =
+        get_access_token(req_client, &token_payload, &keycloak_config.url).await?;
+
+    Ok(admin_access_token)
 }

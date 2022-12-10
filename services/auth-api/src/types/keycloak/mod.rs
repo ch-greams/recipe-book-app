@@ -2,7 +2,7 @@ use reqwest::Client;
 
 use crate::{
     config::KeycloakConfig,
-    services::openid::get_token,
+    services::openid::get_access_token,
     types::keycloak::{client::KeycloakClient, realm::KeycloakRealm, role::KeycloakRole},
     utils,
 };
@@ -29,7 +29,7 @@ impl Keycloak {
         // Authorize
 
         let token_payload = self.config.clone().into();
-        let admin_token = get_token(req_client, &token_payload, &self.config.url)
+        let admin_access_token = get_access_token(req_client, &token_payload, &self.config.url)
             .await
             .unwrap();
 
@@ -40,7 +40,7 @@ impl Keycloak {
         let master_realm: KeycloakRealm = utils::read_json("config/keycloak_realm.json").unwrap();
 
         master_realm
-            .update(req_client, &self.config.url, &admin_token)
+            .update(req_client, &self.config.url, &admin_access_token)
             .await
             .unwrap();
 
@@ -56,7 +56,7 @@ impl Keycloak {
         for role in keycloak_roles.iter() {
             print!(" {}...", role.name);
 
-            role.upsert(req_client, &self.config.url, &admin_token)
+            role.upsert(req_client, &self.config.url, &admin_access_token)
                 .await
                 .unwrap();
         }
@@ -73,7 +73,7 @@ impl Keycloak {
         print!(" {}...", client_payload.client_id);
 
         client_payload
-            .upsert(req_client, &self.config.url, &admin_token)
+            .upsert(req_client, &self.config.url, &admin_access_token)
             .await
             .unwrap();
 
