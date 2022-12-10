@@ -40,7 +40,8 @@ async fn login(
     keycloak_config: Data<KeycloakConfig>,
     req_client: Data<Client>,
 ) -> Result<HttpResponse, Error> {
-    let access_token = get_access_token(&req_client, &form.clone().into(), &keycloak_config.url).await?;
+    let access_token =
+        get_access_token(&req_client, &form.clone().into(), &keycloak_config.url).await?;
 
     let response = HttpResponse::Ok()
         .insert_header((header::SET_COOKIE, format!("access_token={}", access_token)))
