@@ -7,6 +7,8 @@ services:
     depends_on:
       rb-database:
         condition: service_healthy
+      rb-auth-api:
+        condition: service_healthy
     ports:
       - 8080:8080
     working_dir: /web-api

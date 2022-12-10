@@ -25,14 +25,14 @@ const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
     }, [ meta.isLoaded, meta.isLoading ]);
 
     const router = useRouter();
-    const isHomePage = (router.pathname === "/");
+    const hideSearch = [ "/", "/login" ].includes(router.pathname);
 
     return (
         <>
             <Head>
                 <title>{"RecipeBook"}</title>
             </Head>
-            <RbaNavbar hideSearch={isHomePage} username={user.userName} />
+            <RbaNavbar hideSearch={hideSearch} username={user.userName} />
             <div>{children}</div>
             <RbaFooter />
         </>

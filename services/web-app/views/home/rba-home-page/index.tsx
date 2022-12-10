@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
+import { BUTTON_CREATE_FOOD,BUTTON_CREATE_RECIPE } from "@common/labels";
 import Utils, { ProductType } from "@common/utils";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch, useAppSelector } from "@store";
@@ -10,9 +11,6 @@ import styles from "./rba-home-page.module.scss";
 
 
 const RbaHomePage: React.FC = () => {
-
-    const CREATE_RECIPE_BUTTON_LABEL = "Create Recipe";
-    const CREATE_FOOD_BUTTON_LABEL = "Create Food";
 
     const dispatch = useAppDispatch();
     const search = useAppSelector((state) => state.search);
@@ -30,15 +28,21 @@ const RbaHomePage: React.FC = () => {
 
             <div className={styles.homePageButtons}>
 
-                <Link href={Utils.getNewProductPath(ProductType.Recipe)}>
+                <Link
+                    href={Utils.getNewProductPath(ProductType.Recipe)}
+                    legacyBehavior={true}
+                >
                     <a className={styles.homePageButton}>
-                        {CREATE_RECIPE_BUTTON_LABEL}
+                        {BUTTON_CREATE_RECIPE}
                     </a>
                 </Link>
 
-                <Link href={Utils.getNewProductPath(ProductType.Food)}>
+                <Link
+                    href={Utils.getNewProductPath(ProductType.Food)}
+                    legacyBehavior={true}
+                >
                     <a className={styles.homePageButton}>
-                        {CREATE_FOOD_BUTTON_LABEL}
+                        {BUTTON_CREATE_FOOD}
                     </a>
                 </Link>
 
