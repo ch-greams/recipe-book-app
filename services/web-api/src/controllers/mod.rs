@@ -14,11 +14,11 @@ pub fn configure(config: &mut ServiceConfig) {
             .service(recipe::scope())
             .service(meta::scope())
             .service(journal::scope())
-            .service(echo),
+            .service(health),
     );
 }
 
 #[get("/health")]
-async fn echo() -> impl Responder {
+async fn health() -> impl Responder {
     HttpResponse::Ok().body("API is healthy")
 }

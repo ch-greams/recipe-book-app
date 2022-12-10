@@ -169,7 +169,7 @@ mod tests {
     #[tokio::test]
     async fn upsert_user_nutrient() {
         let upsert_user_nutrient_payload: UserNutrient =
-            utils::read_type_from_file("examples/upsert_user_nutrient.json").unwrap();
+            utils::read_json("examples/upsert_user_nutrient.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -189,7 +189,7 @@ mod tests {
     #[tokio::test]
     async fn delete_user_nutrient() {
         let upsert_user_nutrient_payload: UserNutrient =
-            utils::read_type_from_file("examples/upsert_user_nutrient.json").unwrap();
+            utils::read_json("examples/upsert_user_nutrient.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 

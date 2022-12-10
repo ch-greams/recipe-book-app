@@ -9,6 +9,7 @@ $node_projects = [
 
 $rust_projects = [
     "services/web-api",
+    "services/auth-api",
     "tools/rba-cli",
 ]
 
