@@ -1,5 +1,4 @@
-import superagent from "superagent";
-
+import { Header, ResourceType } from "@common/http";
 import type { Recipe } from "@common/typings";
 
 
@@ -10,23 +9,44 @@ export default class RecipeApi {
 
     public static async getRecipe(id: number): Promise<Recipe> {
 
-        const { body: recipe } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
+        const response = await fetch(`${RecipeApi.API_PATH}/${id}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const recipe: Recipe = await response.json();
 
         return recipe;
     }
 
     public static async createRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: createdRecipe } = await superagent.post(`${RecipeApi.API_PATH}/create`)
-            .send(recipe);
+        const response = await fetch(`${RecipeApi.API_PATH}/create`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(recipe),
+        });
+
+        const createdRecipe: Recipe = await response.json();
 
         return createdRecipe;
     }
 
     public static async updateRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: updatedRecipe } = await superagent.post(`${RecipeApi.API_PATH}/update`)
-            .send(recipe);
+        const response = await fetch(`${RecipeApi.API_PATH}/update`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(recipe),
+        });
+
+        const updatedRecipe: Recipe = await response.json();
 
         return updatedRecipe;
     }

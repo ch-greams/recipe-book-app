@@ -2,7 +2,7 @@ use reqwest::Client;
 
 use crate::{
     config::KeycloakConfig,
-    services::openid::get_access_token,
+    services::openid::get_admin_access_token,
     types::keycloak::{client::KeycloakClient, realm::KeycloakRealm, role::KeycloakRole},
     utils,
 };
@@ -28,8 +28,7 @@ impl Keycloak {
 
         // Authorize
 
-        let token_payload = self.config.clone().into();
-        let admin_access_token = get_access_token(req_client, &token_payload, &self.config.url)
+        let admin_access_token = get_admin_access_token(req_client, &self.config)
             .await
             .unwrap();
 

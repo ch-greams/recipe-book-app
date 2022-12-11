@@ -1,5 +1,4 @@
-import superagent from "superagent";
-
+import { Header, ResourceType } from "@common/http";
 import type { Food } from "@common/typings";
 
 
@@ -10,23 +9,44 @@ export default class FoodApi {
 
     public static async getFood(id: number): Promise<Food> {
 
-        const { body: food } = await superagent.get(`${FoodApi.API_PATH}/${id}`);
+        const response = await fetch(`${FoodApi.API_PATH}/${id}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const food: Food = await response.json();
 
         return food;
     }
 
     public static async createFood(food: Food): Promise<Food> {
 
-        const { body: createdFood } = await superagent.post(`${FoodApi.API_PATH}/create`)
-            .send(food);
+        const response = await fetch(`${FoodApi.API_PATH}/create`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(food),
+        });
+
+        const createdFood: Food = await response.json();
 
         return createdFood;
     }
 
     public static async updateFood(food: Food): Promise<Food> {
 
-        const { body: updatedFood } = await superagent.post(`${FoodApi.API_PATH}/update`)
-            .send(food);
+        const response = await fetch(`${FoodApi.API_PATH}/update`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(food),
+        });
+
+        const updatedFood: Food = await response.json();
 
         return updatedFood;
     }

@@ -1,5 +1,4 @@
-import superagent from "superagent";
-
+import { Header, ResourceType } from "@common/http";
 import type { NutrientMeta } from "@common/typings";
 
 
@@ -10,7 +9,12 @@ export default class MetaApi {
 
     public static async getNutrients(): Promise<NutrientMeta[]> {
 
-        const { body: nutrients } = await superagent.get(`${MetaApi.API_PATH}/nutrients`);
+        const response = await fetch(`${MetaApi.API_PATH}/nutrients`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const nutrients: NutrientMeta[] = await response.json();
 
         return nutrients;
     }

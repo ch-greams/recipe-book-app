@@ -3,13 +3,14 @@ import React, { useState } from "react";
 import { BUTTON_LOGIN } from "@common/labels";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
+import AuthApi from "@api/loginApi";
 
 import styles from "./rba-login-page.module.scss";
 
 
 const RbaLoginPage: React.FC = () => {
 
-    const [ email, setEmail ] = useState("");
+    const [ username, setUserName ] = useState("");
     const [ password, setPassword ] = useState("");
 
     return (
@@ -22,10 +23,10 @@ const RbaLoginPage: React.FC = () => {
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
                     height={InputHeightSize.Large}
-                    placeholder={"email"}
+                    placeholder={"username"}
                     name={"username"}
-                    value={email}
-                    onChange={(value) => { setEmail(value); }}
+                    value={username}
+                    onChange={(value) => { setUserName(value); }}
                 />
 
                 <RbaInput
@@ -43,9 +44,7 @@ const RbaLoginPage: React.FC = () => {
                 <RbaButton
                     label={BUTTON_LOGIN}
                     width={ButtonWidthSize.Full}
-                    onClick={() => {
-                        console.log("email", email, "password", password);
-                    }}
+                    onClick={() => { AuthApi.login(username, password); }}
                 />
 
             </div>

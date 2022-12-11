@@ -38,22 +38,22 @@ impl From<LoginForm> for TokenRequest {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TokenResponse {
-    access_token: String,
-    token_type: String,
-    expires_in: u32,
-    refresh_token: String,
-    refresh_expires_in: u32,
+    pub access_token: String,
+    pub token_type: String,
+    pub expires_in: u32,
+    pub refresh_token: String,
+    pub refresh_expires_in: u32,
     #[serde(rename = "not-before-policy")]
-    not_before_policy: u32,
-    session_state: String,
-    scope: String,
+    pub not_before_policy: u32,
+    pub session_state: String,
+    pub scope: String,
 }
 
 pub async fn get_access_token(
     req_client: &Client,
     token_payload: &TokenRequest,
     keycloak_url: &str,
-) -> Result<String, Error> {
+) -> Result<TokenResponse, Error> {
     let token_endpoint = format!(
         "http://{}/realms/master/protocol/openid-connect/token",
         keycloak_url
@@ -67,7 +67,7 @@ pub async fn get_access_token(
         .json::<TokenResponse>()
         .await?;
 
-    Ok(response.access_token)
+    Ok(response)
 }
 
 pub async fn get_admin_access_token(
@@ -79,5 +79,5 @@ pub async fn get_admin_access_token(
     let admin_access_token =
         get_access_token(req_client, &token_payload, &keycloak_config.url).await?;
 
-    Ok(admin_access_token)
+    Ok(admin_access_token.access_token)
 }

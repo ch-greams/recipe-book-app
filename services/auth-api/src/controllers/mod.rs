@@ -43,8 +43,14 @@ async fn login(
     let access_token =
         get_access_token(&req_client, &form.clone().into(), &keycloak_config.url).await?;
 
+    let set_cookie_value = format!(
+        "access_token={access_token}; SameSite=Strict; Max-Age={expires_in}",
+        access_token = access_token.access_token,
+        expires_in = access_token.expires_in
+    );
+
     let response = HttpResponse::Ok()
-        .insert_header((header::SET_COOKIE, format!("access_token={}", access_token)))
+        .insert_header((header::SET_COOKIE, set_cookie_value))
         .finish();
 
     Ok(response)

@@ -1,7 +1,5 @@
-import superagent from "superagent";
-
+import { getUrlParams, Header, ResourceType } from "@common/http";
 import type { JournalEntry, JournalEntryDetailed, JournalGroup, UserNutrient, UserNutrientDetailed } from "@common/typings";
-import Utils from "@common/utils";
 
 
 export default class JournalApi {
@@ -11,69 +9,120 @@ export default class JournalApi {
 
     public static async getJournalEntries(date: string): Promise<JournalEntryDetailed[]> {
 
-        const params = Utils.getUrlParams({ entry_date: date, user_id: 1 });
+        const params = getUrlParams({ entry_date: date, user_id: 1 });
 
-        const { body: entries } = await superagent.get(`${JournalApi.API_PATH}/entry?${params}`);
+        const response = await fetch(`${JournalApi.API_PATH}/entry?${params}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const entries: JournalEntryDetailed[] = await response.json();
 
         return entries;
     }
 
     public static async getJournalGroups(): Promise<JournalGroup[]> {
 
-        const params = Utils.getUrlParams({ user_id: 1 });
+        const params = getUrlParams({ user_id: 1 });
 
-        const { body: groups } = await superagent.get(`${JournalApi.API_PATH}/groups?${params}`);
+        const response = await fetch(`${JournalApi.API_PATH}/groups?${params}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const groups: JournalGroup[] = await response.json();
 
         return groups;
     }
 
     public static async updateJournalGroups(journalGroups: JournalGroup[]): Promise<void> {
 
-        await superagent.post(`${JournalApi.API_PATH}/groups/update`).send(journalGroups);
+        await fetch(`${JournalApi.API_PATH}/groups/update`, {
+            method: "POST",
+            headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
+            body: JSON.stringify(journalGroups),
+        });
     }
 
     public static async createJournalEntry(journalEntry: JournalEntry): Promise<JournalEntryDetailed> {
 
-        const { body: entry } = await superagent.post(`${JournalApi.API_PATH}/entry/create`)
-            .send(journalEntry);
+        const response = await fetch(`${JournalApi.API_PATH}/entry/create`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(journalEntry),
+        });
+
+        const entry: JournalEntryDetailed = await response.json();
 
         return entry;
     }
 
     public static async updateJournalEntry(journalEntry: JournalEntry): Promise<JournalEntry> {
 
-        const { body: entry } = await superagent.post(`${JournalApi.API_PATH}/entry/update`)
-            .send(journalEntry);
+        const response = await fetch(`${JournalApi.API_PATH}/entry/update`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(journalEntry),
+        });
+
+        const entry: JournalEntry = await response.json();
 
         return entry;
     }
 
     public static async deleteJournalEntry(journalEntryId: number): Promise<void> {
 
-        await superagent.post(`${JournalApi.API_PATH}/entry/delete`).send({ id: journalEntryId });
+        await fetch(`${JournalApi.API_PATH}/entry/delete`, {
+            method: "POST",
+            headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
+            body: JSON.stringify({ id: journalEntryId }),
+        });
     }
 
     public static async getUserNutrients(): Promise<UserNutrientDetailed[]> {
 
-        const params = Utils.getUrlParams({ user_id: 1 });
+        const params = getUrlParams({ user_id: 1 });
 
-        const { body: nutrients } = await superagent.get(`${JournalApi.API_PATH}/nutrients?${params}`);
+        const response = await fetch(`${JournalApi.API_PATH}/nutrients?${params}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
+
+        const nutrients: UserNutrientDetailed[] = await response.json();
 
         return nutrients;
     }
 
     public static async upsertUserNutrient(userNutrient: UserNutrient): Promise<UserNutrientDetailed> {
 
-        const { body: nutrient } = await superagent.post(`${JournalApi.API_PATH}/nutrient/upsert`)
-            .send(userNutrient);
+        const response = await fetch(`${JournalApi.API_PATH}/nutrient/upsert`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(userNutrient),
+        });
+
+        const nutrient: UserNutrientDetailed = await response.json();
 
         return nutrient;
     }
 
     public static async deleteUserNutrient(userNutrientId: number): Promise<void> {
 
-        const params = Utils.getUrlParams({ user_id: 1 });
+        const params = getUrlParams({ user_id: 1 });
 
-        await superagent.post(`${JournalApi.API_PATH}/nutrient/delete?${params}`).send({ id: userNutrientId });
+        await fetch(`${JournalApi.API_PATH}/nutrient/delete?${params}`, {
+            method: "POST",
+            headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
+            body: JSON.stringify({ id: userNutrientId }),
+        });
     }
 }
