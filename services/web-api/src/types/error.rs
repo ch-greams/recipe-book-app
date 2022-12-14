@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 pub enum ErrorKind {
     Database,
     NotFound,
+    Unauthenticated,
     NotCreated,
     NotUpdated,
     NotDeleted,
@@ -33,6 +34,15 @@ impl From<sqlx::Error> for Error {
     }
 }
 
+impl From<jsonwebtoken::errors::Error> for Error {
+    fn from(err: jsonwebtoken::errors::Error) -> Self {
+        Error {
+            kind: ErrorKind::Unauthenticated,
+            text: err.to_string(),
+        }
+    }
+}
+
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}: {}", &self.kind, &self.text)
@@ -43,6 +53,7 @@ impl ResponseError for Error {
     fn status_code(&self) -> StatusCode {
         match &self.kind {
             ErrorKind::NotFound => StatusCode::NOT_FOUND,
+            ErrorKind::Unauthenticated => StatusCode::UNAUTHORIZED,
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
@@ -57,6 +68,13 @@ impl Error {
         Error {
             kind: ErrorKind::NotFound,
             text: format!("Record with id = {} was not found", id),
+        }
+    }
+
+    pub fn unauthenticated() -> Error {
+        Error {
+            kind: ErrorKind::Unauthenticated,
+            text: format!("No valid access_token was found"),
         }
     }
 

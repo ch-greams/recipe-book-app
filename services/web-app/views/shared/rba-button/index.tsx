@@ -23,15 +23,17 @@ export enum ButtonHeightSize {
 
 interface Props {
     label: string;
+    type?: "button" | "reset" | "submit";
     disabled?: boolean;
     width: ButtonWidthSize;
     height?: ButtonHeightSize;
     theme?: ButtonTheme;
-    onClick: () => void;
+    onClick?: () => void;
 }
 
 const RbaButton: React.FC<Props> = ({
     label,
+    type = "button",
     disabled = false,
     width,
     height = ButtonHeightSize.Medium,
@@ -41,7 +43,7 @@ const RbaButton: React.FC<Props> = ({
     return (
         <button
             data-cy={CY_BUTTON}
-            type={"button"}
+            type={type}
             disabled={disabled}
             className={classNames({
                 [styles.rbaButton]: true,

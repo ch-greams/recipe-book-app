@@ -1,5 +1,6 @@
 {
     "clientId": "rb-web-api",
+    "publicClient": false,
     "rootUrl": "https://localhost:3000",
     "adminUrl": "https://localhost:3000",
     "redirectUris": [

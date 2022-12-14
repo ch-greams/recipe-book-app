@@ -1,7 +1,7 @@
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
-use crate::{config::KeycloakConfig, controllers::LoginForm, types::error::Error};
+use crate::{config::KeycloakConfig, types::error::Error};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TokenRequest {
@@ -24,14 +24,14 @@ impl From<KeycloakConfig> for TokenRequest {
     }
 }
 
-impl From<LoginForm> for TokenRequest {
-    fn from(form: LoginForm) -> Self {
+impl TokenRequest {
+    pub fn new(username: &str, password: &str, client_secret: &str) -> Self {
         TokenRequest {
             grant_type: "password".to_string(),
-            client_id: "admin-cli".to_string(),
-            client_secret: None,
-            username: form.username.to_string(),
-            password: form.password,
+            client_id: "rb-web-api".to_string(),
+            client_secret: Some(client_secret.to_string()),
+            username: username.to_string(),
+            password: password.to_string(),
         }
     }
 }

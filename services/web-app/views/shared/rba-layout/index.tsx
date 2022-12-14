@@ -15,8 +15,7 @@ const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     const dispatch = useAppDispatch();
 
-    const user = useAppSelector((state) => state.user);
-    const meta = useAppSelector((state) => state.meta);
+    const { user, meta } = useAppSelector((state) => state);
 
     useEffect(() => {
         if (!meta.isLoaded && !meta.isLoading) {

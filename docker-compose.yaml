@@ -21,6 +21,7 @@ services:
     environment:
       RB__listen_addr: 0.0.0.0:8080
       RB__database_url: postgres://postgres:password@rb-database
+      RB__auth_api_url: rb-auth-api:8080
 
   rb-web-app:
     image: web-app

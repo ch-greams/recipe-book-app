@@ -10,8 +10,10 @@ use crate::types::error::Error;
 pub struct KeycloakClient {
     pub id: Option<String>,
     pub client_id: String,
+    pub public_client: bool,
     pub root_url: String,
     pub admin_url: String,
+    pub secret: Option<String>,
     pub redirect_uris: Vec<String>,
     pub web_origins: Vec<String>,
     pub direct_access_grants_enabled: bool,

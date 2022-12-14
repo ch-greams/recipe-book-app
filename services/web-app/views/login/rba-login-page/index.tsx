@@ -16,7 +16,13 @@ const RbaLoginPage: React.FC = () => {
     return (
         <div className={styles.loginPage}>
 
-            <div className={styles.loginForm}>
+            <form
+                className={styles.loginForm}
+                onSubmit={(event) => {
+                    event.preventDefault();
+                    AuthApi.login(username, password);
+                }}
+            >
 
                 <RbaInput
                     theme={InputTheme.Alternative}
@@ -26,7 +32,7 @@ const RbaLoginPage: React.FC = () => {
                     placeholder={"username"}
                     name={"username"}
                     value={username}
-                    onChange={(value) => { setUserName(value); }}
+                    onChange={setUserName}
                 />
 
                 <RbaInput
@@ -38,16 +44,16 @@ const RbaLoginPage: React.FC = () => {
                     name={"password"}
                     hidden={true}
                     value={password}
-                    onChange={(value) => { setPassword(value); }}
+                    onChange={setPassword}
                 />
 
                 <RbaButton
                     label={BUTTON_LOGIN}
+                    type={"submit"}
                     width={ButtonWidthSize.Full}
-                    onClick={() => { AuthApi.login(username, password); }}
                 />
 
-            </div>
+            </form>
 
         </div>
     );

@@ -1,3 +1,4 @@
+use jsonwebtoken::Algorithm;
 use reqwest::{Client, StatusCode};
 use serde::{Deserialize, Serialize};
 
@@ -27,5 +28,52 @@ impl KeycloakRealm {
             .await?;
 
         Ok(response.status())
+    }
+}
+
+#[derive(Deserialize, Serialize, PartialEq, Eq, Clone, Debug)]
+#[allow(non_camel_case_types)]
+pub enum KeycloakRealmCertificateAlgorithm {
+    RS256,
+    #[serde(rename = "RSA-OAEP")]
+    RSA_OAEP,
+}
+
+impl From<KeycloakRealmCertificateAlgorithm> for Algorithm {
+    fn from(alg: KeycloakRealmCertificateAlgorithm) -> Self {
+        match alg {
+            KeycloakRealmCertificateAlgorithm::RS256 => Algorithm::RS256,
+            KeycloakRealmCertificateAlgorithm::RSA_OAEP => Algorithm::RS256,
+        }
+    }
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct KeycloakRealmCertificate {
+    pub kid: String,
+    pub kty: String,
+    pub alg: KeycloakRealmCertificateAlgorithm,
+    pub n: String,
+    pub e: String,
+}
+
+#[derive(Deserialize, Serialize, Clone, Debug)]
+pub struct KeycloakRealmCertificates {
+    pub keys: Vec<KeycloakRealmCertificate>,
+}
+
+impl KeycloakRealmCertificates {
+    pub async fn query(req_client: &Client, keycloak_url: &str) -> Result<Self, Error> {
+        let response = req_client
+            .get(format!(
+                "http://{}/realms/master/protocol/openid-connect/certs",
+                keycloak_url
+            ))
+            .send()
+            .await?
+            .json::<KeycloakRealmCertificates>()
+            .await?;
+
+        Ok(response)
     }
 }

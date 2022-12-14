@@ -17,13 +17,14 @@ async fn main() -> std::io::Result<()> {
     let config = Config::new().unwrap();
     let req_client = Client::new();
 
-    Keycloak::new(&config.keycloak).bootstrap(&req_client).await;
+    let client_secret = Keycloak::new(&config.keycloak).bootstrap(&req_client).await;
 
     println!("App is listening on {:?}", config.listen_addr);
 
     HttpServer::new(move || {
         App::new()
             .app_data(Data::new(config.keycloak.clone()))
+            .app_data(Data::new(client_secret.clone()))
             .app_data(Data::new(req_client.clone()))
             .configure(controllers::configure)
     })
