@@ -22,7 +22,11 @@ async fn get_nutrients(
 ) -> Result<Json<Vec<Nutrient>>, Error> {
     let token_data_claims = validate_cookie(request, &auth_certificate)?;
 
-    if !token_data_claims.realm_access.roles.contains(&"rb-user".to_string()) {
+    if !token_data_claims
+        .realm_access
+        .roles
+        .contains(&"rb-user".to_string())
+    {
         return Err(Error::unauthenticated());
     }
 

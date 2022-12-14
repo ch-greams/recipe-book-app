@@ -14,9 +14,7 @@ async fn main() -> std::io::Result<()> {
 
     println!("{:?}", config);
 
-    let auth_certificate = auth_setup(&config.auth_api_url)
-        .await
-        .unwrap();
+    let auth_certificate = auth_setup(&config.auth_api_url).await.unwrap();
 
     let db_pool = PgPool::connect_lazy(&config.database_url).unwrap();
 

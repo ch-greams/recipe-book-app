@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-use crate::types::error::Error;
 #[cfg(test)]
 use crate::config::Config;
+use crate::types::error::Error;
 use actix_web::HttpRequest;
-use jsonwebtoken::{DecodingKey, Validation, decode, Algorithm};
+use jsonwebtoken::{decode, Algorithm, DecodingKey, Validation};
 use reqwest::Client;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 #[cfg(test)]
 use sqlx::{PgPool, Pool, Postgres};
 
@@ -27,7 +27,6 @@ pub(crate) fn get_pg_pool() -> Pool<Postgres> {
     let config = Config::new().unwrap();
     PgPool::connect_lazy(&config.database_url).unwrap()
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ClaimsAccess {
@@ -68,7 +67,7 @@ pub struct Claims {
 pub fn validate_cookie(request: HttpRequest, certificate: &Certificate) -> Result<Claims, Error> {
     let cookie = request
         .cookie("access_token")
-        .ok_or_else(|| Error::unauthenticated())?;
+        .ok_or_else(Error::unauthenticated)?;
 
     let access_token = cookie.value();
 
@@ -77,12 +76,8 @@ pub fn validate_cookie(request: HttpRequest, certificate: &Certificate) -> Resul
 
     let mut validation = Validation::new(certificate.algorithm);
     validation.set_required_spec_claims(&["azp", "realm_access"]);
-    
-    let token_data = decode::<Claims>(
-        access_token,
-        &decoding_key,
-        &validation,
-    )?;
+
+    let token_data = decode::<Claims>(access_token, &decoding_key, &validation)?;
 
     Ok(token_data.claims)
 }
@@ -102,7 +97,6 @@ pub struct Certificate {
 }
 
 pub async fn auth_setup(auth_api_url: &str) -> Result<Certificate, reqwest::Error> {
-
     let req_client = Client::new();
 
     let auth_certificate = req_client

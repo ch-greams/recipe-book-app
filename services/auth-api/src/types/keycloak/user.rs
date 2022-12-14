@@ -23,13 +23,13 @@ impl KeycloakUserCredentials {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakUser {
-    pub username: String, // john@central.com
-    pub email: String,    // john@central.com
+    pub username: String,
+    pub email: String,
 
-    pub first_name: String, // Andrei
-    pub last_name: String,  // Khvalko
+    pub first_name: String,
+    pub last_name: String,
 
-    pub enabled: bool, // true
+    pub enabled: bool,
 
     pub credentials: Vec<KeycloakUserCredentials>,
 

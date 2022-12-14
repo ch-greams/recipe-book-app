@@ -74,7 +74,7 @@ impl Error {
     pub fn unauthenticated() -> Error {
         Error {
             kind: ErrorKind::Unauthenticated,
-            text: format!("No valid access_token was found"),
+            text: "No valid access_token was found".to_string(),
         }
     }
 
