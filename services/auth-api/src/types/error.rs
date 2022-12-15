@@ -9,6 +9,8 @@ pub enum ErrorKind {
     Proxy(StatusCode),
     NotFound,
     MissingId,
+    Database,
+    NotCreated,
 }
 
 impl std::fmt::Display for ErrorKind {
@@ -42,6 +44,15 @@ impl ResponseError for Error {
     }
 }
 
+impl From<sqlx::Error> for Error {
+    fn from(err: sqlx::Error) -> Self {
+        Error {
+            kind: ErrorKind::Database,
+            text: err.to_string(),
+        }
+    }
+}
+
 impl From<reqwest::Error> for Error {
     fn from(reqwest_error: reqwest::Error) -> Self {
         Error {
@@ -67,6 +78,13 @@ impl Error {
         Error {
             kind: ErrorKind::MissingId,
             text: format!("Can't {} {} without an id", action, entity),
+        }
+    }
+
+    pub fn not_created(table: &str) -> Error {
+        Error {
+            kind: ErrorKind::NotCreated,
+            text: format!("Error during {} creation", table),
         }
     }
 }

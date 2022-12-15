@@ -12,8 +12,9 @@ pub struct KeycloakRoleComposites {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct KeycloakRole {
+    pub id: Option<String>,
     pub name: String,
-    pub composite: bool,
+    pub composite: Option<bool>,
     pub composites: Option<KeycloakRoleComposites>,
 }
 
@@ -68,5 +69,25 @@ impl KeycloakRole {
         } else {
             Ok(create_status)
         }
+    }
+
+    pub async fn query_by_name(
+        req_client: &Client,
+        role_name: &str,
+        keycloak_url: &str,
+        access_token: &str,
+    ) -> Result<KeycloakRole, Error> {
+        let response = req_client
+            .get(format!(
+                "http://{}/admin/realms/master/roles/{}",
+                keycloak_url, role_name
+            ))
+            .bearer_auth(access_token)
+            .send()
+            .await?
+            .json::<KeycloakRole>()
+            .await?;
+
+        Ok(response)
     }
 }

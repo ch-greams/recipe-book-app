@@ -7,17 +7,20 @@ use actix_web::{
 };
 use jsonwebtoken::Algorithm;
 use reqwest::Client;
+use secrecy::Secret;
 use serde::{Deserialize, Serialize};
+use sqlx::{Pool, Postgres};
 
 use crate::{
-    config::KeycloakConfig,
-    services::openid::{get_access_token, get_admin_access_token, TokenRequest},
+    services::openid::{get_access_token, TokenRequest},
     types::{
         error::Error,
         keycloak::{
             realm::{KeycloakRealmCertificateAlgorithm, KeycloakRealmCertificates},
             user::KeycloakUser,
+            Keycloak,
         },
+        user::{CreateUserPayload, User},
     },
 };
 
@@ -39,19 +42,18 @@ async fn health() -> impl Responder {
 #[derive(Deserialize, Clone, Debug)]
 pub struct LoginForm {
     pub username: String,
-    pub password: String,
+    pub password: Secret<String>,
 }
 
 #[post("/login")]
 async fn login(
     form: Form<LoginForm>,
-    keycloak_config: Data<KeycloakConfig>,
-    client_secret: Data<String>,
+    kc: Data<Keycloak>,
     req_client: Data<Client>,
 ) -> Result<HttpResponse, Error> {
-    let token_request = TokenRequest::new(&form.username, &form.password, &client_secret);
+    let token_request = TokenRequest::rb_web_api(&form.username, &form.password, &kc.client_secret);
 
-    let access_token = get_access_token(&req_client, &token_request, &keycloak_config.url).await?;
+    let access_token = get_access_token(&req_client, &token_request, &kc.url).await?;
 
     let set_cookie_value = format!(
         "access_token={access_token}; SameSite=Strict; Path=/; Max-Age={expires_in}",
@@ -78,17 +80,48 @@ pub struct SignupForm {
 #[post("/signup")]
 async fn signup(
     form: Form<SignupForm>,
-    keycloak_config: Data<KeycloakConfig>,
+    kc: Data<Keycloak>,
     req_client: Data<Client>,
+    db_pool: Data<Pool<Postgres>>,
 ) -> Result<HttpResponse, Error> {
-    let admin_access_token = get_admin_access_token(&req_client, &keycloak_config).await?;
+    let token_payload = TokenRequest::admin_cli(&kc.admin_username, &kc.admin_password);
+    let admin_access_token = get_access_token(&req_client, &token_payload, &kc.url)
+        .await?
+        .access_token;
 
-    let user: KeycloakUser = form.clone().into();
-    let response = user
-        .create(&req_client, &keycloak_config.url, &admin_access_token)
+    let mut txn = db_pool.begin().await?;
+
+    let create_user_payload = CreateUserPayload {
+        email: form.email.clone(),
+        first_name: form.first_name.clone(),
+        last_name: form.last_name.clone(),
+    };
+
+    let user = User::create(&create_user_payload, &mut txn).await?;
+
+    let user: KeycloakUser = KeycloakUser::new(
+        &form.email,
+        &form.first_name,
+        &form.last_name,
+        &form.password,
+        user.id,
+    );
+    let user_brief = user
+        .create(&req_client, &kc.url, &admin_access_token)
         .await?;
 
-    Ok(HttpResponse::new(response))
+    KeycloakUser::assign_realm_roles(
+        &req_client,
+        &user_brief.id,
+        &kc.default_user_roles,
+        &kc.url,
+        &admin_access_token,
+    )
+    .await?;
+
+    txn.commit().await?;
+
+    Ok(HttpResponse::Created().json(user_brief))
 }
 
 #[derive(Serialize, Debug)]
@@ -101,11 +134,8 @@ pub struct CertificateResponse {
 }
 
 #[get("/certificate")]
-async fn certificate(
-    keycloak_config: Data<KeycloakConfig>,
-    req_client: Data<Client>,
-) -> Result<HttpResponse, Error> {
-    let response = KeycloakRealmCertificates::query(&req_client, &keycloak_config.url).await?;
+async fn certificate(kc: Data<Keycloak>, req_client: Data<Client>) -> Result<HttpResponse, Error> {
+    let response = KeycloakRealmCertificates::query(&req_client, &kc.url).await?;
 
     let rsa_key = response
         .keys

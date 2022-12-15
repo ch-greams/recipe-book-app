@@ -41,6 +41,11 @@ pub enum ClaimAudience {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct ClaimAttributes {
+    pub user_id: Option<i64>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
     #[serde(rename = "aud")]
     pub audience: ClaimAudience,
@@ -62,6 +67,7 @@ pub struct Claims {
     pub given_name: Option<String>,
     pub family_name: Option<String>,
     pub email: Option<String>,
+    pub attributes: Option<ClaimAttributes>,
 }
 
 pub fn validate_cookie(request: HttpRequest, certificate: &Certificate) -> Result<Claims, Error> {

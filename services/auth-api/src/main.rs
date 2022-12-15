@@ -1,6 +1,7 @@
 use crate::types::keycloak::Keycloak;
 use actix_web::{web::Data, App, HttpServer};
 use reqwest::Client;
+use sqlx::PgPool;
 
 use crate::config::Config;
 
@@ -17,15 +18,17 @@ async fn main() -> std::io::Result<()> {
     let config = Config::new().unwrap();
     let req_client = Client::new();
 
-    let client_secret = Keycloak::new(&config.keycloak).bootstrap(&req_client).await;
+    let kc = Keycloak::bootstrap(&config.keycloak, &req_client).await;
+
+    let db_pool = PgPool::connect_lazy(&config.database_url).unwrap();
 
     println!("App is listening on {:?}", config.listen_addr);
 
     HttpServer::new(move || {
         App::new()
-            .app_data(Data::new(config.keycloak.clone()))
-            .app_data(Data::new(client_secret.clone()))
+            .app_data(Data::new(kc.clone()))
             .app_data(Data::new(req_client.clone()))
+            .app_data(Data::new(db_pool.clone()))
             .configure(controllers::configure)
     })
     .bind(&config.listen_addr)?

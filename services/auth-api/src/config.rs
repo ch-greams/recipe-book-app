@@ -1,18 +1,20 @@
 use std::{net::SocketAddr, path::Path};
 
 use config::ConfigError;
+use secrecy::Secret;
 use serde::Deserialize;
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct KeycloakConfig {
     pub url: String,
     pub username: String,
-    pub password: String,
+    pub password: Secret<String>,
 }
 
 #[derive(Clone, Debug, Deserialize)]
 pub struct Config {
     pub listen_addr: SocketAddr,
+    pub database_url: String,
     pub keycloak: KeycloakConfig,
 }
 
