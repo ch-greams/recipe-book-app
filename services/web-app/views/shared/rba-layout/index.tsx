@@ -14,6 +14,7 @@ import RbaNavbar from "../rba-navbar";
 const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
     const { user, meta } = useAppSelector((state) => state);
 
@@ -23,7 +24,10 @@ const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
         }
     }, [ meta.isLoaded, meta.isLoading ]);
 
-    const router = useRouter();
+    useEffect(() => {
+        router.push(user.isLoggedIn ? "/" : "/login");
+    }, [ user.isLoggedIn ]);
+
     const hideSearch = [ "/", "/login" ].includes(router.pathname);
 
     return (
@@ -31,8 +35,15 @@ const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
             <Head>
                 <title>{"RecipeBook"}</title>
             </Head>
-            <RbaNavbar hideSearch={hideSearch} username={user.userName} />
+
+            <RbaNavbar
+                hideSearch={hideSearch}
+                isLoggedIn={user.isLoggedIn}
+                username={user.userName}
+            />
+
             <div>{children}</div>
+
             <RbaFooter />
         </>
     );

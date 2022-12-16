@@ -1,19 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import type { HttpStatus } from "@common/http";
+import { isSuccess } from "@common/http";
 import type { NutrientMeta } from "@common/typings";
 import MetaApi from "@api/metaApi";
 
 
-export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectValue: string }>(
+export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectValue: HttpStatus }>(
     "meta/fetch_nutrients",
     async (_arg, { rejectWithValue }) => {
-        try {
-            const nutrients = await MetaApi.getNutrients();
-            return nutrients;
-        }
-        catch (error) {
-            const errorMessage = (error as Error).message;
-            return rejectWithValue(errorMessage);
-        }
+        const { status, body } = await MetaApi.getNutrients();
+        return isSuccess(status, body) ? body : rejectWithValue(status);
     },
 );

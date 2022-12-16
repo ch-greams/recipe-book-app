@@ -1,10 +1,13 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
+import type { HttpStatus } from "@common/http";
+import { isSuccess } from "@common/http";
 import { isSome } from "@common/types";
 import type { FoodShort, RecipeShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
 import type { UserMenuItem } from "@common/utils";
 import { ProductType } from "@common/utils";
 import JournalApi from "@api/journalApi";
+import AuthApi from "@api/loginApi";
 import ProductApi from "@api/productApi";
 
 import type { RootState } from "..";
@@ -96,6 +99,18 @@ export const deleteNutrient = createAsyncThunk<void, number, { rejectValue: Erro
         }
         catch (error) {
             return rejectWithValue(error as Error);
+        }
+    },
+);
+
+export const login = createAsyncThunk<void, { username: string, password: string }, { rejectValue: HttpStatus }>(
+    "user/login",
+    async ({ username, password }, { rejectWithValue }) => {
+
+        const { status, body } = await AuthApi.login(username, password);
+
+        if (!isSuccess(status, body)) {
+            return rejectWithValue(status);
         }
     },
 );

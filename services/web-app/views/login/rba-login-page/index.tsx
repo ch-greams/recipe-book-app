@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 
-import { BUTTON_LOGIN } from "@common/labels";
+import { BUTTON_LOG_IN } from "@common/labels";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
-import AuthApi from "@api/loginApi";
+import { login } from "@store/actions/user";
+import { useAppDispatch } from "@store/index";
 
 import styles from "./rba-login-page.module.scss";
 
 
 const RbaLoginPage: React.FC = () => {
+
+    const dispatch = useAppDispatch();
 
     const [ username, setUserName ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -20,7 +23,7 @@ const RbaLoginPage: React.FC = () => {
                 className={styles.loginForm}
                 onSubmit={(event) => {
                     event.preventDefault();
-                    AuthApi.login(username, password);
+                    dispatch(login({ username, password }));
                 }}
             >
 
@@ -48,7 +51,7 @@ const RbaLoginPage: React.FC = () => {
                 />
 
                 <RbaButton
-                    label={BUTTON_LOGIN}
+                    label={BUTTON_LOG_IN}
                     type={"submit"}
                     width={ButtonWidthSize.Full}
                 />

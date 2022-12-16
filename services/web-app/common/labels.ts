@@ -19,4 +19,5 @@ export const BUTTON_DELETE = "DELETE";
 export const BUTTON_CREATE_RECIPE = "Create Recipe";
 export const BUTTON_CREATE_FOOD = "Create Food";
 
-export const BUTTON_LOGIN = "LOGIN";
+export const BUTTON_LOG_IN = "LOG IN";
+export const BUTTON_SIGN_UP = "SIGN UP";

@@ -1,14 +1,19 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
+import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
 import { UserMenuItem } from "@common/utils";
+import { fetchNutrients } from "@store/actions/meta";
 
-import { changeMenuItem, deleteCustomProduct, deleteFavoriteProduct, deleteNutrient, fetchUserData, upsertNutrient } from "../actions/user";
+import { changeMenuItem, deleteCustomProduct, deleteFavoriteProduct, deleteNutrient, fetchUserData, login, upsertNutrient } from "../actions/user";
 import type { UserStore } from "../types/user";
 
 
 
 const initialState: UserStore = {
+
+    isLoggedIn: true,
+
     userId: 1,
     userName: "Andrei Khvalko",
 
@@ -147,6 +152,27 @@ const reducer = createReducer(initialState, (builder) => {
             const message = action.payload?.message;
             state.isLoaded = true;
             state.errorMessage = message;
+        })
+        .addCase(login.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+        })
+        .addCase(login.fulfilled, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.isLoggedIn = true;
+        })
+        .addCase(login.rejected, (state, { payload: errorStatus }) => {
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+            state.isLoggedIn = false;
+        })
+        .addMatcher(isAnyOf(fetchNutrients.rejected), (state, { payload: errorStatus }) => {
+            if (errorStatus === HttpStatus.Unauthorized) {
+                console.log(getErrorMessageFromStatus(errorStatus));
+
+                state.isLoggedIn = false;
+            }
         });
 });
 

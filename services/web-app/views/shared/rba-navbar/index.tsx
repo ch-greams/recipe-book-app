@@ -14,10 +14,11 @@ import styles from "./rba-navbar.module.scss";
 
 interface Props {
     hideSearch: boolean;
+    isLoggedIn: boolean;
     username: string;
 }
 
-const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
+const RbaNavbar: React.FC<Props> = ({ hideSearch = false, isLoggedIn, username }) => {
 
     const dispatch = useAppDispatch();
     const searchPage = useAppSelector((state) => state.search);
@@ -49,10 +50,10 @@ const RbaNavbar: React.FC<Props> = ({ hideSearch = false, username }) => {
 
             <div className={styles.navbarUserSection}>
 
-                <Link href={"/user"}>
+                <Link href={( isLoggedIn ? "/user" : "/login" )}>
                     <div data-cy={constants.CY_NAVBAR_USER_ITEM} className={styles.navbarUser}>
                         <RbaIconPerson size={IconSize.ExtraLarge} color={Color.White} />
-                        <span className={styles.navbarUserName}>{username}</span>
+                        <span className={styles.navbarUserName}>{( isLoggedIn ? username : "Log In" )}</span>
                     </div>
                 </Link>
 
