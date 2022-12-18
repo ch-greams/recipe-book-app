@@ -2,6 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import { sortBy, sortByConverted } from "@common/array";
 import { formatTime, getCurrentDate, parseTime } from "@common/date";
+import { getErrorMessageFromStatus } from "@common/http";
 import { convertToMetric } from "@common/units";
 
 import * as actions from "../actions/journal";
@@ -111,9 +112,8 @@ const reducer = createReducer(initialState, (builder) => {
 
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
-        .addCase(actions.createJournalEntry.rejected, (state, action) => {
-            const message = action.payload?.message;
-            state.errorMessage = message;
+        .addCase(actions.createJournalEntry.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.isSaved = true;
         })
         .addCase(actions.updateJournalEntry.pending, (state) => {
@@ -124,9 +124,8 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
             state.isSaved = true;
         })
-        .addCase(actions.updateJournalEntry.rejected, (state, action) => {
-            const message = action.payload?.message;
-            state.errorMessage = message;
+        .addCase(actions.updateJournalEntry.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.isSaved = true;
         })
         .addCase(actions.deleteJournalEntry.pending, (state) => {
@@ -141,9 +140,8 @@ const reducer = createReducer(initialState, (builder) => {
             state.entries = state.entries.filter((entry) => entry.id !== entryId);
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
-        .addCase(actions.deleteJournalEntry.rejected, (state, action) => {
-            const message = action.payload?.message;
-            state.errorMessage = message;
+        .addCase(actions.deleteJournalEntry.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.isSaved = true;
         })
         .addCase(actions.fetchJournalInfo.pending, (state) => {
@@ -181,10 +179,9 @@ const reducer = createReducer(initialState, (builder) => {
 
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
-        .addCase(actions.fetchJournalInfo.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(actions.fetchJournalInfo.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
 
             state.entries = [];
             state.groups = [];
@@ -202,9 +199,8 @@ const reducer = createReducer(initialState, (builder) => {
                 .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
                 .sort(sortBy("uiIndex"));
         })
-        .addCase(actions.updateJournalGroups.rejected, (state, action) => {
-            const message = action.payload?.message;
-            state.errorMessage = message;
+        .addCase(actions.updateJournalGroups.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.isLoaded = true;
         });
 });

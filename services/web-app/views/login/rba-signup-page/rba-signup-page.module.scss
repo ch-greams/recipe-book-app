@@ -1,0 +1,20 @@
+@import "@styles/variables.scss";
+
+.signupPage {
+
+    display: flex;
+
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    height: 100vh;
+
+    background-color: $color-default;
+
+
+    .signupForm {
+        display: grid;
+        gap: 8px;
+    }
+}

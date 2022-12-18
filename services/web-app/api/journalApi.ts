@@ -1,3 +1,4 @@
+import { HttpError } from "@common/http";
 import { getUrlParams, Header, ResourceType } from "@common/http";
 import type { JournalEntry, JournalEntryDetailed, JournalGroup, UserNutrient, UserNutrientDetailed } from "@common/typings";
 
@@ -16,9 +17,13 @@ export default class JournalApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const entries: JournalEntryDetailed[] = await response.json();
-
-        return entries;
+        if (response.ok) {
+            const entries: JournalEntryDetailed[] = await response.json();
+            return entries;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async getJournalGroups(): Promise<JournalGroup[]> {
@@ -30,18 +35,26 @@ export default class JournalApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const groups: JournalGroup[] = await response.json();
-
-        return groups;
+        if (response.ok) {
+            const groups: JournalGroup[] = await response.json();
+            return groups;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async updateJournalGroups(journalGroups: JournalGroup[]): Promise<void> {
 
-        await fetch(`${JournalApi.API_PATH}/groups/update`, {
+        const response = await fetch(`${JournalApi.API_PATH}/groups/update`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify(journalGroups),
         });
+
+        if (!response.ok) {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async createJournalEntry(journalEntry: JournalEntry): Promise<JournalEntryDetailed> {
@@ -55,9 +68,13 @@ export default class JournalApi {
             body: JSON.stringify(journalEntry),
         });
 
-        const entry: JournalEntryDetailed = await response.json();
-
-        return entry;
+        if (response.ok) {
+            const entry: JournalEntryDetailed = await response.json();
+            return entry;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async updateJournalEntry(journalEntry: JournalEntry): Promise<JournalEntry> {
@@ -71,18 +88,26 @@ export default class JournalApi {
             body: JSON.stringify(journalEntry),
         });
 
-        const entry: JournalEntry = await response.json();
-
-        return entry;
+        if (response.ok) {
+            const entry: JournalEntry = await response.json();
+            return entry;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async deleteJournalEntry(journalEntryId: number): Promise<void> {
 
-        await fetch(`${JournalApi.API_PATH}/entry/delete`, {
+        const response = await fetch(`${JournalApi.API_PATH}/entry/delete`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: journalEntryId }),
         });
+
+        if (!response.ok) {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async getUserNutrients(): Promise<UserNutrientDetailed[]> {
@@ -94,9 +119,13 @@ export default class JournalApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const nutrients: UserNutrientDetailed[] = await response.json();
-
-        return nutrients;
+        if (response.ok) {
+            const nutrients: UserNutrientDetailed[] = await response.json();
+            return nutrients;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async upsertUserNutrient(userNutrient: UserNutrient): Promise<UserNutrientDetailed> {
@@ -110,19 +139,27 @@ export default class JournalApi {
             body: JSON.stringify(userNutrient),
         });
 
-        const nutrient: UserNutrientDetailed = await response.json();
-
-        return nutrient;
+        if (response.ok) {
+            const nutrient: UserNutrientDetailed = await response.json();
+            return nutrient;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async deleteUserNutrient(userNutrientId: number): Promise<void> {
 
         const params = getUrlParams({ user_id: 1 });
 
-        await fetch(`${JournalApi.API_PATH}/nutrient/delete?${params}`, {
+        const response = await fetch(`${JournalApi.API_PATH}/nutrient/delete?${params}`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: userNutrientId }),
         });
+
+        if (!response.ok) {
+            throw new HttpError(response.status);
+        }
     }
 }

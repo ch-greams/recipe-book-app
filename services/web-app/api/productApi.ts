@@ -1,3 +1,4 @@
+import { HttpError } from "@common/http";
 import { getUrlParams, Header, ResourceType } from "@common/http";
 import type { ProductShort } from "@common/typings";
 import type { ProductType } from "@common/utils";
@@ -17,9 +18,13 @@ export default class ProductApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const products: T[] = await response.json();
-
-        return products;
+        if (response.ok) {
+            const products: T[] = await response.json();
+            return products;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async getCustomProducts<T>(productType: ProductType): Promise<T[]> {
@@ -31,9 +36,13 @@ export default class ProductApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const products: T[] = await response.json();
-
-        return products;
+        if (response.ok) {
+            const products: T[] = await response.json();
+            return products;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async getProducts(filter: string): Promise<ProductShort[]> {
@@ -45,28 +54,40 @@ export default class ProductApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const products: ProductShort[] = await response.json();
-
-        return products;
+        if (response.ok) {
+            const products: ProductShort[] = await response.json();
+            return products;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async deleteFavoriteProduct(productId: number): Promise<void> {
 
         const params = getUrlParams({ user_id: 1 });
 
-        await fetch(`${ProductApi.API_PATH}/favorite/delete?${params}`, {
+        const response = await fetch(`${ProductApi.API_PATH}/favorite/delete?${params}`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: productId }),
         });
+
+        if (!response.ok) {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async deleteProduct(productId: number): Promise<void> {
 
-        await fetch(`${ProductApi.API_PATH}/delete`, {
+        const response = await fetch(`${ProductApi.API_PATH}/delete`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: productId }),
         });
+
+        if (!response.ok) {
+            throw new HttpError(response.status);
+        }
     }
 }

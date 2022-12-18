@@ -1,6 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
+import { getErrorMessageFromStatus } from "@common/http";
 import { getKeys, getValues } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type * as typings from "@common/typings";
@@ -887,11 +888,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
 
         })
-        .addCase(actions.addIngredient.rejected, (state, action) => {
+        .addCase(actions.addIngredient.rejected, (state, { payload: errorStatus }) => {
             state.isLoadedIngredients = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-
         .addCase(actions.addIngredientProduct.pending, (state) => {
             state.isLoadedIngredients = false;
         })
@@ -916,9 +916,9 @@ const reducer = createReducer(initialState, (builder) => {
                     : ingredient
             ));
         })
-        .addCase(actions.addIngredientProduct.rejected, (state, action) => {
+        .addCase(actions.addIngredientProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoadedIngredients = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
         .addCase(actions.updateServingSizeAmount, (state, action) => {
             const { payload: servingSizeInput } = action;
@@ -1013,10 +1013,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.ingredients = recipeIngredients;
             state.directions = recipeDirections;
         })
-        .addCase(actions.fetchRecipe.rejected, (state, action) => {
+        .addCase(actions.fetchRecipe.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
 
         .addCase(actions.createRecipe.pending, (state) => {
@@ -1032,10 +1032,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = recipe.id;
             state.isCreated = true;
         })
-        .addCase(actions.createRecipe.rejected, (state, action) => {
+        .addCase(actions.createRecipe.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
 
         .addCase(actions.updateRecipe.pending, (state) => {
@@ -1051,10 +1051,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = recipe.id;
             state.isCreated = true;
         })
-        .addCase(actions.updateRecipe.rejected, (state, action) => {
+        .addCase(actions.updateRecipe.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         });
 });
 

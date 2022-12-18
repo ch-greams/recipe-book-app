@@ -1,5 +1,4 @@
 import { getKeys } from "./object";
-import { isSome } from "./types";
 
 
 export enum Header {
@@ -24,16 +23,6 @@ export enum ResourceType {
     X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded",
 }
 
-export interface Response<T> {
-    status: HttpStatus;
-    body: Option<T>;
-}
-
-export function isSuccess<T>(status: HttpStatus, body: Option<T>): body is T {
-    const isOk = [ HttpStatus.Ok, HttpStatus.Created, HttpStatus.NoContent ].includes(status);
-    return isOk || isSome(body);
-}
-
 
 export function getErrorMessageFromStatus(status: Option<HttpStatus>): string {
     switch (status) {
@@ -50,4 +39,25 @@ export function getErrorMessageFromStatus(status: Option<HttpStatus>): string {
 
 export function getUrlParams(obj: object): string {
     return getKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
+}
+
+
+export class HttpError extends Error {
+
+    public status: HttpStatus;
+
+    public constructor(status: HttpStatus) {
+        super(getErrorMessageFromStatus(status));
+
+        this.name = "HttpError";
+        this.status = status;
+    }
+
+    public static getStatus(error: unknown): HttpStatus {
+        return (
+            (error instanceof HttpError)
+                ? error.status
+                : HttpStatus.InternalServerError
+        );
+    }
 }

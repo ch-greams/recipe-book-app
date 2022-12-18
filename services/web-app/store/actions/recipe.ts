@@ -1,15 +1,17 @@
 /* eslint-disable max-len */
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
+import { HttpError } from "@common/http";
 import type { IngredientProduct, ProductShort, Recipe } from "@common/typings";
 import type * as units from "@common/units";
 import { ProductType } from "@common/utils";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
-import type { RootState } from "..";
 import { convertFoodToIngredientProduct, convertRecipePageIntoRecipe, convertRecipeToIngredientProduct } from "../helpers/recipe";
 import type * as types from "../types/recipe";
+
+import type { AsyncThunkConfig } from ".";
 
 
 // -----------------------------------------------------------------------------
@@ -29,7 +31,7 @@ export const updateBrand = createAction<string>("recipe/update_brand");
 export const updateSubtitle = createAction<string>("recipe/update_subtitle");
 export const updateDescription = createAction<string>("recipe/update_description");
 
-export const fetchRecipe = createAsyncThunk<Recipe, number, { rejectValue: Error }>(
+export const fetchRecipe = createAsyncThunk<Recipe, number, AsyncThunkConfig>(
     "recipe/fetch_recipe",
     async (recipeId, { rejectWithValue }) => {
         try {
@@ -37,11 +39,11 @@ export const fetchRecipe = createAsyncThunk<Recipe, number, { rejectValue: Error
             return recipe;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
-export const createRecipe = createAsyncThunk<Recipe, void, { state: RootState, rejectValue: Error }>(
+export const createRecipe = createAsyncThunk<Recipe, void, AsyncThunkConfig>(
     "recipe/create_recipe",
     async (_arg, { getState, rejectWithValue }) => {
         try {
@@ -51,11 +53,11 @@ export const createRecipe = createAsyncThunk<Recipe, void, { state: RootState, r
             return createdRecipe;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
-export const updateRecipe = createAsyncThunk<Recipe, void, { state: RootState, rejectValue: Error }>(
+export const updateRecipe = createAsyncThunk<Recipe, void, AsyncThunkConfig>(
     "recipe/update_recipe",
     async (_arg, { getState, rejectWithValue }) => {
         try {
@@ -65,7 +67,7 @@ export const updateRecipe = createAsyncThunk<Recipe, void, { state: RootState, r
             return updatedRecipe;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
@@ -113,7 +115,7 @@ export const updateIngredientProductAmount = createAction<{ parentId: number, id
 export const updateIngredientProductUnit = createAction<{ parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
 export const updateAltNutrients = createAction<{ parentId: number, id: number, isSelected: boolean }>("recipe/ingredient/update_alt_nutrients");
 
-export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, { rejectValue: Error }>(
+export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, AsyncThunkConfig>(
     "recipe/ingredient/add",
     async (product, { rejectWithValue }) => {
         try {
@@ -127,11 +129,11 @@ export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, {
             }
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
-export const addIngredientProduct = createAsyncThunk<{ id: number, product: IngredientProduct }, { id: number, product: ProductShort }, { rejectValue: Error }>(
+export const addIngredientProduct = createAsyncThunk<{ id: number, product: IngredientProduct }, { id: number, product: ProductShort }, AsyncThunkConfig>(
     "recipe/ingredient/add_product",
     async ({ id, product }, { rejectWithValue }) => {
         try {
@@ -145,7 +147,7 @@ export const addIngredientProduct = createAsyncThunk<{ id: number, product: Ingr
             }
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );

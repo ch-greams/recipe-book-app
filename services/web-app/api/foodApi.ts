@@ -1,3 +1,4 @@
+import { HttpError } from "@common/http";
 import { Header, ResourceType } from "@common/http";
 import type { Food } from "@common/typings";
 
@@ -14,9 +15,13 @@ export default class FoodApi {
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
 
-        const food: Food = await response.json();
-
-        return food;
+        if (response.ok) {
+            const food: Food = await response.json();
+            return food;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async createFood(food: Food): Promise<Food> {
@@ -30,9 +35,13 @@ export default class FoodApi {
             body: JSON.stringify(food),
         });
 
-        const createdFood: Food = await response.json();
-
-        return createdFood;
+        if (response.ok) {
+            const createdFood: Food = await response.json();
+            return createdFood;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async updateFood(food: Food): Promise<Food> {
@@ -46,8 +55,12 @@ export default class FoodApi {
             body: JSON.stringify(food),
         });
 
-        const updatedFood: Food = await response.json();
-
-        return updatedFood;
+        if (response.ok) {
+            const updatedFood: Food = await response.json();
+            return updatedFood;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 }
