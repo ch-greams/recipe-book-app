@@ -9,7 +9,8 @@ import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as foodActions from "@store/actions/food";
 import { searchClear } from "@store/actions/search";
-import * as userActions from "@store/actions/user";
+import type { MetaStore } from "@store/types/meta";
+import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -20,7 +21,12 @@ interface FoodPageQuery extends ParsedUrlQuery {
     fid: string;
 }
 
-const RbaFoodPageConnected: React.FC = () => {
+interface Props {
+    user: UserStore;
+    meta: MetaStore;
+}
+
+const RbaFoodPageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -28,9 +34,7 @@ const RbaFoodPageConnected: React.FC = () => {
     const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = isNone(fid);
 
-    const { food, meta, user } = useAppSelector((state) => state);
-
-    useEffect(() => { dispatch(userActions.fetchUserData()); }, [ user.userId ]);
+    const food = useAppSelector((state) => state.food);
 
     useEffect(() => {
         if (!food.isLoading) {

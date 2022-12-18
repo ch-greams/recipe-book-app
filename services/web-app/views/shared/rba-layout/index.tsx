@@ -1,22 +1,27 @@
-import type { PropsWithChildren } from "react";
 import { useEffect } from "react";
 import React from "react";
+import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 import { useAppDispatch, useAppSelector } from "@store";
 import { fetchNutrients } from "@store/actions/meta";
+import { fetchUserData } from "@store/actions/user";
 
 import RbaFooter from "../rba-footer";
 import RbaNavbar from "../rba-navbar";
 
 
-const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
+interface Props {
+    page: AppProps;
+}
+
+const RbaLayout: React.FC<Props> = ({ page: { Component, pageProps } }) => {
 
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
-    const user = useAppSelector((state) => state.user);
-    const meta = useAppSelector((state) => state.meta);
+    const { user, meta } = useAppSelector((state) => state);
 
     useEffect(() => {
         if (!meta.isLoaded && !meta.isLoading) {
@@ -24,16 +29,37 @@ const RbaLayout: React.FC<PropsWithChildren> = ({ children }) => {
         }
     }, [ meta.isLoaded, meta.isLoading ]);
 
-    const router = useRouter();
-    const isHomePage = (router.pathname === "/");
+    useEffect(() => {
+        if (!user.isLoggedIn) {
+            router.push("/login");
+        }
+    }, [ user.isLoggedIn ]);
+
+    useEffect(() => {
+        dispatch(fetchUserData());
+    }, [ user.userId ]);
+
+
+    const hideSearch = [ "/", "/login" ].includes(router.pathname);
 
     return (
         <>
             <Head>
                 <title>{"RecipeBook"}</title>
             </Head>
-            <RbaNavbar hideSearch={isHomePage} username={user.userName} />
-            <div>{children}</div>
+
+            <RbaNavbar
+                hideSearch={hideSearch}
+                isLoggedIn={user.isLoggedIn}
+                username={user.userName}
+            />
+
+            <Component
+                user={user}
+                meta={meta}
+                {...pageProps}
+            />
+
             <RbaFooter />
         </>
     );

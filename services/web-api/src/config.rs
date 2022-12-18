@@ -7,6 +7,7 @@ use serde::Deserialize;
 pub struct Config {
     pub listen_addr: SocketAddr,
     pub database_url: String,
+    pub auth_api_url: String,
 }
 
 impl Config {

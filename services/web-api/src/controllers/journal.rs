@@ -1,22 +1,25 @@
 use actix_web::{
     get, post,
     web::{Data, Json, Query},
-    HttpResponse, Scope,
+    HttpRequest, HttpResponse, Scope,
 };
 use chrono::NaiveDate;
 use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
-use crate::types::{
-    custom_unit::CustomUnit,
-    error::Error,
-    journal_entry::{
-        CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry, JournalEntryDetailed,
-        UpdateJournalEntryPayload,
+use crate::{
+    types::{
+        custom_unit::CustomUnit,
+        error::Error,
+        journal_entry::{
+            CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry,
+            JournalEntryDetailed, UpdateJournalEntryPayload,
+        },
+        journal_group::JournalGroup,
+        product_nutrient::ProductNutrient,
+        user_nutrient::UserNutrient,
     },
-    journal_group::JournalGroup,
-    product_nutrient::ProductNutrient,
-    user_nutrient::UserNutrient,
+    utils::{validate_cookie, Certificate},
 };
 
 pub fn scope() -> Scope {
@@ -80,7 +83,19 @@ pub struct FindEntriesQuery {
 async fn get_entries(
     query: Query<FindEntriesQuery>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let token_data_claims = validate_cookie(request, &auth_certificate)?;
+
+    if !token_data_claims
+        .realm_access
+        .roles
+        .contains(&"rb-user".to_string())
+    {
+        return Err(Error::unauthenticated());
+    }
+
     let mut txn = db_pool.begin().await?;
 
     let journal_entries = JournalEntry::find_all_by_date(query.entry_date, query.user_id)

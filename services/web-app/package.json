@@ -3,7 +3,7 @@
   "version": "0.7.0",
   "private": true,
   "engines": {
-    "node": "~16",
+    "node": "~18",
     "npm": "~8"
   },
   "scripts": {
@@ -29,8 +29,7 @@
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
     "redux-logger": "^3.0.6",
-    "sass": "^1.53.0",
-    "superagent": "^8.0.0"
+    "sass": "^1.53.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
@@ -46,7 +45,6 @@
     "@types/react": "^18.0.14",
     "@types/redux-logger": "^3.0.9",
     "@types/styled-components": "^5.1.15",
-    "@types/superagent": "^4.1.13",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
     "babel-loader": "^8.2.5",

@@ -50,7 +50,7 @@ describe("user", () => {
 
         it("can navigate to user page", () => {
 
-            const USER_NAME = "Andrei Khvalko";
+            const USER_NAME = "Andrei Greams";
 
             cy.get(`[data-cy=${constants.CY_NAVBAR_USER_ITEM}]`)
                 .contains(USER_NAME)

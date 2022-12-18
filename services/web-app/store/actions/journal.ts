@@ -1,11 +1,12 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT, formatTime } from "@common/date";
+import { HttpError } from "@common/http";
 import { unwrap } from "@common/types";
 import type { JournalEntry, JournalEntryDetailed, JournalGroup } from "@common/typings";
 import JournalApi from "@api/journalApi";
 
-import type { RootState } from "..";
+import type { AsyncThunkConfig } from ".";
 
 
 export const updateDate = createAction<string>("journal/update_date");
@@ -17,7 +18,7 @@ export const updateEntryUnit = createAction<{ id: number, unit: string }>("journ
 export const fetchJournalInfo = createAsyncThunk<
     { entries: JournalEntryDetailed[], groups: JournalGroup[] },
     void,
-    { state: RootState, rejectValue: Error }
+    AsyncThunkConfig
 >(
     "journal/fetch_info",
     async (_arg, { rejectWithValue, getState }) => {
@@ -32,26 +33,25 @@ export const fetchJournalInfo = createAsyncThunk<
             return { entries, groups };
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
 
-export const createJournalEntry = createAsyncThunk<JournalEntryDetailed, JournalEntry, { rejectValue: Error }>(
+export const createJournalEntry = createAsyncThunk<JournalEntryDetailed, JournalEntry, AsyncThunkConfig>(
     "journal/create_entry",
     async (entry, { rejectWithValue }) => {
         try {
             const entryResponse = await JournalApi.createJournalEntry(entry);
-
             return entryResponse;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
 
-export const updateJournalEntry = createAsyncThunk<JournalEntry, number, { state: RootState, rejectValue: Error }>(
+export const updateJournalEntry = createAsyncThunk<JournalEntry, number, AsyncThunkConfig>(
     "journal/update_entry",
     async (entryId, { rejectWithValue, getState }) => {
         try {
@@ -73,35 +73,33 @@ export const updateJournalEntry = createAsyncThunk<JournalEntry, number, { state
             return entryResponse;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
 
-export const deleteJournalEntry = createAsyncThunk<number, number, { rejectValue: Error }>(
+export const deleteJournalEntry = createAsyncThunk<number, number, AsyncThunkConfig>(
     "journal/delete_entry",
     async (entryId, { rejectWithValue }) => {
         try {
             await JournalApi.deleteJournalEntry(entryId);
-
             return entryId;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
 
-export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], { rejectValue: Error }>(
+export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], AsyncThunkConfig>(
     "journal/update_groups",
     async (groups, { rejectWithValue }) => {
         try {
             await JournalApi.updateJournalGroups(groups);
-
             return groups;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );

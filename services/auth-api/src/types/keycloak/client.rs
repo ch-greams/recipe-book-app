@@ -7,15 +7,28 @@ use crate::types::error::Error;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+pub struct ProtocolMapper {
+    pub name: String,
+    pub protocol: String,
+    pub protocol_mapper: String,
+    pub consent_required: bool,
+    pub config: HashMap<String, String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct KeycloakClient {
     pub id: Option<String>,
     pub client_id: String,
+    pub public_client: bool,
     pub root_url: String,
     pub admin_url: String,
+    pub secret: Option<String>,
     pub redirect_uris: Vec<String>,
     pub web_origins: Vec<String>,
     pub direct_access_grants_enabled: bool,
     pub attributes: HashMap<String, String>,
+    pub protocol_mappers: Vec<ProtocolMapper>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

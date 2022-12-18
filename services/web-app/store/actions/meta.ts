@@ -1,10 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+import { HttpError } from "@common/http";
 import type { NutrientMeta } from "@common/typings";
 import MetaApi from "@api/metaApi";
 
+import type { AsyncThunkConfig } from ".";
 
-export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectValue: string }>(
+
+export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, AsyncThunkConfig>(
     "meta/fetch_nutrients",
     async (_arg, { rejectWithValue }) => {
         try {
@@ -12,8 +15,7 @@ export const fetchNutrients = createAsyncThunk<NutrientMeta[], void, { rejectVal
             return nutrients;
         }
         catch (error) {
-            const errorMessage = (error as Error).message;
-            return rejectWithValue(errorMessage);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );

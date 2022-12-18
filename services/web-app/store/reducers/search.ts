@@ -1,5 +1,7 @@
 import { createReducer } from "@reduxjs/toolkit";
 
+import { getErrorMessageFromStatus } from "@common/http";
+
 import { searchClear, searchProducts } from "../actions/search";
 import type { SearchStore } from "../types/search";
 
@@ -21,23 +23,20 @@ const reducer = createReducer(initialState, (builder) => {
             state.searchInput = "";
             state.products = [];
         })
-        .addCase(searchProducts.pending, (state, action) => {
-            const { arg: filter } = action.meta;
+        .addCase(searchProducts.pending, (state, { meta: { arg: filter } }) => {
             state.isLoaded = false;
             state.errorMessage = null;
             state.searchInput = filter;
             state.products = [];
         })
-        .addCase(searchProducts.fulfilled, (state, action) => {
-            const { payload: products } = action;
+        .addCase(searchProducts.fulfilled, (state, { payload: products }) => {
             state.isLoaded = true;
             state.errorMessage = null;
             state.products = products;
         })
-        .addCase(searchProducts.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(searchProducts.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.products = [];
         });
 });

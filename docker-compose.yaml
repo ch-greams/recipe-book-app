@@ -7,6 +7,8 @@ services:
     depends_on:
       rb-database:
         condition: service_healthy
+      rb-auth-api:
+        condition: service_healthy
     ports:
       - 8080:8080
     working_dir: /web-api
@@ -19,6 +21,7 @@ services:
     environment:
       RB__listen_addr: 0.0.0.0:8080
       RB__database_url: postgres://postgres:password@rb-database
+      RB__auth_api_url: rb-auth-api:8080
 
   rb-web-app:
     image: web-app
@@ -30,6 +33,7 @@ services:
     working_dir: /app
     environment:
       RB__API_ADDR: rb-web-api:8080
+      RB__AUTH_API_ADDR: rb-auth-api:8080
       NODE_ENV: production     # options: production, development
       PORT: 3000
       LOG_LEVEL: DEBUG

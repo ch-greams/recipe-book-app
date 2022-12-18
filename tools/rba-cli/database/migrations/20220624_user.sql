@@ -18,7 +18,6 @@ GRANT ALL ON SEQUENCE journal.user_id TO postgres;
 CREATE TABLE journal."user" (
     id int8 NOT NULL DEFAULT nextval('journal.user_id'::regclass),
     email text NOT NULL,
-    "password" text NOT NULL,
     first_name text NOT NULL,
     last_name text NOT NULL,
     CONSTRAINT user_email_unique UNIQUE (email),

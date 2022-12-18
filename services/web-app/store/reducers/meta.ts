@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
+import { getErrorMessageFromStatus } from "@common/http";
 import { NutrientName } from "@common/nutrients";
 import { mapRecord } from "@common/object";
 import { isSome } from "@common/types";
@@ -97,8 +98,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         })
-        .addCase(fetchNutrients.fulfilled, (state, action) => {
-            const { payload: nutrients } = action;
+        .addCase(fetchNutrients.fulfilled, (state, { payload: nutrients }) => {
             state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -117,11 +117,10 @@ const reducer = createReducer(initialState, (builder) => {
             // TODO: Make it safer? Currently you just assume that database and list of nutrients here are in sync
             state.nutrientDescriptions = nutrientDescriptions;
         })
-        .addCase(fetchNutrients.rejected, (state, action) => {
-            const { payload: errorMessage } = action;
+        .addCase(fetchNutrients.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = errorMessage;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
             state.nutrientDescriptions = initialState.nutrientDescriptions;
         });
 });

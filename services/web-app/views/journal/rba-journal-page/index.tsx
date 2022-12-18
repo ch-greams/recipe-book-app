@@ -5,17 +5,24 @@ import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as actions from "@store/actions/journal";
+import type { MetaStore } from "@store/types/meta";
+import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
 import RbaJournalPage from "./rba-journal-page";
 
 
-const RbaJournalPageConnected: React.FC = () => {
+interface Props {
+    user: UserStore;
+    meta: MetaStore;
+}
+
+const RbaJournalPageConnected: React.FC<Props> = ({ meta, user: { userId } }) => {
 
     const dispatch = useAppDispatch();
 
-    const { meta, user: { userId }, journal, search } = useAppSelector((state) => state);
+    const { journal, search } = useAppSelector((state) => state);
 
     useEffect(() => {
         dispatch(actions.fetchJournalInfo());

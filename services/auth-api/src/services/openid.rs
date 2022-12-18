@@ -1,9 +1,10 @@
 use reqwest::Client;
+use secrecy::{ExposeSecret, Secret};
 use serde::{Deserialize, Serialize};
 
-use crate::{config::KeycloakConfig, controllers::LoginForm, types::error::Error};
+use crate::types::error::Error;
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct TokenRequest {
     pub grant_type: String,
     pub client_id: String,
@@ -12,48 +13,50 @@ pub struct TokenRequest {
     pub password: String,
 }
 
-impl From<KeycloakConfig> for TokenRequest {
-    fn from(config: KeycloakConfig) -> Self {
+impl TokenRequest {
+    pub fn rb_web_api(
+        username: &str,
+        password: &Secret<String>,
+        client_secret: &Secret<String>,
+    ) -> Self {
         TokenRequest {
             grant_type: "password".to_string(),
-            client_id: "admin-cli".to_string(),
-            client_secret: None,
-            username: config.username,
-            password: config.password,
+            client_id: "rb-web-api".to_string(),
+            client_secret: Some(client_secret.expose_secret().to_string()),
+            username: username.to_string(),
+            password: password.expose_secret().to_string(),
         }
     }
-}
 
-impl From<LoginForm> for TokenRequest {
-    fn from(form: LoginForm) -> Self {
+    pub fn admin_cli(username: &str, password: &Secret<String>) -> Self {
         TokenRequest {
             grant_type: "password".to_string(),
             client_id: "admin-cli".to_string(),
             client_secret: None,
-            username: form.username.to_string(),
-            password: form.password,
+            username: username.to_string(),
+            password: password.expose_secret().to_string(),
         }
     }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TokenResponse {
-    access_token: String,
-    token_type: String,
-    expires_in: u32,
-    refresh_token: String,
-    refresh_expires_in: u32,
+    pub access_token: String,
+    pub token_type: String,
+    pub expires_in: u32,
+    pub refresh_token: String,
+    pub refresh_expires_in: u32,
     #[serde(rename = "not-before-policy")]
-    not_before_policy: u32,
-    session_state: String,
-    scope: String,
+    pub not_before_policy: u32,
+    pub session_state: String,
+    pub scope: String,
 }
 
 pub async fn get_access_token(
     req_client: &Client,
     token_payload: &TokenRequest,
     keycloak_url: &str,
-) -> Result<String, Error> {
+) -> Result<TokenResponse, Error> {
     let token_endpoint = format!(
         "http://{}/realms/master/protocol/openid-connect/token",
         keycloak_url
@@ -67,17 +70,5 @@ pub async fn get_access_token(
         .json::<TokenResponse>()
         .await?;
 
-    Ok(response.access_token)
-}
-
-pub async fn get_admin_access_token(
-    req_client: &Client,
-    keycloak_config: &KeycloakConfig,
-) -> Result<String, Error> {
-    let token_payload = keycloak_config.clone().into();
-
-    let admin_access_token =
-        get_access_token(req_client, &token_payload, &keycloak_config.url).await?;
-
-    Ok(admin_access_token)
+    Ok(response)
 }

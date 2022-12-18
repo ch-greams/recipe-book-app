@@ -10,12 +10,10 @@ import "@styles/globals.scss";
 import "@common/extensions";
 
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+const App: React.FC<AppProps> = (props) => {
     return (
         <Provider store={store}>
-            <RbaLayout>
-                <Component {...pageProps} />
-            </RbaLayout>
+            <RbaLayout page={props} />
         </Provider>
     );
 };
