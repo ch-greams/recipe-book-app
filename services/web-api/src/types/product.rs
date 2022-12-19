@@ -44,6 +44,7 @@ pub struct ProductShort {
     pub name: String,
     pub brand: String,
     pub subtitle: String,
+    pub created_by: i64,
     pub is_private: bool,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -57,6 +58,7 @@ impl ProductShort {
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
+            created_by: product.created_by,
             is_private: product.is_private,
             created_at: product.created_at,
             updated_at: product.updated_at,
@@ -65,21 +67,25 @@ impl ProductShort {
 }
 
 impl Product {
-    pub fn find_food_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
+    pub fn find_food_by_id(
+        id: i64,
+        user_id: Option<i64>,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE is_deleted = false AND product_type = 'food' AND id = $1
+            WHERE is_deleted = false AND product_type = 'food' AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
         .bind(id)
+        .bind(user_id)
     }
 
     pub fn find_all(
         limit: u32,
         offset: u32,
-        user_id: i64,
+        user_id: Option<i64>,
         types: Vec<ProductType>,
         filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
@@ -144,15 +150,19 @@ impl Product {
         .bind(format!("%{}%", filter))
     }
 
-    pub fn find_recipe_by_id(id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
+    pub fn find_recipe_by_id(
+        id: i64,
+        user_id: Option<i64>,
+    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE is_deleted = false AND product_type = 'recipe' AND id = $1
+            WHERE is_deleted = false AND product_type = 'recipe' AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
         .bind(id)
+        .bind(user_id)
     }
 
     pub async fn insert_food(
@@ -219,6 +229,7 @@ impl Product {
 
     pub async fn update_food(
         update_food_payload: &UpdateFoodPayload,
+        user_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
@@ -233,7 +244,7 @@ impl Product {
                 serving_size = $6,
                 is_private = $7,
                 updated_at = $8
-            WHERE id = $9
+            WHERE id = $9 AND created_by = $10
             RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
@@ -245,7 +256,8 @@ impl Product {
             .bind(update_food_payload.serving_size)
             .bind(update_food_payload.is_private)
             .bind(Utc::now())
-            .bind(update_food_payload.id);
+            .bind(update_food_payload.id)
+            .bind(user_id);
 
         let result = query
             .fetch_optional(txn)
@@ -257,6 +269,7 @@ impl Product {
 
     pub async fn update_recipe(
         update_recipe_payload: &UpdateRecipePayload,
+        user_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
@@ -271,7 +284,7 @@ impl Product {
                 serving_size = $6,
                 is_private = $7,
                 updated_at = $8
-            WHERE id = $9
+            WHERE id = $9 AND created_by = $10
             RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
@@ -283,7 +296,8 @@ impl Product {
             .bind(update_recipe_payload.serving_size)
             .bind(update_recipe_payload.is_private)
             .bind(Utc::now())
-            .bind(update_recipe_payload.id);
+            .bind(update_recipe_payload.id)
+            .bind(user_id);
 
         let result = query
             .fetch_optional(txn)
@@ -295,16 +309,18 @@ impl Product {
 
     pub async fn delete_by_id(
         product_id: i64,
+        user_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<(), Error> {
         let query = sqlx::query(
             r#"
             UPDATE product.product SET is_deleted = true
-            WHERE id = $1
+            WHERE id = $1 AND created_by = $2
             RETURNING id;
         "#,
         )
-        .bind(product_id);
+        .bind(product_id)
+        .bind(user_id);
 
         query.execute(txn).await?;
 
@@ -345,10 +361,11 @@ mod tests {
     #[tokio::test]
     async fn find_food_by_id() {
         let food_id = 1;
+        let user_id = None;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let product = Product::find_food_by_id(food_id)
+        let product = Product::find_food_by_id(food_id, user_id)
             .fetch_optional(&mut txn)
             .await
             .unwrap();
@@ -360,7 +377,7 @@ mod tests {
     async fn find_food_all() {
         let food_limit = 10;
         let food_offset = 0;
-        let food_user_id = 1;
+        let food_user_id = Some(1);
         let food_type = vec![ProductType::Food];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -428,10 +445,11 @@ mod tests {
     #[tokio::test]
     async fn find_recipe_by_id() {
         let recipe_id = 6;
+        let user_id = None;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let product = Product::find_recipe_by_id(recipe_id)
+        let product = Product::find_recipe_by_id(recipe_id, user_id)
             .fetch_optional(&mut txn)
             .await
             .unwrap();
@@ -443,7 +461,7 @@ mod tests {
     async fn find_recipe_all() {
         let recipe_limit = 10;
         let recipe_offset = 0;
-        let recipe_user_id = 1;
+        let recipe_user_id = Some(1);
         let recipe_type = vec![ProductType::Recipe];
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -510,12 +528,14 @@ mod tests {
 
     #[tokio::test]
     async fn insert_food() {
+        let user_id = 1;
+
         let create_product_payload: CreateFoodPayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
+        let product_result = Product::insert_food(&create_product_payload, user_id, &mut txn)
             .await
             .unwrap();
 
@@ -529,14 +549,17 @@ mod tests {
 
     #[tokio::test]
     async fn update_food() {
+        let user_id = 1;
+
         let create_product_payload: CreateFoodPayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_food(&create_product_payload, 1, &mut txn)
-            .await
-            .unwrap();
+        let create_product_result =
+            Product::insert_food(&create_product_payload, user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             0, create_product_result.id,
@@ -548,9 +571,10 @@ mod tests {
 
         update_product_payload.id = create_product_result.id;
 
-        let update_product_result = Product::update_food(&update_product_payload, &mut txn)
-            .await
-            .unwrap();
+        let update_product_result =
+            Product::update_food(&update_product_payload, user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             create_product_result.name, update_product_result.name,
@@ -581,12 +605,14 @@ mod tests {
 
     #[tokio::test]
     async fn update_recipe() {
+        let user_id = 1;
+
         let create_product_payload: CreateRecipePayload =
             utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
+        let create_product_result = Product::insert_recipe(&create_product_payload, user_id, &mut txn)
             .await
             .unwrap();
 
@@ -600,7 +626,7 @@ mod tests {
 
         update_product_payload.id = create_product_result.id;
 
-        let update_product_result = Product::update_recipe(&update_product_payload, &mut txn)
+        let update_product_result = Product::update_recipe(&update_product_payload, user_id, &mut txn)
             .await
             .unwrap();
 
@@ -629,10 +655,13 @@ mod tests {
     #[tokio::test]
     async fn delete_by_id() {
         let product_id = 1;
+        let user_id = 1;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        Product::delete_by_id(product_id, &mut txn).await.unwrap();
+        Product::delete_by_id(product_id, user_id, &mut txn)
+            .await
+            .unwrap();
 
         txn.rollback().await.unwrap();
     }

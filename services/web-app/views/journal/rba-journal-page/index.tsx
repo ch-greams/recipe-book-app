@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import { changeDate } from "@common/date";
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
@@ -18,15 +20,15 @@ interface Props {
     meta: MetaStore;
 }
 
-const RbaJournalPageConnected: React.FC<Props> = ({ meta, user: { userId } }) => {
+const RbaJournalPageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
 
     const { journal, search } = useAppSelector((state) => state);
 
-    useEffect(() => {
-        dispatch(actions.fetchJournalInfo());
-    }, [ dispatch, journal.currentDate ]);
+    useLoginRedirect(user.isLoggedIn);
+
+    useEffect(() => { dispatch(actions.fetchJournalInfo()); }, [ journal.currentDate ]);
 
     return (
         journal.isLoaded
@@ -35,7 +37,7 @@ const RbaJournalPageConnected: React.FC<Props> = ({ meta, user: { userId } }) =>
                     ? <RbaSingleMessagePage text={journal.errorMessage} />
                     : (
                         <RbaJournalPage
-                            userId={userId}
+                            userId={user.userId}
                             journal={journal}
                             meta={meta}
                             search={search}

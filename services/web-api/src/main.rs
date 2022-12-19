@@ -1,8 +1,9 @@
 use actix_web::{web::Data, App, HttpServer};
 use sqlx::PgPool;
 
-use crate::{config::Config, utils::auth_setup};
+use crate::{auth::auth_setup, config::Config};
 
+mod auth;
 mod config;
 mod controllers;
 mod types;

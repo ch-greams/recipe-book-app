@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
@@ -35,6 +36,8 @@ const RbaFoodPageConnected: React.FC<Props> = ({ meta, user }) => {
     const isNewFoodPage = isNone(fid);
 
     const food = useAppSelector((state) => state.food);
+
+    useLoginRedirect(user.isLoggedIn);
 
     useEffect(() => {
         if (!food.isLoading) {

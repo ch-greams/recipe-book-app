@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppSelector } from "@store";
@@ -24,9 +26,9 @@ const RbaUserPageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const { journal } = useAppSelector((state) => state);
 
-    useEffect(() => {
-        dispatch(journalActions.fetchJournalInfo());
-    }, [ dispatch ]);
+    useLoginRedirect(user.isLoggedIn);
+
+    useEffect(() => { dispatch(journalActions.fetchJournalInfo()); }, [ dispatch ]);
 
     return (
         user.isLoaded && meta.isLoaded && journal.isLoaded

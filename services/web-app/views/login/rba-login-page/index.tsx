@@ -14,6 +14,7 @@ import styles from "./rba-login-page.module.scss";
 
 interface LoginPageQuery extends ParsedUrlQuery {
     username?: string;
+    redirect?: string;
 }
 
 const RbaLoginPage: React.FC = () => {
@@ -21,13 +22,13 @@ const RbaLoginPage: React.FC = () => {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
-    const { username: usernameFromQuery } = router.query as LoginPageQuery;
+    const query: LoginPageQuery = router.query;
 
     useEffect(() => {
-        if (isSome(usernameFromQuery)) {
-            setUserName(usernameFromQuery);
+        if (isSome(query.username)) {
+            setUserName(query.username);
         }
-    }, [ usernameFromQuery ]);
+    }, [ query.username ]);
 
     const [ username, setUserName ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -42,7 +43,7 @@ const RbaLoginPage: React.FC = () => {
                     const response = await dispatch(login({ username, password }));
 
                     if (response.meta.requestStatus === "fulfilled") {
-                        router.push("/journal");
+                        router.push(isSome(query.redirect) ? query.redirect : "/journal");
                     }
                 }}
             >
