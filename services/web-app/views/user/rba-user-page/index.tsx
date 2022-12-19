@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 
 import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";

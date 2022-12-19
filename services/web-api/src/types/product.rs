@@ -612,9 +612,10 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_recipe(&create_product_payload, user_id, &mut txn)
-            .await
-            .unwrap();
+        let create_product_result =
+            Product::insert_recipe(&create_product_payload, user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             0, create_product_result.id,
@@ -626,9 +627,10 @@ mod tests {
 
         update_product_payload.id = create_product_result.id;
 
-        let update_product_result = Product::update_recipe(&update_product_payload, user_id, &mut txn)
-            .await
-            .unwrap();
+        let update_product_result =
+            Product::update_recipe(&update_product_payload, user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             create_product_result.name, update_product_result.name,

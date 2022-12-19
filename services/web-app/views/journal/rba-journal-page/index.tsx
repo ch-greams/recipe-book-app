@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useRouter } from "next/router";
 
 import { changeDate } from "@common/date";
 import { useLoginRedirect } from "@common/hooks";
