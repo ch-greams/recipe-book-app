@@ -8,6 +8,7 @@ pub enum ErrorKind {
     Database,
     NotFound,
     Unauthenticated,
+    Unauthorized,
     NotCreated,
     NotUpdated,
     NotDeleted,
@@ -54,6 +55,7 @@ impl ResponseError for Error {
         match &self.kind {
             ErrorKind::NotFound => StatusCode::NOT_FOUND,
             ErrorKind::Unauthenticated => StatusCode::UNAUTHORIZED,
+            ErrorKind::Unauthorized => StatusCode::FORBIDDEN,
             _ => StatusCode::INTERNAL_SERVER_ERROR,
         }
     }
@@ -75,6 +77,13 @@ impl Error {
         Error {
             kind: ErrorKind::Unauthenticated,
             text: "No valid access_token was found".to_string(),
+        }
+    }
+
+    pub fn unauthorized() -> Error {
+        Error {
+            kind: ErrorKind::Unauthorized,
+            text: "Current user doesn't have the necessary permissions for this action".to_string(),
         }
     }
 

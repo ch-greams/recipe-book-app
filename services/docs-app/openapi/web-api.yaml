@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: RecipeBook API
-  version: 0.6.0
+  version: 0.7.0
   description: >
     # About
 
@@ -12,6 +12,11 @@ servers:
     description: local deployment of web-api
 
 components:
+  securitySchemes:
+    AccessTokenAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
   schemas:
     # nutrient
     Nutrient:
@@ -747,6 +752,7 @@ paths:
       tags:
         - meta
       summary: Get all nutrients
+      security: []
       responses:
         "200":
           description: OK
@@ -762,7 +768,7 @@ paths:
       tags:
         - product
       summary: Find products
-
+      security: []
       parameters:
         - name: limit
           in: query
@@ -773,12 +779,6 @@ paths:
         - name: offset
           in: query
           required: false
-          schema:
-            type: integer
-            example: 0
-        - name: user_id
-          in: query
-          required: true
           schema:
             type: integer
             example: 0
@@ -814,7 +814,8 @@ paths:
       tags:
         - product
       summary: Find products created by user
-
+      security: 
+        - AccessTokenAuth: []
       parameters:
         - name: limit
           in: query
@@ -825,12 +826,6 @@ paths:
         - name: offset
           in: query
           required: false
-          schema:
-            type: integer
-            example: 0
-        - name: user_id
-          in: query
-          required: true
           schema:
             type: integer
             example: 0
@@ -858,6 +853,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductShort"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -866,7 +865,8 @@ paths:
       tags:
         - product
       summary: Find favorite products
-
+      security: 
+        - AccessTokenAuth: []
       parameters:
         - name: limit
           in: query
@@ -877,12 +877,6 @@ paths:
         - name: offset
           in: query
           required: false
-          schema:
-            type: integer
-            example: 0
-        - name: user_id
-          in: query
-          required: true
           schema:
             type: integer
             example: 0
@@ -910,6 +904,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ProductShort"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -918,13 +916,8 @@ paths:
       tags:
         - product
       summary: Delete a favorite product by id
-      parameters:
-        - name: user_id
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -933,6 +926,10 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -941,6 +938,8 @@ paths:
       tags:
         - product
       summary: Delete a product by id
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -949,6 +948,10 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -957,6 +960,7 @@ paths:
       tags:
         - food
       summary: Find a food by id
+      security: []
       parameters:
         - name: id
           in: path
@@ -979,6 +983,8 @@ paths:
       tags:
         - food
       summary: Create a food
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -991,6 +997,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Food"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -999,6 +1009,8 @@ paths:
       tags:
         - food
       summary: Update a food
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1011,6 +1023,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Food"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1019,6 +1035,7 @@ paths:
       tags:
         - recipe
       summary: Find a recipe by id
+      security: []
       parameters:
         - name: id
           in: path
@@ -1041,6 +1058,8 @@ paths:
       tags:
         - recipe
       summary: Create a recipe
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1053,6 +1072,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Recipe"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1061,6 +1084,8 @@ paths:
       tags:
         - recipe
       summary: Update a recipe
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1073,6 +1098,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/Recipe"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1081,13 +1110,8 @@ paths:
       tags:
         - journal
       summary: Get all journal groups
-      parameters:
-        - name: user_id
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
+      security: 
+        - AccessTokenAuth: []
       responses:
         "200":
           description: OK
@@ -1107,6 +1131,10 @@ paths:
                 - ui_index: 3
                   name: dinner
                   user_id: 1
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1116,6 +1144,8 @@ paths:
         - journal
       summary: Update all journal groups
       description: This request will replace all existing journal groups for a user with the ones in this payload
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1133,6 +1163,10 @@ paths:
       responses:
         "201":
           description: Created
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1141,13 +1175,9 @@ paths:
       tags:
         - journal
       summary: Get all journal entries
+      security: 
+        - AccessTokenAuth: []
       parameters:
-        - name: user_id
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
         - name: entry_date
           in: query
           required: true
@@ -1163,6 +1193,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/JournalEntryDetailed"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1171,6 +1205,8 @@ paths:
       tags:
         - journal
       summary: Create a journal entry
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1183,6 +1219,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/JournalEntryDetailed"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1191,6 +1231,8 @@ paths:
       tags:
         - journal
       summary: Update a journal entry
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1203,6 +1245,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1211,6 +1257,8 @@ paths:
       tags:
         - journal
       summary: Delete a journal entry
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1219,6 +1267,10 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1227,13 +1279,8 @@ paths:
       tags:
         - journal
       summary: Get all user nutrients
-      parameters:
-        - name: user_id
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
+      security: 
+        - AccessTokenAuth: []
       responses:
         "200":
           description: OK
@@ -1243,15 +1290,20 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/UserNutrientDetailed"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
-
 
   /journal/nutrient/upsert:
     post:
       tags:
         - journal
       summary: Upsert a user nutrient
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1264,6 +1316,10 @@ paths:
             "application/json":
               schema:
                 $ref: "#/components/schemas/UserNutrientDetailed"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found
 
@@ -1272,13 +1328,8 @@ paths:
       tags:
         - journal
       summary: Delete a user nutrient
-      parameters:
-        - name: user_id
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
+      security: 
+        - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
@@ -1287,5 +1338,9 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
         "404":
           description: Not Found

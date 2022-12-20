@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
@@ -35,6 +36,8 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
     const isNewRecipePage = isNone(rid);
 
     const { recipe, search } = useAppSelector((state) => state);
+
+    useLoginRedirect(user.isLoggedIn);
 
     useEffect(() => {
         if (!recipe.isLoading) {
