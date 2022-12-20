@@ -10,7 +10,11 @@ const redocusaurus = [
         specs: [
             {
                 spec: 'openapi/web-api.yaml',
-                route: '/api/',
+                route: '/web-api/',
+            },
+            {
+                spec: 'openapi/auth-api.yaml',
+                route: '/auth-api/',
             },
         ],
         theme: {
@@ -80,8 +84,13 @@ const config = {
                         label: "Documentation",
                     },
                     {
-                        to: "/api",
-                        label: "API",
+                        to: "/web-api",
+                        label: "WEB-API",
+                        position: "left",
+                    },
+                    {
+                        to: "/auth-api",
+                        label: "AUTH-API",
                         position: "left",
                     },
                     {

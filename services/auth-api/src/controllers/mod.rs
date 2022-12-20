@@ -5,10 +5,9 @@ use actix_web::{
     web::{Data, Form, ServiceConfig},
     HttpResponse, Responder,
 };
-use jsonwebtoken::Algorithm;
 use reqwest::Client;
 use secrecy::Secret;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
 use crate::{
@@ -122,15 +121,6 @@ async fn signup(
     txn.commit().await?;
 
     Ok(HttpResponse::Created().json(user_brief))
-}
-
-#[derive(Serialize, Debug)]
-pub struct CertificateResponse {
-    pub kid: String,
-    pub kty: String,
-    pub alg: Algorithm,
-    pub n: String,
-    pub e: String,
 }
 
 #[get("/certificate")]
