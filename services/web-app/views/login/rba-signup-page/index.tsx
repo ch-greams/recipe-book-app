@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
+import * as constants from "@cypress/constants";
 
 import { BUTTON_SIGN_UP } from "@common/labels";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
@@ -36,6 +37,7 @@ const RbaSignupPage: React.FC = () => {
             >
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_USERNAME_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
@@ -47,6 +49,7 @@ const RbaSignupPage: React.FC = () => {
                 />
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_FIRST_NAME_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
@@ -58,6 +61,7 @@ const RbaSignupPage: React.FC = () => {
                 />
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_LAST_NAME_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
@@ -69,6 +73,7 @@ const RbaSignupPage: React.FC = () => {
                 />
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_PASSWORD_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
