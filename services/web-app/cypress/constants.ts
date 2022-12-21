@@ -1,10 +1,14 @@
 
 // GENERAL
 
+export const CY_HOME_PATH = "/";
 export const CY_RECIPE_PATH = "/recipe";
 export const CY_FOOD_PATH = "/food";
 export const CY_USER_PATH = "/user";
 export const CY_JOURNAL_PATH = "/journal";
+export const CY_LOGIN_PATH = "/login";
+export const CY_SIGNUP_PATH = "/signup";
+
 
 export const CY_NEW_RECIPE_PATH = "/recipe/new";
 export const CY_NEW_FOOD_PATH = "/food/new";
@@ -14,6 +18,7 @@ export const CY_FOOD_API_PATH = "/api/v1/food";
 export const CY_PRODUCT_API_PATH = "/api/v1/product";
 export const CY_JOURNAL_API_PATH = "/api/v1/journal";
 export const CY_META_API_PATH = "/api/v1/meta";
+export const CY_AUTH_API_PATH = "/auth/api/v1";
 
 // PAGE_TITLE
 
@@ -120,3 +125,10 @@ export const CY_JOURNAL_ENTRY_FOOD_AMOUNT = "CY_JOURNAL_ENTRY_FOOD_AMOUNT";
 export const CY_JOURNAL_ENTRY_FOOD_UNIT = "CY_JOURNAL_ENTRY_FOOD_UNIT";
 export const CY_JOURNAL_SEARCH_INPUT = "CY_JOURNAL_SEARCH_INPUT";
 export const CY_DETAILED_NUTRIENTS_BLOCK = "CY_JOURNAL_DETAILED_NUTRIENTS_BLOCK";
+
+// AUTH
+
+export const CY_AUTH_USERNAME_INPUT = "CY_AUTH_USERNAME_INPUT";
+export const CY_AUTH_PASSWORD_INPUT = "CY_AUTH_PASSWORD_INPUT";
+export const CY_AUTH_FIRST_NAME_INPUT = "CY_AUTH_FIRST_NAME_INPUT";
+export const CY_AUTH_LAST_NAME_INPUT = "CY_AUTH_LAST_NAME_INPUT";

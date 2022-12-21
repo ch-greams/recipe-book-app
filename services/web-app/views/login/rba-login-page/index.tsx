@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import * as constants from "@cypress/constants";
 import type { ParsedUrlQuery } from "querystring";
 
 import { BUTTON_LOG_IN } from "@common/labels";
@@ -49,6 +50,7 @@ const RbaLoginPage: React.FC = () => {
             >
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_USERNAME_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}
@@ -60,6 +62,7 @@ const RbaLoginPage: React.FC = () => {
                 />
 
                 <RbaInput
+                    data-cy={constants.CY_AUTH_PASSWORD_INPUT}
                     theme={InputTheme.Alternative}
                     align={InputTextAlign.Left}
                     width={InputWidthSize.Full}

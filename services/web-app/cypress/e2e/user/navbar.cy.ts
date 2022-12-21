@@ -57,7 +57,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", "/user");
+            cy.url().should("include", constants.CY_USER_PATH);
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)
