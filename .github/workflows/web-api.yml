@@ -53,7 +53,7 @@ jobs:
         runs-on: ubuntu-20.04
 
         services:
-            recipe-book-db:
+            rb-database:
                 image: postgres:14
                 ports:
                     - 5432:5432

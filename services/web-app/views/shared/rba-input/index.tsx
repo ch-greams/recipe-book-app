@@ -44,6 +44,8 @@ interface Props {
     "data-cy"?: string;
     value: string;
     disabled?: boolean;
+    hidden?: boolean;
+    name?: string;
     placeholder?: string;
     align?: InputTextAlign;
     theme: InputTheme;
@@ -75,6 +77,8 @@ const RbaInput: React.FC<Props> = ({
     width,
     height,
     disabled = false,
+    hidden = false,
+    name,
     maxLength,
     onChange,
     onBlur,
@@ -93,7 +97,8 @@ const RbaInput: React.FC<Props> = ({
             data-cy={props["data-cy"]}
             disabled={disabled}
             placeholder={placeholder}
-            type={"text"}
+            type={hidden ? "password" : "text"}
+            name={name}
             className={classNames({
                 [styles.rbaInput]: true,
                 [styles[align]]: true,

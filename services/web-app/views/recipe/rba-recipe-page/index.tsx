@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
@@ -9,7 +10,8 @@ import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as recipeActions from "@store/actions/recipe";
 import { searchClear } from "@store/actions/search";
-import * as userActions from "@store/actions/user";
+import type { MetaStore } from "@store/types/meta";
+import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -20,7 +22,12 @@ interface RecipePageQuery extends ParsedUrlQuery {
     rid: string;
 }
 
-const RecipePageConnected: React.FC = () => {
+interface Props {
+    user: UserStore;
+    meta: MetaStore;
+}
+
+const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -28,9 +35,9 @@ const RecipePageConnected: React.FC = () => {
     const { rid } = router.query as RecipePageQuery;
     const isNewRecipePage = isNone(rid);
 
-    const { recipe, search, meta, user } = useAppSelector((state) => state);
+    const { recipe, search } = useAppSelector((state) => state);
 
-    useEffect(() => { dispatch(userActions.fetchUserData()); }, [ user.userId ]);
+    useLoginRedirect(user.isLoggedIn);
 
     useEffect(() => {
         if (!recipe.isLoading) {

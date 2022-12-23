@@ -145,7 +145,7 @@ mod tests {
     #[tokio::test]
     async fn insert_multiple() {
         let create_product_payload: CreateFoodPayload =
-            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+            utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -175,7 +175,7 @@ mod tests {
     #[tokio::test]
     async fn replace_multiple() {
         let create_product_payload: CreateFoodPayload =
-            utils::read_type_from_file("examples/create_food_payload.json").unwrap();
+            utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -200,7 +200,7 @@ mod tests {
         .unwrap();
 
         let update_product_payload: UpdateFoodPayload =
-            utils::read_type_from_file("examples/update_food_payload.json").unwrap();
+            utils::read_json("examples/update_food_payload.json").unwrap();
 
         ProductNutrient::replace_multiple(
             &update_product_payload.nutrients,

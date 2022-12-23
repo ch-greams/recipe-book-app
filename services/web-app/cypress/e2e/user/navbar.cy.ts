@@ -50,14 +50,14 @@ describe("user", () => {
 
         it("can navigate to user page", () => {
 
-            const USER_NAME = "Andrei Khvalko";
+            const USER_NAME = "Andrei Greams";
 
             cy.get(`[data-cy=${constants.CY_NAVBAR_USER_ITEM}]`)
                 .contains(USER_NAME)
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", "/user");
+            cy.url().should("include", constants.CY_USER_PATH);
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)

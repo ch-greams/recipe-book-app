@@ -1,16 +1,25 @@
-import { createReducer } from "@reduxjs/toolkit";
+import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
+import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
 import { UserMenuItem } from "@common/utils";
+import * as foodActions from "@store/actions/food";
+import * as journalActions from "@store/actions/journal";
+import * as metaActions from "@store/actions/meta";
+import * as recipeActions from "@store/actions/recipe";
+import * as searchActions from "@store/actions/search";
 
-import { changeMenuItem, deleteCustomProduct, deleteFavoriteProduct, deleteNutrient, fetchUserData, upsertNutrient } from "../actions/user";
+import * as userActions from "../actions/user";
 import type { UserStore } from "../types/user";
 
 
 
 const initialState: UserStore = {
+
+    isLoggedIn: true,
+
     userId: 1,
-    userName: "Andrei Khvalko",
+    userName: "Andrei Greams",
 
     selectedMenuItem: UserMenuItem.Settings,
 
@@ -26,12 +35,32 @@ const initialState: UserStore = {
     errorMessage: null,
 };
 
+const ASYNC_REJECTIONS = isAnyOf(
+    // FOOD ACTIONS
+    foodActions.fetchFood.rejected, foodActions.createFood.rejected, foodActions.updateFood.rejected,
+    // JOURNAL ACTIONS
+    journalActions.fetchJournalInfo.rejected, journalActions.createJournalEntry.rejected,
+    journalActions.updateJournalEntry.rejected, journalActions.deleteJournalEntry.rejected,
+    journalActions.updateJournalGroups.rejected,
+    // META ACTIONS
+    metaActions.fetchNutrients.rejected,
+    // RECIPE ACTIONS
+    recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected, recipeActions.updateRecipe.rejected,
+    recipeActions.addIngredient.rejected, recipeActions.addIngredientProduct.rejected,
+    // SEARCH ACTIONS
+    searchActions.searchProducts.rejected,
+    // USER ACTIONS
+    userActions.fetchUserData.rejected, userActions.deleteCustomProduct.rejected,
+    userActions.deleteFavoriteProduct.rejected, userActions.upsertNutrient.rejected,
+    userActions.deleteNutrient.rejected, userActions.login.rejected, userActions.signup.rejected,
+);
+
 const reducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(changeMenuItem, (state, action) => {
+        .addCase(userActions.changeMenuItem, (state, action) => {
             state.selectedMenuItem = action.payload;
         })
-        .addCase(fetchUserData.pending, (state) => {
+        .addCase(userActions.fetchUserData.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
             state.favoriteFoods = [];
@@ -40,7 +69,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.customRecipes = [];
             state.nutrients = [];
         })
-        .addCase(fetchUserData.fulfilled, (state, action) => {
+        .addCase(userActions.fetchUserData.fulfilled, (state, action) => {
             const { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients } = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -62,16 +91,15 @@ const reducer = createReducer(initialState, (builder) => {
                 }))
                 .sort(sortBy("uiIndex"));
         })
-        .addCase(fetchUserData.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(userActions.fetchUserData.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(deleteCustomProduct.pending, (state) => {
+        .addCase(userActions.deleteCustomProduct.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(deleteCustomProduct.fulfilled, (state, action) => {
+        .addCase(userActions.deleteCustomProduct.fulfilled, (state, action) => {
             const { arg: productId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -80,32 +108,30 @@ const reducer = createReducer(initialState, (builder) => {
             state.customRecipes = state.customRecipes.filter((recipe) => recipe.id !== productId);
             state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
-        .addCase(deleteCustomProduct.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(userActions.deleteCustomProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(deleteFavoriteProduct.pending, (state) => {
+        .addCase(userActions.deleteFavoriteProduct.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(deleteFavoriteProduct.fulfilled, (state, action) => {
+        .addCase(userActions.deleteFavoriteProduct.fulfilled, (state, action) => {
             const { arg: productId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
             state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
             state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
-        .addCase(deleteFavoriteProduct.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(userActions.deleteFavoriteProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(upsertNutrient.pending, (state) => {
+        .addCase(userActions.upsertNutrient.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(upsertNutrient.fulfilled, (state, action) => {
+        .addCase(userActions.upsertNutrient.fulfilled, (state, action) => {
             const { payload: userNutrient } = action;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -127,26 +153,57 @@ const reducer = createReducer(initialState, (builder) => {
                 },
             ];
         })
-        .addCase(upsertNutrient.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(userActions.upsertNutrient.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(deleteNutrient.pending, (state) => {
+        .addCase(userActions.deleteNutrient.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(deleteNutrient.fulfilled, (state, action) => {
+        .addCase(userActions.deleteNutrient.fulfilled, (state, action) => {
             const { arg: nutrientId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
 
             state.nutrients = state.nutrients.filter((nutrient) => nutrient.nutrientId !== nutrientId);
         })
-        .addCase(deleteNutrient.rejected, (state, action) => {
-            const message = action.payload?.message;
+        .addCase(userActions.deleteNutrient.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
-            state.errorMessage = message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addCase(userActions.login.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+        })
+        .addCase(userActions.login.fulfilled, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.isLoggedIn = true;
+        })
+        .addCase(userActions.login.rejected, (state, { payload: errorStatus }) => {
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+            state.isLoggedIn = false;
+        })
+        .addCase(userActions.signup.pending, (state) => {
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.isLoggedIn = false;
+        })
+        .addCase(userActions.signup.fulfilled, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+        })
+        .addCase(userActions.signup.rejected, (state, { payload: errorStatus }) => {
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addMatcher(ASYNC_REJECTIONS, (state, { payload: errorStatus }) => {
+            if (errorStatus === HttpStatus.Unauthorized) {
+                // TODO: Implement full logout
+                state.isLoggedIn = false;
+            }
         });
 });
 

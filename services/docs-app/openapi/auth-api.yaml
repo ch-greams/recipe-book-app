@@ -1,0 +1,154 @@
+openapi: 3.0.3
+info:
+  title: RecipeBook Auth API
+  version: 0.7.0
+  description: >
+    # About
+
+    Something about this API...
+
+servers:
+  - url: http://127.0.0.1:3003/api/v1/
+    description: local deployment of auth-api
+
+components:
+  securitySchemes:
+    AccessTokenAuth:
+      type: apiKey
+      in: cookie
+      name: access_token
+  schemas:
+    LoginForm:
+      type: object
+      properties:
+        username:
+          type: string
+          example: admin@rba.com
+        password:
+          type: string
+          example: qwerty123
+    SignupForm:
+      type: object
+      properties:
+        email:
+          type: string
+          example: admin@rba.com
+        password:
+          type: string
+          example: qwerty123
+        first_name:
+          type: string
+          example: Andrei
+        last_name:
+          type: string
+          example: Greams
+    KeycloakUserBrief:
+      type: object
+      properties:
+        id:
+          type: string
+          example: e3bd41cb-3ded-458e-ad3e-f946efb58b8b
+        username:
+          type: string
+          example: admin@rba.com
+        email:
+          type: string
+          example: admin@rba.com
+        first_name:
+          type: string
+          example: Andrei
+        last_name:
+          type: string
+          example: Greams
+        enabled:
+          type: boolean
+          example: true
+    RealmCertificate:
+      type: object
+      properties:
+        kid:
+          type: string
+          example: E-kQgkMoqNlY0jNDcGXEdCFhoZ5KitSfTSEAZv259Ro
+        kty:
+          type: string
+          example: RSA
+        alg:
+          type: string
+          example: RS256
+        n:
+          type: string
+          example: jvfYm7WkEpFyWwW0sCAHo5Em473SpRxTLpJou5jpTPp093zW_redyANDSzYUyfTmUqqXOQrz_JXxCOKFs-NZN9kErxYqKNU46LgYa-II45Qkhxnhnsj1gGimNWkTzR4EiVrKI8HjH1fQcsmw39iHXNwAUR-vvsz-dv2vQ76ZcsOHHxp8wmfXOhgwxpJtjil2qUi0Ep177oKbJlxQ8UbCptY_-Iex8u6Gm-IUrSvl7NZ1zyAd9XNGELF0-dNcbIQONTlW8aazMUbjjmPdyrwj2-XPUSpXAD9J2Z8h1ueviB8n-Mfb_WQ8nOvGC8bTQRiq-_47mN7bTcCImytCpxKf-w
+        e:
+          type: string
+          example: AQAB
+
+tags:
+  - name: public
+    description: Used by the clients like `web-app`
+  - name: internal
+    description: Used by internal services
+
+x-tagGroups:
+  - name: General
+    tags:
+      - public
+      - internal
+
+paths:
+  /login:
+    post:
+      tags:
+        - public
+      summary: Create a token from login info
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              $ref: "#/components/schemas/LoginForm"
+      responses:
+        "200":
+          description: OK
+          headers: 
+            Set-Cookie:
+              schema: 
+                type: string
+                example: access_token=JWT_HERE; SameSite=Strict; Path=/; Max-Age=1800
+        "404":
+          description: Not Found
+
+  /signup:
+    post:
+      tags:
+        - public
+      summary: Create a user
+      requestBody:
+        required: true
+        content:
+          "application/x-www-form-urlencoded":
+            schema:
+              $ref: "#/components/schemas/SignupForm"
+      responses:
+        "201":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/KeycloakUserBrief"
+        "404":
+          description: Not Found
+
+  /certificate:
+    get:
+      tags:
+        - internal
+      summary: Get all nutrients
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/RealmCertificate"
+        "5XX":
+          description: Unexpected error

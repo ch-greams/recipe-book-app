@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
+import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import Utils, { ProductType } from "@common/utils";
@@ -9,7 +10,8 @@ import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as foodActions from "@store/actions/food";
 import { searchClear } from "@store/actions/search";
-import * as userActions from "@store/actions/user";
+import type { MetaStore } from "@store/types/meta";
+import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
@@ -20,7 +22,12 @@ interface FoodPageQuery extends ParsedUrlQuery {
     fid: string;
 }
 
-const RbaFoodPageConnected: React.FC = () => {
+interface Props {
+    user: UserStore;
+    meta: MetaStore;
+}
+
+const RbaFoodPageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -28,9 +35,9 @@ const RbaFoodPageConnected: React.FC = () => {
     const { fid } = router.query as FoodPageQuery;
     const isNewFoodPage = isNone(fid);
 
-    const { food, meta, user } = useAppSelector((state) => state);
+    const food = useAppSelector((state) => state.food);
 
-    useEffect(() => { dispatch(userActions.fetchUserData()); }, [ user.userId ]);
+    useLoginRedirect(user.isLoggedIn);
 
     useEffect(() => {
         if (!food.isLoading) {

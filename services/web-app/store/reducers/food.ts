@@ -1,5 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
+import { getErrorMessageFromStatus } from "@common/http";
 import * as units from "@common/units";
 import Utils, { DecimalPlaces } from "@common/utils";
 
@@ -106,10 +107,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrientsByServing = food.nutrients;
             state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(food.nutrients);
         })
-        .addCase(actions.fetchFood.rejected, (state, action) => {
+        .addCase(actions.fetchFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
         .addCase(actions.updateNutrient, (state, action) => {
             const { payload: { key, value } } = action;
@@ -250,10 +251,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = food.id;
             state.isCreated = true;
         })
-        .addCase(actions.createFood.rejected, (state, action) => {
+        .addCase(actions.createFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
         .addCase(actions.updateFood.pending, (state) => {
             state.isLoading = true;
@@ -267,10 +268,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.editMode = false;
             state.id = food.id;
         })
-        .addCase(actions.updateFood.rejected, (state, action) => {
+        .addCase(actions.updateFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
             state.isLoaded = true;
-            state.errorMessage = action.payload?.message;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         });
 });
 

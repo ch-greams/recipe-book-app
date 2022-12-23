@@ -166,10 +166,6 @@ export default class Utils {
         return `/${route}/new`;
     }
 
-    public static getUrlParams(obj: object): string {
-        return getKeys(obj).map((key) => `${key}=${obj[key]}`).join("&");
-    }
-
     public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         const caret = event.target.selectionStart;
         const element = event.target;

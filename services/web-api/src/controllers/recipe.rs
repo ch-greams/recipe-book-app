@@ -3,20 +3,23 @@ use std::collections::HashMap;
 use actix_web::{
     get, post,
     web::{Data, Json, Path},
-    Scope,
+    HttpRequest, Scope,
 };
 use sqlx::{Pool, Postgres};
 
-use crate::types::{
-    custom_unit::CustomUnit,
-    direction::{Direction, DirectionDetails},
-    direction_part::DirectionPart,
-    error::Error,
-    ingredient::{Ingredient, IngredientDetails},
-    ingredient_product::{IngredientProduct, IngredientProductDetails},
-    product::Product,
-    product_nutrient::ProductNutrient,
-    recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
+use crate::{
+    auth::{authorize, get_user, Certificate},
+    types::{
+        custom_unit::CustomUnit,
+        direction::{Direction, DirectionDetails},
+        direction_part::DirectionPart,
+        error::Error,
+        ingredient::{Ingredient, IngredientDetails},
+        ingredient_product::{IngredientProduct, IngredientProductDetails},
+        product::Product,
+        product_nutrient::ProductNutrient,
+        recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
+    },
 };
 
 pub fn scope() -> Scope {
@@ -27,10 +30,17 @@ pub fn scope() -> Scope {
 }
 
 #[get("/{id}")]
-async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json<Recipe>, Error> {
+async fn find_by_id(
+    id: Path<i64>,
+    db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
+) -> Result<Json<Recipe>, Error> {
+    let user_id = get_user(request, &auth_certificate);
+
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::find_recipe_by_id(*id)
+    let product = Product::find_recipe_by_id(*id, user_id)
         .fetch_optional(&mut txn)
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
@@ -97,24 +107,28 @@ async fn find_by_id(id: Path<i64>, db_pool: Data<Pool<Postgres>>) -> Result<Json
 
 #[post("/create")]
 async fn create_recipe(
-    request: Json<CreateRecipePayload>,
+    payload: Json<CreateRecipePayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<Json<Recipe>, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::insert_recipe(&request, 1, &mut txn).await?;
+    let product = Product::insert_recipe(&payload, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::insert_multiple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
     // ingredients
 
     let ingredients =
-        Ingredient::insert_multiple(&request.ingredients, product.id, &mut txn).await?;
+        Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
 
     let mut temporary_to_final_id = HashMap::new();
 
-    for (index, ingredient_payload) in request.ingredients.iter().enumerate() {
+    for (index, ingredient_payload) in payload.ingredients.iter().enumerate() {
         let ingredient = ingredients
             .get(index)
             .ok_or_else(|| Error::not_created("ingredient"))?;
@@ -154,11 +168,11 @@ async fn create_recipe(
 
     // directions
 
-    let directions = Direction::insert_multiple(&request.directions, product.id, &mut txn).await?;
+    let directions = Direction::insert_multiple(&payload.directions, product.id, &mut txn).await?;
 
     let mut direction_parts: Vec<DirectionPart> = Vec::new();
 
-    for (index, direction_payload) in request.directions.iter().enumerate() {
+    for (index, direction_payload) in payload.directions.iter().enumerate() {
         let direction = directions
             .get(index)
             .ok_or_else(|| Error::not_created("direction"))?;
@@ -188,24 +202,29 @@ async fn create_recipe(
 
 #[post("/update")]
 async fn update_recipe(
-    request: Json<UpdateRecipePayload>,
+    payload: Json<UpdateRecipePayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<Json<Recipe>, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::update_recipe(&request, &mut txn).await?;
+    // TODO: Might want to provide a better error when user_id doesn't match
+    let product = Product::update_recipe(&payload, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::replace_multiple(&request.custom_units, product.id, &mut txn).await?;
+        CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
     // ingredients
 
     let ingredients =
-        Ingredient::replace_multiple(&request.ingredients, product.id, &mut txn).await?;
+        Ingredient::replace_multiple(&payload.ingredients, product.id, &mut txn).await?;
 
     let mut temporary_to_final_id = HashMap::new();
 
-    for (index, ingredient_payload) in request.ingredients.iter().enumerate() {
+    for (index, ingredient_payload) in payload.ingredients.iter().enumerate() {
         let ingredient = ingredients
             .get(index)
             .ok_or_else(|| Error::not_updated("ingredient", ingredient_payload.id))?;
@@ -245,11 +264,11 @@ async fn update_recipe(
 
     // directions
 
-    let directions = Direction::replace_multiple(&request.directions, product.id, &mut txn).await?;
+    let directions = Direction::replace_multiple(&payload.directions, product.id, &mut txn).await?;
 
     let mut direction_parts: Vec<DirectionPart> = Vec::new();
 
-    for (index, direction_payload) in request.directions.iter().enumerate() {
+    for (index, direction_payload) in payload.directions.iter().enumerate() {
         let direction = directions
             .get(index)
             .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;

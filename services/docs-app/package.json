@@ -1,6 +1,6 @@
 {
   "name": "docs-app",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
@@ -42,6 +42,6 @@
     ]
   },
   "engines": {
-    "node": ">=16.14"
+    "node": "~18"
   }
 }

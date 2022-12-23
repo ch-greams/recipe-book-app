@@ -1,12 +1,14 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
+import { HttpError } from "@common/http";
 import type { NutrientName } from "@common/nutrients";
 import type { Food } from "@common/typings";
 import type { CustomUnitInput, Unit, VolumeUnit, WeightUnit } from "@common/units";
 import FoodApi from "@api/foodApi";
 
-import type { RootState } from "..";
 import { convertFoodPageIntoFood } from "../helpers/food";
+
+import type { AsyncThunkConfig } from ".";
 
 
 export const setEditMode = createAction<boolean>("food/set_edit_mode");
@@ -26,7 +28,7 @@ export const removeCustomUnit = createAction<number>("food/remove_custom_unit");
 export const updateNutrient = createAction<{ key: NutrientName, value: string }>("food/update_nutrient");
 export const fetchFoodNew = createAction("food/fetch_food_new");
 
-export const fetchFood = createAsyncThunk<Food, number, { rejectValue: Error }>(
+export const fetchFood = createAsyncThunk<Food, number, AsyncThunkConfig>(
     "food/fetch_food",
     async (foodId, { rejectWithValue }) => {
         try {
@@ -34,11 +36,11 @@ export const fetchFood = createAsyncThunk<Food, number, { rejectValue: Error }>(
             return food;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
-export const createFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
+export const createFood = createAsyncThunk<Food, void, AsyncThunkConfig>(
     "food/create_food",
     async (_arg, { getState, rejectWithValue }) => {
         try {
@@ -48,11 +50,11 @@ export const createFood = createAsyncThunk<Food, void, { state: RootState, rejec
             return createdFood;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );
-export const updateFood = createAsyncThunk<Food, void, { state: RootState, rejectValue: Error }>(
+export const updateFood = createAsyncThunk<Food, void, AsyncThunkConfig>(
     "food/update_food",
     async (_arg, { getState, rejectWithValue }) => {
         try {
@@ -62,7 +64,7 @@ export const updateFood = createAsyncThunk<Food, void, { state: RootState, rejec
             return updatedFood;
         }
         catch (error) {
-            return rejectWithValue(error as Error);
+            return rejectWithValue(HttpError.getStatus(error));
         }
     },
 );

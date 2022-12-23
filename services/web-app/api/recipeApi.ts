@@ -1,5 +1,5 @@
-import superagent from "superagent";
-
+import { HttpError } from "@common/http";
+import { Header, ResourceType } from "@common/http";
 import type { Recipe } from "@common/typings";
 
 
@@ -10,24 +10,57 @@ export default class RecipeApi {
 
     public static async getRecipe(id: number): Promise<Recipe> {
 
-        const { body: recipe } = await superagent.get(`${RecipeApi.API_PATH}/${id}`);
+        const response = await fetch(`${RecipeApi.API_PATH}/${id}`, {
+            method: "GET",
+            headers: { [Header.ACCEPT]: ResourceType.JSON },
+        });
 
-        return recipe;
+        if (response.ok) {
+            const recipe: Recipe = await response.json();
+            return recipe;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async createRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: createdRecipe } = await superagent.post(`${RecipeApi.API_PATH}/create`)
-            .send(recipe);
+        const response = await fetch(`${RecipeApi.API_PATH}/create`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(recipe),
+        });
 
-        return createdRecipe;
+        if (response.ok) {
+            const createdRecipe: Recipe = await response.json();
+            return createdRecipe;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 
     public static async updateRecipe(recipe: Recipe): Promise<Recipe> {
 
-        const { body: updatedRecipe } = await superagent.post(`${RecipeApi.API_PATH}/update`)
-            .send(recipe);
+        const response = await fetch(`${RecipeApi.API_PATH}/update`, {
+            method: "POST",
+            headers: {
+                [Header.ACCEPT]: ResourceType.JSON,
+                [Header.CONTENT_TYPE]: ResourceType.JSON,
+            },
+            body: JSON.stringify(recipe),
+        });
 
-        return updatedRecipe;
+        if (response.ok) {
+            const updatedRecipe: Recipe = await response.json();
+            return updatedRecipe;
+        }
+        else {
+            throw new HttpError(response.status);
+        }
     }
 }

@@ -1,0 +1,38 @@
+{
+    "clientId": "rb-web-api",
+    "publicClient": false,
+    "rootUrl": "http://localhost:3000/",
+    "adminUrl": "http://localhost:3000",
+    "redirectUris": [
+        "http://localhost:3000/*"
+    ],
+    "webOrigins": [
+        "http://localhost:3000"
+    ],
+    "directAccessGrantsEnabled": true,
+    "attributes": {
+        "access.token.lifespan": "1800",
+        "backchannel.logout.session.required": "true",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "use.jwks.url": "true",
+        "use.refresh.tokens": "true"
+    },
+    "protocolMappers": [
+        {
+            "name": "user_id",
+            "protocol": "openid-connect",
+            "protocolMapper": "oidc-usermodel-attribute-mapper",
+            "consentRequired": false,
+            "config": {
+                "aggregate.attrs": "false",
+                "userinfo.token.claim": "true",
+                "multivalued": "false",
+                "user.attribute": "user_id",
+                "id.token.claim": "true",
+                "access.token.claim": "true",
+                "claim.name": "attributes.user_id",
+                "jsonType.label": "long"
+            }
+        }
+    ]
+}

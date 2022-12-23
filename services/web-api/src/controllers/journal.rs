@@ -1,22 +1,25 @@
 use actix_web::{
     get, post,
     web::{Data, Json, Query},
-    HttpResponse, Scope,
+    HttpRequest, HttpResponse, Scope,
 };
 use chrono::NaiveDate;
 use serde::Deserialize;
 use sqlx::{Pool, Postgres};
 
-use crate::types::{
-    custom_unit::CustomUnit,
-    error::Error,
-    journal_entry::{
-        CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry, JournalEntryDetailed,
-        UpdateJournalEntryPayload,
+use crate::{
+    auth::{authorize, Certificate},
+    types::{
+        custom_unit::CustomUnit,
+        error::Error,
+        journal_entry::{
+            CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry,
+            JournalEntryDetailed, UpdateJournalEntryPayload,
+        },
+        journal_group::JournalGroup,
+        product_nutrient::ProductNutrient,
+        user_nutrient::UserNutrient,
     },
-    journal_group::JournalGroup,
-    product_nutrient::ProductNutrient,
-    user_nutrient::UserNutrient,
 };
 
 pub fn scope() -> Scope {
@@ -32,20 +35,17 @@ pub fn scope() -> Scope {
         .service(delete_nutrient)
 }
 
-#[derive(Debug, Deserialize)]
-pub struct FindGroupsQuery {
-    // TODO: Move into auth cookies
-    user_id: i64,
-}
-
 #[get("/groups")]
 async fn get_groups(
-    query: Query<FindGroupsQuery>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<Json<Vec<JournalGroup>>, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let journal_groups = JournalGroup::find_all_by_user_id(query.user_id)
+    let journal_groups = JournalGroup::find_all_by_user_id(user_id)
         .fetch_all(&mut txn)
         .await?;
 
@@ -56,13 +56,16 @@ async fn get_groups(
 
 #[post("/groups/update")]
 async fn update_groups(
-    request: Json<Vec<JournalGroup>>,
+    payload: Json<Vec<JournalGroup>>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let user_id = 1;
-    JournalGroup::replace_multiple(&request, user_id, &mut txn).await?;
+    JournalGroup::replace_multiple(&payload, user_id, &mut txn).await?;
 
     txn.commit().await?;
 
@@ -72,18 +75,20 @@ async fn update_groups(
 #[derive(Debug, Deserialize)]
 pub struct FindEntriesQuery {
     entry_date: NaiveDate,
-    // TODO: Move into auth cookies
-    user_id: i64,
 }
 
 #[get("/entry")]
 async fn get_entries(
     query: Query<FindEntriesQuery>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let journal_entries = JournalEntry::find_all_by_date(query.entry_date, query.user_id)
+    let journal_entries = JournalEntry::find_all_by_date(query.entry_date, user_id)
         .fetch_all(&mut txn)
         .await?;
 
@@ -126,12 +131,16 @@ async fn get_entries(
 
 #[post("/entry/create")]
 async fn create_entry(
-    request: Json<CreateJournalEntryPayload>,
+    payload: Json<CreateJournalEntryPayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let journal_entry = JournalEntry::insert_journal_entry(&request, &mut txn).await?;
+    let journal_entry = JournalEntry::insert_journal_entry(&payload, &mut txn).await?;
 
     let product_nutrients = ProductNutrient::find_by_product_id(journal_entry.product_id)
         .fetch_all(&mut txn)
@@ -151,12 +160,16 @@ async fn create_entry(
 
 #[post("/entry/update")]
 async fn update_entry(
-    request: Json<UpdateJournalEntryPayload>,
+    payload: Json<UpdateJournalEntryPayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let response = JournalEntry::update_journal_entry(&request, &mut txn).await?;
+    let response = JournalEntry::update_journal_entry(&payload, &mut txn).await?;
 
     txn.commit().await?;
 
@@ -165,12 +178,16 @@ async fn update_entry(
 
 #[post("/entry/delete")]
 async fn delete_entry(
-    request: Json<DeleteJournalEntryPayload>,
+    payload: Json<DeleteJournalEntryPayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    JournalEntry::delete_journal_entry(request.id, &mut txn).await?;
+    JournalEntry::delete_journal_entry(payload.id, &mut txn).await?;
 
     txn.commit().await?;
 
@@ -179,22 +196,17 @@ async fn delete_entry(
 
 // NOTE: user_nutrient
 
-#[derive(Debug, Deserialize)]
-pub struct UserNutrientQuery {
-    // TODO: Move into auth cookies
-    user_id: i64,
-}
-
 #[get("/nutrients")]
 async fn get_nutrients(
-    query: Query<UserNutrientQuery>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    let user_nutrients = UserNutrient::find_all(query.user_id)
-        .fetch_all(&mut txn)
-        .await?;
+    let user_nutrients = UserNutrient::find_all(user_id).fetch_all(&mut txn).await?;
 
     txn.commit().await?;
 
@@ -203,14 +215,18 @@ async fn get_nutrients(
 
 #[post("/nutrient/upsert")]
 async fn upsert_nutrient(
-    request: Json<UserNutrient>,
+    payload: Json<UserNutrient>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    UserNutrient::upsert_nutrient(&request, &mut txn).await?;
+    UserNutrient::upsert_nutrient(&payload, &mut txn).await?;
 
-    let user_nutrient = UserNutrient::find_by_id(request.user_id, request.nutrient_id)
+    let user_nutrient = UserNutrient::find_by_id(user_id, payload.nutrient_id)
         .fetch_optional(&mut txn)
         .await?;
 
@@ -226,13 +242,16 @@ pub struct DeleteUserNutrientPayload {
 
 #[post("/nutrient/delete")]
 async fn delete_nutrient(
-    query: Query<UserNutrientQuery>,
-    request: Json<DeleteUserNutrientPayload>,
+    payload: Json<DeleteUserNutrientPayload>,
     db_pool: Data<Pool<Postgres>>,
+    auth_certificate: Data<Certificate>,
+    request: HttpRequest,
 ) -> Result<HttpResponse, Error> {
+    let user_id = authorize(request, &auth_certificate)?;
+
     let mut txn = db_pool.begin().await?;
 
-    UserNutrient::delete_user_nutrient(query.user_id, request.id, &mut txn).await?;
+    UserNutrient::delete_user_nutrient(user_id, payload.id, &mut txn).await?;
 
     txn.commit().await?;
 
