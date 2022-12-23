@@ -14,6 +14,8 @@ on:
     # Allows you to run this workflow manually from the Actions tab
     workflow_dispatch:
 
+# NOTE: Can't run keycloak container (and as a result integration tests) for testing because GH Actions don't support command specification 
+
 jobs:
 
     lint:
