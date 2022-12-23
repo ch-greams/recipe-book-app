@@ -134,3 +134,101 @@ async fn certificate(kc: Data<Keycloak>, req_client: Data<Client>) -> Result<Htt
 
     Ok(HttpResponse::Ok().json(rsa_key))
 }
+
+#[cfg(test)]
+mod tests {
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    use actix_web::{test, web::Data, App};
+    use reqwest::Client;
+    use serde_json::json;
+    use sqlx::{PgPool, Pool, Postgres};
+
+    use crate::{config::Config, controllers::configure, types::keycloak::Keycloak};
+
+    // NOTE: Should be ok to rerun multiple times in parallel
+    // NOTE: In a perfect world you would use `before all` and/or std::sync::Once, but bootstrap requires async call
+    async fn setup_data() -> (Keycloak, Client, Pool<Postgres>) {
+        let config = Config::new().unwrap();
+        let req_client = Client::new();
+
+        let kc = Keycloak::bootstrap(&config.keycloak, &req_client).await;
+
+        let db_pool = PgPool::connect_lazy(&config.database_url).unwrap();
+
+        (kc, req_client, db_pool)
+    }
+
+    #[actix_web::test]
+    async fn get_certificate() {
+        let (kc, req_client, _) = setup_data().await;
+
+        let app = test::init_service(
+            App::new()
+                .app_data(Data::new(kc.clone()))
+                .app_data(Data::new(req_client.clone()))
+                .configure(configure),
+        )
+        .await;
+
+        let request = test::TestRequest::get()
+            .uri("/api/v1/certificate")
+            .to_request();
+
+        let response = test::call_service(&app, request).await;
+
+        assert!(response.status().is_success());
+    }
+
+    #[actix_web::test]
+    async fn signup_and_login() {
+        let (kc, req_client, db_pool) = setup_data().await;
+
+        let app = test::init_service(
+            App::new()
+                .app_data(Data::new(kc.clone()))
+                .app_data(Data::new(req_client.clone()))
+                .app_data(Data::new(db_pool.clone()))
+                .configure(configure),
+        )
+        .await;
+
+        let timestamp = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_secs();
+        let username = format!("test-{}@rba.com", timestamp);
+
+        let signup_form = serde_json::to_value(json!({
+            "email": username.clone(),
+            "password": "password",
+            "first_name": "Test",
+            "last_name": "Testinson",
+        }))
+        .unwrap();
+
+        let signup_request = test::TestRequest::post()
+            .uri("/api/v1/signup")
+            .set_form(signup_form)
+            .to_request();
+
+        let signup_response = test::call_service(&app, signup_request).await;
+
+        assert!(signup_response.status().is_success());
+
+        let login_form = serde_json::to_value(json!({
+            "username": username.clone(),
+            "password": "password",
+        }))
+        .unwrap();
+
+        let login_request = test::TestRequest::post()
+            .uri("/api/v1/login")
+            .set_form(login_form)
+            .to_request();
+
+        let login_response = test::call_service(&app, login_request).await;
+
+        assert!(login_response.status().is_success());
+    }
+}

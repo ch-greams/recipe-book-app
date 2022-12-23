@@ -16,10 +16,7 @@ describe("auth", () => {
 
             cy.visit(constants.CY_SIGNUP_PATH);
 
-            cy.intercept(
-                `${constants.CY_AUTH_API_PATH}/signup`,
-                { statusCode: HttpStatus.Created },
-            )
+            cy.intercept(`${constants.CY_AUTH_API_PATH}/signup`, { statusCode: HttpStatus.Created })
                 .as("authSignup");
 
             cy.get(`form [data-cy=${constants.CY_AUTH_USERNAME_INPUT}]`)
