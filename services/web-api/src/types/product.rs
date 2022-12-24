@@ -8,7 +8,6 @@ use super::error::Error;
 use super::food::{CreateFoodPayload, UpdateFoodPayload};
 use super::recipe::{CreateRecipePayload, UpdateRecipePayload};
 
-
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
@@ -92,8 +91,7 @@ impl Product {
             .bind(user_id)
             .bind(format!("%{}%", filter))
             .bind(is_recipe)
-        }
-        else {
+        } else {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
@@ -130,8 +128,7 @@ impl Product {
             .bind(user_id)
             .bind(format!("%{}%", filter))
             .bind(is_recipe)
-        }
-        else {
+        } else {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
@@ -170,8 +167,7 @@ impl Product {
             .bind(user_id)
             .bind(format!("%{}%", filter))
             .bind(is_recipe)
-        }
-        else {
+        } else {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
