@@ -57,7 +57,6 @@ CREATE TABLE product.product (
     id int8 NOT NULL DEFAULT nextval('product.product_id'::regclass),
     "name" text NOT NULL,
     brand text NOT NULL,
-    subtitle text NOT NULL,
     description text NOT NULL,
     density float8 NOT NULL DEFAULT 1,
     created_by int8 NOT NULL,

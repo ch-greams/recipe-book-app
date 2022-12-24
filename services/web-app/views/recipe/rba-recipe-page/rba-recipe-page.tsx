@@ -82,7 +82,6 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
     const {
         name,
         brand,
-        subtitle,
         description,
         ingredients,
         newDirection,
@@ -114,7 +113,6 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                             <RbaPageTitleBlock
                                 name={name}
                                 brand={brand}
-                                subtitle={subtitle}
                                 description={description}
                             />
 
@@ -123,11 +121,9 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                             <RbaPageTitleBlockInput
                                 name={name}
                                 brand={brand}
-                                subtitle={subtitle}
                                 description={description}
                                 updateName={recipeActions.updateName}
                                 updateBrand={recipeActions.updateBrand}
-                                updateSubtitle={recipeActions.updateSubtitle}
                                 updateDescription={recipeActions.updateDescription}
                             />
                         )

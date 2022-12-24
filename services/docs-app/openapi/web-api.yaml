@@ -47,16 +47,13 @@ components:
         id:
           type: integer
           example: 321360
-        product_type:
-          type: string
-          example: food
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Tomatoes, grape, raw
         brand:
-          type: string
-          example: ""
-        subtitle:
           type: string
           example: ""
         is_private:
@@ -114,8 +111,6 @@ components:
           example: Tomato
         brand:
           type: string
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -156,8 +151,6 @@ components:
           example: Tomato
         brand:
           type: string
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -194,8 +187,6 @@ components:
           type: string
           example: Tomato
         brand:
-          type: string
-        subtitle:
           type: string
         description:
           type: string
@@ -239,9 +230,9 @@ components:
         unit:
           type: string
           example: g
-        product_type:
-          type: string
-          example: food
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Ground Beef
@@ -447,8 +438,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -487,8 +476,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -524,8 +511,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -782,14 +767,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -829,14 +812,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -880,14 +861,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false

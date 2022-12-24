@@ -72,33 +72,6 @@ describe("food_page", () => {
             });
         });
 
-        it("can update subtitle", () => {
-
-            const NEW_PAGE_TITLE_SUBTITLE = "new subtitle";
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
-
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("not.exist");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`)
-                .should("be.visible")
-                .clear()
-                .type(NEW_PAGE_TITLE_SUBTITLE);
-
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
-                .should("be.visible")
-                .click();
-
-            cy.wait("@updateFood").then(interceptedRequest => {
-                cy.wrap(interceptedRequest?.request?.body)
-                    .its("subtitle")
-                    .should("eq", NEW_PAGE_TITLE_SUBTITLE);
-            });
-        });
-
         it("can update description", () => {
 
             const NEW_PAGE_TITLE_DESCRIPTION = "new description";

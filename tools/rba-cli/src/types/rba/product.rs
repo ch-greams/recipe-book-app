@@ -17,7 +17,6 @@ pub struct Product {
     pub is_recipe: bool,
     pub name: String,
     pub brand: String,
-    pub subtitle: String,
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
@@ -33,7 +32,7 @@ impl Product {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut products_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.product (id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+            "INSERT INTO product.product (id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
         products_query_builder.push_values(
@@ -43,7 +42,6 @@ impl Product {
                     .push_bind(product.is_recipe)
                     .push_bind(&product.name)
                     .push_bind(&product.brand)
-                    .push_bind(&product.subtitle)
                     .push_bind(&product.description)
                     .push_bind(product.density)
                     .push_bind(product.serving_size)
@@ -96,7 +94,6 @@ impl From<&FoundationFoodItem> for Product {
 
             name: foundation_food_item.description.to_owned(),
             brand: "".to_string(),
-            subtitle: "".to_string(),
             description: "usda - foundation".to_string(),
 
             density,
@@ -132,7 +129,6 @@ impl From<&SurveyFoodItem> for Product {
 
             name: survey_food_item.description.to_owned(),
             brand: "".to_string(),
-            subtitle: "".to_string(),
             description: "usda - survey".to_string(),
 
             density,
@@ -166,7 +162,7 @@ impl From<&BrandedFoodItem> for Product {
 
             name: branded_food_item.description.to_owned(),
             brand: brand.to_owned(),
-            subtitle: branded_food_item.branded_food_category.to_owned(),
+            // subtitle: branded_food_item.branded_food_category.to_owned(),
             description: branded_food_item.ingredients.to_owned(),
 
             density: 1.0,

@@ -77,7 +77,6 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
     const {
         name,
         brand,
-        subtitle,
         description,
         nutrientsByServing,
         nutrientsByServingInputs,
@@ -106,7 +105,6 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
                             <RbaPageTitleBlock
                                 name={name}
                                 brand={brand}
-                                subtitle={subtitle}
                                 description={description}
                             />
 
@@ -115,11 +113,9 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
                             <RbaPageTitleBlockInput
                                 name={name}
                                 brand={brand}
-                                subtitle={subtitle}
                                 description={description}
                                 updateName={foodActions.updateName}
                                 updateBrand={foodActions.updateBrand}
-                                updateSubtitle={foodActions.updateSubtitle}
                                 updateDescription={foodActions.updateDescription}
                             />
                         )

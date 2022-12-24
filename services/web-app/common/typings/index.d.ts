@@ -8,7 +8,6 @@ export interface Food {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
     description: string;
     density: number;
     serving_size: number;
@@ -22,7 +21,6 @@ export interface Product {
     is_recipe: boolean;
     name: string;
     brand: string;
-    subtitle: string;
     description: string;
     density: number;
     serving_size: number;
@@ -35,7 +33,6 @@ export interface ProductShort {
     is_recipe: boolean;
     name: string;
     brand: string;
-    subtitle: string;
     // is_private: boolean;
     // created_at: DateTime<Utc>;
     // updated_at: DateTime<Utc>;
@@ -45,7 +42,6 @@ export interface FoodShort {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
 }
 
 export interface IngredientProduct {
@@ -87,7 +83,6 @@ export interface Recipe {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
     description: string;
     type: string;
     density: number;
@@ -105,7 +100,6 @@ export interface RecipeShort {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
 }
 
 export interface NutrientMeta {

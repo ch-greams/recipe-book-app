@@ -76,7 +76,6 @@ export interface RecipePageStore {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
     description: string;
     type: string;
 

@@ -14,7 +14,6 @@ import type { AsyncThunkConfig } from ".";
 export const setEditMode = createAction<boolean>("food/set_edit_mode");
 export const updateName = createAction<string>("food/update_name");
 export const updateBrand = createAction<string>("food/update_brand");
-export const updateSubtitle = createAction<string>("food/update_subtitle");
 export const updateDescription = createAction<string>("food/update_description");
 export const updateType = createAction<string>("food/update_type");
 export const updateDensityAmount = createAction<string>("food/update_density_amount");

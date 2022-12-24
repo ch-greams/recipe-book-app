@@ -15,7 +15,6 @@ const initialState: FoodPageStore = {
     id: -1,
     name: "Name",
     brand: "Brand",
-    subtitle: "Subtitle",
     description: "",
     nutrients: {},
     customUnits: [],
@@ -59,9 +58,6 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateBrand, (state, action) => {
             state.brand = action.payload;
         })
-        .addCase(actions.updateSubtitle, (state, action) => {
-            state.subtitle = action.payload;
-        })
         .addCase(actions.updateDescription, (state, action) => {
             state.description = action.payload;
         })
@@ -93,7 +89,6 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = food.id;
             state.name = food.name;
             state.brand = food.brand;
-            state.subtitle = food.subtitle;
 
             state.density = food.density;
             state.densityInput = String(food.density);

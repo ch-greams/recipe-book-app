@@ -7,12 +7,11 @@ import styles from "./rba-page-title-block.module.scss";
 interface Props {
     name: string;
     brand: string;
-    subtitle: string;
     description?: string;
 }
 
 
-const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, subtitle, description }) => {
+const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, description }) => {
 
     const descriptionBlock = (
         <div className={styles.descriptionBlock}>
@@ -45,16 +44,6 @@ const RbaPageTitleBlock: React.FC<Props> = ({ name, brand, subtitle, description
                     {brand}
                 </div>
 
-            </div>
-
-            <div className={styles.subtitleBlock}>
-
-                <div
-                    data-cy={constants.CY_PAGE_TITLE_SUBTITLE_TEXT}
-                    className={styles.subtitle}
-                >
-                    {subtitle}
-                </div>
             </div>
 
             {description && descriptionBlock}

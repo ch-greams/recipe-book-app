@@ -14,7 +14,6 @@ pub struct Product {
     pub is_recipe: bool,
     pub name: String,
     pub brand: String,
-    pub subtitle: String,
     pub description: String,
     pub density: f64,
     pub created_by: i64,
@@ -31,7 +30,6 @@ pub struct ProductShort {
     pub is_recipe: bool,
     pub name: String,
     pub brand: String,
-    pub subtitle: String,
     pub created_by: i64,
     pub is_private: bool,
     pub created_at: DateTime<Utc>,
@@ -45,7 +43,6 @@ impl ProductShort {
             is_recipe: product.is_recipe.to_owned(),
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
-            subtitle: product.subtitle.to_owned(),
             created_by: product.created_by,
             is_private: product.is_private,
             created_at: product.created_at,
@@ -61,7 +58,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
             WHERE is_deleted = false AND is_recipe = false AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
@@ -80,7 +77,7 @@ impl Product {
         if let Some(is_recipe) = is_recipe {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND (is_private = false OR created_by = $3)
                 LIMIT $1 OFFSET $2
@@ -94,7 +91,7 @@ impl Product {
         } else {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4 AND (is_private = false OR created_by = $3)
                 LIMIT $1 OFFSET $2
@@ -117,7 +114,7 @@ impl Product {
         if let Some(is_recipe) = is_recipe {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND created_by = $3
                 LIMIT $1 OFFSET $2
@@ -131,7 +128,7 @@ impl Product {
         } else {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4 AND created_by = $3
                 LIMIT $1 OFFSET $2
@@ -154,7 +151,7 @@ impl Product {
         if let Some(is_recipe) = is_recipe {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5
                     AND (is_private = false OR created_by = $3)
@@ -170,7 +167,7 @@ impl Product {
         } else {
             sqlx::query_as(
                 r#"
-                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
                 FROM product.product
                 WHERE is_deleted = false AND name ILIKE $4
                     AND (is_private = false OR created_by = $3)
@@ -191,7 +188,7 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
             WHERE is_deleted = false AND is_recipe = true AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
@@ -207,14 +204,13 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO product.product (is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
-            VALUES (false, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            INSERT INTO product.product (is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES (false, $1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_food_payload.name.to_owned())
             .bind(create_food_payload.brand.to_owned())
-            .bind(create_food_payload.subtitle.to_owned())
             .bind(create_food_payload.description.to_owned())
             .bind(create_food_payload.density)
             .bind(create_food_payload.serving_size)
@@ -238,14 +234,13 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO product.product (is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
-            VALUES (true, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            INSERT INTO product.product (is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES (true, $1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_recipe_payload.name.to_owned())
             .bind(create_recipe_payload.brand.to_owned())
-            .bind(create_recipe_payload.subtitle.to_owned())
             .bind(create_recipe_payload.description.to_owned())
             .bind(create_recipe_payload.density)
             .bind(create_recipe_payload.serving_size)
@@ -273,19 +268,17 @@ impl Product {
                 is_recipe = false,
                 name = $1,
                 brand = $2,
-                subtitle = $3,
-                description = $4,
-                density = $5,
-                serving_size = $6,
-                is_private = $7,
-                updated_at = $8
-            WHERE id = $9 AND created_by = $10
-            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+                description = $3,
+                density = $4,
+                serving_size = $5,
+                is_private = $6,
+                updated_at = $7
+            WHERE id = $8 AND created_by = $9
+            RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_food_payload.name.to_owned())
             .bind(update_food_payload.brand.to_owned())
-            .bind(update_food_payload.subtitle.to_owned())
             .bind(update_food_payload.description.to_owned())
             .bind(update_food_payload.density)
             .bind(update_food_payload.serving_size)
@@ -313,19 +306,17 @@ impl Product {
                 is_recipe = true,
                 name = $1,
                 brand = $2,
-                subtitle = $3,
-                description = $4,
-                density = $5,
-                serving_size = $6,
-                is_private = $7,
-                updated_at = $8
-            WHERE id = $9 AND created_by = $10
-            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+                description = $3,
+                density = $4,
+                serving_size = $5,
+                is_private = $6,
+                updated_at = $7
+            WHERE id = $8 AND created_by = $9
+            RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_recipe_payload.name.to_owned())
             .bind(update_recipe_payload.brand.to_owned())
-            .bind(update_recipe_payload.subtitle.to_owned())
             .bind(update_recipe_payload.description.to_owned())
             .bind(update_recipe_payload.density)
             .bind(update_recipe_payload.serving_size)
