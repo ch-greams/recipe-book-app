@@ -5,7 +5,6 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientName } from "@common/nutrients";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
-import { ProductType } from "@common/utils";
 import { store } from "@store";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
@@ -154,7 +153,7 @@ const INGREDIENT_1: RecipeIngredient = {
             amountInput: "5",
             unit: WeightUnit.oz,
             product_id: PRODUCT_ID,
-            product_type: ProductType.Food,
+            is_recipe: false,
             name: "Cottage Cheese",
             density: 1,
             nutrients: {

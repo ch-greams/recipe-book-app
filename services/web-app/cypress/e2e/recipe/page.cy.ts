@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
-import Utils, { ProductType } from "@common/utils";
+import { getProductPath, NEW_RECIPE_PATH, RECIPE_PATH } from "@common/routes";
 
 
 describe("recipe_page", () => {
@@ -17,7 +17,7 @@ describe("recipe_page", () => {
                 .as("createRecipe");
 
             // NOTE: new-recipe-page automatically loads with editMode === true
-            cy.visit(`${constants.CY_RECIPE_PATH}/new`);
+            cy.visit(`${RECIPE_PATH}/new`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_REVERT)
                 .should("be.disabled");
@@ -28,7 +28,7 @@ describe("recipe_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.url().should("include", Utils.getNewProductPath(ProductType.Recipe));
+            cy.url().should("include", NEW_RECIPE_PATH);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
@@ -43,7 +43,7 @@ describe("recipe_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, NEW_RECIPE_ID));
+            cy.url().should("include", getProductPath(true, NEW_RECIPE_ID));
         });
 
         it("can save an updated page", () => {
@@ -55,7 +55,7 @@ describe("recipe_page", () => {
                 .as("updateRecipe");
 
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
@@ -84,7 +84,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
             cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`)
                 .contains(BUTTON_DELETE)

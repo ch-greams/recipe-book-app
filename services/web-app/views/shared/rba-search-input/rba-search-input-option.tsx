@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
+import { FOOD, RECIPE } from "@common/labels";
+import { getProductPath } from "@common/routes";
 import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
-import Utils from "@common/utils";
 
 import type { OnSelectFunc } from ".";
 
@@ -19,14 +20,14 @@ interface Props {
 const getLink = (product: ProductShort): JSX.Element => (
     <Link
         key={product.id}
-        href={Utils.getProductPath(product.product_type, product.id)}
+        href={getProductPath(product.is_recipe, product.id)}
     >
         <a className={styles.searchOption}>
             <span>
                 {product.name}
             </span>
             <span className={styles.searchOptionType}>
-                {product.product_type}
+                {product.is_recipe ? RECIPE : FOOD}
             </span>
         </a>
     </Link>
@@ -38,7 +39,7 @@ const getButton = (product: ProductShort, onSelect: OnSelectFunc): JSX.Element =
             {product.name}
         </span>
         <span className={styles.searchOptionType}>
-            {product.product_type}
+            {product.is_recipe ? RECIPE : FOOD}
         </span>
     </button>
 );

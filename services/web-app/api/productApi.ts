@@ -1,7 +1,6 @@
 import { HttpError } from "@common/http";
 import { getUrlParams, Header, ResourceType } from "@common/http";
 import type { ProductShort } from "@common/typings";
-import type { ProductType } from "@common/utils";
 
 
 export default class ProductApi {
@@ -9,9 +8,9 @@ export default class ProductApi {
     private static readonly API_PATH: string = "/api/v1/product";
 
 
-    public static async getFavoriteProducts<T>(productType: ProductType): Promise<T[]> {
+    public static async getFavoriteProducts<T>(isRecipe: boolean): Promise<T[]> {
 
-        const params = getUrlParams({ limit: 20, user_id: 1, product_type: productType });
+        const params = getUrlParams({ limit: 20, user_id: 1, is_recipe: isRecipe });
 
         const response = await fetch(`${ProductApi.API_PATH}/favorite?${params}`, {
             method: "GET",
@@ -27,9 +26,9 @@ export default class ProductApi {
         }
     }
 
-    public static async getCustomProducts<T>(productType: ProductType): Promise<T[]> {
+    public static async getCustomProducts<T>(isRecipe: boolean): Promise<T[]> {
 
-        const params = getUrlParams({ limit: 20, user_id: 1, product_type: productType });
+        const params = getUrlParams({ limit: 20, user_id: 1, is_recipe: isRecipe });
 
         const response = await fetch(`${ProductApi.API_PATH}/created?${params}`, {
             method: "GET",

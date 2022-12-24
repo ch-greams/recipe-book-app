@@ -2,10 +2,10 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
+import { getProductPath } from "@common/routes";
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import { Unit } from "@common/units";
-import Utils from "@common/utils";
 import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
@@ -155,7 +155,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
                 </div>
             </div>
 
-            <Link href={Utils.getProductPath(ingredientProduct.product_type, ingredientProduct.product_id)}>
+            <Link href={getProductPath(ingredientProduct.is_recipe, ingredientProduct.product_id)}>
                 <a className={styles.ingredientProductButton}>
                     <RbaIconLink size={IconSize.Medium} color={getIconColor(theme)} />
                 </a>

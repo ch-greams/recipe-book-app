@@ -4,7 +4,6 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { getValues } from "@common/object";
 import type { ProductShort } from "@common/typings";
-import { ProductType } from "@common/utils";
 
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from ".";
 
@@ -64,14 +63,14 @@ Loading.args = {
 const products: ProductShort[] = [
     {
         id: 1,
-        product_type: ProductType.Food,
+        is_recipe: false,
         name: "Milk",
         brand: "",
         subtitle: "",
     },
     {
         id: 2,
-        product_type: ProductType.Recipe,
+        is_recipe: true,
         name: "Meatloaf",
         brand: "",
         subtitle: "",

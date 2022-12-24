@@ -1,7 +1,7 @@
 [
     {
         "id": 29,
-        "product_type": "recipe",
+        "is_recipe": true,
         "name": "Cottage Cheese Dip",
         "brand": "Homemade",
         "subtitle": "integer ac leo"

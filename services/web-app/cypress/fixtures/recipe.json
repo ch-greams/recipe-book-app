@@ -23,7 +23,7 @@
                     "product_id": 1,
                     "amount": 100,
                     "unit": "ml",
-                    "product_type": "food",
+                    "is_recipe": false,
                     "name": "Sour Cream",
                     "density": 1.0208,
                     "nutrients": {
@@ -45,7 +45,7 @@
                     "product_id": 2,
                     "amount": 100,
                     "unit": "ml",
-                    "product_type": "food",
+                    "is_recipe": false,
                     "name": "Yogurt",
                     "density": 1,
                     "nutrients": {
@@ -76,7 +76,7 @@
                     "product_id": 3,
                     "amount": 150,
                     "unit": "g",
-                    "product_type": "food",
+                    "is_recipe": false,
                     "name": "Cottage Cheese",
                     "density": 1,
                     "nutrients": {

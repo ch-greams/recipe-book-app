@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { changeDate, DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT, formatTime, getCurrentDate } from "@common/date";
+import { JOURNAL_PATH } from "@common/routes";
 
 
 describe("journal_page", () => {
@@ -20,7 +21,7 @@ describe("journal_page", () => {
                 { fixture: "journal_groups_response.json" },
             );
 
-            cy.visit(`${constants.CY_JOURNAL_PATH}`);
+            cy.visit(JOURNAL_PATH);
         });
 
         it("can see all page blocks", () => {

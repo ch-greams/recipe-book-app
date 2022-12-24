@@ -2,6 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT } from "@common/labels";
 import { NutrientName } from "@common/nutrients";
+import { FOOD_PATH, RECIPE_PATH } from "@common/routes";
 import type { Unit } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
 
@@ -14,7 +15,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
             cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
         });
 
         it("can replace ingredient_product", () => {
@@ -133,7 +134,7 @@ describe("recipe_page", () => {
                 .as("ingredient");
 
             cy.get("@ingredient")
-                .get(`a[href="${constants.CY_FOOD_PATH}/1"]`)
+                .get(`a[href="${FOOD_PATH}/1"]`)
                 .should("be.visible");
         });
 
@@ -233,7 +234,7 @@ describe("recipe_page", () => {
             );
             cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
         });
 

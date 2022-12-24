@@ -1,6 +1,5 @@
 import type { NutrientName } from "@common/nutrients";
 import type { CustomUnit, TemperatureUnit, TimeUnit, Unit } from "@common/units";
-import type { ProductType } from "@common/utils";
 import type { DirectionPartType } from "@store/types/recipe";
 
 export * from "./common";
@@ -20,7 +19,7 @@ export interface Food {
 
 export interface Product {
     id: number;
-    product_type: ProductType;
+    is_recipe: boolean;
     name: string;
     brand: string;
     subtitle: string;
@@ -33,7 +32,7 @@ export interface Product {
 // TODO: Create an app version of this type (camelCase) and have all necessary fields available
 export interface ProductShort {
     id: number;
-    product_type: ProductType;
+    is_recipe: boolean;
     name: string;
     brand: string;
     subtitle: string;
@@ -51,7 +50,7 @@ export interface FoodShort {
 
 export interface IngredientProduct {
     product_id: number;
-    product_type: ProductType;
+    is_recipe: boolean;
     name: string;
     amount: number;
     unit: Unit;

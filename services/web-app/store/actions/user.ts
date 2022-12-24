@@ -4,7 +4,6 @@ import { HttpError } from "@common/http";
 import { isSome } from "@common/types";
 import type { FoodShort, RecipeShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
 import type { UserMenuItem } from "@common/utils";
-import { ProductType } from "@common/utils";
 import AuthApi from "@api/authApi";
 import JournalApi from "@api/journalApi";
 import ProductApi from "@api/productApi";
@@ -27,10 +26,10 @@ export const fetchUserData = createAsyncThunk<UserFetchDataPayload, void, AsyncT
     async (_arg, { rejectWithValue }) => {
         try {
             const [ favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients ] = await Promise.all([
-                ProductApi.getFavoriteProducts<FoodShort>(ProductType.Food),
-                ProductApi.getCustomProducts<FoodShort>(ProductType.Food),
-                ProductApi.getFavoriteProducts<RecipeShort>(ProductType.Recipe),
-                ProductApi.getCustomProducts<RecipeShort>(ProductType.Recipe),
+                ProductApi.getFavoriteProducts<FoodShort>(false),
+                ProductApi.getCustomProducts<FoodShort>(false),
+                ProductApi.getFavoriteProducts<RecipeShort>(true),
+                ProductApi.getCustomProducts<RecipeShort>(true),
                 JournalApi.getUserNutrients(),
             ]);
             return { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients };

@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT, BUTTON_SAVE } from "@common/labels";
+import { RECIPE_PATH } from "@common/routes";
 
 
 describe("recipe_page", () => {
@@ -12,7 +13,7 @@ describe("recipe_page", () => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_create_response.json" })
                 .as("updateRecipe");
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
         });
 
         it("can update name", () => {

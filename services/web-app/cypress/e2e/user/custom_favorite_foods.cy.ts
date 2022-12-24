@@ -2,7 +2,8 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { BUTTON_DELETE } from "@common/labels";
-import Utils, { ProductType, UserMenuItem } from "@common/utils";
+import { getProductPath, USER_PATH } from "@common/routes";
+import { UserMenuItem } from "@common/utils";
 
 
 describe("user", () => {
@@ -11,20 +12,20 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=recipe`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=true`,
                 { fixture: "recipes_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=recipe`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=true`,
                 { fixture: "recipes_custom.json" },
             );
 
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=food`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=false`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=food`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=false`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(
@@ -47,7 +48,7 @@ describe("user", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
-            cy.visit(constants.CY_USER_PATH);
+            cy.visit(USER_PATH);
         });
 
         it("can navigate to favorite recipe", () => {
@@ -65,7 +66,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, FAVORITE_RECIPE_ID));
+            cy.url().should("include", getProductPath(true, FAVORITE_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_RECIPE_NAME)
@@ -108,7 +109,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Recipe, CUSTOM_RECIPE_ID));
+            cy.url().should("include", getProductPath(true, CUSTOM_RECIPE_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_RECIPE_NAME)
@@ -151,7 +152,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Food, FAVORITE_FOOD_ID));
+            cy.url().should("include", getProductPath(false, FAVORITE_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_FOOD_NAME)
@@ -194,7 +195,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Food, CUSTOM_FOOD_ID));
+            cy.url().should("include", getProductPath(false, CUSTOM_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME)

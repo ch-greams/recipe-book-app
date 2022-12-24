@@ -3,7 +3,7 @@ import Link from "next/link";
 import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE } from "@common/labels";
-import Utils, { ProductType } from "@common/utils";
+import { getProductPath } from "@common/routes";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonHeightSize, ButtonWidthSize } from "@views/shared/rba-button";
 
@@ -34,7 +34,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods, deleteFavo
             <div className={styles.foodList}>
                 {favoriteFoods.map((food) => (
                     <div key={food.id} className={styles.foodLine}>
-                        <Link href={Utils.getProductPath(ProductType.Food, food.id)}>
+                        <Link href={getProductPath(false, food.id)}>
                             <div data-cy={constants.CY_USER_FOOD_FAVORITE_ITEM} className={styles.foodName}>
                                 {food.name}
                             </div>
@@ -55,7 +55,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods, deleteFavo
             <div className={styles.foodList}>
                 {customFoods.map((food) => (
                     <div key={food.id} className={styles.foodLine}>
-                        <Link href={Utils.getProductPath(ProductType.Food, food.id)}>
+                        <Link href={getProductPath(false, food.id)}>
                             <div data-cy={constants.CY_USER_FOOD_CUSTOM_ITEM} className={styles.foodName}>
                                 {food.name}
                             </div>

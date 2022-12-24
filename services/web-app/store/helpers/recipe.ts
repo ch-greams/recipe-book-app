@@ -3,7 +3,7 @@ import { mapDictionary } from "@common/object";
 import { unwrap } from "@common/types";
 import type { Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
-import Utils, { DecimalPlaces, ProductType } from "@common/utils";
+import Utils, { DecimalPlaces } from "@common/utils";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
     RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
@@ -87,7 +87,7 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
 export function convertFoodToIngredientProduct(food: Food): IngredientProduct {
     return {
         product_id: food.id,
-        product_type: ProductType.Food,
+        is_recipe: false,
         name: food.name,
         amount: 100,
         unit: WeightUnit.g,
@@ -99,7 +99,7 @@ export function convertFoodToIngredientProduct(food: Food): IngredientProduct {
 export function convertRecipeToIngredientProduct(recipe: Recipe): IngredientProduct {
     return {
         product_id: recipe.id,
-        product_type: ProductType.Recipe,
+        is_recipe: true,
         name: recipe.name,
         amount: 100,
         unit: WeightUnit.g,

@@ -3,9 +3,9 @@ import { useRouter } from "next/dist/client/router";
 import type { ParsedUrlQuery } from "querystring";
 
 import { useLoginRedirect } from "@common/hooks";
+import { getProductPath, NEW_FOOD_PATH } from "@common/routes";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
-import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as foodActions from "@store/actions/food";
@@ -47,10 +47,10 @@ const RbaFoodPageConnected: React.FC<Props> = ({ meta, user }) => {
                 const foodId = Number(fid);
                 dispatch(foodActions.fetchFood(foodId));
             }
-            else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Food))) {
+            else if (router.asPath.includes(NEW_FOOD_PATH)) {
 
                 if (food.isCreated) {
-                    router.push(Utils.getProductPath(ProductType.Food, food.id));
+                    router.push(getProductPath(false, food.id));
                 }
                 else {
                     dispatch(foodActions.fetchFoodNew());

@@ -4,7 +4,6 @@ GRANT ALL ON SCHEMA product TO postgres;
 
 
 CREATE TYPE product."direction_part_type" AS ENUM ('ingredient', 'note', 'warning', 'tip');
-CREATE TYPE product."product_type" AS ENUM ('food', 'recipe');
 
 
 -- First 100 reserved for testing purposes
@@ -56,7 +55,6 @@ GRANT ALL ON SEQUENCE product.product_nutrient_id TO postgres;
 
 CREATE TABLE product.product (
     id int8 NOT NULL DEFAULT nextval('product.product_id'::regclass),
-    product_type product."product_type" NOT NULL,
     "name" text NOT NULL,
     brand text NOT NULL,
     subtitle text NOT NULL,
@@ -68,6 +66,7 @@ CREATE TABLE product.product (
     updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
     serving_size float8 NOT NULL DEFAULT 100,
     is_deleted bool NOT NULL DEFAULT false,
+    is_recipe bool NOT NULL DEFAULT false,
     CONSTRAINT density_check CHECK ((density > (0)::double precision)) NOT VALID,
     CONSTRAINT product_pk PRIMARY KEY (id),
     CONSTRAINT serving_size_check CHECK ((serving_size > (0)::double precision)) NOT VALID,

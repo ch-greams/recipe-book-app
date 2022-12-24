@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{error::Error, product::ProductType, product_nutrient::ProductNutrient};
+use super::{error::Error, product_nutrient::ProductNutrient};
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone, Debug)]
 pub struct IngredientProduct {
@@ -70,7 +70,7 @@ pub struct IngredientProductDetails {
     pub amount: f64,
     pub unit: String,
 
-    pub product_type: ProductType,
+    pub is_recipe: bool,
     pub name: String,
     pub density: f64,
 }
@@ -86,7 +86,7 @@ impl IngredientProductDetails {
                 ip.product_id,
                 ip.amount,
                 ip.unit,
-                p.product_type,
+                p.is_recipe,
                 p.name,
                 p.density
             FROM product.ingredient_product ip
@@ -105,7 +105,7 @@ pub struct IngredientProductDetailsWithNutrients {
     pub amount: f64,
     pub unit: String,
 
-    pub product_type: ProductType,
+    pub is_recipe: bool,
     pub name: String,
     pub density: f64,
 
@@ -128,7 +128,7 @@ impl IngredientProductDetailsWithNutrients {
             amount: ingredient_product.amount,
             unit: ingredient_product.unit.to_owned(),
 
-            product_type: ingredient_product.product_type.to_owned(),
+            is_recipe: ingredient_product.is_recipe.to_owned(),
             name: ingredient_product.name.to_owned(),
             density: ingredient_product.density,
 

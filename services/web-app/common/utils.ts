@@ -13,11 +13,6 @@ export enum UserMenuItem {
     Foods = "Foods",
 }
 
-export enum ProductType {
-    Food = "food",
-    Recipe = "recipe",
-}
-
 export enum DecimalPlaces {
     Zero = 0,
     One = 1,
@@ -156,14 +151,6 @@ export default class Utils {
     public static getNumberOfLines(str: string): number {
         const SINGLE_LINE = 1;
         return (str.match(/\n/g) || "").length + SINGLE_LINE;
-    }
-
-    public static getProductPath(route: ProductType, id: number): string {
-        return `/${route}/${id}`;
-    }
-
-    public static getNewProductPath(route: ProductType): string {
-        return `/${route}/new`;
     }
 
     public static keepCaretInPlace(window: Window & typeof globalThis, event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {

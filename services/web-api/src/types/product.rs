@@ -8,22 +8,11 @@ use super::error::Error;
 use super::food::{CreateFoodPayload, UpdateFoodPayload};
 use super::recipe::{CreateRecipePayload, UpdateRecipePayload};
 
-#[derive(sqlx::Type, Serialize, Deserialize, Debug, Clone)]
-#[sqlx(type_name = "product_type", rename_all = "snake_case")]
-#[serde(rename_all = "snake_case")]
-pub enum ProductType {
-    Food,
-    Recipe,
-}
-
-#[derive(sqlx::Type, Serialize, Deserialize, Clone)]
-#[sqlx(type_name = "_product_type")]
-struct ProductTypeArray(Vec<ProductType>);
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
-    pub product_type: ProductType,
+    pub is_recipe: bool,
     pub name: String,
     pub brand: String,
     pub subtitle: String,
@@ -40,7 +29,7 @@ pub struct Product {
 #[derive(Deserialize, Serialize)]
 pub struct ProductShort {
     pub id: i64,
-    pub product_type: ProductType,
+    pub is_recipe: bool,
     pub name: String,
     pub brand: String,
     pub subtitle: String,
@@ -54,7 +43,7 @@ impl ProductShort {
     pub fn new(product: &Product) -> Self {
         Self {
             id: product.id,
-            product_type: product.product_type.to_owned(),
+            is_recipe: product.is_recipe.to_owned(),
             name: product.name.to_owned(),
             brand: product.brand.to_owned(),
             subtitle: product.subtitle.to_owned(),
@@ -73,9 +62,9 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE is_deleted = false AND product_type = 'food' AND id = $1 AND (is_private = false OR created_by = $2)
+            WHERE is_deleted = false AND is_recipe = false AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
         .bind(id)
@@ -86,68 +75,118 @@ impl Product {
         limit: u32,
         offset: u32,
         user_id: Option<i64>,
-        types: Vec<ProductType>,
+        is_recipe: Option<bool>,
         filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM product.product
-            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND (is_private = false OR created_by = $3)
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit as i32)
-        .bind(offset as i32)
-        .bind(user_id)
-        .bind(ProductTypeArray(types))
-        .bind(format!("%{}%", filter))
+        if let Some(is_recipe) = is_recipe {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND (is_private = false OR created_by = $3)
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+            .bind(is_recipe)
+        }
+        else {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4 AND (is_private = false OR created_by = $3)
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+        }
     }
 
     pub fn find_all_created_by_user(
         limit: u32,
         offset: u32,
         user_id: i64,
-        types: Vec<ProductType>,
+        is_recipe: Option<bool>,
         filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM product.product
-            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4) AND created_by = $3
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit as i32)
-        .bind(offset as i32)
-        .bind(user_id)
-        .bind(ProductTypeArray(types))
-        .bind(format!("%{}%", filter))
+        if let Some(is_recipe) = is_recipe {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND created_by = $3
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+            .bind(is_recipe)
+        }
+        else {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4 AND created_by = $3
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+        }
     }
 
     pub fn find_all_favorite(
         limit: u32,
         offset: u32,
         user_id: i64,
-        types: Vec<ProductType>,
+        is_recipe: Option<bool>,
         filter: String,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM product.product
-            WHERE is_deleted = false AND name ILIKE $5 AND product_type = ANY($4)
-                AND (is_private = false OR created_by = $3)
-                AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
-            LIMIT $1 OFFSET $2
-        "#,
-        )
-        .bind(limit as i32)
-        .bind(offset as i32)
-        .bind(user_id)
-        .bind(ProductTypeArray(types))
-        .bind(format!("%{}%", filter))
+        if let Some(is_recipe) = is_recipe {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5
+                    AND (is_private = false OR created_by = $3)
+                    AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+            .bind(is_recipe)
+        }
+        else {
+            sqlx::query_as(
+                r#"
+                SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+                FROM product.product
+                WHERE is_deleted = false AND name ILIKE $4
+                    AND (is_private = false OR created_by = $3)
+                    AND product.id IN (SELECT product_id FROM journal.favorite_product WHERE user_id = $3)
+                LIMIT $1 OFFSET $2
+            "#,
+            )
+            .bind(limit as i32)
+            .bind(offset as i32)
+            .bind(user_id)
+            .bind(format!("%{}%", filter))
+        }
     }
 
     pub fn find_recipe_by_id(
@@ -156,9 +195,9 @@ impl Product {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
+            SELECT id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM product.product
-            WHERE is_deleted = false AND product_type = 'recipe' AND id = $1 AND (is_private = false OR created_by = $2)
+            WHERE is_deleted = false AND is_recipe = true AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
         .bind(id)
@@ -172,9 +211,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO product.product (product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
-            VALUES ('food', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            INSERT INTO product.product (is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES (false, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_food_payload.name.to_owned())
@@ -203,9 +242,9 @@ impl Product {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO product.product (product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
-            VALUES ('recipe', $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            INSERT INTO product.product (is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            VALUES (true, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(create_recipe_payload.name.to_owned())
@@ -235,7 +274,7 @@ impl Product {
         let query = sqlx::query_as(
             r#"
             UPDATE product.product SET
-                product_type = 'food',
+                is_recipe = false,
                 name = $1,
                 brand = $2,
                 subtitle = $3,
@@ -245,7 +284,7 @@ impl Product {
                 is_private = $7,
                 updated_at = $8
             WHERE id = $9 AND created_by = $10
-            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_food_payload.name.to_owned())
@@ -275,7 +314,7 @@ impl Product {
         let query = sqlx::query_as(
             r#"
             UPDATE product.product SET
-                product_type = 'recipe',
+                is_recipe = true,
                 name = $1,
                 brand = $2,
                 subtitle = $3,
@@ -285,7 +324,7 @@ impl Product {
                 is_private = $7,
                 updated_at = $8
             WHERE id = $9 AND created_by = $10
-            RETURNING id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
+            RETURNING id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
             .bind(update_recipe_payload.name.to_owned())
@@ -352,7 +391,7 @@ mod tests {
     use crate::{
         types::{
             food::{CreateFoodPayload, UpdateFoodPayload},
-            product::{Product, ProductType},
+            product::Product,
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
@@ -378,7 +417,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = Some(1);
-        let food_type = vec![ProductType::Food];
+        let is_recipe = Some(false);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -386,7 +425,7 @@ mod tests {
             food_limit,
             food_offset,
             food_user_id,
-            food_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)
@@ -401,7 +440,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
-        let food_type = vec![ProductType::Food];
+        let is_recipe = Some(false);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -409,7 +448,7 @@ mod tests {
             food_limit,
             food_offset,
             food_user_id,
-            food_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)
@@ -424,7 +463,7 @@ mod tests {
         let food_limit = 10;
         let food_offset = 0;
         let food_user_id = 1;
-        let food_type = vec![ProductType::Food];
+        let is_recipe = Some(false);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -432,7 +471,7 @@ mod tests {
             food_limit,
             food_offset,
             food_user_id,
-            food_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)
@@ -462,7 +501,7 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = Some(1);
-        let recipe_type = vec![ProductType::Recipe];
+        let is_recipe = Some(true);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -470,7 +509,7 @@ mod tests {
             recipe_limit,
             recipe_offset,
             recipe_user_id,
-            recipe_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)
@@ -485,7 +524,7 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
-        let recipe_type = vec![ProductType::Recipe];
+        let is_recipe = Some(true);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -493,7 +532,7 @@ mod tests {
             recipe_limit,
             recipe_offset,
             recipe_user_id,
-            recipe_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)
@@ -508,7 +547,7 @@ mod tests {
         let recipe_limit = 10;
         let recipe_offset = 0;
         let recipe_user_id = 1;
-        let recipe_type = vec![ProductType::Recipe];
+        let is_recipe = Some(true);
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -516,7 +555,7 @@ mod tests {
             recipe_limit,
             recipe_offset,
             recipe_user_id,
-            recipe_type,
+            is_recipe,
             "".to_string(),
         )
         .fetch_all(&mut txn)

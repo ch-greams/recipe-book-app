@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT } from "@common/labels";
+import { FOOD_PATH } from "@common/routes";
 import { WeightUnit } from "@common/units";
 
 
@@ -11,7 +12,7 @@ describe("food_page", () => {
         beforeEach(() => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+            cy.visit(`${FOOD_PATH}/1`);
         });
 
         it("can create custom_unit", () => {

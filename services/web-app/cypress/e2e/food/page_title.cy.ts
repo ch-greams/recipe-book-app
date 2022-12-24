@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT, BUTTON_SAVE } from "@common/labels";
+import { FOOD_PATH } from "@common/routes";
 
 
 describe("food_page", () => {
@@ -12,7 +13,7 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+            cy.visit(`${FOOD_PATH}/1`);
         });
 
         it("can update name", () => {

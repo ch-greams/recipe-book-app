@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { BUTTON_CREATE_FOOD,BUTTON_CREATE_RECIPE } from "@common/labels";
-import Utils, { ProductType } from "@common/utils";
+import { NEW_FOOD_PATH, NEW_RECIPE_PATH } from "@common/routes";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch, useAppSelector } from "@store";
 import { searchProducts } from "@store/actions/search";
@@ -29,7 +29,7 @@ const RbaHomePage: React.FC = () => {
             <div className={styles.homePageButtons}>
 
                 <Link
-                    href={Utils.getNewProductPath(ProductType.Recipe)}
+                    href={NEW_RECIPE_PATH}
                     legacyBehavior={true}
                 >
                     <a className={styles.homePageButton}>
@@ -38,7 +38,7 @@ const RbaHomePage: React.FC = () => {
                 </Link>
 
                 <Link
-                    href={Utils.getNewProductPath(ProductType.Food)}
+                    href={NEW_FOOD_PATH}
                     legacyBehavior={true}
                 >
                     <a className={styles.homePageButton}>
