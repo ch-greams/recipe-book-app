@@ -4,7 +4,6 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { HttpError } from "@common/http";
 import type { IngredientProduct, ProductShort, Recipe } from "@common/typings";
 import type * as units from "@common/units";
-import { ProductType } from "@common/utils";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
@@ -119,13 +118,13 @@ export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, A
     "recipe/ingredient/add",
     async (product, { rejectWithValue }) => {
         try {
-            if (product.product_type === ProductType.Food) {
-                const food = await FoodApi.getFood(product.id);
-                return convertFoodToIngredientProduct(food);
-            }
-            else {
+            if (product.is_recipe) {
                 const recipe = await RecipeApi.getRecipe(product.id);
                 return convertRecipeToIngredientProduct(recipe);
+            }
+            else {
+                const food = await FoodApi.getFood(product.id);
+                return convertFoodToIngredientProduct(food);
             }
         }
         catch (error) {
@@ -137,13 +136,13 @@ export const addIngredientProduct = createAsyncThunk<{ id: number, product: Ingr
     "recipe/ingredient/add_product",
     async ({ id, product }, { rejectWithValue }) => {
         try {
-            if (product.product_type === ProductType.Food) {
-                const food = await FoodApi.getFood(product.id);
-                return { id, product: convertFoodToIngredientProduct(food) };
-            }
-            else {
+            if (product.is_recipe) {
                 const recipe = await RecipeApi.getRecipe(product.id);
                 return { id, product: convertRecipeToIngredientProduct(recipe) };
+            }
+            else {
+                const food = await FoodApi.getFood(product.id);
+                return { id, product: convertFoodToIngredientProduct(food) };
             }
         }
         catch (error) {

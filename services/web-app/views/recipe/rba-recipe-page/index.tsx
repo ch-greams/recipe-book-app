@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
 import { useLoginRedirect } from "@common/hooks";
+import { getProductPath, NEW_RECIPE_PATH } from "@common/routes";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
-import Utils, { ProductType } from "@common/utils";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
 import { useAppDispatch, useAppSelector } from "@store";
 import * as recipeActions from "@store/actions/recipe";
@@ -47,10 +47,10 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
                 const recipeId = Number(rid);
                 dispatch(recipeActions.fetchRecipe(recipeId));
             }
-            else if (router.asPath.includes(Utils.getNewProductPath(ProductType.Recipe))) {
+            else if (router.asPath.includes(NEW_RECIPE_PATH)) {
 
                 if (recipe.isCreated) {
-                    router.push(Utils.getProductPath(ProductType.Recipe, recipe.id));
+                    router.push(getProductPath(true, recipe.id));
                 }
                 else {
                     dispatch(recipeActions.fetchRecipeNew());

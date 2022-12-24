@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT } from "@common/labels";
+import { RECIPE_PATH } from "@common/routes";
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 import { DirectionPartType } from "@store/types/recipe";
 
@@ -13,7 +14,7 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
         });
 
         it("can switch temperature unit", () => {
@@ -160,7 +161,7 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(`${RECIPE_PATH}/29`);
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
         });
 

@@ -1,7 +1,7 @@
 [
     {
         "id": 15,
-        "product_type": "food",
+        "is_recipe": false,
         "name": "Chicken Thigh - Bone Out",
         "brand": "Twiyo",
         "subtitle": "in magna bibendum",

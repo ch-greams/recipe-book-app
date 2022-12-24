@@ -11,17 +11,10 @@ use crate::{
     utils::BIND_LIMIT,
 };
 
-#[derive(sqlx::Type, Serialize, Deserialize, Debug, Clone)]
-#[sqlx(type_name = "product_type", rename_all = "snake_case")]
-pub enum ProductType {
-    Food,
-    Recipe,
-}
-
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Product {
     pub id: i64,
-    pub product_type: ProductType,
+    pub is_recipe: bool,
     pub name: String,
     pub brand: String,
     pub subtitle: String,
@@ -40,14 +33,14 @@ impl Product {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut products_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.product (id, product_type, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+            "INSERT INTO product.product (id, is_recipe, name, brand, subtitle, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
         products_query_builder.push_values(
             products.iter().take(BIND_LIMIT / 12),
             |mut b, product| {
                 b.push_bind(product.id)
-                    .push_bind(&product.product_type)
+                    .push_bind(product.is_recipe)
                     .push_bind(&product.name)
                     .push_bind(&product.brand)
                     .push_bind(&product.subtitle)
@@ -99,7 +92,7 @@ impl From<&FoundationFoodItem> for Product {
 
         Self {
             id: foundation_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
+            is_recipe: false,
 
             name: foundation_food_item.description.to_owned(),
             brand: "".to_string(),
@@ -135,7 +128,7 @@ impl From<&SurveyFoodItem> for Product {
 
         Self {
             id: survey_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
+            is_recipe: false,
 
             name: survey_food_item.description.to_owned(),
             brand: "".to_string(),
@@ -169,7 +162,7 @@ impl From<&BrandedFoodItem> for Product {
 
         Self {
             id: branded_food_item.fdc_id.into(),
-            product_type: ProductType::Food,
+            is_recipe: false,
 
             name: branded_food_item.description.to_owned(),
             brand: brand.to_owned(),

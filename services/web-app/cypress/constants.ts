@@ -1,15 +1,6 @@
 
 // GENERAL
 
-export const CY_HOME_PATH = "/";
-export const CY_RECIPE_PATH = "/recipe";
-export const CY_FOOD_PATH = "/food";
-export const CY_USER_PATH = "/user";
-export const CY_JOURNAL_PATH = "/journal";
-export const CY_LOGIN_PATH = "/login";
-export const CY_SIGNUP_PATH = "/signup";
-
-
 export const CY_NEW_RECIPE_PATH = "/recipe/new";
 export const CY_NEW_FOOD_PATH = "/food/new";
 

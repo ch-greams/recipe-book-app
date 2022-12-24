@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { HttpStatus } from "@common/http";
+import { LOGIN_PATH, SIGNUP_PATH } from "@common/routes";
 
 
 describe("auth", () => {
@@ -14,7 +15,7 @@ describe("auth", () => {
 
         it("can successfully sign up", () => {
 
-            cy.visit(constants.CY_SIGNUP_PATH);
+            cy.visit(SIGNUP_PATH);
 
             cy.intercept(`${constants.CY_AUTH_API_PATH}/signup`, { statusCode: HttpStatus.Created })
                 .as("authSignup");
@@ -54,7 +55,7 @@ describe("auth", () => {
                     .should("eq", bodyText);
             });
 
-            cy.url().should("eq", `${Cypress.config().baseUrl}${constants.CY_LOGIN_PATH}?username=${USERNAME}`);
+            cy.url().should("eq", `${Cypress.config().baseUrl}${LOGIN_PATH}?username=${USERNAME}`);
 
             cy.get(`form [data-cy=${constants.CY_AUTH_USERNAME_INPUT}][value="${USERNAME}"]`)
                 .should("be.visible");

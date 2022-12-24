@@ -24,7 +24,7 @@
                     "product_id": 1,
                     "amount": 100.0,
                     "unit": "ml",
-                    "product_type": "food",
+                    "is_recipe": false,
                     "name": "English Muffin"
                 },
                 "2": {
@@ -32,7 +32,7 @@
                     "product_id": 2,
                     "amount": 100.0,
                     "unit": "ml",
-                    "product_type": "food",
+                    "is_recipe": false,
                     "name": "Wine - Red, Cooking"
                 }
             }
@@ -46,7 +46,7 @@
                     "product_id": 3,
                     "amount": 150.0,
                     "unit": "g",
-                    "product_type": "recipe",
+                    "is_recipe": true,
                     "name": "Wine - White, Pelee Island"
                 }
             }

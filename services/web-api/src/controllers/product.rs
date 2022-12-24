@@ -10,7 +10,7 @@ use crate::{
     auth::{authorize, get_user, Certificate},
     types::{
         error::Error,
-        product::{Product, ProductShort, ProductType},
+        product::{Product, ProductShort},
     },
 };
 
@@ -27,7 +27,7 @@ pub fn scope() -> Scope {
 pub struct FindAllQuery {
     limit: Option<u32>,
     offset: Option<u32>,
-    product_type: Option<ProductType>,
+    is_recipe: Option<bool>,
     filter: Option<String>,
 }
 
@@ -42,16 +42,11 @@ async fn find_all(
 
     let mut txn = db_pool.begin().await?;
 
-    let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![product_type.to_owned()],
-        None => vec![ProductType::Recipe, ProductType::Food],
-    };
-
     let products = Product::find_all(
         query.limit.unwrap_or(100),
         query.offset.unwrap_or(0),
         user_id,
-        types,
+        query.is_recipe,
         query.filter.clone().unwrap_or_default(),
     )
     .fetch_all(&mut txn)
@@ -73,16 +68,11 @@ async fn find_all_created(
 
     let mut txn = db_pool.begin().await?;
 
-    let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![product_type.to_owned()],
-        None => vec![ProductType::Recipe, ProductType::Food],
-    };
-
     let products = Product::find_all_created_by_user(
         query.limit.unwrap_or(100),
         query.offset.unwrap_or(0),
         user_id,
-        types,
+        query.is_recipe,
         query.filter.clone().unwrap_or_default(),
     )
     .fetch_all(&mut txn)
@@ -104,16 +94,11 @@ async fn find_all_favorite(
 
     let mut txn = db_pool.begin().await?;
 
-    let types: Vec<ProductType> = match &query.product_type {
-        Some(product_type) => vec![product_type.to_owned()],
-        None => vec![ProductType::Recipe, ProductType::Food],
-    };
-
     let products = Product::find_all_favorite(
         query.limit.unwrap_or(100),
         query.offset.unwrap_or(0),
         user_id,
-        types,
+        query.is_recipe,
         query.filter.clone().unwrap_or_default(),
     )
     .fetch_all(&mut txn)

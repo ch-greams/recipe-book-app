@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
-import Utils, { ProductType } from "@common/utils";
+import { FOOD_PATH, getProductPath, NEW_FOOD_PATH } from "@common/routes";
 
 
 describe("food_page", () => {
@@ -17,7 +17,7 @@ describe("food_page", () => {
                 .as("updateFood");
 
             // NOTE: new-food-page automatically loads with editMode === true
-            cy.visit(`${constants.CY_FOOD_PATH}/new`);
+            cy.visit(`${FOOD_PATH}/new`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_REVERT)
                 .should("be.disabled");
@@ -28,7 +28,7 @@ describe("food_page", () => {
                 .clear()
                 .type(NEW_PAGE_TITLE_NAME);
 
-            cy.url().should("include", Utils.getNewProductPath(ProductType.Food));
+            cy.url().should("include", NEW_FOOD_PATH);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
                 .should("be.visible")
@@ -43,7 +43,7 @@ describe("food_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
 
-            cy.url().should("include", Utils.getProductPath(ProductType.Food, NEW_FOOD_ID));
+            cy.url().should("include", getProductPath(false, NEW_FOOD_ID));
         });
 
         it("can save an updated page", () => {
@@ -54,7 +54,7 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+            cy.visit(`${FOOD_PATH}/1`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
 
@@ -83,7 +83,7 @@ describe("food_page", () => {
             cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
             cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
 
-            cy.visit(`${constants.CY_FOOD_PATH}/1`);
+            cy.visit(`${FOOD_PATH}/1`);
 
             cy.get(`[data-cy=${constants.CY_BUTTON}]`)
                 .contains(BUTTON_DELETE)

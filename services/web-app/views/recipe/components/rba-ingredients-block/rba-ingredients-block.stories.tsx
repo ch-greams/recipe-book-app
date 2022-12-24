@@ -5,7 +5,6 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientName } from "@common/nutrients";
 import { WeightUnit } from "@common/units";
-import { ProductType } from "@common/utils";
 import { store } from "@store";
 import type { RecipeIngredient } from "@store/types/recipe";
 
@@ -53,7 +52,7 @@ const INGREDIENT_0: RecipeIngredient = {
             amountInput: "100",
             unit: WeightUnit.g,
             product_id: PRODUCT_ID_1,
-            product_type: ProductType.Food,
+            is_recipe: false,
             name: "Sour Cream 10%",
             density: 1,
             nutrients: {
@@ -68,7 +67,7 @@ const INGREDIENT_0: RecipeIngredient = {
             amountInput: "100",
             unit: WeightUnit.g,
             product_id: PRODUCT_ID_2,
-            product_type: ProductType.Food,
+            is_recipe: false,
             name: "Sour Cream 15%",
             density: 1,
             nutrients: {
@@ -98,7 +97,7 @@ const INGREDIENT_1: RecipeIngredient = {
             amountInput: "5",
             unit: WeightUnit.oz,
             product_id: PRODUCT_ID_3,
-            product_type: ProductType.Food,
+            is_recipe: false,
             name: "Cottage Cheese",
             density: 1,
             nutrients: {

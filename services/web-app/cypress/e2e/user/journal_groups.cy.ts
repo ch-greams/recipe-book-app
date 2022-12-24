@@ -2,6 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
+import { USER_PATH } from "@common/routes";
 import type { JournalGroup } from "@common/typings";
 
 
@@ -11,20 +12,20 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=recipe`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=true`,
                 { fixture: "recipes_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=recipe`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=true`,
                 { fixture: "recipes_custom.json" },
             );
 
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=food`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=false`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=food`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=false`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(
@@ -44,7 +45,7 @@ describe("user", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.visit(constants.CY_USER_PATH);
+            cy.visit(USER_PATH);
         });
 
         it("can see journal groups", () => {
