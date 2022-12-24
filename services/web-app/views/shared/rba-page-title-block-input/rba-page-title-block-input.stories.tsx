@@ -21,10 +21,6 @@ export default {
             type: { name: "string" },
             table: { type: { summary: "string" } },
         },
-        subtitle: {
-            type: { name: "string" },
-            table: { type: { summary: "string" } },
-        },
         description: {
             type: { name: "string" },
             table: { type: { summary: "string" } },
@@ -46,7 +42,6 @@ export const WithoutDescription = Template.bind({});
 WithoutDescription.args = {
     name: "Name",
     brand: "Brand",
-    subtitle: "Subtitle",
 };
 
 
@@ -54,6 +49,5 @@ export const WithDescription = Template.bind({});
 WithDescription.args = {
     name: "Name",
     brand: "Brand",
-    subtitle: "Subtitle",
     description: "Description",
 };

@@ -51,7 +51,6 @@ const initialState: types.RecipePageStore = {
     id: -1,
     name: "Name",
     brand: "Brand",
-    subtitle: "Subtitle",
     description: "",
     type: "",
 
@@ -231,9 +230,6 @@ const reducer = createReducer(initialState, (builder) => {
         })
         .addCase(actions.updateBrand, (state, action) => {
             state.brand = action.payload;
-        })
-        .addCase(actions.updateSubtitle, (state, action) => {
-            state.subtitle = action.payload;
         })
         .addCase(actions.updateDescription, (state, action) => {
             state.description = action.payload;
@@ -994,7 +990,6 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = recipe.id;
             state.name = recipe.name;
             state.brand = recipe.brand;
-            state.subtitle = recipe.subtitle;
             state.description = recipe.description;
             state.type = recipe.type;
 

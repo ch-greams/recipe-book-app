@@ -9,7 +9,6 @@ export function convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
         id: foodPage.id,
         name: foodPage.name,
         brand: foodPage.brand,
-        subtitle: foodPage.subtitle,
         description: foodPage.description,
         density: foodPage.density,
         serving_size: foodPage.servingSize,

@@ -66,14 +66,12 @@ const products: ProductShort[] = [
         is_recipe: false,
         name: "Milk",
         brand: "",
-        subtitle: "",
     },
     {
         id: 2,
         is_recipe: true,
         name: "Meatloaf",
         brand: "",
-        subtitle: "",
     },
 ];
 

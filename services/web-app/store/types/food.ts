@@ -13,7 +13,6 @@ export interface FoodPageStore {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
     description: string;
     nutrients: Dictionary<NutrientName, number>;
     customUnits: CustomUnitInput[];

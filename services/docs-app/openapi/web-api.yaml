@@ -56,9 +56,6 @@ components:
         brand:
           type: string
           example: ""
-        subtitle:
-          type: string
-          example: ""
         is_private:
           type: boolean
           example: false
@@ -114,8 +111,6 @@ components:
           example: Tomato
         brand:
           type: string
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -156,8 +151,6 @@ components:
           example: Tomato
         brand:
           type: string
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -194,8 +187,6 @@ components:
           type: string
           example: Tomato
         brand:
-          type: string
-        subtitle:
           type: string
         description:
           type: string
@@ -447,8 +438,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -487,8 +476,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -524,8 +511,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:

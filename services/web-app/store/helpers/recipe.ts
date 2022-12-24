@@ -72,7 +72,6 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
         id: recipePage.id,
         name: recipePage.name,
         brand: recipePage.brand,
-        subtitle: recipePage.subtitle,
         description: recipePage.description,
         custom_units: recipePage.customUnits,
         type: recipePage.type,

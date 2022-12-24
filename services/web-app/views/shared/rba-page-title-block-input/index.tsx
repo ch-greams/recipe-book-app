@@ -15,11 +15,9 @@ import styles from "./rba-page-title-block-input.module.scss";
 interface Props {
     name: string;
     brand: string;
-    subtitle: string;
     description?: string;
     updateName: (value: string) => AnyAction;
     updateBrand: (value: string) => AnyAction;
-    updateSubtitle: (value: string) => AnyAction;
     updateDescription: (value: string) => AnyAction;
 }
 
@@ -27,8 +25,7 @@ interface Props {
 const MIN_DESCRIPTION_SIZE: number = 3;
 
 const RbaPageTitleBlockInput: React.FC<Props> = ({
-    name, brand, subtitle, description,
-    updateName, updateBrand, updateSubtitle, updateDescription,
+    name, brand, description, updateName, updateBrand, updateDescription,
 }) => {
     const dispatch = useAppDispatch();
 
@@ -63,19 +60,6 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     onChange={(value: string): void => { dispatch(updateBrand(unwrapOr(value, ""))); }}
                 />
 
-            </div>
-
-            <div className={styles.subtitleBlock}>
-                <RbaInput
-                    data-cy={constants.CY_PAGE_TITLE_SUBTITLE_INPUT}
-                    theme={InputTheme.Alternative}
-                    width={InputWidthSize.Full}
-                    height={InputHeightSize.Large}
-                    align={InputTextAlign.Left}
-                    placeholder={"SUBTITLE"}
-                    value={subtitle}
-                    onChange={(value: string): void => { dispatch(updateSubtitle(unwrapOr(value, ""))); }}
-                />
             </div>
 
             <div className={styles.descriptionBlock}>

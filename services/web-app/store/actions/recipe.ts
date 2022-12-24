@@ -27,7 +27,6 @@ export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit"
 export const updateCustomUnit = createAction<{ index: number, customUnit: units.CustomUnitInput }>("recipe/update_custom_unit");
 export const updateName = createAction<string>("recipe/update_name");
 export const updateBrand = createAction<string>("recipe/update_brand");
-export const updateSubtitle = createAction<string>("recipe/update_subtitle");
 export const updateDescription = createAction<string>("recipe/update_description");
 
 export const fetchRecipe = createAsyncThunk<Recipe, number, AsyncThunkConfig>(
