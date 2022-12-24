@@ -47,9 +47,9 @@ components:
         id:
           type: integer
           example: 321360
-        product_type:
-          type: string
-          example: food
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Tomatoes, grape, raw
@@ -239,9 +239,9 @@ components:
         unit:
           type: string
           example: g
-        product_type:
-          type: string
-          example: food
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Ground Beef
@@ -782,14 +782,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -829,14 +827,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -880,14 +876,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
