@@ -1,14 +1,16 @@
 import { DecimalPlaces, roundToDecimal } from "@common/numeric";
-import type { NutrientName } from "@common/nutrients";
+import { NutrientName } from "@common/nutrients";
 import { mapDictionary } from "@common/object";
-import { unwrap } from "@common/types";
+import { isSome, unwrap, unwrapOr } from "@common/types";
 import type { Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
-import { getPercentMultiplier, nutrientSum } from "@common/utils";
+
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
     RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
-} from "@store/types/recipe";
+} from "../types/recipe";
+
+import { getNutrientMultiplierFromAmount } from "./food";
 
 
 
@@ -116,7 +118,7 @@ export function getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Di
     const productNutrients: Dictionary<NutrientName, number>[] = ingredients
         .map((ingredient) => {
             const { nutrients, amount } = getIngredientProduct(ingredient);
-            const multiplier = getPercentMultiplier(amount);
+            const multiplier = getNutrientMultiplierFromAmount(amount);
             return mapDictionary(nutrients, (_key, value) => roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
@@ -132,4 +134,27 @@ export function getIngredientProduct(ingredient: Ingredient): IngredientProduct 
 }
 export function getRecipeIngredientProduct(ingredient: RecipeIngredient): RecipeIngredientProduct {
     return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+}
+
+export function nutrientSum(productNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
+
+    return Object.values(NutrientName).reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
+
+        const nutrientValue = productNutrients.reduce(
+            (sum: Option<number>, ingredient) => {
+                const value = ingredient[nutrientType];
+                return ( isSome(value) ? unwrapOr(sum, 0) + value : sum );
+            },
+            null,
+        );
+
+        return {
+            ...acc,
+            [nutrientType]: (
+                isSome(nutrientValue)
+                    ? roundToDecimal(nutrientValue, DecimalPlaces.Two)
+                    : null
+            ),
+        };
+    }, {});
 }

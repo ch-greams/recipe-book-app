@@ -5,8 +5,9 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientGroupType, NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
-import { convertNutrientValuesIntoInputs, getNutrients } from "@common/utils";
+import { getNutrients } from "@common/utils";
 import { store } from "@store";
+import { convertNutrientValuesIntoInputs } from "@store/helpers/food";
 
 import RbaNutrientsBlock from ".";
 

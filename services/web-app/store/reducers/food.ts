@@ -3,10 +3,12 @@ import { createReducer } from "@reduxjs/toolkit";
 import { getErrorMessageFromStatus } from "@common/http";
 import { DecimalPlaces, roundToDecimal } from "@common/numeric";
 import * as units from "@common/units";
-import { convertNutrients, convertNutrientValuesIntoInputs } from "@common/utils";
-import { convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues } from "@store/helpers/food";
 
 import * as actions from "../actions/food";
+import {
+    convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues,
+    convertNutrients, convertNutrientValuesIntoInputs,
+} from "../helpers/food";
 import type { FoodPageStore } from "../types/food";
 
 

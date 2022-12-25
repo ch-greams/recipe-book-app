@@ -5,8 +5,9 @@ import { NutrientName } from "@common/nutrients";
 import { mapRecord } from "@common/object";
 import { isSome } from "@common/types";
 import { NutrientUnit } from "@common/units";
-import { fetchNutrients } from "@store/actions/meta";
-import type { MetaStore } from "@store/types/meta";
+
+import { fetchNutrients } from "../actions/meta";
+import type { MetaStore } from "../types/meta";
 
 
 const NUTRIENT_DESCRIPTIONS: Record<NutrientName, { unit: NutrientUnit, isFraction: boolean }> = {

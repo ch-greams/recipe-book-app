@@ -5,8 +5,8 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
-import { convertNutrientValuesIntoInputs } from "@common/utils";
 import { store } from "@store";
+import { convertNutrientValuesIntoInputs } from "@store/helpers/food";
 
 import RbaPageDetailedNutrientsBlock from ".";
 
