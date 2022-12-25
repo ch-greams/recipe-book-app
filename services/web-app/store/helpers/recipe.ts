@@ -1,9 +1,10 @@
+import { DecimalPlaces, roundToDecimal } from "@common/numeric";
 import type { NutrientName } from "@common/nutrients";
 import { mapDictionary } from "@common/object";
 import { unwrap } from "@common/types";
 import type { Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
-import Utils, { DecimalPlaces } from "@common/utils";
+import { getPercentMultiplier, nutrientSum } from "@common/utils";
 import type {
     RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
     RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
@@ -115,11 +116,11 @@ export function getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Di
     const productNutrients: Dictionary<NutrientName, number>[] = ingredients
         .map((ingredient) => {
             const { nutrients, amount } = getIngredientProduct(ingredient);
-            const multiplier = Utils.getPercentMultiplier(amount);
-            return mapDictionary(nutrients, (_key, value) => Utils.roundToDecimal(value * multiplier, DecimalPlaces.Two));
+            const multiplier = getPercentMultiplier(amount);
+            return mapDictionary(nutrients, (_key, value) => roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
-    return Utils.nutrientSum(productNutrients);
+    return nutrientSum(productNutrients);
 }
 
 export function getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {

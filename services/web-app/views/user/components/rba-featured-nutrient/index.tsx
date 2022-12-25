@@ -5,7 +5,6 @@ import { NutrientName } from "@common/nutrients";
 import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
 import { getValues, mapDictionary } from "@common/object";
 import { isEnum, isSome, unwrapOr } from "@common/types";
-import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputNormalizer, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { getOptionLabel, SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
 import RbaToggle from "@views/shared/rba-toggle";
@@ -83,7 +82,7 @@ const RbaFeaturedNutrient: React.FC<Props> = ({
                     value={amount}
                     onBlur={(value) => {
                         if (isSome(nutrientName) && isEnum<NutrientName, typeof NutrientName>(NutrientName, nutrientName)) {
-                            updateNutrient(slotIndex, nutrientName, Utils.stringToNumber(value));
+                            updateNutrient(slotIndex, nutrientName, value.toNumber());
                         }
                     }}
                     onChange={(value) => setAmount(value)}

@@ -4,7 +4,6 @@ import type { NutrientName } from "@common/nutrients";
 import { NUTRIENT_TYPE_LABEL_MAPPING } from "@common/nutrients";
 import { isSome } from "@common/types";
 import type { NutrientUnit } from "@common/units";
-import Utils from "@common/utils";
 import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import { useAppDispatch } from "@store";
@@ -28,6 +27,7 @@ interface Props {
     nutrient: Nutrient;
 }
 
+const MAX_DAILY_VALUE: number = 999;
 
 const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
     return (
@@ -35,7 +35,7 @@ const dailyValueBlock = (dailyValue: Option<number>): Option<JSX.Element> => {
             ? (
                 <>
                     <div className={styles.nutrientDailyValue}>
-                        {( dailyValue > Utils.MAX_DAILY_VALUE ? `${Utils.MAX_DAILY_VALUE}+` : dailyValue )}
+                        {( dailyValue > MAX_DAILY_VALUE ? `${MAX_DAILY_VALUE}+` : dailyValue )}
                     </div>
 
                     <div className={styles.nutrientPercent}>

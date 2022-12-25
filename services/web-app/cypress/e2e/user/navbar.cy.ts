@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { FOOD_PATH, USER_PATH } from "@common/routes";
-import { UserMenuItem } from "@common/utils";
+import { UserMenuItem } from "@store/types/user";
 
 
 describe("user", () => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { classNames } from "@common/style";
 import { isSome } from "@common/types";
-import Utils from "@common/utils";
+import { keepCaretInPlace } from "@common/utils";
 
 import { decimalNormalizer, timeNormalizer } from "./normalizers";
 
@@ -113,7 +113,7 @@ const RbaInput: React.FC<Props> = ({
                 const newValue = withNormalizer(normalizer, event.target.value, inputValue);
                 setInputValue(newValue);
 
-                Utils.keepCaretInPlace(window, event);
+                keepCaretInPlace(window, event);
 
                 onChange(newValue);
             }}

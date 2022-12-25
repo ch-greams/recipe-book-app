@@ -4,7 +4,6 @@ import * as constants from "@cypress/constants";
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import type { ProductShort } from "@common/typings";
-import Utils from "@common/utils";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 import RbaIconSearch from "@icons/rba-icon-search";
@@ -71,7 +70,7 @@ const RbaSearchInput: React.FC<Props> = ({
 
                 <div className={styles.icon}>
                     {(
-                        ( !Utils.isEmptyString(searchInput) && isLoading )
+                        ( searchInput.isNotEmpty() && isLoading )
                             ? <RbaIconLoading size={IconSize.Large} color={Color.White} />
                             : <RbaIconSearch size={IconSize.Large} color={Color.White} />
                     )}
@@ -87,7 +86,7 @@ const RbaSearchInput: React.FC<Props> = ({
                 />
             </div>
 
-            {( !Utils.isEmptyString(searchInput) && (
+            {( searchInput.isNotEmpty() && (
                 <div className={styles.searchList}>
                     {items.map((product) => (
                         <RbaSearchInputOption

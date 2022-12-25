@@ -2,7 +2,6 @@ import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
 import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
-import { UserMenuItem } from "@common/utils";
 import * as foodActions from "@store/actions/food";
 import * as journalActions from "@store/actions/journal";
 import * as metaActions from "@store/actions/meta";
@@ -11,6 +10,7 @@ import * as searchActions from "@store/actions/search";
 
 import * as userActions from "../actions/user";
 import type { UserStore } from "../types/user";
+import { UserMenuItem } from "../types/user";
 
 
 

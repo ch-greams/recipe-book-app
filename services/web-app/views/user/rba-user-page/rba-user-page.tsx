@@ -3,7 +3,6 @@ import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import { classNames } from "@common/style";
-import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import RbaSettingsBlock from "@views/user/components/rba-settings-block";
@@ -12,6 +11,7 @@ import * as journalActions from "@store/actions/journal";
 import * as userActions from "@store/actions/user";
 import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStore } from "@store/types/user";
+import { UserMenuItem } from "@store/types/user";
 
 import styles from "./rba-user-page.module.scss";
 

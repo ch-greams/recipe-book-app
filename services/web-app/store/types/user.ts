@@ -1,6 +1,11 @@
 import type { FoodShort, RecipeShort } from "@common/typings";
-import type { UserMenuItem } from "@common/utils";
 
+
+export enum UserMenuItem {
+    Settings = "Settings",
+    Recipes = "Recipes",
+    Foods = "Foods",
+}
 
 export interface UserStoreNutrient {
     nutrientId: number;
