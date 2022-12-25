@@ -2,15 +2,15 @@ import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
 import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
-import { UserMenuItem } from "@common/utils";
-import * as foodActions from "@store/actions/food";
-import * as journalActions from "@store/actions/journal";
-import * as metaActions from "@store/actions/meta";
-import * as recipeActions from "@store/actions/recipe";
-import * as searchActions from "@store/actions/search";
 
+import * as foodActions from "../actions/food";
+import * as journalActions from "../actions/journal";
+import * as metaActions from "../actions/meta";
+import * as recipeActions from "../actions/recipe";
+import * as searchActions from "../actions/search";
 import * as userActions from "../actions/user";
 import type { UserStore } from "../types/user";
+import { UserMenuItem } from "../types/user";
 
 
 

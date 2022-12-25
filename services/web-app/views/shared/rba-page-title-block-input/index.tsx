@@ -3,7 +3,7 @@ import * as constants from "@cypress/constants";
 import type { AnyAction } from "@reduxjs/toolkit";
 
 import { unwrapOr } from "@common/types";
-import Utils from "@common/utils";
+import { keepCaretInPlace } from "@common/utils";
 import { useAppDispatch } from "@store";
 
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "../rba-input";
@@ -30,7 +30,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
     const dispatch = useAppDispatch();
 
     const descriptionText = unwrapOr(description, "");
-    const descriptionSize = Utils.getNumberOfLines(descriptionText);
+    const descriptionSize = descriptionText.numberOfLines();
 
     return (
 
@@ -70,7 +70,7 @@ const RbaPageTitleBlockInput: React.FC<Props> = ({
                     rows={descriptionSize > MIN_DESCRIPTION_SIZE ? descriptionSize : MIN_DESCRIPTION_SIZE}
                     placeholder={"Description"} value={descriptionText}
                     onChange={(event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-                        Utils.keepCaretInPlace(window, event);
+                        keepCaretInPlace(window, event);
                         dispatch(updateDescription(unwrapOr(event.target.value, "")));
                     }}
                 />

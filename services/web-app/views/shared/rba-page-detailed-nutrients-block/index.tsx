@@ -6,7 +6,7 @@ import {
     CarbohydrateNutrients, LipidNutrients, MineralNutrients, NutrientGroupType,
     OtherNutrients, ProteinNutrients, VitaminNutrients,
 } from "@common/nutrients";
-import Utils from "@common/utils";
+import { getNutrients } from "@common/utils";
 import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 
 import styles from "./rba-page-detailed-nutrients-block.module.scss";
@@ -47,9 +47,7 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutrients={Utils.getNutrients(
-                            group, nutrients, nutrientInputs, nutrientDescriptions,
-                        )}
+                        nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
                     />
                 ))}
 
@@ -62,9 +60,7 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutrients={Utils.getNutrients(
-                            group, nutrients, nutrientInputs, nutrientDescriptions,
-                        )}
+                        nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
                     />
                 ))}
 

@@ -5,8 +5,9 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientGroupType, NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
-import Utils from "@common/utils";
+import { getNutrients } from "@common/utils";
 import { store } from "@store";
+import { convertNutrientValuesIntoInputs } from "@store/helpers/food";
 
 import RbaNutrientsBlock from ".";
 
@@ -44,7 +45,7 @@ const nutrients: Dictionary<NutrientName, number> = {
     [NutrientName.Carbohydrate]: 57,
     [NutrientName.DietaryFiber]: 1.7,
 };
-const nutrientInputs = Utils.convertNutrientValuesIntoInputs(nutrients);
+const nutrientInputs = convertNutrientValuesIntoInputs(nutrients);
 const group = Object.values(NutrientName);
 
 const defaultNutrientDescriptions = store.getState().meta.nutrientDescriptions;
@@ -66,7 +67,7 @@ const nutrientDescriptions = {
     },
 };
 
-const nutrientsGroup = Utils.getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions);
+const nutrientsGroup = getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions);
 
 export const Default = Template.bind({});
 Default.args = {

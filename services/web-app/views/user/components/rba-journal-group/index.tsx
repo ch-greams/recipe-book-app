@@ -1,7 +1,6 @@
 import React from "react";
 import * as constants from "@cypress/constants";
 
-import Utils from "@common/utils";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaToggle from "@views/shared/rba-toggle";
 
@@ -39,7 +38,7 @@ const RbaJournalGroup: React.FC<Props> = ({ uiIndex, name, updateGroup }) => {
             </div>
 
             <RbaToggle
-                value={!Utils.isEmptyString(name)}
+                value={name.isNotEmpty()}
                 onToggle={() => updateGroup(uiIndex, "")}
             />
 

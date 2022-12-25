@@ -4,7 +4,6 @@ import { sortBy } from "@common/array";
 import { BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import { unwrapOr } from "@common/types";
 import type { JournalGroup } from "@common/typings";
-import Utils from "@common/utils";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import type { JournalStoreGroup } from "@store/types/journal";
 
@@ -67,7 +66,7 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
                     width={ButtonWidthSize.Full}
                     onClick={() => {
                         const groupsToSave = journalGroups
-                            .filter((g) => !Utils.isEmptyString(g.name))
+                            .filter((g) => g.name.isNotEmpty())
                             .map(({ uiIndex, name }) => ({ user_id: 1, ui_index: uiIndex, name }));
                         updateGroups(groupsToSave);
                     }}

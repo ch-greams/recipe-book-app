@@ -1,10 +1,14 @@
 import { createReducer } from "@reduxjs/toolkit";
 
 import { getErrorMessageFromStatus } from "@common/http";
+import { DecimalPlaces, roundToDecimal } from "@common/numeric";
 import * as units from "@common/units";
-import Utils, { DecimalPlaces } from "@common/utils";
 
 import * as actions from "../actions/food";
+import {
+    convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues,
+    convertNutrients, convertNutrientValuesIntoInputs,
+} from "../helpers/food";
 import type { FoodPageStore } from "../types/food";
 
 
@@ -97,10 +101,10 @@ const reducer = createReducer(initialState, (builder) => {
             state.servingSizeInput = String(food.serving_size);
 
             state.nutrients = food.nutrients;
-            state.customUnits = Utils.convertCustomUnitsIntoInputs(food.custom_units);
+            state.customUnits = convertCustomUnitsIntoInputs(food.custom_units);
 
             state.nutrientsByServing = food.nutrients;
-            state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(food.nutrients);
+            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(food.nutrients);
         })
         .addCase(actions.fetchFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;
@@ -112,10 +116,10 @@ const reducer = createReducer(initialState, (builder) => {
 
             const nutrientsByServing = {
                 ...state.nutrientsByServing,
-                ...Utils.convertNutrientInputsIntoValues({ [key]: value }),
+                ...convertNutrientInputsIntoValues({ [key]: value }),
             };
 
-            state.nutrients = Utils.convertNutrients(state.servingSize, false, nutrientsByServing),
+            state.nutrients = convertNutrients(state.servingSize, false, nutrientsByServing),
             state.nutrientsByServing = nutrientsByServing,
             state.nutrientsByServingInputs = {
                 ...state.nutrientsByServingInputs,
@@ -126,7 +130,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { payload: customUnit } = action;
 
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
-            if (state.customUnits.some((cu) => cu.name === customUnit.name) || Utils.isEmptyString(customUnit.name)) {
+            if (state.customUnits.some((cu) => cu.name === customUnit.name) || !customUnit.name.isNotEmpty()) {
                 return;
             }
 
@@ -174,7 +178,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { payload: densityVolumeUnit } = action;
 
             const density = units.convertDensityFromMetric(state.density, state.densityWeightUnit, densityVolumeUnit);
-            const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
+            const densityRounded = roundToDecimal(density, DecimalPlaces.Four);
 
             state.densityInput = String(densityRounded);
             state.densityVolumeUnit = densityVolumeUnit;
@@ -184,7 +188,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { payload: densityWeightUnit } = action;
 
             const density = units.convertDensityFromMetric(state.density, densityWeightUnit, state.densityVolumeUnit);
-            const densityRounded = Utils.roundToDecimal(density, DecimalPlaces.Four);
+            const densityRounded = roundToDecimal(density, DecimalPlaces.Four);
 
             state.densityInput = String(densityRounded);
             state.densityWeightUnit = densityWeightUnit;
@@ -203,12 +207,12 @@ const reducer = createReducer(initialState, (builder) => {
             }
             // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
-                const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
+                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
                 state.servingSizeInput = servingSizeInput;
                 state.nutrientsByServing = nutrientsByServing;
-                state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
+                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
         .addCase(actions.updateServingSizeUnit, (state, action) => {
@@ -225,12 +229,12 @@ const reducer = createReducer(initialState, (builder) => {
             }
             // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
             else {
-                const nutrientsByServing = Utils.convertNutrients(servingSize, true, state.nutrients);
+                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
 
                 state.servingSize = servingSize;
                 state.servingSizeUnit = servingSizeUnit;
                 state.nutrientsByServing = nutrientsByServing;
-                state.nutrientsByServingInputs = Utils.convertNutrientValuesIntoInputs(nutrientsByServing);
+                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
         .addCase(actions.createFood.pending, (state) => {

@@ -5,8 +5,8 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { NutrientName } from "@common/nutrients";
 import { NutrientUnit } from "@common/units";
-import Utils from "@common/utils";
 import { store } from "@store";
+import { convertNutrientValuesIntoInputs } from "@store/helpers/food";
 
 import RbaPageDetailedNutrientsBlock from ".";
 
@@ -90,7 +90,7 @@ const nutrientDescriptions = {
     },
 };
 
-const nutrientInputs = Utils.convertNutrientValuesIntoInputs(nutrients);
+const nutrientInputs = convertNutrientValuesIntoInputs(nutrients);
 
 export const Default = Template.bind({});
 Default.args = {

@@ -3,7 +3,7 @@ import * as constants from "@cypress/constants";
 import { getCurrentDate } from "@common/date";
 import { BUTTON_DELETE } from "@common/labels";
 import { getProductPath, USER_PATH } from "@common/routes";
-import { UserMenuItem } from "@common/utils";
+import { UserMenuItem } from "@store/types/user";
 
 
 describe("user", () => {

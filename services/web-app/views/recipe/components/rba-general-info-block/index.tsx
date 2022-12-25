@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { NutrientDescription,NutrientName } from "@common/nutrients";
-import Utils from "@common/utils";
+import { getNutrients } from "@common/utils";
 import RbaParametersBlock from "@views/recipe/components/rba-parameters-block";
 import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 import type { RecipePageStore } from "@store/types/recipe";
@@ -30,7 +30,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
             <RbaNutrientsBlock
                 isReadOnly={true}
                 title={"NUTRITION FACTS"}
-                nutrients={Utils.getNutrients(
+                nutrients={getNutrients(
                     featuredNutrients,
                     nutrients,
                     nutrientInputs,

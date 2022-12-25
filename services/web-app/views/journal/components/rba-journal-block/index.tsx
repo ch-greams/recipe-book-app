@@ -4,7 +4,7 @@ import { DndContext } from "@dnd-kit/core";
 
 import { DEFAULT_TIME_FORMAT, getCurrentTime } from "@common/date";
 import { isSome } from "@common/types";
-import Utils from "@common/utils";
+import { getTemporaryId } from "@common/utils";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
 import * as journalActions from "@store/actions/journal";
@@ -118,7 +118,7 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                 onSelect={(product) => {
 
                     dispatch(journalActions.createJournalEntry({
-                        id: Utils.getTemporaryId(),
+                        id: getTemporaryId(),
                         user_id: userId,
                         entry_date: currentDate,
                         entry_time: getCurrentTime(DEFAULT_TIME_FORMAT),
