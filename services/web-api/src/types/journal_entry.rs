@@ -227,7 +227,7 @@ mod tests {
 
     #[tokio::test]
     async fn find_all_by_date() {
-        let entry_date = NaiveDate::from_ymd(2022, 11, 4);
+        let entry_date = NaiveDate::from_ymd_opt(2022, 11, 4).unwrap();
         let user_id = 1;
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();

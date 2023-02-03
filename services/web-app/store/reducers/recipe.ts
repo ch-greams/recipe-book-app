@@ -279,6 +279,139 @@ const reducer = createReducer(initialState, (builder) => {
             const { payload: customUnitIndex } = action;
             state.customUnits = state.customUnits.filter((_customUnit, index) => index !== customUnitIndex);
         })
+        .addCase(actions.updateServingSizeAmount, (state, action) => {
+            const { payload: servingSizeInput } = action;
+
+            const servingSize = units.convertToMetric(
+                Number(servingSizeInput), state.servingSizeUnit, state.customUnits, state.density,
+            );
+
+            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
+            if (state.editMode) {
+                state.servingSize = servingSize;
+                state.servingSizeInput = servingSizeInput;
+            }
+            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
+            else {
+                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
+
+                state.servingSize = servingSize;
+                state.servingSizeInput = servingSizeInput;
+                state.nutrientsByServing = nutrientsByServing;
+                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+            }
+        })
+        .addCase(actions.updateServingSizeUnit, (state, action) => {
+            const { payload: servingSizeUnit } = action;
+
+            const servingSize = units.convertToMetric(
+                Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
+            );
+
+            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
+            if (state.editMode) {
+                state.servingSize = servingSize;
+                state.servingSizeUnit = servingSizeUnit;
+            }
+            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
+            else {
+                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
+
+                state.servingSize = servingSize;
+                state.servingSizeUnit = servingSizeUnit;
+                state.nutrientsByServing = nutrientsByServing;
+                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+            }
+        })
+        .addCase(actions.fetchRecipeNew, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.editMode = true;
+            state.isCreated = false;
+        })
+        .addCase(actions.fetchRecipe.pending, (state, action) => {
+            const { arg: recipeId } = action.meta;
+
+            state.id = recipeId;
+            state.isLoading = true;
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.editMode = false;
+        })
+        .addCase(actions.fetchRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
+
+            const recipeIngredients = convertIngredients(recipe.ingredients);
+            const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
+
+            const nutrientsByServing = getRecipeNutrientsFromIngredients(recipeIngredients);
+
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = null;
+
+            state.id = recipe.id;
+            state.name = recipe.name;
+            state.brand = recipe.brand;
+            state.description = recipe.description;
+            state.type = recipe.type;
+
+            state.density = recipe.density;
+            state.densityInput = String(recipe.density);
+
+            state.servingSize = recipe.serving_size;
+            state.servingSizeInput = String(recipe.serving_size);
+
+            state.nutrients = convertNutrients(recipe.serving_size, false, nutrientsByServing);
+            state.customUnits = convertCustomUnitsIntoInputs(recipe.custom_units);
+
+            state.nutrientsByServing = nutrientsByServing;
+            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+
+            state.ingredients = recipeIngredients;
+            state.directions = recipeDirections;
+        })
+        .addCase(actions.fetchRecipe.rejected, (state, { payload: errorStatus }) => {
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addCase(actions.createRecipe.pending, (state) => {
+            state.isLoading = true;
+            state.isLoaded = false;
+        })
+        .addCase(actions.createRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
+
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.editMode = false;
+            state.id = recipe.id;
+            state.isCreated = true;
+        })
+        .addCase(actions.createRecipe.rejected, (state, { payload: errorStatus }) => {
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addCase(actions.updateRecipe.pending, (state) => {
+            state.isLoading = true;
+            state.isLoaded = false;
+        })
+        .addCase(actions.updateRecipe.fulfilled, (state, action) => {
+            const { payload: recipe } = action;
+
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.editMode = false;
+            state.id = recipe.id;
+            state.isCreated = true;
+        })
+        .addCase(actions.updateRecipe.rejected, (state, { payload: errorStatus }) => {
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
     // -----------------------------------------------------------------------------------------------------------------
     // Directions
     // -----------------------------------------------------------------------------------------------------------------
@@ -687,13 +820,7 @@ const reducer = createReducer(initialState, (builder) => {
 
             const ingredients = state.ingredients.reduce<types.RecipeIngredient[]>((accIngredients, curIngredient) => (
                 (curIngredient.id === parentId)
-                    ? [
-                        ...accIngredients,
-                        {
-                            ...curIngredient,
-                            product_id: id,
-                        },
-                    ]
+                    ? [ ...accIngredients, { ...curIngredient, product_id: id } ]
                     : [ ...accIngredients, curIngredient ]
             ), []);
 
@@ -703,7 +830,6 @@ const reducer = createReducer(initialState, (builder) => {
             );
             const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
             const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
 
             state.ingredients = ingredients;
             state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
@@ -736,10 +862,7 @@ const reducer = createReducer(initialState, (builder) => {
                 if (ingredient.id === parentId) {
 
                     const product = unwrap(ingredient.products[id], `ingredient.products[${id}]`);
-
-                    const amount = units.convertToMetric(
-                        Number(inputValue), product.unit, [], product.density,
-                    );
+                    const amount = units.convertToMetric(Number(inputValue), product.unit, [], product.density);
 
                     return {
                         ...ingredient,
@@ -779,9 +902,7 @@ const reducer = createReducer(initialState, (builder) => {
 
                     if (state.editMode) {
 
-                        const amount = units.convertToMetric(
-                            Number(product.amountInput), unit, [], product.density,
-                        );
+                        const amount = units.convertToMetric(Number(product.amountInput), unit, [], product.density);
 
                         return {
                             ...ingredient,
@@ -841,7 +962,6 @@ const reducer = createReducer(initialState, (builder) => {
                     : ingredient
             ));
         })
-
         .addCase(actions.addIngredient.pending, (state) => {
             state.isLoadedIngredients = false;
         })
@@ -918,141 +1038,6 @@ const reducer = createReducer(initialState, (builder) => {
         })
         .addCase(actions.addIngredientProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoadedIngredients = true;
-            state.errorMessage = getErrorMessageFromStatus(errorStatus);
-        })
-        .addCase(actions.updateServingSizeAmount, (state, action) => {
-            const { payload: servingSizeInput } = action;
-
-            const servingSize = units.convertToMetric(
-                Number(servingSizeInput), state.servingSizeUnit, state.customUnits, state.density,
-            );
-
-            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
-            if (state.editMode) {
-                state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInput;
-            }
-            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
-            else {
-                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
-
-                state.servingSize = servingSize;
-                state.servingSizeInput = servingSizeInput;
-                state.nutrientsByServing = nutrientsByServing;
-                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
-            }
-        })
-        .addCase(actions.updateServingSizeUnit, (state, action) => {
-            const { payload: servingSizeUnit } = action;
-
-            const servingSize = units.convertToMetric(
-                Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
-            );
-
-            // NOTE: edit-mode will not update nutrients, so you can adjust how much nutrients is in selected servingSize
-            if (state.editMode) {
-                state.servingSize = servingSize;
-                state.servingSizeUnit = servingSizeUnit;
-            }
-            // NOTE: read-mode will update nutrients to demonstrate how much you'll have in a selected servingSize
-            else {
-                const nutrientsByServing = convertNutrients(servingSize, true, state.nutrients);
-
-                state.servingSize = servingSize;
-                state.servingSizeUnit = servingSizeUnit;
-                state.nutrientsByServing = nutrientsByServing;
-                state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
-            }
-        })
-        .addCase(actions.fetchRecipeNew, (state) => {
-            state.isLoaded = true;
-            state.errorMessage = null;
-            state.editMode = true;
-            state.isCreated = false;
-        })
-        .addCase(actions.fetchRecipe.pending, (state, action) => {
-            const { arg: recipeId } = action.meta;
-
-            state.id = recipeId;
-            state.isLoading = true;
-            state.isLoaded = false;
-            state.errorMessage = null;
-            state.editMode = false;
-        })
-        .addCase(actions.fetchRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
-            const recipeIngredients = convertIngredients(recipe.ingredients);
-            const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
-
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(recipeIngredients);
-
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.errorMessage = null;
-
-            state.id = recipe.id;
-            state.name = recipe.name;
-            state.brand = recipe.brand;
-            state.description = recipe.description;
-            state.type = recipe.type;
-
-            state.density = recipe.density;
-            state.densityInput = String(recipe.density);
-
-            state.servingSize = recipe.serving_size;
-            state.servingSizeInput = String(recipe.serving_size);
-
-            state.nutrients = convertNutrients(recipe.serving_size, false, nutrientsByServing);
-            state.customUnits = convertCustomUnitsIntoInputs(recipe.custom_units);
-
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
-
-            state.ingredients = recipeIngredients;
-            state.directions = recipeDirections;
-        })
-        .addCase(actions.fetchRecipe.rejected, (state, { payload: errorStatus }) => {
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.errorMessage = getErrorMessageFromStatus(errorStatus);
-        })
-
-        .addCase(actions.createRecipe.pending, (state) => {
-            state.isLoading = true;
-            state.isLoaded = false;
-        })
-        .addCase(actions.createRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.editMode = false;
-            state.id = recipe.id;
-            state.isCreated = true;
-        })
-        .addCase(actions.createRecipe.rejected, (state, { payload: errorStatus }) => {
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.errorMessage = getErrorMessageFromStatus(errorStatus);
-        })
-
-        .addCase(actions.updateRecipe.pending, (state) => {
-            state.isLoading = true;
-            state.isLoaded = false;
-        })
-        .addCase(actions.updateRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.editMode = false;
-            state.id = recipe.id;
-            state.isCreated = true;
-        })
-        .addCase(actions.updateRecipe.rejected, (state, { payload: errorStatus }) => {
-            state.isLoading = false;
-            state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         });
 });
