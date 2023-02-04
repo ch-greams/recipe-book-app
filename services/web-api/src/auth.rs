@@ -106,7 +106,7 @@ pub async fn auth_setup(auth_api_url: &str) -> Result<Certificate, reqwest::Erro
     let req_client = Client::new();
 
     let auth_certificate = req_client
-        .get(format!("http://{}/api/v1/certificate", auth_api_url))
+        .get(format!("http://{auth_api_url}/api/v1/certificate"))
         .send()
         .await?
         .json::<Certificate>()

@@ -45,7 +45,7 @@ impl FoundationFoodData {
             } else {
                 (n + 1) * products_batch_size
             };
-            println!("products - from: {} to: {}", from, to);
+            println!("products - from: {from} to: {to}");
 
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
@@ -73,7 +73,7 @@ impl FoundationFoodData {
             } else {
                 (n + 1) * product_nutrients_batch_size
             };
-            println!("product_nutrients - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {from} to: {to}");
 
             ProductNutrient::seed_product_nutrients(
                 product_nutrients[from..to].to_vec(),
@@ -109,7 +109,7 @@ impl FoundationFoodData {
             } else {
                 (n + 1) * custom_units_batch_size
             };
-            println!("custom_units - from: {} to: {}", from, to);
+            println!("custom_units - from: {from} to: {to}");
 
             CustomUnit::seed_custom_units(custom_units_vec[from..to].to_vec(), &mut txn).await;
         }
@@ -147,7 +147,7 @@ impl SurveyFoodData {
             } else {
                 (n + 1) * products_batch_size
             };
-            println!("products - from: {} to: {}", from, to);
+            println!("products - from: {from} to: {to}");
 
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
@@ -175,7 +175,7 @@ impl SurveyFoodData {
             } else {
                 (n + 1) * product_nutrients_batch_size
             };
-            println!("product_nutrients - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {from} to: {to}");
 
             ProductNutrient::seed_product_nutrients(
                 product_nutrients[from..to].to_vec(),
@@ -211,7 +211,7 @@ impl SurveyFoodData {
             } else {
                 (n + 1) * custom_units_batch_size
             };
-            println!("custom_units - from: {} to: {}", from, to);
+            println!("custom_units - from: {from} to: {to}");
 
             CustomUnit::seed_custom_units(custom_units_vec[from..to].to_vec(), &mut txn).await;
         }
@@ -249,7 +249,7 @@ impl BrandedFoodData {
             } else {
                 (n + 1) * products_batch_size
             };
-            println!("products - from: {} to: {}", from, to);
+            println!("products - from: {from} to: {to}");
 
             Product::seed_products(products[from..to].to_vec(), &mut txn).await;
         }
@@ -277,7 +277,7 @@ impl BrandedFoodData {
             } else {
                 (n + 1) * product_nutrients_batch_size
             };
-            println!("product_nutrients - from: {} to: {}", from, to);
+            println!("product_nutrients - from: {from} to: {to}");
 
             ProductNutrient::seed_product_nutrients(
                 product_nutrients[from..to].to_vec(),
