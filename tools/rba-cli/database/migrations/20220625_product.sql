@@ -29,16 +29,6 @@ CREATE SEQUENCE product.ingredient_id
 ALTER SEQUENCE product.ingredient_id OWNER TO postgres;
 GRANT ALL ON SEQUENCE product.ingredient_id TO postgres;
 
--- First 100 reserved for testing purposes
-CREATE SEQUENCE product.ingredient_product_id
-    INCREMENT BY 1
-    MINVALUE 1
-    MAXVALUE 9223372036854775807
-    START 100
-    CACHE 1
-    NO CYCLE;
-ALTER SEQUENCE product.ingredient_product_id OWNER TO postgres;
-GRANT ALL ON SEQUENCE product.ingredient_product_id TO postgres;
 
 -- First 100 reserved for testing purposes
 CREATE SEQUENCE product.product_id
@@ -117,29 +107,17 @@ GRANT ALL ON TABLE product.direction TO postgres;
 CREATE TABLE product.ingredient (
     id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
     recipe_id int8 NOT NULL,
-    product_id int8 NULL,
-    CONSTRAINT ingredient_pk PRIMARY KEY (id),
-    CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id),
-    CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-ALTER TABLE product.ingredient OWNER TO postgres;
-GRANT ALL ON TABLE product.ingredient TO postgres;
-
-
-CREATE TABLE product.ingredient_product (
-    id int8 NOT NULL DEFAULT nextval('product.ingredient_product_id'::regclass),
-    ingredient_id int8 NOT NULL,
     product_id int8 NOT NULL,
     amount float8 NOT NULL,
     unit text NOT NULL,
-    CONSTRAINT ingredient_product_pk PRIMARY KEY (id),
-    CONSTRAINT ingredient_product_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES product.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT ingredient_product_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
+    alternative_to int8 NULL,
+    CONSTRAINT ingredient_pk PRIMARY KEY (id),
+    CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT ingredient_aternative_fk FOREIGN KEY (alternative_to) REFERENCES product.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE,
 );
-CREATE INDEX fki_ingredient_product_ingredient_fk ON product.ingredient_product USING btree (ingredient_id);
-CREATE INDEX fki_ingredient_product_product_fk ON product.ingredient_product USING btree (product_id);
-ALTER TABLE product.ingredient_product OWNER TO postgres;
-GRANT ALL ON TABLE product.ingredient_product TO postgres;
+ALTER TABLE product.ingredient OWNER TO postgres;
+GRANT ALL ON TABLE product.ingredient TO postgres;
 
 
 CREATE TABLE product.product_nutrient (
