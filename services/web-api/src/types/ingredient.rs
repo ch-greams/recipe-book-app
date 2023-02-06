@@ -1,12 +1,14 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
-use sqlx::{query::QueryAs, Postgres, postgres::PgArguments, types::Json, Executor, QueryBuilder, Transaction};
+use sqlx::{
+    postgres::PgArguments, query::QueryAs, types::Json, Executor, Postgres, QueryBuilder,
+    Transaction,
+};
 
 use crate::utils::BIND_LIMIT;
 
 use super::error::Error;
-
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct Ingredient {
@@ -27,15 +29,12 @@ pub struct IngredientPayload {
     pub is_alternative: bool,
 }
 
-
 impl Ingredient {
-
     pub async fn insert_multiple(
         ingredient_payloads: &[IngredientPayload],
         recipe_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
-
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
             "INSERT INTO product.ingredient (recipe_id, order_number, product_id, amount, unit, is_alternative) ",
         );
@@ -61,13 +60,11 @@ impl Ingredient {
         Ok(ingredients)
     }
 
-
     pub async fn replace_multiple(
         ingredient_payloads: &[IngredientPayload],
         recipe_id: i64,
         txn: &mut Transaction<'_, Postgres>,
     ) -> Result<Vec<Self>, Error> {
-
         // delete
 
         let delete_query =
@@ -103,7 +100,6 @@ impl Ingredient {
     }
 }
 
-
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct IngredientDetailed {
     pub order_number: i16,
@@ -121,7 +117,6 @@ pub struct IngredientDetailed {
 }
 
 impl IngredientDetailed {
-
     pub fn find_by_recipe_id(recipe_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
@@ -144,10 +139,17 @@ impl IngredientDetailed {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
-    use crate::{config::Config, types::{ingredient::{IngredientDetailed, Ingredient}, recipe::{CreateRecipePayload, UpdateRecipePayload}, product::Product}, utils};
+    use crate::{
+        config::Config,
+        types::{
+            ingredient::{Ingredient, IngredientDetailed},
+            product::Product,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
+        },
+        utils,
+    };
     use sqlx::PgPool;
 
     #[tokio::test]

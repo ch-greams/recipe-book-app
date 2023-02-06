@@ -12,8 +12,9 @@ use crate::{
         direction::{Direction, DirectionDetails},
         direction_part::DirectionPart,
         error::Error,
+        ingredient::{Ingredient, IngredientDetailed},
         product::Product,
-        recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload}, ingredient::{IngredientDetailed, Ingredient},
+        recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
     },
 };
 
@@ -46,7 +47,7 @@ async fn find_by_id(
 
     // ingredients
 
-    let ingredients= IngredientDetailed::find_by_recipe_id(*id)
+    let ingredients = IngredientDetailed::find_by_recipe_id(*id)
         .fetch_all(&mut txn)
         .await?;
 
@@ -96,7 +97,9 @@ async fn create_recipe(
 
     Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(product.id).fetch_all(&mut txn).await?;
+    let ingredients = IngredientDetailed::find_by_recipe_id(product.id)
+        .fetch_all(&mut txn)
+        .await?;
 
     // directions
 
@@ -109,12 +112,9 @@ async fn create_recipe(
             .get(index)
             .ok_or_else(|| Error::not_created("direction"))?;
 
-        let mut _direction_parts = DirectionPart::insert_multiple(
-            &direction_payload.steps,
-            direction.id,
-            &mut txn,
-        )
-        .await?;
+        let mut _direction_parts =
+            DirectionPart::insert_multiple(&direction_payload.steps, direction.id, &mut txn)
+                .await?;
 
         direction_parts.append(&mut _direction_parts);
     }
@@ -152,7 +152,9 @@ async fn update_recipe(
 
     Ingredient::replace_multiple(&payload.ingredients, product.id, &mut txn).await?;
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(product.id).fetch_all(&mut txn).await?;
+    let ingredients = IngredientDetailed::find_by_recipe_id(product.id)
+        .fetch_all(&mut txn)
+        .await?;
 
     // directions
 
@@ -165,12 +167,9 @@ async fn update_recipe(
             .get(index)
             .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;
 
-        let mut _direction_parts = DirectionPart::insert_multiple(
-            &direction_payload.steps,
-            direction.id,
-            &mut txn,
-        )
-        .await?;
+        let mut _direction_parts =
+            DirectionPart::insert_multiple(&direction_payload.steps, direction.id, &mut txn)
+                .await?;
 
         direction_parts.append(&mut _direction_parts);
     }

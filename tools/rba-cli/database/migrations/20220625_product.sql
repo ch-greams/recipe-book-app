@@ -105,16 +105,16 @@ GRANT ALL ON TABLE product.direction TO postgres;
 
 
 CREATE TABLE product.ingredient (
-	id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
-	order_number int2 NOT NULL,
-	recipe_id int8 NOT NULL,
-	product_id int8 NOT NULL,
-	amount float8 NOT NULL,
-	unit text NOT NULL,
-	is_alternative bool NOT NULL DEFAULT false,
-	CONSTRAINT ingredient_pk PRIMARY KEY (id),
-	CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
+    id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
+    order_number int2 NOT NULL,
+    recipe_id int8 NOT NULL,
+    product_id int8 NOT NULL,
+    amount float8 NOT NULL,
+    unit text NOT NULL,
+    is_alternative bool NOT NULL DEFAULT false,
+    CONSTRAINT ingredient_pk PRIMARY KEY (id),
+    CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 ALTER TABLE product.ingredient OWNER TO postgres;
 GRANT ALL ON TABLE product.ingredient TO postgres;

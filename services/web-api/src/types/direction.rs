@@ -210,8 +210,9 @@ mod tests {
         config::Config,
         types::{
             direction::Direction,
+            ingredient::Ingredient,
             product::Product,
-            recipe::{CreateRecipePayload, UpdateRecipePayload}, ingredient::Ingredient,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
     };

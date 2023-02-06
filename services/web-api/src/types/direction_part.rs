@@ -127,8 +127,8 @@ mod tests {
     use crate::{
         config::Config,
         types::{
-            direction::Direction, direction_part::DirectionPart,
-            product::Product, recipe::CreateRecipePayload, ingredient::Ingredient,
+            direction::Direction, direction_part::DirectionPart, ingredient::Ingredient,
+            product::Product, recipe::CreateRecipePayload,
         },
         utils,
     };
@@ -194,13 +194,10 @@ mod tests {
         for (index, direction_payload) in create_product_payload.directions.iter().enumerate() {
             let direction = create_directions_result.get(index).unwrap();
 
-            let mut _direction_parts = DirectionPart::insert_multiple(
-                &direction_payload.steps,
-                direction.id,
-                &mut txn,
-            )
-            .await
-            .unwrap();
+            let mut _direction_parts =
+                DirectionPart::insert_multiple(&direction_payload.steps, direction.id, &mut txn)
+                    .await
+                    .unwrap();
 
             direction_parts.append(&mut _direction_parts);
         }
