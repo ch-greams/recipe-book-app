@@ -1,166 +1,153 @@
 use std::collections::HashMap;
 
 use serde::{Deserialize, Serialize};
-use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres, Transaction};
+use sqlx::{query::QueryAs, Postgres, postgres::PgArguments, types::Json, Executor, QueryBuilder, Transaction};
 
-use super::{
-    error::Error,
-    ingredient_product::{
-        IngredientProductDetails, IngredientProductDetailsWithNutrients, IngredientProductPayload,
-    },
-    product_nutrient::ProductNutrient,
-};
+use crate::utils::BIND_LIMIT;
+
+use super::error::Error;
+
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct Ingredient {
-    pub id: i64,
+    pub order_number: i16,
     pub recipe_id: i64,
     pub product_id: i64,
+    pub amount: f64,
+    pub unit: String,
+    pub is_alternative: bool,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct CreateIngredientPayload {
-    // NOTE: should store temporary id
-    pub id: i64,
+#[derive(sqlx::FromRow, Serialize, Deserialize, Clone, Debug)]
+pub struct IngredientPayload {
+    pub order_number: i16,
     pub product_id: i64,
-    pub products: HashMap<i64, IngredientProductPayload>,
+    pub amount: f64,
+    pub unit: String,
+    pub is_alternative: bool,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct UpdateIngredientPayload {
-    pub id: i64,
-    pub product_id: i64,
-    pub products: HashMap<i64, IngredientProductPayload>,
-}
 
 impl Ingredient {
-    pub fn find_by_recipe_id(recipe_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            "SELECT id, recipe_id, product_id FROM product.ingredient WHERE recipe_id = $1",
-        )
-        .bind(recipe_id)
-    }
 
     pub async fn insert_multiple(
-        create_ingredient_payloads: &[CreateIngredientPayload],
+        ingredient_payloads: &[IngredientPayload],
         recipe_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
-        let mut recipe_ids: Vec<i64> = Vec::new();
-        let mut product_ids: Vec<i64> = Vec::new();
-        create_ingredient_payloads
-            .iter()
-            .for_each(|ingredient_payload| {
-                recipe_ids.push(recipe_id);
-                product_ids.push(ingredient_payload.product_id);
-            });
 
-        let insert_query = sqlx::query_as(
-            r#"
-            INSERT INTO product.ingredient (recipe_id, product_id)
-            SELECT * FROM UNNEST($1, $2)
-            RETURNING id, recipe_id, product_id;
-        "#,
-        )
-        .bind(recipe_ids)
-        .bind(product_ids);
+        let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
+            "INSERT INTO product.ingredient (recipe_id, order_number, product_id, amount, unit, is_alternative) ",
+        );
 
-        let result = insert_query.fetch_all(txn).await?;
+        let ingredients = insert_query_builder
+            .push_values(
+                ingredient_payloads.iter().take(BIND_LIMIT / 5),
+                |mut builder, ingredient_payload| {
+                    builder
+                        .push_bind(recipe_id)
+                        .push_bind(ingredient_payload.order_number)
+                        .push_bind(ingredient_payload.product_id)
+                        .push_bind(ingredient_payload.amount)
+                        .push_bind(ingredient_payload.unit.clone())
+                        .push_bind(ingredient_payload.is_alternative);
+                },
+            )
+            .push(" RETURNING order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .build_query_as()
+            .fetch_all(txn)
+            .await?;
 
-        Ok(result)
+        Ok(ingredients)
     }
 
+
     pub async fn replace_multiple(
-        update_ingredient_payloads: &[UpdateIngredientPayload],
+        ingredient_payloads: &[IngredientPayload],
         recipe_id: i64,
         txn: &mut Transaction<'_, Postgres>,
     ) -> Result<Vec<Self>, Error> {
-        let mut recipe_ids: Vec<i64> = Vec::new();
-        let mut product_ids: Vec<i64> = Vec::new();
-        update_ingredient_payloads
-            .iter()
-            .for_each(|ingredient_payload| {
-                recipe_ids.push(recipe_id);
-                product_ids.push(ingredient_payload.product_id);
-            });
 
-        let delete_query = sqlx::query_as(
+        // delete
+
+        let delete_query =
+            sqlx::query("DELETE FROM product.ingredient WHERE recipe_id = $1").bind(recipe_id);
+
+        delete_query.fetch_all(&mut *txn).await?;
+
+        // insert
+
+        let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
+            "INSERT INTO product.ingredient (recipe_id, order_number, product_id, amount, unit, is_alternative) ",
+        );
+
+        let ingredients = insert_query_builder
+            .push_values(
+                ingredient_payloads.iter().take(BIND_LIMIT / 5),
+                |mut builder, ingredient_payload| {
+                    builder
+                        .push_bind(recipe_id)
+                        .push_bind(ingredient_payload.order_number)
+                        .push_bind(ingredient_payload.product_id)
+                        .push_bind(ingredient_payload.amount)
+                        .push_bind(ingredient_payload.unit.clone())
+                        .push_bind(ingredient_payload.is_alternative);
+                },
+            )
+            .push(" RETURNING order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .build_query_as()
+            .fetch_all(txn)
+            .await?;
+
+        Ok(ingredients)
+    }
+}
+
+
+#[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
+pub struct IngredientDetailed {
+    pub order_number: i16,
+    pub recipe_id: i64,
+    pub product_id: i64,
+    pub amount: f64,
+    pub unit: String,
+    pub is_alternative: bool,
+
+    pub is_recipe: bool,
+    pub name: String,
+    pub density: f64,
+
+    pub nutrients: Json<HashMap<String, f32>>,
+}
+
+impl IngredientDetailed {
+
+    pub fn find_by_recipe_id(recipe_id: i64) -> QueryAs<'static, Postgres, Self, PgArguments> {
+        sqlx::query_as(
             r#"
-            DELETE FROM product.ingredient
-            WHERE recipe_id = $1
-            RETURNING id, recipe_id, product_id;
+                SELECT
+                    order_number,
+                    recipe_id,
+                    product_id,
+                    amount,
+                    unit,
+                    is_alternative,
+                    is_recipe,
+                    name,
+                    density,
+                    nutrients
+                FROM product.ingredient_detailed
+                WHERE recipe_id = $1
             "#,
         )
-        .bind(recipe_id);
-
-        let _delete_query_result: Vec<Self> = delete_query.fetch_all(&mut *txn).await?;
-
-        let insert_query = sqlx::query_as(
-            r#"
-            INSERT INTO product.ingredient (recipe_id, product_id)
-            SELECT * FROM UNNEST($1, $2)
-            RETURNING id, recipe_id, product_id;
-        "#,
-        )
-        .bind(recipe_ids)
-        .bind(product_ids);
-
-        let result = insert_query.fetch_all(txn).await?;
-
-        Ok(result)
+        .bind(recipe_id)
     }
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct IngredientDetails {
-    pub id: i64,
-    pub product_id: i64,
-    pub products: HashMap<i64, IngredientProductDetailsWithNutrients>,
-}
-
-impl IngredientDetails {
-    pub fn new(
-        ingredient: &Ingredient,
-        ingredient_products: &[IngredientProductDetails],
-        product_nutrients: &[ProductNutrient],
-    ) -> Self {
-        let products = ingredient_products
-            .iter()
-            .filter(|ip| ip.ingredient_id == ingredient.id)
-            .map(|ip| {
-                (
-                    ip.product_id,
-                    IngredientProductDetailsWithNutrients::new(
-                        ip,
-                        &product_nutrients
-                            .iter()
-                            .cloned()
-                            .filter(|pn| pn.product_id == ip.product_id)
-                            .collect::<Vec<ProductNutrient>>(),
-                    ),
-                )
-            })
-            .collect::<HashMap<i64, IngredientProductDetailsWithNutrients>>();
-
-        Self {
-            id: ingredient.id.to_owned(),
-            product_id: ingredient.product_id.to_owned(),
-            products,
-        }
-    }
-}
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        config::Config,
-        types::{
-            ingredient::Ingredient,
-            product::Product,
-            recipe::{CreateRecipePayload, UpdateRecipePayload},
-        },
-        utils,
-    };
+    use crate::{config::Config, types::{ingredient::{IngredientDetailed, Ingredient}, recipe::{CreateRecipePayload, UpdateRecipePayload}, product::Product}, utils};
     use sqlx::PgPool;
 
     #[tokio::test]
@@ -174,7 +161,7 @@ mod tests {
             .await
             .unwrap();
 
-        let ingredients = Ingredient::find_by_recipe_id(recipe_id)
+        let ingredients = IngredientDetailed::find_by_recipe_id(recipe_id)
             .fetch_all(&mut txn)
             .await
             .unwrap();
@@ -206,7 +193,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(create_ingredients_result.len(), 2);
+        assert_eq!(create_ingredients_result.len(), 3);
 
         txn.rollback().await.unwrap();
     }
@@ -235,7 +222,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(create_ingredients_result.len(), 2);
+        assert_eq!(create_ingredients_result.len(), 3);
 
         let mut update_product_payload: UpdateRecipePayload =
             utils::read_json("examples/update_recipe_payload.json").unwrap();
@@ -252,7 +239,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(update_ingredients_result.len(), 3);
+        assert_eq!(update_ingredients_result.len(), 5);
 
         txn.rollback().await.unwrap();
     }

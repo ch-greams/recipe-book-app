@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
@@ -25,7 +23,7 @@ pub struct DirectionPart {
     pub step_number: i16,
     pub direction_part_type: DirectionPartType,
     pub comment_text: Option<String>,
-    pub ingredient_id: Option<i64>,
+    pub ingredient_number: Option<i16>,
     pub ingredient_amount: Option<f64>,
 }
 
@@ -34,7 +32,7 @@ pub struct DirectionPartPayload {
     pub step_number: i16,
     pub direction_part_type: DirectionPartType,
     pub comment_text: Option<String>,
-    pub ingredient_id: Option<i64>,
+    pub ingredient_number: Option<i16>,
     pub ingredient_amount: Option<f64>,
 }
 
@@ -44,7 +42,7 @@ impl DirectionPart {
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
-            SELECT direction_id, step_number, direction_part_type, comment_text, ingredient_id, ingredient_amount
+            SELECT direction_id, step_number, direction_part_type, comment_text, ingredient_number, ingredient_amount
             FROM product.direction_part
             WHERE direction_id = ANY($1)
         "#,
@@ -55,14 +53,13 @@ impl DirectionPart {
     pub async fn insert_multiple(
         direction_part_payloads: &[DirectionPartPayload],
         direction_id: i64,
-        temporary_to_final_id: &HashMap<i64, i64>,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut direction_ids: Vec<i64> = Vec::new();
         let mut step_numbers: Vec<i16> = Vec::new();
         let mut direction_part_types: Vec<DirectionPartType> = Vec::new();
         let mut comment_texts: Vec<Option<String>> = Vec::new();
-        let mut ingredient_ids: Vec<Option<i64>> = Vec::new();
+        let mut ingredient_numbers: Vec<Option<i16>> = Vec::new();
         let mut ingredient_amounts: Vec<Option<f64>> = Vec::new();
 
         direction_part_payloads
@@ -72,13 +69,7 @@ impl DirectionPart {
                 step_numbers.push(direction_part_payload.step_number);
                 direction_part_types.push(direction_part_payload.direction_part_type.to_owned());
                 comment_texts.push(direction_part_payload.comment_text.to_owned());
-                let ingredient_id =
-                    if let Some(temporary_ingredient_id) = direction_part_payload.ingredient_id {
-                        temporary_to_final_id.get(&temporary_ingredient_id).copied()
-                    } else {
-                        None
-                    };
-                ingredient_ids.push(ingredient_id);
+                ingredient_numbers.push(direction_part_payload.ingredient_number);
                 ingredient_amounts.push(direction_part_payload.ingredient_amount);
             });
 
@@ -89,18 +80,18 @@ impl DirectionPart {
                 step_number,
                 direction_part_type,
                 comment_text,
-                ingredient_id,
+                ingredient_number,
                 ingredient_amount
             )
             SELECT * FROM UNNEST($1, $2, $3, $4, $5, $6)
-            RETURNING direction_id, step_number, direction_part_type, comment_text, ingredient_id, ingredient_amount;
+            RETURNING direction_id, step_number, direction_part_type, comment_text, ingredient_number, ingredient_amount;
         "#,
         )
         .bind(direction_ids)
         .bind(step_numbers)
         .bind(DirectionPartTypeArray(direction_part_types))
         .bind(comment_texts)
-        .bind(ingredient_ids)
+        .bind(ingredient_numbers)
         .bind(ingredient_amounts);
 
         let result = insert_query.fetch_all(txn).await?;
@@ -114,7 +105,7 @@ pub struct DirectionPartDetails {
     pub step_number: i16,
     pub direction_part_type: DirectionPartType,
     pub comment_text: Option<String>,
-    pub ingredient_id: Option<i64>,
+    pub ingredient_number: Option<i16>,
     pub ingredient_amount: Option<f64>,
 }
 
@@ -124,7 +115,7 @@ impl DirectionPartDetails {
             step_number: direction_part.step_number,
             direction_part_type: direction_part.direction_part_type.to_owned(),
             comment_text: direction_part.comment_text.to_owned(),
-            ingredient_id: direction_part.ingredient_id,
+            ingredient_number: direction_part.ingredient_number,
             ingredient_amount: direction_part.ingredient_amount,
         }
     }
@@ -132,13 +123,12 @@ impl DirectionPartDetails {
 
 #[cfg(test)]
 mod tests {
-    use std::collections::HashMap;
 
     use crate::{
         config::Config,
         types::{
-            direction::Direction, direction_part::DirectionPart, ingredient::Ingredient,
-            product::Product, recipe::CreateRecipePayload,
+            direction::Direction, direction_part::DirectionPart,
+            product::Product, recipe::CreateRecipePayload, ingredient::Ingredient,
         },
         utils,
     };
@@ -187,14 +177,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(create_ingredients_result.len(), 2);
-
-        let mut temporary_to_final_id = HashMap::new();
-
-        for (index, ingredient_payload) in create_product_payload.ingredients.iter().enumerate() {
-            let ingredient = create_ingredients_result.get(index).unwrap();
-            temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
-        }
+        assert_eq!(create_ingredients_result.len(), 3);
 
         let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,
@@ -214,7 +197,6 @@ mod tests {
             let mut _direction_parts = DirectionPart::insert_multiple(
                 &direction_payload.steps,
                 direction.id,
-                &temporary_to_final_id,
                 &mut txn,
             )
             .await
