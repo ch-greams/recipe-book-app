@@ -28,6 +28,9 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
 
     const dispatch = useAppDispatch();
 
+    const [ primaryIngredients, alternativeIngredients ] = ingredients.partition((ingredient) => !ingredient.is_alternative);
+    const nextSlotNumber = ingredients.length && Math.max(...primaryIngredients.map((ingredient) => ingredient.order_number)) + 1;
+
     return (
         <div
             data-cy={constants.CY_INGREDIENTS_BLOCK}
@@ -41,12 +44,17 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
             ) )}
 
             <div className={classNames({ [styles.ingredientsLoading]: !isLoaded })}>
-                {ingredients.map( (ingredient) => (
+                {primaryIngredients.map( (ingredient) => (
                     <RbaIngredient
-                        key={`ingredient_${ingredient.id}`}
+                        key={`ingredient_${ingredient.order_number}`}
                         search={search}
                         isReadOnly={isReadOnly}
                         ingredient={ingredient}
+                        ingredient_alternatives={
+                            alternativeIngredients.filter(
+                                (alternativeIngredient) => alternativeIngredient.order_number === ingredient.order_number,
+                            )
+                        }
                     />
                 ) )}
 
@@ -59,7 +67,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                         items={search.products}
                         onChange={(value) => { dispatch(searchProducts(value)); }}
                         onSelect={(product) => {
-                            dispatch(addIngredient(product));
+                            dispatch(addIngredient({ product, slotNumber: nextSlotNumber, isAlternative: false }));
                             dispatch(searchClear());
                         }}
                         data-cy={constants.CY_SEARCH}

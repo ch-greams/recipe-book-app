@@ -2,12 +2,13 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
-import type { IngredientProduct, ProductShort, Recipe } from "@common/typings";
+import type { NutrientName } from "@common/nutrients";
+import type { Ingredient, ProductShort, Recipe } from "@common/typings";
 import type * as units from "@common/units";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
-import { convertFoodToIngredientProduct, convertRecipePageIntoRecipe, convertRecipeToIngredientProduct } from "../helpers/recipe";
+import { convertFoodToIngredient, convertRecipePageIntoRecipe, convertRecipeToIngredient } from "../helpers/recipe";
 import type * as types from "../types/recipe";
 
 import type { AsyncThunkConfig } from ".";
@@ -97,7 +98,7 @@ export const updateDirectionPartStepNumber = createAction<{ directionIndex: numb
 export const updateDirectionPartNote = createAction<{ directionIndex: number, directionPartId: number, note: string }>("recipe/update_direction_part_note");
 export const updateDirectionPartIngredientAmount = createAction<{ directionIndex: number, directionPartId: number, inputValue: string }>("recipe/update_direction_part_ingredient_amount");
 export const updateDirectionPartIngredientUnit = createAction<{ directionIndex: number, directionPartId: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/update_direction_part_ingredient_unit");
-export const createDirectionPartIngredient = createAction<{ directionIndex: number, ingredientId: number }>("recipe/create_direction_part_ingredient");
+export const createDirectionPartIngredient = createAction<{ directionIndex: number, ingredientNumber: number }>("recipe/create_direction_part_ingredient");
 export const createDirectionPartComment = createAction<{ directionIndex: number, type: types.DirectionPartType }>("recipe/create_direction_part_comment");
 
 // -----------------------------------------------------------------------------
@@ -105,43 +106,25 @@ export const createDirectionPartComment = createAction<{ directionIndex: number,
 // -----------------------------------------------------------------------------
 
 export const removeIngredient = createAction<number>("recipe/ingredient/remove");
-export const removeIngredientProduct = createAction<{ parentId: number, id: number }>("recipe/ingredient/remove_product");
-export const replaceIngredientWithAlternative = createAction<{ parentId: number, id: number }>("recipe/ingredient/replace_with_alt");
+export const removeIngredientAlternative = createAction<number>("recipe/ingredient/remove_alternative");
+export const replaceIngredientWithAlternative = createAction<{ slotNumber: number, id: number }>("recipe/ingredient/replace_with_alt");
 export const toggleIngredientOpen = createAction<number>("recipe/ingredient/toggle_open");
 export const toggleIngredientMark = createAction<number>("recipe/ingredient/toggle_mark");
-export const updateIngredientProductAmount = createAction<{ parentId: number, id: number, inputValue: string }>("recipe/ingredient/update_product_amount");
-export const updateIngredientProductUnit = createAction<{ parentId: number, id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
-export const updateAltNutrients = createAction<{ parentId: number, id: number, isSelected: boolean }>("recipe/ingredient/update_alt_nutrients");
+export const updateIngredientProductAmount = createAction<{ id: number, inputValue: string }>("recipe/ingredient/update_product_amount");
+export const updateIngredientProductUnit = createAction<{ id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
+export const updateAltNutrients = createAction<{ slotNumber: number, nutrients: Dictionary<NutrientName, number> }>("recipe/ingredient/update_alt_nutrients");
 
-export const addIngredient = createAsyncThunk<IngredientProduct, ProductShort, AsyncThunkConfig>(
+export const addIngredient = createAsyncThunk<Ingredient, { product: ProductShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
     "recipe/ingredient/add",
-    async (product, { rejectWithValue }) => {
+    async ({ product, slotNumber, isAlternative }, { rejectWithValue }) => {
         try {
             if (product.is_recipe) {
                 const recipe = await RecipeApi.getRecipe(product.id);
-                return convertRecipeToIngredientProduct(recipe);
+                return convertRecipeToIngredient(recipe, slotNumber, isAlternative);
             }
             else {
                 const food = await FoodApi.getFood(product.id);
-                return convertFoodToIngredientProduct(food);
-            }
-        }
-        catch (error) {
-            return rejectWithValue(HttpError.getStatus(error));
-        }
-    },
-);
-export const addIngredientProduct = createAsyncThunk<{ id: number, product: IngredientProduct }, { id: number, product: ProductShort }, AsyncThunkConfig>(
-    "recipe/ingredient/add_product",
-    async ({ id, product }, { rejectWithValue }) => {
-        try {
-            if (product.is_recipe) {
-                const recipe = await RecipeApi.getRecipe(product.id);
-                return { id, product: convertRecipeToIngredientProduct(recipe) };
-            }
-            else {
-                const food = await FoodApi.getFood(product.id);
-                return { id, product: convertFoodToIngredientProduct(food) };
+                return convertFoodToIngredient(food, slotNumber, isAlternative);
             }
         }
         catch (error) {

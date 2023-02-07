@@ -172,7 +172,7 @@ AS SELECT i.id,
     p.is_recipe,
     p.name,
     p.density,
-    jsonb_object_agg(pnd.name, pnd.amount) AS nutrients
+    COALESCE(jsonb_object_agg(pnd.name, pnd.amount) FILTER (WHERE pnd.name IS NOT NULL), '{}'::jsonb) AS nutrients
    FROM product.ingredient i
      LEFT JOIN product.product p ON p.id = i.product_id
      LEFT JOIN product.product_nutrient_detailed pnd ON pnd.product_id = i.product_id

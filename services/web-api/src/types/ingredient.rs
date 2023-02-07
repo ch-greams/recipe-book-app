@@ -12,6 +12,7 @@ use super::error::Error;
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct Ingredient {
+    pub id: i64,
     pub order_number: i16,
     pub recipe_id: i64,
     pub product_id: i64,
@@ -41,7 +42,7 @@ impl Ingredient {
 
         let ingredients = insert_query_builder
             .push_values(
-                ingredient_payloads.iter().take(BIND_LIMIT / 5),
+                ingredient_payloads.iter().take(BIND_LIMIT / 6),
                 |mut builder, ingredient_payload| {
                     builder
                         .push_bind(recipe_id)
@@ -52,7 +53,7 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(" RETURNING order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .push(" RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;")
             .build_query_as()
             .fetch_all(txn)
             .await?;
@@ -80,7 +81,7 @@ impl Ingredient {
 
         let ingredients = insert_query_builder
             .push_values(
-                ingredient_payloads.iter().take(BIND_LIMIT / 5),
+                ingredient_payloads.iter().take(BIND_LIMIT / 6),
                 |mut builder, ingredient_payload| {
                     builder
                         .push_bind(recipe_id)
@@ -91,7 +92,7 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(" RETURNING order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .push(" RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;")
             .build_query_as()
             .fetch_all(txn)
             .await?;
@@ -102,6 +103,7 @@ impl Ingredient {
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct IngredientDetailed {
+    pub id: i64,
     pub order_number: i16,
     pub recipe_id: i64,
     pub product_id: i64,
@@ -121,6 +123,7 @@ impl IngredientDetailed {
         sqlx::query_as(
             r#"
                 SELECT
+                    id,
                     order_number,
                     recipe_id,
                     product_id,
