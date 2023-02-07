@@ -53,7 +53,9 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(" RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .push(
+                " RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;",
+            )
             .build_query_as()
             .fetch_all(txn)
             .await?;
@@ -92,7 +94,9 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(" RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;")
+            .push(
+                " RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;",
+            )
             .build_query_as()
             .fetch_all(txn)
             .await?;
