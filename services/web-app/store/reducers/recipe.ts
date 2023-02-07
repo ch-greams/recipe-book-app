@@ -116,8 +116,8 @@ function convertDirectionPart(
             "directionPart.ingredient_number",
         );
         const ingredient = unwrap(
-            ingredients.find((i) => i.order_number === ingredientNumber),
-            "ingredients.find((i) => i.order_number === ingredient_number)",
+            ingredients.find((i) => i.slot_number === ingredientNumber),
+            "ingredients.find((i) => i.slot_number === ingredient_number)",
         );
 
         const ingredientAmount = ingredient.amount * unwrapOr(directionPart.ingredient_amount, MAX_INGREDIENT_PERCENT);
@@ -552,7 +552,7 @@ const reducer = createReducer(initialState, (builder) => {
             const direction = state.directions[directionIndex];
 
             const ingredient = unwrap(
-                state.ingredients.find(_ingredient => _ingredient.order_number === ingredientNumber),
+                state.ingredients.find(_ingredient => _ingredient.slot_number === ingredientNumber),
                 `Ingredient with id = ${ingredientNumber} is not found`,
             );
 
@@ -765,9 +765,9 @@ const reducer = createReducer(initialState, (builder) => {
     // Ingredients
     // -----------------------------------------------------------------------------------------------------------------
         .addCase(actions.removeIngredient, (state, action) => {
-            const { payload: order_number } = action;
+            const { payload: slot_number } = action;
 
-            const ingredients = state.ingredients.filter((ingredient) => ingredient.order_number !== order_number);
+            const ingredients = state.ingredients.filter((ingredient) => ingredient.slot_number !== slot_number);
 
             const servingSize = getRecipeServingSizeFromIngredients(ingredients);
             const servingSizeInCurrentUnits = units.convertFromMetric(
@@ -792,7 +792,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { slotNumber, id } = action.payload;
 
             const ingredients = state.ingredients.map((ingredient) => (
-                ingredient.order_number === slotNumber
+                ingredient.slot_number === slotNumber
                     ? (
                         ingredient.id === id
                             ? { ...ingredient, is_alternative: false, isOpen: false, alternativeNutrients: {} }
@@ -908,7 +908,7 @@ const reducer = createReducer(initialState, (builder) => {
             const { slotNumber, nutrients } = action.payload;
 
             state.ingredients = state.ingredients.map((ingredient) => (
-                (!ingredient.is_alternative && ingredient.order_number === slotNumber)
+                (!ingredient.is_alternative && ingredient.slot_number === slotNumber)
                     ? {
                         ...ingredient,
                         alternativeNutrients: nutrients,

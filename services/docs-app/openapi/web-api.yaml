@@ -221,7 +221,7 @@ components:
         id:
           type: integer
           example: 6
-        order_number:
+        slot_number:
           type: integer
           example: 1
         recipe_id:
@@ -265,7 +265,7 @@ components:
           type: integer
           description: should store a temporary id
           example: -6
-        order_number:
+        slot_number:
           type: integer
           example: 1
         product_id:
@@ -286,7 +286,7 @@ components:
         id:
           type: integer
           example: 6
-        order_number:
+        slot_number:
           type: integer
           example: 1
         product_id:

@@ -71,7 +71,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
                             label: ingredient.name,
-                            value: String(ingredient.order_number),
+                            value: String(ingredient.slot_number),
                         })),
                         ...otherDirectionPartTypes.map((type) => ({ group: "Comment", value: type })),
                     ]}

@@ -106,7 +106,7 @@ GRANT ALL ON TABLE product.direction TO postgres;
 
 CREATE TABLE product.ingredient (
     id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
-    order_number int2 NOT NULL,
+    slot_number int2 NOT NULL,
     recipe_id int8 NOT NULL,
     product_id int8 NOT NULL,
     amount float8 NOT NULL,
@@ -163,7 +163,7 @@ GRANT ALL ON TABLE product.product_nutrient_detailed TO postgres;
 
 CREATE OR REPLACE VIEW product.ingredient_detailed
 AS SELECT i.id,
-    i.order_number,
+    i.slot_number,
     i.recipe_id,
     i.product_id,
     i.amount,

@@ -27,7 +27,7 @@ function convertRecipeDirectionPartIntoDirectionPart(
 
     if (ingredientNumber) {
         const ingredient = unwrap(
-            ingredients.find((_ingredient) => _ingredient.order_number === ingredientNumber),
+            ingredients.find((_ingredient) => _ingredient.slot_number === ingredientNumber),
             "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
         );
 
@@ -88,7 +88,7 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
 export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
         id: getTemporaryId(),
-        order_number: slotNumber,
+        slot_number: slotNumber,
         is_alternative: isAlternative,
         product_id: food.id,
         is_recipe: false,
@@ -104,7 +104,7 @@ export function convertFoodToIngredient(food: Food, slotNumber: number, isAltern
 export function convertRecipeToIngredient(recipe: Recipe, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
         id: getTemporaryId(),
-        order_number: slotNumber,
+        slot_number: slotNumber,
         is_alternative: isAlternative,
         product_id: recipe.id,
         is_recipe: true,

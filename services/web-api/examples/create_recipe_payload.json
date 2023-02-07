@@ -15,21 +15,21 @@
     ],
     "ingredients": [
         {
-            "order_number": 1,
+            "slot_number": 1,
             "product_id": 2,
             "amount": 100.0,
             "unit": "ml",
             "is_alternative": false
         },
         {
-            "order_number": 1,
+            "slot_number": 1,
             "product_id": 1,
             "amount": 100.0,
             "unit": "ml",
             "is_alternative": true
         },
         {
-            "order_number": 2,
+            "slot_number": 2,
             "product_id": 3,
             "amount": 150.0,
             "unit": "g",

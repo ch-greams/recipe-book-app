@@ -13,7 +13,7 @@ use super::error::Error;
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct Ingredient {
     pub id: i64,
-    pub order_number: i16,
+    pub slot_number: i16,
     pub recipe_id: i64,
     pub product_id: i64,
     pub amount: f64,
@@ -23,7 +23,7 @@ pub struct Ingredient {
 
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone, Debug)]
 pub struct IngredientPayload {
-    pub order_number: i16,
+    pub slot_number: i16,
     pub product_id: i64,
     pub amount: f64,
     pub unit: String,
@@ -37,7 +37,7 @@ impl Ingredient {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.ingredient (recipe_id, order_number, product_id, amount, unit, is_alternative) ",
+            "INSERT INTO product.ingredient (recipe_id, slot_number, product_id, amount, unit, is_alternative) ",
         );
 
         let ingredients = insert_query_builder
@@ -46,7 +46,7 @@ impl Ingredient {
                 |mut builder, ingredient_payload| {
                     builder
                         .push_bind(recipe_id)
-                        .push_bind(ingredient_payload.order_number)
+                        .push_bind(ingredient_payload.slot_number)
                         .push_bind(ingredient_payload.product_id)
                         .push_bind(ingredient_payload.amount)
                         .push_bind(ingredient_payload.unit.clone())
@@ -54,7 +54,7 @@ impl Ingredient {
                 },
             )
             .push(
-                " RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;",
+                " RETURNING id, slot_number, recipe_id, product_id, amount, unit, is_alternative;",
             )
             .build_query_as()
             .fetch_all(txn)
@@ -78,7 +78,7 @@ impl Ingredient {
         // insert
 
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.ingredient (recipe_id, order_number, product_id, amount, unit, is_alternative) ",
+            "INSERT INTO product.ingredient (recipe_id, slot_number, product_id, amount, unit, is_alternative) ",
         );
 
         let ingredients = insert_query_builder
@@ -87,7 +87,7 @@ impl Ingredient {
                 |mut builder, ingredient_payload| {
                     builder
                         .push_bind(recipe_id)
-                        .push_bind(ingredient_payload.order_number)
+                        .push_bind(ingredient_payload.slot_number)
                         .push_bind(ingredient_payload.product_id)
                         .push_bind(ingredient_payload.amount)
                         .push_bind(ingredient_payload.unit.clone())
@@ -95,7 +95,7 @@ impl Ingredient {
                 },
             )
             .push(
-                " RETURNING id, order_number, recipe_id, product_id, amount, unit, is_alternative;",
+                " RETURNING id, slot_number, recipe_id, product_id, amount, unit, is_alternative;",
             )
             .build_query_as()
             .fetch_all(txn)
@@ -108,7 +108,7 @@ impl Ingredient {
 #[derive(sqlx::FromRow, Serialize, Deserialize, Clone)]
 pub struct IngredientDetailed {
     pub id: i64,
-    pub order_number: i16,
+    pub slot_number: i16,
     pub recipe_id: i64,
     pub product_id: i64,
     pub amount: f64,
@@ -128,7 +128,7 @@ impl IngredientDetailed {
             r#"
                 SELECT
                     id,
-                    order_number,
+                    slot_number,
                     recipe_id,
                     product_id,
                     amount,

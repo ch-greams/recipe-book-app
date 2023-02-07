@@ -29,7 +29,7 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
     const dispatch = useAppDispatch();
 
     const [ primaryIngredients, alternativeIngredients ] = ingredients.partition((ingredient) => !ingredient.is_alternative);
-    const nextSlotNumber = ingredients.length && Math.max(...primaryIngredients.map((ingredient) => ingredient.order_number)) + 1;
+    const nextSlotNumber = ingredients.length && Math.max(...primaryIngredients.map((ingredient) => ingredient.slot_number)) + 1;
 
     return (
         <div
@@ -46,13 +46,13 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
             <div className={classNames({ [styles.ingredientsLoading]: !isLoaded })}>
                 {primaryIngredients.map( (ingredient) => (
                     <RbaIngredient
-                        key={`ingredient_${ingredient.order_number}`}
+                        key={`ingredient_${ingredient.slot_number}`}
                         search={search}
                         isReadOnly={isReadOnly}
                         ingredient={ingredient}
                         ingredient_alternatives={
                             alternativeIngredients.filter(
-                                (alternativeIngredient) => alternativeIngredient.order_number === ingredient.order_number,
+                                (alternativeIngredient) => alternativeIngredient.slot_number === ingredient.slot_number,
                             )
                         }
                     />

@@ -43,7 +43,7 @@ const PRODUCT_ID_3 = 3;
 
 const INGREDIENT_00: RecipeIngredient = {
     id: -1,
-    order_number: 1,
+    slot_number: 1,
     product_id: PRODUCT_ID_1,
     isOpen: false,
     isMarked: false,
@@ -70,7 +70,7 @@ const INGREDIENT_00: RecipeIngredient = {
 
 const INGREDIENT_01: RecipeIngredient = {
     id: -1,
-    order_number: 1,
+    slot_number: 1,
     product_id: PRODUCT_ID_2,
     isOpen: false,
     isMarked: false,
@@ -92,7 +92,7 @@ const INGREDIENT_01: RecipeIngredient = {
 
 const INGREDIENT_1: RecipeIngredient = {
     id: -3,
-    order_number: 2,
+    slot_number: 2,
     product_id: PRODUCT_ID_3,
     isOpen: false,
     isMarked: false,

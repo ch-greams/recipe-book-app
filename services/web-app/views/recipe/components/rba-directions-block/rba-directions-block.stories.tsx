@@ -144,7 +144,7 @@ const PRODUCT_ID = 1;
 
 const INGREDIENT_1: RecipeIngredient = {
     id: 10,
-    order_number: 1,
+    slot_number: 1,
     product_id: PRODUCT_ID,
     isOpen: false,
     isMarked: false,

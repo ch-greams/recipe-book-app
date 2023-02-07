@@ -46,7 +46,7 @@ export interface FoodShort {
 
 export interface Ingredient {
     id: number;
-    order_number: number;
+    slot_number: number;
     product_id: number;
     name: string;
     amount: number;
