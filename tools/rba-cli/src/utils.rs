@@ -15,7 +15,7 @@ pub(crate) async fn migrate_db(database_url: &str) {
         .unwrap();
 
     let duration = start.elapsed();
-    println!("migration is complete in {:?}", duration);
+    println!("migration is complete in {duration:?}");
 }
 
 pub(crate) async fn seed_db(database_url: &str) {
@@ -39,7 +39,6 @@ pub(crate) async fn seed_db(database_url: &str) {
         "database/seeds/product/02_ingredient.sql",
         "database/seeds/product/02_product_nutrient.sql",
         "database/seeds/product/03_direction_part.sql",
-        "database/seeds/product/03_ingredient_product.sql",
     ];
 
     let mut txn = db_pool.begin().await.unwrap();
@@ -65,7 +64,7 @@ pub(crate) async fn seed_db(database_url: &str) {
     txn.commit().await.unwrap();
 
     let duration = start.elapsed();
-    println!("seeding is complete in {:?}", duration);
+    println!("seeding is complete in {duration:?}");
 }
 
 pub(crate) fn read_csv_file<T: serde::de::DeserializeOwned>(path: &str) -> anyhow::Result<Vec<T>> {

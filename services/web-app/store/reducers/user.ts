@@ -45,8 +45,8 @@ const ASYNC_REJECTIONS = isAnyOf(
     // META ACTIONS
     metaActions.fetchNutrients.rejected,
     // RECIPE ACTIONS
-    recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected, recipeActions.updateRecipe.rejected,
-    recipeActions.addIngredient.rejected, recipeActions.addIngredientProduct.rejected,
+    recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected,
+    recipeActions.updateRecipe.rejected, recipeActions.addIngredient.rejected,
     // SEARCH ACTIONS
     searchActions.searchProducts.rejected,
     // USER ACTIONS

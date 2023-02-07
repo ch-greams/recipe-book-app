@@ -76,6 +76,7 @@ services:
       start_period: 60s
     environment:
       RB__listen_addr: 0.0.0.0:8080
+      RB__database_url: postgres://postgres:password@rb-database
       RB__keycloak__url: rb-keycloak:8080
       RB__keycloak__username: admin
       RB__keycloak__password: admin

@@ -44,27 +44,24 @@ export interface FoodShort {
     brand: string;
 }
 
-export interface IngredientProduct {
+export interface Ingredient {
+    id: number;
+    slot_number: number;
     product_id: number;
-    is_recipe: boolean;
     name: string;
     amount: number;
     unit: Unit;
     density: number;
+    is_alternative: boolean;
+    is_recipe: boolean;
     nutrients: Dictionary<NutrientName, number>;
-}
-
-export interface Ingredient {
-    id: number;
-    product_id: number;
-    products: Dictionary<number, IngredientProduct>;
 }
 
 export interface DirectionPart {
     step_number: number;
     direction_part_type: DirectionPartType;
     comment_text?: Option<string>;
-    ingredient_id?: Option<number>;
+    ingredient_number?: Option<number>;
     ingredient_amount?: Option<number>;
 }
 

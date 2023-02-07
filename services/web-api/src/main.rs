@@ -13,7 +13,7 @@ mod utils;
 async fn main() -> std::io::Result<()> {
     let config = Config::new().unwrap();
 
-    println!("{:?}", config);
+    println!("{config:?}");
 
     let auth_certificate = auth_setup(&config.auth_api_url).await.unwrap();
 

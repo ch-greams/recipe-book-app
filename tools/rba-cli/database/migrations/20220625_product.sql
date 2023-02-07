@@ -106,29 +106,18 @@ GRANT ALL ON TABLE product.direction TO postgres;
 
 CREATE TABLE product.ingredient (
     id int8 NOT NULL DEFAULT nextval('product.ingredient_id'::regclass),
+    slot_number int2 NOT NULL,
     recipe_id int8 NOT NULL,
-    product_id int8 NULL,
+    product_id int8 NOT NULL,
+    amount float8 NOT NULL,
+    unit text NOT NULL,
+    is_alternative bool NOT NULL DEFAULT false,
     CONSTRAINT ingredient_pk PRIMARY KEY (id),
-    CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id),
+    CONSTRAINT ingredient_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT ingredient_recipe_fk FOREIGN KEY (recipe_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 ALTER TABLE product.ingredient OWNER TO postgres;
 GRANT ALL ON TABLE product.ingredient TO postgres;
-
-
-CREATE TABLE product.ingredient_product (
-    ingredient_id int8 NOT NULL,
-    product_id int8 NOT NULL,
-    amount float8 NOT NULL,
-    unit text NOT NULL,
-    CONSTRAINT ingredient_product_pk PRIMARY KEY (ingredient_id, product_id),
-    CONSTRAINT ingredient_product_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES product.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT ingredient_product_product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-CREATE INDEX fki_ingredient_product_ingredient_fk ON product.ingredient_product USING btree (ingredient_id);
-CREATE INDEX fki_ingredient_product_product_fk ON product.ingredient_product USING btree (product_id);
-ALTER TABLE product.ingredient_product OWNER TO postgres;
-GRANT ALL ON TABLE product.ingredient_product TO postgres;
 
 
 CREATE TABLE product.product_nutrient (
@@ -141,6 +130,7 @@ CREATE TABLE product.product_nutrient (
     CONSTRAINT nutrient_id_fk FOREIGN KEY (nutrient_id) REFERENCES meta.nutrient(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT product_id_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
+CREATE INDEX product_nutrient_product_id_idx ON product.product_nutrient USING btree (product_id);
 ALTER TABLE product.product_nutrient OWNER TO postgres;
 GRANT ALL ON TABLE product.product_nutrient TO postgres;
 
@@ -150,17 +140,42 @@ CREATE TABLE product.direction_part (
     step_number int2 NOT NULL,
     "direction_part_type" product."direction_part_type" NOT NULL,
     comment_text text NULL,
-    ingredient_id int8 NULL,
+    ingredient_number int2 NULL,
     ingredient_amount float8 NULL,
     CONSTRAINT direction_part_ingredient_amount_check CHECK (((ingredient_amount > (0)::double precision) AND (ingredient_amount <= (1)::double precision))) NOT VALID,
     CONSTRAINT direction_part_pk PRIMARY KEY (direction_id, step_number),
-    CONSTRAINT direction_part_type_check CHECK (
-CASE
-    WHEN (direction_part_type = 'ingredient'::product.direction_part_type) THEN ((comment_text IS NULL) AND (ingredient_id IS NOT NULL) AND (ingredient_amount IS NOT NULL))
-    ELSE ((comment_text IS NOT NULL) AND (ingredient_id IS NULL) AND (ingredient_amount IS NULL))
-END),
-    CONSTRAINT direction_part_direction_fk FOREIGN KEY (direction_id) REFERENCES product.direction(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT direction_part_ingredient_fk FOREIGN KEY (ingredient_id) REFERENCES product.ingredient(id) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT direction_part_direction_fk FOREIGN KEY (direction_id) REFERENCES product.direction(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 ALTER TABLE product.direction_part OWNER TO postgres;
 GRANT ALL ON TABLE product.direction_part TO postgres;
+
+-- VIEWS
+
+CREATE OR REPLACE VIEW product.product_nutrient_detailed
+AS SELECT pn.product_id,
+    n.name,
+    pn.amount
+   FROM product.product_nutrient pn
+     LEFT JOIN meta.nutrient n ON n.id = pn.nutrient_id;
+ALTER TABLE product.product_nutrient_detailed OWNER TO postgres;
+GRANT ALL ON TABLE product.product_nutrient_detailed TO postgres;
+
+
+CREATE OR REPLACE VIEW product.ingredient_detailed
+AS SELECT i.id,
+    i.slot_number,
+    i.recipe_id,
+    i.product_id,
+    i.amount,
+    i.unit,
+    i.is_alternative,
+    p.is_recipe,
+    p.name,
+    p.density,
+    COALESCE(jsonb_object_agg(pnd.name, pnd.amount) FILTER (WHERE pnd.name IS NOT NULL), '{}'::jsonb) AS nutrients
+   FROM product.ingredient i
+     LEFT JOIN product.product p ON p.id = i.product_id
+     LEFT JOIN product.product_nutrient_detailed pnd ON pnd.product_id = i.product_id
+  GROUP BY i.id, p.id;
+ALTER TABLE product.ingredient_detailed OWNER TO postgres;
+GRANT ALL ON TABLE product.ingredient_detailed TO postgres;

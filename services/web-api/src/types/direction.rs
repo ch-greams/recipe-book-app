@@ -261,7 +261,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(create_ingredients_result.len(), 2);
+        assert_eq!(create_ingredients_result.len(), 3);
 
         let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,
@@ -300,7 +300,7 @@ mod tests {
         .await
         .unwrap();
 
-        assert_eq!(create_ingredients_result.len(), 2);
+        assert_eq!(create_ingredients_result.len(), 3);
 
         let create_directions_result = Direction::insert_multiple(
             &create_product_payload.directions,

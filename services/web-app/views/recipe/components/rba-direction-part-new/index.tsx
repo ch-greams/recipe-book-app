@@ -7,7 +7,6 @@ import RbaSelect, { SelectTheme } from "@views/shared/rba-select";
 import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
-import { getRecipeIngredientProduct } from "@store/helpers/recipe";
 import type { RecipeIngredient } from "@store/types/recipe";
 import { DirectionPartType } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
@@ -36,7 +35,7 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
             dispatch(actions.createDirectionPartComment({ directionIndex, type: currentDirectionPart.value as DirectionPartType }));
         }
         else {
-            dispatch(actions.createDirectionPartIngredient({ directionIndex, ingredientId: Number(currentDirectionPart.value) }));
+            dispatch(actions.createDirectionPartIngredient({ directionIndex, ingredientNumber: Number(currentDirectionPart.value) }));
         }
     };
 
@@ -71,8 +70,8 @@ const RbaDirectionPartNew: React.FC<Props> = ({ directionIndex, ingredients }) =
                     options={[
                         ...ingredients.map((ingredient) => ({
                             group: "Ingredients",
-                            label: getRecipeIngredientProduct(ingredient).name,
-                            value: String(ingredient.id),
+                            label: ingredient.name,
+                            value: String(ingredient.slot_number),
                         })),
                         ...otherDirectionPartTypes.map((type) => ({ group: "Comment", value: type })),
                     ]}

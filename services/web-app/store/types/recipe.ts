@@ -3,14 +3,10 @@ import type * as typings from "@common/typings";
 import type * as units from "@common/units";
 
 
-export interface RecipeIngredientProduct extends typings.IngredientProduct {
-    amountInput: string;
-}
-
 export interface RecipeIngredient extends typings.Ingredient {
+    amountInput: string;
     isOpen: boolean;
     isMarked: boolean;
-    products: Dictionary<number, RecipeIngredientProduct>;
     alternativeNutrients: Dictionary<NutrientName, number>;
 }
 
@@ -36,7 +32,7 @@ export interface RecipeDirectionPartIngredient {
     stepNumber: number;
     type: DirectionPartType;
     isMarked: boolean;
-    ingredientId: number;
+    ingredientNumber: number;
     ingredientAmount: number;
     ingredientAmountInput: string;
     ingredientName: string;

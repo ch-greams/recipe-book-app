@@ -215,12 +215,18 @@ components:
           type: boolean
           example: false
     # ingredient
-    IngredientProductDetailsWithNutrients:
+    IngredientDetails:
       type: object
       properties:
-        ingredient_id:
+        id:
           type: integer
           example: 6
+        slot_number:
+          type: integer
+          example: 1
+        recipe_id:
+          type: integer
+          example: 4
         product_id:
           type: integer
           example: 4
@@ -230,6 +236,9 @@ components:
         unit:
           type: string
           example: g
+        is_alternative:
+          type: boolean
+          example: false
         is_recipe:
           type: boolean
           example: false
@@ -249,22 +258,16 @@ components:
             sugars: 0
             carbohydrate: 0
             fat: 30.0
-    IngredientDetails:
+    CreateIngredientPayload:
       type: object
       properties:
         id:
           type: integer
-          example: 6
-        product_id:
+          description: should store a temporary id
+          example: -6
+        slot_number:
           type: integer
-          example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductDetailsWithNutrients"
-    IngredientProductPayload:
-      type: object
-      properties:
+          example: 1
         product_id:
           type: integer
           example: 4
@@ -274,33 +277,30 @@ components:
         unit:
           type: string
           example: g
-    CreateIngredientPayload:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: should store a temporary id
-          example: -6
-        product_id:
-          type: integer
-          example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductPayload"
+        is_alternative:
+          type: boolean
+          example: false
     UpdateIngredientPayload:
       type: object
       properties:
         id:
           type: integer
           example: 6
+        slot_number:
+          type: integer
+          example: 1
         product_id:
           type: integer
           example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductPayload"
+        amount:
+          type: number
+          example: 125.0
+        unit:
+          type: string
+          example: g
+        is_alternative:
+          type: boolean
+          example: false
     # direction
     DirectionPartDetails:
       type: object
@@ -319,7 +319,7 @@ components:
         comment_text:
           type: string
           example: You can flip it after 8 min, but not necessary
-        ingredient_id:
+        ingredient_number:
           type: integer
         ingredient_amount:
           type: number
@@ -368,7 +368,7 @@ components:
         comment_text:
           type: string
           example: You can flip it after 8 min, but not necessary
-        ingredient_id:
+        ingredient_number:
           type: integer
         ingredient_amount:
           type: number

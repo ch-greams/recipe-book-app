@@ -11,7 +11,7 @@ import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
-import type { RecipeIngredientProduct } from "@store/types/recipe";
+import type { RecipeIngredient } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLink from "@icons/rba-icon-link";
 import RbaIconRemove from "@icons/rba-icon-remove";
@@ -35,7 +35,7 @@ interface Props {
     theme: IngredientProductTheme;
     size: IngredientProductSize;
     isReadOnly: boolean;
-    ingredientProduct: RecipeIngredientProduct;
+    ingredient: RecipeIngredient;
     onClick: () => void;
     onClickRemove: () => void;
     onMouseEnter?: () => void;
@@ -88,7 +88,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
     theme,
     size,
     isReadOnly,
-    ingredientProduct,
+    ingredient: ingredientProduct,
     onClick,
     onClickRemove,
     onMouseEnter,

@@ -24,6 +24,14 @@ Array.prototype.equals = function(value) {
     return thisClone.length === otherClone.length && thisClone.every((element, index) => otherClone[index] === element);
 };
 
+Array.prototype.partition = function(predicate) {
+    return this.reduce(([ pass, fail ], currentValue) => (
+        predicate(currentValue)
+            ? [ [ ...pass, currentValue ], fail ]
+            : [ pass, [ ...fail, currentValue ] ]
+    ), [ [], [] ]);
+};
+
 Array.prototype.isNotEmpty = function() {
     return this.length > 0;
 };
@@ -35,6 +43,7 @@ declare global {
         last(): Option<T>;
         set(index: number, value: T): T[];
         equals(value: T[]): boolean;
+        partition(predicate: (value: T) => boolean): [T[], T[]];
         isNotEmpty(): boolean;
     }
 }

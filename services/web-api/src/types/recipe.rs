@@ -1,6 +1,6 @@
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
 use super::direction::{CreateDirectionPayload, DirectionDetails, UpdateDirectionPayload};
-use super::ingredient::{CreateIngredientPayload, IngredientDetails, UpdateIngredientPayload};
+use super::ingredient::{IngredientDetailed, IngredientPayload};
 use super::product::Product;
 
 use chrono::{DateTime, Utc};
@@ -15,7 +15,7 @@ pub struct Recipe {
     pub density: f64,
     pub serving_size: f64,
     pub custom_units: Vec<CustomUnit>,
-    pub ingredients: Vec<IngredientDetails>,
+    pub ingredients: Vec<IngredientDetailed>,
     pub directions: Vec<DirectionDetails>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
@@ -30,7 +30,7 @@ pub struct CreateRecipePayload {
     pub density: f64,
     pub serving_size: f64,
     pub custom_units: Vec<CreateCustomUnitPayload>,
-    pub ingredients: Vec<CreateIngredientPayload>,
+    pub ingredients: Vec<IngredientPayload>,
     pub directions: Vec<CreateDirectionPayload>,
     pub is_private: bool,
 }
@@ -44,7 +44,7 @@ pub struct UpdateRecipePayload {
     pub density: f64,
     pub serving_size: f64,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
-    pub ingredients: Vec<UpdateIngredientPayload>,
+    pub ingredients: Vec<IngredientPayload>,
     pub directions: Vec<UpdateDirectionPayload>,
     pub is_private: bool,
 }
@@ -53,7 +53,7 @@ impl Recipe {
     pub fn new(
         product: Product,
         custom_units: Vec<CustomUnit>,
-        ingredients: Vec<IngredientDetails>,
+        ingredients: Vec<IngredientDetailed>,
         directions: Vec<DirectionDetails>,
     ) -> Self {
         Self {

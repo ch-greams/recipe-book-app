@@ -86,7 +86,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
             .bind(is_recipe)
         } else {
             sqlx::query_as(
@@ -100,7 +100,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
         }
     }
 
@@ -123,7 +123,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
             .bind(is_recipe)
         } else {
             sqlx::query_as(
@@ -137,7 +137,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
         }
     }
 
@@ -162,7 +162,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
             .bind(is_recipe)
         } else {
             sqlx::query_as(
@@ -178,7 +178,7 @@ impl Product {
             .bind(limit as i32)
             .bind(offset as i32)
             .bind(user_id)
-            .bind(format!("%{}%", filter))
+            .bind(format!("%{filter}%"))
         }
     }
 

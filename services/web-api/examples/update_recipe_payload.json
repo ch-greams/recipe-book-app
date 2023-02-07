@@ -15,52 +15,39 @@
     ],
     "ingredients": [
         {
-            "id": 44,
+            "slot_number": 1,
+            "product_id": 1,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": true
+        },
+        {
+            "slot_number": 1,
             "product_id": 2,
-            "products": {
-                "1": {
-                    "ingredient_id": 44,
-                    "product_id": 1,
-                    "amount": 100.0,
-                    "unit": "ml"
-                },
-                "2": {
-                    "ingredient_id": 44,
-                    "product_id": 2,
-                    "amount": 100.0,
-                    "unit": "ml"
-                },
-                "3": {
-                    "ingredient_id": 44,
-                    "product_id": 3,
-                    "amount": 100.0,
-                    "unit": "ml"
-                }
-            }
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": false
         },
         {
-            "id": 45,
+            "slot_number": 1,
             "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 45,
-                    "product_id": 3,
-                    "amount": 150.0,
-                    "unit": "g"
-                }
-            }
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": true
         },
         {
-            "id": 46,
+            "slot_number": 2,
             "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 46,
-                    "product_id": 3,
-                    "amount": 150.0,
-                    "unit": "g"
-                }
-            }
+            "amount": 150.0,
+            "unit": "g",
+            "is_alternative": false
+        },
+        {
+            "slot_number": 3,
+            "product_id": 3,
+            "amount": 150.0,
+            "unit": "g",
+            "is_alternative": false
         }
     ],
     "directions": [
@@ -87,21 +74,21 @@
                     "step_number": 0,
                     "direction_part_type": "note",
                     "comment_text": "Add Cottage Cheese first - Updated",
-                    "ingredient_id": null,
+                    "ingredient_number": null,
                     "ingredient_amount": null
                 },
                 {
                     "step_number": 1,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 45,
+                    "ingredient_number": 2,
                     "ingredient_amount": 1.0
                 },
                 {
                     "step_number": 2,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 44,
+                    "ingredient_number": 1,
                     "ingredient_amount": 0.75
                 }
             ]

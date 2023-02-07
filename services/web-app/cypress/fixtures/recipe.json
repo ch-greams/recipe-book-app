@@ -14,85 +14,82 @@
     "density": 1,
     "ingredients": [
         {
-            "id": 10,
+            "id": 1,
+            "slot_number": 1,
             "product_id": 1,
-            "products": {
-                "1": {
-                    "ingredient_id": 10,
-                    "product_id": 1,
-                    "amount": 100,
-                    "unit": "ml",
-                    "is_recipe": false,
-                    "name": "Sour Cream",
-                    "density": 1.0208,
-                    "nutrients": {
-                        "product_id": 1,
-                        "energy": 157,
-                        "carbohydrate": 2.9,
-                        "dietary_fiber": 10.6,
-                        "sugars": 28.3,
-                        "fat": 15,
-                        "protein": 2.7,
-                        "vitamin_a": 14.9,
-                        "vitamin_c": 28.8,
-                        "sodium": 9.9
-                    },
-                    "amountInput": "100"
-                },
-                "2": {
-                    "ingredient_id": 10,
-                    "product_id": 2,
-                    "amount": 100,
-                    "unit": "ml",
-                    "is_recipe": false,
-                    "name": "Yogurt",
-                    "density": 1,
-                    "nutrients": {
-                        "product_id": 2,
-                        "energy": 66.8,
-                        "carbohydrate": 4.2,
-                        "dietary_fiber": 19.9,
-                        "sugars": 12.5,
-                        "fat": 2,
-                        "protein": 8,
-                        "vitamin_a": 20,
-                        "vitamin_c": 8.5,
-                        "sodium": 12.8
-                    },
-                    "amountInput": "100"
-                }
+            "amount": 100,
+            "unit": "ml",
+            "is_recipe": false,
+            "name": "Sour Cream",
+            "density": 1.0208,
+            "nutrients": {
+                "product_id": 1,
+                "energy": 157,
+                "carbohydrate": 2.9,
+                "dietary_fiber": 10.6,
+                "sugars": 28.3,
+                "fat": 15,
+                "protein": 2.7,
+                "vitamin_a": 14.9,
+                "vitamin_c": 28.8,
+                "sodium": 9.9
             },
+            "is_alternative": false,
+            "amountInput": "100",
             "isOpen": false,
             "isMarked": false,
             "altNutrients": {}
         },
         {
-            "id": 11,
-            "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 11,
-                    "product_id": 3,
-                    "amount": 150,
-                    "unit": "g",
-                    "is_recipe": false,
-                    "name": "Cottage Cheese",
-                    "density": 1,
-                    "nutrients": {
-                        "product_id": 3,
-                        "energy": 183.1,
-                        "carbohydrate": 75.4,
-                        "dietary_fiber": 19.9,
-                        "sugars": 12.5,
-                        "fat": 18.3,
-                        "protein": 30.4,
-                        "vitamin_a": 20,
-                        "vitamin_c": 8.5,
-                        "sodium": 12.8
-                    },
-                    "amountInput": "150"
-                }
+            "id": 2,
+            "slot_number": 1,
+            "product_id": 2,
+            "amount": 100,
+            "unit": "ml",
+            "is_recipe": false,
+            "name": "Yogurt",
+            "density": 1,
+            "nutrients": {
+                "product_id": 2,
+                "energy": 66.8,
+                "carbohydrate": 4.2,
+                "dietary_fiber": 19.9,
+                "sugars": 12.5,
+                "fat": 2,
+                "protein": 8,
+                "vitamin_a": 20,
+                "vitamin_c": 8.5,
+                "sodium": 12.8
             },
+            "is_alternative": true,
+            "amountInput": "100",
+            "isOpen": false,
+            "isMarked": false,
+            "altNutrients": {}
+        },
+        {
+            "id": 3,
+            "slot_number": 2,
+            "product_id": 3,
+            "amount": 150,
+            "unit": "g",
+            "is_recipe": false,
+            "name": "Cottage Cheese",
+            "density": 1,
+            "nutrients": {
+                "product_id": 3,
+                "energy": 183.1,
+                "carbohydrate": 75.4,
+                "dietary_fiber": 19.9,
+                "sugars": 12.5,
+                "fat": 18.3,
+                "protein": 30.4,
+                "vitamin_a": 20,
+                "vitamin_c": 8.5,
+                "sodium": 12.8
+            },
+            "is_alternative": false,
+            "amountInput": "150",
             "isOpen": false,
             "isMarked": false,
             "altNutrients": {}
@@ -122,21 +119,21 @@
                     "step_number": 0,
                     "direction_part_type": "note",
                     "comment_text": "Add Cottage Cheese first",
-                    "ingredient_id": null,
+                    "ingredient_number": null,
                     "ingredient_amount": null
                 },
                 {
                     "step_number": 1,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 10,
+                    "ingredient_number": 1,
                     "ingredient_amount": 1.0
                 },
                 {
                     "step_number": 2,
                     "direction_part_type": "ingredient",
                     "comment_text": null,
-                    "ingredient_id": 11,
+                    "ingredient_number": 2,
                     "ingredient_amount": 0.75
                 }
             ]

@@ -2,12 +2,12 @@ import { DecimalPlaces, roundToDecimal } from "@common/numeric";
 import { NutrientName } from "@common/nutrients";
 import { mapDictionary } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
-import type { Direction, DirectionPart, Food, Ingredient, IngredientProduct, Recipe } from "@common/typings";
+import type { Direction, DirectionPart, Food, Ingredient, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
+import { getTemporaryId } from "@common/utils";
 
 import type {
-    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient,
-    RecipeIngredient, RecipeIngredientProduct, RecipePageStore,
+    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient, RecipePageStore,
 } from "../types/recipe";
 
 import { getNutrientMultiplierFromAmount } from "./food";
@@ -21,26 +21,24 @@ function convertRecipeDirectionPartIntoDirectionPart(
 ): DirectionPart {
 
     const directionPartIngredient = recipeDirectionPart as RecipeDirectionPartIngredient;
-    const ingredientId = directionPartIngredient.ingredientId;
+    const ingredientNumber = directionPartIngredient.ingredientNumber;
 
     let ingredientAmount;
 
-    if (ingredientId) {
+    if (ingredientNumber) {
         const ingredient = unwrap(
-            ingredients.find((_ingredient) => _ingredient.id === ingredientId),
+            ingredients.find((_ingredient) => _ingredient.slot_number === ingredientNumber),
             "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
         );
 
-        const ingredientProduct = getRecipeIngredientProduct(ingredient);
-
-        ingredientAmount = directionPartIngredient.ingredientAmount / ingredientProduct.amount;
+        ingredientAmount = directionPartIngredient.ingredientAmount / ingredient.amount;
     }
 
     return {
         step_number: directionPartIndex,
         direction_part_type: recipeDirectionPart.type,
         comment_text: (recipeDirectionPart as RecipeDirectionPartComment).commentText,
-        ingredient_id: ingredientId,
+        ingredient_number: ingredientNumber,
         ingredient_amount: ingredientAmount,
     };
 }
@@ -86,8 +84,12 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
     };
 }
 
-export function convertFoodToIngredientProduct(food: Food): IngredientProduct {
+// TODO: RBA-221 should merge convert to ingredient functions
+export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
+        id: getTemporaryId(),
+        slot_number: slotNumber,
+        is_alternative: isAlternative,
         product_id: food.id,
         is_recipe: false,
         name: food.name,
@@ -98,8 +100,12 @@ export function convertFoodToIngredientProduct(food: Food): IngredientProduct {
     };
 }
 
-export function convertRecipeToIngredientProduct(recipe: Recipe): IngredientProduct {
+// TODO: RBA-221 should merge convert to ingredient functions
+export function convertRecipeToIngredient(recipe: Recipe, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
+        id: getTemporaryId(),
+        slot_number: slotNumber,
+        is_alternative: isAlternative,
         product_id: recipe.id,
         is_recipe: true,
         name: recipe.name,
@@ -117,23 +123,15 @@ export function getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Di
 
     const productNutrients: Dictionary<NutrientName, number>[] = ingredients
         .map((ingredient) => {
-            const { nutrients, amount } = getIngredientProduct(ingredient);
-            const multiplier = getNutrientMultiplierFromAmount(amount);
-            return mapDictionary(nutrients, (_key, value) => roundToDecimal(value * multiplier, DecimalPlaces.Two));
+            const multiplier = getNutrientMultiplierFromAmount(ingredient.amount);
+            return mapDictionary(ingredient.nutrients, (_key, value) => roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
     return nutrientSum(productNutrients);
 }
 
 export function getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {
-    return ingredients.reduce((sum, ingredient) => (sum + getIngredientProduct(ingredient).amount), 0);
-}
-
-export function getIngredientProduct(ingredient: Ingredient): IngredientProduct {
-    return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
-}
-export function getRecipeIngredientProduct(ingredient: RecipeIngredient): RecipeIngredientProduct {
-    return unwrap(ingredient.products[ingredient.product_id], `ingredient.products["${ingredient.product_id}"]`);
+    return ingredients.reduce((sum, ingredient) => (sum + ingredient.amount), 0);
 }
 
 export function nutrientSum(productNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
