@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use actix_web::{
     get, post,
     web::{Data, Json, Path},
@@ -13,7 +15,9 @@ use crate::{
         direction_part::DirectionPart,
         error::Error,
         ingredient::{Ingredient, IngredientDetailed},
+        meta::Nutrient,
         product::Product,
+        product_nutrient::ProductNutrient,
         recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
     },
 };
@@ -45,6 +49,13 @@ async fn find_by_id(
         .fetch_all(&mut txn)
         .await?;
 
+    let product_nutrients = ProductNutrient::find_by_product_id(*id)
+        .fetch_all(&mut txn)
+        .await?
+        .iter()
+        .map(|pn| (pn.name.clone(), pn.amount))
+        .collect::<HashMap<String, f32>>();
+
     // ingredients
 
     let ingredients = IngredientDetailed::find_by_recipe_id(*id)
@@ -72,7 +83,13 @@ async fn find_by_id(
         .map(|direction| DirectionDetails::new(direction, &direction_parts))
         .collect();
 
-    let recipe = Recipe::new(product, custom_units, ingredients, direction_details);
+    let recipe = Recipe::new(
+        product,
+        &product_nutrients,
+        custom_units,
+        ingredients,
+        direction_details,
+    );
 
     Ok(Json(recipe))
 }
@@ -92,6 +109,10 @@ async fn create_recipe(
 
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
+
+    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+    ProductNutrient::insert_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
 
     // ingredients
 
@@ -126,7 +147,13 @@ async fn create_recipe(
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(product, custom_units, ingredients, direction_details);
+    let recipe = Recipe::new(
+        product,
+        &payload.nutrients,
+        custom_units,
+        ingredients,
+        direction_details,
+    );
 
     Ok(Json(recipe))
 }
@@ -147,6 +174,10 @@ async fn update_recipe(
 
     let custom_units =
         CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
+
+    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+    ProductNutrient::replace_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
 
     // ingredients
 
@@ -181,7 +212,13 @@ async fn update_recipe(
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(product, custom_units, ingredients, direction_details);
+    let recipe = Recipe::new(
+        product,
+        &payload.nutrients,
+        custom_units,
+        ingredients,
+        direction_details,
+    );
 
     Ok(Json(recipe))
 }
