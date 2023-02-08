@@ -81,38 +81,22 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
         ingredients: recipePage.ingredients,
         directions: directions,
         is_private: recipePage.isPrivate,
+        nutrients: recipePage.nutrients,
     };
 }
 
-// TODO: RBA-221 should merge convert to ingredient functions
-export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean): Ingredient {
+export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean, isRecipe: boolean): Ingredient {
     return {
         id: getTemporaryId(),
         slot_number: slotNumber,
         is_alternative: isAlternative,
         product_id: food.id,
-        is_recipe: false,
+        is_recipe: isRecipe,
         name: food.name,
         amount: 100,
         unit: WeightUnit.g,
         density: food.density,
         nutrients: food.nutrients,
-    };
-}
-
-// TODO: RBA-221 should merge convert to ingredient functions
-export function convertRecipeToIngredient(recipe: Recipe, slotNumber: number, isAlternative: boolean): Ingredient {
-    return {
-        id: getTemporaryId(),
-        slot_number: slotNumber,
-        is_alternative: isAlternative,
-        product_id: recipe.id,
-        is_recipe: true,
-        name: recipe.name,
-        amount: 100,
-        unit: WeightUnit.g,
-        density: recipe.density,
-        nutrients: getRecipeNutrientsFromIngredients(recipe.ingredients),
     };
 }
 

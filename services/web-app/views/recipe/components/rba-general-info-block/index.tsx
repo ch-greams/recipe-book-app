@@ -16,10 +16,11 @@ interface GeneralInfoBlockProps {
     nutrients: Dictionary<NutrientName, number>;
     nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
+    updateNutrient: (name: NutrientName, value: string) => void;
 }
 
 const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
-    recipe, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions,
+    recipe, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => (
     <div className={styles.mainBlock}>
 
@@ -28,7 +29,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
         <div className={styles.featuredNutrients}>
 
             <RbaNutrientsBlock
-                isReadOnly={true}
+                isReadOnly={!recipe.editMode}
                 title={"NUTRITION FACTS"}
                 nutrients={getNutrients(
                     featuredNutrients,
@@ -37,6 +38,7 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
                     nutrientDescriptions,
                     true,
                 )}
+                updateNutrient={updateNutrient}
             />
         </div>
     </div>

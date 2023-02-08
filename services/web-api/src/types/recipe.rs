@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
 use super::direction::{CreateDirectionPayload, DirectionDetails, UpdateDirectionPayload};
 use super::ingredient::{IngredientDetailed, IngredientPayload};
@@ -14,6 +16,7 @@ pub struct Recipe {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
+    pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetailed>,
     pub directions: Vec<DirectionDetails>,
@@ -29,6 +32,7 @@ pub struct CreateRecipePayload {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
+    pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<CreateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
     pub directions: Vec<CreateDirectionPayload>,
@@ -43,6 +47,7 @@ pub struct UpdateRecipePayload {
     pub description: String,
     pub density: f64,
     pub serving_size: f64,
+    pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
     pub directions: Vec<UpdateDirectionPayload>,
@@ -52,6 +57,7 @@ pub struct UpdateRecipePayload {
 impl Recipe {
     pub fn new(
         product: Product,
+        nutrients: &HashMap<String, f32>,
         custom_units: Vec<CustomUnit>,
         ingredients: Vec<IngredientDetailed>,
         directions: Vec<DirectionDetails>,
@@ -63,6 +69,7 @@ impl Recipe {
             description: product.description,
             density: product.density,
             serving_size: product.serving_size,
+            nutrients: nutrients.to_owned(),
             custom_units,
             ingredients,
             directions,

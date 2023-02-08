@@ -5,6 +5,18 @@
     "description": "",
     "density": 1.14,
     "serving_size": 125,
+    "nutrients": {
+        "energy": 191.6,
+        "carbohydrate": 157.3,
+        "dietary_fiber": 5.9,
+        "sugars": 5.9,
+        "fat": 29.1,
+        "omega_3": 12,
+        "protein": 35.5,
+        "vitamin_a": 28.6,
+        "vitamin_c": 28.5,
+        "sodium": 19.1
+    },
     "custom_units": [
         {
             "name": "package - Updated",

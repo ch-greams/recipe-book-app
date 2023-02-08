@@ -16,17 +16,6 @@ export interface Food {
     is_private: boolean;
 }
 
-export interface Product {
-    id: number;
-    is_recipe: boolean;
-    name: string;
-    brand: string;
-    description: string;
-    density: number;
-    serving_size: number;
-    is_private: boolean;
-}
-
 // TODO: Create an app version of this type (camelCase) and have all necessary fields available
 export interface ProductShort {
     id: number;
@@ -76,21 +65,10 @@ export interface Direction {
     steps: DirectionPart[];
 }
 
-export interface Recipe {
-    id: number;
-    name: string;
-    brand: string;
-    description: string;
+export interface Recipe extends Food {
     type: string;
-    density: number;
-    serving_size: number;
-
-    custom_units: CustomUnit[];
-
     ingredients: Ingredient[];
     directions: Direction[];
-
-    is_private: boolean;
 }
 
 export interface RecipeShort {
