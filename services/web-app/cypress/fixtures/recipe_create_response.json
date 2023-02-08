@@ -4,6 +4,7 @@
     "brand": "Brand",
     "description": "",
     "density": 1.0,
+    "nutrients": {},
     "custom_units": [],
     "ingredients": [],
     "directions": [],

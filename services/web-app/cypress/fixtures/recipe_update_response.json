@@ -4,6 +4,17 @@
     "brand": "Homemade",
     "description": "",
     "density": 1.0,
+    "nutrients": {
+        "energy": 191.6,
+        "carbohydrate": 157.3,
+        "dietary_fiber": 5.9,
+        "sugars": 5.9,
+        "fat": 29.1,
+        "protein": 35.5,
+        "vitamin_a": 28.6,
+        "vitamin_c": 28.5,
+        "sodium": 19.1
+    },
     "custom_units": [
         {
             "name": "package",
@@ -22,7 +33,6 @@
             "is_recipe": false,
             "name": "new name",
             "nutrients": {
-                "product_id": 1,
                 "energy": 191.6,
                 "carbohydrate": 157.3,
                 "dietary_fiber": 5.9,
@@ -44,7 +54,6 @@
             "is_recipe": false,
             "name": "Wine - Red, Cooking",
             "nutrients": {
-                "product_id": 2,
                 "energy": 115.5,
                 "carbohydrate": 151.8,
                 "dietary_fiber": 7.8,
@@ -66,7 +75,6 @@
             "is_recipe": true,
             "name": "Wine - White, Pelee Island",
             "nutrients": {
-                "product_id": 3,
                 "energy": 196.0,
                 "carbohydrate": 183.0,
                 "dietary_fiber": 7.7,

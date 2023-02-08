@@ -5,7 +5,6 @@
     "description": null,
     "density": 1.04,
     "nutrients": {
-        "product_id": 1,
         "energy": 191.6,
         "carbohydrate": 157.3,
         "dietary_fiber": 5.9,
