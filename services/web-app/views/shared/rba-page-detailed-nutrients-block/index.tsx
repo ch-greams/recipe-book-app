@@ -18,11 +18,12 @@ interface Props {
     nutrients: Dictionary<NutrientName, number>;
     nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
+    updateNutrient?: (name: NutrientName, value: string) => void;
 }
 
 
 const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
-    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions,
+    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => {
 
     const leftColumn: [ NutrientGroupType, NutrientName[] ][] = [
@@ -48,6 +49,7 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         isReadOnly={isReadOnly}
                         title={type}
                         nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
+                        updateNutrient={updateNutrient}
                     />
                 ))}
 
@@ -61,6 +63,7 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         isReadOnly={isReadOnly}
                         title={type}
                         nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
+                        updateNutrient={updateNutrient}
                     />
                 ))}
 

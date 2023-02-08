@@ -110,9 +110,17 @@ async fn create_recipe(
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::insert_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
+    let defined_nutrients: HashMap<String, f32> = payload
+        .nutrients
+        .clone()
+        .into_iter()
+        .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+        .collect();
+
+    ProductNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
+        .await?;
 
     // ingredients
 
@@ -149,7 +157,7 @@ async fn create_recipe(
 
     let recipe = Recipe::new(
         product,
-        &payload.nutrients,
+        &defined_nutrients,
         custom_units,
         ingredients,
         direction_details,
@@ -175,9 +183,19 @@ async fn update_recipe(
     let custom_units =
         CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::replace_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
+    let defined_nutrients: HashMap<String, f32> = payload
+        .nutrients
+        .clone()
+        .into_iter()
+        .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+        .collect();
+
+    println!("defined_nutrients: {defined_nutrients:?}");
+
+    ProductNutrient::replace_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
+        .await?;
 
     // ingredients
 
@@ -214,7 +232,7 @@ async fn update_recipe(
 
     let recipe = Recipe::new(
         product,
-        &payload.nutrients,
+        &defined_nutrients,
         custom_units,
         ingredients,
         direction_details,

@@ -10,7 +10,7 @@ import { getTemporaryId } from "@common/utils";
 
 import * as actions from "../actions/recipe";
 import {
-    convertCustomUnitsIntoInputs, convertNutrients, convertNutrientValuesIntoInputs,
+    convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues, convertNutrients, convertNutrientValuesIntoInputs,
 } from "../helpers/food";
 import { getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients } from "../helpers/recipe";
 import * as types from "../types/recipe";
@@ -227,6 +227,19 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateType, (state, action) => {
             state.type = action.payload;
         })
+        .addCase(actions.updateNutrient, (state, { payload: { key, value } }) => {
+            const nutrientsByServing = {
+                ...state.nutrientsByServing,
+                ...convertNutrientInputsIntoValues({ [key]: value }),
+            };
+
+            state.nutrients = convertNutrients(state.servingSize, false, nutrientsByServing),
+            state.nutrientsByServing = nutrientsByServing,
+            state.nutrientsByServingInputs = {
+                ...state.nutrientsByServingInputs,
+                ...{ [key]: value },
+            };
+        })
         .addCase(actions.addCustomUnit, (state, action) => {
             const { payload: customUnit } = action;
 
@@ -330,8 +343,6 @@ const reducer = createReducer(initialState, (builder) => {
             const recipeIngredients = convertIngredients(recipe.ingredients);
             const recipeDirections = convertDirections(recipe.directions, recipe.ingredients);
 
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(recipeIngredients);
-
             state.isLoading = false;
             state.isLoaded = true;
             state.errorMessage = null;
@@ -348,11 +359,11 @@ const reducer = createReducer(initialState, (builder) => {
             state.servingSize = recipe.serving_size;
             state.servingSizeInput = String(recipe.serving_size);
 
-            state.nutrients = convertNutrients(recipe.serving_size, false, nutrientsByServing);
+            state.nutrients = recipe.nutrients;
             state.customUnits = convertCustomUnitsIntoInputs(recipe.custom_units);
 
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+            state.nutrientsByServing = recipe.nutrients;
+            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(recipe.nutrients);
 
             state.ingredients = recipeIngredients;
             state.directions = recipeDirections;
@@ -767,21 +778,7 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.removeIngredient, (state, action) => {
             const { payload: slot_number } = action;
 
-            const ingredients = state.ingredients.filter((ingredient) => ingredient.slot_number !== slot_number);
-
-            const servingSize = getRecipeServingSizeFromIngredients(ingredients);
-            const servingSizeInCurrentUnits = units.convertFromMetric(
-                servingSize, state.servingSizeUnit, state.customUnits, state.density,
-            );
-            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
-            state.ingredients = ingredients;
-            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
-            state.servingSize = servingSize;
-            state.servingSizeInput = String(servingSizeInput);
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+            state.ingredients = state.ingredients.filter((ingredient) => ingredient.slot_number !== slot_number);
         })
         .addCase(actions.removeIngredientAlternative, (state, action) => {
             const { payload: id } = action;
@@ -791,7 +788,7 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.replaceIngredientWithAlternative, (state, action) => {
             const { slotNumber, id } = action.payload;
 
-            const ingredients = state.ingredients.map((ingredient) => (
+            state.ingredients = state.ingredients.map((ingredient) => (
                 ingredient.slot_number === slotNumber
                     ? (
                         ingredient.id === id
@@ -800,20 +797,6 @@ const reducer = createReducer(initialState, (builder) => {
                     )
                     : ingredient
             ));
-
-            const servingSize = getRecipeServingSizeFromIngredients(ingredients);
-            const servingSizeInCurrentUnits = units.convertFromMetric(
-                servingSize, state.servingSizeUnit, state.customUnits, state.density,
-            );
-            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
-            state.ingredients = ingredients;
-            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
-            state.servingSize = servingSize;
-            state.servingSizeInput = String(servingSizeInput);
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
         })
         .addCase(actions.toggleIngredientOpen, (state, action) => {
             const { payload: id } = action;
@@ -834,7 +817,7 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.updateIngredientProductAmount, (state, action) => {
             const { id, inputValue } = action.payload;
 
-            const ingredients = state.ingredients.map((ingredient) => (
+            state.ingredients = state.ingredients.map((ingredient) => (
                 (ingredient.id === id)
                     ? {
                         ...ingredient,
@@ -843,26 +826,11 @@ const reducer = createReducer(initialState, (builder) => {
                     }
                     : ingredient
             ));
-
-            const servingSize = getRecipeServingSizeFromIngredients(ingredients);
-            const servingSizeInCurrentUnits = units.convertFromMetric(
-                servingSize, state.servingSizeUnit, state.customUnits, state.density,
-            );
-            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
-
-            state.ingredients = ingredients;
-            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
-            state.servingSize = servingSize;
-            state.servingSizeInput = String(servingSizeInput);
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
         })
         .addCase(actions.updateIngredientProductUnit, (state, action) => {
             const { id, unit } = action.payload;
 
-            const ingredients = state.ingredients.map((ingredient) => {
+            state.ingredients = state.ingredients.map((ingredient) => {
                 if (ingredient.id === id) {
 
                     if (state.editMode) {
@@ -888,21 +856,6 @@ const reducer = createReducer(initialState, (builder) => {
                     return ingredient;
                 }
             });
-
-            const servingSize = getRecipeServingSizeFromIngredients(ingredients);
-            const servingSizeInCurrentUnits = units.convertFromMetric(
-                servingSize, state.servingSizeUnit, state.customUnits, state.density,
-            );
-            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
-
-            state.ingredients = ingredients;
-            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
-            state.servingSize = servingSize;
-            state.servingSizeInput = String(servingSizeInput);
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
         })
         .addCase(actions.updateAltNutrients, (state, action) => {
             const { slotNumber, nutrients } = action.payload;
@@ -916,13 +869,29 @@ const reducer = createReducer(initialState, (builder) => {
                     : ingredient
             ));
         })
+        .addCase(actions.calculateNutrientsAndServingSize, (state) => {
+
+            const servingSize = getRecipeServingSizeFromIngredients(state.ingredients);
+            const servingSizeInCurrentUnits = units.convertFromMetric(
+                servingSize, state.servingSizeUnit, state.customUnits, state.density,
+            );
+            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
+            const nutrientsByServing = getRecipeNutrientsFromIngredients(state.ingredients);
+
+            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
+            state.servingSize = servingSize;
+            state.servingSizeInput = String(servingSizeInput);
+            state.nutrientsByServing = nutrientsByServing;
+            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
+        })
         .addCase(actions.addIngredient.pending, (state) => {
             state.isLoadedIngredients = false;
         })
         .addCase(actions.addIngredient.fulfilled, (state, action) => {
             const { payload: ingredient } = action;
 
-            const ingredients: types.RecipeIngredient[] = [
+            state.isLoadedIngredients = true;
+            state.ingredients = [
                 ...state.ingredients,
                 {
                     ...ingredient,
@@ -941,23 +910,6 @@ const reducer = createReducer(initialState, (builder) => {
                     alternativeNutrients: {},
                 },
             ];
-
-            const servingSize = getRecipeServingSizeFromIngredients(ingredients);
-            const servingSizeInCurrentUnits = units.convertFromMetric(
-                servingSize, state.servingSizeUnit, state.customUnits, state.density,
-            );
-            const servingSizeInput = roundToDecimal(servingSizeInCurrentUnits, DecimalPlaces.Four);
-            const nutrientsByServing = getRecipeNutrientsFromIngredients(ingredients);
-
-
-            state.isLoadedIngredients = true;
-            state.ingredients = ingredients;
-            state.nutrients = convertNutrients(servingSize, false, nutrientsByServing);
-            state.servingSize = servingSize;
-            state.servingSizeInput = String(servingSizeInput);
-            state.nutrientsByServing = nutrientsByServing;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
-
         })
         .addCase(actions.addIngredient.rejected, (state, { payload: errorStatus }) => {
             state.isLoadedIngredients = true;

@@ -16,10 +16,11 @@ interface Props {
     nutrients: Dictionary<NutrientName, number>;
     nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
+    updateNutrient: (name: NutrientName, value: string) => void;
 }
 
 const RbaGeneralInfoBlock: React.FC<Props> = ({
-    food, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions,
+    food, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => (
     <div className={styles.mainBlock}>
 
@@ -37,6 +38,7 @@ const RbaGeneralInfoBlock: React.FC<Props> = ({
                     nutrientDescriptions,
                     true,
                 )}
+                updateNutrient={updateNutrient}
             />
         </div>
     </div>

@@ -43,6 +43,10 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
             : () => dispatch(recipeActions.updateRecipe())
     );
 
+    const updateNutrient = (name: NutrientName, value: string): void => {
+        dispatch(recipeActions.updateNutrient({ key: name, value: value }));
+    };
+
     const pageControls = (
         <>
             <RbaButton
@@ -137,9 +141,18 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
+                    updateNutrient={updateNutrient}
                 />
 
                 <RbaBlockTitle text={"INGREDIENTS"} />
+
+                {!isReadOnly && (
+                    <RbaButton
+                        label={"calculate nutrients & serving size from ingredients".toUpperCase()}
+                        width={ButtonWidthSize.Full}
+                        onClick={() => dispatch(recipeActions.calculateNutrientsAndServingSize())}
+                    />
+                )}
 
                 <RbaIngredientsBlock
                     isReadOnly={isReadOnly}
@@ -160,10 +173,11 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
                 <RbaPageDetailedNutrientsBlock
-                    isReadOnly={true}
+                    isReadOnly={isReadOnly}
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
+                    updateNutrient={updateNutrient}
                 />
 
             </div>

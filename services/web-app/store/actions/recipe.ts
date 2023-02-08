@@ -8,7 +8,7 @@ import type * as units from "@common/units";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
-import { convertFoodToIngredient, convertRecipePageIntoRecipe, convertRecipeToIngredient } from "../helpers/recipe";
+import { convertFoodToIngredient, convertRecipePageIntoRecipe } from "../helpers/recipe";
 import type * as types from "../types/recipe";
 
 import type { AsyncThunkConfig } from ".";
@@ -22,6 +22,7 @@ export const setEditMode = createAction<boolean>("recipe/set_edit_mode");
 export const updateServingSizeAmount = createAction<string>("recipe/update_serving_size_amount");
 export const updateServingSizeUnit = createAction<units.WeightUnit | units.VolumeUnit>("recipe/update_serving_size_unit");
 export const updateType = createAction<string>("recipe/update_type");
+export const updateNutrient = createAction<{ key: NutrientName, value: string }>("recipe/update_nutrient");
 export const fetchRecipeNew = createAction("recipe/fetch_recipe_new");
 export const addCustomUnit = createAction<units.CustomUnitInput>("recipe/add_custom_unit");
 export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit");
@@ -113,6 +114,7 @@ export const toggleIngredientMark = createAction<number>("recipe/ingredient/togg
 export const updateIngredientProductAmount = createAction<{ id: number, inputValue: string }>("recipe/ingredient/update_product_amount");
 export const updateIngredientProductUnit = createAction<{ id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
 export const updateAltNutrients = createAction<{ slotNumber: number, nutrients: Dictionary<NutrientName, number> }>("recipe/ingredient/update_alt_nutrients");
+export const calculateNutrientsAndServingSize = createAction("recipe/ingredient/calculate_nutrients_and_serving_size");
 
 export const addIngredient = createAsyncThunk<Ingredient, { product: ProductShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
     "recipe/ingredient/add",
@@ -120,11 +122,11 @@ export const addIngredient = createAsyncThunk<Ingredient, { product: ProductShor
         try {
             if (product.is_recipe) {
                 const recipe = await RecipeApi.getRecipe(product.id);
-                return convertRecipeToIngredient(recipe, slotNumber, isAlternative);
+                return convertFoodToIngredient(recipe, slotNumber, isAlternative, true);
             }
             else {
                 const food = await FoodApi.getFood(product.id);
-                return convertFoodToIngredient(food, slotNumber, isAlternative);
+                return convertFoodToIngredient(food, slotNumber, isAlternative, false);
             }
         }
         catch (error) {

@@ -38,6 +38,10 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
             : () => dispatch(foodActions.updateFood())
     );
 
+    const updateNutrient = (name: NutrientName, value: string): void => {
+        dispatch(foodActions.updateNutrient({ key: name, value: value }));
+    };
+
     const pageControls = (
         <>
             <RbaButton
@@ -130,6 +134,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
+                    updateNutrient={updateNutrient}
                 />
 
                 {/* Detailed Nutrition Information  */}
@@ -141,6 +146,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
                     nutrients={nutrientsByServing}
                     nutrientInputs={nutrientsByServingInputs}
                     nutrientDescriptions={nutrientDescriptions}
+                    updateNutrient={updateNutrient}
                 />
 
             </div>
