@@ -28,7 +28,7 @@ pub struct Error {
 
 impl From<sqlx::Error> for Error {
     fn from(err: sqlx::Error) -> Self {
-        Error {
+        Self {
             kind: ErrorKind::Database,
             text: err.to_string(),
         }
@@ -37,7 +37,7 @@ impl From<sqlx::Error> for Error {
 
 impl From<jsonwebtoken::errors::Error> for Error {
     fn from(err: jsonwebtoken::errors::Error) -> Self {
-        Error {
+        Self {
             kind: ErrorKind::Unauthenticated,
             text: err.to_string(),
         }

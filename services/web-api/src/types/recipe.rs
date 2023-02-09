@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
-use super::direction::{CreateDirectionPayload, DirectionDetails, UpdateDirectionPayload};
 use super::ingredient::{IngredientDetailed, IngredientPayload};
+use super::instruction::{CreateInstructionPayload, InstructionDetailed, UpdateInstructionPayload};
 use super::product::Product;
 
 use chrono::{DateTime, Utc};
@@ -19,7 +19,7 @@ pub struct Recipe {
     pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CustomUnit>,
     pub ingredients: Vec<IngredientDetailed>,
-    pub directions: Vec<DirectionDetails>,
+    pub instructions: Vec<InstructionDetailed>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub is_private: bool,
@@ -35,7 +35,7 @@ pub struct CreateRecipePayload {
     pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<CreateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
-    pub directions: Vec<CreateDirectionPayload>,
+    pub instructions: Vec<CreateInstructionPayload>,
     pub is_private: bool,
 }
 
@@ -50,7 +50,7 @@ pub struct UpdateRecipePayload {
     pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
-    pub directions: Vec<UpdateDirectionPayload>,
+    pub instructions: Vec<UpdateInstructionPayload>,
     pub is_private: bool,
 }
 
@@ -60,7 +60,7 @@ impl Recipe {
         nutrients: &HashMap<String, f32>,
         custom_units: Vec<CustomUnit>,
         ingredients: Vec<IngredientDetailed>,
-        directions: Vec<DirectionDetails>,
+        instructions: &[InstructionDetailed],
     ) -> Self {
         Self {
             id: product.id,
@@ -72,7 +72,7 @@ impl Recipe {
             nutrients: nutrients.to_owned(),
             custom_units,
             ingredients,
-            directions,
+            instructions: instructions.to_vec(),
             created_at: product.created_at,
             updated_at: product.updated_at,
             is_private: product.is_private,
