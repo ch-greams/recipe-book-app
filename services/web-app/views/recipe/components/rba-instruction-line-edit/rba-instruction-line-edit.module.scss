@@ -1,12 +1,12 @@
 @import "@styles/variables.scss";
 
 
-.directionLine {
+.instructionLine {
     display: flex;
     flex-direction: row;
     gap: 8px;
 
-    .directionLineButton {
+    .instructionLineButton {
 
         width: 44px;
         height: 24px;
@@ -32,7 +32,7 @@
         border-radius: 2px;
     }
 
-    .directionInfo {
+    .instructionInfo {
 
         display: flex;
         flex-grow: 2;
@@ -54,7 +54,7 @@
         border-width: 1px;
         border-radius: 2px;
 
-        .directionInfoTitle {
+        .instructionInfoTitle {
 
             display: flex;
             flex-direction: row;
@@ -68,13 +68,13 @@
             }
         }
 
-        .directionInfoMeasures {
+        .instructionInfoMeasures {
 
             display: flex;
             flex-direction: row;
             gap: 4px;
 
-            .directionInfoMeasure {
+            .instructionInfoMeasure {
 
                 display: flex;
                 gap: 4px;

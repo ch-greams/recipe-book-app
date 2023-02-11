@@ -2,73 +2,58 @@ import { DecimalPlaces, roundToDecimal } from "@common/numeric";
 import { NutrientName } from "@common/nutrients";
 import { mapDictionary } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
-import type { Direction, DirectionPart, Food, Ingredient, Recipe } from "@common/typings";
+import type { Food, Ingredient, Instruction, InstructionIngredient, Recipe } from "@common/typings";
 import { WeightUnit } from "@common/units";
 import { getTemporaryId } from "@common/utils";
 
 import type {
-    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient, RecipePageStore,
+    RecipeIngredient, RecipeInstruction, RecipeInstructionIngredient, RecipePageStore,
 } from "../types/recipe";
 
 import { getNutrientMultiplierFromAmount } from "./food";
 
 
 
-function convertRecipeDirectionPartIntoDirectionPart(
-    recipeDirectionPart: RecipeDirectionPartComment | RecipeDirectionPartIngredient,
+function convertRecipeInstructionIngredientIntoInstructionIngredient(
+    recipeInstructionIngredient: RecipeInstructionIngredient,
     ingredients: RecipeIngredient[],
-    directionPartIndex: number,
-): DirectionPart {
+): InstructionIngredient {
 
-    const directionPartIngredient = recipeDirectionPart as RecipeDirectionPartIngredient;
-    const ingredientNumber = directionPartIngredient.ingredientNumber;
+    const ingredientSlotNumber = recipeInstructionIngredient.ingredientSlotNumber;
 
-    let ingredientAmount;
-
-    if (ingredientNumber) {
-        const ingredient = unwrap(
-            ingredients.find((_ingredient) => _ingredient.slot_number === ingredientNumber),
-            "ingredients.find((_ingredient) => _ingredient.id === ingredientId)",
-        );
-
-        ingredientAmount = directionPartIngredient.ingredientAmount / ingredient.amount;
-    }
+    const ingredient = unwrap(
+        ingredients.find((_ingredient) => _ingredient.slot_number === ingredientSlotNumber),
+        "ingredients.find((_ingredient) => _ingredient.slot_number === ingredientSlotNumber)",
+    );
 
     return {
-        step_number: directionPartIndex,
-        direction_part_type: recipeDirectionPart.type,
-        comment_text: (recipeDirectionPart as RecipeDirectionPartComment).commentText,
-        ingredient_number: ingredientNumber,
-        ingredient_amount: ingredientAmount,
+        ingredient_slot_number: ingredientSlotNumber,
+        ingredient_percentage: recipeInstructionIngredient.ingredientAmount / ingredient.amount,
     };
 }
 
-function convertRecipeDirectionIntoDirection(
-    recipeDirection: RecipeDirection,
+function convertRecipeInstructionIntoInstruction(
+    recipeInstruction: RecipeInstruction,
     ingredients: RecipeIngredient[],
-    directionIndex: number,
-): Direction {
-
-    const directionParts = recipeDirection.steps
-        .map((directionPart, index) => convertRecipeDirectionPartIntoDirectionPart(directionPart, ingredients, index));
+    instructionIndex: number,
+): Instruction {
 
     return {
-        id: recipeDirection.id,
-        step_number: directionIndex,
-        name: recipeDirection.name,
-        duration_value: recipeDirection.durationValue,
-        duration_unit: recipeDirection.durationUnit,
-        temperature_value: recipeDirection.temperatureValue,
-        temperature_unit: recipeDirection.temperatureUnit,
-        steps: directionParts,
+        id: recipeInstruction.id,
+        step_number: instructionIndex,
+        description: recipeInstruction.description,
+        duration_value: recipeInstruction.durationValue,
+        duration_unit: recipeInstruction.durationUnit,
+        temperature_value: recipeInstruction.temperatureValue,
+        temperature_unit: recipeInstruction.temperatureUnit,
+        ingredients: recipeInstruction.ingredients
+            .map((instructionIngredient) =>
+                convertRecipeInstructionIngredientIntoInstructionIngredient(instructionIngredient, ingredients),
+            ),
     };
 }
 
 export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe {
-
-    const directions = recipePage.directions
-        .map((direction, index) => convertRecipeDirectionIntoDirection(direction, recipePage.ingredients, index));
-
     return {
         id: recipePage.id,
         name: recipePage.name,
@@ -79,7 +64,10 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
         density: recipePage.density,
         serving_size: recipePage.servingSize,
         ingredients: recipePage.ingredients,
-        directions: directions,
+        instructions: recipePage.instructions
+            .map((instruction, index) =>
+                convertRecipeInstructionIntoInstruction(instruction, recipePage.ingredients, index),
+            ),
         is_private: recipePage.isPrivate,
         nutrients: recipePage.nutrients,
     };

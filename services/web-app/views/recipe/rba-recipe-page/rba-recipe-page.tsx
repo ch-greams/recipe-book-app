@@ -3,9 +3,9 @@ import { useRouter } from "next/router";
 
 import { BUTTON_DELETE, BUTTON_EDIT,BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
 import type { NutrientName } from "@common/nutrients";
-import RbaDirectionsBlock from "@views/recipe/components/rba-directions-block";
 import RbaGeneralInfoBlock from "@views/recipe/components/rba-general-info-block";
 import RbaIngredientsBlock from "@views/recipe/components/rba-ingredients-block";
+import RbaInstructionsBlock from "@views/recipe/components/rba-instructions-block";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonWidthSize } from "@views/shared/rba-button";
 import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutrients-block";
@@ -88,8 +88,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
         brand,
         description,
         ingredients,
-        newDirection,
-        directions,
+        instructions,
         nutrientsByServing,
         nutrientsByServingInputs,
     } = recipe;
@@ -161,12 +160,11 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                     search={search}
                 />
 
-                <RbaBlockTitle text={"DIRECTIONS"} />
+                <RbaBlockTitle text={"INSTRUCTIONS"} />
 
-                <RbaDirectionsBlock
+                <RbaInstructionsBlock
                     isReadOnly={isReadOnly}
-                    newDirection={newDirection}
-                    directions={directions}
+                    instructions={instructions}
                     ingredients={ingredients}
                 />
 

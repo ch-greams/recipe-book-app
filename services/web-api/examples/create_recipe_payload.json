@@ -48,46 +48,33 @@
             "is_alternative": false
         }
     ],
-    "directions": [
+    "instructions": [
         {
             "id": 34,
             "step_number": 0,
-            "name": "test step",
+            "description": "test step",
             "temperature_value": 180,
             "temperature_unit": "C",
             "duration_value": null,
             "duration_unit": "min",
-            "steps": []
+            "ingredients": []
         },
         {
             "id": 35,
             "step_number": 1,
-            "name": "stir",
+            "description": "Stir. Add Cottage Cheese first.",
             "temperature_value": null,
             "temperature_unit": "C",
             "duration_value": 1,
             "duration_unit": "min",
-            "steps": [
+            "ingredients": [
                 {
-                    "step_number": 0,
-                    "direction_part_type": "note",
-                    "comment_text": "Add Cottage Cheese first",
-                    "ingredient_number": null,
-                    "ingredient_amount": null
+                    "ingredient_slot_number": 2,
+                    "ingredient_percentage": 1.0
                 },
                 {
-                    "step_number": 1,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_number": 2,
-                    "ingredient_amount": 1.0
-                },
-                {
-                    "step_number": 2,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_number": 1,
-                    "ingredient_amount": 0.75
+                    "ingredient_slot_number": 1,
+                    "ingredient_percentage": 0.75
                 }
             ]
         }

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, iter::zip};
 
 use actix_web::{
     get, post,
@@ -11,10 +11,10 @@ use crate::{
     auth::{authorize, get_user, Certificate},
     types::{
         custom_unit::CustomUnit,
-        direction::{Direction, DirectionDetails},
-        direction_part::DirectionPart,
         error::Error,
         ingredient::{Ingredient, IngredientDetailed},
+        instruction::{Instruction, InstructionDetailed},
+        instruction_ingredient::InstructionIngredient,
         meta::Nutrient,
         product::Product,
         product_nutrient::ProductNutrient,
@@ -26,7 +26,7 @@ pub fn scope() -> Scope {
     actix_web::web::scope("recipe")
         .service(find_by_id)
         .service(create_recipe)
-        .service(update_recipe)
+    // .service(update_recipe)
 }
 
 #[get("/{id}")]
@@ -62,33 +62,18 @@ async fn find_by_id(
         .fetch_all(&mut txn)
         .await?;
 
-    // directions
+    // instructions
 
-    let directions = Direction::find_by_recipe_id(*id)
+    let instructions = InstructionDetailed::find_by_recipe_id(*id)
         .fetch_all(&mut txn)
         .await?;
-
-    let direction_ids: Vec<i64> = directions
-        .clone()
-        .iter()
-        .map(|direction| direction.id)
-        .collect();
-
-    let direction_parts = DirectionPart::find_by_direction_ids(direction_ids)
-        .fetch_all(&mut txn)
-        .await?;
-
-    let direction_details = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
 
     let recipe = Recipe::new(
         product,
         &product_nutrients,
         custom_units,
         ingredients,
-        direction_details,
+        &instructions,
     );
 
     Ok(Json(recipe))
@@ -130,28 +115,32 @@ async fn create_recipe(
         .fetch_all(&mut txn)
         .await?;
 
-    // directions
+    // instructions
 
-    let directions = Direction::insert_multiple(&payload.directions, product.id, &mut txn).await?;
+    let created_instructions =
+        Instruction::insert_multiple(&payload.instructions, product.id, &mut txn).await?;
 
-    let mut direction_parts: Vec<DirectionPart> = Vec::new();
+    let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+        zip(&created_instructions, &payload.instructions)
+            .flat_map(|(ci, ip)| InstructionIngredient::from_created_instructions(ci, ip))
+            .collect();
 
-    for (index, direction_payload) in payload.directions.iter().enumerate() {
-        let direction = directions
-            .get(index)
-            .ok_or_else(|| Error::not_created("direction"))?;
+    let created_instruction_ingredients =
+        InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+            .await?;
 
-        let mut _direction_parts =
-            DirectionPart::insert_multiple(&direction_payload.steps, direction.id, &mut txn)
-                .await?;
+    let instructions_detailed = created_instructions
+        .into_iter()
+        .map(|created_instruction| {
+            let instruction_ingredients = created_instruction_ingredients
+                .clone()
+                .into_iter()
+                .filter(|ii| ii.instruction_id == created_instruction.id)
+                .collect::<Vec<InstructionIngredient>>();
 
-        direction_parts.append(&mut _direction_parts);
-    }
-
-    let direction_details: Vec<DirectionDetails> = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
+            InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+        })
+        .collect::<Vec<InstructionDetailed>>();
 
     txn.commit().await?;
 
@@ -160,7 +149,7 @@ async fn create_recipe(
         &defined_nutrients,
         custom_units,
         ingredients,
-        direction_details,
+        &instructions_detailed,
     );
 
     Ok(Json(recipe))
@@ -205,28 +194,33 @@ async fn update_recipe(
         .fetch_all(&mut txn)
         .await?;
 
-    // directions
+    // instructions
 
-    let directions = Direction::replace_multiple(&payload.directions, product.id, &mut txn).await?;
+    let created_instructions =
+        Instruction::replace_multiple(&payload.instructions, product.id, &mut txn).await?;
 
-    let mut direction_parts: Vec<DirectionPart> = Vec::new();
+    let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+        zip(&created_instructions, &payload.instructions)
+            .flat_map(|(ci, ip)| InstructionIngredient::from_updated_instructions(ci, ip))
+            .collect();
 
-    for (index, direction_payload) in payload.directions.iter().enumerate() {
-        let direction = directions
-            .get(index)
-            .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;
+    // NOTE: No need to replace instruction_ingredients, cascade delete of instructions will take care of it
+    let created_instruction_ingredients =
+        InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+            .await?;
 
-        let mut _direction_parts =
-            DirectionPart::insert_multiple(&direction_payload.steps, direction.id, &mut txn)
-                .await?;
+    let instructions_detailed = created_instructions
+        .into_iter()
+        .map(|created_instruction| {
+            let instruction_ingredients = created_instruction_ingredients
+                .clone()
+                .into_iter()
+                .filter(|ii| ii.instruction_id == created_instruction.id)
+                .collect::<Vec<InstructionIngredient>>();
 
-        direction_parts.append(&mut _direction_parts);
-    }
-
-    let direction_details: Vec<DirectionDetails> = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
+            InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+        })
+        .collect::<Vec<InstructionDetailed>>();
 
     txn.commit().await?;
 
@@ -235,7 +229,7 @@ async fn update_recipe(
         &defined_nutrients,
         custom_units,
         ingredients,
-        direction_details,
+        &instructions_detailed,
     );
 
     Ok(Json(recipe))

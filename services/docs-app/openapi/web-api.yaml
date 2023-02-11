@@ -301,29 +301,15 @@ components:
         is_alternative:
           type: boolean
           example: false
-    # direction
-    DirectionPartDetails:
+    # instruction
+    InstructionIngredientSimple:
       type: object
       properties:
-        step_number:
+        ingredient_slot_number:
           type: integer
-          example: 1
-        direction_part_type:
-          type: string
-          enum:
-            - ingredient
-            - note
-            - warning
-            - tip
-          example: tip
-        comment_text:
-          type: string
-          example: You can flip it after 8 min, but not necessary
-        ingredient_number:
-          type: integer
-        ingredient_amount:
+        ingredient_percentage:
           type: number
-    DirectionDetails:
+    InstructionDetailed:
       type: object
       properties:
         id:
@@ -332,7 +318,7 @@ components:
         step_number:
           type: integer
           example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -347,38 +333,17 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartDetails"
-    DirectionPartPayload:
+            $ref: "#/components/schemas/InstructionIngredientSimple"
+    CreateInstructionPayload:
       type: object
       properties:
         step_number:
           type: integer
           example: 1
-        direction_part_type:
-          type: string
-          enum:
-            - ingredient
-            - note
-            - warning
-            - tip
-          example: tip
-        comment_text:
-          type: string
-          example: You can flip it after 8 min, but not necessary
-        ingredient_number:
-          type: integer
-        ingredient_amount:
-          type: number
-    CreateDirectionPayload:
-      type: object
-      properties:
-        step_number:
-          type: integer
-          example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -393,11 +358,11 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartPayload"
-    UpdateDirectionPayload:
+            $ref: "#/components/schemas/InstructionIngredientSimple"
+    UpdateInstructionPayload:
       type: object
       properties:
         id:
@@ -406,7 +371,7 @@ components:
         step_number:
           type: integer
           example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -421,10 +386,10 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartPayload"
+            $ref: "#/components/schemas/InstructionIngredientSimple"
     # recipe
     Recipe:
       type: object
@@ -454,10 +419,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/IngredientDetails"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionDetails"
+            $ref: "#/components/schemas/InstructionDetailed"
         is_private:
           type: boolean
           example: false
@@ -492,10 +457,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CreateIngredientPayload"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/CreateDirectionPayload"
+            $ref: "#/components/schemas/CreateInstructionPayload"
         is_private:
           type: boolean
           example: false
@@ -527,10 +492,10 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UpdateIngredientPayload"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/UpdateDirectionPayload"
+            $ref: "#/components/schemas/UpdateInstructionPayload"
         is_private:
           type: boolean
           example: false
