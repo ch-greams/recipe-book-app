@@ -8,113 +8,112 @@ import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import type { RbaSelectChangeCallback } from "@views/shared/rba-select";
 import RbaSelect, { SelectHeightSize, SelectTheme,SelectWidthSize } from "@views/shared/rba-select";
-import type { RecipeDirection } from "@store/types/recipe";
+import type { RecipeInstruction } from "@store/types/recipe";
 import { IconSize } from "@icons/icon-params";
 import RbaIconAdd from "@icons/rba-icon-add";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
-import styles from "./rba-direction-line-edit.module.scss";
+import styles from "./rba-instruction-line-edit.module.scss";
 
 
 
 interface Props {
-    direction: RecipeDirection;
-    isNewDirection?: boolean;
+    instruction: RecipeInstruction;
+    isNew?: boolean;
     onButtonClick: () => void;
-    updateDirectionStepNumber: RbaInputChangeCallback;
-    updateDirectionName: RbaInputChangeCallback;
-    updateDirectionTemperatureCount: RbaInputChangeCallback;
-    updateDirectionTemperatureUnit: RbaSelectChangeCallback;
-    updateDirectionTimeCount: RbaInputChangeCallback;
-    updateDirectionTimeUnit: RbaSelectChangeCallback;
+    updateInstructionStepNumber: RbaInputChangeCallback;
+    updateInstructionDescription: RbaInputChangeCallback;
+    updateInstructionTemperatureCount: RbaInputChangeCallback;
+    updateInstructionTemperatureUnit: RbaSelectChangeCallback;
+    updateInstructionTimeCount: RbaInputChangeCallback;
+    updateInstructionTimeUnit: RbaSelectChangeCallback;
 }
 
-const RbaDirectionLineEdit: React.FC<Props> = ({
-    direction,
-    isNewDirection = false,
+const RbaInstructionLineEdit: React.FC<Props> = ({
+    instruction,
+    isNew = false,
     onButtonClick,
-    updateDirectionStepNumber,
-    updateDirectionName,
-    updateDirectionTemperatureCount,
-    updateDirectionTemperatureUnit,
-    updateDirectionTimeCount,
-    updateDirectionTimeUnit,
+    updateInstructionStepNumber,
+    updateInstructionDescription,
+    updateInstructionTemperatureCount,
+    updateInstructionTemperatureUnit,
+    updateInstructionTimeCount,
+    updateInstructionTimeUnit,
 }) => {
 
-    const directionButtonIcon = (
-        isNewDirection
+    const instructionButtonIcon = (
+        isNew
             ? <RbaIconAdd size={IconSize.Medium} color={Color.Default} />
             : <RbaIconRemove size={IconSize.Medium} color={Color.Default} />
     );
 
-    const directionTitleClassName = classNames({
-        [styles.directionInfoTitle]: true,
-        [styles.isMarked]: direction.isMarked,
+    const instructionTitleClassName = classNames({
+        [styles.instructionInfoTitle]: true,
+        [styles.isMarked]: instruction.isMarked,
     });
 
     return (
 
         <div
-            data-cy={constants.CY_DIRECTION_LINE}
-            className={styles.directionLine}
+            data-cy={constants.CY_INSTRUCTION_LINE}
+            className={styles.instructionLine}
         >
 
             <div
-                data-cy={constants.CY_DIRECTION_BUTTON}
-                className={styles.directionLineButton}
+                data-cy={constants.CY_INSTRUCTION_BUTTON}
+                className={styles.instructionLineButton}
                 onClick={onButtonClick}
             >
-                {directionButtonIcon}
+                {instructionButtonIcon}
             </div>
 
-            <div className={styles.directionInfo}>
+            <div className={styles.instructionInfo}>
 
-                <div className={directionTitleClassName}>
+                <div className={instructionTitleClassName}>
 
                     {(
-                        !isNewDirection && (
+                        !isNew && (
                             <RbaInput
-                                data-cy={constants.CY_DIRECTION_LINE_STEP_INPUT}
                                 maxLength={2}
                                 align={InputTextAlign.Center}
                                 theme={InputTheme.Primary}
                                 width={InputWidthSize.Small}
                                 height={InputHeightSize.Medium}
                                 placeholder={"#"}
-                                value={String(direction.stepNumber)}
-                                onChange={updateDirectionStepNumber}
+                                value={String(instruction.stepNumber)}
+                                onChange={updateInstructionStepNumber}
                             />
                         )
                     )}
 
                     <RbaInput
-                        data-cy={constants.CY_DIRECTION_LINE_NAME_INPUT}
+                        data-cy={constants.CY_INSTRUCTION_LINE_DESCRIPTION_INPUT}
                         align={InputTextAlign.Left}
                         theme={InputTheme.Primary}
                         width={InputWidthSize.Full}
                         height={InputHeightSize.Medium}
-                        value={direction.name}
+                        value={instruction.description}
                         placeholder={"TITLE"}
-                        onChange={updateDirectionName}
+                        onChange={updateInstructionDescription}
                     />
                 </div>
 
-                <div className={styles.directionInfoMeasures}>
+                <div className={styles.instructionInfoMeasures}>
 
                     <div
-                        data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_MEASURE}
-                        className={styles.directionInfoMeasure}
+                        data-cy={constants.CY_INSTRUCTION_LINE_TEMPERATURE_MEASURE}
+                        className={styles.instructionInfoMeasure}
                     >
 
                         <RbaInput
-                            data-cy={constants.CY_DIRECTION_LINE_TEMPERATURE_INPUT}
+                            data-cy={constants.CY_INSTRUCTION_LINE_TEMPERATURE_INPUT}
                             theme={InputTheme.Primary}
                             width={InputWidthSize.Medium}
                             height={InputHeightSize.Medium}
                             placeholder={"#"}
-                            value={direction.temperatureValueInput}
+                            value={instruction.temperatureValueInput}
                             normalizer={InputNormalizer.Decimal}
-                            onChange={updateDirectionTemperatureCount}
+                            onChange={updateInstructionTemperatureCount}
                         />
 
                         <RbaSelect
@@ -124,26 +123,26 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                             width={SelectWidthSize.Medium}
                             height={SelectHeightSize.Medium}
                             options={Object.values(TemperatureUnit).map((unit) => ({ value: unit }))}
-                            value={direction.temperatureUnit}
-                            onChange={updateDirectionTemperatureUnit}
+                            value={instruction.temperatureUnit}
+                            onChange={updateInstructionTemperatureUnit}
                         />
 
                     </div>
 
                     <div
-                        data-cy={constants.CY_DIRECTION_LINE_DURATION_MEASURE}
-                        className={styles.directionInfoMeasure}
+                        data-cy={constants.CY_INSTRUCTION_LINE_DURATION_MEASURE}
+                        className={styles.instructionInfoMeasure}
                     >
 
                         <RbaInput
-                            data-cy={constants.CY_DIRECTION_LINE_DURATION_INPUT}
+                            data-cy={constants.CY_INSTRUCTION_LINE_DURATION_INPUT}
                             theme={InputTheme.Primary}
                             width={InputWidthSize.Medium}
                             height={InputHeightSize.Medium}
                             placeholder={"#"}
-                            value={direction.durationValueInput}
+                            value={instruction.durationValueInput}
                             normalizer={InputNormalizer.Decimal}
-                            onChange={updateDirectionTimeCount}
+                            onChange={updateInstructionTimeCount}
                         />
 
                         <RbaSelect
@@ -153,8 +152,8 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
                             width={SelectWidthSize.Medium}
                             height={SelectHeightSize.Medium}
                             options={Object.values(TimeUnit).map((unit) => ({ value: unit }))}
-                            value={direction.durationUnit}
-                            onChange={updateDirectionTimeUnit}
+                            value={instruction.durationUnit}
+                            onChange={updateInstructionTimeUnit}
                         />
 
                     </div>
@@ -165,6 +164,6 @@ const RbaDirectionLineEdit: React.FC<Props> = ({
     );
 };
 
-RbaDirectionLineEdit.displayName = "RbaDirectionLineEdit";
+RbaInstructionLineEdit.displayName = "RbaInstructionLineEdit";
 
-export default RbaDirectionLineEdit;
+export default RbaInstructionLineEdit;

@@ -6,26 +6,23 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import { NutrientName } from "@common/nutrients";
 import { DEFAULT_TEMPERATURE_UNIT,DEFAULT_TIME_UNIT, TemperatureUnit, TimeUnit, WeightUnit } from "@common/units";
 import { store } from "@store";
-import type {
-    RecipeDirection, RecipeDirectionPartComment, RecipeDirectionPartIngredient, RecipeIngredient,
-} from "@store/types/recipe";
-import { DirectionPartType } from "@store/types/recipe";
+import type { RecipeIngredient, RecipeInstruction, RecipeInstructionIngredient } from "@store/types/recipe";
 
-import RbaDirectionsBlock from ".";
+import RbaInstructionsBlock from ".";
 
 export default {
-    title: "Recipe/RbaDirectionsBlock",
-    component: RbaDirectionsBlock,
+    title: "Recipe/RbaInstructionsBlock",
+    component: RbaInstructionsBlock,
     argTypes: {
         isReadOnly: {
             type: { name: "boolean", required: true },
             table: { type: { summary: "boolean" } },
         },
-        newDirection: {
-            table: { type: { summary: "RecipeDirection" } },
+        newInstruction: {
+            table: { type: { summary: "RecipeInstruction" } },
         },
-        directions: {
-            table: { type: { summary: "RecipeDirection[]" } },
+        instructions: {
+            table: { type: { summary: "RecipeInstruction[]" } },
         },
         ingredients: {
             table: { type: { summary: "RecipeIngredient[]" } },
@@ -38,40 +35,19 @@ export default {
             </Provider>
         ),
     ],
-} as ComponentMeta<typeof RbaDirectionsBlock>;
+} as ComponentMeta<typeof RbaInstructionsBlock>;
 
-const Template: ComponentStory<typeof RbaDirectionsBlock> = (args) => <RbaDirectionsBlock {...args} />;
+const Template: ComponentStory<typeof RbaInstructionsBlock> = (args) => <RbaInstructionsBlock {...args} />;
 
 
-const NEW_DIRECTION: RecipeDirection = {
-    id: -1,
-
-    isOpen: false,
-    isMarked: false,
-
-    stepNumber: 0,
-    name: "",
-
-    durationValue: 0,
-    durationUnit: DEFAULT_TIME_UNIT,
-
-    temperatureValue: 0,
-    temperatureUnit: DEFAULT_TEMPERATURE_UNIT,
-
-    durationValueInput: "",
-    temperatureValueInput: "",
-
-    steps: [],
-};
-
-const DIRECTION_1: RecipeDirection = {
+const INSTRUCTION_1: RecipeInstruction = {
     id: 1,
 
     isOpen: false,
     isMarked: false,
 
     stepNumber: 1,
-    name: "test step",
+    description: "test step",
 
     durationValue: null,
     durationUnit: DEFAULT_TIME_UNIT,
@@ -82,22 +58,11 @@ const DIRECTION_1: RecipeDirection = {
     durationValueInput: "",
     temperatureValueInput: "180",
 
-    steps: [],
+    ingredients: [],
 };
 
-const SUB_DIRECTION_0: RecipeDirectionPartComment = {
-    id: 0,
-    stepNumber: 0,
-    type: DirectionPartType.Note,
-    commentText: "Add Cottage Cheese first",
-};
-
-const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
-    id: 1,
-    stepNumber: 1,
-    type: DirectionPartType.Ingredient,
-    isMarked: false,
-    ingredientNumber: 10,
+const INSTRUCTION_INGREDIENT_1: RecipeInstructionIngredient = {
+    ingredientSlotNumber: 10,
     ingredientAmount: 5,
     ingredientAmountInput: "5",
     ingredientName: "Cottage Cheese",
@@ -105,12 +70,8 @@ const SUB_DIRECTION_1: RecipeDirectionPartIngredient = {
     ingredientDensity: 1,
 };
 
-const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
-    id: 2,
-    stepNumber: 2,
-    type: DirectionPartType.Ingredient,
-    isMarked: false,
-    ingredientNumber: 11,
+const INSTRUCTION_INGREDIENT_2: RecipeInstructionIngredient = {
+    ingredientSlotNumber: 11,
     ingredientAmount: 100,
     ingredientAmountInput: "100",
     ingredientName: "Sour Cream",
@@ -119,14 +80,14 @@ const SUB_DIRECTION_2: RecipeDirectionPartIngredient = {
 
 };
 
-const DIRECTION_2: RecipeDirection = {
+const INSTRUCTION_2: RecipeInstruction = {
     id: 2,
 
     isOpen: true,
     isMarked: false,
 
     stepNumber: 2,
-    name: "stir",
+    description: "stir",
 
     durationValue: 1,
     durationUnit: TimeUnit.min,
@@ -137,7 +98,7 @@ const DIRECTION_2: RecipeDirection = {
     durationValueInput: "1",
     temperatureValueInput: "",
 
-    steps: [],
+    ingredients: [],
 };
 
 const PRODUCT_ID = 1;
@@ -169,12 +130,11 @@ const INGREDIENT_1: RecipeIngredient = {
 export const Editable = Template.bind({});
 Editable.args = {
     isReadOnly: false,
-    newDirection: NEW_DIRECTION,
-    directions: [
-        DIRECTION_1,
+    instructions: [
+        INSTRUCTION_1,
         {
-            ...DIRECTION_2,
-            steps: [ SUB_DIRECTION_0, SUB_DIRECTION_1, SUB_DIRECTION_2 ],
+            ...INSTRUCTION_2,
+            ingredients: [ INSTRUCTION_INGREDIENT_1, INSTRUCTION_INGREDIENT_2 ],
         },
     ],
     ingredients: [ INGREDIENT_1 ],
@@ -183,12 +143,11 @@ Editable.args = {
 export const ReadOnly = Template.bind({});
 ReadOnly.args = {
     isReadOnly: true,
-    newDirection: NEW_DIRECTION,
-    directions: [
-        DIRECTION_1,
+    instructions: [
+        INSTRUCTION_1,
         {
-            ...DIRECTION_2,
-            steps: [ SUB_DIRECTION_0, { ...SUB_DIRECTION_1, isMarked: true }, SUB_DIRECTION_2 ],
+            ...INSTRUCTION_2,
+            ingredients: [ INSTRUCTION_INGREDIENT_1, INSTRUCTION_INGREDIENT_2 ],
         },
     ],
 };

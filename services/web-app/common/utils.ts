@@ -18,7 +18,7 @@ export function keepCaretInPlace(window: Window & typeof globalThis, event: Reac
 
 /**
  * Generates a temporary id, which is a negative locally unique number to distinguish from real ids
- * Used for ingredients in a new recipe, and direction_parts that are not in the db yet
+ * Used for ingredients in a new recipe, and instruction_ingredients that are not in the db yet
  */
 export function getTemporaryId(): number {
     return -Date.now();

@@ -1,6 +1,6 @@
 import type { NutrientName } from "@common/nutrients";
 import type { CustomUnit, TemperatureUnit, TimeUnit, Unit } from "@common/units";
-import type { DirectionPartType } from "@store/types/recipe";
+
 
 export * from "./common";
 
@@ -16,7 +16,7 @@ export interface Food {
     is_private: boolean;
 }
 
-// TODO: Create an app version of this type (camelCase) and have all necessary fields available
+// TODO: ??? Create an app version of this type (camelCase) and have all necessary fields available
 export interface ProductShort {
     id: number;
     is_recipe: boolean;
@@ -46,29 +46,26 @@ export interface Ingredient {
     nutrients: Dictionary<NutrientName, number>;
 }
 
-export interface DirectionPart {
-    step_number: number;
-    direction_part_type: DirectionPartType;
-    comment_text?: Option<string>;
-    ingredient_number?: Option<number>;
-    ingredient_amount?: Option<number>;
+export interface InstructionIngredient {
+    ingredient_slot_number: number;
+    ingredient_percentage: number;
 }
 
-export interface Direction {
+export interface Instruction {
     id: number;
     step_number: number;
-    name: string;
+    description: string;
     duration_value?: Option<number>;
     duration_unit: TimeUnit;
     temperature_value?: Option<number>;
     temperature_unit: TemperatureUnit;
-    steps: DirectionPart[];
+    ingredients: InstructionIngredient[];
 }
 
 export interface Recipe extends Food {
     type: string;
     ingredients: Ingredient[];
-    directions: Direction[];
+    instructions: Instruction[];
 }
 
 export interface RecipeShort {

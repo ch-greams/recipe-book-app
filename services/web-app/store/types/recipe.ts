@@ -10,41 +10,21 @@ export interface RecipeIngredient extends typings.Ingredient {
     alternativeNutrients: Dictionary<NutrientName, number>;
 }
 
-
-export enum DirectionPartType {
-    Tip = "tip",
-    Note = "note",
-    Warning = "warning",
-    Ingredient = "ingredient",
-}
-
-export interface RecipeDirectionPartComment {
-    // NOTE: Used only for component identification, not saved in db
-    id: number;
-    stepNumber: number;
-    type: DirectionPartType;
-    commentText: string;
-}
-
-export interface RecipeDirectionPartIngredient {
-    // NOTE: Used only for component identification, not saved in db
-    id: number;
-    stepNumber: number;
-    type: DirectionPartType;
-    isMarked: boolean;
-    ingredientNumber: number;
+export interface RecipeInstructionIngredient {
+    ingredientSlotNumber: number;
     ingredientAmount: number;
     ingredientAmountInput: string;
+
     ingredientName: string;
     ingredientUnit: units.Unit;
     ingredientDensity: number;
 }
 
-export interface RecipeDirection {
+export interface RecipeInstruction {
     id: number;
 
     stepNumber: number;
-    name: string;
+    description: string;
 
     durationValue?: Option<number>;
     durationUnit: units.TimeUnit;
@@ -57,7 +37,7 @@ export interface RecipeDirection {
     isOpen: boolean;
     isMarked: boolean;
 
-    steps: (RecipeDirectionPartComment | RecipeDirectionPartIngredient)[];
+    ingredients: RecipeInstructionIngredient[];
 }
 
 
@@ -93,9 +73,7 @@ export interface RecipePageStore {
     nutrientsByServingInputs: Dictionary<NutrientName, string>;
 
     ingredients: RecipeIngredient[];
-
-    newDirection: RecipeDirection;
-    directions: RecipeDirection[];
+    instructions: RecipeInstruction[];
 
     // NOTE: NEW RECIPE
     isCreated: boolean;

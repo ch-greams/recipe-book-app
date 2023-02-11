@@ -1,13 +1,13 @@
 @import "@styles/variables.scss";
 
 
-.directionLine {
+.instructionLine {
 
     display: flex;
     flex-direction: row;
     gap: 8px;
 
-    .directionCheckbox {
+    .instructionCheckbox {
 
         width: 22px;
         height: 22px;
@@ -22,7 +22,7 @@
         border-style: solid;
         border-width: 2px;
 
-        .directionCheckboxMark {
+        .instructionCheckboxMark {
 
             width: 16px;
             height: 16px;
@@ -33,7 +33,7 @@
         }
     }
 
-    .directionInfo {
+    .instructionInfo {
 
         display: flex;
         flex-grow: 2;
@@ -53,7 +53,7 @@
         border-width: 1px;
         border-radius: 2px;
 
-        .directionInfoTitle {
+        .instructionInfoTitle {
 
             display: flex;
             flex-direction: row;
@@ -65,7 +65,7 @@
                 opacity: 0.25;
             }
 
-            .directionInfoIndex {
+            .instructionInfoIndex {
 
                 width: 28px;
 
@@ -74,24 +74,24 @@
                 line-height: 24px;
             }
 
-            .directionInfoName {
+            .instructionInfoName {
 
                 line-height: 24px;
             }
         }
 
-        .directionInfoMeasures {
+        .instructionInfoMeasures {
 
             display: flex;
             flex-direction: row;
             gap: 4px;
 
-            .directionInfoMeasure {
+            .instructionInfoMeasure {
 
                 display: flex;
                 gap: 4px;
 
-                .directionInfoAmount {
+                .instructionInfoAmount {
 
                     width: 80px;
 

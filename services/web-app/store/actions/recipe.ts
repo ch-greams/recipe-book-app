@@ -73,34 +73,23 @@ export const updateRecipe = createAsyncThunk<Recipe, void, AsyncThunkConfig>(
 );
 
 // -----------------------------------------------------------------------------
-// Directions
+// Instructions
 // -----------------------------------------------------------------------------
 
-export const removeDirection = createAction<number>("recipe/remove_direction");
-export const toggleDirectionOpen = createAction<number>("recipe/toggle_direction_open");
-export const toggleDirectionMark = createAction<number>("recipe/toggle_direction_mark");
-export const updateDirectionStepNumber = createAction<{ directionIndex: number, stepNumber: number }>("recipe/update_direction_step_number");
-export const updateDirectionName = createAction<{ directionIndex: number, name: string }>("recipe/update_direction_name");
-
-export const updateDirectionTemperatureCount = createAction<{ directionIndex: number, inputValue: string }>("recipe/update_direction_temperature_count");
-export const updateDirectionTemperatureUnit = createAction<{ directionIndex: number, unit: units.TemperatureUnit }>("recipe/update_direction_temperature_unit");
-export const updateDirectionTimeCount = createAction<{ directionIndex: number, inputValue: string }>("recipe/update_direction_time_count");
-export const updateDirectionTimeUnit = createAction<{ directionIndex: number, unit: units.TimeUnit }>("recipe/update_direction_time_unit");
-export const updateNewDirectionStepNumber = createAction<number>("recipe/update_new_direction_step_number");
-export const updateNewDirectionName = createAction<string>("recipe/update_new_direction_name");
-export const updateNewDirectionTemperatureCount = createAction<string>("recipe/update_new_direction_temperature_count");
-export const updateNewDirectionTemperatureUnit = createAction<units.TemperatureUnit>("recipe/update_new_direction_temperature_unit");
-export const updateNewDirectionTimeCount = createAction<string>("recipe/update_new_direction_time_count");
-export const updateNewDirectionTimeUnit = createAction<units.TimeUnit>("recipe/update_new_direction_time_unit");
-export const createDirection = createAction<types.RecipeDirection>("recipe/create_direction");
-export const removeDirectionPart = createAction<{ directionIndex: number, directionPartId: number }>("recipe/remove_direction_part");
-export const toggleDirectionPartMark = createAction<{ directionIndex: number, directionPartId: number }>("recipe/toggle_direction_part_mark");
-export const updateDirectionPartStepNumber = createAction<{ directionIndex: number, directionPartId: number, stepNumber: number }>("recipe/update_direction_part_step_number");
-export const updateDirectionPartNote = createAction<{ directionIndex: number, directionPartId: number, note: string }>("recipe/update_direction_part_note");
-export const updateDirectionPartIngredientAmount = createAction<{ directionIndex: number, directionPartId: number, inputValue: string }>("recipe/update_direction_part_ingredient_amount");
-export const updateDirectionPartIngredientUnit = createAction<{ directionIndex: number, directionPartId: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/update_direction_part_ingredient_unit");
-export const createDirectionPartIngredient = createAction<{ directionIndex: number, ingredientNumber: number }>("recipe/create_direction_part_ingredient");
-export const createDirectionPartComment = createAction<{ directionIndex: number, type: types.DirectionPartType }>("recipe/create_direction_part_comment");
+export const removeInstruction = createAction<number>("recipe/remove_instruction");
+export const toggleInstructionOpen = createAction<number>("recipe/toggle_instruction_open");
+export const toggleInstructionMark = createAction<number>("recipe/toggle_instruction_mark");
+export const updateInstructionStepNumber = createAction<{ instructionIndex: number, stepNumber: number }>("recipe/update_instruction_step_number");
+export const updateInstructionDescription = createAction<{ instructionIndex: number, name: string }>("recipe/update_instruction_description");
+export const updateInstructionTemperatureCount = createAction<{ instructionIndex: number, inputValue: string }>("recipe/update_instruction_temperature_count");
+export const updateInstructionTemperatureUnit = createAction<{ instructionIndex: number, unit: units.TemperatureUnit }>("recipe/update_instruction_temperature_unit");
+export const updateInstructionTimeCount = createAction<{ instructionIndex: number, inputValue: string }>("recipe/update_instruction_time_count");
+export const updateInstructionTimeUnit = createAction<{ instructionIndex: number, unit: units.TimeUnit }>("recipe/update_instruction_time_unit");
+export const createInstruction = createAction<types.RecipeInstruction>("recipe/create_instruction");
+export const removeInstructionIngredient = createAction<{ instructionIndex: number, ingredientSlotNumber: number }>("recipe/remove_instruction_ingredient");
+export const updateInstructionIngredientAmount = createAction<{ instructionIndex: number, ingredientSlotNumber: number, inputValue: string }>("recipe/update_instruction_ingredient_percentage");
+export const updateInstructionIngredientUnit = createAction<{ instructionIndex: number, ingredientSlotNumber: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/update_instruction_ingredient_unit");
+export const createInstructionIngredient = createAction<{ instructionIndex: number, ingredientSlotNumber: number }>("recipe/create_instruction_ingredient");
 
 // -----------------------------------------------------------------------------
 // Ingredients
