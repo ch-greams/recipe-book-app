@@ -9,7 +9,6 @@ use super::error::Error;
 pub struct JournalGroup {
     pub ui_index: i16,
     pub name: String,
-    pub user_id: i64,
 }
 
 impl JournalGroup {

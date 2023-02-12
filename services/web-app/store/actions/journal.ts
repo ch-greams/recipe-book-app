@@ -3,7 +3,7 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import { DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT, formatTime } from "@common/date";
 import { HttpError } from "@common/http";
 import { unwrap } from "@common/types";
-import type { JournalEntry, JournalEntryDetailed, JournalGroup } from "@common/typings";
+import type { JournalEntry, JournalEntryDetailed } from "@common/typings";
 import JournalApi from "@api/journalApi";
 
 import type { AsyncThunkConfig } from ".";
@@ -15,22 +15,14 @@ export const updateEntryTime = createAction<{ id: number, time: string }>("journ
 export const updateEntryAmount = createAction<{ id: number, amountInput: string }>("journal/update_entry_amount");
 export const updateEntryUnit = createAction<{ id: number, unit: string }>("journal/update_entry_unit");
 
-export const fetchJournalInfo = createAsyncThunk<
-    { entries: JournalEntryDetailed[], groups: JournalGroup[] },
-    void,
-    AsyncThunkConfig
->(
+export const fetchJournalInfo = createAsyncThunk<JournalEntryDetailed[], void, AsyncThunkConfig>(
     "journal/fetch_info",
     async (_arg, { rejectWithValue, getState }) => {
         try {
             const journal = getState().journal;
+            const entries = await JournalApi.getJournalEntries(journal.currentDate);
 
-            const [ entries, groups ] = await Promise.all([
-                JournalApi.getJournalEntries(journal.currentDate),
-                JournalApi.getJournalGroups(),
-            ]);
-
-            return { entries, groups };
+            return entries;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));
@@ -83,19 +75,6 @@ export const deleteJournalEntry = createAsyncThunk<number, number, AsyncThunkCon
         try {
             await JournalApi.deleteJournalEntry(entryId);
             return entryId;
-        }
-        catch (error) {
-            return rejectWithValue(HttpError.getStatus(error));
-        }
-    },
-);
-
-export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], AsyncThunkConfig>(
-    "journal/update_groups",
-    async (groups, { rejectWithValue }) => {
-        try {
-            await JournalApi.updateJournalGroups(groups);
-            return groups;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

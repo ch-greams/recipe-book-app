@@ -26,22 +26,6 @@ export default class JournalApi {
         }
     }
 
-    public static async getJournalGroups(): Promise<JournalGroup[]> {
-
-        const response = await fetch(`${JournalApi.API_PATH}/groups`, {
-            method: "GET",
-            headers: { [Header.ACCEPT]: ResourceType.JSON },
-        });
-
-        if (response.ok) {
-            const groups: JournalGroup[] = await response.json();
-            return groups;
-        }
-        else {
-            throw new HttpError(response.status);
-        }
-    }
-
     public static async updateJournalGroups(journalGroups: JournalGroup[]): Promise<void> {
 
         const response = await fetch(`${JournalApi.API_PATH}/groups/update`, {
@@ -104,22 +88,6 @@ export default class JournalApi {
         });
 
         if (!response.ok) {
-            throw new HttpError(response.status);
-        }
-    }
-
-    public static async getUserNutrients(): Promise<UserNutrientDetailed[]> {
-
-        const response = await fetch(`${JournalApi.API_PATH}/nutrients`, {
-            method: "GET",
-            headers: { [Header.ACCEPT]: ResourceType.JSON },
-        });
-
-        if (response.ok) {
-            const nutrients: UserNutrientDetailed[] = await response.json();
-            return nutrients;
-        }
-        else {
             throw new HttpError(response.status);
         }
     }

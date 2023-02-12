@@ -11,24 +11,12 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20`,
-                { fixture: "foods_favorite.json" },
-            );
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20`,
-                { fixture: "foods_custom.json" },
-            );
-            cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups`,
-                { fixture: "journal_groups_response.json" },
-            );
-            cy.intercept(
                 `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/nutrients`,
-                { fixture: "journal_nutrients_response.json" },
+                `${constants.CY_USER_API_PATH}/info`,
+                { fixture: "user_info.json" },
             );
             cy.intercept(
                 `${constants.CY_META_API_PATH}/nutrients`,

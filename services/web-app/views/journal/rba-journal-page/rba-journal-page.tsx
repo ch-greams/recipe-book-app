@@ -7,6 +7,7 @@ import RbaPageDetailedNutrientsBlock from "@views/shared/rba-page-detailed-nutri
 import type { JournalStore } from "@store/types/journal";
 import type { MetaStore } from "@store/types/meta";
 import type { SearchStore } from "@store/types/search";
+import type { UserStore } from "@store/types/user";
 
 import RbaJournalDateBlock from "../components/rba-journal-date-block";
 
@@ -15,16 +16,18 @@ import styles from "./rba-journal-page.module.scss";
 
 interface Props {
     journal: JournalStore;
+    user: UserStore;
     meta: MetaStore;
     search: SearchStore;
     decrementDate: () => void;
     incrementDate: () => void;
 }
 
-const RbaJournalPage: React.FC<Props> = ({ journal, meta, search, decrementDate, incrementDate }) => {
+const RbaJournalPage: React.FC<Props> = ({ journal, user, meta, search, decrementDate, incrementDate }) => {
 
     const { nutrientDescriptions } = meta;
-    const { currentDate, entries, groups, nutrients } = journal;
+    const { journalGroups } = user;
+    const { currentDate, entries, nutrients } = journal;
 
     return (
         <div className={styles.journalPage}>
@@ -42,7 +45,7 @@ const RbaJournalPage: React.FC<Props> = ({ journal, meta, search, decrementDate,
 
                 <RbaJournalBlock
                     currentDate={currentDate}
-                    groups={groups}
+                    groups={journalGroups}
                     entries={entries}
                     search={search}
                 />

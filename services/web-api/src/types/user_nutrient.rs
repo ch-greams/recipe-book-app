@@ -5,7 +5,6 @@ use super::error::Error;
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct UserNutrient {
-    pub user_id: i64,
     pub nutrient_id: i16,
     pub is_featured: bool,
     pub daily_target_amount: Option<f32>,
@@ -14,7 +13,6 @@ pub struct UserNutrient {
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct UserNutrientDetailed {
-    pub user_id: i64,
     pub nutrient_id: i16,
     pub is_featured: bool,
     pub daily_target_amount: Option<f32>,
@@ -31,7 +29,6 @@ impl UserNutrient {
         sqlx::query_as(
             r#"
             SELECT
-                user_id,
                 nutrient_id,
                 is_featured,
                 daily_target_amount,
@@ -55,7 +52,6 @@ impl UserNutrient {
         sqlx::query_as(
             r#"
             SELECT
-                user_id,
                 nutrient_id,
                 is_featured,
                 daily_target_amount,
@@ -74,6 +70,7 @@ impl UserNutrient {
     }
 
     pub async fn upsert_nutrient(
+        user_id: i64,
         user_nutrient: &Self,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
@@ -84,10 +81,10 @@ impl UserNutrient {
             ON CONFLICT (user_id, nutrient_id)
             DO 
                UPDATE SET is_featured = $3, daily_target_amount = $4, ui_index = $5
-            RETURNING user_id, nutrient_id, is_featured, daily_target_amount, ui_index;
+            RETURNING nutrient_id, is_featured, daily_target_amount, ui_index;
         "#,
         )
-            .bind(user_nutrient.user_id)
+            .bind(user_id)
             .bind(user_nutrient.nutrient_id)
             .bind(user_nutrient.is_featured)
             .bind(user_nutrient.daily_target_amount)
@@ -96,7 +93,7 @@ impl UserNutrient {
         let result = query
             .fetch_optional(txn)
             .await?
-            .ok_or_else(|| Error::not_updated("user_nutrient", user_nutrient.user_id))?;
+            .ok_or_else(|| Error::not_updated("user_nutrient", user_id))?;
 
         Ok(result)
     }
@@ -110,7 +107,7 @@ impl UserNutrient {
             r#"
             DELETE FROM journal.user_nutrient
             WHERE user_id = $1 AND nutrient_id = $2
-            RETURNING user_id, nutrient_id, is_featured, daily_target_amount, ui_index;
+            RETURNING nutrient_id, is_featured, daily_target_amount, ui_index;
             "#,
         )
         .bind(user_id)
@@ -168,18 +165,19 @@ mod tests {
 
     #[tokio::test]
     async fn upsert_user_nutrient() {
+        let user_id = 1;
         let upsert_user_nutrient_payload: UserNutrient =
             utils::read_json("examples/upsert_user_nutrient.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let insert_result =
-            UserNutrient::upsert_nutrient(&upsert_user_nutrient_payload, &mut txn).await;
+            UserNutrient::upsert_nutrient(user_id, &upsert_user_nutrient_payload, &mut txn).await;
 
         assert!(insert_result.is_ok(), "insert_result should be ok");
 
         let update_result =
-            UserNutrient::upsert_nutrient(&upsert_user_nutrient_payload, &mut txn).await;
+            UserNutrient::upsert_nutrient(user_id, &upsert_user_nutrient_payload, &mut txn).await;
 
         assert!(update_result.is_ok(), "update_result should be ok");
 
@@ -188,18 +186,19 @@ mod tests {
 
     #[tokio::test]
     async fn delete_user_nutrient() {
+        let user_id = 1;
         let upsert_user_nutrient_payload: UserNutrient =
             utils::read_json("examples/upsert_user_nutrient.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let upsert_result =
-            UserNutrient::upsert_nutrient(&upsert_user_nutrient_payload, &mut txn).await;
+            UserNutrient::upsert_nutrient(user_id, &upsert_user_nutrient_payload, &mut txn).await;
 
         assert!(upsert_result.is_ok(), "upsert_result should be ok");
 
         let delete_result = UserNutrient::delete_user_nutrient(
-            upsert_user_nutrient_payload.user_id,
+            user_id,
             upsert_user_nutrient_payload.nutrient_id,
             &mut txn,
         )

@@ -224,7 +224,7 @@ async fn upsert_nutrient(
 
     let mut txn = db_pool.begin().await?;
 
-    UserNutrient::upsert_nutrient(&payload, &mut txn).await?;
+    UserNutrient::upsert_nutrient(user_id, &payload, &mut txn).await?;
 
     let user_nutrient = UserNutrient::find_by_id(user_id, payload.nutrient_id)
         .fetch_optional(&mut txn)

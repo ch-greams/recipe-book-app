@@ -1,6 +1,6 @@
 import { createReducer } from "@reduxjs/toolkit";
 
-import { sortBy, sortByConverted } from "@common/array";
+import { sortByConverted } from "@common/array";
 import { formatTime, getCurrentDate, parseTime } from "@common/date";
 import { getErrorMessageFromStatus } from "@common/http";
 import { convertToMetric } from "@common/units";
@@ -149,10 +149,9 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
 
             state.entries = [];
-            state.groups = [];
         })
         .addCase(actions.fetchJournalInfo.fulfilled, (state, action) => {
-            const { entries, groups } = action.payload;
+            const entries = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
 
@@ -173,10 +172,6 @@ const reducer = createReducer(initialState, (builder) => {
                 }))
                 .sort(sortByConverted("entryTime", (entryTime) => parseTime(entryTime as string)));
 
-            state.groups = groups
-                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
-                .sort(sortBy("uiIndex"));
-
             state.nutrients = getNutrientsFromJournalEntries(state.entries);
         })
         .addCase(actions.fetchJournalInfo.rejected, (state, { payload: errorStatus }) => {
@@ -184,24 +179,6 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
 
             state.entries = [];
-            state.groups = [];
-        })
-        .addCase(actions.updateJournalGroups.pending, (state) => {
-            state.errorMessage = null;
-            state.isLoaded = false;
-        })
-        .addCase(actions.updateJournalGroups.fulfilled, (state, action) => {
-            const groups = action.payload;
-            state.errorMessage = null;
-            state.isLoaded = true;
-
-            state.groups = groups
-                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
-                .sort(sortBy("uiIndex"));
-        })
-        .addCase(actions.updateJournalGroups.rejected, (state, { payload: errorStatus }) => {
-            state.errorMessage = getErrorMessageFromStatus(errorStatus);
-            state.isLoaded = true;
         });
 });
 

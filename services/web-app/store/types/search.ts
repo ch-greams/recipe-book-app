@@ -1,4 +1,4 @@
-import type { ProductShort } from "@common/typings";
+import type { FoodShort } from "@common/typings";
 
 
 export interface SearchStore {
@@ -6,5 +6,5 @@ export interface SearchStore {
     errorMessage?: Option<string>;
 
     searchInput: string;
-    products: ProductShort[];
+    products: FoodShort[];
 }

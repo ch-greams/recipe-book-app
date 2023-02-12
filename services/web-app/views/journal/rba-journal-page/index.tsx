@@ -37,6 +37,7 @@ const RbaJournalPageConnected: React.FC<Props> = ({ meta, user }) => {
                     : (
                         <RbaJournalPage
                             journal={journal}
+                            user={user}
                             meta={meta}
                             search={search}
                             decrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, -1)))}

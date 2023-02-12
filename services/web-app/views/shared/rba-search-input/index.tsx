@@ -3,7 +3,7 @@ import * as constants from "@cypress/constants";
 
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
-import type { ProductShort } from "@common/typings";
+import type { FoodShort } from "@common/typings";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 import RbaIconSearch from "@icons/rba-icon-search";
@@ -24,7 +24,7 @@ export enum SearchInputHeightSize {
     Medium = "heightSize_Medium",
 }
 
-export type OnSelectFunc = (product: ProductShort) => void;
+export type OnSelectFunc = (product: FoodShort) => void;
 
 interface Props {
     "data-cy"?: string;
@@ -33,7 +33,7 @@ interface Props {
     placeholder?: string;
     isLoading: boolean;
     value: string;
-    items: ProductShort[];
+    items: FoodShort[];
     onChange: (value: string) => void;
     onSelect?: OnSelectFunc;
 }

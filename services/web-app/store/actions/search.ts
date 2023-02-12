@@ -1,7 +1,7 @@
 import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
-import type { ProductShort } from "@common/typings";
+import type { FoodShort } from "@common/typings";
 import ProductApi from "@api/productApi";
 
 import type { AsyncThunkConfig } from ".";
@@ -9,7 +9,7 @@ import type { AsyncThunkConfig } from ".";
 
 export const searchClear = createAction("search/search_clear");
 
-export const searchProducts = createAsyncThunk<ProductShort[], string, AsyncThunkConfig>(
+export const searchProducts = createAsyncThunk<FoodShort[], string, AsyncThunkConfig>(
     "search/search_products",
     async (filter, { rejectWithValue }) => {
         try {

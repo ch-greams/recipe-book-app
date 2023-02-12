@@ -11,14 +11,13 @@ describe("journal_page", () => {
         const CURRENT_DATE = getCurrentDate();
 
         beforeEach(() => {
-
             cy.intercept(
                 `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups`,
-                { fixture: "journal_groups_response.json" },
+                `${constants.CY_USER_API_PATH}/info`,
+                { fixture: "user_info.json" },
             );
 
             cy.visit(JOURNAL_PATH);

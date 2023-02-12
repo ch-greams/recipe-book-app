@@ -8,6 +8,7 @@ export const CY_RECIPE_API_PATH = "/api/v1/recipe";
 export const CY_FOOD_API_PATH = "/api/v1/food";
 export const CY_PRODUCT_API_PATH = "/api/v1/product";
 export const CY_JOURNAL_API_PATH = "/api/v1/journal";
+export const CY_USER_API_PATH = "/api/v1/user";
 export const CY_META_API_PATH = "/api/v1/meta";
 export const CY_AUTH_API_PATH = "/auth/api/v1";
 

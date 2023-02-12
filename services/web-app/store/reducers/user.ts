@@ -25,6 +25,7 @@ const initialState: UserStore = {
     favoriteFoods: [],
     customFoods: [],
 
+    journalGroups: [],
     nutrients: [],
 
     isLoaded: false,
@@ -37,7 +38,6 @@ const ASYNC_REJECTIONS = isAnyOf(
     // JOURNAL ACTIONS
     journalActions.fetchJournalInfo.rejected, journalActions.createJournalEntry.rejected,
     journalActions.updateJournalEntry.rejected, journalActions.deleteJournalEntry.rejected,
-    journalActions.updateJournalGroups.rejected,
     // META ACTIONS
     metaActions.fetchNutrients.rejected,
     // RECIPE ACTIONS
@@ -49,6 +49,7 @@ const ASYNC_REJECTIONS = isAnyOf(
     userActions.fetchUserData.rejected, userActions.deleteCustomProduct.rejected,
     userActions.deleteFavoriteProduct.rejected, userActions.upsertNutrient.rejected,
     userActions.deleteNutrient.rejected, userActions.login.rejected, userActions.signup.rejected,
+    userActions.updateJournalGroups.rejected,
 );
 
 const reducer = createReducer(initialState, (builder) => {
@@ -64,12 +65,17 @@ const reducer = createReducer(initialState, (builder) => {
             state.nutrients = [];
         })
         .addCase(userActions.fetchUserData.fulfilled, (state, action) => {
-            const { favoriteFoods, customFoods, nutrients } = action.payload;
+            const userInfo = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.favoriteFoods = favoriteFoods;
-            state.customFoods = customFoods;
-            state.nutrients = nutrients
+            state.favoriteFoods = userInfo.favorite_foods;
+            state.customFoods = userInfo.created_foods;
+
+            state.journalGroups = userInfo.journal_groups
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(sortBy("uiIndex"));
+
+            state.nutrients = userInfo.user_nutrients
                 .map((nutrient) => ({
                     nutrientId: nutrient.nutrient_id,
                     isFeatured: nutrient.is_featured,
@@ -115,6 +121,23 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(userActions.deleteFavoriteProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addCase(userActions.updateJournalGroups.pending, (state) => {
+            state.errorMessage = null;
+            state.isLoaded = false;
+        })
+        .addCase(userActions.updateJournalGroups.fulfilled, (state, action) => {
+            const groups = action.payload;
+            state.errorMessage = null;
+            state.isLoaded = true;
+
+            state.journalGroups = groups
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(sortBy("uiIndex"));
+        })
+        .addCase(userActions.updateJournalGroups.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+            state.isLoaded = true;
         })
         .addCase(userActions.upsertNutrient.pending, (state) => {
             state.isLoaded = false;

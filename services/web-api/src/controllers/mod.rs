@@ -5,6 +5,7 @@ mod journal;
 mod meta;
 mod product;
 mod recipe;
+mod user;
 
 pub fn configure(config: &mut ServiceConfig) {
     config.service(
@@ -14,6 +15,7 @@ pub fn configure(config: &mut ServiceConfig) {
             .service(recipe::scope())
             .service(meta::scope())
             .service(journal::scope())
+            .service(user::scope())
             .service(health),
     );
 }
