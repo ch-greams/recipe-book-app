@@ -18,7 +18,6 @@ const initialState: UserStore = {
 
     isLoggedIn: true,
 
-    userId: 1,
     userName: "Andrei Greams",
 
     selectedMenuItem: UserMenuItem.Settings,
