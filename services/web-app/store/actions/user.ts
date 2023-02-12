@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
 import { isSome } from "@common/types";
-import type { FoodShort, RecipeShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
+import type { FoodShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
 import type { UserMenuItem } from "@store/types/user";
 import AuthApi from "@api/authApi";
 import JournalApi from "@api/journalApi";
@@ -16,8 +16,6 @@ export const changeMenuItem = createAction<UserMenuItem>("user/change_menu_item"
 interface UserFetchDataPayload {
     favoriteFoods: FoodShort[];
     customFoods: FoodShort[];
-    favoriteRecipes: RecipeShort[];
-    customRecipes: RecipeShort[];
     nutrients: UserNutrientDetailed[];
 }
 
@@ -25,14 +23,12 @@ export const fetchUserData = createAsyncThunk<UserFetchDataPayload, void, AsyncT
     "user/fetch_data",
     async (_arg, { rejectWithValue }) => {
         try {
-            const [ favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients ] = await Promise.all([
-                ProductApi.getFavoriteProducts<FoodShort>(false),
-                ProductApi.getCustomProducts<FoodShort>(false),
-                ProductApi.getFavoriteProducts<RecipeShort>(true),
-                ProductApi.getCustomProducts<RecipeShort>(true),
+            const [ favoriteFoods, customFoods, nutrients ] = await Promise.all([
+                ProductApi.getFavoriteProducts(),
+                ProductApi.getCustomProducts(),
                 JournalApi.getUserNutrients(),
             ]);
-            return { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients };
+            return { favoriteFoods, customFoods, nutrients };
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

@@ -23,9 +23,6 @@ const initialState: UserStore = {
 
     selectedMenuItem: UserMenuItem.Settings,
 
-    favoriteRecipes: [],
-    customRecipes: [],
-
     favoriteFoods: [],
     customFoods: [],
 
@@ -65,18 +62,14 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
             state.favoriteFoods = [];
             state.customFoods = [];
-            state.favoriteRecipes = [];
-            state.customRecipes = [];
             state.nutrients = [];
         })
         .addCase(userActions.fetchUserData.fulfilled, (state, action) => {
-            const { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients } = action.payload;
+            const { favoriteFoods, customFoods, nutrients } = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
             state.favoriteFoods = favoriteFoods;
             state.customFoods = customFoods;
-            state.favoriteRecipes = favoriteRecipes;
-            state.customRecipes = customRecipes;
             state.nutrients = nutrients
                 .map((nutrient) => ({
                     nutrientId: nutrient.nutrient_id,
@@ -105,8 +98,6 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
             state.customFoods = state.customFoods.filter((food) => food.id !== productId);
             state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
-            state.customRecipes = state.customRecipes.filter((recipe) => recipe.id !== productId);
-            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
         .addCase(userActions.deleteCustomProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
@@ -121,7 +112,6 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = null;
             state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
-            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
         })
         .addCase(userActions.deleteFavoriteProduct.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;

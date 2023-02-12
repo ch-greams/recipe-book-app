@@ -31,6 +31,7 @@ export interface FoodShort {
     id: number;
     name: string;
     brand: string;
+    is_recipe: boolean;
 }
 
 export interface Ingredient {
@@ -66,12 +67,6 @@ export interface Recipe extends Food {
     type: string;
     ingredients: Ingredient[];
     instructions: Instruction[];
-}
-
-export interface RecipeShort {
-    id: number;
-    name: string;
-    brand: string;
 }
 
 export interface NutrientMeta {
