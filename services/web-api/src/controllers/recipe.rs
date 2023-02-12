@@ -95,8 +95,6 @@ async fn create_recipe(
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
-
     let defined_nutrients: HashMap<String, f32> = payload
         .nutrients
         .clone()
@@ -104,43 +102,55 @@ async fn create_recipe(
         .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
         .collect();
 
-    ProductNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
-        .await?;
+    if !defined_nutrients.is_empty() {
+        let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+        ProductNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
+            .await?;
+    }
 
     // ingredients
 
-    Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
+    let ingredients = if payload.ingredients.is_empty() {
+        Vec::new()
+    } else {
+        Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(product.id)
-        .fetch_all(&mut txn)
-        .await?;
+        IngredientDetailed::find_by_recipe_id(product.id)
+            .fetch_all(&mut txn)
+            .await?
+    };
 
     // instructions
 
-    let created_instructions =
-        Instruction::insert_multiple(&payload.instructions, product.id, &mut txn).await?;
+    let instructions_detailed: Vec<InstructionDetailed> = if payload.instructions.is_empty() {
+        Vec::new()
+    } else {
+        let created_instructions =
+            Instruction::insert_multiple(&payload.instructions, product.id, &mut txn).await?;
 
-    let instruction_ingredients_to_create: Vec<InstructionIngredient> =
-        zip(&created_instructions, &payload.instructions)
-            .flat_map(|(ci, ip)| InstructionIngredient::from_created_instructions(ci, ip))
-            .collect();
+        let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+            zip(&created_instructions, &payload.instructions)
+                .flat_map(|(ci, ip)| InstructionIngredient::from_created_instructions(ci, ip))
+                .collect();
 
-    let created_instruction_ingredients =
-        InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
-            .await?;
+        let created_instruction_ingredients =
+            InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+                .await?;
 
-    let instructions_detailed = created_instructions
-        .into_iter()
-        .map(|created_instruction| {
-            let instruction_ingredients = created_instruction_ingredients
-                .clone()
-                .into_iter()
-                .filter(|ii| ii.instruction_id == created_instruction.id)
-                .collect::<Vec<InstructionIngredient>>();
+        created_instructions
+            .into_iter()
+            .map(|created_instruction| {
+                let instruction_ingredients = created_instruction_ingredients
+                    .clone()
+                    .into_iter()
+                    .filter(|ii| ii.instruction_id == created_instruction.id)
+                    .collect::<Vec<InstructionIngredient>>();
 
-            InstructionDetailed::new(&created_instruction, &instruction_ingredients)
-        })
-        .collect::<Vec<InstructionDetailed>>();
+                InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+            })
+            .collect()
+    };
 
     txn.commit().await?;
 
@@ -172,8 +182,6 @@ async fn update_recipe(
     let custom_units =
         CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
-
     let defined_nutrients: HashMap<String, f32> = payload
         .nutrients
         .clone()
@@ -181,7 +189,7 @@ async fn update_recipe(
         .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
         .collect();
 
-    println!("defined_nutrients: {defined_nutrients:?}");
+    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
     ProductNutrient::replace_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
         .await?;

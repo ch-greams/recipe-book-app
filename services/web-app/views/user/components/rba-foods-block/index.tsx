@@ -4,23 +4,19 @@ import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE } from "@common/labels";
 import { getProductPath } from "@common/routes";
+import type { FoodShort } from "@common/typings";
 import RbaBlockTitle from "@views/shared/rba-block-title";
 import RbaButton, { ButtonHeightSize, ButtonWidthSize } from "@views/shared/rba-button";
 
 import styles from "./rba-foods-block.module.scss";
 
 
-// TODO: Replace it with real type
-interface FoodItem {
-    id: number;
-    name: string;
-}
 
 interface Props {
-    favoriteFoods: FoodItem[];
-    customFoods: FoodItem[];
-    deleteFavoriteFood: (productId: number) => void;
-    deleteCustomFood: (productId: number) => void;
+    favoriteFoods: FoodShort[];
+    customFoods: FoodShort[];
+    deleteFavoriteFood: (foodId: number) => void;
+    deleteCustomFood: (foodId: number) => void;
 }
 
 
@@ -36,7 +32,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods, deleteFavo
                     <div key={food.id} className={styles.foodLine}>
                         <Link href={getProductPath(false, food.id)}>
                             <div data-cy={constants.CY_USER_FOOD_FAVORITE_ITEM} className={styles.foodName}>
-                                {food.name}
+                                {food.is_recipe ? "* " : ""}{food.name}
                             </div>
                         </Link>
 
@@ -57,7 +53,7 @@ const RbaFoodsBlock: React.FC<Props> = ({ favoriteFoods, customFoods, deleteFavo
                     <div key={food.id} className={styles.foodLine}>
                         <Link href={getProductPath(false, food.id)}>
                             <div data-cy={constants.CY_USER_FOOD_CUSTOM_ITEM} className={styles.foodName}>
-                                {food.name}
+                                {food.is_recipe ? "* " : ""}{food.name}
                             </div>
                         </Link>
 

@@ -4,7 +4,6 @@ import { CY_USER_MENU_ITEM } from "@cypress/constants";
 import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import { classNames } from "@common/style";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
-import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
 import * as journalActions from "@store/actions/journal";
@@ -29,7 +28,6 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescription
 
     const menuItems = [
         UserMenuItem.Foods,
-        UserMenuItem.Recipes,
         UserMenuItem.Settings,
     ];
 
@@ -49,22 +47,13 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescription
 
     const getMainBlock = (menuItem: UserMenuItem): JSX.Element => {
         switch (menuItem) {
-            case UserMenuItem.Recipes:
-                return (
-                    <RbaRecipesBlock
-                        favoriteRecipes={user.favoriteRecipes}
-                        customRecipes={user.customRecipes}
-                        deleteFavoriteRecipe={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
-                        deleteCustomRecipe={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
-                    />
-                );
             case UserMenuItem.Foods:
                 return (
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
-                        deleteCustomFood={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
+                        deleteFavoriteFood={(foodId) => dispatch(userActions.deleteFavoriteProduct(foodId))}
+                        deleteCustomFood={(foodId) => dispatch(userActions.deleteCustomProduct(foodId))}
                     />
                 );
             case UserMenuItem.Settings:

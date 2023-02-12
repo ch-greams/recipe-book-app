@@ -12,20 +12,11 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=true`,
-                { fixture: "recipes_favorite.json" },
-            );
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=true`,
-                { fixture: "recipes_custom.json" },
-            );
-
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&is_recipe=false`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&is_recipe=false`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(

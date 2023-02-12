@@ -74,9 +74,12 @@ async fn create_food(
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+    if !payload.nutrients.is_empty() {
+        let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::insert_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
+        ProductNutrient::insert_multiple(&payload.nutrients, &meta_nutrients, product.id, &mut txn)
+            .await?;
+    }
 
     txn.commit().await?;
 
@@ -102,9 +105,10 @@ async fn update_food(
     let custom_units =
         CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
 
-    let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::replace_multiple(&payload.nutrients, &nutrients, product.id, &mut txn).await?;
+    ProductNutrient::replace_multiple(&payload.nutrients, &meta_nutrients, product.id, &mut txn)
+        .await?;
 
     txn.commit().await?;
 

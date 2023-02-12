@@ -1,9 +1,8 @@
-import type { FoodShort, RecipeShort } from "@common/typings";
+import type { FoodShort } from "@common/typings";
 
 
 export enum UserMenuItem {
     Settings = "Settings",
-    Recipes = "Recipes",
     Foods = "Foods",
 }
 
@@ -26,9 +25,6 @@ export interface UserStore {
     userName: string;
 
     selectedMenuItem: UserMenuItem;
-
-    favoriteRecipes: RecipeShort[];
-    customRecipes: RecipeShort[];
 
     favoriteFoods: FoodShort[];
     customFoods: FoodShort[];
