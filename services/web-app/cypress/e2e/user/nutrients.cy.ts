@@ -12,23 +12,23 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/groups`,
                 { fixture: "journal_groups_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/nutrients?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/nutrients`,
                 { fixture: "journal_nutrients_response.json" },
             );
             cy.intercept(
@@ -95,7 +95,7 @@ describe("user", () => {
             )
                 .as("upsertNutrient");
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine
@@ -165,7 +165,7 @@ describe("user", () => {
             )
                 .as("upsertNutrient");
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine
@@ -206,7 +206,7 @@ describe("user", () => {
             const NUTRIENT_INDEX = 3;
             const NUTRIENT_LABEL = NUTRIENT_TYPE_LABEL_MAPPING[NutrientName.DietaryFiber];
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine

@@ -10,7 +10,7 @@ export default class JournalApi {
 
     public static async getJournalEntries(date: string): Promise<JournalEntryDetailed[]> {
 
-        const params = getUrlParams({ entry_date: date, user_id: 1 });
+        const params = getUrlParams({ entry_date: date });
 
         const response = await fetch(`${JournalApi.API_PATH}/entry?${params}`, {
             method: "GET",
@@ -28,9 +28,7 @@ export default class JournalApi {
 
     public static async getJournalGroups(): Promise<JournalGroup[]> {
 
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/groups?${params}`, {
+        const response = await fetch(`${JournalApi.API_PATH}/groups`, {
             method: "GET",
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
@@ -112,9 +110,7 @@ export default class JournalApi {
 
     public static async getUserNutrients(): Promise<UserNutrientDetailed[]> {
 
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/nutrients?${params}`, {
+        const response = await fetch(`${JournalApi.API_PATH}/nutrients`, {
             method: "GET",
             headers: { [Header.ACCEPT]: ResourceType.JSON },
         });
@@ -150,9 +146,7 @@ export default class JournalApi {
 
     public static async deleteUserNutrient(userNutrientId: number): Promise<void> {
 
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/nutrient/delete?${params}`, {
+        const response = await fetch(`${JournalApi.API_PATH}/nutrient/delete`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: userNutrientId }),

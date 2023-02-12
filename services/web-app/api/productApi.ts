@@ -10,7 +10,7 @@ export default class ProductApi {
 
     public static async getFavoriteProducts(): Promise<FoodShort[]> {
 
-        const params = getUrlParams({ limit: 20, user_id: 1 });
+        const params = getUrlParams({ limit: 20 });
 
         const response = await fetch(`${ProductApi.API_PATH}/favorite?${params}`, {
             method: "GET",
@@ -28,7 +28,7 @@ export default class ProductApi {
 
     public static async getCustomProducts(): Promise<FoodShort[]> {
 
-        const params = getUrlParams({ limit: 20, user_id: 1 });
+        const params = getUrlParams({ limit: 20 });
 
         const response = await fetch(`${ProductApi.API_PATH}/created?${params}`, {
             method: "GET",
@@ -46,7 +46,7 @@ export default class ProductApi {
 
     public static async getProducts(filter: string): Promise<ProductShort[]> {
 
-        const params = getUrlParams({ limit: 10, user_id: 1, filter: filter });
+        const params = getUrlParams({ limit: 10, filter: filter });
 
         const response = await fetch(`${ProductApi.API_PATH}?${params}`, {
             method: "GET",
@@ -64,9 +64,7 @@ export default class ProductApi {
 
     public static async deleteFavoriteProduct(productId: number): Promise<void> {
 
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${ProductApi.API_PATH}/favorite/delete?${params}`, {
+        const response = await fetch(`${ProductApi.API_PATH}/favorite/delete`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: productId }),

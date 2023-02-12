@@ -67,7 +67,7 @@ const RbaJournalGroupsBlock: React.FC<Props> = ({ groups, updateGroups }) => {
                     onClick={() => {
                         const groupsToSave = journalGroups
                             .filter((g) => g.name.isNotEmpty())
-                            .map(({ uiIndex, name }) => ({ user_id: 1, ui_index: uiIndex, name }));
+                            .map(({ uiIndex, name }) => ({ ui_index: uiIndex, name }));
                         updateGroups(groupsToSave);
                     }}
                 />

@@ -20,8 +20,6 @@ export interface UserStoreNutrient {
 
 export interface UserStore {
     isLoggedIn: boolean;
-
-    userId: number;
     userName: string;
 
     selectedMenuItem: UserMenuItem;

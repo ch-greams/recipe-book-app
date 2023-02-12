@@ -13,11 +13,11 @@ describe("journal_page", () => {
         beforeEach(() => {
 
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/groups`,
                 { fixture: "journal_groups_response.json" },
             );
 
@@ -50,7 +50,7 @@ describe("journal_page", () => {
             const FOOD_GROUP = "unknown";
 
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}?limit=10&user_id=1&filter=${NEW_PRODUCT_NAME_SHORT}`,
+                `${constants.CY_PRODUCT_API_PATH}?limit=10&filter=${NEW_PRODUCT_NAME_SHORT}`,
                 { fixture: "products_response.json" },
             );
             cy.intercept(
@@ -217,7 +217,7 @@ describe("journal_page", () => {
             const NEXT_DAY = changeDate(CURRENT_DATE, 1);
 
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}`,
                 { body: [] },
             );
 

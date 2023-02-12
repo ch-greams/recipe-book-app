@@ -12,23 +12,23 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/groups`,
                 { fixture: "journal_groups_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/nutrients?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/nutrients`,
                 { fixture: "journal_nutrients_response.json" },
             );
             cy.intercept(

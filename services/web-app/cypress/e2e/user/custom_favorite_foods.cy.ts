@@ -12,23 +12,23 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20`,
                 { fixture: "foods_favorite.json" },
             );
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1`,
+                `${constants.CY_PRODUCT_API_PATH}/created?limit=20`,
                 { fixture: "foods_custom.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/groups`,
                 { fixture: "journal_groups_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/nutrients?user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/nutrients`,
                 { fixture: "journal_nutrients_response.json" },
             );
             cy.intercept(
@@ -68,7 +68,7 @@ describe("user", () => {
 
             const FAVORITE_FOOD_NAME = "English Muffin";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete?user_id=1`, { statusCode: 204 });
+            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)

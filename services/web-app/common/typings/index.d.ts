@@ -78,7 +78,6 @@ export interface NutrientMeta {
     parent_name?: Option<string>;
 }
 export interface UserNutrient {
-    user_id: number;
     nutrient_id: number;
     is_featured: boolean;
     daily_target_amount?: Option<number>;
@@ -96,12 +95,10 @@ export interface UserNutrientDetailed extends UserNutrient {
 export interface JournalGroup {
     ui_index: number;
     name: string;
-    user_id: number;
 }
 
 export interface JournalEntry {
     id: number;
-    user_id: number;
     entry_date: string;
     entry_time: string;
     product_id: number;

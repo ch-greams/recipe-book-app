@@ -36,7 +36,6 @@ const RbaJournalPageConnected: React.FC<Props> = ({ meta, user }) => {
                     ? <RbaSingleMessagePage text={journal.errorMessage} />
                     : (
                         <RbaJournalPage
-                            userId={user.userId}
                             journal={journal}
                             meta={meta}
                             search={search}

@@ -20,14 +20,13 @@ import styles from "./rba-journal-block.module.scss";
 
 
 interface Props {
-    userId: number;
     currentDate: string;
     groups: JournalStoreGroup[];
     entries: JournalStoreEntry[];
     search: SearchStore;
 }
 
-const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search }) => {
+const RbaJournalBlock: React.FC<Props> = ({ currentDate, groups, entries, search }) => {
 
     const dispatch = useAppDispatch();
     const [ showTrash, setShowTrash ] = useState(false);
@@ -119,7 +118,6 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
 
                     dispatch(journalActions.createJournalEntry({
                         id: getTemporaryId(),
-                        user_id: userId,
                         entry_date: currentDate,
                         entry_time: getCurrentTime(DEFAULT_TIME_FORMAT),
                         product_id: product.id,

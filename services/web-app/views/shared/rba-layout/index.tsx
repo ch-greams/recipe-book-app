@@ -29,7 +29,7 @@ const RbaLayout: React.FC<Props> = ({ page: { Component, pageProps } }) => {
         }
     }, [ meta.isLoaded, meta.isLoading ]);
 
-    useEffect(() => { dispatch(fetchUserData()); }, [ user.userId ]);
+    useEffect(() => { dispatch(fetchUserData()); }, [ user.userName ]);
 
 
     const hideSearch = [ "/", "/login" ].includes(router.pathname);

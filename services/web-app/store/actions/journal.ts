@@ -55,13 +55,12 @@ export const updateJournalEntry = createAsyncThunk<JournalEntry, number, AsyncTh
     "journal/update_entry",
     async (entryId, { rejectWithValue, getState }) => {
         try {
-            const { journal: { entries }, user: { userId } } = getState();
+            const { journal: { entries } } = getState();
 
             const entry = unwrap( entries.find((e) => e.id === entryId), `entries.find((e) => e.id === ${entryId})` );
 
             const entryResponse = await JournalApi.updateJournalEntry({
                 id: entry.id,
-                user_id: userId,
                 entry_date: entry.entryDate,
                 entry_time: formatTime(entry.entryTime, DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT),
                 product_id: entry.foodId,
