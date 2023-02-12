@@ -657,17 +657,40 @@ components:
         id:
           type: integer
           example: 2
+    # user_info
+    UserInfo:
+      type: object
+      properties:
+        journal_groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/JournalGroup"
+        user_nutrients:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserNutrientDetailed"
+        created_foods:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductShort"
+        favorite_foods:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductShort"
+
 tags:
   - name: meta
-    description: All `meta` related endpoints
+    description: All `meta`-related endpoints
   - name: product
-    description: All `product` related endpoints
+    description: All `product`-related endpoints
   - name: food
-    description: All `food` related endpoints
+    description: All `food`-related endpoints
   - name: recipe
-    description: All `recipe` related endpoints
+    description: All `recipe`-related endpoints
   - name: journal
-    description: All `journal` related endpoints
+    description: All `journal`-related endpoints
+  - name: user
+    description: All `user`-related endpoints
 
 x-tagGroups:
   - name: General
@@ -677,6 +700,7 @@ x-tagGroups:
       - food
       - recipe
       - journal
+      - user
 
 paths:
   /meta/nutrients:
@@ -1259,6 +1283,27 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+
+  /user/info:
+    get:
+      tags:
+        - user
+      summary: Get user info
+      security: 
+        - AccessTokenAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserInfo"
         "401":
           description: Unauthorized
         "403":

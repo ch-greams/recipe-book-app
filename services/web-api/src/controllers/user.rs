@@ -29,14 +29,14 @@ pub struct FindAllQuery {
 }
 
 #[derive(Serialize)]
-struct GetInfoResponse {
+struct UserInfo {
     journal_groups: Vec<JournalGroup>,
     user_nutrients: Vec<UserNutrientDetailed>,
     created_foods: Vec<ProductShort>,
     favorite_foods: Vec<ProductShort>,
 }
 
-impl GetInfoResponse {
+impl UserInfo {
     pub fn new(
         journal_groups: Vec<JournalGroup>,
         user_nutrients: Vec<UserNutrientDetailed>,
@@ -58,7 +58,7 @@ async fn get_info(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<GetInfoResponse>, Error> {
+) -> Result<Json<UserInfo>, Error> {
     let user_id = authorize(request, &auth_certificate)?;
 
     let mut txn = db_pool.begin().await?;
@@ -103,7 +103,7 @@ async fn get_info(
     .map(ProductShort::new)
     .collect();
 
-    Ok(Json(GetInfoResponse::new(
+    Ok(Json(UserInfo::new(
         journal_groups,
         user_nutrients,
         created_foods,
