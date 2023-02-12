@@ -33,8 +33,7 @@ describe("journal_page", () => {
             const FOOD_NAME = "hamburger";
             const FOOD_GROUP = "lunch";
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -66,8 +65,7 @@ describe("journal_page", () => {
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -88,8 +86,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -129,8 +126,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -170,8 +166,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
