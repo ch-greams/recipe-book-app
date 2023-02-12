@@ -11,14 +11,13 @@ describe("journal_page", () => {
         const CURRENT_DATE = getCurrentDate();
 
         beforeEach(() => {
-
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
-                { fixture: "journal_groups_response.json" },
+                `${constants.CY_USER_API_PATH}/info`,
+                { fixture: "user_info.json" },
             );
 
             cy.visit(JOURNAL_PATH);
@@ -34,8 +33,7 @@ describe("journal_page", () => {
             const FOOD_NAME = "hamburger";
             const FOOD_GROUP = "lunch";
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -50,7 +48,7 @@ describe("journal_page", () => {
             const FOOD_GROUP = "unknown";
 
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}?limit=10&user_id=1&filter=${NEW_PRODUCT_NAME_SHORT}`,
+                `${constants.CY_PRODUCT_API_PATH}?limit=10&filter=${NEW_PRODUCT_NAME_SHORT}`,
                 { fixture: "products_response.json" },
             );
             cy.intercept(
@@ -67,8 +65,7 @@ describe("journal_page", () => {
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -89,8 +86,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -130,8 +126,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -171,8 +166,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -217,7 +211,7 @@ describe("journal_page", () => {
             const NEXT_DAY = changeDate(CURRENT_DATE, 1);
 
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}`,
                 { body: [] },
             );
 

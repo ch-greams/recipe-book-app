@@ -3,7 +3,7 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
 import type { NutrientName } from "@common/nutrients";
-import type { Ingredient, ProductShort, Recipe } from "@common/typings";
+import type { FoodShort, Ingredient, Recipe } from "@common/typings";
 import type * as units from "@common/units";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
@@ -105,7 +105,7 @@ export const updateIngredientProductUnit = createAction<{ id: number, unit: (uni
 export const updateAltNutrients = createAction<{ slotNumber: number, nutrients: Dictionary<NutrientName, number> }>("recipe/ingredient/update_alt_nutrients");
 export const calculateNutrientsAndServingSize = createAction("recipe/ingredient/calculate_nutrients_and_serving_size");
 
-export const addIngredient = createAsyncThunk<Ingredient, { product: ProductShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
+export const addIngredient = createAsyncThunk<Ingredient, { product: FoodShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
     "recipe/ingredient/add",
     async ({ product, slotNumber, isAlternative }, { rejectWithValue }) => {
         try {

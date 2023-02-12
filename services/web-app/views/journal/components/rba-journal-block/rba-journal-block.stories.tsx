@@ -15,10 +15,6 @@ export default {
     title: "Journal/RbaJournalBlock",
     component: RbaJournalBlock,
     argTypes: {
-        userId: {
-            type: { name: "number", required: false },
-            table: { type: { summary: "number" } },
-        },
         currentDate: {
             type: { name: "string", required: false },
             table: { type: { summary: "string" } },
@@ -94,7 +90,6 @@ const SEARCH_STORE = store.getState().search;
 
 export const Default = Template.bind({});
 Default.args = {
-    userId: 1,
     currentDate: "2022-12-17",
     groups: JOURNAL_GROUPS,
     entries: JOURNAL_ENTRIES,

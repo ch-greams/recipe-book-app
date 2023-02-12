@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 import { useLoginRedirect } from "@common/hooks";
 import { Color } from "@common/style";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
-import { useAppSelector } from "@store";
-import { useAppDispatch } from "@store";
-import * as journalActions from "@store/actions/journal";
 import type { MetaStore } from "@store/types/meta";
 import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
@@ -21,23 +18,16 @@ interface Props {
 
 const RbaUserPageConnected: React.FC<Props> = ({ meta, user }) => {
 
-    const dispatch = useAppDispatch();
-
-    const { journal } = useAppSelector((state) => state);
-
     useLoginRedirect(user.isLoggedIn);
 
-    useEffect(() => { dispatch(journalActions.fetchJournalInfo()); }, [ dispatch ]);
-
     return (
-        user.isLoaded && meta.isLoaded && journal.isLoaded
+        user.isLoaded && meta.isLoaded
             ? (
                 user.errorMessage
                     ? <RbaSingleMessagePage text={user.errorMessage} />
                     : (
                         <RbaUserPage
                             user={user}
-                            journalGroups={journal.groups}
                             nutrientDescriptions={meta.nutrientDescriptions}
                         />
                     )

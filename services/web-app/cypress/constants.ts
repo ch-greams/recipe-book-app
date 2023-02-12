@@ -8,6 +8,7 @@ export const CY_RECIPE_API_PATH = "/api/v1/recipe";
 export const CY_FOOD_API_PATH = "/api/v1/food";
 export const CY_PRODUCT_API_PATH = "/api/v1/product";
 export const CY_JOURNAL_API_PATH = "/api/v1/journal";
+export const CY_USER_API_PATH = "/api/v1/user";
 export const CY_META_API_PATH = "/api/v1/meta";
 export const CY_AUTH_API_PATH = "/auth/api/v1";
 
@@ -105,6 +106,7 @@ export const CY_SEARCH_INPUT = "CY_SEARCH_INPUT";
 export const CY_JOURNAL_DATE_BLOCK = "CY_JOURNAL_DATE_BLOCK";
 export const CY_JOURNAL_BLOCK = "CY_JOURNAL_BLOCK";
 export const CY_JOURNAL_GROUP = "CY_JOURNAL_GROUP";
+export const CY_JOURNAL_GROUP_NAME = "CY_JOURNAL_GROUP_NAME";
 export const CY_JOURNAL_ENTRY = "CY_JOURNAL_ENTRY";
 export const CY_JOURNAL_ENTRY_TIME = "CY_JOURNAL_ENTRY_TIME";
 export const CY_JOURNAL_ENTRY_FOOD_AMOUNT = "CY_JOURNAL_ENTRY_FOOD_AMOUNT";

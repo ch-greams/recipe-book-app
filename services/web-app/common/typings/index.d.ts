@@ -16,8 +16,7 @@ export interface Food {
     is_private: boolean;
 }
 
-// TODO: ??? Create an app version of this type (camelCase) and have all necessary fields available
-export interface ProductShort {
+export interface FoodShort {
     id: number;
     is_recipe: boolean;
     name: string;
@@ -25,13 +24,6 @@ export interface ProductShort {
     // is_private: boolean;
     // created_at: DateTime<Utc>;
     // updated_at: DateTime<Utc>;
-}
-
-export interface FoodShort {
-    id: number;
-    name: string;
-    brand: string;
-    is_recipe: boolean;
 }
 
 export interface Ingredient {
@@ -78,7 +70,6 @@ export interface NutrientMeta {
     parent_name?: Option<string>;
 }
 export interface UserNutrient {
-    user_id: number;
     nutrient_id: number;
     is_featured: boolean;
     daily_target_amount?: Option<number>;
@@ -96,12 +87,10 @@ export interface UserNutrientDetailed extends UserNutrient {
 export interface JournalGroup {
     ui_index: number;
     name: string;
-    user_id: number;
 }
 
 export interface JournalEntry {
     id: number;
-    user_id: number;
     entry_date: string;
     entry_time: string;
     product_id: number;
@@ -115,4 +104,11 @@ export interface JournalEntryDetailed extends JournalEntry {
     product_density: number;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
+}
+
+export interface UserInfo {
+    journal_groups: JournalGroup[];
+    user_nutrients: UserNutrientDetailed[];
+    created_foods: FoodShort[];
+    favorite_foods: FoodShort[];
 }

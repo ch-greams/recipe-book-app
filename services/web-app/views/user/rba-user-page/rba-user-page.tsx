@@ -6,9 +6,7 @@ import { classNames } from "@common/style";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
 import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
-import * as journalActions from "@store/actions/journal";
 import * as userActions from "@store/actions/user";
-import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStore } from "@store/types/user";
 import { UserMenuItem } from "@store/types/user";
 
@@ -17,12 +15,11 @@ import styles from "./rba-user-page.module.scss";
 
 interface Props {
     user: UserStore;
-    journalGroups: JournalStoreGroup[];
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescriptions }) => {
+const RbaUserPage: React.FC<Props> = ({ user, nutrientDescriptions }) => {
 
     const dispatch = useAppDispatch();
 
@@ -59,10 +56,10 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescription
             case UserMenuItem.Settings:
                 return (
                     <RbaSettingsBlock
-                        journalGroups={journalGroups}
+                        journalGroups={user.journalGroups}
                         userNutrients={user.nutrients}
                         nutrientDescriptions={nutrientDescriptions}
-                        updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
+                        updateJournalGroups={(groups) => dispatch(userActions.updateJournalGroups(groups))}
                         updateNutrient={(nutrient) => dispatch(userActions.upsertNutrient(nutrient))}
                         deleteNutrient={(nutrientId) => dispatch(userActions.deleteNutrient(nutrientId))}
                     />

@@ -44,7 +44,6 @@ const RbaFeaturedNutrientsBlock: React.FC<Props> = ({
                     nutrientUnit={userNutrient.nutrientUnit}
                     updateNutrient={(uiIndex, name, amount) => {
                         updateNutrient({
-                            user_id: 1,
                             nutrient_id: nutrientDescriptions[name].id,
                             is_featured: true,
                             daily_target_amount: amount,
@@ -62,7 +61,6 @@ const RbaFeaturedNutrientsBlock: React.FC<Props> = ({
                     slotIndex={slotIndex}
                     updateNutrient={(uiIndex, name, amount) => {
                         updateNutrient({
-                            user_id: 1,
                             nutrient_id: nutrientDescriptions[name].id,
                             is_featured: true,
                             daily_target_amount: amount,

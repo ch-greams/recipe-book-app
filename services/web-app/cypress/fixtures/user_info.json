@@ -1,0 +1,170 @@
+{
+
+    "journal_groups": [
+        {
+            "ui_index": 1,
+            "name": "breakfast",
+            "user_id": 1
+        },
+        {
+            "ui_index": 2,
+            "name": "lunch",
+            "user_id": 1
+        },
+        {
+            "ui_index": 3,
+            "name": "dinner",
+            "user_id": 1
+        }
+    ],
+    "user_nutrients": [
+        {
+            "user_id": 1,
+            "nutrient_id": 1,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 1,
+            "nutrient_name": "energy",
+            "nutrient_daily_value": 2000,
+            "nutrient_unit": "kcal",
+            "nutrient_group": "energy",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 5,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 2,
+            "nutrient_name": "carbohydrate",
+            "nutrient_daily_value": 275,
+            "nutrient_unit": "g",
+            "nutrient_group": "carbohydrates",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 6,
+            "is_featured": true,
+            "daily_target_amount": 31,
+            "ui_index": 3,
+            "nutrient_name": "dietary_fiber",
+            "nutrient_daily_value": 28,
+            "nutrient_unit": "g",
+            "nutrient_group": "carbohydrates",
+            "nutrient_parent_name": "carbohydrate"
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 8,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 4,
+            "nutrient_name": "sugars",
+            "nutrient_daily_value": 50,
+            "nutrient_unit": "g",
+            "nutrient_group": "carbohydrates",
+            "nutrient_parent_name": "carbohydrate"
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 9,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 5,
+            "nutrient_name": "fat",
+            "nutrient_daily_value": 78,
+            "nutrient_unit": "g",
+            "nutrient_group": "lipids",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 10,
+            "is_featured": true,
+            "daily_target_amount": 22.5,
+            "ui_index": 6,
+            "nutrient_name": "monounsaturated",
+            "nutrient_daily_value": null,
+            "nutrient_unit": "g",
+            "nutrient_group": "lipids",
+            "nutrient_parent_name": "fat"
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 18,
+            "is_featured": true,
+            "daily_target_amount": 87.2,
+            "ui_index": 7,
+            "nutrient_name": "protein",
+            "nutrient_daily_value": 50,
+            "nutrient_unit": "g",
+            "nutrient_group": "proteins_and_amino_acids",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 38,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 9,
+            "nutrient_name": "vitamin_a",
+            "nutrient_daily_value": 5000,
+            "nutrient_unit": "mcg",
+            "nutrient_group": "vitamins",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 39,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 10,
+            "nutrient_name": "vitamin_c",
+            "nutrient_daily_value": 90,
+            "nutrient_unit": "mg",
+            "nutrient_group": "vitamins",
+            "nutrient_parent_name": null
+        },
+        {
+            "user_id": 1,
+            "nutrient_id": 58,
+            "is_featured": true,
+            "daily_target_amount": null,
+            "ui_index": 8,
+            "nutrient_name": "sodium",
+            "nutrient_daily_value": 2300,
+            "nutrient_unit": "mg",
+            "nutrient_group": "minerals",
+            "nutrient_parent_name": null
+        }    
+    ],
+    "created_foods": [
+        {
+            "id": 1,
+            "is_recipe": false,
+            "name": "English Muffin",
+            "brand": "Homemade"
+        },
+        {
+            "id": 29,
+            "is_recipe": true,
+            "name": "Cottage Cheese Dip",
+            "brand": "Homemade"
+        }
+    ],
+    "favorite_foods": [
+        {
+            "id": 1,
+            "is_recipe": false,
+            "name": "English Muffin",
+            "brand": "Homemade"
+        },
+        {
+            "id": 29,
+            "is_recipe": true,
+            "name": "Cottage Cheese Dip",
+            "brand": "Homemade"
+        }
+    ]
+}

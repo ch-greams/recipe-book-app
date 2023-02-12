@@ -197,7 +197,7 @@ describe("recipe_page", () => {
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}?limit=10&user_id=1&filter=${NEW_PRODUCT_NAME_SHORT}`,
+                `${constants.CY_PRODUCT_API_PATH}?limit=10&filter=${NEW_PRODUCT_NAME_SHORT}`,
                 { fixture: "products_response.json" },
             );
             cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });

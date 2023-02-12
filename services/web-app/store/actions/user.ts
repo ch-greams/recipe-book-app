@@ -2,33 +2,25 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
 import { isSome } from "@common/types";
-import type { FoodShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
+import type { JournalGroup, UserInfo, UserNutrient, UserNutrientDetailed } from "@common/typings";
 import type { UserMenuItem } from "@store/types/user";
 import AuthApi from "@api/authApi";
 import JournalApi from "@api/journalApi";
 import ProductApi from "@api/productApi";
+import UserApi from "@api/userApi";
 
 import type { AsyncThunkConfig } from ".";
 
 
 export const changeMenuItem = createAction<UserMenuItem>("user/change_menu_item");
 
-interface UserFetchDataPayload {
-    favoriteFoods: FoodShort[];
-    customFoods: FoodShort[];
-    nutrients: UserNutrientDetailed[];
-}
 
-export const fetchUserData = createAsyncThunk<UserFetchDataPayload, void, AsyncThunkConfig>(
+export const fetchUserData = createAsyncThunk<UserInfo, void, AsyncThunkConfig>(
     "user/fetch_data",
     async (_arg, { rejectWithValue }) => {
         try {
-            const [ favoriteFoods, customFoods, nutrients ] = await Promise.all([
-                ProductApi.getFavoriteProducts(),
-                ProductApi.getCustomProducts(),
-                JournalApi.getUserNutrients(),
-            ]);
-            return { favoriteFoods, customFoods, nutrients };
+            const userInfo = await UserApi.getUserInfo();
+            return userInfo;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));
@@ -53,6 +45,19 @@ export const deleteFavoriteProduct = createAsyncThunk<void, number, AsyncThunkCo
     async (productId, { rejectWithValue }) => {
         try {
             await ProductApi.deleteFavoriteProduct(productId);
+        }
+        catch (error) {
+            return rejectWithValue(HttpError.getStatus(error));
+        }
+    },
+);
+
+export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], AsyncThunkConfig>(
+    "user/update_journal_groups",
+    async (groups, { rejectWithValue }) => {
+        try {
+            await JournalApi.updateJournalGroups(groups);
+            return groups;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

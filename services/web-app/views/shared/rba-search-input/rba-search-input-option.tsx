@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FOOD, RECIPE } from "@common/labels";
 import { getProductPath } from "@common/routes";
 import { isSome } from "@common/types";
-import type { ProductShort } from "@common/typings";
+import type { FoodShort } from "@common/typings";
 
 import type { OnSelectFunc } from ".";
 
@@ -12,12 +12,12 @@ import styles from "./rba-search-input.module.scss";
 
 
 interface Props {
-    product: ProductShort;
+    product: FoodShort;
     onSelect?: Option<OnSelectFunc>;
 }
 
 
-const getLink = (product: ProductShort): JSX.Element => (
+const getLink = (product: FoodShort): JSX.Element => (
     <Link
         key={product.id}
         href={getProductPath(product.is_recipe, product.id)}
@@ -33,7 +33,7 @@ const getLink = (product: ProductShort): JSX.Element => (
     </Link>
 );
 
-const getButton = (product: ProductShort, onSelect: OnSelectFunc): JSX.Element => (
+const getButton = (product: FoodShort, onSelect: OnSelectFunc): JSX.Element => (
     <button type={"button"} onClick={() => onSelect(product)} className={styles.searchOption}>
         <span>
             {product.name}
