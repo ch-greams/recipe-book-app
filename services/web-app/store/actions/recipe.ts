@@ -3,7 +3,7 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
 import type { NutrientName } from "@common/nutrients";
-import type { Ingredient, FoodShort, Recipe } from "@common/typings";
+import type { FoodShort, Ingredient, Recipe } from "@common/typings";
 import type * as units from "@common/units";
 import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";

@@ -10,8 +10,9 @@ use crate::{
     auth::{authorize, Certificate},
     types::{
         error::Error,
+        journal_group::JournalGroup,
         product::{Product, ProductShort},
-        user_nutrient::{UserNutrient, UserNutrientDetailed}, journal_group::JournalGroup,
+        user_nutrient::{UserNutrient, UserNutrientDetailed},
     },
 };
 
@@ -64,7 +65,9 @@ async fn get_info(
 
     // journal_groups
 
-    let journal_groups = JournalGroup::find_all_by_user_id(user_id).fetch_all(&mut txn).await?;
+    let journal_groups = JournalGroup::find_all_by_user_id(user_id)
+        .fetch_all(&mut txn)
+        .await?;
 
     // user_nutrients
 
