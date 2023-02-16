@@ -53,9 +53,7 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(
-                " RETURNING id, slot_number, recipe_id, food_id, amount, unit, is_alternative;",
-            )
+            .push(" RETURNING id, slot_number, recipe_id, food_id, amount, unit, is_alternative;")
             .build_query_as()
             .fetch_all(txn)
             .await?;
@@ -94,9 +92,7 @@ impl Ingredient {
                         .push_bind(ingredient_payload.is_alternative);
                 },
             )
-            .push(
-                " RETURNING id, slot_number, recipe_id, food_id, amount, unit, is_alternative;",
-            )
+            .push(" RETURNING id, slot_number, recipe_id, food_id, amount, unit, is_alternative;")
             .build_query_as()
             .fetch_all(txn)
             .await?;
@@ -151,8 +147,8 @@ mod tests {
     use crate::{
         config::Config,
         types::{
-            ingredient::{Ingredient, IngredientDetailed},
             food::Food,
+            ingredient::{Ingredient, IngredientDetailed},
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,

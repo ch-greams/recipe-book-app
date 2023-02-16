@@ -32,9 +32,7 @@ impl CustomUnit {
         .bind(food_id)
     }
 
-    pub fn find_by_food_ids(
-        food_ids: Vec<i64>,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
+    pub fn find_by_food_ids(food_ids: Vec<i64>) -> QueryAs<'static, Postgres, Self, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT name, amount, unit, food_id
@@ -128,7 +126,7 @@ mod tests {
     use crate::{
         types::{
             custom_unit::CustomUnit,
-            food::{Food, CreateFoodPayload, UpdateFoodPayload},
+            food::{CreateFoodPayload, Food, UpdateFoodPayload},
         },
         utils,
     };

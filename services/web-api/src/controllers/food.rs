@@ -13,7 +13,7 @@ use crate::{
     types::{
         custom_unit::CustomUnit,
         error::Error,
-        food::{Food, FoodShort, CreateFoodPayload, FoodDetailed, UpdateFoodPayload},
+        food::{CreateFoodPayload, Food, FoodDetailed, FoodShort, UpdateFoodPayload},
         food_nutrient::FoodNutrient,
         meta::Nutrient,
     },
@@ -47,9 +47,7 @@ async fn find_by_id(
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
 
-    let custom_units = CustomUnit::find_by_food_id(*id)
-        .fetch_all(&mut txn)
-        .await?;
+    let custom_units = CustomUnit::find_by_food_id(*id).fetch_all(&mut txn).await?;
 
     let food_nutrients = FoodNutrient::find_by_food_id(*id)
         .fetch_all(&mut txn)
@@ -112,8 +110,7 @@ async fn update_food(
 
     let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    FoodNutrient::replace_multiple(&payload.nutrients, &meta_nutrients, food.id, &mut txn)
-        .await?;
+    FoodNutrient::replace_multiple(&payload.nutrients, &meta_nutrients, food.id, &mut txn).await?;
 
     txn.commit().await?;
 

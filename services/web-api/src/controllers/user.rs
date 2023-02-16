@@ -10,8 +10,8 @@ use crate::{
     auth::{authorize, Certificate},
     types::{
         error::Error,
-        journal_group::JournalGroup,
         food::{Food, FoodShort},
+        journal_group::JournalGroup,
         user_nutrient::{UserNutrient, UserNutrientDetailed},
     },
 };

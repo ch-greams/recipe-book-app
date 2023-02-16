@@ -115,7 +115,7 @@ impl FoodNutrient {
 mod tests {
     use crate::{
         types::{
-            food::{Food, CreateFoodPayload, UpdateFoodPayload},
+            food::{CreateFoodPayload, Food, UpdateFoodPayload},
             food_nutrient::FoodNutrient,
             meta::Nutrient,
         },

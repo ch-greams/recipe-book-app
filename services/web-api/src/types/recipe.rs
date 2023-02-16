@@ -1,9 +1,9 @@
 use std::collections::HashMap;
 
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
+use super::food::Food;
 use super::ingredient::{IngredientDetailed, IngredientPayload};
 use super::instruction::{CreateInstructionPayload, InstructionDetailed, UpdateInstructionPayload};
-use super::food::Food;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};

@@ -183,9 +183,9 @@ mod tests {
     use crate::{
         config::Config,
         types::{
+            food::Food,
             ingredient::Ingredient,
             instruction::{Instruction, InstructionDetailed},
-            food::Food,
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,

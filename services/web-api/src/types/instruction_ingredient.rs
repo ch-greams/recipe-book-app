@@ -95,9 +95,8 @@ mod tests {
 
     use crate::{
         types::{
-            ingredient::Ingredient, instruction::Instruction,
-            instruction_ingredient::InstructionIngredient, food::Food,
-            recipe::CreateRecipePayload,
+            food::Food, ingredient::Ingredient, instruction::Instruction,
+            instruction_ingredient::InstructionIngredient, recipe::CreateRecipePayload,
         },
         utils,
     };

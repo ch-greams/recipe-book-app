@@ -2,11 +2,12 @@ use std::collections::HashMap;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-use sqlx::{query::QueryAs, Postgres, postgres::PgArguments, Executor};
+use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
 use super::{
     custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload},
-    recipe::{CreateRecipePayload, UpdateRecipePayload}, error::Error,
+    error::Error,
+    recipe::{CreateRecipePayload, UpdateRecipePayload},
 };
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -115,7 +116,6 @@ impl FoodDetailed {
         }
     }
 }
-
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Food {
@@ -417,12 +417,11 @@ impl Food {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::{
         types::{
-            food::{Food, CreateFoodPayload, UpdateFoodPayload},
+            food::{CreateFoodPayload, Food, UpdateFoodPayload},
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
@@ -626,10 +625,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload, false, user_id, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload, false, user_id, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,
@@ -660,10 +658,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let food_result = Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, food_result.id,
@@ -701,9 +698,14 @@ mod tests {
 
         update_food_payload.id = create_food_result.id;
 
-        let update_food_result = Food::update(&update_food_payload.to_owned().into(), true, user_id, &mut txn)
-            .await
-            .unwrap();
+        let update_food_result = Food::update(
+            &update_food_payload.to_owned().into(),
+            true,
+            user_id,
+            &mut txn,
+        )
+        .await
+        .unwrap();
 
         assert_ne!(
             create_food_result.name, update_food_result.name,
