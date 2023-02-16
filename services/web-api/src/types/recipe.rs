@@ -3,13 +3,13 @@ use std::collections::HashMap;
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
 use super::ingredient::{IngredientDetailed, IngredientPayload};
 use super::instruction::{CreateInstructionPayload, InstructionDetailed, UpdateInstructionPayload};
-use super::product::Product;
+use super::food::Food;
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
-pub struct Recipe {
+pub struct RecipeDetailed {
     pub id: i64,
     pub name: String,
     pub brand: String,
@@ -54,28 +54,28 @@ pub struct UpdateRecipePayload {
     pub is_private: bool,
 }
 
-impl Recipe {
+impl RecipeDetailed {
     pub fn new(
-        product: Product,
+        food: Food,
         nutrients: &HashMap<String, f32>,
         custom_units: Vec<CustomUnit>,
         ingredients: Vec<IngredientDetailed>,
         instructions: &[InstructionDetailed],
     ) -> Self {
         Self {
-            id: product.id,
-            name: product.name,
-            brand: product.brand,
-            description: product.description,
-            density: product.density,
-            serving_size: product.serving_size,
+            id: food.id,
+            name: food.name,
+            brand: food.brand,
+            description: food.description,
+            density: food.density,
+            serving_size: food.serving_size,
             nutrients: nutrients.to_owned(),
             custom_units,
             ingredients,
             instructions: instructions.to_vec(),
-            created_at: product.created_at,
-            updated_at: product.updated_at,
-            is_private: product.is_private,
+            created_at: food.created_at,
+            updated_at: food.updated_at,
+            is_private: food.is_private,
         }
     }
 }

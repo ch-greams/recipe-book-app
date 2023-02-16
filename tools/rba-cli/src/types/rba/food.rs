@@ -12,7 +12,7 @@ use crate::{
 };
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
-pub struct Product {
+pub struct Food {
     pub id: i64,
     pub is_recipe: bool,
     pub name: String,
@@ -26,40 +26,31 @@ pub struct Product {
     pub updated_at: DateTime<Utc>,
 }
 
-impl Product {
-    pub async fn seed_products(
-        products: Vec<Product>,
-        txn: impl Executor<'_, Database = Postgres>,
-    ) {
-        let mut products_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.product (id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+impl Food {
+    pub async fn seed_foods(foods: Vec<Food>, txn: impl Executor<'_, Database = Postgres>) {
+        let mut foods_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
+            "INSERT INTO food.food (id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
-        products_query_builder.push_values(
-            products.iter().take(BIND_LIMIT / 12),
-            |mut b, product| {
-                b.push_bind(product.id)
-                    .push_bind(product.is_recipe)
-                    .push_bind(&product.name)
-                    .push_bind(&product.brand)
-                    .push_bind(&product.description)
-                    .push_bind(product.density)
-                    .push_bind(product.serving_size)
-                    .push_bind(product.created_by)
-                    .push_bind(product.is_private)
-                    .push_bind(product.created_at)
-                    .push_bind(product.updated_at);
-            },
-        );
+        foods_query_builder.push_values(foods.iter().take(BIND_LIMIT / 12), |mut b, food| {
+            b.push_bind(food.id)
+                .push_bind(food.is_recipe)
+                .push_bind(&food.name)
+                .push_bind(&food.brand)
+                .push_bind(&food.description)
+                .push_bind(food.density)
+                .push_bind(food.serving_size)
+                .push_bind(food.created_by)
+                .push_bind(food.is_private)
+                .push_bind(food.created_at)
+                .push_bind(food.updated_at);
+        });
 
-        let products_query = products_query_builder.build();
+        let foods_query = foods_query_builder.build();
 
-        let products_response = products_query.execute(txn).await.unwrap();
+        let foods_response = foods_query.execute(txn).await.unwrap();
 
-        println!(
-            "{} product records created",
-            products_response.rows_affected()
-        );
+        println!("{} food records created", foods_response.rows_affected());
     }
 }
 
@@ -72,7 +63,7 @@ fn get_density(food_portion: &FoodPortion) -> f64 {
     }
 }
 
-impl From<&FoundationFoodItem> for Product {
+impl From<&FoundationFoodItem> for Food {
     fn from(foundation_food_item: &FoundationFoodItem) -> Self {
         let std_units = vec!["ml", "tsp", "tbsp", "cup"];
         let std_portion = foundation_food_item
@@ -107,7 +98,7 @@ impl From<&FoundationFoodItem> for Product {
     }
 }
 
-impl From<&SurveyFoodItem> for Product {
+impl From<&SurveyFoodItem> for Food {
     fn from(survey_food_item: &SurveyFoodItem) -> Self {
         let std_units = vec!["ml", "tsp", "tbsp", "cup"];
         let std_portion = survey_food_item
@@ -142,7 +133,7 @@ impl From<&SurveyFoodItem> for Product {
     }
 }
 
-impl From<&BrandedFoodItem> for Product {
+impl From<&BrandedFoodItem> for Food {
     fn from(branded_food_item: &BrandedFoodItem) -> Self {
         let timestamp = Utc::now();
 

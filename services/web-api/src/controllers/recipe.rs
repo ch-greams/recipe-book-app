@@ -12,13 +12,13 @@ use crate::{
     types::{
         custom_unit::CustomUnit,
         error::Error,
+        food_nutrient::FoodNutrient,
         ingredient::{Ingredient, IngredientDetailed},
         instruction::{Instruction, InstructionDetailed},
         instruction_ingredient::InstructionIngredient,
         meta::Nutrient,
-        product::Product,
-        product_nutrient::ProductNutrient,
-        recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
+        food::Food,
+        recipe::{CreateRecipePayload, RecipeDetailed, UpdateRecipePayload},
     },
 };
 
@@ -26,7 +26,7 @@ pub fn scope() -> Scope {
     actix_web::web::scope("recipe")
         .service(find_by_id)
         .service(create_recipe)
-    // .service(update_recipe)
+        .service(update_recipe)
 }
 
 #[get("/{id}")]
@@ -35,21 +35,21 @@ async fn find_by_id(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = get_user(request, &auth_certificate);
 
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::find_recipe_by_id(*id, user_id)
+    let food = Food::find_recipe_by_id(*id, user_id)
         .fetch_optional(&mut txn)
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
 
-    let custom_units = CustomUnit::find_by_product_id(*id)
+    let custom_units = CustomUnit::find_by_food_id(*id)
         .fetch_all(&mut txn)
         .await?;
 
-    let product_nutrients = ProductNutrient::find_by_product_id(*id)
+    let food_nutrients = FoodNutrient::find_by_food_id(*id)
         .fetch_all(&mut txn)
         .await?
         .iter()
@@ -68,9 +68,9 @@ async fn find_by_id(
         .fetch_all(&mut txn)
         .await?;
 
-    let recipe = Recipe::new(
-        product,
-        &product_nutrients,
+    let recipe = RecipeDetailed::new(
+        food,
+        &food_nutrients,
         custom_units,
         ingredients,
         &instructions,
@@ -85,15 +85,15 @@ async fn create_recipe(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = authorize(request, &auth_certificate)?;
 
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::insert_recipe(&payload, user_id, &mut txn).await?;
+    let food = Food::insert(&payload.to_owned().into(), true, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
+        CustomUnit::insert_multiple(&payload.custom_units, food.id, &mut txn).await?;
 
     let defined_nutrients: HashMap<String, f32> = payload
         .nutrients
@@ -105,7 +105,7 @@ async fn create_recipe(
     if !defined_nutrients.is_empty() {
         let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-        ProductNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
+        FoodNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, food.id, &mut txn)
             .await?;
     }
 
@@ -114,9 +114,9 @@ async fn create_recipe(
     let ingredients = if payload.ingredients.is_empty() {
         Vec::new()
     } else {
-        Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
+        Ingredient::insert_multiple(&payload.ingredients, food.id, &mut txn).await?;
 
-        IngredientDetailed::find_by_recipe_id(product.id)
+        IngredientDetailed::find_by_recipe_id(food.id)
             .fetch_all(&mut txn)
             .await?
     };
@@ -127,7 +127,7 @@ async fn create_recipe(
         Vec::new()
     } else {
         let created_instructions =
-            Instruction::insert_multiple(&payload.instructions, product.id, &mut txn).await?;
+            Instruction::insert_multiple(&payload.instructions, food.id, &mut txn).await?;
 
         let instruction_ingredients_to_create: Vec<InstructionIngredient> =
             zip(&created_instructions, &payload.instructions)
@@ -154,8 +154,8 @@ async fn create_recipe(
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(
-        product,
+    let recipe = RecipeDetailed::new(
+        food,
         &defined_nutrients,
         custom_units,
         ingredients,
@@ -171,16 +171,16 @@ async fn update_recipe(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = authorize(request, &auth_certificate)?;
 
     let mut txn = db_pool.begin().await?;
 
     // TODO: Might want to provide a better error when user_id doesn't match
-    let product = Product::update_recipe(&payload, user_id, &mut txn).await?;
+    let food = Food::update(&payload.to_owned().into(), true, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
+        CustomUnit::replace_multiple(&payload.custom_units, food.id, &mut txn).await?;
 
     let defined_nutrients: HashMap<String, f32> = payload
         .nutrients
@@ -191,21 +191,21 @@ async fn update_recipe(
 
     let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
 
-    ProductNutrient::replace_multiple(&defined_nutrients, &meta_nutrients, product.id, &mut txn)
+    FoodNutrient::replace_multiple(&defined_nutrients, &meta_nutrients, food.id, &mut txn)
         .await?;
 
     // ingredients
 
-    Ingredient::replace_multiple(&payload.ingredients, product.id, &mut txn).await?;
+    Ingredient::replace_multiple(&payload.ingredients, food.id, &mut txn).await?;
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(product.id)
+    let ingredients = IngredientDetailed::find_by_recipe_id(food.id)
         .fetch_all(&mut txn)
         .await?;
 
     // instructions
 
     let created_instructions =
-        Instruction::replace_multiple(&payload.instructions, product.id, &mut txn).await?;
+        Instruction::replace_multiple(&payload.instructions, food.id, &mut txn).await?;
 
     let instruction_ingredients_to_create: Vec<InstructionIngredient> =
         zip(&created_instructions, &payload.instructions)
@@ -232,8 +232,8 @@ async fn update_recipe(
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(
-        product,
+    let recipe = RecipeDetailed::new(
+        food,
         &defined_nutrients,
         custom_units,
         ingredients,

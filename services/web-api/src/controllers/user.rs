@@ -11,7 +11,7 @@ use crate::{
     types::{
         error::Error,
         journal_group::JournalGroup,
-        product::{Product, ProductShort},
+        food::{Food, FoodShort},
         user_nutrient::{UserNutrient, UserNutrientDetailed},
     },
 };
@@ -32,16 +32,16 @@ pub struct FindAllQuery {
 struct UserInfo {
     journal_groups: Vec<JournalGroup>,
     user_nutrients: Vec<UserNutrientDetailed>,
-    created_foods: Vec<ProductShort>,
-    favorite_foods: Vec<ProductShort>,
+    created_foods: Vec<FoodShort>,
+    favorite_foods: Vec<FoodShort>,
 }
 
 impl UserInfo {
     pub fn new(
         journal_groups: Vec<JournalGroup>,
         user_nutrients: Vec<UserNutrientDetailed>,
-        created_foods: Vec<ProductShort>,
-        favorite_foods: Vec<ProductShort>,
+        created_foods: Vec<FoodShort>,
+        favorite_foods: Vec<FoodShort>,
     ) -> Self {
         Self {
             journal_groups,
@@ -75,7 +75,7 @@ async fn get_info(
 
     // created_foods
 
-    let created_foods = Product::find_all_created_by_user(
+    let created_foods = Food::find_all_created_by_user(
         query.limit.unwrap_or(100),
         query.offset.unwrap_or(0),
         user_id,
@@ -85,12 +85,12 @@ async fn get_info(
     .fetch_all(&mut txn)
     .await?
     .iter()
-    .map(ProductShort::new)
+    .map(FoodShort::new)
     .collect();
 
     // favorite_foods
 
-    let favorite_foods = Product::find_all_favorite(
+    let favorite_foods = Food::find_all_favorite(
         query.limit.unwrap_or(100),
         query.offset.unwrap_or(0),
         user_id,
@@ -100,7 +100,7 @@ async fn get_info(
     .fetch_all(&mut txn)
     .await?
     .iter()
-    .map(ProductShort::new)
+    .map(FoodShort::new)
     .collect();
 
     Ok(Json(UserInfo::new(

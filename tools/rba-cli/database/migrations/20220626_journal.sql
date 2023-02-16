@@ -1,14 +1,14 @@
 
 
-CREATE TABLE journal.favorite_product (
+CREATE TABLE journal.favorite_food (
     user_id int8 NOT NULL,
-    product_id int8 NOT NULL,
-    CONSTRAINT favorite_product_pk PRIMARY KEY (user_id, product_id),
-    CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES product.product(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    food_id int8 NOT NULL,
+    CONSTRAINT favorite_food_pk PRIMARY KEY (user_id, food_id),
+    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES food.food(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-ALTER TABLE journal.favorite_product OWNER TO postgres;
-GRANT ALL ON TABLE journal.favorite_product TO postgres;
+ALTER TABLE journal.favorite_food OWNER TO postgres;
+GRANT ALL ON TABLE journal.favorite_food TO postgres;
 
 
 -- First 100 reserved for testing purposes
@@ -38,34 +38,34 @@ CREATE TABLE journal.journal_entry (
     user_id int8 NOT NULL,
     entry_date date NOT NULL,
     entry_time time NOT NULL,
-    product_id int8 NOT NULL,
+    food_id int8 NOT NULL,
     amount float4 NOT NULL,
     unit text NOT NULL,
     journal_group_ui_index int2 NULL,
     CONSTRAINT journal_entry_pk PRIMARY KEY (id),
     -- CONSTRAINT journal_group_fk FOREIGN KEY (journal_group_ui_index,user_id) REFERENCES journal.journal_group(ui_index,user_id),
-    CONSTRAINT product_fk FOREIGN KEY (product_id) REFERENCES product.product(id),
+    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES food.food(id),
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)
 );
 ALTER TABLE journal.journal_entry OWNER TO postgres;
 GRANT ALL ON TABLE journal.journal_entry TO postgres;
 
 
-CREATE OR REPLACE VIEW journal.journal_entry_product
+CREATE OR REPLACE VIEW journal.journal_entry_food
 AS SELECT journal_entry.id,
     journal_entry.user_id,
     journal_entry.entry_date,
     journal_entry.entry_time,
-    journal_entry.product_id,
-    product.name AS product_name,
-    product.density AS product_density,
+    journal_entry.food_id,
+    food.name AS food_name,
+    food.density AS food_density,
     journal_entry.amount,
     journal_entry.unit,
     journal_entry.journal_group_ui_index
    FROM journal.journal_entry journal_entry
-   JOIN product.product product ON product.id = journal_entry.product_id;
-ALTER TABLE journal.journal_entry_product OWNER TO postgres;
-GRANT ALL ON TABLE journal.journal_entry_product TO postgres;
+   JOIN food.food food ON food.id = journal_entry.food_id;
+ALTER TABLE journal.journal_entry_food OWNER TO postgres;
+GRANT ALL ON TABLE journal.journal_entry_food TO postgres;
 
 
 CREATE OR REPLACE VIEW journal.user_nutrient_detailed

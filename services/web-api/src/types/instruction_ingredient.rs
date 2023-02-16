@@ -66,7 +66,7 @@ impl InstructionIngredient {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.instruction_ingredient (instruction_id, ingredient_slot_number, ingredient_percentage) ",
+            "INSERT INTO food.instruction_ingredient (instruction_id, ingredient_slot_number, ingredient_percentage) ",
         );
 
         let instruction_ingredients = insert_query_builder
@@ -96,7 +96,7 @@ mod tests {
     use crate::{
         types::{
             ingredient::Ingredient, instruction::Instruction,
-            instruction_ingredient::InstructionIngredient, product::Product,
+            instruction_ingredient::InstructionIngredient, food::Food,
             recipe::CreateRecipePayload,
         },
         utils,
@@ -104,23 +104,24 @@ mod tests {
 
     #[tokio::test]
     async fn insert_multiple() {
-        let create_product_payload: CreateRecipePayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
-            .await
-            .unwrap();
+        let create_food_result =
+            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
-            0, create_product_result.id,
-            "create_product_result should not have a placeholder value for id"
+            0, create_food_result.id,
+            "create_food_result should not have a placeholder value for id"
         );
 
         let create_ingredients_result = Ingredient::insert_multiple(
-            &create_product_payload.ingredients,
-            create_product_result.id,
+            &create_food_payload.ingredients,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -129,8 +130,8 @@ mod tests {
         assert_eq!(create_ingredients_result.len(), 3);
 
         let create_instructions_result = Instruction::insert_multiple(
-            &create_product_payload.instructions,
-            create_product_result.id,
+            &create_food_payload.instructions,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -140,7 +141,7 @@ mod tests {
 
         let instruction_ingredients_to_create: Vec<InstructionIngredient> = zip(
             &create_instructions_result,
-            &create_product_payload.instructions,
+            &create_food_payload.instructions,
         )
         .flat_map(|(ci, ip)| InstructionIngredient::from_created_instructions(ci, ip))
         .collect();
