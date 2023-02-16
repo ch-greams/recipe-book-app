@@ -24,7 +24,7 @@ export enum SearchInputHeightSize {
     Medium = "heightSize_Medium",
 }
 
-export type OnSelectFunc = (product: FoodShort) => void;
+export type OnSelectFunc = (food: FoodShort) => void;
 
 interface Props {
     "data-cy"?: string;
@@ -39,8 +39,8 @@ interface Props {
 }
 
 const getOnSelect = (onSelect: OnSelectFunc, searchInputClear: () => void): OnSelectFunc => {
-    return (productId) => {
-        onSelect(productId);
+    return (foodId) => {
+        onSelect(foodId);
         searchInputClear();
     };
 };
@@ -88,10 +88,10 @@ const RbaSearchInput: React.FC<Props> = ({
 
             {( searchInput.isNotEmpty() && (
                 <div className={styles.searchList}>
-                    {items.map((product) => (
+                    {items.map((food) => (
                         <RbaSearchInputOption
-                            key={product.id}
-                            product={product}
+                            key={food.id}
+                            food={food}
                             onSelect={isSome(onSelect) ? getOnSelect(onSelect, searchInputClear) : null}
                         />
                     ))}

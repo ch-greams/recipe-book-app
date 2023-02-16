@@ -20,7 +20,7 @@
             "name": "package",
             "amount": 12.0,
             "unit": "tbsp",
-            "product_id": 1
+            "food_id": 1
         }
     ],
     "is_private": false,

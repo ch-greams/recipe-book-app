@@ -145,7 +145,7 @@ AMOUNT_MEASURE_PATTERN: MatcherPattern = [
     ],
 ]
 
-PRODUCT_PATTERN: MatcherPattern = [
+FOOD_PATTERN: MatcherPattern = [
     [
         { "LOWER": "extra", "OP": "?" },
         { "LOWER": "virgin", "OP": "?" },
@@ -235,7 +235,7 @@ class MatcherPatternType(Enum):
     MEASURE                     = "MEASURE"
     UNIT_MEASURE                = "UNIT_MEASURE"
     AMOUNT_MEASURE              = "AMOUNT_MEASURE"
-    PRODUCT                     = "PRODUCT"
+    FOOD                        = "FOOD"
     TEMPERATURE_MEASURE         = "TEMPERATURE_MEASURE"
     TIME_MEASURE                = "TIME_MEASURE"
 
@@ -247,7 +247,7 @@ INGREDIENT_PATTERNS: dict[MatcherPatternType, MatcherPattern] = {
     MatcherPatternType.MEASURE:                     MEASURE_PATTERN,
     MatcherPatternType.UNIT_MEASURE:                UNIT_MEASURE_PATTERN,
     MatcherPatternType.AMOUNT_MEASURE:              AMOUNT_MEASURE_PATTERN,
-    # MatcherPatternType.PRODUCT:                     PRODUCT_PATTERN,
+    # MatcherPatternType.FOOD:                        FOOD_PATTERN,
 }
 
 INSTRUCTION_PATTERNS: dict[MatcherPatternType, MatcherPattern] = {

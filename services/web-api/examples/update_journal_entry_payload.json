@@ -3,7 +3,7 @@
     "user_id": 1,
     "entry_date": "2022-11-04",
     "entry_time": "17:29:03",
-    "product_id": 6,
+    "food_id": 6,
     "amount": 123,
     "unit": "g",
     "journal_group_ui_index": 1

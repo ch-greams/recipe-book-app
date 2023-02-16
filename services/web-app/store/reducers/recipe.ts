@@ -206,7 +206,7 @@ const reducer = createReducer(initialState, (builder) => {
                         state.customUnits,
                         state.density,
                     ),
-                    product_id: state.id,
+                    food_id: state.id,
                 },
             ];
         })
@@ -631,7 +631,7 @@ const reducer = createReducer(initialState, (builder) => {
                 isMarked: (ingredient.id === id) ? !ingredient.isMarked : ingredient.isMarked,
             }));
         })
-        .addCase(actions.updateIngredientProductAmount, (state, action) => {
+        .addCase(actions.updateIngredientFoodAmount, (state, action) => {
             const { id, inputValue } = action.payload;
 
             state.ingredients = state.ingredients.map((ingredient) => (
@@ -644,7 +644,7 @@ const reducer = createReducer(initialState, (builder) => {
                     : ingredient
             ));
         })
-        .addCase(actions.updateIngredientProductUnit, (state, action) => {
+        .addCase(actions.updateIngredientFoodUnit, (state, action) => {
             const { id, unit } = action.payload;
 
             state.ingredients = state.ingredients.map((ingredient) => {
@@ -718,7 +718,7 @@ const reducer = createReducer(initialState, (builder) => {
 
                     id: getTemporaryId(),
 
-                    product_id: ingredient.product_id,
+                    food_id: ingredient.food_id,
 
                     amount: 100,
                     amountInput: "100",

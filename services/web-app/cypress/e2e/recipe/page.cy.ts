@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
-import { getProductPath, NEW_RECIPE_PATH, RECIPE_PATH } from "@common/routes";
+import { getFoodPath, NEW_RECIPE_PATH, RECIPE_PATH } from "@common/routes";
 
 
 describe("recipe_page", () => {
@@ -43,7 +43,7 @@ describe("recipe_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
 
-            cy.url().should("include", getProductPath(true, NEW_RECIPE_ID));
+            cy.url().should("include", getFoodPath(true, NEW_RECIPE_ID));
         });
 
         it("can save an updated page", () => {
@@ -82,7 +82,7 @@ describe("recipe_page", () => {
         it("can delete a recipe", () => {
 
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+            cy.intercept("POST", `${constants.CY_FOOD_API_PATH}/delete`, { statusCode: 204 });
 
             cy.visit(`${RECIPE_PATH}/29`);
 

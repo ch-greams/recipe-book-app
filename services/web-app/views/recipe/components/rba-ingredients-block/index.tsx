@@ -6,7 +6,7 @@ import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
 import { addIngredient } from "@store/actions/recipe";
-import { searchClear, searchProducts } from "@store/actions/search";
+import { searchClear, searchFoods } from "@store/actions/search";
 import type { RecipeIngredient } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
 import { IconSize } from "@icons/icon-params";
@@ -64,10 +64,10 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                         placeholder={"Add an ingredient..."}
                         isLoading={!search.isLoaded}
                         value={search.searchInput}
-                        items={search.products}
-                        onChange={(value) => { dispatch(searchProducts(value)); }}
-                        onSelect={(product) => {
-                            dispatch(addIngredient({ product, slotNumber: nextSlotNumber, isAlternative: false }));
+                        items={search.foods}
+                        onChange={(value) => { dispatch(searchFoods(value)); }}
+                        onSelect={(food) => {
+                            dispatch(addIngredient({ food, slotNumber: nextSlotNumber, isAlternative: false }));
                             dispatch(searchClear());
                         }}
                         data-cy={constants.CY_SEARCH}

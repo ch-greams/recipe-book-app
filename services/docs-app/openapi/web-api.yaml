@@ -40,8 +40,8 @@ components:
         parent_name:
           type: string
           example: carbohydrate
-    # product
-    ProductShort:
+    # food
+    FoodShort:
       type: object
       properties:
         id:
@@ -65,7 +65,7 @@ components:
         updated_at:
           type: string
           example: "2022-11-04T13:29:03.400873Z"
-    DeleteProductPayload:
+    DeleteFoodPayload:
       type: object
       properties:
         id:
@@ -84,7 +84,7 @@ components:
         unit:
           type: string
           example: g
-        product_id:
+        food_id:
           type: integer
           example: 3
     CreateCustomUnitPayload:
@@ -227,7 +227,7 @@ components:
         recipe_id:
           type: integer
           example: 4
-        product_id:
+        food_id:
           type: integer
           example: 4
         amount:
@@ -268,7 +268,7 @@ components:
         slot_number:
           type: integer
           example: 1
-        product_id:
+        food_id:
           type: integer
           example: 4
         amount:
@@ -289,7 +289,7 @@ components:
         slot_number:
           type: integer
           example: 1
-        product_id:
+        food_id:
           type: integer
           example: 4
         amount:
@@ -521,7 +521,7 @@ components:
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
         amount:
@@ -542,7 +542,7 @@ components:
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
         amount:
@@ -572,13 +572,13 @@ components:
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
-        product_name:
+        food_name:
           type: string
           example: Hamburger
-        product_density:
+        food_density:
           type: number
           example: 0.9
         amount:
@@ -672,17 +672,15 @@ components:
         created_foods:
           type: array
           items:
-            $ref: "#/components/schemas/ProductShort"
+            $ref: "#/components/schemas/FoodShort"
         favorite_foods:
           type: array
           items:
-            $ref: "#/components/schemas/ProductShort"
+            $ref: "#/components/schemas/FoodShort"
 
 tags:
   - name: meta
     description: All `meta`-related endpoints
-  - name: product
-    description: All `product`-related endpoints
   - name: food
     description: All `food`-related endpoints
   - name: recipe
@@ -696,7 +694,6 @@ x-tagGroups:
   - name: General
     tags:
       - meta
-      - product
       - food
       - recipe
       - journal
@@ -719,11 +716,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/Nutrient"
 
-  /product:
+  /food:
     get:
       tags:
-        - product
-      summary: Find products
+        - food
+      summary: Find foods
       security: []
       parameters:
         - name: limit
@@ -759,15 +756,15 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "404":
           description: Not Found
 
-  /product/created:
+  /food/created:
     get:
       tags:
-        - product
-      summary: Find products created by user
+        - food
+      summary: Find foods created by user
       security: 
         - AccessTokenAuth: []
       parameters:
@@ -804,7 +801,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "401":
           description: Unauthorized
         "403":
@@ -812,11 +809,11 @@ paths:
         "404":
           description: Not Found
 
-  /product/favorite:
+  /food/favorite:
     get:
       tags:
-        - product
-      summary: Find favorite products
+        - food
+      summary: Find favorite foods
       security: 
         - AccessTokenAuth: []
       parameters:
@@ -853,7 +850,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "401":
           description: Unauthorized
         "403":
@@ -861,18 +858,18 @@ paths:
         "404":
           description: Not Found
 
-  /product/favorite/delete:
+  /food/favorite/delete:
     post:
       tags:
-        - product
-      summary: Delete a favorite product by id
+        - food
+      summary: Delete a favorite food by id
       security: 
         - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/DeleteProductPayload"
+              $ref: "#/components/schemas/DeleteFoodPayload"
       responses:
         "204":
           description: No Content
@@ -883,18 +880,18 @@ paths:
         "404":
           description: Not Found
 
-  /product/delete:
+  /food/delete:
     post:
       tags:
-        - product
-      summary: Delete a product by id
+        - food
+      summary: Delete a food by id
       security: 
         - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/DeleteProductPayload"
+              $ref: "#/components/schemas/DeleteFoodPayload"
       responses:
         "204":
           description: No Content

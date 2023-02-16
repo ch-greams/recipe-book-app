@@ -1,4 +1,4 @@
-INSERT INTO product.product_nutrient (nutrient_id, product_id, amount) VALUES
+INSERT INTO food.food_nutrient (nutrient_id, food_id, amount) VALUES
     (1,  1,  143.0), 
     (5,  1,  1.1), 
     (9,  1,  11.0), 
@@ -26,4 +26,4 @@ INSERT INTO product.product_nutrient (nutrient_id, product_id, amount) VALUES
     (5,  5,  1.3),
     (9,  5,  33.0),
     (18, 5,  25.0)
-ON CONFLICT (nutrient_id, product_id) DO NOTHING;
+ON CONFLICT (nutrient_id, food_id) DO NOTHING;

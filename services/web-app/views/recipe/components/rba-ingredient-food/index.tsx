@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { getProductPath } from "@common/routes";
+import { getFoodPath } from "@common/routes";
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import { Unit } from "@common/units";
@@ -16,24 +16,24 @@ import { IconSize } from "@icons/icon-params";
 import RbaIconLink from "@icons/rba-icon-link";
 import RbaIconRemove from "@icons/rba-icon-remove";
 
-import styles from "./rba-ingredient-product.module.scss";
+import styles from "./rba-ingredient-food.module.scss";
 
 
 // NOTE: Values correspond to the class names
-export enum IngredientProductTheme {
+export enum IngredientFoodTheme {
     Primary = "theme_Primary",
     Alternative = "theme_Alternative",
 }
 
-export enum IngredientProductSize {
+export enum IngredientFoodSize {
     Compact = "size_Compact",
     Default = "size_Default",
 }
 
 
 interface Props {
-    theme: IngredientProductTheme;
-    size: IngredientProductSize;
+    theme: IngredientFoodTheme;
+    size: IngredientFoodSize;
     isReadOnly: boolean;
     ingredient: RecipeIngredient;
     onClick: () => void;
@@ -57,38 +57,38 @@ const getCheckbox = (isMarked?: boolean, onClickMark?: Option<() => void>): Opti
         : null
 );
 
-const getSelectTheme = (theme: IngredientProductTheme): SelectTheme => {
+const getSelectTheme = (theme: IngredientFoodTheme): SelectTheme => {
     switch (theme) {
-        case IngredientProductTheme.Primary:
+        case IngredientFoodTheme.Primary:
             return SelectTheme.Primary;
-        case IngredientProductTheme.Alternative:
+        case IngredientFoodTheme.Alternative:
             return SelectTheme.Alternative;
     }
 };
 
-const getInputTheme = (theme: IngredientProductTheme): InputTheme => {
+const getInputTheme = (theme: IngredientFoodTheme): InputTheme => {
     switch (theme) {
-        case IngredientProductTheme.Primary:
+        case IngredientFoodTheme.Primary:
             return InputTheme.Primary;
-        case IngredientProductTheme.Alternative:
+        case IngredientFoodTheme.Alternative:
             return InputTheme.Alternative;
     }
 };
 
-const getIconColor = (theme: IngredientProductTheme): Color => {
+const getIconColor = (theme: IngredientFoodTheme): Color => {
     switch (theme) {
-        case IngredientProductTheme.Primary:
+        case IngredientFoodTheme.Primary:
             return Color.Default;
-        case IngredientProductTheme.Alternative:
+        case IngredientFoodTheme.Alternative:
             return Color.White;
     }
 };
 
-const RbaIngredientProduct: React.FC<Props> = ({
+const RbaIngredientFood: React.FC<Props> = ({
     theme,
     size,
     isReadOnly,
-    ingredient: ingredientProduct,
+    ingredient,
     onClick,
     onClickRemove,
     onMouseEnter,
@@ -101,8 +101,8 @@ const RbaIngredientProduct: React.FC<Props> = ({
 
     const removeButton = (
         <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}
-            className={styles.ingredientProductButton}
+            data-cy={constants.CY_INGREDIENT_FOOD_REMOVE_BUTTON}
+            className={styles.ingredientFoodButton}
             onClick={onClickRemove}
         >
             <RbaIconRemove size={IconSize.Medium} color={getIconColor(theme)} />
@@ -112,32 +112,32 @@ const RbaIngredientProduct: React.FC<Props> = ({
     return (
 
         <div
-            data-cy={constants.CY_INGREDIENT_PRODUCT}
-            className={classNames([ styles.ingredientProduct, styles[theme], styles[size] ])}
+            data-cy={constants.CY_INGREDIENT_FOOD}
+            className={classNames([ styles.ingredientFood, styles[theme], styles[size] ])}
         >
             {( isReadOnly ? getCheckbox(isMarked, onClickMark) : removeButton )}
 
-            <div className={styles.ingredientProductInfo}>
+            <div className={styles.ingredientFoodInfo}>
                 {/* FIXME: Whole line should be clickable, but it shouldn't mess with amount and unit */}
                 <div
-                    data-cy={constants.CY_INGREDIENT_PRODUCT_NAME}
+                    data-cy={constants.CY_INGREDIENT_FOOD_NAME}
                     className={styles.ingredientInfoLineName}
                     onClick={onClick}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                 >
-                    {ingredientProduct.name}
+                    {ingredient.name}
                 </div>
 
                 <div className={styles.ingredientInfoLineMeasure}>
 
                     <RbaInput
-                        data-cy={constants.CY_INGREDIENT_PRODUCT_AMOUNT}
+                        data-cy={constants.CY_INGREDIENT_FOOD_AMOUNT}
                         theme={getInputTheme(theme)}
                         width={InputWidthSize.Medium}
                         height={InputHeightSize.Medium}
                         disabled={isReadOnly}
-                        value={ingredientProduct.amountInput}
+                        value={ingredient.amountInput}
                         normalizer={InputNormalizer.Decimal}
                         onChange={onChangeAmount}
                     />
@@ -149,14 +149,14 @@ const RbaIngredientProduct: React.FC<Props> = ({
                         width={SelectWidthSize.Medium}
                         height={SelectHeightSize.Medium}
                         options={Object.values(Unit).map((unit) => ({ value: unit }))}
-                        value={ingredientProduct.unit}
+                        value={ingredient.unit}
                         onChange={onChangeUnit}
                     />
                 </div>
             </div>
 
-            <Link href={getProductPath(ingredientProduct.is_recipe, ingredientProduct.product_id)}>
-                <a className={styles.ingredientProductButton}>
+            <Link href={getFoodPath(ingredient.is_recipe, ingredient.food_id)}>
+                <a className={styles.ingredientFoodButton}>
                     <RbaIconLink size={IconSize.Medium} color={getIconColor(theme)} />
                 </a>
             </Link>
@@ -164,7 +164,7 @@ const RbaIngredientProduct: React.FC<Props> = ({
     );
 };
 
-RbaIngredientProduct.displayName = "RbaIngredientProduct";
+RbaIngredientFood.displayName = "RbaIngredientFood";
 
 
-export default RbaIngredientProduct;
+export default RbaIngredientFood;

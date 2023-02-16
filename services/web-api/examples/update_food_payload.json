@@ -23,7 +23,7 @@
             "name": "p1",
             "amount": 12,
             "unit": "tbsp",
-            "product_id": 1
+            "food_id": 1
         }
     ]
 }

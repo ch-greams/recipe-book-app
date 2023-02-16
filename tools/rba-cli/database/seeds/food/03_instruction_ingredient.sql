@@ -1,4 +1,4 @@
-INSERT INTO product.instruction_ingredient (instruction_id,ingredient_slot_number,ingredient_percentage) VALUES
+INSERT INTO food.instruction_ingredient (instruction_id,ingredient_slot_number,ingredient_percentage) VALUES
     (3,1,1.0),
     (3,5,1.0),
     (4,3,1.0),

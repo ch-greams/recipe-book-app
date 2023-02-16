@@ -49,8 +49,8 @@ const RbaUserPage: React.FC<Props> = ({ user, nutrientDescriptions }) => {
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(foodId) => dispatch(userActions.deleteFavoriteProduct(foodId))}
-                        deleteCustomFood={(foodId) => dispatch(userActions.deleteCustomProduct(foodId))}
+                        deleteFavoriteFood={(foodId) => dispatch(userActions.deleteFavoriteFood(foodId))}
+                        deleteCustomFood={(foodId) => dispatch(userActions.deleteCustomFood(foodId))}
                     />
                 );
             case UserMenuItem.Settings:

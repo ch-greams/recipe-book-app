@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { BUTTON_DELETE } from "@common/labels";
-import { getProductPath, USER_PATH } from "@common/routes";
+import { getFoodPath, USER_PATH } from "@common/routes";
 import { UserMenuItem } from "@store/types/user";
 
 
@@ -24,7 +24,7 @@ describe("user", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
             cy.visit(USER_PATH);
@@ -45,7 +45,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", getProductPath(false, FAVORITE_FOOD_ID));
+            cy.url().should("include", getFoodPath(false, FAVORITE_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_FOOD_NAME)
@@ -56,7 +56,7 @@ describe("user", () => {
 
             const FAVORITE_FOOD_NAME = "English Muffin";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/favorite/delete`, { statusCode: 204 });
+            cy.intercept("POST", `${constants.CY_FOOD_API_PATH}/favorite/delete`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)
@@ -88,7 +88,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", getProductPath(false, CUSTOM_FOOD_ID));
+            cy.url().should("include", getFoodPath(false, CUSTOM_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME)
@@ -99,7 +99,7 @@ describe("user", () => {
 
             const CUSTOM_FOOD_NAME = "English Muffin";
 
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+            cy.intercept("POST", `${constants.CY_FOOD_API_PATH}/delete`, { statusCode: 204 });
 
             cy.get(`[data-cy=${constants.CY_USER_MENU_ITEM}]`)
                 .contains(UserMenuItem.Foods)

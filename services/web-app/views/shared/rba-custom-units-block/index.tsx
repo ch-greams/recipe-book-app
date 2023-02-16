@@ -17,7 +17,7 @@ interface Props {
 }
 
 const NEW_CUSTOM_UNIT: CustomUnitInput = {
-    product_id: -1,
+    food_id: -1,
     name: "",
     amount: 100,
     amountInput: "100",

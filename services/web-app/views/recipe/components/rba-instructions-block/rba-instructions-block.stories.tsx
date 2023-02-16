@@ -101,12 +101,12 @@ const INSTRUCTION_2: RecipeInstruction = {
     ingredients: [],
 };
 
-const PRODUCT_ID = 1;
+const FOOD_ID = 1;
 
 const INGREDIENT_1: RecipeIngredient = {
     id: 10,
     slot_number: 1,
-    product_id: PRODUCT_ID,
+    food_id: FOOD_ID,
     isOpen: false,
     isMarked: false,
     amount: 5,

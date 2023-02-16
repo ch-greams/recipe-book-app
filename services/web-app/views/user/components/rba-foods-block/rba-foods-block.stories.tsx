@@ -16,10 +16,10 @@ export default {
             table: { type: { summary: "FoodItem[]" } },
         },
         deleteFavoriteFood: {
-            table: { type: { summary: "(productId: number) => void" } },
+            table: { type: { summary: "(foodId: number) => void" } },
         },
         deleteCustomFood: {
-            table: { type: { summary: "(productId: number) => void" } },
+            table: { type: { summary: "(foodId: number) => void" } },
         },
     },
 } as ComponentMeta<typeof RbaFoodsBlock>;

@@ -13,6 +13,6 @@ export const NEW_RECIPE_PATH = "/recipe/new";
 export const NEW_FOOD_PATH = "/food/new";
 
 
-export function getProductPath(is_recipe: boolean, id: number): string {
+export function getFoodPath(is_recipe: boolean, id: number): string {
     return `/${is_recipe ? RECIPE : FOOD}/${id}`;
 }

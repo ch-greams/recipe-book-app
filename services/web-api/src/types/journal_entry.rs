@@ -4,7 +4,7 @@ use chrono::{NaiveDate, NaiveTime};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
-use super::{custom_unit::CustomUnit, error::Error, product_nutrient::ProductNutrient};
+use super::{custom_unit::CustomUnit, error::Error, food_nutrient::FoodNutrient};
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
 pub struct JournalEntry {
@@ -12,21 +12,21 @@ pub struct JournalEntry {
     pub user_id: i64,
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
-    pub product_id: i64,
+    pub food_id: i64,
     pub amount: f32,
     pub unit: String,
     pub journal_group_ui_index: Option<i16>,
 }
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug)]
-pub struct JournalEntryProduct {
+pub struct JournalEntryFood {
     pub id: i64,
     pub user_id: i64,
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
-    pub product_id: i64,
-    pub product_name: String,
-    pub product_density: f64,
+    pub food_id: i64,
+    pub food_name: String,
+    pub food_density: f64,
     pub amount: f32,
     pub unit: String,
     pub journal_group_ui_index: Option<i16>,
@@ -37,7 +37,7 @@ pub struct CreateJournalEntryPayload {
     pub user_id: i64,
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
-    pub product_id: i64,
+    pub food_id: i64,
     pub amount: f32,
     pub unit: String,
     pub journal_group_ui_index: Option<i16>,
@@ -54,7 +54,7 @@ impl JournalEntry {
     pub fn find_all_by_date(
         entry_date: NaiveDate,
         user_id: i64,
-    ) -> QueryAs<'static, Postgres, JournalEntryProduct, PgArguments> {
+    ) -> QueryAs<'static, Postgres, JournalEntryFood, PgArguments> {
         sqlx::query_as(
             r#"
             SELECT
@@ -62,13 +62,13 @@ impl JournalEntry {
                 user_id,
                 entry_date,
                 entry_time,
-                product_id,
-                product_name,
-                product_density,
+                food_id,
+                food_name,
+                food_density,
                 amount,
                 unit,
                 journal_group_ui_index
-            FROM journal.journal_entry_product
+            FROM journal.journal_entry_food
             WHERE entry_date = $1 AND user_id = $2
         "#,
         )
@@ -79,33 +79,33 @@ impl JournalEntry {
     pub async fn insert_journal_entry(
         create_journal_entry_payload: &CreateJournalEntryPayload,
         txn: impl Executor<'_, Database = Postgres>,
-    ) -> Result<JournalEntryProduct, Error> {
+    ) -> Result<JournalEntryFood, Error> {
         let query = sqlx::query_as(
             r#"
             WITH journal_entry AS (
-                INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index)
+                INSERT INTO journal.journal_entry (user_id, entry_date, entry_time, food_id, amount, unit, journal_group_ui_index)
                 VALUES ($1, $2, $3, $4, $5, $6, $7)
-                RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index
+                RETURNING id, user_id, entry_date, entry_time, food_id, amount, unit, journal_group_ui_index
             )
             SELECT
                 journal_entry.id,
                 journal_entry.user_id,
                 journal_entry.entry_date,
                 journal_entry.entry_time,
-                journal_entry.product_id,
-                product.name AS product_name,
-                product.density AS product_density,
+                journal_entry.food_id,
+                food.name AS food_name,
+                food.density AS food_density,
                 journal_entry.amount,
                 journal_entry.unit,
                 journal_entry.journal_group_ui_index
             FROM journal_entry
-            JOIN product.product product ON product.id = journal_entry.product_id;
+            JOIN food.food food ON food.id = journal_entry.food_id;
         "#,
         )
             .bind(create_journal_entry_payload.user_id)
             .bind(create_journal_entry_payload.entry_date)
             .bind(create_journal_entry_payload.entry_time)
-            .bind(create_journal_entry_payload.product_id)
+            .bind(create_journal_entry_payload.food_id)
             .bind(create_journal_entry_payload.amount)
             .bind(create_journal_entry_payload.unit.to_owned())
             .bind(create_journal_entry_payload.journal_group_ui_index);
@@ -128,18 +128,18 @@ impl JournalEntry {
                 user_id = $1,
                 entry_date = $2,
                 entry_time = $3,
-                product_id = $4,
+                food_id = $4,
                 amount = $5,
                 unit = $6,
                 journal_group_ui_index = $7
             WHERE id = $8
-            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index;
+            RETURNING id, user_id, entry_date, entry_time, food_id, amount, unit, journal_group_ui_index;
         "#,
         )
             .bind(update_journal_entry_payload.user_id)
             .bind(update_journal_entry_payload.entry_date)
             .bind(update_journal_entry_payload.entry_time)
-            .bind(update_journal_entry_payload.product_id)
+            .bind(update_journal_entry_payload.food_id)
             .bind(update_journal_entry_payload.amount)
             .bind(update_journal_entry_payload.unit.to_owned())
             .bind(update_journal_entry_payload.journal_group_ui_index)
@@ -161,7 +161,7 @@ impl JournalEntry {
             r#"
             DELETE FROM journal.journal_entry
             WHERE id = $1
-            RETURNING id, user_id, entry_date, entry_time, product_id, amount, unit, journal_group_ui_index;
+            RETURNING id, user_id, entry_date, entry_time, food_id, amount, unit, journal_group_ui_index;
             "#,
         )
             .bind(journal_entry_id);
@@ -181,9 +181,9 @@ pub struct JournalEntryDetailed {
     pub user_id: i64,
     pub entry_date: NaiveDate,
     pub entry_time: NaiveTime,
-    pub product_id: i64,
-    pub product_name: String,
-    pub product_density: f64,
+    pub food_id: i64,
+    pub food_name: String,
+    pub food_density: f64,
     pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CustomUnit>,
     pub amount: f32,
@@ -193,8 +193,8 @@ pub struct JournalEntryDetailed {
 
 impl JournalEntryDetailed {
     pub fn new(
-        journal_entry: &JournalEntryProduct,
-        nutrients: &[ProductNutrient],
+        journal_entry: &JournalEntryFood,
+        nutrients: &[FoodNutrient],
         custom_units: &[CustomUnit],
     ) -> Self {
         let nutrients = nutrients
@@ -207,9 +207,9 @@ impl JournalEntryDetailed {
             user_id: journal_entry.user_id,
             entry_date: journal_entry.entry_date,
             entry_time: journal_entry.entry_time,
-            product_id: journal_entry.product_id,
-            product_name: journal_entry.product_name.to_owned(),
-            product_density: journal_entry.product_density,
+            food_id: journal_entry.food_id,
+            food_name: journal_entry.food_name.to_owned(),
+            food_density: journal_entry.food_density,
             amount: journal_entry.amount,
             unit: journal_entry.unit.to_owned(),
             journal_group_ui_index: journal_entry.journal_group_ui_index,
@@ -267,20 +267,20 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result =
+        let create_food_result =
             JournalEntry::insert_journal_entry(&create_journal_entry_payload, &mut txn)
                 .await
                 .unwrap();
 
         assert_ne!(
-            0, create_product_result.id,
-            "create_product_result should not have a placeholder value for id"
+            0, create_food_result.id,
+            "create_food_result should not have a placeholder value for id"
         );
 
         let mut update_journal_entry_payload: UpdateJournalEntryPayload =
             utils::read_json("examples/update_journal_entry_payload.json").unwrap();
 
-        update_journal_entry_payload.id = create_product_result.id;
+        update_journal_entry_payload.id = create_food_result.id;
 
         let update_journal_entry_result =
             JournalEntry::update_journal_entry(&update_journal_entry_payload, &mut txn)
@@ -302,23 +302,23 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result =
+        let create_food_result =
             JournalEntry::insert_journal_entry(&create_journal_entry_payload, &mut txn)
                 .await
                 .unwrap();
 
         assert_ne!(
-            0, create_product_result.id,
-            "create_product_result should not have a placeholder value for id"
+            0, create_food_result.id,
+            "create_food_result should not have a placeholder value for id"
         );
 
         let delete_journal_entry_result =
-            JournalEntry::delete_journal_entry(create_product_result.id, &mut txn)
+            JournalEntry::delete_journal_entry(create_food_result.id, &mut txn)
                 .await
                 .unwrap();
 
         assert_eq!(
-            create_product_result.id, delete_journal_entry_result.id,
+            create_food_result.id, delete_journal_entry_result.id,
             "delete_journal_entry_result should have the same id as was provided in args"
         );
 

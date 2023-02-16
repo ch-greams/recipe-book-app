@@ -2,7 +2,7 @@ import { createReducer } from "@reduxjs/toolkit";
 
 import { getErrorMessageFromStatus } from "@common/http";
 
-import { searchClear, searchProducts } from "../actions/search";
+import { searchClear, searchFoods } from "../actions/search";
 import type { SearchStore } from "../types/search";
 
 
@@ -12,7 +12,7 @@ const initialState: SearchStore = {
     errorMessage: null,
 
     searchInput: "",
-    products: [],
+    foods: [],
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -21,23 +21,23 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = null;
             state.searchInput = "";
-            state.products = [];
+            state.foods = [];
         })
-        .addCase(searchProducts.pending, (state, { meta: { arg: filter } }) => {
+        .addCase(searchFoods.pending, (state, { meta: { arg: filter } }) => {
             state.isLoaded = false;
             state.errorMessage = null;
             state.searchInput = filter;
-            state.products = [];
+            state.foods = [];
         })
-        .addCase(searchProducts.fulfilled, (state, { payload: products }) => {
+        .addCase(searchFoods.fulfilled, (state, { payload: foods }) => {
             state.isLoaded = true;
             state.errorMessage = null;
-            state.products = products;
+            state.foods = foods;
         })
-        .addCase(searchProducts.rejected, (state, { payload: errorStatus }) => {
+        .addCase(searchFoods.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
-            state.products = [];
+            state.foods = [];
         });
 });
 

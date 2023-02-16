@@ -65,7 +65,7 @@ const RbaFoodPage: React.FC<Props> = ({ isReadOnly, food, meta, featuredNutrient
                 label={BUTTON_DELETE}
                 width={ButtonWidthSize.Full}
                 onClick={() => {
-                    dispatch(userActions.deleteCustomProduct(food.id));
+                    dispatch(userActions.deleteCustomFood(food.id));
                     router.push("/");
                 }}
             />

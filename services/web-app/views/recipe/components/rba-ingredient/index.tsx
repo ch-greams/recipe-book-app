@@ -2,14 +2,13 @@ import React from "react";
 import * as constants from "@cypress/constants";
 
 import type { Unit } from "@common/units";
+import RbaIngredientFood, {
+    IngredientFoodSize,    IngredientFoodTheme } from "@views/recipe/components/rba-ingredient-food";
 import RbaIngredientNutrients from "@views/recipe/components/rba-ingredient-nutrients";
-import RbaIngredientProduct, {
-    IngredientProductSize, IngredientProductTheme,
-} from "@views/recipe/components/rba-ingredient-product";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
-import { searchClear, searchProducts } from "@store/actions/search";
+import { searchClear, searchFoods } from "@store/actions/search";
 import type { RecipeIngredient } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
 
@@ -48,10 +47,10 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient, ingred
 
             {(
                 showIngredientAlternatives && ingredient_alternatives.map((ingredient_alternative) => (
-                    <RbaIngredientProduct
+                    <RbaIngredientFood
                         key={`alt_ingredient_${ingredient_alternative.id}`}
-                        theme={IngredientProductTheme.Alternative}
-                        size={IngredientProductSize.Compact}
+                        theme={IngredientFoodTheme.Alternative}
+                        size={IngredientFoodSize.Compact}
                         isReadOnly={isReadOnly}
                         ingredient={ingredient_alternative}
                         onClick={() => {
@@ -76,13 +75,13 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient, ingred
                             }));
                         }}
                         onChangeAmount={(value) => {
-                            dispatch(actions.updateIngredientProductAmount({
+                            dispatch(actions.updateIngredientFoodAmount({
                                 id: ingredient_alternative.id,
                                 inputValue: value,
                             }));
                         }}
                         onChangeUnit={(option) => {
-                            dispatch(actions.updateIngredientProductUnit({
+                            dispatch(actions.updateIngredientFoodUnit({
                                 id: ingredient_alternative.id,
                                 unit: option.value as Unit,
                             }));
@@ -98,10 +97,10 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient, ingred
                     placeholder={"Add a substitute for this ingredient..."}
                     isLoading={!search.isLoaded}
                     value={search.searchInput}
-                    items={search.products}
-                    onChange={(value) => { dispatch(searchProducts(value)); }}
-                    onSelect={(product) => {
-                        dispatch(actions.addIngredient({ product, slotNumber: ingredient.slot_number, isAlternative: true }));
+                    items={search.foods}
+                    onChange={(value) => { dispatch(searchFoods(value)); }}
+                    onSelect={(food) => {
+                        dispatch(actions.addIngredient({ food, slotNumber: ingredient.slot_number, isAlternative: true }));
                         dispatch(searchClear());
                     }}
                     data-cy={constants.CY_SEARCH}
@@ -118,9 +117,9 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient, ingred
             key={`ingredient_${ingredient.slot_number}`}
             className={styles.ingredient}
         >
-            <RbaIngredientProduct
-                theme={IngredientProductTheme.Primary}
-                size={IngredientProductSize.Default}
+            <RbaIngredientFood
+                theme={IngredientFoodTheme.Primary}
+                size={IngredientFoodSize.Default}
                 ingredient={ingredient}
                 isReadOnly={isReadOnly}
                 isMarked={ingredient.isMarked}
@@ -128,10 +127,10 @@ const RbaIngredient: React.FC<Props> = ({ search, isReadOnly, ingredient, ingred
                 onClickRemove={() => dispatch(actions.removeIngredient(ingredient.slot_number))}
                 onClickMark={() => dispatch(actions.toggleIngredientMark(ingredient.id))}
                 onChangeAmount={(value) => {
-                    dispatch(actions.updateIngredientProductAmount({ id: ingredient.id, inputValue: value }));
+                    dispatch(actions.updateIngredientFoodAmount({ id: ingredient.id, inputValue: value }));
                 }}
                 onChangeUnit={(option) => {
-                    dispatch(actions.updateIngredientProductUnit({ id: ingredient.id, unit: option.value as Unit }));
+                    dispatch(actions.updateIngredientFoodUnit({ id: ingredient.id, unit: option.value as Unit }));
                 }}
             />
 

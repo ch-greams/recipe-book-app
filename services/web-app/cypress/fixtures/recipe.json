@@ -19,7 +19,7 @@
             "name": "package",
             "amount": 12,
             "unit": "tbsp",
-            "product_id": 29
+            "food_id": 29
         }
     ],
     "density": 1,
@@ -27,14 +27,14 @@
         {
             "id": 1,
             "slot_number": 1,
-            "product_id": 1,
+            "food_id": 1,
             "amount": 100,
             "unit": "ml",
             "is_recipe": false,
             "name": "Sour Cream",
             "density": 1.0208,
             "nutrients": {
-                "product_id": 1,
+                "food_id": 1,
                 "energy": 157,
                 "carbohydrate": 2.9,
                 "dietary_fiber": 10.6,
@@ -54,14 +54,14 @@
         {
             "id": 2,
             "slot_number": 1,
-            "product_id": 2,
+            "food_id": 2,
             "amount": 100,
             "unit": "ml",
             "is_recipe": false,
             "name": "Yogurt",
             "density": 1,
             "nutrients": {
-                "product_id": 2,
+                "food_id": 2,
                 "energy": 66.8,
                 "carbohydrate": 4.2,
                 "dietary_fiber": 19.9,
@@ -81,14 +81,14 @@
         {
             "id": 3,
             "slot_number": 2,
-            "product_id": 3,
+            "food_id": 3,
             "amount": 150,
             "unit": "g",
             "is_recipe": false,
             "name": "Cottage Cheese",
             "density": 1,
             "nutrients": {
-                "product_id": 3,
+                "food_id": 3,
                 "energy": 183.1,
                 "carbohydrate": 75.4,
                 "dietary_fiber": 19.9,

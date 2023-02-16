@@ -53,7 +53,7 @@ impl Instruction {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
+            "INSERT INTO food.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
         );
 
         let created_instructions = insert_query_builder
@@ -88,14 +88,14 @@ impl Instruction {
         // delete
 
         let delete_query =
-            sqlx::query("DELETE FROM product.instruction WHERE recipe_id = $1").bind(recipe_id);
+            sqlx::query("DELETE FROM food.instruction WHERE recipe_id = $1").bind(recipe_id);
 
         delete_query.fetch_all(&mut *txn).await?;
 
         // insert
 
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO product.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
+            "INSERT INTO food.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
         );
 
         let created_instructions = insert_query_builder
@@ -170,7 +170,7 @@ impl InstructionDetailed {
                     duration_value,
                     duration_unit,
                     ingredients
-                FROM product.instruction_detailed
+                FROM food.instruction_detailed
                 WHERE recipe_id = $1
             "#,
         )
@@ -183,9 +183,9 @@ mod tests {
     use crate::{
         config::Config,
         types::{
+            food::Food,
             ingredient::Ingredient,
             instruction::{Instruction, InstructionDetailed},
-            product::Product,
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
@@ -193,7 +193,7 @@ mod tests {
     use sqlx::PgPool;
 
     #[tokio::test]
-    async fn find_by_product_id() {
+    async fn find_by_food_id() {
         let recipe_id = 6;
 
         let config = Config::new().unwrap();
@@ -213,23 +213,24 @@ mod tests {
 
     #[tokio::test]
     async fn insert_multiple() {
-        let create_product_payload: CreateRecipePayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
-            .await
-            .unwrap();
+        let create_food_result =
+            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
-            0, create_product_result.id,
-            "create_product_result should not have a placeholder value for id"
+            0, create_food_result.id,
+            "create_food_result should not have a placeholder value for id"
         );
 
         let create_ingredients_result = Ingredient::insert_multiple(
-            &create_product_payload.ingredients,
-            create_product_result.id,
+            &create_food_payload.ingredients,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -238,8 +239,8 @@ mod tests {
         assert_eq!(create_ingredients_result.len(), 3);
 
         let create_instructions_result = Instruction::insert_multiple(
-            &create_product_payload.instructions,
-            create_product_result.id,
+            &create_food_payload.instructions,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -252,23 +253,24 @@ mod tests {
 
     #[tokio::test]
     async fn replace_multiple() {
-        let create_product_payload: CreateRecipePayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_recipe_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_product_result = Product::insert_recipe(&create_product_payload, 1, &mut txn)
-            .await
-            .unwrap();
+        let create_food_result =
+            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
-            0, create_product_result.id,
-            "create_product_result should not have a placeholder value for id"
+            0, create_food_result.id,
+            "create_food_result should not have a placeholder value for id"
         );
 
         let create_ingredients_result = Ingredient::insert_multiple(
-            &create_product_payload.ingredients,
-            create_product_result.id,
+            &create_food_payload.ingredients,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -277,8 +279,8 @@ mod tests {
         assert_eq!(create_ingredients_result.len(), 3);
 
         let create_instructions_result = Instruction::insert_multiple(
-            &create_product_payload.instructions,
-            create_product_result.id,
+            &create_food_payload.instructions,
+            create_food_result.id,
             &mut txn,
         )
         .await
@@ -286,12 +288,12 @@ mod tests {
 
         assert_eq!(create_instructions_result.len(), 2);
 
-        let update_product_payload: UpdateRecipePayload =
+        let update_food_payload: UpdateRecipePayload =
             utils::read_json("examples/update_recipe_payload.json").unwrap();
 
         let update_instructions_result = Instruction::replace_multiple(
-            &update_product_payload.instructions,
-            create_product_result.id,
+            &update_food_payload.instructions,
+            create_food_result.id,
             &mut txn,
         )
         .await

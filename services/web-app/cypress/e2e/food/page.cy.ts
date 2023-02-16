@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_DELETE, BUTTON_EDIT, BUTTON_REVERT, BUTTON_SAVE } from "@common/labels";
-import { FOOD_PATH, getProductPath, NEW_FOOD_PATH } from "@common/routes";
+import { FOOD_PATH, getFoodPath, NEW_FOOD_PATH } from "@common/routes";
 
 
 describe("food_page", () => {
@@ -43,14 +43,14 @@ describe("food_page", () => {
                     .should("eq", NEW_PAGE_TITLE_NAME);
             });
 
-            cy.url().should("include", getProductPath(false, NEW_FOOD_ID));
+            cy.url().should("include", getFoodPath(false, NEW_FOOD_ID));
         });
 
         it("can save an updated page", () => {
 
             const NEW_PAGE_TITLE_NAME = "new name";
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 
@@ -80,8 +80,8 @@ describe("food_page", () => {
 
         it("can delete a food", () => {
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
-            cy.intercept("POST", `${constants.CY_PRODUCT_API_PATH}/delete`, { statusCode: 204 });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
+            cy.intercept("POST", `${constants.CY_FOOD_API_PATH}/delete`, { statusCode: 204 });
 
             cy.visit(`${FOOD_PATH}/1`);
 

@@ -60,7 +60,7 @@ Loading.args = {
 };
 
 
-const products: FoodShort[] = [
+const foods: FoodShort[] = [
     {
         id: 1,
         is_recipe: false,
@@ -80,5 +80,5 @@ WithResults.args = {
     value: "M",
     isLoading: false,
     width: SearchInputWidthSize.Medium,
-    items: products,
+    items: foods,
 };

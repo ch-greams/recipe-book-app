@@ -70,7 +70,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                 label={BUTTON_DELETE}
                 width={ButtonWidthSize.Full}
                 onClick={() => {
-                    dispatch(userActions.deleteCustomProduct(recipe.id));
+                    dispatch(userActions.deleteCustomFood(recipe.id));
                     router.push("/");
                 }}
             />

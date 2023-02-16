@@ -1,7 +1,7 @@
 @import "@styles/variables.scss";
 
 
-.ingredientProduct {
+.ingredientFood {
 
     display: flex;
     flex-direction: row;
@@ -34,7 +34,7 @@
         }
     }
 
-    .ingredientProductButton {
+    .ingredientFoodButton {
         text-align: center;
 
         cursor: pointer;
@@ -43,7 +43,7 @@
         border-width: 1px;
     }
 
-    .ingredientProductInfo {
+    .ingredientFoodInfo {
 
         display: flex;
         flex-grow: 2;
@@ -75,12 +75,12 @@
     // -------------------------------------------------------------------------
 
     &.theme_Alternative {
-        .ingredientProductButton {
+        .ingredientFoodButton {
             background-color: $color-default;
             border-color: $color-white;
         }
 
-        .ingredientProductInfo {
+        .ingredientFoodInfo {
             color: $color-white;
             background-color: $color-default;
             border-color: $color-white;
@@ -88,13 +88,13 @@
     }
 
     &.theme_Primary {
-        .ingredientProductButton {
+        .ingredientFoodButton {
             background-color: $color-white;
             border-color: $color-grey-light;
             border-radius: 2px;
         }
 
-        .ingredientProductInfo {
+        .ingredientFoodInfo {
             color: $color-default;
             background-color: $color-white;
             border-color: $color-grey-light;
@@ -107,7 +107,7 @@
     // -------------------------------------------------------------------------
 
     &.size_Compact {
-        .ingredientProductButton {
+        .ingredientFoodButton {
             width: 36px;
             height: 24px;
 
@@ -115,13 +115,13 @@
             line-height: 24px;
         }
 
-        .ingredientProductInfo {
+        .ingredientFoodInfo {
             padding: 6px 12px 6px 20px;
         }
     }
 
     &.size_Default {
-        .ingredientProductButton {
+        .ingredientFoodButton {
             width: 44px;
             height: 24px;
 
@@ -129,7 +129,7 @@
             line-height: 24px;
         }
 
-        .ingredientProductInfo {
+        .ingredientFoodInfo {
             padding: 10px 12px 10px 20px;
         }
     }

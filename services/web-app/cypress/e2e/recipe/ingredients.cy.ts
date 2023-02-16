@@ -13,17 +13,17 @@ describe("recipe_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "food_15.json" });
 
             cy.visit(`${RECIPE_PATH}/29`);
         });
 
-        it("can replace ingredient_product", () => {
+        it("can replace ingredient_food", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
-            const INGREDIENT_PRODUCT_NAME = "Yogurt";
+            const INGREDIENT_FOOD_NAME = "Yogurt";
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME)
                 .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
                 .as("ingredient");
@@ -35,13 +35,13 @@ describe("recipe_page", () => {
 
             // Open ingredient line and save altIngredientInfoLineName
             cy.get("@ingredient")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .click();
             cy.get("@ingredient")
-                .find(`[data-cy=${constants.CY_INGREDIENT_INFO_LINES}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_INFO_LINES}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .as("altIngredientInfoLineName");
 
-            // - Current product nutrition facts -
+            // - Current food nutrition facts -
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRIENT_TYPE}]`)
                 .contains(NutrientName.Carbohydrate)
@@ -72,12 +72,12 @@ describe("recipe_page", () => {
                 .contains("157");
 
             // Confirm that alternative is visible and hover over it
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_PRODUCT_NAME)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
+                .contains(INGREDIENT_FOOD_NAME)
                 .should("be.visible")
                 .trigger("mouseover");
 
-            // - Alternative product nutrition facts -
+            // - Alternative food nutrition facts -
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT_NUTRIENT_TYPE}]`)
                 .contains(NutrientName.Carbohydrate)
@@ -107,26 +107,26 @@ describe("recipe_page", () => {
                 .should("be.visible")
                 .contains("66.8");
 
-            // Confirm that alternative is visible and change ingredient_product
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_PRODUCT_NAME)
+            // Confirm that alternative is visible and change ingredient_food
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
+                .contains(INGREDIENT_FOOD_NAME)
                 .should("be.visible")
                 .click();
 
             // Confirm that ingredient was changed
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_PRODUCT_NAME)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
+                .contains(INGREDIENT_FOOD_NAME)
                 .should("be.visible");
 
             // Confirm that alternatives aren't visible
             cy.get("@altIngredientInfoLineName").should("not.exist");
         });
 
-        it("can check product link in ingredient", () => {
+        it("can check food link in ingredient", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
@@ -148,7 +148,7 @@ describe("recipe_page", () => {
             const INGREDIENT_AMOUNT_AFTER: number = 3.53;
 
             // Check ingredient and open it
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .parent()
@@ -163,7 +163,7 @@ describe("recipe_page", () => {
 
             // Check current amount
             cy.get("@ingredientInfoLine")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD_AMOUNT}]`)
                 .should("have.value", String(INGREDIENT_AMOUNT_BEFORE))
                 .should("be.visible");
 
@@ -183,7 +183,7 @@ describe("recipe_page", () => {
 
             // Confirm that amount changes
             cy.get("@ingredientInfoLine")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_AMOUNT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD_AMOUNT}]`)
                 .should("have.value", String(INGREDIENT_AMOUNT_AFTER))
                 .should("be.visible");
         });
@@ -191,16 +191,16 @@ describe("recipe_page", () => {
 
     describe("ingredients - edit", () => {
 
-        const NEW_PRODUCT_NAME_SHORT = "chicken";
-        const NEW_PRODUCT_NAME_FULL = "Chicken Thigh - Bone Out";
+        const NEW_FOOD_NAME_SHORT = "chicken";
+        const NEW_FOOD_NAME_FULL = "Chicken Thigh - Bone Out";
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}?limit=10&filter=${NEW_PRODUCT_NAME_SHORT}`,
-                { fixture: "products_response.json" },
+                `${constants.CY_FOOD_API_PATH}?limit=10&filter=${NEW_FOOD_NAME_SHORT}`,
+                { fixture: "foods_response.json" },
             );
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "product.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "food_15.json" });
 
             cy.visit(`${RECIPE_PATH}/29`);
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
@@ -215,10 +215,10 @@ describe("recipe_page", () => {
 
             cy.get(`[data-cy=${constants.CY_INGREDIENTS_BLOCK}] [data-cy=${constants.CY_SEARCH}] [data-cy=${constants.CY_SEARCH_INPUT}]`)
                 .should("be.visible")
-                .type(NEW_PRODUCT_NAME_SHORT);
+                .type(NEW_FOOD_NAME_SHORT);
 
             cy.get(`[data-cy=${constants.CY_INGREDIENTS_BLOCK}] [data-cy=${constants.CY_SEARCH}]`)
-                .contains(NEW_PRODUCT_NAME_FULL)
+                .contains(NEW_FOOD_NAME_FULL)
                 .should("be.visible")
                 .click();
 
@@ -236,46 +236,46 @@ describe("recipe_page", () => {
             cy.get(`[data-cy=${constants.CY_INGREDIENT}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_BEFORE);
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME_TO_REMOVE)
                 .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD_REMOVE_BUTTON}]`)
                 .click();
 
             cy.get(`[data-cy=${constants.CY_INGREDIENT}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_AFTER);
         });
 
-        it("can remove ingredient_product", () => {
+        it("can remove ingredient_food", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
-            const INGREDIENT_PRODUCT_NAME = "Yogurt";
+            const INGREDIENT_FOOD_NAME = "Yogurt";
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_PRODUCT_NAME)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
+                .contains(INGREDIENT_FOOD_NAME)
                 .should("be.visible")
-                .parents(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT_REMOVE_BUTTON}]`)
+                .parents(`[data-cy=${constants.CY_INGREDIENT_FOOD}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD_REMOVE_BUTTON}]`)
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
-                .contains(INGREDIENT_PRODUCT_NAME)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
+                .contains(INGREDIENT_FOOD_NAME)
                 .should("not.exist");
         });
 
-        it("can add ingredient_product", () => {
+        it("can add ingredient_food", () => {
 
             const INGREDIENT_NAME = "Sour Cream";
 
             const AMOUNT_OF_INGREDIENTS_BEFORE = 2;
             const AMOUNT_OF_INGREDIENTS_AFTER = 3;
 
-            cy.get(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}] [data-cy=${constants.CY_INGREDIENT_PRODUCT_NAME}]`)
+            cy.get(`[data-cy=${constants.CY_INGREDIENT_FOOD}] [data-cy=${constants.CY_INGREDIENT_FOOD_NAME}]`)
                 .contains(INGREDIENT_NAME)
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_INGREDIENT}]`)
@@ -286,21 +286,21 @@ describe("recipe_page", () => {
                 .click();
 
             cy.get("@ingredient")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_BEFORE);
 
             cy.get("@ingredient")
                 .find(`[data-cy=${constants.CY_SEARCH}] [data-cy=${constants.CY_SEARCH_INPUT}]`)
                 .should("be.visible")
-                .type(NEW_PRODUCT_NAME_SHORT);
+                .type(NEW_FOOD_NAME_SHORT);
 
             cy.get("@ingredient")
-                .contains(NEW_PRODUCT_NAME_FULL)
+                .contains(NEW_FOOD_NAME_FULL)
                 .should("be.visible")
                 .click();
 
             cy.get("@ingredient")
-                .find(`[data-cy=${constants.CY_INGREDIENT_PRODUCT}]`)
+                .find(`[data-cy=${constants.CY_INGREDIENT_FOOD}]`)
                 .should("have.length", AMOUNT_OF_INGREDIENTS_AFTER);
         });
     });
