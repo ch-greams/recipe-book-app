@@ -21,7 +21,6 @@ use crate::{
 
 pub fn scope() -> Scope {
     actix_web::web::scope("food")
-        .service(find_by_id)
         .service(create_food)
         .service(update_food)
         .service(find_all)
@@ -29,6 +28,7 @@ pub fn scope() -> Scope {
         .service(find_all_favorite)
         .service(delete_favorite_by_id)
         .service(delete_by_id)
+        .service(find_by_id)
 }
 
 #[get("/{id}")]
