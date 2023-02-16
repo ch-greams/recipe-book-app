@@ -44,10 +44,10 @@ const ASYNC_REJECTIONS = isAnyOf(
     recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected,
     recipeActions.updateRecipe.rejected, recipeActions.addIngredient.rejected,
     // SEARCH ACTIONS
-    searchActions.searchProducts.rejected,
+    searchActions.searchFoods.rejected,
     // USER ACTIONS
-    userActions.fetchUserData.rejected, userActions.deleteCustomProduct.rejected,
-    userActions.deleteFavoriteProduct.rejected, userActions.upsertNutrient.rejected,
+    userActions.fetchUserData.rejected, userActions.deleteCustomFood.rejected,
+    userActions.deleteFavoriteFood.rejected, userActions.upsertNutrient.rejected,
     userActions.deleteNutrient.rejected, userActions.login.rejected, userActions.signup.rejected,
     userActions.updateJournalGroups.rejected,
 );
@@ -93,32 +93,32 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(userActions.deleteCustomProduct.pending, (state) => {
+        .addCase(userActions.deleteCustomFood.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(userActions.deleteCustomProduct.fulfilled, (state, action) => {
-            const { arg: productId } = action.meta;
+        .addCase(userActions.deleteCustomFood.fulfilled, (state, action) => {
+            const { arg: foodId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.customFoods = state.customFoods.filter((food) => food.id !== productId);
-            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
+            state.customFoods = state.customFoods.filter((food) => food.id !== foodId);
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== foodId);
         })
-        .addCase(userActions.deleteCustomProduct.rejected, (state, { payload: errorStatus }) => {
+        .addCase(userActions.deleteCustomFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(userActions.deleteFavoriteProduct.pending, (state) => {
+        .addCase(userActions.deleteFavoriteFood.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(userActions.deleteFavoriteProduct.fulfilled, (state, action) => {
-            const { arg: productId } = action.meta;
+        .addCase(userActions.deleteFavoriteFood.fulfilled, (state, action) => {
+            const { arg: foodId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== foodId);
         })
-        .addCase(userActions.deleteFavoriteProduct.rejected, (state, { payload: errorStatus }) => {
+        .addCase(userActions.deleteFavoriteFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })

@@ -20,14 +20,14 @@
             "name": "package",
             "amount": 12.0,
             "unit": "tbsp",
-            "product_id": 29
+            "food_id": 29
         }
     ],
     "ingredients": [
         {
             "id": 1,
             "slot_number": 1,
-            "product_id": 1,
+            "food_id": 1,
             "amount": 100.0,
             "unit": "ml",
             "is_recipe": false,
@@ -48,7 +48,7 @@
         {
             "id": 2,
             "slot_number": 1,
-            "product_id": 2,
+            "food_id": 2,
             "amount": 100.0,
             "unit": "ml",
             "is_recipe": false,
@@ -69,7 +69,7 @@
         {
             "id": 3,
             "slot_number": 2,
-            "product_id": 3,
+            "food_id": 3,
             "amount": 150.0,
             "unit": "g",
             "is_recipe": true,

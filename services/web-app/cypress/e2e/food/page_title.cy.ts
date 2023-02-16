@@ -9,7 +9,7 @@ describe("food_page", () => {
     describe("page_title", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food.json" });
+            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
             cy.intercept(`${constants.CY_FOOD_API_PATH}/update`, { fixture: "food_update_response.json" })
                 .as("updateFood");
 

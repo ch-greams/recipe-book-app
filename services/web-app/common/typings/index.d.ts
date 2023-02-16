@@ -29,7 +29,7 @@ export interface FoodShort {
 export interface Ingredient {
     id: number;
     slot_number: number;
-    product_id: number;
+    food_id: number;
     name: string;
     amount: number;
     unit: Unit;
@@ -93,15 +93,15 @@ export interface JournalEntry {
     id: number;
     entry_date: string;
     entry_time: string;
-    product_id: number;
+    food_id: number;
     amount: number;
     unit: string;
     journal_group_ui_index: Option<number>;
 }
 
 export interface JournalEntryDetailed extends JournalEntry {
-    product_name: string;
-    product_density: number;
+    food_name: string;
+    food_density: number;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
 }

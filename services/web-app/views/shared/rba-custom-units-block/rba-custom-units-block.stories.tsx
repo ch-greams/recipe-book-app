@@ -46,8 +46,8 @@ const Template: ComponentStory<typeof RbaCustomUnitsBlock> = (args) => (<RbaCust
 
 
 const customUnits: CustomUnitInput[] = [
-    { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
-    { product_id: -1, name: "glass", amount: 240, amountInput: "240", unit: VolumeUnit.ml },
+    { food_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
+    { food_id: -1, name: "glass", amount: 240, amountInput: "240", unit: VolumeUnit.ml },
 ];
 
 export const Default = Template.bind({});

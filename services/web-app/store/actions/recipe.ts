@@ -100,22 +100,22 @@ export const removeIngredientAlternative = createAction<number>("recipe/ingredie
 export const replaceIngredientWithAlternative = createAction<{ slotNumber: number, id: number }>("recipe/ingredient/replace_with_alt");
 export const toggleIngredientOpen = createAction<number>("recipe/ingredient/toggle_open");
 export const toggleIngredientMark = createAction<number>("recipe/ingredient/toggle_mark");
-export const updateIngredientProductAmount = createAction<{ id: number, inputValue: string }>("recipe/ingredient/update_product_amount");
-export const updateIngredientProductUnit = createAction<{ id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_product_unit");
+export const updateIngredientFoodAmount = createAction<{ id: number, inputValue: string }>("recipe/ingredient/update_food_amount");
+export const updateIngredientFoodUnit = createAction<{ id: number, unit: (units.WeightUnit | units.VolumeUnit) }>("recipe/ingredient/update_food_unit");
 export const updateAltNutrients = createAction<{ slotNumber: number, nutrients: Dictionary<NutrientName, number> }>("recipe/ingredient/update_alt_nutrients");
 export const calculateNutrientsAndServingSize = createAction("recipe/ingredient/calculate_nutrients_and_serving_size");
 
-export const addIngredient = createAsyncThunk<Ingredient, { product: FoodShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
+export const addIngredient = createAsyncThunk<Ingredient, { food: FoodShort, slotNumber: number, isAlternative: boolean }, AsyncThunkConfig>(
     "recipe/ingredient/add",
-    async ({ product, slotNumber, isAlternative }, { rejectWithValue }) => {
+    async ({ food, slotNumber, isAlternative }, { rejectWithValue }) => {
         try {
-            if (product.is_recipe) {
-                const recipe = await RecipeApi.getRecipe(product.id);
+            if (food.is_recipe) {
+                const recipe = await RecipeApi.getRecipe(food.id);
                 return convertFoodToIngredient(recipe, slotNumber, isAlternative, true);
             }
             else {
-                const food = await FoodApi.getFood(product.id);
-                return convertFoodToIngredient(food, slotNumber, isAlternative, false);
+                const _food = await FoodApi.getFood(food.id);
+                return convertFoodToIngredient(_food, slotNumber, isAlternative, false);
             }
         }
         catch (error) {

@@ -5,7 +5,7 @@
     "description": "",
     "density": 1.06,
     "nutrients": {
-        "product_id": 15,
+        "food_id": 15,
         "energy": 173.6,
         "carbohydrate": 52.7,
         "dietary_fiber": 28.0,
@@ -21,13 +21,13 @@
             "name": "montes",
             "amount": 37.5,
             "unit": "tbsp",
-            "product_id": 15
+            "food_id": 15
         },
         {
             "name": "blandit",
             "amount": 52.2,
             "unit": "tbsp",
-            "product_id": 15
+            "food_id": 15
         }
     ],
     "is_private": false,

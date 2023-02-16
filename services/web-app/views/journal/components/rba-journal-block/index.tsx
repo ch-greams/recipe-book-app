@@ -112,15 +112,15 @@ const RbaJournalBlock: React.FC<Props> = ({ currentDate, groups, entries, search
                 placeholder={"Add a new entry..."}
                 isLoading={!search.isLoaded}
                 value={search.searchInput}
-                items={search.products}
-                onChange={(value) => { dispatch(searchActions.searchProducts(value)); }}
-                onSelect={(product) => {
+                items={search.foods}
+                onChange={(value) => { dispatch(searchActions.searchFoods(value)); }}
+                onSelect={(food) => {
 
                     dispatch(journalActions.createJournalEntry({
                         id: getTemporaryId(),
                         entry_date: currentDate,
                         entry_time: getCurrentTime(DEFAULT_TIME_FORMAT),
-                        product_id: product.id,
+                        food_id: food.id,
                         amount: 100,
                         unit: "g",
                         journal_group_ui_index: null,

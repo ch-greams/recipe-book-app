@@ -55,7 +55,7 @@ export const updateJournalEntry = createAsyncThunk<JournalEntry, number, AsyncTh
                 id: entry.id,
                 entry_date: entry.entryDate,
                 entry_time: formatTime(entry.entryTime, DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT),
-                product_id: entry.foodId,
+                food_id: entry.foodId,
                 amount: entry.foodAmount,
                 unit: entry.foodUnit,
                 journal_group_ui_index: entry.groupIndex,

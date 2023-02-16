@@ -134,7 +134,7 @@ const reducer = createReducer(initialState, (builder) => {
                     state.customUnits,
                     state.density,
                 ),
-                product_id: state.id,
+                food_id: state.id,
             });
         })
         .addCase(actions.updateCustomUnit, (state, { payload: { index, customUnit } }) => {

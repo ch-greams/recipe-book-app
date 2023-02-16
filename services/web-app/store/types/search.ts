@@ -6,5 +6,5 @@ export interface SearchStore {
     errorMessage?: Option<string>;
 
     searchInput: string;
-    products: FoodShort[];
+    foods: FoodShort[];
 }

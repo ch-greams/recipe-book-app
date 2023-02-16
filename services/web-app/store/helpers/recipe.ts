@@ -78,7 +78,7 @@ export function convertFoodToIngredient(food: Food, slotNumber: number, isAltern
         id: getTemporaryId(),
         slot_number: slotNumber,
         is_alternative: isAlternative,
-        product_id: food.id,
+        food_id: food.id,
         is_recipe: isRecipe,
         name: food.name,
         amount: 100,
@@ -93,24 +93,24 @@ export function convertFoodToIngredient(food: Food, slotNumber: number, isAltern
  */
 export function getRecipeNutrientsFromIngredients(ingredients: Ingredient[]): Dictionary<NutrientName, number> {
 
-    const productNutrients: Dictionary<NutrientName, number>[] = ingredients
+    const foodNutrients: Dictionary<NutrientName, number>[] = ingredients
         .map((ingredient) => {
             const multiplier = getNutrientMultiplierFromAmount(ingredient.amount);
             return mapDictionary(ingredient.nutrients, (_key, value) => roundToDecimal(value * multiplier, DecimalPlaces.Two));
         });
 
-    return nutrientSum(productNutrients);
+    return nutrientSum(foodNutrients);
 }
 
 export function getRecipeServingSizeFromIngredients(ingredients: Ingredient[]): number {
     return ingredients.reduce((sum, ingredient) => (sum + ingredient.amount), 0);
 }
 
-export function nutrientSum(productNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
+export function nutrientSum(foodNutrients: Dictionary<NutrientName, number>[]): Dictionary<NutrientName, number> {
 
     return Object.values(NutrientName).reduce((acc: Dictionary<NutrientName, number>, nutrientType) => {
 
-        const nutrientValue = productNutrients.reduce(
+        const nutrientValue = foodNutrients.reduce(
             (sum: Option<number>, ingredient) => {
                 const value = ingredient[nutrientType];
                 return ( isSome(value) ? unwrapOr(sum, 0) + value : sum );
