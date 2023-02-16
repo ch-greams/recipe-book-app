@@ -45,7 +45,7 @@ The current solution is very basic and far from production. The following proble
     
     - Identifying units and measurements should be mostly possible using regex
 
-    - With removed measurements - basically, only name of the ingredient is left, but you need to link it with real food and that will be complicated (although alternative products might be handy)
+    - With removed measurements - basically, only name of the ingredient is left, but you need to link it with real food and that will be complicated (although alternative foods might be handy)
 
 - `instructions` should be formatted into something that will make sense with the RBA data model, or ***model needs to be evolved to be more compatible with recipes in the outside world***
     
@@ -53,7 +53,7 @@ The current solution is very basic and far from production. The following proble
 
     - With other types of instructions the main difficulty will be restructuring texts with removed parts like ingredient names and measurement
 
-    - **While recipes aren't copyrightable, some other texts might be.** Researching this might be necessary, but at the same time you might end up in the situation where those texts will not exists in the final product
+    - **While recipes aren't copyrightable, some other texts might be.** Researching this might be necessary, but at the same time you might end up in the situation where those texts will not exists in the final food
 
 - More information is necessary:
 
