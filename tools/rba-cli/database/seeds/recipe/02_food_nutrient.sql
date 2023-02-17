@@ -1,4 +1,4 @@
-INSERT INTO food.food_nutrient (nutrient_id, food_id, amount) VALUES
+INSERT INTO recipe.food_nutrient (nutrient_id, food_id, amount) VALUES
     (1,  1,  143.0), 
     (5,  1,  1.1), 
     (9,  1,  11.0), 

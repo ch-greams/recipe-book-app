@@ -1,4 +1,4 @@
-INSERT INTO food.ingredient (id,slot_number,recipe_id,food_id,amount,unit,is_alternative) VALUES
+INSERT INTO recipe.ingredient (id,slot_number,recipe_id,food_id,amount,unit,is_alternative) VALUES
     (1,1,6,4,125.0,'g',false),
     (2,2,6,2,100.0,'g',false),
     (3,3,6,5,141.74759999999998,'oz',false),

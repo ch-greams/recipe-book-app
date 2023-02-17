@@ -25,7 +25,7 @@ impl CustomUnit {
         sqlx::query_as(
             r#"
             SELECT name, amount, unit, food_id
-            FROM food.custom_unit
+            FROM recipe.custom_unit
             WHERE food_id = $1
         "#,
         )
@@ -36,7 +36,7 @@ impl CustomUnit {
         sqlx::query_as(
             r#"
             SELECT name, amount, unit, food_id
-            FROM food.custom_unit
+            FROM recipe.custom_unit
             WHERE food_id = ANY($1)
         "#,
         )
@@ -61,7 +61,7 @@ impl CustomUnit {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO food.custom_unit (name, amount, unit, food_id)
+            INSERT INTO recipe.custom_unit (name, amount, unit, food_id)
             SELECT * FROM UNNEST($1, $2, $3, $4)
             RETURNING name, amount, unit, food_id;
         "#,
@@ -94,7 +94,7 @@ impl CustomUnit {
 
         let delete_query = sqlx::query_as(
             r#"
-            DELETE FROM food.custom_unit
+            DELETE FROM recipe.custom_unit
             WHERE food_id = $1
             RETURNING name, amount, unit, food_id;
             "#,
@@ -105,7 +105,7 @@ impl CustomUnit {
 
         let insert_query = sqlx::query_as(
             r#"
-            INSERT INTO food.custom_unit (name, amount, unit, food_id)
+            INSERT INTO recipe.custom_unit (name, amount, unit, food_id)
             SELECT * FROM UNNEST($1, $2, $3, $4)
             RETURNING name, amount, unit, food_id;
         "#,

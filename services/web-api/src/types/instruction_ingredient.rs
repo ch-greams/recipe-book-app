@@ -66,7 +66,7 @@ impl InstructionIngredient {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.instruction_ingredient (instruction_id, ingredient_slot_number, ingredient_percentage) ",
+            "INSERT INTO recipe.instruction_ingredient (instruction_id, ingredient_slot_number, ingredient_percentage) ",
         );
 
         let instruction_ingredients = insert_query_builder

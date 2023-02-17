@@ -138,7 +138,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND (is_private = false OR created_by = $3)
                 LIMIT $1 OFFSET $2
             "#,
@@ -152,7 +152,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4 AND (is_private = false OR created_by = $3)
                 LIMIT $1 OFFSET $2
             "#,
@@ -175,7 +175,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5 AND created_by = $3
                 LIMIT $1 OFFSET $2
             "#,
@@ -189,7 +189,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4 AND created_by = $3
                 LIMIT $1 OFFSET $2
             "#,
@@ -212,7 +212,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4 AND is_recipe = $5
                     AND (is_private = false OR created_by = $3)
                     AND food.id IN (SELECT food_id FROM journal.favorite_food WHERE user_id = $3)
@@ -228,7 +228,7 @@ impl Food {
             sqlx::query_as(
                 r#"
                 SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-                FROM food.food
+                FROM recipe.food
                 WHERE is_deleted = false AND name ILIKE $4
                     AND (is_private = false OR created_by = $3)
                     AND food.id IN (SELECT food_id FROM journal.favorite_food WHERE user_id = $3)
@@ -249,7 +249,7 @@ impl Food {
         sqlx::query_as(
             r#"
             SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM food.food
+            FROM recipe.food
             WHERE is_deleted = false AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
@@ -264,7 +264,7 @@ impl Food {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            INSERT INTO food.food (is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at)
+            INSERT INTO recipe.food (is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at)
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
@@ -296,7 +296,7 @@ impl Food {
     ) -> Result<Self, Error> {
         let query = sqlx::query_as(
             r#"
-            UPDATE food.food SET
+            UPDATE recipe.food SET
                 is_recipe = $1,
                 name = $2,
                 brand = $3,
@@ -335,7 +335,7 @@ impl Food {
     ) -> Result<(), Error> {
         let query = sqlx::query(
             r#"
-            UPDATE food.food SET is_deleted = true
+            UPDATE recipe.food SET is_deleted = true
             WHERE id = $1 AND created_by = $2
             RETURNING id;
         "#,

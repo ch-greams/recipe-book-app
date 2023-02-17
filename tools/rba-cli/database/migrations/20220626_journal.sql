@@ -4,7 +4,7 @@ CREATE TABLE journal.favorite_food (
     user_id int8 NOT NULL,
     food_id int8 NOT NULL,
     CONSTRAINT favorite_food_pk PRIMARY KEY (user_id, food_id),
-    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES food.food(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES recipe.food(id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 ALTER TABLE journal.favorite_food OWNER TO postgres;
@@ -44,7 +44,7 @@ CREATE TABLE journal.journal_entry (
     journal_group_ui_index int2 NULL,
     CONSTRAINT journal_entry_pk PRIMARY KEY (id),
     -- CONSTRAINT journal_group_fk FOREIGN KEY (journal_group_ui_index,user_id) REFERENCES journal.journal_group(ui_index,user_id),
-    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES food.food(id),
+    CONSTRAINT food_fk FOREIGN KEY (food_id) REFERENCES recipe.food(id),
     CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES journal."user"(id)
 );
 ALTER TABLE journal.journal_entry OWNER TO postgres;
@@ -63,7 +63,7 @@ AS SELECT journal_entry.id,
     journal_entry.unit,
     journal_entry.journal_group_ui_index
    FROM journal.journal_entry journal_entry
-   JOIN food.food food ON food.id = journal_entry.food_id;
+   JOIN recipe.food food ON food.id = journal_entry.food_id;
 ALTER TABLE journal.journal_entry_food OWNER TO postgres;
 GRANT ALL ON TABLE journal.journal_entry_food TO postgres;
 

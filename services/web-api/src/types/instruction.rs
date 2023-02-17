@@ -41,7 +41,7 @@ impl Instruction {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
+            "INSERT INTO recipe.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
         );
 
         let created_instructions = insert_query_builder
@@ -73,7 +73,7 @@ impl Instruction {
         txn: &mut Transaction<'_, Postgres>,
     ) -> Result<(), Error> {
         let delete_query =
-            sqlx::query("DELETE FROM food.instruction WHERE recipe_id = $1").bind(recipe_id);
+            sqlx::query("DELETE FROM recipe.instruction WHERE recipe_id = $1").bind(recipe_id);
 
         delete_query.fetch_all(&mut *txn).await?;
 
@@ -145,7 +145,7 @@ impl InstructionDetailed {
                     duration_value,
                     duration_unit,
                     ingredients
-                FROM food.instruction_detailed
+                FROM recipe.instruction_detailed
                 WHERE recipe_id = $1
             "#,
         )

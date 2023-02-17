@@ -7,7 +7,7 @@
 
 Contains tables and views that will store metadata which will be readonly for users and won't be changed often.
 
-### `food.*`
+### `recipe.*`
 
 Default recipe-book schema at the moment. Stores all non-user specific food information.
 

@@ -19,7 +19,7 @@ impl FoodNutrient {
         sqlx::query_as(
             r#"
             SELECT fn.food_id, n.name, fn.amount
-            FROM food.food_nutrient fn 
+            FROM recipe.food_nutrient fn 
             LEFT JOIN meta.nutrient n ON n.id = fn.nutrient_id 
             WHERE fn.food_id = $1
         "#,
@@ -31,7 +31,7 @@ impl FoodNutrient {
         sqlx::query_as(
             r#"
             SELECT fn.food_id, n.name, fn.amount
-            FROM food.food_nutrient fn 
+            FROM recipe.food_nutrient fn 
             LEFT JOIN meta.nutrient n ON n.id = fn.nutrient_id 
             WHERE fn.food_id = ANY($1)
         "#,
@@ -51,7 +51,7 @@ impl FoodNutrient {
             .collect::<HashMap<String, i16>>();
 
         let mut insert_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.food_nutrient (food_id, nutrient_id, amount) ");
+            QueryBuilder::new("INSERT INTO recipe.food_nutrient (food_id, nutrient_id, amount) ");
 
         insert_query_builder
             .push_values(
@@ -79,7 +79,7 @@ impl FoodNutrient {
         // delete
 
         let delete_query =
-            sqlx::query("DELETE FROM food.food_nutrient WHERE food_id = $1").bind(food_id);
+            sqlx::query("DELETE FROM recipe.food_nutrient WHERE food_id = $1").bind(food_id);
 
         delete_query.fetch_all(&mut *txn).await?;
 
@@ -91,7 +91,7 @@ impl FoodNutrient {
             .collect::<HashMap<String, i16>>();
 
         let mut insert_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.food_nutrient (food_id, nutrient_id, amount) ");
+            QueryBuilder::new("INSERT INTO recipe.food_nutrient (food_id, nutrient_id, amount) ");
 
         insert_query_builder
             .push_values(

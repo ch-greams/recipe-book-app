@@ -29,7 +29,7 @@ pub struct Food {
 impl Food {
     pub async fn seed_foods(foods: Vec<Food>, txn: impl Executor<'_, Database = Postgres>) {
         let mut foods_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.food (id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at) "
+            "INSERT INTO recipe.food (id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at) "
         );
 
         foods_query_builder.push_values(foods.iter().take(BIND_LIMIT / 12), |mut b, food| {
