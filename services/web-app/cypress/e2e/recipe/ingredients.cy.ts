@@ -15,7 +15,7 @@ describe("recipe_page", () => {
 
         beforeEach(() => {
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "food_15.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/15`, { fixture: "food_15.json" });
 
             cy.visit(getRecipePath(RECIPE_ID));
         });
@@ -202,7 +202,7 @@ describe("recipe_page", () => {
                 `${constants.CY_FOOD_API_PATH}?limit=10&filter=${NEW_FOOD_NAME_SHORT}`,
                 { fixture: "foods_response.json" },
             );
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/15`, { fixture: "food_15.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/15`, { fixture: "food_15.json" });
 
             cy.visit(getRecipePath(RECIPE_ID));
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();

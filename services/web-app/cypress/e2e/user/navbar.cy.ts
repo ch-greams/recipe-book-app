@@ -23,7 +23,7 @@ describe("user", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/1`, { fixture: "food_1.json" });
 
             cy.visit(getRecipePath(1));
         });
