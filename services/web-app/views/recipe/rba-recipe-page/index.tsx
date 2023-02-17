@@ -15,7 +15,7 @@ import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
-import RecipePage from "./rba-recipe-page";
+import RbaRecipePage from "./rba-recipe-page";
 
 
 interface RecipePageQuery extends ParsedUrlQuery {
@@ -27,7 +27,7 @@ interface Props {
     meta: MetaStore;
 }
 
-const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
+const RbaRecipePageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -65,7 +65,7 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
                 recipe.errorMessage
                     ? <RbaSingleMessagePage text={recipe.errorMessage} />
                     : (
-                        <RecipePage
+                        <RbaRecipePage
                             isReadOnly={!recipe.editMode}
                             recipe={recipe}
                             search={search}
@@ -83,6 +83,6 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
     );
 };
 
-RecipePageConnected.displayName = "RecipePageConnected";
+RbaRecipePageConnected.displayName = "RbaRecipePageConnected";
 
-export default RecipePageConnected;
+export default RbaRecipePageConnected;

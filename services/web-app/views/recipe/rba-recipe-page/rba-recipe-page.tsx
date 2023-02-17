@@ -32,7 +32,7 @@ interface Props {
     isNew: boolean;
 }
 
-const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, featuredNutrients, isNew }) => {
+const RbaRecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, featuredNutrients, isNew }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -191,6 +191,6 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
     );
 };
 
-RecipePage.displayName = "RecipePage";
+RbaRecipePage.displayName = "RbaRecipePage";
 
-export default RecipePage;
+export default RbaRecipePage;
