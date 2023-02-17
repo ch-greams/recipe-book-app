@@ -10,7 +10,7 @@ import styles from "./rba-general-info-block.module.scss";
 
 
 
-interface GeneralInfoBlockProps {
+interface Props {
     recipe: RecipePageStore;
     featuredNutrients: NutrientName[];
     nutrients: Dictionary<NutrientName, number>;
@@ -19,7 +19,7 @@ interface GeneralInfoBlockProps {
     updateNutrient: (name: NutrientName, value: string) => void;
 }
 
-const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
+const RbaGeneralInfoBlock: React.FC<Props> = ({
     recipe, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => (
     <div className={styles.mainBlock}>
