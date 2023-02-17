@@ -3,16 +3,19 @@ import { createReducer } from "@reduxjs/toolkit";
 import { sortBy } from "@common/array";
 import { getErrorMessageFromStatus } from "@common/http";
 import { DecimalPlaces, roundToDecimal } from "@common/numeric";
-import { isSome, unwrap, unwrapOr } from "@common/types";
-import type * as typings from "@common/typings";
+import { isSome, unwrap } from "@common/types";
 import * as units from "@common/units";
 import { getTemporaryId } from "@common/utils";
 
 import * as actions from "../actions/recipe";
 import {
-    convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues, convertNutrients, convertNutrientValuesIntoInputs,
+    convertCustomUnitsIntoInputs, convertNutrientInputsIntoValues,
+    convertNutrients, convertNutrientValuesIntoInputs,
 } from "../helpers/food";
-import { getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients } from "../helpers/recipe";
+import {
+    convertIngredients, convertInstructions, getNewStepNumber,
+    getRecipeNutrientsFromIngredients, getRecipeServingSizeFromIngredients,
+} from "../helpers/recipe";
 import type * as types from "../types/recipe";
 
 
@@ -22,16 +25,18 @@ const initialState: types.RecipePageStore = {
 
     isLoading: false,
     isLoaded: false,
-    isLoadedIngredients: true,
     errorMessage: null,
 
     editMode: true,
+    isCreated: false,
 
     id: -1,
     name: "Name",
     brand: "Brand",
     description: "",
     type: "",
+
+    isRecipe: false,
 
     density: units.DEFAULT_DENSITY,
     densityInput: String(units.DEFAULT_DENSITY),
@@ -43,137 +48,85 @@ const initialState: types.RecipePageStore = {
     nutrientsByServingInputs: {},
 
     customUnits: [],
+    isPrivate: false,
 
     servingSize: DEFAULT_SERVING_SIZE,
     servingSizeInput: String(DEFAULT_SERVING_SIZE),
     servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 
+    // NOTE: RECIPE
+
     ingredients: [],
     instructions: [],
 
-    isPrivate: false,
-
-    // NOTE: NEW RECIPE
-
-    isCreated: false,
+    isLoadedIngredients: true,
 };
-
-
-function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngredient[] {
-
-    return ingredients.map((ingredient) => {
-
-        const amountInCurrentUnits = units.convertFromMetric(ingredient.amount, ingredient.unit, [], ingredient.density);
-        const amountInput = roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
-
-        return {
-            ...ingredient,
-
-            amountInput: String(amountInput),
-
-            isOpen: false,
-            isMarked: false,
-
-            alternativeNutrients: {},
-        };
-    });
-}
-
-function convertInstructionIngredient(
-    instructionIngredient: typings.InstructionIngredient,
-    ingredients: typings.Ingredient[],
-): types.RecipeInstructionIngredient {
-
-    const MAX_INGREDIENT_PERCENT = 1;
-
-    const ingredientSlotNumber = unwrap(
-        instructionIngredient.ingredient_slot_number,
-        "instructionIngredient.ingredient_slot_number",
-    );
-    const ingredient = unwrap(
-        ingredients.find((i) => i.slot_number === ingredientSlotNumber),
-        "ingredients.find((i) => i.slot_number === ingredientSlotNumber)",
-    );
-
-    const ingredientAmount = ingredient.amount * unwrapOr(instructionIngredient.ingredient_percentage, MAX_INGREDIENT_PERCENT);
-
-    const amountInCurrentUnits = units.convertFromMetric(ingredientAmount, ingredient.unit, [], ingredient.density);
-    const ingredientAmountInput = roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
-
-    return {
-        ingredientSlotNumber: ingredientSlotNumber,
-
-        ingredientAmount: ingredientAmount,
-        ingredientAmountInput: String(ingredientAmountInput),
-
-        ingredientName: ingredient.name,
-        ingredientUnit: ingredient.unit,
-
-        ingredientDensity: ingredient.density,
-    };
-}
-
-function convertInstructions(instructions: typings.Instruction[], ingredients: typings.Ingredient[]): types.RecipeInstruction[] {
-
-    return instructions.map((instruction) => ({
-        id: instruction.id,
-
-        stepNumber: instruction.step_number,
-        description: instruction.description,
-
-        durationValue: instruction.duration_value,
-        durationUnit: instruction.duration_unit,
-        durationValueInput: (
-            instruction.duration_value
-                ? String( roundToDecimal(
-                    units.convertFromSeconds(instruction.duration_value, instruction.duration_unit),
-                    DecimalPlaces.Two,
-                ) )
-                : ""
-        ),
-
-        temperatureValue: instruction.temperature_value,
-        temperatureUnit: instruction.temperature_unit,
-        temperatureValueInput: (
-            instruction.temperature_value
-                ? String( roundToDecimal(
-                    instruction.temperature_unit === units.TemperatureUnit.F
-                        ? units.convertCelsiusToFahrenheit(instruction.temperature_value)
-                        : instruction.temperature_value,
-                    DecimalPlaces.Two,
-                ) )
-                : ""
-        ),
-
-        isOpen: true,
-        isMarked: false,
-
-        ingredients: instruction.ingredients.map((step) => convertInstructionIngredient(step, ingredients)),
-    }));
-}
-
-function getNewStepNumber(last: Option<number>): number {
-    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
-    return (last || -1) + 1;
-}
-
 
 const reducer = createReducer(initialState, (builder) => {
     builder
-        .addCase(actions.setEditMode, (state, action) => {
-            state.editMode = action.payload;
+        .addCase(actions.setEditMode, (state, { payload }) => {
+            state.editMode = payload;
         })
-        .addCase(actions.updateName, (state, action) => {
-            state.name = action.payload;
+        .addCase(actions.updateName, (state, { payload }) => {
+            state.name = payload;
         })
-        .addCase(actions.updateBrand, (state, action) => {
-            state.brand = action.payload;
+        .addCase(actions.updateBrand, (state, { payload }) => {
+            state.brand = payload;
         })
-        .addCase(actions.updateDescription, (state, action) => {
-            state.description = action.payload;
+        .addCase(actions.updateDescription, (state, { payload }) => {
+            state.description = payload;
         })
-        .addCase(actions.updateType, (state, action) => {
-            state.type = action.payload;
+        .addCase(actions.updateType, (state, { payload }) => {
+            state.type = payload;
+        })
+        .addCase(actions.fetchRecipeNew, (state) => {
+            state.isLoaded = true;
+            state.errorMessage = null;
+            state.editMode = true;
+            state.isCreated = false;
+        })
+        .addCase(actions.fetchRecipe.pending, (state, { meta: { arg: recipeId } }) => {
+            state.id = recipeId;
+            state.isLoading = true;
+            state.isLoaded = false;
+            state.errorMessage = null;
+            state.editMode = false;
+        })
+        .addCase(actions.fetchRecipe.fulfilled, (state, { payload: recipe }) => {
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = null;
+
+            state.id = recipe.id;
+            state.name = recipe.name;
+            state.brand = recipe.brand;
+            state.description = recipe.description;
+            state.type = recipe.type;
+
+            state.isRecipe = recipe.is_recipe;
+
+            state.density = recipe.density;
+            state.densityInput = String(recipe.density);
+
+            state.servingSize = recipe.serving_size;
+            state.servingSizeInput = String(recipe.serving_size);
+
+            state.nutrients = recipe.nutrients;
+            state.customUnits = convertCustomUnitsIntoInputs(recipe.custom_units);
+
+            state.nutrientsByServing = recipe.nutrients;
+            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(recipe.nutrients);
+
+            const recipeIngredients = convertIngredients(recipe.ingredients);
+            const recipeInstructions = convertInstructions(recipe.instructions, recipe.ingredients);
+
+            state.ingredients = recipeIngredients;
+            state.instructions = recipeInstructions;
+        })
+        .addCase(actions.fetchRecipe.rejected, (state, { payload: errorStatus }) => {
+            state.isLoading = false;
+            state.isLoaded = true;
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
         .addCase(actions.updateNutrient, (state, { payload: { key, value } }) => {
             const nutrientsByServing = {
@@ -188,9 +141,7 @@ const reducer = createReducer(initialState, (builder) => {
                 ...{ [key]: value },
             };
         })
-        .addCase(actions.addCustomUnit, (state, action) => {
-            const { payload: customUnit } = action;
-
+        .addCase(actions.addCustomUnit, (state, { payload: customUnit }) => {
             // IMPROVE: Custom Unit name is empty or already exist, maybe show some kind of feedback?
             if (state.customUnits.some((cu) => cu.name === customUnit.name) || !customUnit.name.isNotEmpty()) {
                 return;
@@ -210,25 +161,46 @@ const reducer = createReducer(initialState, (builder) => {
                 },
             ];
         })
-        .addCase(actions.updateCustomUnit, (state, action) => {
-            const { payload: { index: customUnitIndex, customUnit: updatedCustomUnit } } = action;
-            state.customUnits[customUnitIndex] = {
-                ...updatedCustomUnit,
+        .addCase(actions.updateCustomUnit, (state, { payload: { index, customUnit } }) => {
+            state.customUnits[index] = {
+                ...customUnit,
                 amount: units.convertToMetric(
-                    Number(updatedCustomUnit.amountInput),
-                    updatedCustomUnit.unit,
+                    Number(customUnit.amountInput),
+                    customUnit.unit,
                     state.customUnits,
                     state.density,
                 ),
             };
         })
-        .addCase(actions.removeCustomUnit, (state, action) => {
-            const { payload: customUnitIndex } = action;
+        .addCase(actions.removeCustomUnit, (state, { payload: customUnitIndex }) => {
             state.customUnits = state.customUnits.filter((_customUnit, index) => index !== customUnitIndex);
         })
-        .addCase(actions.updateServingSizeAmount, (state, action) => {
-            const { payload: servingSizeInput } = action;
+        .addCase(actions.updateDensityAmount, (state, { payload: densityInput }) => {
+            const density = units.convertDensityToMetric(
+                Number(densityInput), state.densityWeightUnit, state.densityVolumeUnit,
+            );
 
+            // FIXME: Recalculate all volume related amounts?
+
+            state.density = density;
+            state.densityInput = densityInput;
+        })
+        .addCase(actions.updateDensityVolumeUnit, (state, { payload: densityVolumeUnit }) => {
+            const density = units.convertDensityFromMetric(state.density, state.densityWeightUnit, densityVolumeUnit);
+            const densityRounded = roundToDecimal(density, DecimalPlaces.Four);
+
+            state.densityInput = String(densityRounded);
+            state.densityVolumeUnit = densityVolumeUnit;
+
+        })
+        .addCase(actions.updateDensityWeightUnit, (state, { payload: densityWeightUnit }) => {
+            const density = units.convertDensityFromMetric(state.density, densityWeightUnit, state.densityVolumeUnit);
+            const densityRounded = roundToDecimal(density, DecimalPlaces.Four);
+
+            state.densityInput = String(densityRounded);
+            state.densityWeightUnit = densityWeightUnit;
+        })
+        .addCase(actions.updateServingSizeAmount, (state, { payload: servingSizeInput }) => {
             const servingSize = units.convertToMetric(
                 Number(servingSizeInput), state.servingSizeUnit, state.customUnits, state.density,
             );
@@ -248,9 +220,7 @@ const reducer = createReducer(initialState, (builder) => {
                 state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
-        .addCase(actions.updateServingSizeUnit, (state, action) => {
-            const { payload: servingSizeUnit } = action;
-
+        .addCase(actions.updateServingSizeUnit, (state, { payload: servingSizeUnit }) => {
             const servingSize = units.convertToMetric(
                 Number(state.servingSizeInput), servingSizeUnit, state.customUnits, state.density,
             );
@@ -270,64 +240,11 @@ const reducer = createReducer(initialState, (builder) => {
                 state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(nutrientsByServing);
             }
         })
-        .addCase(actions.fetchRecipeNew, (state) => {
-            state.isLoaded = true;
-            state.errorMessage = null;
-            state.editMode = true;
-            state.isCreated = false;
-        })
-        .addCase(actions.fetchRecipe.pending, (state, action) => {
-            const { arg: recipeId } = action.meta;
-
-            state.id = recipeId;
-            state.isLoading = true;
-            state.isLoaded = false;
-            state.errorMessage = null;
-            state.editMode = false;
-        })
-        .addCase(actions.fetchRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
-            const recipeIngredients = convertIngredients(recipe.ingredients);
-            const recipeInstructions = convertInstructions(recipe.instructions, recipe.ingredients);
-
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.errorMessage = null;
-
-            state.id = recipe.id;
-            state.name = recipe.name;
-            state.brand = recipe.brand;
-            state.description = recipe.description;
-            state.type = recipe.type;
-
-            state.density = recipe.density;
-            state.densityInput = String(recipe.density);
-
-            state.servingSize = recipe.serving_size;
-            state.servingSizeInput = String(recipe.serving_size);
-
-            state.nutrients = recipe.nutrients;
-            state.customUnits = convertCustomUnitsIntoInputs(recipe.custom_units);
-
-            state.nutrientsByServing = recipe.nutrients;
-            state.nutrientsByServingInputs = convertNutrientValuesIntoInputs(recipe.nutrients);
-
-            state.ingredients = recipeIngredients;
-            state.instructions = recipeInstructions;
-        })
-        .addCase(actions.fetchRecipe.rejected, (state, { payload: errorStatus }) => {
-            state.isLoading = false;
-            state.isLoaded = true;
-            state.errorMessage = getErrorMessageFromStatus(errorStatus);
-        })
         .addCase(actions.createRecipe.pending, (state) => {
             state.isLoading = true;
             state.isLoaded = false;
         })
-        .addCase(actions.createRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
+        .addCase(actions.createRecipe.fulfilled, (state, { payload: recipe }) => {
             state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;
@@ -343,9 +260,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoading = true;
             state.isLoaded = false;
         })
-        .addCase(actions.updateRecipe.fulfilled, (state, action) => {
-            const { payload: recipe } = action;
-
+        .addCase(actions.updateRecipe.fulfilled, (state, { payload: recipe }) => {
             state.isLoading = false;
             state.isLoaded = true;
             state.editMode = false;

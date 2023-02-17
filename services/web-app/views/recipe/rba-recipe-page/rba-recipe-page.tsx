@@ -143,30 +143,37 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                     updateNutrient={updateNutrient}
                 />
 
-                <RbaBlockTitle text={"INGREDIENTS"} />
+                {(
+                    recipe.isRecipe && (
+                        <>
+                            <RbaBlockTitle text={"INGREDIENTS"} />
 
-                {!isReadOnly && (
-                    <RbaButton
-                        label={"calculate nutrients & serving size from ingredients".toUpperCase()}
-                        width={ButtonWidthSize.Full}
-                        onClick={() => dispatch(recipeActions.calculateNutrientsAndServingSize())}
-                    />
+                            {!isReadOnly && (
+                                <RbaButton
+                                    label={"calculate nutrients & serving size from ingredients".toUpperCase()}
+                                    width={ButtonWidthSize.Full}
+                                    onClick={() => dispatch(recipeActions.calculateNutrientsAndServingSize())}
+                                />
+                            )}
+
+                            <RbaIngredientsBlock
+                                isReadOnly={isReadOnly}
+                                isLoaded={recipe.isLoadedIngredients}
+                                ingredients={ingredients}
+                                search={search}
+                            />
+
+                            <RbaBlockTitle text={"INSTRUCTIONS"} />
+
+                            <RbaInstructionsBlock
+                                isReadOnly={isReadOnly}
+                                instructions={instructions}
+                                ingredients={ingredients}
+                            />
+                        </>
+                    )
                 )}
 
-                <RbaIngredientsBlock
-                    isReadOnly={isReadOnly}
-                    isLoaded={recipe.isLoadedIngredients}
-                    ingredients={ingredients}
-                    search={search}
-                />
-
-                <RbaBlockTitle text={"INSTRUCTIONS"} />
-
-                <RbaInstructionsBlock
-                    isReadOnly={isReadOnly}
-                    instructions={instructions}
-                    ingredients={ingredients}
-                />
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 

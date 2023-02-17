@@ -16,39 +16,36 @@ const DEFAULT_SERVING_SIZE: number = 100;
 
 const initialState: FoodPageStore = {
 
+    isLoading: false,
+    isLoaded: false,
+    errorMessage: null,
+
+    editMode: true,
+    isCreated: false,
+
     id: -1,
     name: "Name",
     brand: "Brand",
     description: "",
-    nutrients: {},
-    customUnits: [],
-    isPrivate: false,
+    type: "",
 
-    type: "Nuts",
+    isRecipe: false,
 
     density: units.DEFAULT_DENSITY,
     densityInput: String(units.DEFAULT_DENSITY),
     densityVolumeUnit: units.DEFAULT_VOLUME_UNIT,
     densityWeightUnit: units.DEFAULT_WEIGHT_UNIT,
 
-    servingSize: DEFAULT_SERVING_SIZE,
-    servingSizeInput: String(DEFAULT_SERVING_SIZE),
-    servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
-
-    // NOTE: INPUTS
-
+    nutrients: {},
     nutrientsByServing: {},
     nutrientsByServingInputs: {},
 
-    // NOTE: PAGE STATE
+    customUnits: [],
+    isPrivate: false,
 
-    isLoading: false,
-    isLoaded: false,
-    errorMessage: null,
-
-    editMode: true,
-
-    isCreated: false,
+    servingSize: DEFAULT_SERVING_SIZE,
+    servingSizeInput: String(DEFAULT_SERVING_SIZE),
+    servingSizeUnit: units.DEFAULT_WEIGHT_UNIT,
 };
 
 const reducer = createReducer(initialState, (builder) => {
@@ -89,6 +86,8 @@ const reducer = createReducer(initialState, (builder) => {
             state.id = food.id;
             state.name = food.name;
             state.brand = food.brand;
+            state.description = food.description;
+            state.type = food.type;
 
             state.density = food.density;
             state.densityInput = String(food.density);
@@ -126,16 +125,19 @@ const reducer = createReducer(initialState, (builder) => {
                 return;
             }
 
-            state.customUnits.push({
-                ...customUnit,
-                amount: units.convertToMetric(
-                    Number(customUnit.amountInput),
-                    customUnit.unit,
-                    state.customUnits,
-                    state.density,
-                ),
-                food_id: state.id,
-            });
+            state.customUnits = [
+                ...state.customUnits,
+                {
+                    ...customUnit,
+                    amount: units.convertToMetric(
+                        Number(customUnit.amountInput),
+                        customUnit.unit,
+                        state.customUnits,
+                        state.density,
+                    ),
+                    food_id: state.id,
+                },
+            ];
         })
         .addCase(actions.updateCustomUnit, (state, { payload: { index, customUnit } }) => {
             state.customUnits[index] = {
@@ -241,6 +243,7 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.editMode = false;
             state.id = food.id;
+            state.isCreated = true;
         })
         .addCase(actions.updateFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoading = false;

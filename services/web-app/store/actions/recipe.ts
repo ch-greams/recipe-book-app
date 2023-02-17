@@ -14,22 +14,21 @@ import type * as types from "../types/recipe";
 import type { AsyncThunkConfig } from ".";
 
 
-// -----------------------------------------------------------------------------
-// Recipe
-// -----------------------------------------------------------------------------
-
 export const setEditMode = createAction<boolean>("recipe/set_edit_mode");
-export const updateServingSizeAmount = createAction<string>("recipe/update_serving_size_amount");
-export const updateServingSizeUnit = createAction<units.WeightUnit | units.VolumeUnit>("recipe/update_serving_size_unit");
-export const updateType = createAction<string>("recipe/update_type");
-export const updateNutrient = createAction<{ key: NutrientName, value: string }>("recipe/update_nutrient");
-export const fetchRecipeNew = createAction("recipe/fetch_recipe_new");
-export const addCustomUnit = createAction<units.CustomUnitInput>("recipe/add_custom_unit");
-export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit");
-export const updateCustomUnit = createAction<{ index: number, customUnit: units.CustomUnitInput }>("recipe/update_custom_unit");
 export const updateName = createAction<string>("recipe/update_name");
 export const updateBrand = createAction<string>("recipe/update_brand");
 export const updateDescription = createAction<string>("recipe/update_description");
+export const updateType = createAction<string>("recipe/update_type");
+export const updateDensityAmount = createAction<string>("recipe/update_density_amount");
+export const updateDensityVolumeUnit = createAction<units.VolumeUnit>("recipe/update_density_volume_unit");
+export const updateDensityWeightUnit = createAction<units.WeightUnit>("recipe/update_density_weight_unit");
+export const updateServingSizeAmount = createAction<string>("recipe/update_serving_size_amount");
+export const updateServingSizeUnit = createAction<units.WeightUnit | units.VolumeUnit>("recipe/update_serving_size_unit");
+export const addCustomUnit = createAction<units.CustomUnitInput>("recipe/add_custom_unit");
+export const updateCustomUnit = createAction<{ index: number, customUnit: units.CustomUnitInput }>("recipe/update_custom_unit");
+export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit");
+export const updateNutrient = createAction<{ key: NutrientName, value: string }>("recipe/update_nutrient");
+export const fetchRecipeNew = createAction("recipe/fetch_recipe_new");
 
 export const fetchRecipe = createAsyncThunk<Recipe, number, AsyncThunkConfig>(
     "recipe/fetch_recipe",

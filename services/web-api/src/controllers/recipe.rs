@@ -40,7 +40,7 @@ async fn find_by_id(
 
     let mut txn = db_pool.begin().await?;
 
-    let food = Food::find_recipe_by_id(*id, user_id)
+    let food = Food::find_by_id(*id, user_id)
         .fetch_optional(&mut txn)
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
@@ -56,15 +56,23 @@ async fn find_by_id(
 
     // ingredients
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(*id)
-        .fetch_all(&mut txn)
-        .await?;
+    let ingredients = if food.is_recipe {
+        IngredientDetailed::find_by_recipe_id(*id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Vec::new()
+    };
 
     // instructions
 
-    let instructions = InstructionDetailed::find_by_recipe_id(*id)
-        .fetch_all(&mut txn)
-        .await?;
+    let instructions = if food.is_recipe {
+        InstructionDetailed::find_by_recipe_id(*id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Vec::new()
+    };
 
     let recipe = RecipeDetailed::new(
         food,

@@ -290,7 +290,7 @@ impl Food {
         }
     }
 
-    pub fn find_recipe_by_id(
+    pub fn find_by_id(
         id: i64,
         user_id: Option<i64>,
     ) -> QueryAs<'static, Postgres, Self, PgArguments> {
@@ -298,7 +298,7 @@ impl Food {
             r#"
             SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
             FROM food.food
-            WHERE is_deleted = false AND is_recipe = true AND id = $1 AND (is_private = false OR created_by = $2)
+            WHERE is_deleted = false AND id = $1 AND (is_private = false OR created_by = $2)
         "#,
         )
         .bind(id)
@@ -518,7 +518,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let food = Food::find_recipe_by_id(recipe_id, user_id)
+        let food = Food::find_by_id(recipe_id, user_id)
             .fetch_optional(&mut txn)
             .await
             .unwrap();

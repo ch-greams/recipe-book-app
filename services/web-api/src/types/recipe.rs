@@ -23,6 +23,7 @@ pub struct RecipeDetailed {
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub is_private: bool,
+    pub is_recipe: bool,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -76,6 +77,7 @@ impl RecipeDetailed {
             created_at: food.created_at,
             updated_at: food.updated_at,
             is_private: food.is_private,
+            is_recipe: food.is_recipe,
         }
     }
 }

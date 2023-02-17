@@ -15,11 +15,13 @@ export function convertFoodPageIntoFood(foodPage: FoodPageStore): Food {
         name: foodPage.name,
         brand: foodPage.brand,
         description: foodPage.description,
+        type: foodPage.type,
         density: foodPage.density,
         serving_size: foodPage.servingSize,
         nutrients: foodPage.nutrients,
         custom_units: foodPage.customUnits,
         is_private: foodPage.isPrivate,
+        is_recipe: foodPage.isRecipe,
     };
 }
 

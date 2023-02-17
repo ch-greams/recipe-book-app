@@ -137,5 +137,6 @@
             ]
         }
     ],
+    "is_recipe": true,
     "is_private": false
 }

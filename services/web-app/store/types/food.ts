@@ -9,6 +9,7 @@ export interface FoodPageStore {
     errorMessage?: Option<string>;
 
     editMode: boolean;
+    isRecipe: boolean;
 
     id: number;
     name: string;

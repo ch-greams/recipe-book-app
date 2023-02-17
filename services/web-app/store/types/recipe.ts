@@ -55,6 +55,8 @@ export interface RecipePageStore {
     description: string;
     type: string;
 
+    isRecipe: boolean;
+
     density: number;
     densityInput: string;
     densityVolumeUnit: units.VolumeUnit;
