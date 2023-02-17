@@ -67,6 +67,9 @@ const reducer = createReducer(initialState, (builder) => {
         .addCase(actions.setEditMode, (state, { payload }) => {
             state.editMode = payload;
         })
+        .addCase(actions.setIsRecipe, (state, { payload }) => {
+            state.isRecipe = payload;
+        })
         .addCase(actions.updateName, (state, { payload }) => {
             state.name = payload;
         })

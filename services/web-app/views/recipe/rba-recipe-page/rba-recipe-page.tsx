@@ -47,13 +47,19 @@ const RbaRecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feat
         dispatch(recipeActions.updateNutrient({ key: name, value: value }));
     };
 
-    const pageControls = (
+    const editModeButtons = (
         <>
             <RbaButton
                 label={BUTTON_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(recipeActions.fetchRecipe(recipe.id))}
+            />
+
+            <RbaButton
+                label={( recipe.isRecipe ? "SWITCH TO FOOD" : "SWITCH TO RECIPE" )}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(recipeActions.setIsRecipe(!recipe.isRecipe))}
             />
 
             <RbaButton
@@ -64,7 +70,7 @@ const RbaRecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feat
         </>
     );
 
-    const editButtons = (
+    const readModeButtons = (
         <>
             <RbaButton
                 label={BUTTON_DELETE}
@@ -105,7 +111,7 @@ const RbaRecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feat
                 {/* Page Controls Block */}
 
                 <div className={styles.pageControls}>
-                    {( isReadOnly ? editButtons : pageControls )}
+                    {( isReadOnly ? readModeButtons : editModeButtons )}
                 </div>
 
                 {/* Title Block */}

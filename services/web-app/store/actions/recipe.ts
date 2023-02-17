@@ -14,6 +14,7 @@ import type { AsyncThunkConfig } from ".";
 
 
 export const setEditMode = createAction<boolean>("recipe/set_edit_mode");
+export const setIsRecipe = createAction<boolean>("recipe/set_is_recipe");
 export const updateName = createAction<string>("recipe/update_name");
 export const updateBrand = createAction<string>("recipe/update_brand");
 export const updateDescription = createAction<string>("recipe/update_description");
