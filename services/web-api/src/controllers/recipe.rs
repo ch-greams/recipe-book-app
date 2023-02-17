@@ -96,7 +96,7 @@ async fn create_recipe(
 
     let mut txn = db_pool.begin().await?;
 
-    let food = Food::insert(&payload.to_owned().into(), true, user_id, &mut txn).await?;
+    let food = Food::insert(&payload.to_owned().into(), user_id, &mut txn).await?;
 
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, food.id, &mut txn).await?;
@@ -117,7 +117,7 @@ async fn create_recipe(
 
     // ingredients
 
-    let ingredients = if payload.ingredients.is_empty() {
+    let ingredients = if payload.ingredients.is_empty() || !payload.is_recipe {
         Vec::new()
     } else {
         Ingredient::insert_multiple(&payload.ingredients, food.id, &mut txn).await?;
@@ -129,7 +129,9 @@ async fn create_recipe(
 
     // instructions
 
-    let instructions_detailed: Vec<InstructionDetailed> = if payload.instructions.is_empty() {
+    let instructions_detailed: Vec<InstructionDetailed> = if payload.instructions.is_empty()
+        || !payload.is_recipe
+    {
         Vec::new()
     } else {
         let created_instructions =
@@ -201,39 +203,51 @@ async fn update_recipe(
 
     // ingredients
 
-    Ingredient::replace_multiple(&payload.ingredients, food.id, &mut txn).await?;
+    let ingredients = if food.is_recipe {
+        Ingredient::replace_multiple(&payload.ingredients, food.id, &mut txn).await?;
 
-    let ingredients = IngredientDetailed::find_by_recipe_id(food.id)
-        .fetch_all(&mut txn)
-        .await?;
+        IngredientDetailed::find_by_recipe_id(food.id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Ingredient::delete_multiple(food.id, &mut txn).await?;
+
+        Vec::new()
+    };
 
     // instructions
 
-    let created_instructions =
-        Instruction::replace_multiple(&payload.instructions, food.id, &mut txn).await?;
+    let instructions_detailed = if payload.is_recipe {
+        let created_instructions =
+            Instruction::replace_multiple(&payload.instructions, food.id, &mut txn).await?;
 
-    let instruction_ingredients_to_create: Vec<InstructionIngredient> =
-        zip(&created_instructions, &payload.instructions)
-            .flat_map(|(ci, ip)| InstructionIngredient::from_updated_instructions(ci, ip))
-            .collect();
+        let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+            zip(&created_instructions, &payload.instructions)
+                .flat_map(|(ci, ip)| InstructionIngredient::from_updated_instructions(ci, ip))
+                .collect();
 
-    // NOTE: No need to replace instruction_ingredients, cascade delete of instructions will take care of it
-    let created_instruction_ingredients =
-        InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
-            .await?;
+        // NOTE: No need to replace instruction_ingredients, cascade delete of instructions will take care of it
+        let created_instruction_ingredients =
+            InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+                .await?;
 
-    let instructions_detailed = created_instructions
-        .into_iter()
-        .map(|created_instruction| {
-            let instruction_ingredients = created_instruction_ingredients
-                .clone()
-                .into_iter()
-                .filter(|ii| ii.instruction_id == created_instruction.id)
-                .collect::<Vec<InstructionIngredient>>();
+        created_instructions
+            .into_iter()
+            .map(|created_instruction| {
+                let instruction_ingredients = created_instruction_ingredients
+                    .clone()
+                    .into_iter()
+                    .filter(|ii| ii.instruction_id == created_instruction.id)
+                    .collect::<Vec<InstructionIngredient>>();
 
-            InstructionDetailed::new(&created_instruction, &instruction_ingredients)
-        })
-        .collect::<Vec<InstructionDetailed>>();
+                InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+            })
+            .collect::<Vec<InstructionDetailed>>()
+    } else {
+        Instruction::delete_multiple(food.id, &mut txn).await?;
+
+        Vec::new()
+    };
 
     txn.commit().await?;
 

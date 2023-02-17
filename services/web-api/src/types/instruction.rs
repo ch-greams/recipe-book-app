@@ -24,19 +24,7 @@ pub struct Instruction {
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct CreateInstructionPayload {
-    pub step_number: i16,
-    pub description: String,
-    pub temperature_value: Option<f32>,
-    pub temperature_unit: String,
-    pub duration_value: Option<i32>,
-    pub duration_unit: String,
-    pub ingredients: Vec<InstructionIngredientSimple>,
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct UpdateInstructionPayload {
-    pub id: i64,
+pub struct InstructionPayload {
     pub step_number: i16,
     pub description: String,
     pub temperature_value: Option<f32>,
@@ -48,7 +36,7 @@ pub struct UpdateInstructionPayload {
 
 impl Instruction {
     pub async fn insert_multiple(
-        instruction_payloads: &[CreateInstructionPayload],
+        instruction_payloads: &[InstructionPayload],
         recipe_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
@@ -80,44 +68,31 @@ impl Instruction {
         Ok(created_instructions)
     }
 
-    pub async fn replace_multiple(
-        instruction_payloads: &[UpdateInstructionPayload],
+    pub async fn delete_multiple(
         recipe_id: i64,
         txn: &mut Transaction<'_, Postgres>,
-    ) -> Result<Vec<Self>, Error> {
-        // delete
-
+    ) -> Result<(), Error> {
         let delete_query =
             sqlx::query("DELETE FROM food.instruction WHERE recipe_id = $1").bind(recipe_id);
 
         delete_query.fetch_all(&mut *txn).await?;
 
+        Ok(())
+    }
+
+    pub async fn replace_multiple(
+        instruction_payloads: &[InstructionPayload],
+        recipe_id: i64,
+        txn: &mut Transaction<'_, Postgres>,
+    ) -> Result<Vec<Self>, Error> {
+        // delete
+
+        Self::delete_multiple(recipe_id, txn).await?;
+
         // insert
 
-        let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.instruction (recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit) ",
-        );
-
-        let created_instructions = insert_query_builder
-            .push_values(
-                instruction_payloads.iter().take(BIND_LIMIT / 7),
-                |mut builder, instruction_payload| {
-                    builder
-                        .push_bind(recipe_id)
-                        .push_bind(instruction_payload.step_number)
-                        .push_bind(instruction_payload.description.to_owned())
-                        .push_bind(instruction_payload.temperature_value)
-                        .push_bind(instruction_payload.temperature_unit.to_owned())
-                        .push_bind(instruction_payload.duration_value)
-                        .push_bind(instruction_payload.duration_unit.to_owned());
-                },
-            )
-            .push(
-                " RETURNING id, recipe_id, step_number, description, temperature_value, temperature_unit, duration_value, duration_unit;",
-            )
-            .build_query_as()
-            .fetch_all(txn)
-            .await?;
+        let created_instructions =
+            Self::insert_multiple(instruction_payloads, recipe_id, txn).await?;
 
         Ok(created_instructions)
     }
@@ -218,10 +193,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,
@@ -258,10 +232,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,

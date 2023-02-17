@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-
 use actix_web::{
     get, post,
-    web::{Data, Json, Path, Query},
+    web::{Data, Json, Query},
     HttpRequest, HttpResponse, Scope,
 };
 use serde::Deserialize;
@@ -11,112 +9,18 @@ use sqlx::{Pool, Postgres};
 use crate::{
     auth::{authorize, get_user, Certificate},
     types::{
-        custom_unit::CustomUnit,
         error::Error,
-        food::{CreateFoodPayload, Food, FoodDetailed, FoodShort, UpdateFoodPayload},
-        food_nutrient::FoodNutrient,
-        meta::Nutrient,
+        food::{Food, FoodShort},
     },
 };
 
 pub fn scope() -> Scope {
     actix_web::web::scope("food")
-        .service(create_food)
-        .service(update_food)
         .service(find_all)
         .service(find_all_created)
         .service(find_all_favorite)
         .service(delete_favorite_by_id)
         .service(delete_by_id)
-        .service(find_by_id)
-}
-
-#[get("/{id}")]
-async fn find_by_id(
-    id: Path<i64>,
-    db_pool: Data<Pool<Postgres>>,
-    auth_certificate: Data<Certificate>,
-    request: HttpRequest,
-) -> Result<Json<FoodDetailed>, Error> {
-    let user_id = get_user(request, &auth_certificate);
-
-    let mut txn = db_pool.begin().await?;
-
-    let food = Food::find_food_by_id(*id, user_id)
-        .fetch_optional(&mut txn)
-        .await?
-        .ok_or_else(|| Error::not_found(*id))?;
-
-    let custom_units = CustomUnit::find_by_food_id(*id).fetch_all(&mut txn).await?;
-
-    let food_nutrients = FoodNutrient::find_by_food_id(*id)
-        .fetch_all(&mut txn)
-        .await?
-        .iter()
-        .map(|pn| (pn.name.clone(), pn.amount))
-        .collect::<HashMap<String, f32>>();
-
-    let food_detailed = FoodDetailed::new(&food, &food_nutrients, custom_units);
-
-    Ok(Json(food_detailed))
-}
-
-#[post("/create")]
-async fn create_food(
-    payload: Json<CreateFoodPayload>,
-    db_pool: Data<Pool<Postgres>>,
-    auth_certificate: Data<Certificate>,
-    request: HttpRequest,
-) -> Result<Json<FoodDetailed>, Error> {
-    let user_id = authorize(request, &auth_certificate)?;
-
-    let mut txn = db_pool.begin().await?;
-
-    let food = Food::insert(&payload, false, user_id, &mut txn).await?;
-
-    let custom_units =
-        CustomUnit::insert_multiple(&payload.custom_units, food.id, &mut txn).await?;
-
-    if !payload.nutrients.is_empty() {
-        let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
-
-        FoodNutrient::insert_multiple(&payload.nutrients, &meta_nutrients, food.id, &mut txn)
-            .await?;
-    }
-
-    txn.commit().await?;
-
-    let food_detailed = FoodDetailed::new(&food, &payload.nutrients, custom_units);
-
-    Ok(Json(food_detailed))
-}
-
-#[post("/update")]
-async fn update_food(
-    payload: Json<UpdateFoodPayload>,
-    db_pool: Data<Pool<Postgres>>,
-    auth_certificate: Data<Certificate>,
-    request: HttpRequest,
-) -> Result<Json<FoodDetailed>, Error> {
-    let user_id = authorize(request, &auth_certificate)?;
-
-    let mut txn = db_pool.begin().await?;
-
-    // TODO: Might want to provide a better error when user_id doesn't match
-    let food = Food::update(&payload, false, user_id, &mut txn).await?;
-
-    let custom_units =
-        CustomUnit::replace_multiple(&payload.custom_units, food.id, &mut txn).await?;
-
-    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
-
-    FoodNutrient::replace_multiple(&payload.nutrients, &meta_nutrients, food.id, &mut txn).await?;
-
-    txn.commit().await?;
-
-    let food_detailed = FoodDetailed::new(&food, &payload.nutrients, custom_units);
-
-    Ok(Json(food_detailed))
 }
 
 #[derive(Debug, Deserialize)]

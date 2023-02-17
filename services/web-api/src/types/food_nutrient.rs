@@ -143,7 +143,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload, false, 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload, 1, &mut txn)
             .await
             .unwrap();
 
@@ -173,7 +173,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload, false, 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload, 1, &mut txn)
             .await
             .unwrap();
 

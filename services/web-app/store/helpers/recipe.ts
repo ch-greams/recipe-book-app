@@ -66,23 +66,23 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
         is_recipe: recipePage.isRecipe,
         density: recipePage.density,
         serving_size: recipePage.servingSize,
+        is_private: recipePage.isPrivate,
+        nutrients: recipePage.nutrients,
         ingredients: recipePage.ingredients,
         instructions: recipePage.instructions
             .map((instruction, index) =>
                 convertRecipeInstructionIntoInstruction(instruction, recipePage.ingredients, index),
             ),
-        is_private: recipePage.isPrivate,
-        nutrients: recipePage.nutrients,
     };
 }
 
-export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean, isRecipe: boolean): Ingredient {
+export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
         id: getTemporaryId(),
         slot_number: slotNumber,
         is_alternative: isAlternative,
         food_id: food.id,
-        is_recipe: isRecipe,
+        is_recipe: food.is_recipe,
         name: food.name,
         amount: 100,
         unit: WeightUnit.g,

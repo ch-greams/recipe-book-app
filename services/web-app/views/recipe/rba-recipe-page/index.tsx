@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
 import { useLoginRedirect } from "@common/hooks";
-import { getFoodPath, NEW_RECIPE_PATH } from "@common/routes";
+import { getRecipePath, NEW_RECIPE_PATH } from "@common/routes";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
@@ -50,7 +50,7 @@ const RbaRecipePageConnected: React.FC<Props> = ({ meta, user }) => {
             else if (router.asPath.includes(NEW_RECIPE_PATH)) {
 
                 if (recipe.isCreated) {
-                    router.push(getFoodPath(true, recipe.id));
+                    router.push(getRecipePath(recipe.id));
                 }
                 else {
                     dispatch(recipeActions.fetchRecipeNew());

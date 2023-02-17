@@ -4,6 +4,7 @@
     "brand": "Homemade",
     "description": "",
     "is_private": false,
+    "is_recipe": false,
     "density": 1.04,
     "serving_size": 100,
     "nutrients": {

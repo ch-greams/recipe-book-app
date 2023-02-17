@@ -6,7 +6,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import type { CustomUnitInput } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
 import { store } from "@store";
-import * as actions from "@store/actions/food";
+import * as actions from "@store/actions/recipe";
 
 import RbaCustomUnitsBlock from ".";
 

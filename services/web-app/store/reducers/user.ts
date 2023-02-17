@@ -3,7 +3,6 @@ import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 import { sortBy } from "@common/array";
 import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
 
-import * as foodActions from "../actions/food";
 import * as journalActions from "../actions/journal";
 import * as metaActions from "../actions/meta";
 import * as recipeActions from "../actions/recipe";
@@ -33,8 +32,6 @@ const initialState: UserStore = {
 };
 
 const ASYNC_REJECTIONS = isAnyOf(
-    // FOOD ACTIONS
-    foodActions.fetchFood.rejected, foodActions.createFood.rejected, foodActions.updateFood.rejected,
     // JOURNAL ACTIONS
     journalActions.fetchJournalInfo.rejected, journalActions.createJournalEntry.rejected,
     journalActions.updateJournalEntry.rejected, journalActions.deleteJournalEntry.rejected,

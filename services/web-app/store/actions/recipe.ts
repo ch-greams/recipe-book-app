@@ -5,7 +5,6 @@ import { HttpError } from "@common/http";
 import type { NutrientName } from "@common/nutrients";
 import type { FoodShort, Ingredient, Recipe } from "@common/typings";
 import type * as units from "@common/units";
-import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
 import { convertFoodToIngredient, convertRecipePageIntoRecipe } from "../helpers/recipe";
@@ -108,14 +107,8 @@ export const addIngredient = createAsyncThunk<Ingredient, { food: FoodShort, slo
     "recipe/ingredient/add",
     async ({ food, slotNumber, isAlternative }, { rejectWithValue }) => {
         try {
-            if (food.is_recipe) {
-                const recipe = await RecipeApi.getRecipe(food.id);
-                return convertFoodToIngredient(recipe, slotNumber, isAlternative, true);
-            }
-            else {
-                const _food = await FoodApi.getFood(food.id);
-                return convertFoodToIngredient(_food, slotNumber, isAlternative, false);
-            }
+            const recipe = await RecipeApi.getRecipe(food.id);
+            return convertFoodToIngredient(recipe, slotNumber, isAlternative);
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

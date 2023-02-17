@@ -5,25 +5,10 @@ use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
 use super::{
-    custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload},
+    custom_unit::{CreateCustomUnitPayload, UpdateCustomUnitPayload},
     error::Error,
     recipe::{CreateRecipePayload, UpdateRecipePayload},
 };
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct FoodDetailed {
-    pub id: i64,
-    pub name: String,
-    pub brand: String,
-    pub description: String,
-    pub density: f64,
-    pub serving_size: f64,
-    pub nutrients: HashMap<String, f32>,
-    pub custom_units: Vec<CustomUnit>,
-    pub is_private: bool,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-}
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct CreateFoodPayload {
@@ -35,6 +20,7 @@ pub struct CreateFoodPayload {
     pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<CreateCustomUnitPayload>,
     pub is_private: bool,
+    pub is_recipe: bool,
 }
 
 impl From<CreateRecipePayload> for CreateFoodPayload {
@@ -55,6 +41,7 @@ impl From<CreateRecipePayload> for CreateFoodPayload {
                 .collect(),
             custom_units: recipe.custom_units,
             is_private: recipe.is_private,
+            is_recipe: recipe.is_recipe,
         }
     }
 }
@@ -70,6 +57,7 @@ pub struct UpdateFoodPayload {
     pub nutrients: HashMap<String, f32>,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
     pub is_private: bool,
+    pub is_recipe: bool,
 }
 
 impl From<UpdateRecipePayload> for UpdateFoodPayload {
@@ -91,28 +79,7 @@ impl From<UpdateRecipePayload> for UpdateFoodPayload {
                 .collect(),
             custom_units: recipe.custom_units,
             is_private: recipe.is_private,
-        }
-    }
-}
-
-impl FoodDetailed {
-    pub fn new(
-        food: &Food,
-        nutrients: &HashMap<String, f32>,
-        custom_units: Vec<CustomUnit>,
-    ) -> Self {
-        Self {
-            id: food.id,
-            name: food.name.to_owned(),
-            brand: food.brand.to_owned(),
-            description: food.description.to_owned(),
-            density: food.density,
-            serving_size: food.serving_size,
-            nutrients: nutrients.to_owned(),
-            custom_units,
-            is_private: food.is_private,
-            created_at: food.created_at,
-            updated_at: food.updated_at,
+            is_recipe: recipe.is_recipe,
         }
     }
 }
@@ -160,21 +127,6 @@ impl FoodShort {
 }
 
 impl Food {
-    pub fn find_food_by_id(
-        id: i64,
-        user_id: Option<i64>,
-    ) -> QueryAs<'static, Postgres, Self, PgArguments> {
-        sqlx::query_as(
-            r#"
-            SELECT id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at
-            FROM food.food
-            WHERE is_deleted = false AND is_recipe = false AND id = $1 AND (is_private = false OR created_by = $2)
-        "#,
-        )
-        .bind(id)
-        .bind(user_id)
-    }
-
     pub fn find_all(
         limit: u32,
         offset: u32,
@@ -307,7 +259,6 @@ impl Food {
 
     pub async fn insert(
         create_food_payload: &CreateFoodPayload,
-        is_recipe: bool,
         created_by: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
@@ -318,7 +269,7 @@ impl Food {
             RETURNING id, is_recipe, name, brand, description, density, serving_size, created_by, is_private, created_at, updated_at;
         "#,
         )
-            .bind(is_recipe)
+            .bind(create_food_payload.is_recipe)
             .bind(create_food_payload.name.to_owned())
             .bind(create_food_payload.brand.to_owned())
             .bind(create_food_payload.description.to_owned())
@@ -426,21 +377,6 @@ mod tests {
         },
         utils,
     };
-
-    #[tokio::test]
-    async fn find_food_by_id() {
-        let food_id = 1;
-        let user_id = None;
-
-        let mut txn = utils::get_pg_pool().begin().await.unwrap();
-
-        let food = Food::find_food_by_id(food_id, user_id)
-            .fetch_optional(&mut txn)
-            .await
-            .unwrap();
-
-        assert!(food.is_some());
-    }
 
     #[tokio::test]
     async fn find_food_all() {
@@ -604,7 +540,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let food_result = Food::insert(&create_food_payload, false, user_id, &mut txn)
+        let food_result = Food::insert(&create_food_payload, user_id, &mut txn)
             .await
             .unwrap();
 
@@ -625,7 +561,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload, false, user_id, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload, user_id, &mut txn)
             .await
             .unwrap();
 
@@ -658,7 +594,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let food_result = Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
+        let food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
             .await
             .unwrap();
 
@@ -679,14 +615,10 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(
-            &create_food_payload.to_owned().into(),
-            true,
-            user_id,
-            &mut txn,
-        )
-        .await
-        .unwrap();
+        let create_food_result =
+            Food::insert(&create_food_payload.to_owned().into(), user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             0, create_food_result.id,

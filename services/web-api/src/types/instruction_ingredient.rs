@@ -5,7 +5,7 @@ use crate::utils::BIND_LIMIT;
 
 use super::{
     error::Error,
-    instruction::{CreateInstructionPayload, Instruction, UpdateInstructionPayload},
+    instruction::{Instruction, InstructionPayload},
 };
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -41,7 +41,7 @@ impl InstructionIngredient {
 
     pub fn from_created_instructions(
         instruction: &Instruction,
-        instruction_payload: &CreateInstructionPayload,
+        instruction_payload: &InstructionPayload,
     ) -> Vec<Self> {
         instruction_payload
             .ingredients
@@ -52,7 +52,7 @@ impl InstructionIngredient {
 
     pub fn from_updated_instructions(
         instruction: &Instruction,
-        instruction_payload: &UpdateInstructionPayload,
+        instruction_payload: &InstructionPayload,
     ) -> Vec<Self> {
         instruction_payload
             .ingredients
@@ -108,10 +108,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,

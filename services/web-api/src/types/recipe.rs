@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use super::custom_unit::{CreateCustomUnitPayload, CustomUnit, UpdateCustomUnitPayload};
 use super::food::Food;
 use super::ingredient::{IngredientDetailed, IngredientPayload};
-use super::instruction::{CreateInstructionPayload, InstructionDetailed, UpdateInstructionPayload};
+use super::instruction::{InstructionDetailed, InstructionPayload};
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -36,8 +36,9 @@ pub struct CreateRecipePayload {
     pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<CreateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
-    pub instructions: Vec<CreateInstructionPayload>,
+    pub instructions: Vec<InstructionPayload>,
     pub is_private: bool,
+    pub is_recipe: bool,
 }
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
@@ -51,8 +52,9 @@ pub struct UpdateRecipePayload {
     pub nutrients: HashMap<String, Option<f32>>,
     pub custom_units: Vec<UpdateCustomUnitPayload>,
     pub ingredients: Vec<IngredientPayload>,
-    pub instructions: Vec<UpdateInstructionPayload>,
+    pub instructions: Vec<InstructionPayload>,
     pub is_private: bool,
+    pub is_recipe: bool,
 }
 
 impl RecipeDetailed {

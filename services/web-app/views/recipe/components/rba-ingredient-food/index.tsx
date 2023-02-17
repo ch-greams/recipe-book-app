@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import * as constants from "@cypress/constants";
 
-import { getFoodPath } from "@common/routes";
+import { getRecipePath } from "@common/routes";
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
 import { Unit } from "@common/units";
@@ -155,7 +155,7 @@ const RbaIngredientFood: React.FC<Props> = ({
                 </div>
             </div>
 
-            <Link href={getFoodPath(ingredient.is_recipe, ingredient.food_id)}>
+            <Link href={getRecipePath(ingredient.food_id)}>
                 <a className={styles.ingredientFoodButton}>
                     <RbaIconLink size={IconSize.Medium} color={getIconColor(theme)} />
                 </a>

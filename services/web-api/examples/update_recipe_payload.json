@@ -103,5 +103,6 @@
             "ingredients": []
         }
     ],
-    "is_private": true
+    "is_private": true,
+    "is_recipe": true
 }

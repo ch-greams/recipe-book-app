@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import logger from "redux-logger";
 import { configureStore } from "@reduxjs/toolkit";
 
-import foodReducer from "./reducers/food";
 import journalReducer from "./reducers/journal";
 import metaReducer from "./reducers/meta";
 import recipeReducer from "./reducers/recipe";
@@ -14,7 +13,6 @@ import userReducer from "./reducers/user";
 
 export const store = configureStore({
     reducer: {
-        food: foodReducer,
         meta: metaReducer,
         recipe: recipeReducer,
         search: searchReducer,
