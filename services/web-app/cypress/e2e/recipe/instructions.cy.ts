@@ -1,19 +1,21 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT } from "@common/labels";
-import { RECIPE_PATH } from "@common/routes";
+import { getRecipePath } from "@common/routes";
 import { TemperatureUnit, TimeUnit, VolumeUnit, WeightUnit } from "@common/units";
 
 
 
 describe("recipe_page", () => {
 
+    const RECIPE_ID = 29;
+
     describe("instructions - read-only", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
 
-            cy.visit(`${RECIPE_PATH}/29`);
+            cy.visit(getRecipePath(RECIPE_ID));
         });
 
         it("can switch temperature unit", () => {
@@ -129,9 +131,9 @@ describe("recipe_page", () => {
     describe("instructions - edit", () => {
 
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
 
-            cy.visit(`${RECIPE_PATH}/29`);
+            cy.visit(getRecipePath(RECIPE_ID));
             cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
         });
 

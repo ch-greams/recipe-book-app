@@ -99,121 +99,6 @@ components:
         unit:
           type: string
           example: g
-    # food
-    Food:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CustomUnit"
-        is_private:
-          type: boolean
-          example: false
-        created_at:
-          type: string
-          example: "2022-06-27T01:41:41.850918Z"
-        updated_at:
-          type: string
-          example: "2022-06-27T01:41:41.850934Z"
-    CreateFoodPayload:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateCustomUnitPayload"
-        is_private:
-          type: boolean
-          example: false
-    UpdateFoodPayload:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CustomUnit"
-        is_private:
-          type: boolean
-          example: false
     # ingredient
     IngredientDetails:
       type: object
@@ -426,6 +311,9 @@ components:
         is_private:
           type: boolean
           example: false
+        is_recipe:
+          type: boolean
+          example: false
         created_at:
           type: string
           example: "2022-06-27T01:41:41.850918Z"
@@ -464,6 +352,9 @@ components:
         is_private:
           type: boolean
           example: false
+        is_recipe:
+          type: boolean
+          example: false
     UpdateRecipePayload:
       type: object
       properties:
@@ -497,6 +388,9 @@ components:
           items:
             $ref: "#/components/schemas/UpdateInstructionPayload"
         is_private:
+          type: boolean
+          example: false
+        is_recipe:
           type: boolean
           example: false
     # journal
@@ -895,81 +789,6 @@ paths:
       responses:
         "204":
           description: No Content
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-
-  /food/{id}:
-    get:
-      tags:
-        - food
-      summary: Find a food by id
-      security: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 3
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
-        "404":
-          description: Not Found
-
-  /food/create:
-    post:
-      tags:
-        - food
-      summary: Create a food
-      security: 
-        - AccessTokenAuth: []
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/CreateFoodPayload"
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-
-  /food/update:
-    post:
-      tags:
-        - food
-      summary: Update a food
-      security: 
-        - AccessTokenAuth: []
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/UpdateFoodPayload"
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
         "401":
           description: Unauthorized
         "403":

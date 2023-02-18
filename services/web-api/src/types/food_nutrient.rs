@@ -19,7 +19,7 @@ impl FoodNutrient {
         sqlx::query_as(
             r#"
             SELECT fn.food_id, n.name, fn.amount
-            FROM food.food_nutrient fn 
+            FROM recipe.food_nutrient fn 
             LEFT JOIN meta.nutrient n ON n.id = fn.nutrient_id 
             WHERE fn.food_id = $1
         "#,
@@ -31,7 +31,7 @@ impl FoodNutrient {
         sqlx::query_as(
             r#"
             SELECT fn.food_id, n.name, fn.amount
-            FROM food.food_nutrient fn 
+            FROM recipe.food_nutrient fn 
             LEFT JOIN meta.nutrient n ON n.id = fn.nutrient_id 
             WHERE fn.food_id = ANY($1)
         "#,
@@ -51,7 +51,7 @@ impl FoodNutrient {
             .collect::<HashMap<String, i16>>();
 
         let mut insert_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.food_nutrient (food_id, nutrient_id, amount) ");
+            QueryBuilder::new("INSERT INTO recipe.food_nutrient (food_id, nutrient_id, amount) ");
 
         insert_query_builder
             .push_values(
@@ -79,7 +79,7 @@ impl FoodNutrient {
         // delete
 
         let delete_query =
-            sqlx::query("DELETE FROM food.food_nutrient WHERE food_id = $1").bind(food_id);
+            sqlx::query("DELETE FROM recipe.food_nutrient WHERE food_id = $1").bind(food_id);
 
         delete_query.fetch_all(&mut *txn).await?;
 
@@ -91,7 +91,7 @@ impl FoodNutrient {
             .collect::<HashMap<String, i16>>();
 
         let mut insert_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.food_nutrient (food_id, nutrient_id, amount) ");
+            QueryBuilder::new("INSERT INTO recipe.food_nutrient (food_id, nutrient_id, amount) ");
 
         insert_query_builder
             .push_values(
@@ -113,11 +113,14 @@ impl FoodNutrient {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::{
         types::{
-            food::{CreateFoodPayload, Food, UpdateFoodPayload},
+            food::Food,
             food_nutrient::FoodNutrient,
             meta::Nutrient,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
     };
@@ -138,12 +141,19 @@ mod tests {
 
     #[tokio::test]
     async fn insert_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
+
+        let create_food_payload_nutrients: HashMap<String, f32> = create_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload, false, 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload, 1, &mut txn)
             .await
             .unwrap();
 
@@ -155,7 +165,7 @@ mod tests {
         let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await.unwrap();
 
         FoodNutrient::insert_multiple(
-            &create_food_payload.nutrients,
+            &create_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,
@@ -168,12 +178,19 @@ mod tests {
 
     #[tokio::test]
     async fn replace_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
+
+        let create_food_payload_nutrients: HashMap<String, f32> = create_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload, false, 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload, 1, &mut txn)
             .await
             .unwrap();
 
@@ -185,7 +202,7 @@ mod tests {
         let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await.unwrap();
 
         FoodNutrient::insert_multiple(
-            &create_food_payload.nutrients,
+            &create_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,
@@ -193,11 +210,18 @@ mod tests {
         .await
         .unwrap();
 
-        let update_food_payload: UpdateFoodPayload =
+        let update_food_payload: UpdateRecipePayload =
             utils::read_json("examples/update_food_payload.json").unwrap();
 
+        let update_food_payload_nutrients: HashMap<String, f32> = update_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
+
         FoodNutrient::replace_multiple(
-            &update_food_payload.nutrients,
+            &update_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,

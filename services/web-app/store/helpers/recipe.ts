@@ -3,9 +3,11 @@ import { NutrientName } from "@common/nutrients";
 import { mapDictionary } from "@common/object";
 import { isSome, unwrap, unwrapOr } from "@common/types";
 import type { Food, Ingredient, Instruction, InstructionIngredient, Recipe } from "@common/typings";
-import { WeightUnit } from "@common/units";
+import type * as typings from "@common/typings";
+import { convertCelsiusToFahrenheit, convertFromMetric, convertFromSeconds, TemperatureUnit, WeightUnit } from "@common/units";
 import { getTemporaryId } from "@common/utils";
 
+import type * as types from "../types/recipe";
 import type {
     RecipeIngredient, RecipeInstruction, RecipeInstructionIngredient, RecipePageStore,
 } from "../types/recipe";
@@ -61,25 +63,26 @@ export function convertRecipePageIntoRecipe(recipePage: RecipePageStore): Recipe
         description: recipePage.description,
         custom_units: recipePage.customUnits,
         type: recipePage.type,
+        is_recipe: recipePage.isRecipe,
         density: recipePage.density,
         serving_size: recipePage.servingSize,
+        is_private: recipePage.isPrivate,
+        nutrients: recipePage.nutrients,
         ingredients: recipePage.ingredients,
         instructions: recipePage.instructions
             .map((instruction, index) =>
                 convertRecipeInstructionIntoInstruction(instruction, recipePage.ingredients, index),
             ),
-        is_private: recipePage.isPrivate,
-        nutrients: recipePage.nutrients,
     };
 }
 
-export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean, isRecipe: boolean): Ingredient {
+export function convertFoodToIngredient(food: Food, slotNumber: number, isAlternative: boolean): Ingredient {
     return {
         id: getTemporaryId(),
         slot_number: slotNumber,
         is_alternative: isAlternative,
         food_id: food.id,
-        is_recipe: isRecipe,
+        is_recipe: food.is_recipe,
         name: food.name,
         amount: 100,
         unit: WeightUnit.g,
@@ -127,4 +130,103 @@ export function nutrientSum(foodNutrients: Dictionary<NutrientName, number>[]): 
             ),
         };
     }, {});
+}
+
+
+export function convertIngredients(ingredients: typings.Ingredient[]): types.RecipeIngredient[] {
+
+    return ingredients.map((ingredient) => {
+
+        const amountInCurrentUnits = convertFromMetric(ingredient.amount, ingredient.unit, [], ingredient.density);
+        const amountInput = roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+        return {
+            ...ingredient,
+
+            amountInput: String(amountInput),
+
+            isOpen: false,
+            isMarked: false,
+
+            alternativeNutrients: {},
+        };
+    });
+}
+
+export function convertInstructionIngredient(
+    instructionIngredient: typings.InstructionIngredient,
+    ingredients: typings.Ingredient[],
+): types.RecipeInstructionIngredient {
+
+    const MAX_INGREDIENT_PERCENT = 1;
+
+    const ingredientSlotNumber = unwrap(
+        instructionIngredient.ingredient_slot_number,
+        "instructionIngredient.ingredient_slot_number",
+    );
+    const ingredient = unwrap(
+        ingredients.find((i) => i.slot_number === ingredientSlotNumber),
+        "ingredients.find((i) => i.slot_number === ingredientSlotNumber)",
+    );
+
+    const ingredientAmount = ingredient.amount * unwrapOr(instructionIngredient.ingredient_percentage, MAX_INGREDIENT_PERCENT);
+
+    const amountInCurrentUnits = convertFromMetric(ingredientAmount, ingredient.unit, [], ingredient.density);
+    const ingredientAmountInput = roundToDecimal(amountInCurrentUnits, DecimalPlaces.Two);
+
+    return {
+        ingredientSlotNumber: ingredientSlotNumber,
+
+        ingredientAmount: ingredientAmount,
+        ingredientAmountInput: String(ingredientAmountInput),
+
+        ingredientName: ingredient.name,
+        ingredientUnit: ingredient.unit,
+
+        ingredientDensity: ingredient.density,
+    };
+}
+
+export function convertInstructions(instructions: typings.Instruction[], ingredients: typings.Ingredient[]): types.RecipeInstruction[] {
+
+    return instructions.map((instruction) => ({
+        id: instruction.id,
+
+        stepNumber: instruction.step_number,
+        description: instruction.description,
+
+        durationValue: instruction.duration_value,
+        durationUnit: instruction.duration_unit,
+        durationValueInput: (
+            instruction.duration_value
+                ? String( roundToDecimal(
+                    convertFromSeconds(instruction.duration_value, instruction.duration_unit),
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        ),
+
+        temperatureValue: instruction.temperature_value,
+        temperatureUnit: instruction.temperature_unit,
+        temperatureValueInput: (
+            instruction.temperature_value
+                ? String( roundToDecimal(
+                    instruction.temperature_unit === TemperatureUnit.F
+                        ? convertCelsiusToFahrenheit(instruction.temperature_value)
+                        : instruction.temperature_value,
+                    DecimalPlaces.Two,
+                ) )
+                : ""
+        ),
+
+        isOpen: true,
+        isMarked: false,
+
+        ingredients: instruction.ingredients.map((step) => convertInstructionIngredient(step, ingredients)),
+    }));
+}
+
+export function getNewStepNumber(last: Option<number>): number {
+    // eslint-disable-next-line @typescript-eslint/no-magic-numbers
+    return (last || -1) + 1;
 }

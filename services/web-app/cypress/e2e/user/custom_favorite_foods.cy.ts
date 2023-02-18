@@ -2,7 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { BUTTON_DELETE } from "@common/labels";
-import { getFoodPath, USER_PATH } from "@common/routes";
+import { getRecipePath, USER_PATH } from "@common/routes";
 import { UserMenuItem } from "@store/types/user";
 
 
@@ -24,7 +24,7 @@ describe("user", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/1`, { fixture: "food_1.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
 
             cy.visit(USER_PATH);
@@ -45,7 +45,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", getFoodPath(false, FAVORITE_FOOD_ID));
+            cy.url().should("include", getRecipePath(FAVORITE_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(FAVORITE_FOOD_NAME)
@@ -88,7 +88,7 @@ describe("user", () => {
                 .should("be.visible")
                 .click();
 
-            cy.url().should("include", getFoodPath(false, CUSTOM_FOOD_ID));
+            cy.url().should("include", getRecipePath(CUSTOM_FOOD_ID));
 
             cy.get(`[data-cy=${constants.CY_PAGE_TITLE_NAME_TEXT}]`)
                 .contains(CUSTOM_FOOD_NAME)

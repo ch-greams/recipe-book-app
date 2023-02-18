@@ -1,7 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
-import { FOOD_PATH, USER_PATH } from "@common/routes";
+import { getRecipePath, USER_PATH } from "@common/routes";
 import { UserMenuItem } from "@store/types/user";
 
 
@@ -23,9 +23,9 @@ describe("user", () => {
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.intercept(`${constants.CY_FOOD_API_PATH}/1`, { fixture: "food_1.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/1`, { fixture: "food_1.json" });
 
-            cy.visit(`${FOOD_PATH}/1`);
+            cy.visit(getRecipePath(1));
         });
 
         it("can navigate to user page", () => {

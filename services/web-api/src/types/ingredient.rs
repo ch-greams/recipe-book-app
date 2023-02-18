@@ -37,7 +37,7 @@ impl Ingredient {
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Vec<Self>, Error> {
         let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.ingredient (recipe_id, slot_number, food_id, amount, unit, is_alternative) ",
+            "INSERT INTO recipe.ingredient (recipe_id, slot_number, food_id, amount, unit, is_alternative) ",
         );
 
         let ingredients = insert_query_builder
@@ -61,6 +61,18 @@ impl Ingredient {
         Ok(ingredients)
     }
 
+    pub async fn delete_multiple(
+        recipe_id: i64,
+        txn: &mut Transaction<'_, Postgres>,
+    ) -> Result<(), Error> {
+        let delete_query =
+            sqlx::query("DELETE FROM recipe.ingredient WHERE recipe_id = $1").bind(recipe_id);
+
+        delete_query.fetch_all(&mut *txn).await?;
+
+        Ok(())
+    }
+
     pub async fn replace_multiple(
         ingredient_payloads: &[IngredientPayload],
         recipe_id: i64,
@@ -68,34 +80,11 @@ impl Ingredient {
     ) -> Result<Vec<Self>, Error> {
         // delete
 
-        let delete_query =
-            sqlx::query("DELETE FROM food.ingredient WHERE recipe_id = $1").bind(recipe_id);
-
-        delete_query.fetch_all(&mut *txn).await?;
+        Self::delete_multiple(recipe_id, txn).await?;
 
         // insert
 
-        let mut insert_query_builder: QueryBuilder<Postgres> = QueryBuilder::new(
-            "INSERT INTO food.ingredient (recipe_id, slot_number, food_id, amount, unit, is_alternative) ",
-        );
-
-        let ingredients = insert_query_builder
-            .push_values(
-                ingredient_payloads.iter().take(BIND_LIMIT / 6),
-                |mut builder, ingredient_payload| {
-                    builder
-                        .push_bind(recipe_id)
-                        .push_bind(ingredient_payload.slot_number)
-                        .push_bind(ingredient_payload.food_id)
-                        .push_bind(ingredient_payload.amount)
-                        .push_bind(ingredient_payload.unit.clone())
-                        .push_bind(ingredient_payload.is_alternative);
-                },
-            )
-            .push(" RETURNING id, slot_number, recipe_id, food_id, amount, unit, is_alternative;")
-            .build_query_as()
-            .fetch_all(txn)
-            .await?;
+        let ingredients = Self::insert_multiple(ingredient_payloads, recipe_id, txn).await?;
 
         Ok(ingredients)
     }
@@ -134,7 +123,7 @@ impl IngredientDetailed {
                     name,
                     density,
                     nutrients
-                FROM food.ingredient_detailed
+                FROM recipe.ingredient_detailed
                 WHERE recipe_id = $1
             "#,
         )
@@ -181,10 +170,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned(), 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,
@@ -211,10 +199,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), true, 1, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned(), 1, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,

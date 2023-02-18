@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 
 import { FOOD, RECIPE } from "@common/labels";
-import { getFoodPath } from "@common/routes";
+import { getRecipePath } from "@common/routes";
 import { isSome } from "@common/types";
 import type { FoodShort } from "@common/typings";
 
@@ -20,7 +20,7 @@ interface Props {
 const getLink = (food: FoodShort): JSX.Element => (
     <Link
         key={food.id}
-        href={getFoodPath(food.is_recipe, food.id)}
+        href={getRecipePath(food.id)}
     >
         <a className={styles.searchOption}>
             <span>

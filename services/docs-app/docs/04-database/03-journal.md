@@ -5,7 +5,7 @@ This schema is used to store all user-specific information. Will include followi
 - `journal_entry`
     - `user_id: int8` - fk to `journal.user`
     - `datetime: date`
-    - `food_id: int8` - fk to `food.food`
+    - `food_id: int8` - fk to `recipe.food`
     - `amount: float4`
     - `unit: text`
     - `journal_group_id?: int8` - [optional] fk to `journal.journal_group`
@@ -20,7 +20,7 @@ This schema is used to store all user-specific information. Will include followi
 	- `first_name: text`
 	- `last_name: text`
 - `favorite_food`
-    - `food_id: int8` - fk to `food.food`
+    - `food_id: int8` - fk to `recipe.food`
     - `user_id: int8` - fk to `journal.user`
 - `user_nutrient` ( `featured_nutrient` / `nutrient_target` )
     - `user_id: int8` - fk to `journal.user`

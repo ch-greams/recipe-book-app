@@ -22,5 +22,7 @@
             "unit": "tbsp",
             "food_id": 1
         }
-    ]
+    ],
+    "ingredients": [],
+    "instructions": []
 }

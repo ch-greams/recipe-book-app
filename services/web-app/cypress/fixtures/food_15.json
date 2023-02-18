@@ -30,6 +30,8 @@
             "food_id": 15
         }
     ],
+    "ingredients": [],
+    "instructions": [],
     "is_private": false,
     "created_at": "2022-04-17T03:15:59.104189Z",
     "updated_at": "2022-04-17T03:15:59.104189Z"

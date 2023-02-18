@@ -19,7 +19,7 @@
     - It's possible to use postgres directly like this:
         ```sql
         SELECT *
-        FROM food.food
+        FROM recipe.food
         WHERE SIMILARITY(name, 'olive oil') > 0.4
         ORDER BY SIMILARITY(name, 'olive oil') DESC
         LIMIT 1

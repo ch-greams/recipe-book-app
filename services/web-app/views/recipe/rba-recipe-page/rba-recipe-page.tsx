@@ -32,7 +32,7 @@ interface Props {
     isNew: boolean;
 }
 
-const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, featuredNutrients, isNew }) => {
+const RbaRecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, featuredNutrients, isNew }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -47,13 +47,19 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
         dispatch(recipeActions.updateNutrient({ key: name, value: value }));
     };
 
-    const pageControls = (
+    const editModeButtons = (
         <>
             <RbaButton
                 label={BUTTON_REVERT}
                 disabled={isNew}
                 width={ButtonWidthSize.Full}
                 onClick={() => dispatch(recipeActions.fetchRecipe(recipe.id))}
+            />
+
+            <RbaButton
+                label={( recipe.isRecipe ? "SWITCH TO FOOD" : "SWITCH TO RECIPE" )}
+                width={ButtonWidthSize.Full}
+                onClick={() => dispatch(recipeActions.setIsRecipe(!recipe.isRecipe))}
             />
 
             <RbaButton
@@ -64,7 +70,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
         </>
     );
 
-    const editButtons = (
+    const readModeButtons = (
         <>
             <RbaButton
                 label={BUTTON_DELETE}
@@ -105,7 +111,7 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                 {/* Page Controls Block */}
 
                 <div className={styles.pageControls}>
-                    {( isReadOnly ? editButtons : pageControls )}
+                    {( isReadOnly ? readModeButtons : editModeButtons )}
                 </div>
 
                 {/* Title Block */}
@@ -143,30 +149,37 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
                     updateNutrient={updateNutrient}
                 />
 
-                <RbaBlockTitle text={"INGREDIENTS"} />
+                {(
+                    recipe.isRecipe && (
+                        <>
+                            <RbaBlockTitle text={"INGREDIENTS"} />
 
-                {!isReadOnly && (
-                    <RbaButton
-                        label={"calculate nutrients & serving size from ingredients".toUpperCase()}
-                        width={ButtonWidthSize.Full}
-                        onClick={() => dispatch(recipeActions.calculateNutrientsAndServingSize())}
-                    />
+                            {!isReadOnly && (
+                                <RbaButton
+                                    label={"calculate nutrients & serving size from ingredients".toUpperCase()}
+                                    width={ButtonWidthSize.Full}
+                                    onClick={() => dispatch(recipeActions.calculateNutrientsAndServingSize())}
+                                />
+                            )}
+
+                            <RbaIngredientsBlock
+                                isReadOnly={isReadOnly}
+                                isLoaded={recipe.isLoadedIngredients}
+                                ingredients={ingredients}
+                                search={search}
+                            />
+
+                            <RbaBlockTitle text={"INSTRUCTIONS"} />
+
+                            <RbaInstructionsBlock
+                                isReadOnly={isReadOnly}
+                                instructions={instructions}
+                                ingredients={ingredients}
+                            />
+                        </>
+                    )
                 )}
 
-                <RbaIngredientsBlock
-                    isReadOnly={isReadOnly}
-                    isLoaded={recipe.isLoadedIngredients}
-                    ingredients={ingredients}
-                    search={search}
-                />
-
-                <RbaBlockTitle text={"INSTRUCTIONS"} />
-
-                <RbaInstructionsBlock
-                    isReadOnly={isReadOnly}
-                    instructions={instructions}
-                    ingredients={ingredients}
-                />
 
                 <RbaBlockTitle text={"DETAILED NUTRITION INFORMATION"} />
 
@@ -184,6 +197,6 @@ const RecipePage: React.FC<Props> = ({ isReadOnly, recipe, search, meta, feature
     );
 };
 
-RecipePage.displayName = "RecipePage";
+RbaRecipePage.displayName = "RbaRecipePage";
 
-export default RecipePage;
+export default RbaRecipePage;

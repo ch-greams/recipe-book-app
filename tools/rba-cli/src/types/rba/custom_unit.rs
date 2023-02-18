@@ -43,7 +43,7 @@ impl CustomUnit {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut custom_units_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.custom_unit (food_id, name, amount, unit) ");
+            QueryBuilder::new("INSERT INTO recipe.custom_unit (food_id, name, amount, unit) ");
 
         custom_units_query_builder.push_values(
             custom_units.iter().take(BIND_LIMIT / 4),

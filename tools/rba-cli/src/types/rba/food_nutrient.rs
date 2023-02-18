@@ -140,7 +140,7 @@ impl FoodNutrient {
         txn: impl Executor<'_, Database = Postgres>,
     ) {
         let mut food_nutrients_query_builder: QueryBuilder<Postgres> =
-            QueryBuilder::new("INSERT INTO food.food_nutrient (food_id, nutrient_id, amount) ");
+            QueryBuilder::new("INSERT INTO recipe.food_nutrient (food_id, nutrient_id, amount) ");
 
         food_nutrients_query_builder.push_values(
             food_nutrients.iter().take(BIND_LIMIT / 3),

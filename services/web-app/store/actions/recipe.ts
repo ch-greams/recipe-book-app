@@ -5,7 +5,6 @@ import { HttpError } from "@common/http";
 import type { NutrientName } from "@common/nutrients";
 import type { FoodShort, Ingredient, Recipe } from "@common/typings";
 import type * as units from "@common/units";
-import FoodApi from "@api/foodApi";
 import RecipeApi from "@api/recipeApi";
 
 import { convertFoodToIngredient, convertRecipePageIntoRecipe } from "../helpers/recipe";
@@ -14,22 +13,22 @@ import type * as types from "../types/recipe";
 import type { AsyncThunkConfig } from ".";
 
 
-// -----------------------------------------------------------------------------
-// Recipe
-// -----------------------------------------------------------------------------
-
 export const setEditMode = createAction<boolean>("recipe/set_edit_mode");
-export const updateServingSizeAmount = createAction<string>("recipe/update_serving_size_amount");
-export const updateServingSizeUnit = createAction<units.WeightUnit | units.VolumeUnit>("recipe/update_serving_size_unit");
-export const updateType = createAction<string>("recipe/update_type");
-export const updateNutrient = createAction<{ key: NutrientName, value: string }>("recipe/update_nutrient");
-export const fetchRecipeNew = createAction("recipe/fetch_recipe_new");
-export const addCustomUnit = createAction<units.CustomUnitInput>("recipe/add_custom_unit");
-export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit");
-export const updateCustomUnit = createAction<{ index: number, customUnit: units.CustomUnitInput }>("recipe/update_custom_unit");
+export const setIsRecipe = createAction<boolean>("recipe/set_is_recipe");
 export const updateName = createAction<string>("recipe/update_name");
 export const updateBrand = createAction<string>("recipe/update_brand");
 export const updateDescription = createAction<string>("recipe/update_description");
+export const updateType = createAction<string>("recipe/update_type");
+export const updateDensityAmount = createAction<string>("recipe/update_density_amount");
+export const updateDensityVolumeUnit = createAction<units.VolumeUnit>("recipe/update_density_volume_unit");
+export const updateDensityWeightUnit = createAction<units.WeightUnit>("recipe/update_density_weight_unit");
+export const updateServingSizeAmount = createAction<string>("recipe/update_serving_size_amount");
+export const updateServingSizeUnit = createAction<units.WeightUnit | units.VolumeUnit>("recipe/update_serving_size_unit");
+export const addCustomUnit = createAction<units.CustomUnitInput>("recipe/add_custom_unit");
+export const updateCustomUnit = createAction<{ index: number, customUnit: units.CustomUnitInput }>("recipe/update_custom_unit");
+export const removeCustomUnit = createAction<number>("recipe/remove_custom_unit");
+export const updateNutrient = createAction<{ key: NutrientName, value: string }>("recipe/update_nutrient");
+export const fetchRecipeNew = createAction("recipe/fetch_recipe_new");
 
 export const fetchRecipe = createAsyncThunk<Recipe, number, AsyncThunkConfig>(
     "recipe/fetch_recipe",
@@ -109,14 +108,8 @@ export const addIngredient = createAsyncThunk<Ingredient, { food: FoodShort, slo
     "recipe/ingredient/add",
     async ({ food, slotNumber, isAlternative }, { rejectWithValue }) => {
         try {
-            if (food.is_recipe) {
-                const recipe = await RecipeApi.getRecipe(food.id);
-                return convertFoodToIngredient(recipe, slotNumber, isAlternative, true);
-            }
-            else {
-                const _food = await FoodApi.getFood(food.id);
-                return convertFoodToIngredient(_food, slotNumber, isAlternative, false);
-            }
+            const recipe = await RecipeApi.getRecipe(food.id);
+            return convertFoodToIngredient(recipe, slotNumber, isAlternative);
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

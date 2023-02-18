@@ -1,19 +1,21 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT, BUTTON_SAVE } from "@common/labels";
-import { RECIPE_PATH } from "@common/routes";
+import { getRecipePath } from "@common/routes";
 
 
 describe("recipe_page", () => {
 
     describe("page_title", () => {
 
+        const RECIPE_ID = 29;
+
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_create_response.json" })
                 .as("updateRecipe");
 
-            cy.visit(`${RECIPE_PATH}/29`);
+            cy.visit(getRecipePath(RECIPE_ID));
         });
 
         it("can update name", () => {

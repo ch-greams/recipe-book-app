@@ -99,7 +99,7 @@ impl JournalEntry {
                 journal_entry.unit,
                 journal_entry.journal_group_ui_index
             FROM journal_entry
-            JOIN food.food food ON food.id = journal_entry.food_id;
+            JOIN recipe.food food ON food.id = journal_entry.food_id;
         "#,
         )
             .bind(create_journal_entry_payload.user_id)

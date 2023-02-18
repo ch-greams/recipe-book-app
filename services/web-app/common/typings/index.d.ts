@@ -9,11 +9,13 @@ export interface Food {
     name: string;
     brand: string;
     description: string;
+    type: string;
     density: number;
     serving_size: number;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
     is_private: boolean;
+    is_recipe: boolean;
 }
 
 export interface FoodShort {
@@ -22,8 +24,8 @@ export interface FoodShort {
     name: string;
     brand: string;
     // is_private: boolean;
-    // created_at: DateTime<Utc>;
-    // updated_at: DateTime<Utc>;
+    // created_at: string;
+    // updated_at: string;
 }
 
 export interface Ingredient {
@@ -56,7 +58,6 @@ export interface Instruction {
 }
 
 export interface Recipe extends Food {
-    type: string;
     ingredients: Ingredient[];
     instructions: Instruction[];
 }

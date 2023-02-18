@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import type { ParsedUrlQuery } from "querystring";
 
 import { useLoginRedirect } from "@common/hooks";
-import { getFoodPath, NEW_RECIPE_PATH } from "@common/routes";
+import { getRecipePath, NEW_RECIPE_PATH } from "@common/routes";
 import { Color } from "@common/style";
 import { isNone } from "@common/types";
 import RbaSingleMessagePage from "@views/shared/rba-single-message-page";
@@ -15,7 +15,7 @@ import type { UserStore } from "@store/types/user";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 
-import RecipePage from "./rba-recipe-page";
+import RbaRecipePage from "./rba-recipe-page";
 
 
 interface RecipePageQuery extends ParsedUrlQuery {
@@ -27,7 +27,7 @@ interface Props {
     meta: MetaStore;
 }
 
-const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
+const RbaRecipePageConnected: React.FC<Props> = ({ meta, user }) => {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
@@ -50,7 +50,7 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
             else if (router.asPath.includes(NEW_RECIPE_PATH)) {
 
                 if (recipe.isCreated) {
-                    router.push(getFoodPath(true, recipe.id));
+                    router.push(getRecipePath(recipe.id));
                 }
                 else {
                     dispatch(recipeActions.fetchRecipeNew());
@@ -65,7 +65,7 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
                 recipe.errorMessage
                     ? <RbaSingleMessagePage text={recipe.errorMessage} />
                     : (
-                        <RecipePage
+                        <RbaRecipePage
                             isReadOnly={!recipe.editMode}
                             recipe={recipe}
                             search={search}
@@ -83,6 +83,6 @@ const RecipePageConnected: React.FC<Props> = ({ meta, user }) => {
     );
 };
 
-RecipePageConnected.displayName = "RecipePageConnected";
+RbaRecipePageConnected.displayName = "RbaRecipePageConnected";
 
-export default RecipePageConnected;
+export default RbaRecipePageConnected;
