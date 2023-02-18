@@ -538,10 +538,9 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result =
-            Food::insert(&create_food_payload.to_owned(), user_id, &mut txn)
-                .await
-                .unwrap();
+        let create_food_result = Food::insert(&create_food_payload.to_owned(), user_id, &mut txn)
+            .await
+            .unwrap();
 
         assert_ne!(
             0, create_food_result.id,
@@ -553,14 +552,10 @@ mod tests {
 
         update_food_payload.id = create_food_result.id;
 
-        let update_food_result = Food::update(
-            &update_food_payload.to_owned(),
-            true,
-            user_id,
-            &mut txn,
-        )
-        .await
-        .unwrap();
+        let update_food_result =
+            Food::update(&update_food_payload.to_owned(), true, user_id, &mut txn)
+                .await
+                .unwrap();
 
         assert_ne!(
             create_food_result.name, update_food_result.name,
