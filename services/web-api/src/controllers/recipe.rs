@@ -96,7 +96,7 @@ async fn create_recipe(
 
     let mut txn = db_pool.begin().await?;
 
-    let food = Food::insert(&payload.to_owned().into(), user_id, &mut txn).await?;
+    let food = Food::insert(&payload, user_id, &mut txn).await?;
 
     let custom_units =
         CustomUnit::insert_multiple(&payload.custom_units, food.id, &mut txn).await?;
@@ -185,7 +185,7 @@ async fn update_recipe(
     let mut txn = db_pool.begin().await?;
 
     // TODO: Might want to provide a better error when user_id doesn't match
-    let food = Food::update(&payload.to_owned().into(), true, user_id, &mut txn).await?;
+    let food = Food::update(&payload, true, user_id, &mut txn).await?;
 
     let custom_units =
         CustomUnit::replace_multiple(&payload.custom_units, food.id, &mut txn).await?;

@@ -170,7 +170,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload.to_owned(), 1, &mut txn)
             .await
             .unwrap();
 
@@ -199,7 +199,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let create_food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+        let create_food_result = Food::insert(&create_food_payload.to_owned(), 1, &mut txn)
             .await
             .unwrap();
 

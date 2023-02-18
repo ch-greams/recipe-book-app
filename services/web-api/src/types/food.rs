@@ -1,88 +1,11 @@
-use std::collections::HashMap;
-
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::{postgres::PgArguments, query::QueryAs, Executor, Postgres};
 
 use super::{
-    custom_unit::{CreateCustomUnitPayload, UpdateCustomUnitPayload},
     error::Error,
     recipe::{CreateRecipePayload, UpdateRecipePayload},
 };
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct CreateFoodPayload {
-    pub name: String,
-    pub brand: String,
-    pub description: String,
-    pub density: f64,
-    pub serving_size: f64,
-    pub nutrients: HashMap<String, f32>,
-    pub custom_units: Vec<CreateCustomUnitPayload>,
-    pub is_private: bool,
-    pub is_recipe: bool,
-}
-
-impl From<CreateRecipePayload> for CreateFoodPayload {
-    fn from(recipe: CreateRecipePayload) -> Self {
-        Self {
-            name: recipe.name,
-            brand: recipe.brand,
-            description: recipe.description,
-            density: recipe.density,
-            serving_size: recipe.serving_size,
-            nutrients: recipe
-                .nutrients
-                .clone()
-                .into_iter()
-                .filter_map(|(nutrient_name, opt_value)| {
-                    opt_value.map(|value| (nutrient_name, value))
-                })
-                .collect(),
-            custom_units: recipe.custom_units,
-            is_private: recipe.is_private,
-            is_recipe: recipe.is_recipe,
-        }
-    }
-}
-
-#[derive(Deserialize, Serialize, Debug)]
-pub struct UpdateFoodPayload {
-    pub id: i64,
-    pub name: String,
-    pub brand: String,
-    pub description: String,
-    pub density: f64,
-    pub serving_size: f64,
-    pub nutrients: HashMap<String, f32>,
-    pub custom_units: Vec<UpdateCustomUnitPayload>,
-    pub is_private: bool,
-    pub is_recipe: bool,
-}
-
-impl From<UpdateRecipePayload> for UpdateFoodPayload {
-    fn from(recipe: UpdateRecipePayload) -> Self {
-        Self {
-            id: recipe.id,
-            name: recipe.name,
-            brand: recipe.brand,
-            description: recipe.description,
-            density: recipe.density,
-            serving_size: recipe.serving_size,
-            nutrients: recipe
-                .nutrients
-                .clone()
-                .into_iter()
-                .filter_map(|(nutrient_name, opt_value)| {
-                    opt_value.map(|value| (nutrient_name, value))
-                })
-                .collect(),
-            custom_units: recipe.custom_units,
-            is_private: recipe.is_private,
-            is_recipe: recipe.is_recipe,
-        }
-    }
-}
 
 #[derive(sqlx::FromRow, Deserialize, Serialize, Debug, Clone)]
 pub struct Food {
@@ -258,7 +181,7 @@ impl Food {
     }
 
     pub async fn insert(
-        create_food_payload: &CreateFoodPayload,
+        create_food_payload: &CreateRecipePayload,
         created_by: i64,
         txn: impl Executor<'_, Database = Postgres>,
     ) -> Result<Self, Error> {
@@ -289,7 +212,7 @@ impl Food {
     }
 
     pub async fn update(
-        update_food_payload: &UpdateFoodPayload,
+        update_food_payload: &UpdateRecipePayload,
         is_recipe: bool,
         user_id: i64,
         txn: impl Executor<'_, Database = Postgres>,
@@ -372,7 +295,7 @@ impl Food {
 mod tests {
     use crate::{
         types::{
-            food::{CreateFoodPayload, Food, UpdateFoodPayload},
+            food::Food,
             recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
@@ -535,7 +458,7 @@ mod tests {
     async fn insert_food() {
         let user_id = 1;
 
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -556,7 +479,7 @@ mod tests {
     async fn update_food() {
         let user_id = 1;
 
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -570,7 +493,7 @@ mod tests {
             "create_food_result should not have a placeholder value for id"
         );
 
-        let mut update_food_payload: UpdateFoodPayload =
+        let mut update_food_payload: UpdateRecipePayload =
             utils::read_json("examples/update_food_payload.json").unwrap();
 
         update_food_payload.id = create_food_result.id;
@@ -594,7 +517,7 @@ mod tests {
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
-        let food_result = Food::insert(&create_food_payload.to_owned().into(), 1, &mut txn)
+        let food_result = Food::insert(&create_food_payload.to_owned(), 1, &mut txn)
             .await
             .unwrap();
 
@@ -616,7 +539,7 @@ mod tests {
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
         let create_food_result =
-            Food::insert(&create_food_payload.to_owned().into(), user_id, &mut txn)
+            Food::insert(&create_food_payload.to_owned(), user_id, &mut txn)
                 .await
                 .unwrap();
 
@@ -631,7 +554,7 @@ mod tests {
         update_food_payload.id = create_food_result.id;
 
         let update_food_result = Food::update(
-            &update_food_payload.to_owned().into(),
+            &update_food_payload.to_owned(),
             true,
             user_id,
             &mut txn,

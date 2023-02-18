@@ -113,11 +113,14 @@ impl FoodNutrient {
 
 #[cfg(test)]
 mod tests {
+    use std::collections::HashMap;
+
     use crate::{
         types::{
-            food::{CreateFoodPayload, Food, UpdateFoodPayload},
+            food::Food,
             food_nutrient::FoodNutrient,
             meta::Nutrient,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
     };
@@ -138,8 +141,15 @@ mod tests {
 
     #[tokio::test]
     async fn insert_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
+
+        let create_food_payload_nutrients: HashMap<String, f32> = create_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -155,7 +165,7 @@ mod tests {
         let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await.unwrap();
 
         FoodNutrient::insert_multiple(
-            &create_food_payload.nutrients,
+            &create_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,
@@ -168,8 +178,15 @@ mod tests {
 
     #[tokio::test]
     async fn replace_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
+
+        let create_food_payload_nutrients: HashMap<String, f32> = create_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
 
@@ -185,7 +202,7 @@ mod tests {
         let nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await.unwrap();
 
         FoodNutrient::insert_multiple(
-            &create_food_payload.nutrients,
+            &create_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,
@@ -193,11 +210,18 @@ mod tests {
         .await
         .unwrap();
 
-        let update_food_payload: UpdateFoodPayload =
+        let update_food_payload: UpdateRecipePayload =
             utils::read_json("examples/update_food_payload.json").unwrap();
 
+        let update_food_payload_nutrients: HashMap<String, f32> = update_food_payload
+            .nutrients
+            .clone()
+            .into_iter()
+            .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+            .collect();
+
         FoodNutrient::replace_multiple(
-            &update_food_payload.nutrients,
+            &update_food_payload_nutrients,
             &nutrients,
             create_food_result.id,
             &mut txn,

@@ -126,7 +126,8 @@ mod tests {
     use crate::{
         types::{
             custom_unit::CustomUnit,
-            food::{CreateFoodPayload, Food, UpdateFoodPayload},
+            food::Food,
+            recipe::{CreateRecipePayload, UpdateRecipePayload},
         },
         utils,
     };
@@ -161,7 +162,7 @@ mod tests {
 
     #[tokio::test]
     async fn insert_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -190,7 +191,7 @@ mod tests {
 
     #[tokio::test]
     async fn replace_multiple() {
-        let create_food_payload: CreateFoodPayload =
+        let create_food_payload: CreateRecipePayload =
             utils::read_json("examples/create_food_payload.json").unwrap();
 
         let mut txn = utils::get_pg_pool().begin().await.unwrap();
@@ -214,7 +215,7 @@ mod tests {
 
         assert_eq!(create_custom_units_result.len(), 2);
 
-        let mut update_food_payload: UpdateFoodPayload =
+        let mut update_food_payload: UpdateRecipePayload =
             utils::read_json("examples/update_food_payload.json").unwrap();
 
         for custom_unit in &mut update_food_payload.custom_units {

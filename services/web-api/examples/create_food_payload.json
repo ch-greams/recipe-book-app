@@ -29,5 +29,7 @@
             "amount": 12,
             "unit": "tbsp"
         }
-    ]
+    ],
+    "ingredients": [],
+    "instructions": []
 }
