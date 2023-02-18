@@ -3,8 +3,7 @@ import React from "react";
 import type { ComponentMeta, ComponentStory } from "@storybook/react";
 
 import { getValues } from "@common/object";
-import type { ProductShort } from "@common/typings";
-import { ProductType } from "@common/utils";
+import type { FoodShort } from "@common/typings";
 
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from ".";
 
@@ -36,7 +35,7 @@ export default {
             control: { type: "select", options: SearchInputHeightSize },
         },
         items: {
-            table: { type: { summary: "ProductShort[]" } },
+            table: { type: { summary: "FoodShort[]" } },
         },
     },
 } as ComponentMeta<typeof RbaSearchInput>;
@@ -61,20 +60,18 @@ Loading.args = {
 };
 
 
-const products: ProductShort[] = [
+const foods: FoodShort[] = [
     {
         id: 1,
-        product_type: ProductType.Food,
+        is_recipe: false,
         name: "Milk",
         brand: "",
-        subtitle: "",
     },
     {
         id: 2,
-        product_type: ProductType.Recipe,
+        is_recipe: true,
         name: "Meatloaf",
         brand: "",
-        subtitle: "",
     },
 ];
 
@@ -83,5 +80,5 @@ WithResults.args = {
     value: "M",
     isLoading: false,
     width: SearchInputWidthSize.Medium,
-    items: products,
+    items: foods,
 };

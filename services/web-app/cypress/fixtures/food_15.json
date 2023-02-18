@@ -1,0 +1,38 @@
+{
+    "id": 15,
+    "name": "Chicken Thigh - Bone Out",
+    "brand": "Twiyo",
+    "description": "",
+    "density": 1.06,
+    "nutrients": {
+        "food_id": 15,
+        "energy": 173.6,
+        "carbohydrate": 52.7,
+        "dietary_fiber": 28.0,
+        "sugars": 24.8,
+        "fat": 16.3,
+        "protein": 26.6,
+        "vitamin_a": 9.5,
+        "vitamin_c": 10.9,
+        "sodium": 21.1
+    },
+    "custom_units": [
+        {
+            "name": "montes",
+            "amount": 37.5,
+            "unit": "tbsp",
+            "food_id": 15
+        },
+        {
+            "name": "blandit",
+            "amount": 52.2,
+            "unit": "tbsp",
+            "food_id": 15
+        }
+    ],
+    "ingredients": [],
+    "instructions": [],
+    "is_private": false,
+    "created_at": "2022-04-17T03:15:59.104189Z",
+    "updated_at": "2022-04-17T03:15:59.104189Z"
+}

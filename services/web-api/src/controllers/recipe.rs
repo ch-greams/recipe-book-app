@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, iter::zip};
 
 use actix_web::{
     get, post,
@@ -11,14 +11,14 @@ use crate::{
     auth::{authorize, get_user, Certificate},
     types::{
         custom_unit::CustomUnit,
-        direction::{Direction, DirectionDetails},
-        direction_part::DirectionPart,
         error::Error,
-        ingredient::{Ingredient, IngredientDetails},
-        ingredient_product::{IngredientProduct, IngredientProductDetails},
-        product::Product,
-        product_nutrient::ProductNutrient,
-        recipe::{CreateRecipePayload, Recipe, UpdateRecipePayload},
+        food::Food,
+        food_nutrient::FoodNutrient,
+        ingredient::{Ingredient, IngredientDetailed},
+        instruction::{Instruction, InstructionDetailed},
+        instruction_ingredient::InstructionIngredient,
+        meta::Nutrient,
+        recipe::{CreateRecipePayload, RecipeDetailed, UpdateRecipePayload},
     },
 };
 
@@ -35,72 +35,52 @@ async fn find_by_id(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = get_user(request, &auth_certificate);
 
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::find_recipe_by_id(*id, user_id)
+    let food = Food::find_by_id(*id, user_id)
         .fetch_optional(&mut txn)
         .await?
         .ok_or_else(|| Error::not_found(*id))?;
 
-    let custom_units = CustomUnit::find_by_product_id(*id)
+    let custom_units = CustomUnit::find_by_food_id(*id).fetch_all(&mut txn).await?;
+
+    let food_nutrients = FoodNutrient::find_by_food_id(*id)
         .fetch_all(&mut txn)
-        .await?;
+        .await?
+        .iter()
+        .map(|pn| (pn.name.clone(), pn.amount))
+        .collect::<HashMap<String, f32>>();
 
     // ingredients
 
-    let ingredients = Ingredient::find_by_recipe_id(*id)
-        .fetch_all(&mut txn)
-        .await?;
+    let ingredients = if food.is_recipe {
+        IngredientDetailed::find_by_recipe_id(*id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Vec::new()
+    };
 
-    let ingredient_ids: Vec<i64> = ingredients
-        .clone()
-        .iter()
-        .map(|ingredient| ingredient.id)
-        .collect();
+    // instructions
 
-    let ingredient_products = IngredientProductDetails::find_by_ingredient_ids(ingredient_ids)
-        .fetch_all(&mut txn)
-        .await?;
+    let instructions = if food.is_recipe {
+        InstructionDetailed::find_by_recipe_id(*id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Vec::new()
+    };
 
-    let product_ids = ingredient_products
-        .iter()
-        .map(|ingredient_product| ingredient_product.product_id)
-        .collect();
-
-    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
-        .fetch_all(&mut txn)
-        .await?;
-
-    let ingredient_details: Vec<IngredientDetails> = ingredients
-        .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
-        .collect();
-
-    // directions
-
-    let directions = Direction::find_by_recipe_id(*id)
-        .fetch_all(&mut txn)
-        .await?;
-
-    let direction_ids: Vec<i64> = directions
-        .clone()
-        .iter()
-        .map(|direction| direction.id)
-        .collect();
-
-    let direction_parts = DirectionPart::find_by_direction_ids(direction_ids)
-        .fetch_all(&mut txn)
-        .await?;
-
-    let direction_details = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
-
-    let recipe = Recipe::new(product, custom_units, ingredient_details, direction_details);
+    let recipe = RecipeDetailed::new(
+        food,
+        &food_nutrients,
+        custom_units,
+        ingredients,
+        &instructions,
+    );
 
     Ok(Json(recipe))
 }
@@ -111,91 +91,84 @@ async fn create_recipe(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = authorize(request, &auth_certificate)?;
 
     let mut txn = db_pool.begin().await?;
 
-    let product = Product::insert_recipe(&payload, user_id, &mut txn).await?;
+    let food = Food::insert(&payload, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::insert_multiple(&payload.custom_units, product.id, &mut txn).await?;
+        CustomUnit::insert_multiple(&payload.custom_units, food.id, &mut txn).await?;
+
+    let defined_nutrients: HashMap<String, f32> = payload
+        .nutrients
+        .clone()
+        .into_iter()
+        .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+        .collect();
+
+    if !defined_nutrients.is_empty() {
+        let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+        FoodNutrient::insert_multiple(&defined_nutrients, &meta_nutrients, food.id, &mut txn)
+            .await?;
+    }
 
     // ingredients
 
-    let ingredients =
-        Ingredient::insert_multiple(&payload.ingredients, product.id, &mut txn).await?;
+    let ingredients = if payload.ingredients.is_empty() || !payload.is_recipe {
+        Vec::new()
+    } else {
+        Ingredient::insert_multiple(&payload.ingredients, food.id, &mut txn).await?;
 
-    let mut temporary_to_final_id = HashMap::new();
+        IngredientDetailed::find_by_recipe_id(food.id)
+            .fetch_all(&mut txn)
+            .await?
+    };
 
-    for (index, ingredient_payload) in payload.ingredients.iter().enumerate() {
-        let ingredient = ingredients
-            .get(index)
-            .ok_or_else(|| Error::not_created("ingredient"))?;
-        temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
+    // instructions
 
-        let _ingredient_products = IngredientProduct::insert_multiple(
-            &ingredient_payload.products,
-            ingredient.id,
-            &mut txn,
-        )
-        .await?;
-    }
+    let instructions_detailed: Vec<InstructionDetailed> = if payload.instructions.is_empty()
+        || !payload.is_recipe
+    {
+        Vec::new()
+    } else {
+        let created_instructions =
+            Instruction::insert_multiple(&payload.instructions, food.id, &mut txn).await?;
 
-    let ingredient_ids: Vec<i64> = ingredients
-        .clone()
-        .iter()
-        .map(|ingredient| ingredient.id)
-        .collect();
+        let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+            zip(&created_instructions, &payload.instructions)
+                .flat_map(|(ci, ip)| InstructionIngredient::from_created_instructions(ci, ip))
+                .collect();
 
-    let ingredient_products = IngredientProductDetails::find_by_ingredient_ids(ingredient_ids)
-        .fetch_all(&mut txn)
-        .await?;
+        let created_instruction_ingredients =
+            InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+                .await?;
 
-    let product_ids = ingredient_products
-        .iter()
-        .map(|ingredient_product| ingredient_product.product_id)
-        .collect();
+        created_instructions
+            .into_iter()
+            .map(|created_instruction| {
+                let instruction_ingredients = created_instruction_ingredients
+                    .clone()
+                    .into_iter()
+                    .filter(|ii| ii.instruction_id == created_instruction.id)
+                    .collect::<Vec<InstructionIngredient>>();
 
-    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
-        .fetch_all(&mut txn)
-        .await?;
-
-    let ingredient_details: Vec<IngredientDetails> = ingredients
-        .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
-        .collect();
-
-    // directions
-
-    let directions = Direction::insert_multiple(&payload.directions, product.id, &mut txn).await?;
-
-    let mut direction_parts: Vec<DirectionPart> = Vec::new();
-
-    for (index, direction_payload) in payload.directions.iter().enumerate() {
-        let direction = directions
-            .get(index)
-            .ok_or_else(|| Error::not_created("direction"))?;
-
-        let mut _direction_parts = DirectionPart::insert_multiple(
-            &direction_payload.steps,
-            direction.id,
-            &temporary_to_final_id,
-            &mut txn,
-        )
-        .await?;
-
-        direction_parts.append(&mut _direction_parts);
-    }
-
-    let direction_details: Vec<DirectionDetails> = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
+                InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+            })
+            .collect()
+    };
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(product, custom_units, ingredient_details, direction_details);
+    let recipe = RecipeDetailed::new(
+        food,
+        &defined_nutrients,
+        custom_units,
+        ingredients,
+        &instructions_detailed,
+    );
 
     Ok(Json(recipe))
 }
@@ -206,92 +179,85 @@ async fn update_recipe(
     db_pool: Data<Pool<Postgres>>,
     auth_certificate: Data<Certificate>,
     request: HttpRequest,
-) -> Result<Json<Recipe>, Error> {
+) -> Result<Json<RecipeDetailed>, Error> {
     let user_id = authorize(request, &auth_certificate)?;
 
     let mut txn = db_pool.begin().await?;
 
     // TODO: Might want to provide a better error when user_id doesn't match
-    let product = Product::update_recipe(&payload, user_id, &mut txn).await?;
+    let food = Food::update(&payload, true, user_id, &mut txn).await?;
 
     let custom_units =
-        CustomUnit::replace_multiple(&payload.custom_units, product.id, &mut txn).await?;
+        CustomUnit::replace_multiple(&payload.custom_units, food.id, &mut txn).await?;
+
+    let defined_nutrients: HashMap<String, f32> = payload
+        .nutrients
+        .clone()
+        .into_iter()
+        .filter_map(|(nutrient_name, opt_value)| opt_value.map(|value| (nutrient_name, value)))
+        .collect();
+
+    let meta_nutrients = Nutrient::get_nutrients().fetch_all(&mut txn).await?;
+
+    FoodNutrient::replace_multiple(&defined_nutrients, &meta_nutrients, food.id, &mut txn).await?;
 
     // ingredients
 
-    let ingredients =
-        Ingredient::replace_multiple(&payload.ingredients, product.id, &mut txn).await?;
+    let ingredients = if food.is_recipe {
+        Ingredient::replace_multiple(&payload.ingredients, food.id, &mut txn).await?;
 
-    let mut temporary_to_final_id = HashMap::new();
+        IngredientDetailed::find_by_recipe_id(food.id)
+            .fetch_all(&mut txn)
+            .await?
+    } else {
+        Ingredient::delete_multiple(food.id, &mut txn).await?;
 
-    for (index, ingredient_payload) in payload.ingredients.iter().enumerate() {
-        let ingredient = ingredients
-            .get(index)
-            .ok_or_else(|| Error::not_updated("ingredient", ingredient_payload.id))?;
-        temporary_to_final_id.insert(ingredient_payload.id, ingredient.id);
+        Vec::new()
+    };
 
-        let _ingredient_products = IngredientProduct::insert_multiple(
-            &ingredient_payload.products,
-            ingredient.id,
-            &mut txn,
-        )
-        .await?;
-    }
+    // instructions
 
-    let ingredient_ids: Vec<i64> = ingredients
-        .clone()
-        .iter()
-        .map(|ingredient| ingredient.id)
-        .collect();
+    let instructions_detailed = if payload.is_recipe {
+        let created_instructions =
+            Instruction::replace_multiple(&payload.instructions, food.id, &mut txn).await?;
 
-    let ingredient_products = IngredientProductDetails::find_by_ingredient_ids(ingredient_ids)
-        .fetch_all(&mut txn)
-        .await?;
+        let instruction_ingredients_to_create: Vec<InstructionIngredient> =
+            zip(&created_instructions, &payload.instructions)
+                .flat_map(|(ci, ip)| InstructionIngredient::from_updated_instructions(ci, ip))
+                .collect();
 
-    let product_ids = ingredient_products
-        .iter()
-        .map(|ingredient_product| ingredient_product.product_id)
-        .collect();
+        // NOTE: No need to replace instruction_ingredients, cascade delete of instructions will take care of it
+        let created_instruction_ingredients =
+            InstructionIngredient::insert_multiple(&instruction_ingredients_to_create, &mut txn)
+                .await?;
 
-    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids)
-        .fetch_all(&mut txn)
-        .await?;
+        created_instructions
+            .into_iter()
+            .map(|created_instruction| {
+                let instruction_ingredients = created_instruction_ingredients
+                    .clone()
+                    .into_iter()
+                    .filter(|ii| ii.instruction_id == created_instruction.id)
+                    .collect::<Vec<InstructionIngredient>>();
 
-    let ingredient_details: Vec<IngredientDetails> = ingredients
-        .iter()
-        .map(|i| IngredientDetails::new(i, &ingredient_products, &product_nutrients))
-        .collect();
+                InstructionDetailed::new(&created_instruction, &instruction_ingredients)
+            })
+            .collect::<Vec<InstructionDetailed>>()
+    } else {
+        Instruction::delete_multiple(food.id, &mut txn).await?;
 
-    // directions
-
-    let directions = Direction::replace_multiple(&payload.directions, product.id, &mut txn).await?;
-
-    let mut direction_parts: Vec<DirectionPart> = Vec::new();
-
-    for (index, direction_payload) in payload.directions.iter().enumerate() {
-        let direction = directions
-            .get(index)
-            .ok_or_else(|| Error::not_updated("direction", direction_payload.id))?;
-
-        let mut _direction_parts = DirectionPart::insert_multiple(
-            &direction_payload.steps,
-            direction.id,
-            &temporary_to_final_id,
-            &mut txn,
-        )
-        .await?;
-
-        direction_parts.append(&mut _direction_parts);
-    }
-
-    let direction_details: Vec<DirectionDetails> = directions
-        .iter()
-        .map(|direction| DirectionDetails::new(direction, &direction_parts))
-        .collect();
+        Vec::new()
+    };
 
     txn.commit().await?;
 
-    let recipe = Recipe::new(product, custom_units, ingredient_details, direction_details);
+    let recipe = RecipeDetailed::new(
+        food,
+        &defined_nutrients,
+        custom_units,
+        ingredients,
+        &instructions_detailed,
+    );
 
     Ok(Json(recipe))
 }

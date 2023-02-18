@@ -6,7 +6,7 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import type { CustomUnitInput } from "@common/units";
 import { VolumeUnit, WeightUnit } from "@common/units";
 import { store } from "@store";
-import * as actions from "@store/actions/food";
+import * as actions from "@store/actions/recipe";
 
 import RbaCustomUnitsBlock from ".";
 
@@ -46,8 +46,8 @@ const Template: ComponentStory<typeof RbaCustomUnitsBlock> = (args) => (<RbaCust
 
 
 const customUnits: CustomUnitInput[] = [
-    { product_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
-    { product_id: -1, name: "glass", amount: 240, amountInput: "240", unit: VolumeUnit.ml },
+    { food_id: -1, name: "package", amount: 120, amountInput: "120", unit: WeightUnit.g },
+    { food_id: -1, name: "glass", amount: 240, amountInput: "240", unit: VolumeUnit.ml },
 ];
 
 export const Default = Template.bind({});

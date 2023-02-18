@@ -2,15 +2,14 @@ import { createReducer, isAnyOf } from "@reduxjs/toolkit";
 
 import { sortBy } from "@common/array";
 import { getErrorMessageFromStatus, HttpStatus } from "@common/http";
-import { UserMenuItem } from "@common/utils";
-import * as foodActions from "@store/actions/food";
-import * as journalActions from "@store/actions/journal";
-import * as metaActions from "@store/actions/meta";
-import * as recipeActions from "@store/actions/recipe";
-import * as searchActions from "@store/actions/search";
 
+import * as journalActions from "../actions/journal";
+import * as metaActions from "../actions/meta";
+import * as recipeActions from "../actions/recipe";
+import * as searchActions from "../actions/search";
 import * as userActions from "../actions/user";
 import type { UserStore } from "../types/user";
+import { UserMenuItem } from "../types/user";
 
 
 
@@ -18,17 +17,14 @@ const initialState: UserStore = {
 
     isLoggedIn: true,
 
-    userId: 1,
     userName: "Andrei Greams",
 
     selectedMenuItem: UserMenuItem.Settings,
 
-    favoriteRecipes: [],
-    customRecipes: [],
-
     favoriteFoods: [],
     customFoods: [],
 
+    journalGroups: [],
     nutrients: [],
 
     isLoaded: false,
@@ -36,23 +32,21 @@ const initialState: UserStore = {
 };
 
 const ASYNC_REJECTIONS = isAnyOf(
-    // FOOD ACTIONS
-    foodActions.fetchFood.rejected, foodActions.createFood.rejected, foodActions.updateFood.rejected,
     // JOURNAL ACTIONS
     journalActions.fetchJournalInfo.rejected, journalActions.createJournalEntry.rejected,
     journalActions.updateJournalEntry.rejected, journalActions.deleteJournalEntry.rejected,
-    journalActions.updateJournalGroups.rejected,
     // META ACTIONS
     metaActions.fetchNutrients.rejected,
     // RECIPE ACTIONS
-    recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected, recipeActions.updateRecipe.rejected,
-    recipeActions.addIngredient.rejected, recipeActions.addIngredientProduct.rejected,
+    recipeActions.fetchRecipe.rejected, recipeActions.createRecipe.rejected,
+    recipeActions.updateRecipe.rejected, recipeActions.addIngredient.rejected,
     // SEARCH ACTIONS
-    searchActions.searchProducts.rejected,
+    searchActions.searchFoods.rejected,
     // USER ACTIONS
-    userActions.fetchUserData.rejected, userActions.deleteCustomProduct.rejected,
-    userActions.deleteFavoriteProduct.rejected, userActions.upsertNutrient.rejected,
+    userActions.fetchUserData.rejected, userActions.deleteCustomFood.rejected,
+    userActions.deleteFavoriteFood.rejected, userActions.upsertNutrient.rejected,
     userActions.deleteNutrient.rejected, userActions.login.rejected, userActions.signup.rejected,
+    userActions.updateJournalGroups.rejected,
 );
 
 const reducer = createReducer(initialState, (builder) => {
@@ -65,19 +59,20 @@ const reducer = createReducer(initialState, (builder) => {
             state.errorMessage = null;
             state.favoriteFoods = [];
             state.customFoods = [];
-            state.favoriteRecipes = [];
-            state.customRecipes = [];
             state.nutrients = [];
         })
         .addCase(userActions.fetchUserData.fulfilled, (state, action) => {
-            const { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients } = action.payload;
+            const userInfo = action.payload;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.favoriteFoods = favoriteFoods;
-            state.customFoods = customFoods;
-            state.favoriteRecipes = favoriteRecipes;
-            state.customRecipes = customRecipes;
-            state.nutrients = nutrients
+            state.favoriteFoods = userInfo.favorite_foods;
+            state.customFoods = userInfo.created_foods;
+
+            state.journalGroups = userInfo.journal_groups
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(sortBy("uiIndex"));
+
+            state.nutrients = userInfo.user_nutrients
                 .map((nutrient) => ({
                     nutrientId: nutrient.nutrient_id,
                     isFeatured: nutrient.is_featured,
@@ -95,37 +90,51 @@ const reducer = createReducer(initialState, (builder) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(userActions.deleteCustomProduct.pending, (state) => {
+        .addCase(userActions.deleteCustomFood.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(userActions.deleteCustomProduct.fulfilled, (state, action) => {
-            const { arg: productId } = action.meta;
+        .addCase(userActions.deleteCustomFood.fulfilled, (state, action) => {
+            const { arg: foodId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.customFoods = state.customFoods.filter((food) => food.id !== productId);
-            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
-            state.customRecipes = state.customRecipes.filter((recipe) => recipe.id !== productId);
-            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
+            state.customFoods = state.customFoods.filter((food) => food.id !== foodId);
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== foodId);
         })
-        .addCase(userActions.deleteCustomProduct.rejected, (state, { payload: errorStatus }) => {
+        .addCase(userActions.deleteCustomFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
         })
-        .addCase(userActions.deleteFavoriteProduct.pending, (state) => {
+        .addCase(userActions.deleteFavoriteFood.pending, (state) => {
             state.isLoaded = false;
             state.errorMessage = null;
         })
-        .addCase(userActions.deleteFavoriteProduct.fulfilled, (state, action) => {
-            const { arg: productId } = action.meta;
+        .addCase(userActions.deleteFavoriteFood.fulfilled, (state, action) => {
+            const { arg: foodId } = action.meta;
             state.isLoaded = true;
             state.errorMessage = null;
-            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== productId);
-            state.favoriteRecipes = state.favoriteRecipes.filter((recipe) => recipe.id !== productId);
+            state.favoriteFoods = state.favoriteFoods.filter((food) => food.id !== foodId);
         })
-        .addCase(userActions.deleteFavoriteProduct.rejected, (state, { payload: errorStatus }) => {
+        .addCase(userActions.deleteFavoriteFood.rejected, (state, { payload: errorStatus }) => {
             state.isLoaded = true;
             state.errorMessage = getErrorMessageFromStatus(errorStatus);
+        })
+        .addCase(userActions.updateJournalGroups.pending, (state) => {
+            state.errorMessage = null;
+            state.isLoaded = false;
+        })
+        .addCase(userActions.updateJournalGroups.fulfilled, (state, action) => {
+            const groups = action.payload;
+            state.errorMessage = null;
+            state.isLoaded = true;
+
+            state.journalGroups = groups
+                .map(({ ui_index, name }) => ({ uiIndex: ui_index, name }))
+                .sort(sortBy("uiIndex"));
+        })
+        .addCase(userActions.updateJournalGroups.rejected, (state, { payload: errorStatus }) => {
+            state.errorMessage = getErrorMessageFromStatus(errorStatus);
+            state.isLoaded = true;
         })
         .addCase(userActions.upsertNutrient.pending, (state) => {
             state.isLoaded = false;

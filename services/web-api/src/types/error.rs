@@ -16,7 +16,7 @@ pub enum ErrorKind {
 
 impl std::fmt::Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{:?}", self)
+        write!(f, "{self:?}")
     }
 }
 
@@ -28,7 +28,7 @@ pub struct Error {
 
 impl From<sqlx::Error> for Error {
     fn from(err: sqlx::Error) -> Self {
-        Error {
+        Self {
             kind: ErrorKind::Database,
             text: err.to_string(),
         }
@@ -37,7 +37,7 @@ impl From<sqlx::Error> for Error {
 
 impl From<jsonwebtoken::errors::Error> for Error {
     fn from(err: jsonwebtoken::errors::Error) -> Self {
-        Error {
+        Self {
             kind: ErrorKind::Unauthenticated,
             text: err.to_string(),
         }
@@ -69,7 +69,7 @@ impl Error {
     pub fn not_found(id: i64) -> Error {
         Error {
             kind: ErrorKind::NotFound,
-            text: format!("Record with id = {} was not found", id),
+            text: format!("Record with id = {id} was not found"),
         }
     }
 
@@ -90,21 +90,21 @@ impl Error {
     pub fn not_created(table: &str) -> Error {
         Error {
             kind: ErrorKind::NotCreated,
-            text: format!("Error during {} creation", table),
+            text: format!("Error during {table} creation"),
         }
     }
 
     pub fn not_updated(table: &str, id: i64) -> Error {
         Error {
             kind: ErrorKind::NotUpdated,
-            text: format!("Error during update of {} with id {}", table, id),
+            text: format!("Error during update of {table} with id {id}"),
         }
     }
 
     pub fn not_deleted(table: &str, id: i64) -> Error {
         Error {
             kind: ErrorKind::NotDeleted,
-            text: format!("Error during deletion of {} with id {}", table, id),
+            text: format!("Error during deletion of {table} with id {id}"),
         }
     }
 }

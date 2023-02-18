@@ -3,33 +3,28 @@ import { CY_USER_MENU_ITEM } from "@cypress/constants";
 
 import type { NutrientDescription, NutrientName } from "@common/nutrients";
 import { classNames } from "@common/style";
-import { UserMenuItem } from "@common/utils";
 import RbaFoodsBlock from "@views/user/components/rba-foods-block";
-import RbaRecipesBlock from "@views/user/components/rba-recipes-block";
 import RbaSettingsBlock from "@views/user/components/rba-settings-block";
 import { useAppDispatch } from "@store";
-import * as journalActions from "@store/actions/journal";
 import * as userActions from "@store/actions/user";
-import type { JournalStoreGroup } from "@store/types/journal";
 import type { UserStore } from "@store/types/user";
+import { UserMenuItem } from "@store/types/user";
 
 import styles from "./rba-user-page.module.scss";
 
 
 interface Props {
     user: UserStore;
-    journalGroups: JournalStoreGroup[];
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
 }
 
 
-const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescriptions }) => {
+const RbaUserPage: React.FC<Props> = ({ user, nutrientDescriptions }) => {
 
     const dispatch = useAppDispatch();
 
     const menuItems = [
         UserMenuItem.Foods,
-        UserMenuItem.Recipes,
         UserMenuItem.Settings,
     ];
 
@@ -49,31 +44,22 @@ const RbaUserPage: React.FC<Props> = ({ user, journalGroups, nutrientDescription
 
     const getMainBlock = (menuItem: UserMenuItem): JSX.Element => {
         switch (menuItem) {
-            case UserMenuItem.Recipes:
-                return (
-                    <RbaRecipesBlock
-                        favoriteRecipes={user.favoriteRecipes}
-                        customRecipes={user.customRecipes}
-                        deleteFavoriteRecipe={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
-                        deleteCustomRecipe={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
-                    />
-                );
             case UserMenuItem.Foods:
                 return (
                     <RbaFoodsBlock
                         favoriteFoods={user.favoriteFoods}
                         customFoods={user.customFoods}
-                        deleteFavoriteFood={(productId) => dispatch(userActions.deleteFavoriteProduct(productId))}
-                        deleteCustomFood={(productId) => dispatch(userActions.deleteCustomProduct(productId))}
+                        deleteFavoriteFood={(foodId) => dispatch(userActions.deleteFavoriteFood(foodId))}
+                        deleteCustomFood={(foodId) => dispatch(userActions.deleteCustomFood(foodId))}
                     />
                 );
             case UserMenuItem.Settings:
                 return (
                     <RbaSettingsBlock
-                        journalGroups={journalGroups}
+                        journalGroups={user.journalGroups}
                         userNutrients={user.nutrients}
                         nutrientDescriptions={nutrientDescriptions}
-                        updateJournalGroups={(groups) => dispatch(journalActions.updateJournalGroups(groups))}
+                        updateJournalGroups={(groups) => dispatch(userActions.updateJournalGroups(groups))}
                         updateNutrient={(nutrient) => dispatch(userActions.upsertNutrient(nutrient))}
                         deleteNutrient={(nutrientId) => dispatch(userActions.deleteNutrient(nutrientId))}
                     />

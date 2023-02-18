@@ -2,131 +2,119 @@
     "id": 29,
     "name": "new name",
     "brand": "Homemade",
-    "subtitle": "integer ac leo",
     "description": "",
     "density": 1.0,
+    "nutrients": {
+        "energy": 191.6,
+        "carbohydrate": 157.3,
+        "dietary_fiber": 5.9,
+        "sugars": 5.9,
+        "fat": 29.1,
+        "protein": 35.5,
+        "vitamin_a": 28.6,
+        "vitamin_c": 28.5,
+        "sodium": 19.1
+    },
     "custom_units": [
         {
             "name": "package",
             "amount": 12.0,
             "unit": "tbsp",
-            "product_id": 29
+            "food_id": 29
         }
     ],
     "ingredients": [
         {
-            "id": 225,
-            "product_id": 1,
-            "products": {
-                "1": {
-                    "ingredient_id": 225,
-                    "product_id": 1,
-                    "amount": 100.0,
-                    "unit": "ml",
-                    "product_type": "food",
-                    "name": "new name",
-                    "nutrients": {
-                        "product_id": 1,
-                        "energy": 191.6,
-                        "carbohydrate": 157.3,
-                        "dietary_fiber": 5.9,
-                        "sugars": 5.9,
-                        "fat": 29.1,
-                        "protein": 35.5,
-                        "vitamin_a": 28.6,
-                        "vitamin_c": 28.5,
-                        "sodium": 19.1
-                    }
-                },
-                "2": {
-                    "ingredient_id": 225,
-                    "product_id": 2,
-                    "amount": 100.0,
-                    "unit": "ml",
-                    "product_type": "food",
-                    "name": "Wine - Red, Cooking",
-                    "nutrients": {
-                        "product_id": 2,
-                        "energy": 115.5,
-                        "carbohydrate": 151.8,
-                        "dietary_fiber": 7.8,
-                        "sugars": 21.8,
-                        "fat": 24.4,
-                        "protein": 19.0,
-                        "vitamin_a": 22.9,
-                        "vitamin_c": 6.9,
-                        "sodium": 19.5
-                    }
-                }
-            }
+            "id": 1,
+            "slot_number": 1,
+            "food_id": 1,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_recipe": false,
+            "name": "new name",
+            "nutrients": {
+                "energy": 191.6,
+                "carbohydrate": 157.3,
+                "dietary_fiber": 5.9,
+                "sugars": 5.9,
+                "fat": 29.1,
+                "protein": 35.5,
+                "vitamin_a": 28.6,
+                "vitamin_c": 28.5,
+                "sodium": 19.1
+            },
+            "is_alternative": false
         },
         {
-            "id": 226,
-            "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 226,
-                    "product_id": 3,
-                    "amount": 150.0,
-                    "unit": "g",
-                    "product_type": "recipe",
-                    "name": "Wine - White, Pelee Island",
-                    "nutrients": {
-                        "product_id": 3,
-                        "energy": 196.0,
-                        "carbohydrate": 183.0,
-                        "dietary_fiber": 7.7,
-                        "sugars": 25.3,
-                        "fat": 8.0,
-                        "protein": 30.6,
-                        "vitamin_a": 6.5,
-                        "vitamin_c": 5.7,
-                        "sodium": 24.5
-                    }
-                }
-            }
+            "id": 2,
+            "slot_number": 1,
+            "food_id": 2,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_recipe": false,
+            "name": "Wine - Red, Cooking",
+            "nutrients": {
+                "energy": 115.5,
+                "carbohydrate": 151.8,
+                "dietary_fiber": 7.8,
+                "sugars": 21.8,
+                "fat": 24.4,
+                "protein": 19.0,
+                "vitamin_a": 22.9,
+                "vitamin_c": 6.9,
+                "sodium": 19.5
+            },
+            "is_alternative": true
+        },
+        {
+            "id": 3,
+            "slot_number": 2,
+            "food_id": 3,
+            "amount": 150.0,
+            "unit": "g",
+            "is_recipe": true,
+            "name": "Wine - White, Pelee Island",
+            "nutrients": {
+                "energy": 196.0,
+                "carbohydrate": 183.0,
+                "dietary_fiber": 7.7,
+                "sugars": 25.3,
+                "fat": 8.0,
+                "protein": 30.6,
+                "vitamin_a": 6.5,
+                "vitamin_c": 5.7,
+                "sodium": 24.5
+            },
+            "is_alternative": false
         }
     ],
-    "directions": [
+    "instructions": [
         {
             "id": 145,
             "step_number": 0,
-            "name": "test step",
+            "description": "test step",
             "temperature_value": 180,
             "temperature_unit": "C",
             "duration_value": null,
             "duration_unit": "min",
-            "steps": []
+            "ingredients": []
         },
         {
             "id": 146,
             "step_number": 1,
-            "name": "stir",
+            "description": "stir",
             "temperature_value": null,
             "temperature_unit": "C",
             "duration_value": 1,
             "duration_unit": "min",
-            "steps": [
+            "ingredients": [
                 {
-                    "step_number": 0,
-                    "direction_part_type": "note",
-                    "comment_text": "Add Cottage Cheese first",
-                    "ingredient_id": null,
-                    "ingredient_amount": null
+                    "ingredient_slot_number": 1,
+                    "ingredient_percentage": 1.0
                 },
                 {
-                    "step_number": 1,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_id": 225,
-                    "ingredient_amount": 1.0
-                },
-                {
-                    "step_number": 2,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_id": 226,
-                    "ingredient_amount": 0.75
+                    "ingredient_slot_number": 2,
+                    "ingredient_percentage": 0.75
                 }
             ]
         }

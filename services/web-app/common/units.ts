@@ -42,7 +42,7 @@ export interface CustomUnit {
     name: string;
     amount: number;
     unit: Unit;
-    product_id: number;
+    food_id: number;
 }
 
 export interface CustomUnitInput extends CustomUnit {

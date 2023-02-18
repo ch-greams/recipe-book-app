@@ -27,7 +27,7 @@ At the moment I target only a limited amount of information:
 
 - `ingredients: string[]`
 
-- `directions: string[]`
+- `instructions: string[]`
 
 - `tags: string[]`
 
@@ -35,7 +35,7 @@ Not accounting for certain quirks:
 
 - Sometimes ingredients might be split into groups, and group titles are saved as ingredients.
 
-- Directions aren't always saved in the currently identified way, which will cause you to get an empty array in the response.
+- Instructions aren't always saved in the currently identified way, which will cause you to get an empty array in the response.
 
 ## Future of the scraping
 
@@ -45,15 +45,15 @@ The current solution is very basic and far from production. The following proble
     
     - Identifying units and measurements should be mostly possible using regex
 
-    - With removed measurements - basically, only name of the ingredient is left, but you need to link it with real food and that will be complicated (although alternative products might be handy)
+    - With removed measurements - basically, only name of the ingredient is left, but you need to link it with real food and that will be complicated (although alternative foods might be handy)
 
-- `directions` should be formatted into something that will make sense with the RBA data model, or ***model needs to be evolved to be more compatible with recipes in the outside world***
+- `instructions` should be formatted into something that will make sense with the RBA data model, or ***model needs to be evolved to be more compatible with recipes in the outside world***
     
     - Identifying temperature is not that difficult, but making existing step description make sense without it will be difficult
 
-    - With other types of directions the main difficulty will be restructuring texts with removed parts like ingredient names and measurement
+    - With other types of instructions the main difficulty will be restructuring texts with removed parts like ingredient names and measurement
 
-    - **While recipes aren't copyrightable, some other texts might be.** Researching this might be necessary, but at the same time you might end up in the situation where those texts will not exists in the final product
+    - **While recipes aren't copyrightable, some other texts might be.** Researching this might be necessary, but at the same time you might end up in the situation where those texts will not exists in the final food
 
 - More information is necessary:
 

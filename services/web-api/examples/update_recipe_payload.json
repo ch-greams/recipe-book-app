@@ -2,121 +2,107 @@
     "id": 241,
     "name": "Cottage Cheese Dip - Updated",
     "brand": "Homemade",
-    "subtitle": "",
     "description": "",
     "density": 1.14,
     "serving_size": 125,
+    "nutrients": {
+        "energy": 191.6,
+        "carbohydrate": 157.3,
+        "dietary_fiber": 5.9,
+        "sugars": 5.9,
+        "fat": 29.1,
+        "omega_3": 12,
+        "protein": 35.5,
+        "vitamin_a": 28.6,
+        "vitamin_c": 28.5,
+        "sodium": 19.1
+    },
     "custom_units": [
         {
             "name": "package - Updated",
             "amount": 12.0,
             "unit": "tbsp",
-            "product_id": 241
+            "food_id": 241
         }
     ],
     "ingredients": [
         {
-            "id": 44,
-            "product_id": 2,
-            "products": {
-                "1": {
-                    "ingredient_id": 44,
-                    "product_id": 1,
-                    "amount": 100.0,
-                    "unit": "ml"
-                },
-                "2": {
-                    "ingredient_id": 44,
-                    "product_id": 2,
-                    "amount": 100.0,
-                    "unit": "ml"
-                },
-                "3": {
-                    "ingredient_id": 44,
-                    "product_id": 3,
-                    "amount": 100.0,
-                    "unit": "ml"
-                }
-            }
+            "slot_number": 1,
+            "food_id": 1,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": true
         },
         {
-            "id": 45,
-            "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 45,
-                    "product_id": 3,
-                    "amount": 150.0,
-                    "unit": "g"
-                }
-            }
+            "slot_number": 1,
+            "food_id": 2,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": false
         },
         {
-            "id": 46,
-            "product_id": 3,
-            "products": {
-                "3": {
-                    "ingredient_id": 46,
-                    "product_id": 3,
-                    "amount": 150.0,
-                    "unit": "g"
-                }
-            }
+            "slot_number": 1,
+            "food_id": 3,
+            "amount": 100.0,
+            "unit": "ml",
+            "is_alternative": true
+        },
+        {
+            "slot_number": 2,
+            "food_id": 3,
+            "amount": 150.0,
+            "unit": "g",
+            "is_alternative": false
+        },
+        {
+            "slot_number": 3,
+            "food_id": 3,
+            "amount": 150.0,
+            "unit": "g",
+            "is_alternative": false
         }
     ],
-    "directions": [
+    "instructions": [
         {
             "id": 34,
             "step_number": 0,
-            "name": "test step - Updated",
+            "description": "test step - Updated",
             "temperature_value": 180,
             "temperature_unit": "C",
             "duration_value": null,
             "duration_unit": "min",
-            "steps": []
+            "ingredients": []
         },
         {
             "id": 35,
             "step_number": 1,
-            "name": "stir",
+            "description": "Stir. Add Cottage Cheese first - Updated.",
             "temperature_value": null,
             "temperature_unit": "C",
             "duration_value": 1,
             "duration_unit": "min",
-            "steps": [
+            "ingredients": [
                 {
-                    "step_number": 0,
-                    "direction_part_type": "note",
-                    "comment_text": "Add Cottage Cheese first - Updated",
-                    "ingredient_id": null,
-                    "ingredient_amount": null
+                    "ingredient_slot_number": 2,
+                    "ingredient_percentage": 1.0
                 },
                 {
-                    "step_number": 1,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_id": 45,
-                    "ingredient_amount": 1.0
-                },
-                {
-                    "step_number": 2,
-                    "direction_part_type": "ingredient",
-                    "comment_text": null,
-                    "ingredient_id": 44,
-                    "ingredient_amount": 0.75
+                    "ingredient_slot_number": 1,
+                    "ingredient_percentage": 0.75
                 }
             ]
         },
         {
             "id": 36,
             "step_number": 2,
-            "name": "test step - New",
+            "description": "test step - New",
             "temperature_value": 200,
             "temperature_unit": "C",
             "duration_value": null,
             "duration_unit": "min",
-            "steps": []
+            "ingredients": []
         }
     ],
-    "is_private": true
+    "is_private": true,
+    "is_recipe": true
 }

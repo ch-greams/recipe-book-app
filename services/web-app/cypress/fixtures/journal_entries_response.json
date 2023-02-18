@@ -4,9 +4,9 @@
         "user_id": 1,
         "entry_date": "2022-11-04",
         "entry_time": "07:14:00",
-        "product_id": 1,
-        "product_name": "Egg",
-        "product_density": 1.0,
+        "food_id": 1,
+        "food_name": "Egg",
+        "food_density": 1.0,
         "nutrients": {
             "protein": 13.0,
             "carbohydrate": 1.1,
@@ -19,13 +19,13 @@
                 "name": "large",
                 "amount": 50.0,
                 "unit": "g",
-                "product_id": 1
+                "food_id": 1
             },
             {
                 "name": "small",
                 "amount": 35.0,
                 "unit": "g",
-                "product_id": 1
+                "food_id": 1
             }
         ],
         "amount": 212.0,
@@ -37,9 +37,9 @@
         "user_id": 1,
         "entry_date": "2022-11-04",
         "entry_time": "12:25:00",
-        "product_id": 6,
-        "product_name": "Hamburger",
-        "product_density": 1.0,
+        "food_id": 6,
+        "food_name": "Hamburger",
+        "food_density": 1.0,
         "nutrients": {},
         "custom_units": [],
         "amount": 450.4,
@@ -51,9 +51,9 @@
         "user_id": 1,
         "entry_date": "2022-11-04",
         "entry_time": "13:30:00",
-        "product_id": 5,
-        "product_name": "Cheddar Cheese",
-        "product_density": 1.0,
+        "food_id": 5,
+        "food_name": "Cheddar Cheese",
+        "food_density": 1.0,
         "nutrients": {
             "carbohydrate": 1.3,
             "fat": 33.0,

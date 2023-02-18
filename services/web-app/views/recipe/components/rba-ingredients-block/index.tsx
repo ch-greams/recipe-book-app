@@ -6,7 +6,7 @@ import RbaIngredient from "@views/recipe/components/rba-ingredient";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
 import { addIngredient } from "@store/actions/recipe";
-import { searchClear, searchProducts } from "@store/actions/search";
+import { searchClear, searchFoods } from "@store/actions/search";
 import type { RecipeIngredient } from "@store/types/recipe";
 import type { SearchStore } from "@store/types/search";
 import { IconSize } from "@icons/icon-params";
@@ -28,6 +28,9 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
 
     const dispatch = useAppDispatch();
 
+    const [ primaryIngredients, alternativeIngredients ] = ingredients.partition((ingredient) => !ingredient.is_alternative);
+    const nextSlotNumber = ingredients.length && Math.max(...primaryIngredients.map((ingredient) => ingredient.slot_number)) + 1;
+
     return (
         <div
             data-cy={constants.CY_INGREDIENTS_BLOCK}
@@ -41,12 +44,17 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
             ) )}
 
             <div className={classNames({ [styles.ingredientsLoading]: !isLoaded })}>
-                {ingredients.map( (ingredient) => (
+                {primaryIngredients.map( (ingredient) => (
                     <RbaIngredient
-                        key={`ingredient_${ingredient.id}`}
+                        key={`ingredient_${ingredient.slot_number}`}
                         search={search}
                         isReadOnly={isReadOnly}
                         ingredient={ingredient}
+                        ingredient_alternatives={
+                            alternativeIngredients.filter(
+                                (alternativeIngredient) => alternativeIngredient.slot_number === ingredient.slot_number,
+                            )
+                        }
                     />
                 ) )}
 
@@ -56,10 +64,10 @@ const RbaIngredientsBlock: React.FC<Props> = ({ search, ingredients, isLoaded, i
                         placeholder={"Add an ingredient..."}
                         isLoading={!search.isLoaded}
                         value={search.searchInput}
-                        items={search.products}
-                        onChange={(value) => { dispatch(searchProducts(value)); }}
-                        onSelect={(product) => {
-                            dispatch(addIngredient(product));
+                        items={search.foods}
+                        onChange={(value) => { dispatch(searchFoods(value)); }}
+                        onSelect={(food) => {
+                            dispatch(addIngredient({ food, slotNumber: nextSlotNumber, isAlternative: false }));
                             dispatch(searchClear());
                         }}
                         data-cy={constants.CY_SEARCH}

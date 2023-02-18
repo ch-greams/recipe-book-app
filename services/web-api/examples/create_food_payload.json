@@ -1,9 +1,9 @@
 {
     "name": "English Muff",
     "brand": "Homemade",
-    "subtitle": "rhoncus aliquam",
     "description": "",
     "is_private": false,
+    "is_recipe": false,
     "density": 1.04,
     "serving_size": 100,
     "nutrients": {
@@ -29,5 +29,7 @@
             "amount": 12,
             "unit": "tbsp"
         }
-    ]
+    ],
+    "ingredients": [],
+    "instructions": []
 }

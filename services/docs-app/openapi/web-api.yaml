@@ -40,23 +40,20 @@ components:
         parent_name:
           type: string
           example: carbohydrate
-    # product
-    ProductShort:
+    # food
+    FoodShort:
       type: object
       properties:
         id:
           type: integer
           example: 321360
-        product_type:
-          type: string
-          example: food
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Tomatoes, grape, raw
         brand:
-          type: string
-          example: ""
-        subtitle:
           type: string
           example: ""
         is_private:
@@ -68,7 +65,7 @@ components:
         updated_at:
           type: string
           example: "2022-11-04T13:29:03.400873Z"
-    DeleteProductPayload:
+    DeleteFoodPayload:
       type: object
       properties:
         id:
@@ -87,7 +84,7 @@ components:
         unit:
           type: string
           example: g
-        product_id:
+        food_id:
           type: integer
           example: 3
     CreateCustomUnitPayload:
@@ -102,135 +99,20 @@ components:
         unit:
           type: string
           example: g
-    # food
-    Food:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        subtitle:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CustomUnit"
-        is_private:
-          type: boolean
-          example: false
-        created_at:
-          type: string
-          example: "2022-06-27T01:41:41.850918Z"
-        updated_at:
-          type: string
-          example: "2022-06-27T01:41:41.850934Z"
-    CreateFoodPayload:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        subtitle:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CreateCustomUnitPayload"
-        is_private:
-          type: boolean
-          example: false
-    UpdateFoodPayload:
-      type: object
-      properties:
-        id:
-          type: integer
-          example: 3
-        name:
-          type: string
-          example: Tomato
-        brand:
-          type: string
-        subtitle:
-          type: string
-        description:
-          type: string
-        density:
-          type: number
-          example: 1.0
-        serving_size:
-          type: number
-          example: 100.0
-        nutrients:
-          type: object
-          additionalProperties:
-            type: number
-          example:
-            protein: 0.9
-            dietary_fiber: 1.2
-            energy: 18.0
-            carbohydrate: 3.9
-            sugars: 2.6
-            fat: 0.2
-        custom_units:
-          type: array
-          items:
-            $ref: "#/components/schemas/CustomUnit"
-        is_private:
-          type: boolean
-          example: false
     # ingredient
-    IngredientProductDetailsWithNutrients:
+    IngredientDetails:
       type: object
       properties:
-        ingredient_id:
+        id:
           type: integer
           example: 6
-        product_id:
+        slot_number:
+          type: integer
+          example: 1
+        recipe_id:
+          type: integer
+          example: 4
+        food_id:
           type: integer
           example: 4
         amount:
@@ -239,9 +121,12 @@ components:
         unit:
           type: string
           example: g
-        product_type:
-          type: string
-          example: food
+        is_alternative:
+          type: boolean
+          example: false
+        is_recipe:
+          type: boolean
+          example: false
         name:
           type: string
           example: Ground Beef
@@ -258,23 +143,17 @@ components:
             sugars: 0
             carbohydrate: 0
             fat: 30.0
-    IngredientDetails:
+    CreateIngredientPayload:
       type: object
       properties:
         id:
           type: integer
-          example: 6
-        product_id:
+          description: should store a temporary id
+          example: -6
+        slot_number:
           type: integer
-          example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductDetailsWithNutrients"
-    IngredientProductPayload:
-      type: object
-      properties:
-        product_id:
+          example: 1
+        food_id:
           type: integer
           example: 4
         amount:
@@ -283,56 +162,39 @@ components:
         unit:
           type: string
           example: g
-    CreateIngredientPayload:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: should store a temporary id
-          example: -6
-        product_id:
-          type: integer
-          example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductPayload"
+        is_alternative:
+          type: boolean
+          example: false
     UpdateIngredientPayload:
       type: object
       properties:
         id:
           type: integer
           example: 6
-        product_id:
-          type: integer
-          example: 4
-        products:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/IngredientProductPayload"
-    # direction
-    DirectionPartDetails:
-      type: object
-      properties:
-        step_number:
+        slot_number:
           type: integer
           example: 1
-        direction_part_type:
-          type: string
-          enum:
-            - ingredient
-            - note
-            - warning
-            - tip
-          example: tip
-        comment_text:
-          type: string
-          example: You can flip it after 8 min, but not necessary
-        ingredient_id:
+        food_id:
           type: integer
-        ingredient_amount:
+          example: 4
+        amount:
           type: number
-    DirectionDetails:
+          example: 125.0
+        unit:
+          type: string
+          example: g
+        is_alternative:
+          type: boolean
+          example: false
+    # instruction
+    InstructionIngredientSimple:
+      type: object
+      properties:
+        ingredient_slot_number:
+          type: integer
+        ingredient_percentage:
+          type: number
+    InstructionDetailed:
       type: object
       properties:
         id:
@@ -341,7 +203,7 @@ components:
         step_number:
           type: integer
           example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -356,38 +218,17 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartDetails"
-    DirectionPartPayload:
+            $ref: "#/components/schemas/InstructionIngredientSimple"
+    CreateInstructionPayload:
       type: object
       properties:
         step_number:
           type: integer
           example: 1
-        direction_part_type:
-          type: string
-          enum:
-            - ingredient
-            - note
-            - warning
-            - tip
-          example: tip
-        comment_text:
-          type: string
-          example: You can flip it after 8 min, but not necessary
-        ingredient_id:
-          type: integer
-        ingredient_amount:
-          type: number
-    CreateDirectionPayload:
-      type: object
-      properties:
-        step_number:
-          type: integer
-          example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -402,11 +243,11 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartPayload"
-    UpdateDirectionPayload:
+            $ref: "#/components/schemas/InstructionIngredientSimple"
+    UpdateInstructionPayload:
       type: object
       properties:
         id:
@@ -415,7 +256,7 @@ components:
         step_number:
           type: integer
           example: 1
-        name:
+        description:
           type: string
           example: Bake the patty
         temperature_value:
@@ -430,10 +271,10 @@ components:
         duration_unit:
           type: string
           example: min
-        steps:
+        ingredients:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionPartPayload"
+            $ref: "#/components/schemas/InstructionIngredientSimple"
     # recipe
     Recipe:
       type: object
@@ -447,8 +288,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -465,11 +304,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/IngredientDetails"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/DirectionDetails"
+            $ref: "#/components/schemas/InstructionDetailed"
         is_private:
+          type: boolean
+          example: false
+        is_recipe:
           type: boolean
           example: false
         created_at:
@@ -487,8 +329,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -505,11 +345,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/CreateIngredientPayload"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/CreateDirectionPayload"
+            $ref: "#/components/schemas/CreateInstructionPayload"
         is_private:
+          type: boolean
+          example: false
+        is_recipe:
           type: boolean
           example: false
     UpdateRecipePayload:
@@ -524,8 +367,6 @@ components:
         brand:
           type: string
           example: Homemade
-        subtitle:
-          type: string
         description:
           type: string
         density:
@@ -542,11 +383,14 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/UpdateIngredientPayload"
-        directions:
+        instructions:
           type: array
           items:
-            $ref: "#/components/schemas/UpdateDirectionPayload"
+            $ref: "#/components/schemas/UpdateInstructionPayload"
         is_private:
+          type: boolean
+          example: false
+        is_recipe:
           type: boolean
           example: false
     # journal
@@ -559,25 +403,19 @@ components:
         name:
           type: string
           example: lunch
-        user_id:
-          type: integer
-          example: 1
     JournalEntry:
       type: object
       properties:
         id:
           type: integer
           example: 2
-        user_id:
-          type: integer
-          example: 1
         entry_date:
           type: string
           example: "2022-11-04"
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
         amount:
@@ -592,16 +430,13 @@ components:
     CreateJournalEntryPayload:
       type: object
       properties:
-        user_id:
-          type: integer
-          example: 1
         entry_date:
           type: string
           example: "2022-11-04"
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
         amount:
@@ -625,22 +460,19 @@ components:
         id:
           type: integer
           example: 2
-        user_id:
-          type: integer
-          example: 1
         entry_date:
           type: string
           example: "2022-11-04"
         entry_time:
           type: string
           example: "13:29:03"
-        product_id:
+        food_id:
           type: integer
           example: 6
-        product_name:
+        food_name:
           type: string
           example: Hamburger
-        product_density:
+        food_density:
           type: number
           example: 0.9
         amount:
@@ -671,9 +503,6 @@ components:
     UserNutrient:
       type: object
       properties:
-        user_id:
-          type: integer
-          example: 1
         nutrient_id:
           type: integer
           example: 2
@@ -689,9 +518,6 @@ components:
     UserNutrientDetailed:
       type: object
       properties:
-        user_id:
-          type: integer
-          example: 1
         nutrient_id:
           type: integer
           example: 45
@@ -725,26 +551,47 @@ components:
         id:
           type: integer
           example: 2
+    # user_info
+    UserInfo:
+      type: object
+      properties:
+        journal_groups:
+          type: array
+          items:
+            $ref: "#/components/schemas/JournalGroup"
+        user_nutrients:
+          type: array
+          items:
+            $ref: "#/components/schemas/UserNutrientDetailed"
+        created_foods:
+          type: array
+          items:
+            $ref: "#/components/schemas/FoodShort"
+        favorite_foods:
+          type: array
+          items:
+            $ref: "#/components/schemas/FoodShort"
+
 tags:
   - name: meta
-    description: All `meta` related endpoints
-  - name: product
-    description: All `product` related endpoints
+    description: All `meta`-related endpoints
   - name: food
-    description: All `food` related endpoints
+    description: All `food`-related endpoints
   - name: recipe
-    description: All `recipe` related endpoints
+    description: All `recipe`-related endpoints
   - name: journal
-    description: All `journal` related endpoints
+    description: All `journal`-related endpoints
+  - name: user
+    description: All `user`-related endpoints
 
 x-tagGroups:
   - name: General
     tags:
       - meta
-      - product
       - food
       - recipe
       - journal
+      - user
 
 paths:
   /meta/nutrients:
@@ -763,11 +610,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/Nutrient"
 
-  /product:
+  /food:
     get:
       tags:
-        - product
-      summary: Find products
+        - food
+      summary: Find foods
       security: []
       parameters:
         - name: limit
@@ -782,14 +629,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -805,15 +650,15 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "404":
           description: Not Found
 
-  /product/created:
+  /food/created:
     get:
       tags:
-        - product
-      summary: Find products created by user
+        - food
+      summary: Find foods created by user
       security: 
         - AccessTokenAuth: []
       parameters:
@@ -829,14 +674,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -852,7 +695,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "401":
           description: Unauthorized
         "403":
@@ -860,11 +703,11 @@ paths:
         "404":
           description: Not Found
 
-  /product/favorite:
+  /food/favorite:
     get:
       tags:
-        - product
-      summary: Find favorite products
+        - food
+      summary: Find favorite foods
       security: 
         - AccessTokenAuth: []
       parameters:
@@ -880,14 +723,12 @@ paths:
           schema:
             type: integer
             example: 0
-        - name: product_type
+        - name: is_recipe
           in: query
           required: false
           schema:
-            type: string
-            enum:
-              - food
-              - recipe
+            type: boolean
+            example: false
         - name: filter
           in: query
           required: false
@@ -903,7 +744,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ProductShort"
+                  $ref: "#/components/schemas/FoodShort"
         "401":
           description: Unauthorized
         "403":
@@ -911,18 +752,18 @@ paths:
         "404":
           description: Not Found
 
-  /product/favorite/delete:
+  /food/favorite/delete:
     post:
       tags:
-        - product
-      summary: Delete a favorite product by id
+        - food
+      summary: Delete a favorite food by id
       security: 
         - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/DeleteProductPayload"
+              $ref: "#/components/schemas/DeleteFoodPayload"
       responses:
         "204":
           description: No Content
@@ -933,96 +774,21 @@ paths:
         "404":
           description: Not Found
 
-  /product/delete:
+  /food/delete:
     post:
       tags:
-        - product
-      summary: Delete a product by id
+        - food
+      summary: Delete a food by id
       security: 
         - AccessTokenAuth: []
       requestBody:
         content:
           "application/json":
             schema:
-              $ref: "#/components/schemas/DeleteProductPayload"
+              $ref: "#/components/schemas/DeleteFoodPayload"
       responses:
         "204":
           description: No Content
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-
-  /food/{id}:
-    get:
-      tags:
-        - food
-      summary: Find a food by id
-      security: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 3
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
-        "404":
-          description: Not Found
-
-  /food/create:
-    post:
-      tags:
-        - food
-      summary: Create a food
-      security: 
-        - AccessTokenAuth: []
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/CreateFoodPayload"
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-        "404":
-          description: Not Found
-
-  /food/update:
-    post:
-      tags:
-        - food
-      summary: Update a food
-      security: 
-        - AccessTokenAuth: []
-      requestBody:
-        content:
-          "application/json":
-            schema:
-              $ref: "#/components/schemas/UpdateFoodPayload"
-      responses:
-        "200":
-          description: OK
-          content:
-            "application/json":
-              schema:
-                $ref: "#/components/schemas/Food"
         "401":
           description: Unauthorized
         "403":
@@ -1124,13 +890,10 @@ paths:
               example:
                 - ui_index: 1
                   name: breakfast
-                  user_id: 1
                 - ui_index: 2
                   name: lunch
-                  user_id: 1
                 - ui_index: 3
                   name: dinner
-                  user_id: 1
         "401":
           description: Unauthorized
         "403":
@@ -1156,10 +919,8 @@ paths:
             example:
               - ui_index: 1
                 name: breakfast
-                user_id: 1
               - ui_index: 2
                 name: lunch
-                user_id: 1
       responses:
         "201":
           description: Created
@@ -1338,6 +1099,27 @@ paths:
       responses:
         "204":
           description: No Content
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+
+  /user/info:
+    get:
+      tags:
+        - user
+      summary: Get user info
+      security: 
+        - AccessTokenAuth: []
+      responses:
+        "200":
+          description: OK
+          content:
+            "application/json":
+              schema:
+                $ref: "#/components/schemas/UserInfo"
         "401":
           description: Unauthorized
         "403":

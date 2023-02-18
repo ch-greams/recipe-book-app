@@ -16,10 +16,10 @@ export default {
             table: { type: { summary: "FoodItem[]" } },
         },
         deleteFavoriteFood: {
-            table: { type: { summary: "(productId: number) => void" } },
+            table: { type: { summary: "(foodId: number) => void" } },
         },
         deleteCustomFood: {
-            table: { type: { summary: "(productId: number) => void" } },
+            table: { type: { summary: "(foodId: number) => void" } },
         },
     },
 } as ComponentMeta<typeof RbaFoodsBlock>;
@@ -30,12 +30,37 @@ const Template: ComponentStory<typeof RbaFoodsBlock> = (args) => <RbaFoodsBlock 
 export const Default = Template.bind({});
 Default.args = {
     favoriteFoods: [
-        { id: 1, name: "Cucumber" },
-        { id: 2, name: "Milk" },
-        { id: 3, name: "Cottage Cheese" },
+        {
+            id: 1,
+            name: "Cucumber",
+            brand: "",
+            is_recipe: false,
+        },
+        {
+            id: 2,
+            name: "Milk",
+            brand: "",
+            is_recipe: false,
+        },
+        {
+            id: 3,
+            name: "Cottage Cheese",
+            brand: "",
+            is_recipe: true,
+        },
     ],
     customFoods: [
-        { id: 1, name: "Cucumber" },
-        { id: 4, name: "Sour Cream" },
+        {
+            id: 1,
+            name: "Cucumber",
+            brand: "",
+            is_recipe: false,
+        },
+        {
+            id: 4,
+            name: "Sour Cream",
+            brand: "",
+            is_recipe: false,
+        },
     ],
 };

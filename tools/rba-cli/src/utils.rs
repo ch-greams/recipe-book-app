@@ -15,7 +15,7 @@ pub(crate) async fn migrate_db(database_url: &str) {
         .unwrap();
 
     let duration = start.elapsed();
-    println!("migration is complete in {:?}", duration);
+    println!("migration is complete in {duration:?}");
 }
 
 pub(crate) async fn seed_db(database_url: &str) {
@@ -30,16 +30,15 @@ pub(crate) async fn seed_db(database_url: &str) {
         "database/seeds/meta/02_nutrient_details.sql",
         "database/seeds/journal/00_user.sql",
         "database/seeds/journal/01_journal_group.sql",
-        "database/seeds/product/01_product.sql",
+        "database/seeds/recipe/01_food.sql",
         "database/seeds/journal/02_user_nutrient.sql",
         "database/seeds/journal/02_journal_entry.sql",
-        "database/seeds/journal/02_favorite_product.sql",
-        "database/seeds/product/02_custom_unit.sql",
-        "database/seeds/product/02_direction.sql",
-        "database/seeds/product/02_ingredient.sql",
-        "database/seeds/product/02_product_nutrient.sql",
-        "database/seeds/product/03_direction_part.sql",
-        "database/seeds/product/03_ingredient_product.sql",
+        "database/seeds/journal/02_favorite_food.sql",
+        "database/seeds/recipe/02_custom_unit.sql",
+        "database/seeds/recipe/02_instruction.sql",
+        "database/seeds/recipe/02_ingredient.sql",
+        "database/seeds/recipe/02_food_nutrient.sql",
+        "database/seeds/recipe/03_instruction_ingredient.sql",
     ];
 
     let mut txn = db_pool.begin().await.unwrap();
@@ -65,7 +64,7 @@ pub(crate) async fn seed_db(database_url: &str) {
     txn.commit().await.unwrap();
 
     let duration = start.elapsed();
-    println!("seeding is complete in {:?}", duration);
+    println!("seeding is complete in {duration:?}");
 }
 
 pub(crate) fn read_csv_file<T: serde::de::DeserializeOwned>(path: &str) -> anyhow::Result<Vec<T>> {

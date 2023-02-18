@@ -1,0 +1,28 @@
+{
+    "id": 1,
+    "name": "English Muffin",
+    "brand": "Homemade",
+    "description": null,
+    "density": 1.04,
+    "nutrients": {
+        "energy": 191.6,
+        "carbohydrate": 157.3,
+        "dietary_fiber": 5.9,
+        "sugars": 5.9,
+        "fat": 29.1,
+        "protein": 35.5,
+        "vitamin_a": 28.6,
+        "vitamin_c": 28.5,
+        "sodium": 19.1
+    },
+    "custom_units": [
+        {
+            "name": "package",
+            "amount": 12,
+            "unit": "tbsp",
+            "food_id": 1
+        }
+    ],
+    "ingredients": [],
+    "instructions": []
+}

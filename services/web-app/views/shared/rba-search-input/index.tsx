@@ -3,8 +3,7 @@ import * as constants from "@cypress/constants";
 
 import { classNames, Color } from "@common/style";
 import { isSome } from "@common/types";
-import type { ProductShort } from "@common/typings";
-import Utils from "@common/utils";
+import type { FoodShort } from "@common/typings";
 import { IconSize } from "@icons/icon-params";
 import RbaIconLoading from "@icons/rba-icon-loading";
 import RbaIconSearch from "@icons/rba-icon-search";
@@ -25,7 +24,7 @@ export enum SearchInputHeightSize {
     Medium = "heightSize_Medium",
 }
 
-export type OnSelectFunc = (product: ProductShort) => void;
+export type OnSelectFunc = (food: FoodShort) => void;
 
 interface Props {
     "data-cy"?: string;
@@ -34,14 +33,14 @@ interface Props {
     placeholder?: string;
     isLoading: boolean;
     value: string;
-    items: ProductShort[];
+    items: FoodShort[];
     onChange: (value: string) => void;
     onSelect?: OnSelectFunc;
 }
 
 const getOnSelect = (onSelect: OnSelectFunc, searchInputClear: () => void): OnSelectFunc => {
-    return (productId) => {
-        onSelect(productId);
+    return (foodId) => {
+        onSelect(foodId);
         searchInputClear();
     };
 };
@@ -71,7 +70,7 @@ const RbaSearchInput: React.FC<Props> = ({
 
                 <div className={styles.icon}>
                     {(
-                        ( !Utils.isEmptyString(searchInput) && isLoading )
+                        ( searchInput.isNotEmpty() && isLoading )
                             ? <RbaIconLoading size={IconSize.Large} color={Color.White} />
                             : <RbaIconSearch size={IconSize.Large} color={Color.White} />
                     )}
@@ -87,12 +86,12 @@ const RbaSearchInput: React.FC<Props> = ({
                 />
             </div>
 
-            {( !Utils.isEmptyString(searchInput) && (
+            {( searchInput.isNotEmpty() && (
                 <div className={styles.searchList}>
-                    {items.map((product) => (
+                    {items.map((food) => (
                         <RbaSearchInputOption
-                            key={product.id}
-                            product={product}
+                            key={food.id}
+                            food={food}
                             onSelect={isSome(onSelect) ? getOnSelect(onSelect, searchInputClear) : null}
                         />
                     ))}

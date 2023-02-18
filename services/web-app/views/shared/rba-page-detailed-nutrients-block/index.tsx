@@ -6,7 +6,7 @@ import {
     CarbohydrateNutrients, LipidNutrients, MineralNutrients, NutrientGroupType,
     OtherNutrients, ProteinNutrients, VitaminNutrients,
 } from "@common/nutrients";
-import Utils from "@common/utils";
+import { getNutrients } from "@common/utils";
 import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 
 import styles from "./rba-page-detailed-nutrients-block.module.scss";
@@ -18,11 +18,12 @@ interface Props {
     nutrients: Dictionary<NutrientName, number>;
     nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
+    updateNutrient?: (name: NutrientName, value: string) => void;
 }
 
 
 const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
-    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions,
+    isReadOnly = false, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => {
 
     const leftColumn: [ NutrientGroupType, NutrientName[] ][] = [
@@ -47,9 +48,8 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutrients={Utils.getNutrients(
-                            group, nutrients, nutrientInputs, nutrientDescriptions,
-                        )}
+                        nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
+                        updateNutrient={updateNutrient}
                     />
                 ))}
 
@@ -62,9 +62,8 @@ const RbaPageDetailedNutrientsBlock: React.FC<Props> = ({
                         key={type}
                         isReadOnly={isReadOnly}
                         title={type}
-                        nutrients={Utils.getNutrients(
-                            group, nutrients, nutrientInputs, nutrientDescriptions,
-                        )}
+                        nutrients={getNutrients(group, nutrients, nutrientInputs, nutrientDescriptions)}
+                        updateNutrient={updateNutrient}
                     />
                 ))}
 

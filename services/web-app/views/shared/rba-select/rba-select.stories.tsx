@@ -5,7 +5,6 @@ import type { ComponentMeta, ComponentStory } from "@storybook/react";
 import Logger from "@common/logger";
 import { getValues } from "@common/object";
 import { Unit } from "@common/units";
-import * as types from "@store/types/recipe";
 
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from ".";
 
@@ -109,20 +108,4 @@ CustomUnit.args = {
     options: Object.values(Unit).map((unit) => ({ value: unit })),
     onChange: (option) => Logger.info(option.value),
     value: Unit.g,
-};
-
-export const DirectionPartType = Template.bind({});
-DirectionPartType.args = {
-    disabled: false,
-    theme: SelectTheme.Alternative,
-    center: false,
-    width: SelectWidthSize.Full,
-    height: SelectHeightSize.Medium,
-    options: [
-        types.DirectionPartType.Tip,
-        types.DirectionPartType.Note,
-        types.DirectionPartType.Warning,
-    ].map((type) => ({ group: "Comment", value: type })),
-    onChange: (option) => Logger.info(option.value),
-    value: types.DirectionPartType.Note,
 };

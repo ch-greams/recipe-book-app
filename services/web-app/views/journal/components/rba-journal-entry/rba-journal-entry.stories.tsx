@@ -64,13 +64,13 @@ const JOURNAL_ENTRY: JournalStoreEntry = {
             name: "large",
             amount: 50,
             unit: WeightUnit.g,
-            product_id: 1,
+            food_id: 1,
         },
         {
             name: "small",
             amount: 35,
             unit: WeightUnit.g,
-            product_id: 1,
+            food_id: 1,
         },
     ],
 };

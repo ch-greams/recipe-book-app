@@ -1,7 +1,6 @@
 import type { NutrientName } from "@common/nutrients";
 import type { CustomUnit, TemperatureUnit, TimeUnit, Unit } from "@common/units";
-import type { ProductType } from "@common/utils";
-import type { DirectionPartType } from "@store/types/recipe";
+
 
 export * from "./common";
 
@@ -9,104 +8,58 @@ export interface Food {
     id: number;
     name: string;
     brand: string;
-    subtitle: string;
-    description: string;
-    density: number;
-    serving_size: number;
-    nutrients: Dictionary<NutrientName, number>;
-    custom_units: CustomUnit[];
-    is_private: boolean;
-}
-
-export interface Product {
-    id: number;
-    product_type: ProductType;
-    name: string;
-    brand: string;
-    subtitle: string;
-    description: string;
-    density: number;
-    serving_size: number;
-    is_private: boolean;
-}
-
-// TODO: Create an app version of this type (camelCase) and have all necessary fields available
-export interface ProductShort {
-    id: number;
-    product_type: ProductType;
-    name: string;
-    brand: string;
-    subtitle: string;
-    // is_private: boolean;
-    // created_at: DateTime<Utc>;
-    // updated_at: DateTime<Utc>;
-}
-
-export interface FoodShort {
-    id: number;
-    name: string;
-    brand: string;
-    subtitle: string;
-}
-
-export interface IngredientProduct {
-    product_id: number;
-    product_type: ProductType;
-    name: string;
-    amount: number;
-    unit: Unit;
-    density: number;
-    nutrients: Dictionary<NutrientName, number>;
-}
-
-export interface Ingredient {
-    id: number;
-    product_id: number;
-    products: Dictionary<number, IngredientProduct>;
-}
-
-export interface DirectionPart {
-    step_number: number;
-    direction_part_type: DirectionPartType;
-    comment_text?: Option<string>;
-    ingredient_id?: Option<number>;
-    ingredient_amount?: Option<number>;
-}
-
-export interface Direction {
-    id: number;
-    step_number: number;
-    name: string;
-    duration_value?: Option<number>;
-    duration_unit: TimeUnit;
-    temperature_value?: Option<number>;
-    temperature_unit: TemperatureUnit;
-    steps: DirectionPart[];
-}
-
-export interface Recipe {
-    id: number;
-    name: string;
-    brand: string;
-    subtitle: string;
     description: string;
     type: string;
     density: number;
     serving_size: number;
-
+    nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
-
-    ingredients: Ingredient[];
-    directions: Direction[];
-
     is_private: boolean;
+    is_recipe: boolean;
 }
 
-export interface RecipeShort {
+export interface FoodShort {
     id: number;
+    is_recipe: boolean;
     name: string;
     brand: string;
-    subtitle: string;
+    // is_private: boolean;
+    // created_at: string;
+    // updated_at: string;
+}
+
+export interface Ingredient {
+    id: number;
+    slot_number: number;
+    food_id: number;
+    name: string;
+    amount: number;
+    unit: Unit;
+    density: number;
+    is_alternative: boolean;
+    is_recipe: boolean;
+    nutrients: Dictionary<NutrientName, number>;
+}
+
+export interface InstructionIngredient {
+    ingredient_slot_number: number;
+    ingredient_percentage: number;
+}
+
+export interface Instruction {
+    id: number;
+    step_number: number;
+    description: string;
+    duration_value?: Option<number>;
+    duration_unit: TimeUnit;
+    temperature_value?: Option<number>;
+    temperature_unit: TemperatureUnit;
+    ingredients: InstructionIngredient[];
+}
+
+export interface Recipe extends Food {
+    ingredients: Ingredient[];
+    instructions: Instruction[];
 }
 
 export interface NutrientMeta {
@@ -118,7 +71,6 @@ export interface NutrientMeta {
     parent_name?: Option<string>;
 }
 export interface UserNutrient {
-    user_id: number;
     nutrient_id: number;
     is_featured: boolean;
     daily_target_amount?: Option<number>;
@@ -136,23 +88,28 @@ export interface UserNutrientDetailed extends UserNutrient {
 export interface JournalGroup {
     ui_index: number;
     name: string;
-    user_id: number;
 }
 
 export interface JournalEntry {
     id: number;
-    user_id: number;
     entry_date: string;
     entry_time: string;
-    product_id: number;
+    food_id: number;
     amount: number;
     unit: string;
     journal_group_ui_index: Option<number>;
 }
 
 export interface JournalEntryDetailed extends JournalEntry {
-    product_name: string;
-    product_density: number;
+    food_name: string;
+    food_density: number;
     nutrients: Dictionary<NutrientName, number>;
     custom_units: CustomUnit[];
+}
+
+export interface UserInfo {
+    journal_groups: JournalGroup[];
+    user_nutrients: UserNutrientDetailed[];
+    created_foods: FoodShort[];
+    favorite_foods: FoodShort[];
 }

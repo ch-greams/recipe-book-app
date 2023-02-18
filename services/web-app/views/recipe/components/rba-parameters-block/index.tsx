@@ -1,12 +1,13 @@
 import React from "react";
 
 import type { CustomUnitInput } from "@common/units";
-import { Unit } from "@common/units";
+import { Unit, VolumeUnit, WeightUnit } from "@common/units";
 import RbaCustomUnitsBlock from "@views/shared/rba-custom-units-block";
 import type { RbaInputChangeCallback } from "@views/shared/rba-input";
 import { InputNormalizer } from "@views/shared/rba-input";
 import RbaInput, { InputHeightSize, InputTextAlign, InputTheme, InputWidthSize } from "@views/shared/rba-input";
 import RbaSelect, { SelectHeightSize, SelectTheme, SelectWidthSize } from "@views/shared/rba-select";
+import type { SelectOption } from "@views/shared/rba-select/rba-select-option";
 import { useAppDispatch } from "@store";
 import * as actions from "@store/actions/recipe";
 import type { RecipePageStore } from "@store/types/recipe";
@@ -15,11 +16,11 @@ import styles from "./rba-parameters-block.module.scss";
 
 
 
-interface ParametersBlockProps {
+interface Props {
     recipe: RecipePageStore;
 }
 
-const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
+const RbaParametersBlock: React.FC<Props> = ({ recipe }) => {
 
     const dispatch = useAppDispatch();
 
@@ -61,6 +62,53 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
 
             <div className={styles.separator} />
 
+            <div className={styles.densityLine}>
+
+                {/* BULK DENSITY */}
+
+                <div
+                    className={styles.densityLineLabel}
+                    title={"Use Bulk Density for foods like rice or beans"}
+                >
+                    {"DENSITY"}
+                </div>
+
+                <RbaInput
+                    theme={InputTheme.Alternative}
+                    width={InputWidthSize.Large}
+                    height={InputHeightSize.Large}
+                    disabled={!recipe.editMode}
+                    value={recipe.densityInput}
+                    normalizer={InputNormalizer.Decimal}
+                    onChange={(value) => { dispatch(actions.updateDensityAmount(value)); }}
+                />
+
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
+                    options={Object.values(WeightUnit).map((unit) => ({ value: unit }))}
+                    onChange={(option: SelectOption) => dispatch(actions.updateDensityWeightUnit(option.value as WeightUnit))}
+                    value={recipe.densityWeightUnit}
+                />
+
+                <span className={styles.densityLineUnitSeparator}>
+                    {"in"}
+                </span>
+
+                <RbaSelect
+                    theme={SelectTheme.Alternative}
+                    center={true}
+                    width={SelectWidthSize.Medium}
+                    height={SelectHeightSize.Large}
+                    options={Object.values(VolumeUnit).map((unit) => ({ value: unit }))}
+                    onChange={(option: SelectOption) => dispatch(actions.updateDensityVolumeUnit(option.value as VolumeUnit))}
+                    value={recipe.densityVolumeUnit}
+                />
+
+            </div>
+
             <div className={styles.servingSizeLine}>
 
                 <div className={styles.servingSizeLineLabel}>
@@ -81,7 +129,10 @@ const RbaParametersBlock: React.FC<ParametersBlockProps> = ({ recipe }) => {
                     center={true}
                     width={SelectWidthSize.Medium}
                     height={SelectHeightSize.Large}
-                    options={Object.values(Unit).map((unit) => ({ value: unit }))}
+                    options={[
+                        ...Object.values(Unit).map((unit) => ({ value: unit })),
+                        ...recipe.customUnits.map((customUnit) => ({ value: customUnit.name })),
+                    ]}
                     value={recipe.servingSizeUnit}
                     onChange={(option) => { dispatch(actions.updateServingSizeUnit(option.value as Unit)); }}
                 />

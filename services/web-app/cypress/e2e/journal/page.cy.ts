@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { changeDate, DEFAULT_TIME_DISPLAY_FORMAT, DEFAULT_TIME_FORMAT, formatTime, getCurrentDate } from "@common/date";
+import { JOURNAL_PATH } from "@common/routes";
 
 
 describe("journal_page", () => {
@@ -10,17 +11,16 @@ describe("journal_page", () => {
         const CURRENT_DATE = getCurrentDate();
 
         beforeEach(() => {
-
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${CURRENT_DATE}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
-                { fixture: "journal_groups_response.json" },
+                `${constants.CY_USER_API_PATH}/info`,
+                { fixture: "user_info.json" },
             );
 
-            cy.visit(`${constants.CY_JOURNAL_PATH}`);
+            cy.visit(JOURNAL_PATH);
         });
 
         it("can see all page blocks", () => {
@@ -33,8 +33,7 @@ describe("journal_page", () => {
             const FOOD_NAME = "hamburger";
             const FOOD_GROUP = "lunch";
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -44,13 +43,13 @@ describe("journal_page", () => {
 
         it("can create a new journal entry", () => {
 
-            const NEW_PRODUCT_NAME_SHORT = "chicken";
-            const NEW_PRODUCT_NAME_FULL = "Chicken Thigh - Bone Out";
+            const NEW_FOOD_NAME_SHORT = "chicken";
+            const NEW_FOOD_NAME_FULL = "Chicken Thigh - Bone Out";
             const FOOD_GROUP = "unknown";
 
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}?limit=10&user_id=1&filter=${NEW_PRODUCT_NAME_SHORT}`,
-                { fixture: "products_response.json" },
+                `${constants.CY_FOOD_API_PATH}?limit=10&filter=${NEW_FOOD_NAME_SHORT}`,
+                { fixture: "foods_response.json" },
             );
             cy.intercept(
                 "POST", `${constants.CY_JOURNAL_API_PATH}/entry/create`,
@@ -59,19 +58,18 @@ describe("journal_page", () => {
 
             cy.get(`[data-cy=${constants.CY_JOURNAL_SEARCH_INPUT}] [data-cy=${constants.CY_SEARCH_INPUT}]`)
                 .should("be.visible")
-                .type(NEW_PRODUCT_NAME_SHORT);
+                .type(NEW_FOOD_NAME_SHORT);
 
             cy.get(`[data-cy=${constants.CY_JOURNAL_SEARCH_INPUT}]`)
-                .contains(NEW_PRODUCT_NAME_FULL)
+                .contains(NEW_FOOD_NAME_FULL)
                 .should("be.visible")
                 .click();
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
-                .contains(NEW_PRODUCT_NAME_FULL, { matchCase: false })
+                .contains(NEW_FOOD_NAME_FULL, { matchCase: false })
                 .should("be.visible");
         });
 
@@ -88,8 +86,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -129,8 +126,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -170,8 +166,7 @@ describe("journal_page", () => {
             )
                 .as("updateEntry");
 
-            cy.get(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
-                .contains(FOOD_GROUP, { matchCase: false })
+            cy.contains(`[data-cy=${constants.CY_JOURNAL_GROUP_NAME}]`, FOOD_GROUP, { matchCase: false })
                 .should("be.visible")
                 .parents(`[data-cy=${constants.CY_JOURNAL_GROUP}]`)
                 .find(`[data-cy=${constants.CY_JOURNAL_ENTRY}]`)
@@ -216,7 +211,7 @@ describe("journal_page", () => {
             const NEXT_DAY = changeDate(CURRENT_DATE, 1);
 
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${NEXT_DAY}`,
                 { body: [] },
             );
 

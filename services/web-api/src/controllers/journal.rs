@@ -12,12 +12,12 @@ use crate::{
     types::{
         custom_unit::CustomUnit,
         error::Error,
+        food_nutrient::FoodNutrient,
         journal_entry::{
             CreateJournalEntryPayload, DeleteJournalEntryPayload, JournalEntry,
             JournalEntryDetailed, UpdateJournalEntryPayload,
         },
         journal_group::JournalGroup,
-        product_nutrient::ProductNutrient,
         user_nutrient::UserNutrient,
     },
 };
@@ -92,16 +92,16 @@ async fn get_entries(
         .fetch_all(&mut txn)
         .await?;
 
-    let product_ids: Vec<i64> = journal_entries
+    let food_ids: Vec<i64> = journal_entries
         .iter()
-        .map(|journal_entry| journal_entry.product_id)
+        .map(|journal_entry| journal_entry.food_id)
         .collect();
 
-    let product_nutrients = ProductNutrient::find_by_product_ids(product_ids.clone())
+    let food_nutrients = FoodNutrient::find_by_food_ids(food_ids.clone())
         .fetch_all(&mut txn)
         .await?;
 
-    let custom_units = CustomUnit::find_by_product_ids(product_ids)
+    let custom_units = CustomUnit::find_by_food_ids(food_ids)
         .fetch_all(&mut txn)
         .await?;
 
@@ -110,15 +110,15 @@ async fn get_entries(
         .map(|je| {
             JournalEntryDetailed::new(
                 je,
-                &product_nutrients
+                &food_nutrients
                     .iter()
                     .cloned()
-                    .filter(|pn| pn.product_id == je.product_id)
-                    .collect::<Vec<ProductNutrient>>(),
+                    .filter(|pn| pn.food_id == je.food_id)
+                    .collect::<Vec<FoodNutrient>>(),
                 &custom_units
                     .iter()
                     .cloned()
-                    .filter(|pn| pn.product_id == je.product_id)
+                    .filter(|pn| pn.food_id == je.food_id)
                     .collect::<Vec<CustomUnit>>(),
             )
         })
@@ -142,16 +142,16 @@ async fn create_entry(
 
     let journal_entry = JournalEntry::insert_journal_entry(&payload, &mut txn).await?;
 
-    let product_nutrients = ProductNutrient::find_by_product_id(journal_entry.product_id)
+    let food_nutrients = FoodNutrient::find_by_food_id(journal_entry.food_id)
         .fetch_all(&mut txn)
         .await?;
 
-    let custom_units = CustomUnit::find_by_product_id(journal_entry.product_id)
+    let custom_units = CustomUnit::find_by_food_id(journal_entry.food_id)
         .fetch_all(&mut txn)
         .await?;
 
     let journal_entry_detailed =
-        JournalEntryDetailed::new(&journal_entry, &product_nutrients, &custom_units);
+        JournalEntryDetailed::new(&journal_entry, &food_nutrients, &custom_units);
 
     txn.commit().await?;
 
@@ -224,7 +224,7 @@ async fn upsert_nutrient(
 
     let mut txn = db_pool.begin().await?;
 
-    UserNutrient::upsert_nutrient(&payload, &mut txn).await?;
+    UserNutrient::upsert_nutrient(user_id, &payload, &mut txn).await?;
 
     let user_nutrient = UserNutrient::find_by_id(user_id, payload.nutrient_id)
         .fetch_optional(&mut txn)

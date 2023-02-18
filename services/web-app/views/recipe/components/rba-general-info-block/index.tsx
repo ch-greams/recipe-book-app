@@ -1,7 +1,7 @@
 import React from "react";
 
 import type { NutrientDescription,NutrientName } from "@common/nutrients";
-import Utils from "@common/utils";
+import { getNutrients } from "@common/utils";
 import RbaParametersBlock from "@views/recipe/components/rba-parameters-block";
 import RbaNutrientsBlock from "@views/shared/rba-nutrients-block";
 import type { RecipePageStore } from "@store/types/recipe";
@@ -10,16 +10,17 @@ import styles from "./rba-general-info-block.module.scss";
 
 
 
-interface GeneralInfoBlockProps {
+interface Props {
     recipe: RecipePageStore;
     featuredNutrients: NutrientName[];
     nutrients: Dictionary<NutrientName, number>;
     nutrientInputs: Dictionary<NutrientName, string>;
     nutrientDescriptions: Record<NutrientName, NutrientDescription>;
+    updateNutrient: (name: NutrientName, value: string) => void;
 }
 
-const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
-    recipe, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions,
+const RbaGeneralInfoBlock: React.FC<Props> = ({
+    recipe, featuredNutrients, nutrients, nutrientInputs, nutrientDescriptions, updateNutrient,
 }) => (
     <div className={styles.mainBlock}>
 
@@ -28,15 +29,16 @@ const RbaGeneralInfoBlock: React.FC<GeneralInfoBlockProps> = ({
         <div className={styles.featuredNutrients}>
 
             <RbaNutrientsBlock
-                isReadOnly={true}
+                isReadOnly={!recipe.editMode}
                 title={"NUTRITION FACTS"}
-                nutrients={Utils.getNutrients(
+                nutrients={getNutrients(
                     featuredNutrients,
                     nutrients,
                     nutrientInputs,
                     nutrientDescriptions,
                     true,
                 )}
+                updateNutrient={updateNutrient}
             />
         </div>
     </div>

@@ -4,7 +4,7 @@ import * as constants from "@cypress/constants";
 
 import { Color } from "@common/style";
 import RbaSearchInput, { SearchInputWidthSize } from "@views/shared/rba-search-input";
-import { searchProducts } from "@store/actions/search";
+import { searchFoods } from "@store/actions/search";
 import { useAppDispatch, useAppSelector } from "@store/index";
 import { IconSize } from "@icons/icon-params";
 import RbaIconPerson from "@icons/rba-icon-person";
@@ -28,8 +28,8 @@ const RbaNavbar: React.FC<Props> = ({ hideSearch = false, isLoggedIn, username }
             width={SearchInputWidthSize.Full}
             isLoading={!searchPage.isLoaded}
             value={searchPage.searchInput}
-            items={searchPage.products}
-            onChange={(value) => { dispatch(searchProducts(value)); }}
+            items={searchPage.foods}
+            onChange={(value) => { dispatch(searchFoods(value)); }}
         />
     );
 

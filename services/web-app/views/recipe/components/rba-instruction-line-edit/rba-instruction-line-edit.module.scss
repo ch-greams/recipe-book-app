@@ -1,0 +1,84 @@
+@import "@styles/variables.scss";
+
+
+.instructionLine {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    .instructionLineButton {
+
+        width: 44px;
+        height: 24px;
+
+        padding: 10px 0;
+
+        font-size: $font-size-medium;
+        font-weight: $font-weight-medium;
+
+        line-height: 24px;
+
+        color: $color-default;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        background-color: $color-white;
+
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+    }
+
+    .instructionInfo {
+
+        display: flex;
+        flex-grow: 2;
+
+        gap: 4px;
+        justify-content: space-between;
+
+        padding: 10px 12px;
+
+        font-size: $font-size-medium;
+        font-weight: $font-weight-medium;
+
+        color: $color-default;
+
+        background-color: $color-white;
+
+        border-color: $color-grey-light;
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 2px;
+
+        .instructionInfoTitle {
+
+            display: flex;
+            flex-direction: row;
+            flex-grow: 2;
+            gap: 4px;
+
+            cursor: pointer;
+
+            &.isMarked {
+                opacity: 0.25;
+            }
+        }
+
+        .instructionInfoMeasures {
+
+            display: flex;
+            flex-direction: row;
+            gap: 4px;
+
+            .instructionInfoMeasure {
+
+                display: flex;
+                gap: 4px;
+            }
+        }
+    }
+}

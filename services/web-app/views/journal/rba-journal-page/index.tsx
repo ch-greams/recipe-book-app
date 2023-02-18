@@ -36,8 +36,8 @@ const RbaJournalPageConnected: React.FC<Props> = ({ meta, user }) => {
                     ? <RbaSingleMessagePage text={journal.errorMessage} />
                     : (
                         <RbaJournalPage
-                            userId={user.userId}
                             journal={journal}
+                            user={user}
                             meta={meta}
                             search={search}
                             decrementDate={() => dispatch(actions.updateDate(changeDate(journal.currentDate, -1)))}

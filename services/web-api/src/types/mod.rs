@@ -1,14 +1,12 @@
 pub mod custom_unit;
-pub mod direction;
-pub mod direction_part;
 pub mod error;
 pub mod food;
+pub mod food_nutrient;
 pub mod ingredient;
-pub mod ingredient_product;
+pub mod instruction;
+pub mod instruction_ingredient;
 pub mod journal_entry;
 pub mod journal_group;
 pub mod meta;
-pub mod product;
-pub mod product_nutrient;
 pub mod recipe;
 pub mod user_nutrient;

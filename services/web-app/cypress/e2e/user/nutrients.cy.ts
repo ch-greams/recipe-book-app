@@ -2,6 +2,7 @@ import * as constants from "@cypress/constants";
 
 import { getCurrentDate } from "@common/date";
 import { NUTRIENT_TYPE_LABEL_MAPPING, NutrientName } from "@common/nutrients";
+import { USER_PATH } from "@common/routes";
 import { NutrientUnit } from "@common/units";
 
 
@@ -11,40 +12,19 @@ describe("user", () => {
 
         beforeEach(() => {
             cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=recipe`,
-                { fixture: "recipes_favorite.json" },
-            );
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=recipe`,
-                { fixture: "recipes_custom.json" },
-            );
-
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/favorite?limit=20&user_id=1&product_type=food`,
-                { fixture: "foods_favorite.json" },
-            );
-            cy.intercept(
-                `${constants.CY_PRODUCT_API_PATH}/created?limit=20&user_id=1&product_type=food`,
-                { fixture: "foods_custom.json" },
-            );
-            cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/groups?user_id=1`,
-                { fixture: "journal_groups_response.json" },
-            );
-            cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}&user_id=1`,
+                `${constants.CY_JOURNAL_API_PATH}/entry?entry_date=${getCurrentDate()}`,
                 { fixture: "journal_entries_response.json" },
             );
             cy.intercept(
-                `${constants.CY_JOURNAL_API_PATH}/nutrients?user_id=1`,
-                { fixture: "journal_nutrients_response.json" },
+                `${constants.CY_USER_API_PATH}/info`,
+                { fixture: "user_info.json" },
             );
             cy.intercept(
                 `${constants.CY_META_API_PATH}/nutrients`,
                 { fixture: "meta_nutrients_response.json" },
             );
 
-            cy.visit(constants.CY_USER_PATH);
+            cy.visit(USER_PATH);
         });
 
         it("can see featured nutrients", () => {
@@ -103,7 +83,7 @@ describe("user", () => {
             )
                 .as("upsertNutrient");
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine
@@ -173,7 +153,7 @@ describe("user", () => {
             )
                 .as("upsertNutrient");
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine
@@ -214,7 +194,7 @@ describe("user", () => {
             const NUTRIENT_INDEX = 3;
             const NUTRIENT_LABEL = NUTRIENT_TYPE_LABEL_MAPPING[NutrientName.DietaryFiber];
 
-            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete?user_id=1`, { statusCode: 204 })
+            cy.intercept("POST", `${constants.CY_JOURNAL_API_PATH}/nutrient/delete`, { statusCode: 204 })
                 .as("deleteNutrient");
 
             // Save nutrientLine

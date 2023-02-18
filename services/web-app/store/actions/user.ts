@@ -2,38 +2,25 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { HttpError } from "@common/http";
 import { isSome } from "@common/types";
-import type { FoodShort, RecipeShort, UserNutrient, UserNutrientDetailed } from "@common/typings";
-import type { UserMenuItem } from "@common/utils";
-import { ProductType } from "@common/utils";
+import type { JournalGroup, UserInfo, UserNutrient, UserNutrientDetailed } from "@common/typings";
+import type { UserMenuItem } from "@store/types/user";
 import AuthApi from "@api/authApi";
+import FoodApi from "@api/foodApi";
 import JournalApi from "@api/journalApi";
-import ProductApi from "@api/productApi";
+import UserApi from "@api/userApi";
 
 import type { AsyncThunkConfig } from ".";
 
 
 export const changeMenuItem = createAction<UserMenuItem>("user/change_menu_item");
 
-interface UserFetchDataPayload {
-    favoriteFoods: FoodShort[];
-    customFoods: FoodShort[];
-    favoriteRecipes: RecipeShort[];
-    customRecipes: RecipeShort[];
-    nutrients: UserNutrientDetailed[];
-}
 
-export const fetchUserData = createAsyncThunk<UserFetchDataPayload, void, AsyncThunkConfig>(
+export const fetchUserData = createAsyncThunk<UserInfo, void, AsyncThunkConfig>(
     "user/fetch_data",
     async (_arg, { rejectWithValue }) => {
         try {
-            const [ favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients ] = await Promise.all([
-                ProductApi.getFavoriteProducts<FoodShort>(ProductType.Food),
-                ProductApi.getCustomProducts<FoodShort>(ProductType.Food),
-                ProductApi.getFavoriteProducts<RecipeShort>(ProductType.Recipe),
-                ProductApi.getCustomProducts<RecipeShort>(ProductType.Recipe),
-                JournalApi.getUserNutrients(),
-            ]);
-            return { favoriteFoods, customFoods, favoriteRecipes, customRecipes, nutrients };
+            const userInfo = await UserApi.getUserInfo();
+            return userInfo;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));
@@ -41,11 +28,11 @@ export const fetchUserData = createAsyncThunk<UserFetchDataPayload, void, AsyncT
     },
 );
 
-export const deleteCustomProduct = createAsyncThunk<void, number, AsyncThunkConfig>(
-    "user/delete_custom_product",
-    async (productId, { rejectWithValue }) => {
+export const deleteCustomFood = createAsyncThunk<void, number, AsyncThunkConfig>(
+    "user/delete_custom_food",
+    async (foodId, { rejectWithValue }) => {
         try {
-            await ProductApi.deleteProduct(productId);
+            await FoodApi.deleteFood(foodId);
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));
@@ -53,11 +40,24 @@ export const deleteCustomProduct = createAsyncThunk<void, number, AsyncThunkConf
     },
 );
 
-export const deleteFavoriteProduct = createAsyncThunk<void, number, AsyncThunkConfig>(
-    "user/delete_favorite_product",
-    async (productId, { rejectWithValue }) => {
+export const deleteFavoriteFood = createAsyncThunk<void, number, AsyncThunkConfig>(
+    "user/delete_favorite_food",
+    async (foodId, { rejectWithValue }) => {
         try {
-            await ProductApi.deleteFavoriteProduct(productId);
+            await FoodApi.deleteFavoriteFood(foodId);
+        }
+        catch (error) {
+            return rejectWithValue(HttpError.getStatus(error));
+        }
+    },
+);
+
+export const updateJournalGroups = createAsyncThunk<JournalGroup[], JournalGroup[], AsyncThunkConfig>(
+    "user/update_journal_groups",
+    async (groups, { rejectWithValue }) => {
+        try {
+            await JournalApi.updateJournalGroups(groups);
+            return groups;
         }
         catch (error) {
             return rejectWithValue(HttpError.getStatus(error));

@@ -10,7 +10,7 @@ export default class JournalApi {
 
     public static async getJournalEntries(date: string): Promise<JournalEntryDetailed[]> {
 
-        const params = getUrlParams({ entry_date: date, user_id: 1 });
+        const params = getUrlParams({ entry_date: date });
 
         const response = await fetch(`${JournalApi.API_PATH}/entry?${params}`, {
             method: "GET",
@@ -20,24 +20,6 @@ export default class JournalApi {
         if (response.ok) {
             const entries: JournalEntryDetailed[] = await response.json();
             return entries;
-        }
-        else {
-            throw new HttpError(response.status);
-        }
-    }
-
-    public static async getJournalGroups(): Promise<JournalGroup[]> {
-
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/groups?${params}`, {
-            method: "GET",
-            headers: { [Header.ACCEPT]: ResourceType.JSON },
-        });
-
-        if (response.ok) {
-            const groups: JournalGroup[] = await response.json();
-            return groups;
         }
         else {
             throw new HttpError(response.status);
@@ -110,24 +92,6 @@ export default class JournalApi {
         }
     }
 
-    public static async getUserNutrients(): Promise<UserNutrientDetailed[]> {
-
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/nutrients?${params}`, {
-            method: "GET",
-            headers: { [Header.ACCEPT]: ResourceType.JSON },
-        });
-
-        if (response.ok) {
-            const nutrients: UserNutrientDetailed[] = await response.json();
-            return nutrients;
-        }
-        else {
-            throw new HttpError(response.status);
-        }
-    }
-
     public static async upsertUserNutrient(userNutrient: UserNutrient): Promise<UserNutrientDetailed> {
 
         const response = await fetch(`${JournalApi.API_PATH}/nutrient/upsert`, {
@@ -150,9 +114,7 @@ export default class JournalApi {
 
     public static async deleteUserNutrient(userNutrientId: number): Promise<void> {
 
-        const params = getUrlParams({ user_id: 1 });
-
-        const response = await fetch(`${JournalApi.API_PATH}/nutrient/delete?${params}`, {
+        const response = await fetch(`${JournalApi.API_PATH}/nutrient/delete`, {
             method: "POST",
             headers: { [Header.CONTENT_TYPE]: ResourceType.JSON },
             body: JSON.stringify({ id: userNutrientId }),

@@ -1,6 +1,7 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT } from "@common/labels";
+import { getRecipePath } from "@common/routes";
 import { WeightUnit } from "@common/units";
 
 
@@ -8,10 +9,12 @@ describe("recipe_page", () => {
 
     describe("custom_units", () => {
 
-        beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+        const RECIPE_ID = 29;
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+        beforeEach(() => {
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
+
+            cy.visit(getRecipePath(RECIPE_ID));
         });
 
         it("can create custom_unit", () => {
@@ -23,11 +26,15 @@ describe("recipe_page", () => {
                 .should("be.visible")
                 .click();
 
+            // Name and amount
+
             cy.get(`[data-cy=${constants.CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}]`)
                 .type(cuName);
             cy.get(`[data-cy=${constants.CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_AMOUNT}]`)
                 .clear()
                 .type(cuAmount);
+
+            // Unit
 
             cy.get(`[data-cy=${constants.CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_SELECT_INPUT}]`)
                 .as("selectInput")
@@ -40,8 +47,8 @@ describe("recipe_page", () => {
             cy.get("@selectInput").get(`[data-cy=${constants.CY_SELECT_INPUT_OPTION}]`).should("not.exist");
 
             cy.get(`[data-cy=${constants.CY_NEW_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_BUTTON}]`)
+                .should("be.visible")
                 .click();
-
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .parent()
@@ -51,7 +58,6 @@ describe("recipe_page", () => {
                     cy.get(`[data-cy=${constants.CY_SELECT_INPUT}]`).contains(WeightUnit.oz).should("be.visible");
                 });
         });
-
 
         it("can update custom_unit", () => {
 
@@ -125,7 +131,6 @@ describe("recipe_page", () => {
 
             cy.get(`[data-cy=${constants.CY_CUSTOM_UNIT_LINE}] [data-cy=${constants.CY_CUSTOM_UNIT_NAME}][value="${cuName}"]`)
                 .should("not.exist");
-
         });
     });
 });

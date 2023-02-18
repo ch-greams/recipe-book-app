@@ -1,10 +1,10 @@
 import React from "react";
 
+import { numberToString } from "@common/numeric";
 import type { NutrientDescription } from "@common/nutrients";
 import { NutrientName } from "@common/nutrients";
 import { isEnum, isSome } from "@common/types";
 import type { UserNutrient } from "@common/typings";
-import Utils from "@common/utils";
 import type { UserStoreNutrient } from "@store/types/user";
 
 import RbaFeaturedNutrient from "../rba-featured-nutrient";
@@ -39,12 +39,11 @@ const RbaFeaturedNutrientsBlock: React.FC<Props> = ({
                     slotIndex={slotIndex}
                     nutrientId={userNutrient.nutrientId}
                     nutrientName={userNutrient.nutrientName}
-                    userDailyTargetAmount={Utils.numberToString(userNutrient.userDailyTargetAmount)}
-                    nutrientDailyTargetAmount={Utils.numberToString(userNutrient.nutrientDailyTargetAmount)}
+                    userDailyTargetAmount={numberToString(userNutrient.userDailyTargetAmount)}
+                    nutrientDailyTargetAmount={numberToString(userNutrient.nutrientDailyTargetAmount)}
                     nutrientUnit={userNutrient.nutrientUnit}
                     updateNutrient={(uiIndex, name, amount) => {
                         updateNutrient({
-                            user_id: 1,
                             nutrient_id: nutrientDescriptions[name].id,
                             is_featured: true,
                             daily_target_amount: amount,
@@ -62,7 +61,6 @@ const RbaFeaturedNutrientsBlock: React.FC<Props> = ({
                     slotIndex={slotIndex}
                     updateNutrient={(uiIndex, name, amount) => {
                         updateNutrient({
-                            user_id: 1,
                             nutrient_id: nutrientDescriptions[name].id,
                             is_featured: true,
                             daily_target_amount: amount,

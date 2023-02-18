@@ -14,12 +14,12 @@
 
     - Take into account `of` (this one might be dropped if it's first after `AMOUNT` or `UNIT`) and `or`
 
-3. Use search by similarity with `product` database and text from previous step
+3. Use search by similarity with `food` database and text from previous step
 
     - It's possible to use postgres directly like this:
         ```sql
         SELECT *
-        FROM product.product
+        FROM recipe.food
         WHERE SIMILARITY(name, 'olive oil') > 0.4
         ORDER BY SIMILARITY(name, 'olive oil') DESC
         LIMIT 1

@@ -28,6 +28,32 @@
         }
     }
 
+
+    .densityLine {
+
+        display: flex;
+        flex-direction: row;
+
+        gap: 4px;
+        margin: 12px 0;
+
+        font-size: $font-size-medium;
+        font-weight: $font-weight-medium;
+
+        line-height: 32px;
+
+        color: $color-white;
+
+        .densityLineLabel {
+            width: 36%;
+        }
+
+        .densityLineUnitSeparator {
+            margin-right: 1px;
+            margin-left: 4px;
+        }
+    }
+
     .servingSizeLine {
 
         display: flex;

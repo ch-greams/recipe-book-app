@@ -1,6 +1,12 @@
-import type { FoodShort, RecipeShort } from "@common/typings";
-import type { UserMenuItem } from "@common/utils";
+import type { FoodShort } from "@common/typings";
 
+import type { JournalStoreGroup } from "./journal";
+
+
+export enum UserMenuItem {
+    Settings = "Settings",
+    Foods = "Foods",
+}
 
 export interface UserStoreNutrient {
     nutrientId: number;
@@ -16,18 +22,14 @@ export interface UserStoreNutrient {
 
 export interface UserStore {
     isLoggedIn: boolean;
-
-    userId: number;
     userName: string;
 
     selectedMenuItem: UserMenuItem;
 
-    favoriteRecipes: RecipeShort[];
-    customRecipes: RecipeShort[];
-
     favoriteFoods: FoodShort[];
     customFoods: FoodShort[];
 
+    journalGroups: JournalStoreGroup[];
     nutrients: UserStoreNutrient[];
 
     isLoaded: boolean;

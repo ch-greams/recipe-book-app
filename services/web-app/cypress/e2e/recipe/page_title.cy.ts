@@ -1,18 +1,21 @@
 import * as constants from "@cypress/constants";
 
 import { BUTTON_EDIT, BUTTON_SAVE } from "@common/labels";
+import { getRecipePath } from "@common/routes";
 
 
 describe("recipe_page", () => {
 
     describe("page_title", () => {
 
+        const RECIPE_ID = 29;
+
         beforeEach(() => {
-            cy.intercept(`${constants.CY_RECIPE_API_PATH}/29`, { fixture: "recipe.json" });
+            cy.intercept(`${constants.CY_RECIPE_API_PATH}/${RECIPE_ID}`, { fixture: "recipe.json" });
             cy.intercept(`${constants.CY_RECIPE_API_PATH}/update`, { fixture: "recipe_create_response.json" })
                 .as("updateRecipe");
 
-            cy.visit(`${constants.CY_RECIPE_PATH}/29`);
+            cy.visit(getRecipePath(RECIPE_ID));
         });
 
         it("can update name", () => {
@@ -68,33 +71,6 @@ describe("recipe_page", () => {
                 cy.wrap(interceptedRequest?.request?.body)
                     .its("brand")
                     .should("eq", NEW_PAGE_TITLE_BRAND);
-            });
-        });
-
-        it("can update subtitle", () => {
-
-            const NEW_PAGE_TITLE_SUBTITLE = "new subtitle";
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_BLOCK}]`).should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("be.visible");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`).should("not.exist");
-
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_EDIT).click();
-
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_TEXT}]`).should("not.exist");
-            cy.get(`[data-cy=${constants.CY_PAGE_TITLE_SUBTITLE_INPUT}]`)
-                .should("be.visible")
-                .clear()
-                .type(NEW_PAGE_TITLE_SUBTITLE);
-
-            cy.get(`[data-cy=${constants.CY_BUTTON}]`).contains(BUTTON_SAVE)
-                .should("be.visible")
-                .click();
-
-            cy.wait("@updateRecipe").then(interceptedRequest => {
-                cy.wrap(interceptedRequest?.request?.body)
-                    .its("subtitle")
-                    .should("eq", NEW_PAGE_TITLE_SUBTITLE);
             });
         });
 

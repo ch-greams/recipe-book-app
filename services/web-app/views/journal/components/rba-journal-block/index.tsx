@@ -4,7 +4,7 @@ import { DndContext } from "@dnd-kit/core";
 
 import { DEFAULT_TIME_FORMAT, getCurrentTime } from "@common/date";
 import { isSome } from "@common/types";
-import Utils from "@common/utils";
+import { getTemporaryId } from "@common/utils";
 import RbaSearchInput, { SearchInputHeightSize, SearchInputWidthSize } from "@views/shared/rba-search-input";
 import { useAppDispatch } from "@store";
 import * as journalActions from "@store/actions/journal";
@@ -20,14 +20,13 @@ import styles from "./rba-journal-block.module.scss";
 
 
 interface Props {
-    userId: number;
     currentDate: string;
     groups: JournalStoreGroup[];
     entries: JournalStoreEntry[];
     search: SearchStore;
 }
 
-const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries, search }) => {
+const RbaJournalBlock: React.FC<Props> = ({ currentDate, groups, entries, search }) => {
 
     const dispatch = useAppDispatch();
     const [ showTrash, setShowTrash ] = useState(false);
@@ -113,16 +112,15 @@ const RbaJournalBlock: React.FC<Props> = ({ userId, currentDate, groups, entries
                 placeholder={"Add a new entry..."}
                 isLoading={!search.isLoaded}
                 value={search.searchInput}
-                items={search.products}
-                onChange={(value) => { dispatch(searchActions.searchProducts(value)); }}
-                onSelect={(product) => {
+                items={search.foods}
+                onChange={(value) => { dispatch(searchActions.searchFoods(value)); }}
+                onSelect={(food) => {
 
                     dispatch(journalActions.createJournalEntry({
-                        id: Utils.getTemporaryId(),
-                        user_id: userId,
+                        id: getTemporaryId(),
                         entry_date: currentDate,
                         entry_time: getCurrentTime(DEFAULT_TIME_FORMAT),
-                        product_id: product.id,
+                        food_id: food.id,
                         amount: 100,
                         unit: "g",
                         journal_group_ui_index: null,

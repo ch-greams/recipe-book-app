@@ -1,5 +1,7 @@
 import * as constants from "@cypress/constants";
 
+import { JOURNAL_PATH, LOGIN_PATH, USER_PATH } from "@common/routes";
+
 
 describe("auth", () => {
 
@@ -10,7 +12,7 @@ describe("auth", () => {
 
         it("can successfully log in", () => {
 
-            cy.visit(constants.CY_LOGIN_PATH);
+            cy.visit(LOGIN_PATH);
 
             cy.intercept(
                 `${constants.CY_AUTH_API_PATH}/login`,
@@ -40,12 +42,12 @@ describe("auth", () => {
                     .should("eq", bodyText);
             });
 
-            cy.url().should("eq", Cypress.config().baseUrl + constants.CY_JOURNAL_PATH);
+            cy.url().should("eq", Cypress.config().baseUrl + JOURNAL_PATH);
         });
 
         it("can successfully redirect after log in", () => {
 
-            cy.visit(`${constants.CY_LOGIN_PATH}?redirect=${constants.CY_USER_PATH}`);
+            cy.visit(`${LOGIN_PATH}?redirect=${USER_PATH}`);
 
             cy.intercept(
                 `${constants.CY_AUTH_API_PATH}/login`,
@@ -75,12 +77,12 @@ describe("auth", () => {
                     .should("eq", bodyText);
             });
 
-            cy.url().should("eq", Cypress.config().baseUrl + constants.CY_USER_PATH);
+            cy.url().should("eq", Cypress.config().baseUrl + USER_PATH);
         });
 
         it("can use username from page params", () => {
 
-            cy.visit(`${constants.CY_LOGIN_PATH}?username=${USERNAME}`);
+            cy.visit(`${LOGIN_PATH}?username=${USERNAME}`);
 
             cy.intercept(
                 `${constants.CY_AUTH_API_PATH}/login`,
@@ -108,7 +110,7 @@ describe("auth", () => {
                     .should("eq", bodyText);
             });
 
-            cy.url().should("eq", Cypress.config().baseUrl + constants.CY_JOURNAL_PATH);
+            cy.url().should("eq", Cypress.config().baseUrl + JOURNAL_PATH);
         });
     });
 });

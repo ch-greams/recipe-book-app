@@ -44,6 +44,7 @@ const RbaJournalGroupBlock: React.FC<Props> = ({
             <div className={styles.journalGroup}>
 
                 <div
+                    data-cy={constants.CY_JOURNAL_GROUP_NAME}
                     className={classNames({
                         [styles.journalGroupName]: true,
                         [styles.journalEntryOver]: isOver,
