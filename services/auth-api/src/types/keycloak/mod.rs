@@ -116,12 +116,12 @@ impl Keycloak {
             print!(" {}...", user.username);
 
             let user_brief = user
-                .create(&req_client, &config.url, &admin_access_token)
+                .create(req_client, &config.url, &admin_access_token)
                 .await
                 .unwrap();
 
             KeycloakUser::assign_realm_roles(
-                &req_client,
+                req_client,
                 &user_brief.id,
                 &default_user_roles,
                 &config.url,
