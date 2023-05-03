@@ -6,7 +6,9 @@ use secrecy::Secret;
 use crate::{
     config::KeycloakConfig,
     services::openid::{get_access_token, TokenRequest},
-    types::keycloak::{client::KeycloakClient, realm::KeycloakRealm, role::KeycloakRole},
+    types::keycloak::{
+        client::KeycloakClient, realm::KeycloakRealm, role::KeycloakRole, user::KeycloakUser,
+    },
     utils,
 };
 
@@ -102,6 +104,36 @@ impl Keycloak {
             .unwrap();
 
         println!(" done!");
+
+        // Upsert users
+
+        print!("Updating users...");
+
+        let keycloak_users: Vec<KeycloakUser> =
+            utils::read_json("config/keycloak_users.json").unwrap();
+
+        for user in keycloak_users.iter() {
+            print!(" {}...", user.username);
+
+            let user_brief = user
+                .create(&req_client, &config.url, &admin_access_token)
+                .await
+                .unwrap();
+
+            KeycloakUser::assign_realm_roles(
+                &req_client,
+                &user_brief.id,
+                &default_user_roles,
+                &config.url,
+                &admin_access_token,
+            )
+            .await
+            .unwrap();
+        }
+
+        println!(" done!");
+
+        // Completion
 
         let client = KeycloakClient::query_by_id(
             req_client,
