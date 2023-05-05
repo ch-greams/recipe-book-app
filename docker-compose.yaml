@@ -25,15 +25,18 @@ services:
 
   rb-web-app:
     image: web-app
-    build: ./services/web-app
+    build:
+      context: ./services/web-app
+      args:
+        RB__API_ADDR: http://rb-web-api:8080
+        RB__AUTH_API_ADDR: http://rb-auth-api:8080
     depends_on:
-      - rb-web-api
+      rb-web-api:
+        condition: service_healthy
     ports:
       - 3000:3000
     working_dir: /app
     environment:
-      RB__API_ADDR: rb-web-api:8080
-      RB__AUTH_API_ADDR: rb-auth-api:8080
       NODE_ENV: production     # options: production, development
       PORT: 3000
       LOG_LEVEL: DEBUG

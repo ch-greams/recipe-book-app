@@ -1,0 +1,34 @@
+[
+    {
+        "username": "admin@rba.io",
+        "email": "admin@rba.io",
+        "firstName": "System",
+        "lastName": "Administrator",
+        "enabled": true,
+        "credentials": [
+            {
+                "type": "password",
+                "value": "qwerty1234"
+            }
+        ],
+        "attributes": {
+            "user_id": "0"
+        }
+    },
+    {
+        "username": "admin@greams.io",
+        "email": "admin@greams.io",
+        "firstName": "Andrei",
+        "lastName": "Khvalko",
+        "enabled": true,
+        "credentials": [
+            {
+                "type": "password",
+                "value": "admin"
+            }
+        ],
+        "attributes": {
+            "user_id": "1"
+        }
+    }
+]

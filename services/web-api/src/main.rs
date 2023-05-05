@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(Data::new(auth_certificate.clone()))
             .configure(controllers::configure)
     })
-    .bind(&config.listen_addr)?
+    .bind(config.listen_addr)?
     .run()
     .await
 }

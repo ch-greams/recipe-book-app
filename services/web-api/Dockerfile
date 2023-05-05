@@ -1,4 +1,4 @@
-FROM rust:1.65-slim-buster
+FROM rust:1.69-slim-buster
 
 # 0 - Install linux toolchain
 RUN apt-get update && apt-get install -y curl 
