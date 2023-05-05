@@ -22,7 +22,7 @@ docker compose up rb-database
 
 #### 2. After project is started it should be possible to access following pages and endpoints
 
-- Login as admin into Keycloak http://localhost:3002/admin/ (with these [credentials](./docker-compose.yaml#L81-L82))
+- Login as admin into Keycloak http://localhost:3002/admin/ (with these [credentials](./docker-compose.yaml#L84-L85))
 
 - Check health endpoints for all running services (like http://localhost:3003/api/v1/health for `auth-api`)
 
